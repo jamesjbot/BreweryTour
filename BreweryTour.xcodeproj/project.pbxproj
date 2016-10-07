@@ -15,6 +15,7 @@
 		A7B2AAEC1DA791A400EE844C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7B2AAEA1DA791A400EE844C /* LaunchScreen.storyboard */; };
 		A7B2AAF71DA791A400EE844C /* BreweryTourTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAF61DA791A400EE844C /* BreweryTourTests.swift */; };
 		A7B2AB021DA791A400EE844C /* BreweryTourUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */; };
+		A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,6 +50,7 @@
 		A7B2AAFD1DA791A400EE844C /* BreweryTourUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BreweryTourUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryTourUITests.swift; sourceTree = "<group>"; };
 		A7B2AB031DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -101,6 +103,7 @@
 			children = (
 				A7B2AADE1DA791A400EE844C /* AppDelegate.swift */,
 				A7B2AAE01DA791A400EE844C /* ViewController.swift */,
+				A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */,
 				A7B2AAE21DA791A400EE844C /* Main.storyboard */,
 				A7B2AAE81DA791A400EE844C /* Assets.xcassets */,
 				A7B2AAEA1DA791A400EE844C /* LaunchScreen.storyboard */,
@@ -196,6 +199,7 @@
 				TargetAttributes = {
 					A7B2AADA1DA791A400EE844C = {
 						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = T37NKE3UT9;
 						ProvisioningStyle = Automatic;
 					};
 					A7B2AAF11DA791A400EE844C = {
@@ -263,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				A7B2AAE71DA791A400EE844C /* BreweryTour.xcdatamodeld in Sources */,
+				A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */,
 				A7B2AAE11DA791A400EE844C /* ViewController.swift in Sources */,
 				A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */,
 			);
@@ -416,6 +421,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T37NKE3UT9;
 				INFOPLIST_FILE = BreweryTour/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = JamesJongs.BreweryTour;
@@ -428,6 +434,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				DEVELOPMENT_TEAM = T37NKE3UT9;
 				INFOPLIST_FILE = BreweryTour/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = JamesJongs.BreweryTour;
