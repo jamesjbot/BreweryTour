@@ -11,7 +11,7 @@
         <!--Brewery Tour-->
         <scene sceneID="At4-3c-UfP">
             <objects>
-                <viewController title="Brewery Tour" id="RKC-MN-s1K" sceneMemberID="viewController">
+                <viewController title="Brewery Tour" id="RKC-MN-s1K" customClass="CategoryViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Yu6-64-6UL"/>
                         <viewControllerLayoutGuide type="bottom" id="wrT-1x-h0f"/>
@@ -67,7 +67,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="375" height="43"/>
+                                                    <frame key="frameInset" width="375" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
