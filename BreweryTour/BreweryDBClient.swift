@@ -10,7 +10,15 @@ import Foundation
 import Alamofire
 
 class BreweryDBClient {
-
+    
+    // MARK: Enumerations
+    
+    enum APIQueryTypes {
+        case Beers
+    }
+    
+    // MARK: Functions
+    
     func downloadBeerTypes(){
 //        let methodParameters = [
 //            Constants.BreweryParameterKeys.Key.Method : Constants.BreweryParameterValues.SearchMethod,
@@ -37,15 +45,23 @@ class BreweryDBClient {
                     return
                 }
                 print(response)
+                self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Beers)
         return
         }
-        
-//        parsedResult = try NSJSONSerialization.JSONObjectWithData(data!, options: .AllowFragments) as! NSDictionary
     }
     
-    func parseData(){
+    func parse(response : NSDictionary, asQueryType: APIQueryTypes){
+        switch asQueryType {
+        case APIQueryTypes.Beers:
+            break
+        default:
+            break
+        }
     }
-    
+   
+    enum QueryTypes {
+        case Beers
+    }
 }
 
 extension BreweryDBClient {
