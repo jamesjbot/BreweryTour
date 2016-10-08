@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		0C24B85C47A6E25F20FCB560 /* Pods_BreweryTour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E039CA81873511D3C9194D6 /* Pods_BreweryTour.framework */; };
 		A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AADE1DA791A400EE844C /* AppDelegate.swift */; };
-		A7B2AAE11DA791A400EE844C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE01DA791A400EE844C /* ViewController.swift */; };
+		A7B2AAE11DA791A400EE844C /* CatergoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */; };
 		A7B2AAE41DA791A400EE844C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7B2AAE21DA791A400EE844C /* Main.storyboard */; };
 		A7B2AAE71DA791A400EE844C /* BreweryTour.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE51DA791A400EE844C /* BreweryTour.xcdatamodeld */; };
 		A7B2AAE91DA791A400EE844C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7B2AAE81DA791A400EE844C /* Assets.xcassets */; };
@@ -41,7 +41,7 @@
 		2E039CA81873511D3C9194D6 /* Pods_BreweryTour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BreweryTour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B2AADB1DA791A400EE844C /* BreweryTour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreweryTour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B2AADE1DA791A400EE844C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		A7B2AAE01DA791A400EE844C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatergoryViewController.swift; sourceTree = "<group>"; };
 		A7B2AAE31DA791A400EE844C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A7B2AAE61DA791A400EE844C /* BreweryTour.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BreweryTour.xcdatamodel; sourceTree = "<group>"; };
 		A7B2AAE81DA791A400EE844C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -126,7 +126,7 @@
 			isa = PBXGroup;
 			children = (
 				A7B2AADE1DA791A400EE844C /* AppDelegate.swift */,
-				A7B2AAE01DA791A400EE844C /* ViewController.swift */,
+				A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */,
 				A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */,
 				A7B2AAE21DA791A400EE844C /* Main.storyboard */,
 				A7B2AAE81DA791A400EE844C /* Assets.xcassets */,
@@ -343,7 +343,7 @@
 			files = (
 				A7B2AAE71DA791A400EE844C /* BreweryTour.xcdatamodeld in Sources */,
 				A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */,
-				A7B2AAE11DA791A400EE844C /* ViewController.swift in Sources */,
+				A7B2AAE11DA791A400EE844C /* CatergoryViewController.swift in Sources */,
 				A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
