@@ -11,6 +11,13 @@ import Alamofire
 
 class BreweryDBClient {
     
+    struct BreweryLocation {
+        var latitude : String?
+        var longitude : String?
+        var url : String?
+        var name : String
+    }
+    
     // MARK: Enumerations
     
     enum APIQueryTypes {
@@ -20,20 +27,21 @@ class BreweryDBClient {
     // MARK: Functions
     
     func downloadBeerTypes(){
-//        let methodParameters = [
-//            Constants.BreweryParameterKeys.Key.Method : Constants.BreweryParameterValues.SearchMethod,
-//            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatValue,
-//            Constants.FlickrParameterKeys.BoundingBox : boundingboxConstruct(),
-//            Constants.FlickrParameterKeys.SafeSearch : Constants.FlickrParameterValues.UseSafeSearch,
-//            Constants.FlickrParameterKeys.Extras : Constants.FlickrParameterValues.MediumURL,
-//            Constants.FlickrParameterKeys.Format : Constants.FlickrParameterValues.ResponseFormat,
-//            Constants.FlickrParameterKeys.NoJSONCallback : Constants.FlickrParameterValues.DisableJSONCallback,
-//            Constants.FlickrParameterKeys.Lat : pinLocation!.latitude!,
-//            Constants.FlickrParameterKeys.Lon : pinLocation!.longitude!
-//        ]
+        //        let methodParameters = [
+        //            Constants.BreweryParameterKeys.Key.Method : Constants.BreweryParameterValues.SearchMethod,
+        //            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatValue,
+        //            Constants.FlickrParameterKeys.BoundingBox : boundingboxConstruct(),
+        //            Constants.FlickrParameterKeys.SafeSearch : Constants.FlickrParameterValues.UseSafeSearch,
+        //            Constants.FlickrParameterKeys.Extras : Constants.FlickrParameterValues.MediumURL,
+        //            Constants.FlickrParameterKeys.Format : Constants.FlickrParameterValues.ResponseFormat,
+        //            Constants.FlickrParameterKeys.NoJSONCallback : Constants.FlickrParameterValues.DisableJSONCallback,
+        //            Constants.FlickrParameterKeys.Lat : pinLocation!.latitude!,
+        //            Constants.FlickrParameterKeys.Lon : pinLocation!.longitude!
+        //        ]
         //let outputURL : NSURL = createURLFromarameters()
         print("Attempting to download")
         //Alamofire.request("http://api.brewerydb.com/v2/categories/?key=\(Constants.BreweryParameterValues.APIKey)")
+        // Query for beers with certain style.
         Alamofire.request("http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
             .responseJSON { response  in
                 guard response.result.isSuccess else {
@@ -44,21 +52,68 @@ class BreweryDBClient {
                     print("Invalid tag informatiion")
                     return
                 }
-                print(response)
                 self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Beers)
-        return
+                return
         }
     }
     
     func parse(response : NSDictionary, asQueryType: APIQueryTypes){
+        print("Repeat \(#line)")
         switch asQueryType {
         case APIQueryTypes.Beers:
+            // The Key in this dictionary are [status,data,numberOfPages,currentPage,totalResults]
+            //print(response["data"])
+            let beerArray = response["data"] as? [[String:AnyObject]]
+            // Array of dictionaries
+            //print(type(of: beerArray))
+            var breweryLocationsArray = [BreweryLocation]()
+            for beer in beerArray! {
+                //print("Repeat from \(#line) beerArray")
+                //print(beer)
+                let breweryInfo = beer["breweries"] as! NSArray
+                //print(type(of: breweryInfo))
+                //print(breweryInfo)
+                //print(breweryInfo.count)
+                for (i,element) in breweryInfo.enumerated() {
+                    //print("Another brewery")
+                    let brewDict = element as! NSDictionary
+                    //print(brewDict["isOrganic"])
+                    //print(type(of: element))
+                    ///print("Element \(i) in brewerinfo:\(element)")
+                    for (k,v) in brewDict {
+                        //print("In brewDict k:\(k) v:\(v)")
+                    }
+                    
+                    if let images = brewDict["images"] as? [String : AnyObject] {
+                        //print("Image to use\(images["squareMedium"])")
+                    }
+
+                    let locationInfo = brewDict["locations"] as! NSArray
+                    // If i want to use company info I may need to change the dictionary from String String
+                    let locDic = locationInfo[0] as! [String : AnyObject]
+                    if locDic["openToPublic"] as! String == "Y" {
+                        print("it's open")
+                        breweryLocationsArray.append(BreweryLocation(
+                                latitude: locDic["latitude"]?.description,
+                                longitude: ["longitude"].description,
+                                url: locDic["website"] as! String?,
+                                name: brewDict["name"] as! String))
+                    }
+                    // TODO pull out some other useful information such as website
+                    //
+                    //let image = breweryInfo["images"]
+                    //let location = breweryInfo["locations"] as! [String:AnyObject]
+                    //            if location["openToPublic"] as! String == "Y" {
+                    //                    breweryLocationsArray.append(BreweryLocation(latitude: location["latitude"] as! String, longitude: location["longitude"] as! String))
+                }
+            }
             break
+            
         default:
             break
         }
     }
-   
+    
     enum QueryTypes {
         case Beers
     }
@@ -95,6 +150,11 @@ extension BreweryDBClient {
         struct BreweryParameterValues {
             static let APIKey = "8e63b90f589c3b3f2001c5e396f5d300"
             static let FormatValue = "json"
+        }
+        
+        struct BreweryLocation {
+            var latitude : String
+            var longitude : String
         }
     }
 }
