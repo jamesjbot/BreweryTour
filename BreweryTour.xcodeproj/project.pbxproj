@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C24B85C47A6E25F20FCB560 /* Pods_BreweryTour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E039CA81873511D3C9194D6 /* Pods_BreweryTour.framework */; };
+		A7A69D571DA8938F00E47C8E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */; };
 		A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AADE1DA791A400EE844C /* AppDelegate.swift */; };
 		A7B2AAE11DA791A400EE844C /* CatergoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */; };
 		A7B2AAE41DA791A400EE844C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7B2AAE21DA791A400EE844C /* Main.storyboard */; };
@@ -39,6 +40,7 @@
 /* Begin PBXFileReference section */
 		23E04B956F6BC3316CA10C6B /* Pods-BreweryTour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BreweryTour.release.xcconfig"; path = "Pods/Target Support Files/Pods-BreweryTour/Pods-BreweryTour.release.xcconfig"; sourceTree = "<group>"; };
 		2E039CA81873511D3C9194D6 /* Pods_BreweryTour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BreweryTour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		A7B2AADB1DA791A400EE844C /* BreweryTour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreweryTour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B2AADE1DA791A400EE844C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatergoryViewController.swift; sourceTree = "<group>"; };
@@ -133,6 +135,7 @@
 				A7B2AAEA1DA791A400EE844C /* LaunchScreen.storyboard */,
 				A7B2AAED1DA791A400EE844C /* Info.plist */,
 				A7B2AAE51DA791A400EE844C /* BreweryTour.xcdatamodeld */,
+				A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */,
 			);
 			path = BreweryTour;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7A69D571DA8938F00E47C8E /* CoreDataStack.swift in Sources */,
 				A7B2AAE71DA791A400EE844C /* BreweryTour.xcdatamodeld in Sources */,
 				A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */,
 				A7B2AAE11DA791A400EE844C /* CatergoryViewController.swift in Sources */,
