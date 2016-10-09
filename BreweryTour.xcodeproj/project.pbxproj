@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		0C24B85C47A6E25F20FCB560 /* Pods_BreweryTour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2E039CA81873511D3C9194D6 /* Pods_BreweryTour.framework */; };
+		A7667A491DAA3A8C00576010 /* FunctionalProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7667A481DAA3A8C00576010 /* FunctionalProtocol.swift */; };
 		A7A69D571DA8938F00E47C8E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */; };
 		A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AADE1DA791A400EE844C /* AppDelegate.swift */; };
 		A7B2AAE11DA791A400EE844C /* CatergoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */; };
@@ -41,6 +42,7 @@
 /* Begin PBXFileReference section */
 		23E04B956F6BC3316CA10C6B /* Pods-BreweryTour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BreweryTour.release.xcconfig"; path = "Pods/Target Support Files/Pods-BreweryTour/Pods-BreweryTour.release.xcconfig"; sourceTree = "<group>"; };
 		2E039CA81873511D3C9194D6 /* Pods_BreweryTour.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BreweryTour.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A7667A481DAA3A8C00576010 /* FunctionalProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FunctionalProtocol.swift; sourceTree = "<group>"; };
 		A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		A7B2AADB1DA791A400EE844C /* BreweryTour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreweryTour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B2AADE1DA791A400EE844C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -104,9 +106,27 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		A727D1451DA918D20063F2B3 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */,
+				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
+			);
+			name = View;
+			sourceTree = "<group>";
+		};
+		A727D1461DA918E90063F2B3 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */,
+			);
+			name = Model;
+			sourceTree = "<group>";
+		};
 		A7B2AAD21DA791A300EE844C = {
 			isa = PBXGroup;
 			children = (
+				A7667A481DAA3A8C00576010 /* FunctionalProtocol.swift */,
 				A7B2AADD1DA791A400EE844C /* BreweryTour */,
 				A7B2AAF51DA791A400EE844C /* BreweryTourTests */,
 				A7B2AB001DA791A400EE844C /* BreweryTourUITests */,
@@ -129,10 +149,9 @@
 		A7B2AADD1DA791A400EE844C /* BreweryTour */ = {
 			isa = PBXGroup;
 			children = (
+				A727D1451DA918D20063F2B3 /* View */,
 				A7B2AADE1DA791A400EE844C /* AppDelegate.swift */,
-				A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */,
-				A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */,
-				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
+				A727D1461DA918E90063F2B3 /* Model */,
 				A7B2AAE21DA791A400EE844C /* Main.storyboard */,
 				A7B2AAE81DA791A400EE844C /* Assets.xcassets */,
 				A7B2AAEA1DA791A400EE844C /* LaunchScreen.storyboard */,
@@ -347,6 +366,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7667A491DAA3A8C00576010 /* FunctionalProtocol.swift in Sources */,
 				A7A69D571DA8938F00E47C8E /* CoreDataStack.swift in Sources */,
 				A7B7524E1DA8CE7B00117ED0 /* MapViewController.swift in Sources */,
 				A7B2AAE71DA791A400EE844C /* BreweryTour.xcdatamodeld in Sources */,

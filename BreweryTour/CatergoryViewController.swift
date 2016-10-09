@@ -20,13 +20,16 @@ class CategoryViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let test = BreweryDBClient()
+        let test = BreweryDBClient.sharedInstance()
         test.downloadBeerTypes()
     }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
     }
 
 
