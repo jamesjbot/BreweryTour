@@ -9,24 +9,38 @@
 import Foundation
 import Alamofire
 
+
+struct BreweryLocation {
+    var latitude : String?
+    var longitude : String?
+    var url : String?
+    var name : String
+}
+
 class BreweryDBClient {
-    
-    struct BreweryLocation {
-        var latitude : String?
-        var longitude : String?
-        var url : String?
-        var name : String
-    }
     
     // MARK: Enumerations
     
-    enum APIQueryTypes {
+    internal enum APIQueryTypes {
         case Beers
     }
     
+    // MARK: Variables
+    
+    internal var breweryLocationsArray = [BreweryLocation]()
+    
+    // MARK: Singleton Implementation
+    
+    private init(){}
+    internal class func sharedInstance() -> BreweryDBClient {
+        struct Singleton {
+            static var sharedInstance = BreweryDBClient()
+        }
+        return Singleton.sharedInstance
+    }
     // MARK: Functions
     
-    func downloadBeerTypes(){
+    internal func downloadBeerTypes(){
         //        let methodParameters = [
         //            Constants.BreweryParameterKeys.Key.Method : Constants.BreweryParameterValues.SearchMethod,
         //            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatValue,
@@ -57,7 +71,7 @@ class BreweryDBClient {
         }
     }
     
-    func parse(response : NSDictionary, asQueryType: APIQueryTypes){
+    private func parse(response : NSDictionary, asQueryType: APIQueryTypes){
         print("Repeat \(#line)")
         switch asQueryType {
         case APIQueryTypes.Beers:
@@ -66,7 +80,7 @@ class BreweryDBClient {
             let beerArray = response["data"] as? [[String:AnyObject]]
             // Array of dictionaries
             //print(type(of: beerArray))
-            var breweryLocationsArray = [BreweryLocation]()
+
             for beer in beerArray! {
                 //print("Repeat from \(#line) beerArray")
                 //print(beer)
@@ -95,7 +109,7 @@ class BreweryDBClient {
                         print("it's open")
                         breweryLocationsArray.append(BreweryLocation(
                                 latitude: locDic["latitude"]?.description,
-                                longitude: ["longitude"].description,
+                                longitude: locDic["longitude"]?.description,
                                 url: locDic["website"] as! String?,
                                 name: brewDict["name"] as! String))
                     }
@@ -112,6 +126,10 @@ class BreweryDBClient {
         default:
             break
         }
+    }
+    
+    internal func getBreweries() -> [BreweryLocation]{
+        return breweryLocationsArray
     }
     
     enum QueryTypes {
