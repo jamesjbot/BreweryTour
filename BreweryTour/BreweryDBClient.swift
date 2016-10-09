@@ -39,8 +39,12 @@ class BreweryDBClient {
         return Singleton.sharedInstance
     }
     // MARK: Functions
+    internal func downloadBeerStyles(){
+        
+        
+    }
     
-    internal func downloadBeerTypes(){
+    internal func downloadBreweries(){
         //        let methodParameters = [
         //            Constants.BreweryParameterKeys.Key.Method : Constants.BreweryParameterValues.SearchMethod,
         //            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatValue,
@@ -106,7 +110,7 @@ class BreweryDBClient {
                     // If i want to use company info I may need to change the dictionary from String String
                     let locDic = locationInfo[0] as! [String : AnyObject]
                     if locDic["openToPublic"] as! String == "Y" {
-                        print("it's open")
+                        //print("it's open")
                         breweryLocationsArray.append(BreweryLocation(
                                 latitude: locDic["latitude"]?.description,
                                 longitude: locDic["longitude"]?.description,
@@ -163,6 +167,9 @@ extension BreweryDBClient {
         struct BreweryParameterKeys {
             static let Key = "key"
             static let Format = "format"
+            static let Organic = "isOrganic"
+            static let StyleID = "styleID"
+            static let WithBreweries = "withBreweries"
         }
         
         struct BreweryParameterValues {
