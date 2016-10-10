@@ -31,6 +31,7 @@ class BreweryDBClient {
     
     internal enum APIQueryTypes {
         case Beers
+        case Styles
     }
     
     // MARK: Variables
@@ -53,8 +54,22 @@ class BreweryDBClient {
     }
     
     internal func downloadBeerStyles(){
+        let methodParameter : [String:AnyObject] = [:]
+        let outputURL : NSURL = createURLFromParameters(queryType: QueryTypes.Beers,parameters: methodParameter)
+        Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
+            guard response.result.isSuccess else {
+                return
+            }
+            guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                print("Invalid tag informatiion")
+                return
+            }
+            self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Beers)
+            return
+        }
     }
     
+    // Query for breweries that offer a certain style.
     internal func downloadBreweries(styleID : String, isOrganic : Bool ){
         let methodParameters  = [
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatValue as AnyObject,
@@ -62,12 +77,8 @@ class BreweryDBClient {
             Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
             Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject
         ]
-
-
         let outputURL : NSURL = createURLFromParameters(queryType: QueryTypes.Beers,parameters: methodParameters)
         Alamofire.request(outputURL.absoluteString!)
-        //Alamofire.request(URLRequest as! URLRequestConvertible)
-            // Query for beers with certain style.
             //Alamofire.request("http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
             .responseJSON { response  in
                 guard response.result.isSuccess else {
@@ -128,6 +139,10 @@ class BreweryDBClient {
                 }
             }
             break
+
+        case .Styles:
+            break
+            
             
         default:
             break
