@@ -8,8 +8,16 @@
 
 import UIKit
 
-class CategoryViewController: UIViewController {
+class CategoryViewController: UIViewController , UITableViewDelegate  {
 
+    // MARK: Constants
+    
+    let cellIdentifier = "BeerTypeCell"
+    
+    // MARK: IBOutlets
+    
+    @IBOutlet weak var styleTable: UITableView!
+    
     // MARK: IBAction clicked
     
     @IBAction func switchClicked(_ sender: AnyObject) {
@@ -39,4 +47,18 @@ class CategoryViewController: UIViewController {
 
 
 }
+
+extension CategoryViewController : UITableViewDataSource {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = styleTable.dequeueReusableCell(withIdentifier: cellIdentifier)
+        cell?.textLabel?.text = BreweryDBClient.sharedInstance().styleNames[indexPath.row].longName
+        return cell!
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return BreweryDBClient.sharedInstance().styleNames.count
+    }
+}
+
+
 

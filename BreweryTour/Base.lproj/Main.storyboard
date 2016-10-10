@@ -76,6 +76,10 @@
                                                 </tableViewCellContentView>
                                             </tableViewCell>
                                         </prototypes>
+                                        <connections>
+                                            <outlet property="dataSource" destination="RKC-MN-s1K" id="BY4-2J-Q3K"/>
+                                            <outlet property="delegate" destination="RKC-MN-s1K" id="JGW-yV-mqK"/>
+                                        </connections>
                                     </tableView>
                                 </subviews>
                                 <constraints>
@@ -100,6 +104,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="styleTable" destination="OSH-8A-abx" id="y1X-oH-hTs"/>
                         <segue destination="aS9-dG-afv" kind="show" identifier="Go" id="ETW-U3-xph"/>
                     </connections>
                 </viewController>
@@ -207,6 +212,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="aS9-dG-afv" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="rvT-cl-HIG">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                     </tabBar>

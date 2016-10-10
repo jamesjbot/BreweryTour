@@ -37,7 +37,7 @@ class BreweryDBClient {
     // MARK: Variables
     
     internal var breweryLocationsSet : Set<BreweryLocation> = Set<BreweryLocation>()
-    
+    internal var styleNames = [style]()
     // MARK: Singleton Implementation
     
     private init(){}
@@ -141,12 +141,25 @@ class BreweryDBClient {
             break
 
         case .Styles:
+            guard let styleArrayOfDict = response["data"] as! [[String:AnyObject]]? else {
+                print("Failed to convert")
+                return
+            }
+            for aStyle in styleArrayOfDict {
+                styleNames.append(style(id: aStyle["id"] as! String as String, longName: aStyle["name"] as! String))
+            }
+            
             break
             
             
         default:
             break
         }
+    }
+    
+    struct style {
+        var id : String
+        var longName : String
     }
     
     internal func getBreweries() -> Set<BreweryLocation>{
