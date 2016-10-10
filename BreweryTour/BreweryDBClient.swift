@@ -10,11 +10,19 @@ import Foundation
 import Alamofire
 
 
-struct BreweryLocation {
+struct BreweryLocation : Hashable {
     var latitude : String?
     var longitude : String?
     var url : String?
     var name : String
+    var hashValue: Int {
+        get {
+            return ("\(latitude)\(longitude)").hashValue
+        }
+    }
+    static func ==(lhs: BreweryLocation, rhs: BreweryLocation) -> Bool {
+        return (lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude)
+    }
 }
 
 class BreweryDBClient {
@@ -27,7 +35,7 @@ class BreweryDBClient {
     
     // MARK: Variables
     
-    internal var breweryLocationsArray = [BreweryLocation]()
+    internal var breweryLocationsSet : Set<BreweryLocation> = Set<BreweryLocation>()
     
     // MARK: Singleton Implementation
     
@@ -39,31 +47,31 @@ class BreweryDBClient {
         return Singleton.sharedInstance
     }
     // MARK: Functions
-    internal func downloadBeerStyles(){
-        
-        
+    
+    internal func isReadyWithBreweryLocations() -> Bool {
+        return breweryLocationsSet.count > 0
     }
     
-    internal func downloadBreweries(){
-        //        let methodParameters = [
-        //            Constants.BreweryParameterKeys.Key.Method : Constants.BreweryParameterValues.SearchMethod,
-        //            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatValue,
-        //            Constants.FlickrParameterKeys.BoundingBox : boundingboxConstruct(),
-        //            Constants.FlickrParameterKeys.SafeSearch : Constants.FlickrParameterValues.UseSafeSearch,
-        //            Constants.FlickrParameterKeys.Extras : Constants.FlickrParameterValues.MediumURL,
-        //            Constants.FlickrParameterKeys.Format : Constants.FlickrParameterValues.ResponseFormat,
-        //            Constants.FlickrParameterKeys.NoJSONCallback : Constants.FlickrParameterValues.DisableJSONCallback,
-        //            Constants.FlickrParameterKeys.Lat : pinLocation!.latitude!,
-        //            Constants.FlickrParameterKeys.Lon : pinLocation!.longitude!
-        //        ]
-        //let outputURL : NSURL = createURLFromarameters()
-        print("Attempting to download")
-        //Alamofire.request("http://api.brewerydb.com/v2/categories/?key=\(Constants.BreweryParameterValues.APIKey)")
-        // Query for beers with certain style.
-        Alamofire.request("http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
+    internal func downloadBeerStyles(){
+    }
+    
+    internal func downloadBreweries(styleID : String, isOrganic : Bool ){
+        let methodParameters  = [
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatValue as AnyObject,
+            Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,
+            Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
+            Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject
+        ]
+
+
+        let outputURL : NSURL = createURLFromParameters(queryType: QueryTypes.Beers,parameters: methodParameters)
+        Alamofire.request(outputURL.absoluteString!)
+        //Alamofire.request(URLRequest as! URLRequestConvertible)
+            // Query for beers with certain style.
+            //Alamofire.request("http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
             .responseJSON { response  in
                 guard response.result.isSuccess else {
-                    print("failed")
+                    print("failed \(response.request?.url)")
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
@@ -76,46 +84,40 @@ class BreweryDBClient {
     }
     
     private func parse(response : NSDictionary, asQueryType: APIQueryTypes){
-        print("Repeat \(#line)")
         switch asQueryType {
         case APIQueryTypes.Beers:
-            // The Key in this dictionary are [status,data,numberOfPages,currentPage,totalResults]
-            //print(response["data"])
-            let beerArray = response["data"] as? [[String:AnyObject]]
-            // Array of dictionaries
-            //print(type(of: beerArray))
-
-            for beer in beerArray! {
-                //print("Repeat from \(#line) beerArray")
-                //print(beer)
-                let breweryInfo = beer["breweries"] as! NSArray
-                //print(type(of: breweryInfo))
-                //print(breweryInfo)
-                //print(breweryInfo.count)
-                for (i,element) in breweryInfo.enumerated() {
-                    //print("Another brewery")
-                    let brewDict = element as! NSDictionary
-                    //print(brewDict["isOrganic"])
-                    //print(type(of: element))
-                    ///print("Element \(i) in brewerinfo:\(element)")
-                    for (k,v) in brewDict {
-                        //print("In brewDict k:\(k) v:\(v)")
+            // The Keys in this dictionary are [status,data,numberOfPages,currentPage,totalResults]
+            // Extracting beer data array of dictionaries
+            guard let beerArray = response["data"] as? [[String:AnyObject]] else {
+                print("Failed to extract data")
+                return
+            }
+            for beer in beerArray {
+                // Every beer is a dictionary; that also has an array of brewery information
+                let breweriesArray = beer["breweries"] as! NSArray
+                for brewery in breweriesArray {
+                    // The brewery dictionary
+                    let breweryDict = brewery as! NSDictionary
+                    //                    for (k,v) in breweryDict {
+                    //                        //print("In brewDict k:\(k) v:\(v)")
+                    //                    }
+                    
+                    // TODO Save Icons for display
+                    if let images = breweryDict["images"] as? [String : AnyObject] {
                     }
                     
-                    if let images = brewDict["images"] as? [String : AnyObject] {
-                        //print("Image to use\(images["squareMedium"])")
-                    }
-
-                    let locationInfo = brewDict["locations"] as! NSArray
-                    // If i want to use company info I may need to change the dictionary from String String
+                    let locationInfo = breweryDict["locations"] as! NSArray
+                    
+                    // TODO Check other information that may be useful for customer
                     let locDic = locationInfo[0] as! [String : AnyObject]
+                    // We can't visit a brewery if it's not open to the public
                     if locDic["openToPublic"] as! String == "Y" {
-                        //print("it's open")
-                        breweryLocationsArray.append(BreweryLocation(
+                        breweryLocationsSet.insert(
+                            BreweryLocation(
                                 latitude: locDic["latitude"]?.description,
                                 longitude: locDic["longitude"]?.description,
                                 url: locDic["website"] as! String?,
-                                name: brewDict["name"] as! String))
+                                name: breweryDict["name"] as! String))
                     }
                     // TODO pull out some other useful information such as website
                     //
@@ -132,43 +134,57 @@ class BreweryDBClient {
         }
     }
     
-    internal func getBreweries() -> [BreweryLocation]{
-        return breweryLocationsArray
+    internal func getBreweries() -> Set<BreweryLocation>{
+        return breweryLocationsSet
     }
     
     enum QueryTypes {
         case Beers
     }
-}
-
-extension BreweryDBClient {
     
-    private func createURLFromParameters(paramenters: [String:AnyObject]) -> NSURL {
+    private func createURLFromParameters(queryType: QueryTypes, parameters: [String:AnyObject]) -> NSURL {
         let components = NSURLComponents()
-        components.scheme = Constants.Brewery.APIScheme
-        components.host = Constants.Brewery.APIHost
-        components.path = Constants.Brewery.APIPath
+        components.scheme = Constants.BreweryDB.APIScheme
+        components.host = Constants.BreweryDB.APIHost
+        switch queryType {
+        case .Beers:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
+            break
+        default:
+            break
+        }
         components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
-        
-        for (key, value) in paramenters {
+        let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
+        components.queryItems?.append(queryItem)
+        for (key, value) in parameters {
+            print(key,value)
             let queryItem = NSURLQueryItem(name: key, value: "\(value)")
             components.queryItems?.append(queryItem as URLQueryItem)
         }
         return components.url! as NSURL
     }
+}
+
+extension BreweryDBClient {
+    
+
     
     struct Constants {
-        struct Brewery {
+        struct BreweryDB {
             static let APIScheme = "http"
             static let APIHost = "api.brewerydb.com"
-            static let APIPath = "/services/rest/v2"
+            static let APIPath = "/v2/"
+            struct Methods {
+                static let Beers = "beers"
+                static let Breweries = "breweries"
+            }
         }
         
         struct BreweryParameterKeys {
             static let Key = "key"
             static let Format = "format"
             static let Organic = "isOrganic"
-            static let StyleID = "styleID"
+            static let StyleID = "styleId"
             static let WithBreweries = "withBreweries"
         }
         
