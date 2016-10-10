@@ -34,7 +34,8 @@ class CategoryViewController: UIViewController , UITableViewDelegate  {
         
         let test = BreweryDBClient.sharedInstance()
         // TODO Test code remove
-        test.downloadBreweries(styleID: "1", isOrganic: true)
+        //test.downloadBreweries(styleID: "1", isOrganic: true)
+        test.downloadBeerStyles()
     }
 
     override func didReceiveMemoryWarning() {
