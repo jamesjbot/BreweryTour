@@ -17,7 +17,7 @@ class MapViewController : UIViewController {
     
     // MARK: Variables
     
-    internal var incomingLocations = [BreweryLocation]()
+    internal var incomingLocations = Set<BreweryLocation>()
     
     internal var greeter : FunctionalProtocol!
     
@@ -26,7 +26,7 @@ class MapViewController : UIViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         //getDataFromTheModel
-        incomingLocations = BreweryDBClient.sharedInstance().breweryLocationsArray
+        incomingLocations = BreweryDBClient.sharedInstance().breweryLocationsSet
         populateMap()
     }
     
