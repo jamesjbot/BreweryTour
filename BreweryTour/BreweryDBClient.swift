@@ -9,7 +9,6 @@
 import Foundation
 import Alamofire
 
-
 struct BreweryLocation : Hashable {
     var latitude : String?
     var longitude : String?
@@ -38,6 +37,7 @@ class BreweryDBClient {
     
     internal var breweryLocationsSet : Set<BreweryLocation> = Set<BreweryLocation>()
     internal var styleNames = [style]()
+ 
     // MARK: Singleton Implementation
     
     private init(){}
@@ -47,6 +47,7 @@ class BreweryDBClient {
         }
         return Singleton.sharedInstance
     }
+    
     // MARK: Functions
     
     internal func isReadyWithBreweryLocations() -> Bool {
@@ -54,8 +55,9 @@ class BreweryDBClient {
     }
     
     internal func downloadBeerStyles(){
-        let methodParameter : [String:AnyObject] = [:]
-        let outputURL : NSURL = createURLFromParameters(queryType: QueryTypes.Beers,parameters: methodParameter)
+        let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject
+]
+        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryTypes.Styles,parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
             guard response.result.isSuccess else {
                 return
@@ -64,7 +66,7 @@ class BreweryDBClient {
                 print("Invalid tag informatiion")
                 return
             }
-            self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Beers)
+            self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Styles)
             return
         }
     }
@@ -72,12 +74,12 @@ class BreweryDBClient {
     // Query for breweries that offer a certain style.
     internal func downloadBreweries(styleID : String, isOrganic : Bool ){
         let methodParameters  = [
-            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatValue as AnyObject,
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
             Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,
             Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
             Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject
         ]
-        let outputURL : NSURL = createURLFromParameters(queryType: QueryTypes.Beers,parameters: methodParameters)
+        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryTypes.Beers,parameters: methodParameters)
         Alamofire.request(outputURL.absoluteString!)
             //Alamofire.request("http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
             .responseJSON { response  in
@@ -146,6 +148,8 @@ class BreweryDBClient {
                 return
             }
             for aStyle in styleArrayOfDict {
+                print(type(of: aStyle))
+                print(aStyle)
                 styleNames.append(style(id: aStyle["id"] as! String as String, longName: aStyle["name"] as! String))
             }
             
@@ -166,11 +170,7 @@ class BreweryDBClient {
         return breweryLocationsSet
     }
     
-    enum QueryTypes {
-        case Beers
-    }
-    
-    private func createURLFromParameters(queryType: QueryTypes, parameters: [String:AnyObject]) -> NSURL {
+    private func createURLFromParameters(queryType: APIQueryTypes, parameters: [String:AnyObject]) -> NSURL {
         let components = NSURLComponents()
         components.scheme = Constants.BreweryDB.APIScheme
         components.host = Constants.BreweryDB.APIHost
@@ -178,6 +178,9 @@ class BreweryDBClient {
         case .Beers:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
             break
+        case .Styles:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Styles
+            
         default:
             break
         }
@@ -205,6 +208,7 @@ extension BreweryDBClient {
             struct Methods {
                 static let Beers = "beers"
                 static let Breweries = "breweries"
+                static let Styles = "styles"
             }
         }
         
@@ -218,7 +222,7 @@ extension BreweryDBClient {
         
         struct BreweryParameterValues {
             static let APIKey = "8e63b90f589c3b3f2001c5e396f5d300"
-            static let FormatValue = "json"
+            static let FormatJSON = "json"
         }
         
         struct BreweryLocation {
