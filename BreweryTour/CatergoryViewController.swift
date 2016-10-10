@@ -21,7 +21,7 @@ class CategoryViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         let test = BreweryDBClient.sharedInstance()
-        test.downloadBeerTypes()
+        test.downloadBeerStyles()
     }
 
     override func didReceiveMemoryWarning() {
