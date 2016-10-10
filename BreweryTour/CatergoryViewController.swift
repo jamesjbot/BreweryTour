@@ -13,6 +13,10 @@ class CategoryViewController: UIViewController {
     // MARK: IBAction clicked
     
     @IBAction func switchClicked(_ sender: AnyObject) {
+        // TODO Test code remove
+        guard BreweryDBClient.sharedInstance().isReadyWithBreweryLocations() else {
+            return
+        }
         performSegue(withIdentifier:"Go", sender: sender)
     }
 
@@ -21,7 +25,8 @@ class CategoryViewController: UIViewController {
         // Do any additional setup after loading the view, typically from a nib.
         
         let test = BreweryDBClient.sharedInstance()
-        test.downloadBeerStyles()
+        // TODO Test code remove
+        test.downloadBreweries(styleID: "1", isOrganic: true)
     }
 
     override func didReceiveMemoryWarning() {
