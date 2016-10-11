@@ -35,8 +35,20 @@ class CategoryViewController: UIViewController , UITableViewDelegate  {
         let test = BreweryDBClient.sharedInstance()
         // TODO Test code remove
         //test.downloadBreweries(styleID: "1", isOrganic: true)
-        test.downloadBeerStyles()
+        test.downloadBeerStyles(){
+            (success) -> Void in
+            if success {
+                self.styleTable.reloadData()
+            }
+            
+        }
     }
+    
+    // TODO Deselct entry when you get back to this window.
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+    }
+    
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -52,7 +64,8 @@ class CategoryViewController: UIViewController , UITableViewDelegate  {
 extension CategoryViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = styleTable.dequeueReusableCell(withIdentifier: cellIdentifier)
-        cell?.textLabel?.text = BreweryDBClient.sharedInstance().styleNames[indexPath.row].longName
+        cell?.textLabel?.text = BreweryDBClient.sharedInstance().styleNames[indexPath.row].id + ". " +
+            BreweryDBClient.sharedInstance().styleNames[indexPath.row].longName
         return cell!
     }
     
