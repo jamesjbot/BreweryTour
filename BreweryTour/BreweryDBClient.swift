@@ -49,24 +49,26 @@ class BreweryDBClient {
     }
     
     // MARK: Functions
-    
     internal func isReadyWithBreweryLocations() -> Bool {
         return breweryLocationsSet.count > 0
     }
     
-    internal func downloadBeerStyles(){
+    internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool) -> Void ){
         let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject
 ]
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryTypes.Styles,parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
             guard response.result.isSuccess else {
+                completionHandler(false)
                 return
             }
             guard let responseJSON = response.result.value as? [String:AnyObject] else {
                 print("Invalid tag informatiion")
+                completionHandler(false)
                 return
             }
             self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Styles)
+            completionHandler(true)
             return
         }
     }
@@ -143,20 +145,15 @@ class BreweryDBClient {
             break
 
         case .Styles:
-            guard let styleArrayOfDict = response["data"] as! [[String:AnyObject]]? else {
+            guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else {
                 print("Failed to convert")
                 return
             }
             for aStyle in styleArrayOfDict {
-                print(type(of: aStyle))
-                print(aStyle)
-                styleNames.append(style(id: aStyle["id"] as! String as String, longName: aStyle["name"] as! String))
+                let localId = aStyle["id"]?.stringValue!
+                let localName = aStyle["name"]
+                styleNames.append(style(id: localId!  , longName: localName as! String))
             }
-            
-            break
-            
-            
-        default:
             break
         }
     }
