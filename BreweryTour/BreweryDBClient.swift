@@ -121,7 +121,9 @@ class BreweryDBClient {
                     if let images = breweryDict["images"] as? [String : AnyObject] {
                     }
                     
-                    let locationInfo = breweryDict["locations"] as! NSArray
+                    guard let locationInfo = breweryDict["locations"] as? NSArray else {
+                        continue
+                    }
                     
                     // TODO Check other information that may be useful for customer
                     let locDic = locationInfo[0] as! [String : AnyObject]
