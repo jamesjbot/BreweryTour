@@ -8,8 +8,9 @@
 import UIKit
 import Foundation
 import MapKit
+import CoreLocation
 
-class MapViewController : UIViewController {
+class MapViewController : UIViewController, CLLocationManagerDelegate {
     
     // MARK: IBOutlet
     
@@ -21,6 +22,7 @@ class MapViewController : UIViewController {
     
     internal var greeter : FunctionalProtocol!
     
+    private let locationManager = CLLocationManager()
     // MARK: Functions
     
     override func viewDidLoad(){
@@ -28,6 +30,11 @@ class MapViewController : UIViewController {
         //getDataFromTheModel
         incomingLocations = BreweryDBClient.sharedInstance().breweryLocationsSet
         populateMap()
+        
+        // CoreLocation initialization
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        
     }
     
     private func populateMap(){
@@ -43,6 +50,7 @@ class MapViewController : UIViewController {
             annotations.append(aPin)
         }
         mapView.addAnnotations(annotations)
+        _ = mapView.userLocation
     }
 }
 
