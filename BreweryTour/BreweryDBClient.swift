@@ -9,6 +9,7 @@
 import Foundation
 import Alamofire
 
+
 struct BreweryLocation : Hashable {
     var latitude : String?
     var longitude : String?
@@ -179,7 +180,6 @@ class BreweryDBClient {
             break
         case .Styles:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Styles
-            
         default:
             break
         }
