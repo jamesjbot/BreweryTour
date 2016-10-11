@@ -8,7 +8,7 @@
 
 import UIKit
 
-class CategoryViewController: UIViewController , UITableViewDelegate  {
+class CategoryViewController: UIViewController  {
 
     // MARK: Constants
     
@@ -16,6 +16,7 @@ class CategoryViewController: UIViewController , UITableViewDelegate  {
     
     // MARK: IBOutlets
     
+    @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var styleTable: UITableView!
     
     // MARK: IBAction clicked
@@ -74,5 +75,11 @@ extension CategoryViewController : UITableViewDataSource {
     }
 }
 
+extension CategoryViewController : UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let style = BreweryDBClient.sharedInstance().styleNames[indexPath.row].id
+        BreweryDBClient.sharedInstance().downloadBreweries(styleID: style, isOrganic: organicSwitch.isOn)
+    }
+}
 
 
