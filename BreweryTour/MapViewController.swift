@@ -42,6 +42,8 @@ class MapViewController : UIViewController {
         }
         mapView.addAnnotations(annotations)
     }
-    
+}
+
+extension MapViewController : MKMapViewDelegate {
     
 }
