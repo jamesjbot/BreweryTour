@@ -36,14 +36,45 @@ class MapViewController : UIViewController {
             guard i.latitude != nil && i.longitude != nil else {
                 continue
             }
-            let a = MKPointAnnotation()
-            a.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
-            annotations.append(a)
+            let aPin = MKPointAnnotation()
+            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
+            aPin.title = i.name
+            aPin.subtitle = i.url
+            annotations.append(aPin)
         }
         mapView.addAnnotations(annotations)
     }
 }
 
 extension MapViewController : MKMapViewDelegate {
+//    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+//        <#code#>
+//    }
+
+    // This format pins (annotations on the map)
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let reuseId = "pin"
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView!.canShowCallout = true
+            pinView!.pinTintColor = UIColor.red
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        }
+        else {
+            pinView!.annotation = annotation
+        }
+        return pinView
+    }
+    
+    
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if control == view.rightCalloutAccessoryView {
+            let url: URL = URL(string: (view.annotation?.subtitle!)!)!
+            if UIApplication.shared.canOpenURL(url) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            }
+        }
+    }
     
 }
