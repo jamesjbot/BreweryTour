@@ -94,7 +94,7 @@ extension MapViewController : MKMapViewDelegate {
             if let routeResponse = response?.routes {
                 // As you can see the response will list many routes, need to sort to just the fastest one
                 let quickestRoute : MKRoute = routeResponse.sorted(by: {$0.expectedTravelTime < $1.expectedTravelTime})[0]
-                displayRouteOnMap(route: quickestRoute)
+                self.displayRouteOnMap(route: quickestRoute)
             } else {
                 print("There are no routes avaialble")
             }
@@ -103,7 +103,8 @@ extension MapViewController : MKMapViewDelegate {
     }
     
     func displayRouteOnMap(route: MKRoute){
-        
+        mapView.add(route.polyline)
+        mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: UIEdgeInsetsMake(10.0,10.0,10.0,10.0), animated: true)
     }
     
     func convertToMKMapItemThis(_ view: MKAnnotationView) -> MKMapItem {
