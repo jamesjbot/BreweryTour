@@ -66,7 +66,12 @@ extension MapViewController : MKMapViewDelegate {
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
-            pinView!.pinTintColor = UIColor.red
+            if pinView?.annotation?.coordinate.latitude == mapView.userLocation.coordinate.latitude
+            && pinView?.annotation?.coordinate.longitude == mapView.userLocation.coordinate.longitude {
+                pinView!.pinTintColor = UIColor.blue
+            } else {
+                pinView!.pinTintColor = UIColor.red
+            }
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         } else {
             pinView!.annotation = annotation
