@@ -19,9 +19,7 @@ class MapViewController : UIViewController {
     // MARK: Variables
     
     internal var incomingLocations = Set<BreweryLocation>()
-    
-    internal var greeter : FunctionalProtocol!
-    
+        
     private let locationManager = CLLocationManager()
     // MARK: Functions
     
