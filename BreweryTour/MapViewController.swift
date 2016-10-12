@@ -122,8 +122,18 @@ extension MapViewController : MKMapViewDelegate {
         }
     }
     
-    
+    internal func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+        let polylineRenderer = MKPolylineRenderer(overlay: overlay)
+        if overlay is MKPolyline {
+            polylineRenderer.strokeColor = UIColor.green.withAlphaComponent(0.5)
+            polylineRenderer.lineWidth = 3
+        }
+        return polylineRenderer
+    }
 }
+
+
+
 
 extension MapViewController: CLLocationManagerDelegate {
     
