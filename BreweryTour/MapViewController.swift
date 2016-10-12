@@ -60,9 +60,6 @@ class MapViewController : UIViewController {
 }
 
 extension MapViewController : MKMapViewDelegate {
-//    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-//        <#code#>
-//    }
 
     // This format pins (annotations on the map)
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -97,10 +94,15 @@ extension MapViewController : MKMapViewDelegate {
             if let routeResponse = response?.routes {
                 // As you can see the response will list many routes, need to sort to just the fastest one
                 let quickestRoute : MKRoute = routeResponse.sorted(by: {$0.expectedTravelTime < $1.expectedTravelTime})[0]
+                displayRouteOnMap(route: quickestRoute)
             } else {
                 print("There are no routes avaialble")
             }
         }
+        
+    }
+    
+    func displayRouteOnMap(route: MKRoute){
         
     }
     
