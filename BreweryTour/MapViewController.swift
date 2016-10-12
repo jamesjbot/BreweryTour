@@ -81,11 +81,31 @@ extension MapViewController : MKMapViewDelegate {
     
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         print("didSelectAnnotation")
-        reverseGeocode(view)
+        // Our location
+        let origin = MKMapItem(placemark: MKPlacemark(coordinate: mapView.userLocation.coordinate))
+        // The brewerery selected
+        let destination = convertToMKMapItemThis(view)
+        // Getting plottable directions
+        let request = MKDirectionsRequest()
+        request.source = origin
+        request.destination = destination
+        request.requestsAlternateRoutes = true
+        request.transportType = .automobile
+        let directions = MKDirections(request: request)
+        directions.calculate(){
+            (response , error ) -> Void in
+            if let routeResponse = response?.routes {
+                // As you can see the response will list many routes, need to sort to just the fastest one
+                let quickestRoute : MKRoute = routeResponse.sorted(by: {$0.expectedTravelTime < $1.expectedTravelTime})[0]
+            } else {
+                print("There are no routes avaialble")
+            }
+        }
+        
     }
     
-    func reverseGeocode(_ view: MKAnnotationView){
-        
+    func convertToMKMapItemThis(_ view: MKAnnotationView) -> MKMapItem {
+        return MKMapItem(placemark: MKPlacemark(coordinate: (view.annotation?.coordinate)!))
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
