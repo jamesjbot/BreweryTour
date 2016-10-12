@@ -35,7 +35,7 @@ class BreweryDBClient {
     }
     
     // MARK: Variables
-    
+    private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     internal var breweryLocationsSet : Set<BreweryLocation> = Set<BreweryLocation>()
     internal var styleNames = [style]()
  
@@ -113,12 +113,22 @@ class BreweryDBClient {
                 
                 // Create the coredata object for each beer
                 // which will include name, description, availability, brewery name, styleID
-                print("beer:\(beer["name"])")
-                print("beerDescription:\(beer["description"])")
-                print("labels:\(beer["labels"])")
-                print("available:\((beer["available"]as?NSDictionary)?["description"])")
-                //Beer(name:, beerDescription: <#T##String#>, availability: <#T##String#>, style: <#T##String#>, context: <#T##NSManagedObjectContext#>)
-                print("id:\(beer["id"])")
+//                print("beer:\(beer["name"])")
+//                print("beerDescription:\(beer["description"])")
+//                print("labels:\(beer["labels"])")
+//                //print("available:\((beer["available"] as? Dictionary)?["description"])")
+//                print("id:\(beer["id"])")
+//                print(coreDataStack?.mainContext)
+                let id : String? = beer["id"] as? String
+                let name : String? = beer["name"] as? String ?? ""
+                let description : String? = (beer["description"] as? String) ?? ""
+                var available : String? = nil
+                if let interimAvail = beer["available"],
+                    let verbage = interimAvail["description"] as? String {
+                    available = verbage
+                }
+               Beer(id: id!, name: name ?? "", beerDescription: description ?? "", availability: available ?? "", context: (coreDataStack?.mainContext!)!)
+
                 let breweriesArray = beer["breweries"] as! NSArray
                 for brewery in breweriesArray {
                     // The brewery dictionary
@@ -128,8 +138,8 @@ class BreweryDBClient {
                     //                    }
                     
                     // TODO Save Icons for display
-                    if let images = breweryDict["images"] as? [String : AnyObject] {
-                    }
+                    //if let images = breweryDict["images"] as? [String : AnyObject] {
+                    //}
                     
                     guard let locationInfo = breweryDict["locations"] as? NSArray else {
                         continue
