@@ -110,6 +110,10 @@ class BreweryDBClient {
             }
             for beer in beerArray {
                 // Every beer is a dictionary; that also has an array of brewery information
+                
+                // Create the coredata object for each beer
+                // which will include name, description, availability, brewery name, styleID
+                
                 let breweriesArray = beer["breweries"] as! NSArray
                 for brewery in breweriesArray {
                     // The brewery dictionary
