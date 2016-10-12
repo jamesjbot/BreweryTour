@@ -1,5 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1004" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="Beer" syncable="YES">
+        <attribute name="availability" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="beerDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="name" attributeType="String" syncable="YES"/>
+        <attribute name="style" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="tastingNotes" optional="YES" attributeType="String" syncable="YES"/>
+    </entity>
     <entity name="Brewery" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
@@ -11,7 +18,8 @@
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Style" positionX="-63" positionY="-18" width="128" height="75"/>
         <element name="Brewery" positionX="-54" positionY="9" width="128" height="105"/>
+        <element name="Style" positionX="-63" positionY="-18" width="128" height="75"/>
+        <element name="Beer" positionX="-54" positionY="27" width="128" height="120"/>
     </elements>
 </model>
