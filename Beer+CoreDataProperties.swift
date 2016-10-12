@@ -21,5 +21,6 @@ extension Beer {
     @NSManaged public var name: String?
     @NSManaged public var style: String?
     @NSManaged public var tastingNotes: String?
+    @NSManaged public var id: String?
 
 }

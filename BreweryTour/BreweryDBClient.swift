@@ -113,7 +113,12 @@ class BreweryDBClient {
                 
                 // Create the coredata object for each beer
                 // which will include name, description, availability, brewery name, styleID
-                
+                print("beer:\(beer["name"])")
+                print("beerDescription:\(beer["description"])")
+                print("labels:\(beer["labels"])")
+                print("available:\((beer["available"]as?NSDictionary)?["description"])")
+                //Beer(name:, beerDescription: <#T##String#>, availability: <#T##String#>, style: <#T##String#>, context: <#T##NSManagedObjectContext#>)
+                print("id:\(beer["id"])")
                 let breweriesArray = beer["breweries"] as! NSArray
                 for brewery in breweriesArray {
                     // The brewery dictionary
