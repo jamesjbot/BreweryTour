@@ -10,7 +10,7 @@ import Foundation
 import MapKit
 import CoreLocation
 
-class MapViewController : UIViewController, CLLocationManagerDelegate {
+class MapViewController : UIViewController {
     
     // MARK: IBOutlet
     
@@ -34,8 +34,13 @@ class MapViewController : UIViewController, CLLocationManagerDelegate {
         // CoreLocation initialization
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+            locationManager.requestLocation()
+        }
         
     }
+        
     
     private func populateMap(){
         var annotations = [MKAnnotation]()
@@ -68,13 +73,20 @@ extension MapViewController : MKMapViewDelegate {
             pinView!.canShowCallout = true
             pinView!.pinTintColor = UIColor.red
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        }
-        else {
+        } else {
             pinView!.annotation = annotation
         }
         return pinView
     }
     
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        print("didSelectAnnotation")
+        reverseGeocode(view)
+    }
+    
+    func reverseGeocode(_ view: MKAnnotationView){
+        
+    }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView {
@@ -82,7 +94,29 @@ extension MapViewController : MKMapViewDelegate {
             if UIApplication.shared.canOpenURL(url) {
                 UIApplication.shared.open(url, options: [:], completionHandler: nil)
             }
+        } else {
+            print("A different control was pressed")
         }
     }
     
+    
 }
+
+extension MapViewController: CLLocationManagerDelegate {
+    
+    func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        CLGeocoder().reverseGeocodeLocation(locations.last!){
+            (placemarks, error) -> Void in
+            if let placemarks = placemarks {
+                let placemark = placemarks[0]
+                // Here is the placemark for the users location
+                let userMapItem = MKMapItem(placemark: MKPlacemark(coordinate: placemark.location!.coordinate, addressDictionary: placemark.addressDictionary as! [String:AnyObject]?))
+            }
+        }
+    }
+    
+    func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
+        
+    }
+}
+
