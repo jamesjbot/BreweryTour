@@ -118,7 +118,7 @@
             </objects>
             <point key="canvasLocation" x="826" y="-59"/>
         </scene>
-        <!--Item-->
+        <!--Map-->
         <scene sceneID="xjh-Lw-ZkF">
             <objects>
                 <viewController id="kc4-oF-YzA" customClass="MapViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
@@ -151,7 +151,7 @@
                             <constraint firstAttribute="leadingMargin" secondItem="idd-zP-hy0" secondAttribute="leading" constant="16" id="nc7-Xs-ra4"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="wBm-jW-G7A"/>
+                    <tabBarItem key="tabBarItem" title="Map" id="wBm-jW-G7A"/>
                     <connections>
                         <outlet property="mapView" destination="idd-zP-hy0" id="hTM-gR-Klp"/>
                     </connections>
@@ -160,7 +160,7 @@
             </objects>
             <point key="canvasLocation" x="2540" y="-59.820089955022496"/>
         </scene>
-        <!--Item-->
+        <!--Beers-->
         <scene sceneID="KEQ-HI-GM0">
             <objects>
                 <viewController id="CGT-bu-6NU" sceneMemberID="viewController">
@@ -173,30 +173,11 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="Ptn-dv-QwG"/>
+                    <tabBarItem key="tabBarItem" title="Beers" id="Ptn-dv-QwG"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR2-N2-eti" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1642" y="682"/>
-        </scene>
-        <!--Item-->
-        <scene sceneID="edm-zd-q9n">
-            <objects>
-                <viewController id="FCz-TZ-rKS" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="BOw-B2-ZVN"/>
-                        <viewControllerLayoutGuide type="bottom" id="nFJ-eD-3p9"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="AXI-x9-Pz8">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                    <tabBarItem key="tabBarItem" title="Item" id="7V2-3N-64N"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="OsC-br-oPb" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2558" y="681"/>
         </scene>
         <!--Brewery Tour-->
         <scene sceneID="068-UA-gCJ">
@@ -228,7 +209,6 @@
                     </tabBar>
                     <connections>
                         <segue destination="kc4-oF-YzA" kind="relationship" relationship="viewControllers" id="rAk-9J-vAp"/>
-                        <segue destination="FCz-TZ-rKS" kind="relationship" relationship="viewControllers" id="RMv-7z-zyQ"/>
                         <segue destination="CGT-bu-6NU" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
                     </connections>
                 </tabBarController>
