@@ -180,8 +180,6 @@ class BreweryDBClient {
             break
         case .Styles:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Styles
-        default:
-            break
         }
         components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
