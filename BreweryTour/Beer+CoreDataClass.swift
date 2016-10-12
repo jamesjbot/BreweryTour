@@ -11,5 +11,12 @@ import CoreData
 
 
 public class Beer: NSManagedObject {
-
+    convenience init(name: String , beerDescription: String, availability: String, style: String, context : NSManagedObjectContext){
+        let entityDescription = NSEntityDescription.entity(forEntityName: "Beer", in: context)
+        self.init(entity: entityDescription!, insertInto: context)
+        self.name = name
+        self.beerDescription = beerDescription
+        self.availability = availability
+        self.style = style
+    }
 }
