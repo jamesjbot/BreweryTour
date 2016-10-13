@@ -109,11 +109,12 @@ class BreweryDBClient {
                 return
             }
             for beer in beerArray {
+                print("---------------------NextBeer---------------------")
                 // Every beer is a dictionary; that also has an array of brewery information
                 
                 // Create the coredata object for each beer
                 // which will include name, description, availability, brewery name, styleID
-//                print("beer:\(beer["name"])")
+                print("beer:\(beer["name"])")
 //                print("beerDescription:\(beer["description"])")
 //                print("labels:\(beer["labels"])")
 //                //print("available:\((beer["available"] as? Dictionary)?["description"])")
@@ -131,6 +132,7 @@ class BreweryDBClient {
 
                 let breweriesArray = beer["breweries"] as! NSArray
                 for brewery in breweriesArray {
+                    print("Another brewery encoutered")
                     // The brewery dictionary
                     let breweryDict = brewery as! NSDictionary
                     //                    for (k,v) in breweryDict {
@@ -138,23 +140,37 @@ class BreweryDBClient {
                     //                    }
                     
                     // TODO Save Icons for display
-                    //if let images = breweryDict["images"] as? [String : AnyObject] {
-                    //}
+                    if let images = breweryDict["images"] as? [String : AnyObject] {
+                    }
                     
                     guard let locationInfo = breweryDict["locations"] as? NSArray else {
                         continue
                     }
                     
+                    print(breweryDict)
+                    
                     // TODO Check other information that may be useful for customer
                     let locDic = locationInfo[0] as! [String : AnyObject]
                     // We can't visit a brewery if it's not open to the public
                     if locDic["openToPublic"] as! String == "Y" {
+                        print("Here is a brewery for this beer \(breweryDict["name"] as! String)")
                         breweryLocationsSet.insert(
                             BreweryLocation(
                                 latitude: locDic["latitude"]?.description,
                                 longitude: locDic["longitude"]?.description,
                                 url: locDic["website"] as! String?,
                                 name: breweryDict["name"] as! String))
+                        
+                            Brewery(name: breweryDict["name"] as! String,
+                                    latitude: locDic["latitude"]?.description,
+                                    longitude: locDic["longitude"]?.description,
+                                    url: locDic["website"] as! String?,
+                                    open: (locDic["openToPublic"] as! String == "Y") ? true : false,
+                                    id: nil,
+                                    context: (coreDataStack?.mainContext)!)
+                        
+                            
+                        //We might only create the beer if the brewery is open
                     }
                     // TODO pull out some other useful information such as website
                     //
