@@ -28,21 +28,19 @@ class BeersViewController: UIViewController {
     
     
     required init?(coder aDecoder: NSCoder) {
-        initializeFetchedResultsController()
-        super.init(coder: aDecoder)
-    }
-    
-    
-    private func initializeFetchedResultsController(){
-        
-        // Create a request for Beer objects and fetch the request from Coredata
-        
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request,
                                                               managedObjectContext: (coreDataStack?.mainContext)!,
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
+        super.init(coder: aDecoder)
+    }
+    
+    
+    private func perfromFetchOnResultsController(){
+        
+        // Create a request for Beer objects and fetch the request from Coredata
         do {
             try fetchedResultsController.performFetch()
         } catch {
@@ -55,6 +53,7 @@ class BeersViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        perfromFetchOnResultsController()
     }
 
     
@@ -87,12 +86,12 @@ extension BeersViewController: NSFetchedResultsControllerDelegate {
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        <#code#>
+        print()
     }
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        <#code#>
+        print()
     }
     
 
@@ -107,13 +106,17 @@ extension BeersViewController: UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        
+        // Get a cell from the tableview and populate with name
+        let cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
+        cell.textLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].name
+        return cell
     }
+
 }
 
 extension BeersViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        <#code#>
+
     }
 }
