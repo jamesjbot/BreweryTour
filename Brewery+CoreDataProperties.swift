@@ -2,7 +2,7 @@
 //  Brewery+CoreDataProperties.swift
 //  
 //
-//  Created by James Jongsurasithiwat on 10/12/16.
+//  Created by James Jongsurasithiwat on 10/13/16.
 //
 //
 
@@ -20,5 +20,7 @@ extension Brewery {
     @NSManaged public var latitude: String?
     @NSManaged public var longitude: String?
     @NSManaged public var name: String?
+    @NSManaged public var url: String?
+    @NSManaged public var openToThePublic: Bool
 
 }

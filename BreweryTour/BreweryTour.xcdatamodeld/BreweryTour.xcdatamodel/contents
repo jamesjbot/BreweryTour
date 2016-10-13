@@ -7,20 +7,24 @@
         <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="style" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tastingNotes" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="brewer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Brewery" inverseName="brewedbeer" inverseEntity="Brewery" syncable="YES"/>
     </entity>
     <entity name="Brewery" representedClassName=".Brewery" syncable="YES">
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="openToThePublic" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
+        <relationship name="brewedbeer" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Beer" inverseName="brewer" inverseEntity="Beer" syncable="YES"/>
     </entity>
     <entity name="Style" representedClassName=".Style" syncable="YES">
         <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Beer" positionX="-54" positionY="27" width="128" height="135"/>
-        <element name="Brewery" positionX="-54" positionY="9" width="128" height="105"/>
+        <element name="Beer" positionX="-54" positionY="27" width="128" height="150"/>
+        <element name="Brewery" positionX="-54" positionY="9" width="128" height="150"/>
         <element name="Style" positionX="-63" positionY="-18" width="128" height="75"/>
     </elements>
 </model>
