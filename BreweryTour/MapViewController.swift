@@ -57,6 +57,7 @@ class MapViewController : UIViewController {
     }
 }
 
+
 extension MapViewController : MKMapViewDelegate {
 
     // This format pins (annotations on the map)
@@ -79,6 +80,7 @@ extension MapViewController : MKMapViewDelegate {
         return pinView
     }
     
+    
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         print("didSelectAnnotation")
         // Our location
@@ -95,6 +97,7 @@ extension MapViewController : MKMapViewDelegate {
         directions.calculate(){
             (response , error ) -> Void in
             if let routeResponse = response?.routes {
+                self.removeRouteOnMap()
                 // As you can see the response will list many routes, need to sort to just the fastest one
                 let quickestRoute : MKRoute = routeResponse.sorted(by: {$0.expectedTravelTime < $1.expectedTravelTime})[0]
                 self.displayRouteOnMap(route: quickestRoute)
@@ -105,14 +108,22 @@ extension MapViewController : MKMapViewDelegate {
         
     }
     
+    
+    func removeRouteOnMap(){
+        mapView.removeOverlays(mapView.overlays)
+    }
+    
+    
     func displayRouteOnMap(route: MKRoute){
         mapView.add(route.polyline)
         mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: UIEdgeInsetsMake(10.0,10.0,10.0,10.0), animated: true)
     }
     
+    
     func convertToMKMapItemThis(_ view: MKAnnotationView) -> MKMapItem {
         return MKMapItem(placemark: MKPlacemark(coordinate: (view.annotation?.coordinate)!))
     }
+    
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         if control == view.rightCalloutAccessoryView,
@@ -124,6 +135,7 @@ extension MapViewController : MKMapViewDelegate {
             print("A different control was pressed")
         }
     }
+    
     
     internal func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
