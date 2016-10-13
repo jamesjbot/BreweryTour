@@ -2,13 +2,13 @@
 //  Beer+CoreDataProperties.swift
 //  
 //
-//  Created by James Jongsurasithiwat on 10/12/16.
+//  Created by James Jongsurasithiwat on 10/13/16.
 //
 //
 
 import Foundation
 import CoreData
-
+ 
 
 extension Beer {
 
@@ -18,9 +18,10 @@ extension Beer {
 
     @NSManaged public var availability: String?
     @NSManaged public var beerDescription: String?
-    @NSManaged public var name: String?
+    @NSManaged public var beerName: String?
+    @NSManaged public var id: String?
     @NSManaged public var style: String?
     @NSManaged public var tastingNotes: String?
-    @NSManaged public var id: String?
+    @NSManaged public var brewer: Brewery?
 
 }

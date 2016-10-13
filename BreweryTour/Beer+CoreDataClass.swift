@@ -14,7 +14,7 @@ public class Beer: NSManagedObject {
     convenience init(id: String, name: String , beerDescription: String, availability: String, context : NSManagedObjectContext){
         let entityDescription = NSEntityDescription.entity(forEntityName: "Beer", in: context)
         self.init(entity: entityDescription!, insertInto: context)
-        self.name = name
+        self.beerName = name
         self.beerDescription = beerDescription
         self.availability = availability
         //self.style = style

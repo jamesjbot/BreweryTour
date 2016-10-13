@@ -11,7 +11,7 @@ import CoreData
 
 
 public class Brewery: NSManagedObject {
-    convenience init(name: String,
+    convenience init(inName: String,
                      latitude: String?,
                      longitude: String?,
                      url: String?,
@@ -25,5 +25,6 @@ public class Brewery: NSManagedObject {
         self.url = url ?? ""
         self.id = id ?? ""
         self.openToThePublic = open ?? false
+        self.name = (inName != nil ? inName : "No Brewery Name Listed")
     }
 }

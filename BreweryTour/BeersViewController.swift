@@ -108,7 +108,8 @@ extension BeersViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name
         let cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
-        cell.textLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].name
+        cell.textLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].beerName
+        cell.detailTextLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].brewer?.name
         return cell
     }
 

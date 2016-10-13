@@ -3,8 +3,8 @@
     <entity name="Beer" representedClassName=".Beer" syncable="YES">
         <attribute name="availability" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="beerDescription" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="beerName" attributeType="String" syncable="YES"/>
         <attribute name="id" attributeType="String" syncable="YES"/>
-        <attribute name="name" attributeType="String" syncable="YES"/>
         <attribute name="style" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tastingNotes" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="brewer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Brewery" inverseName="brewedbeer" inverseEntity="Brewery" syncable="YES"/>

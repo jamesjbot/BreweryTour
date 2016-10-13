@@ -128,7 +128,7 @@ class BreweryDBClient {
                     let verbage = interimAvail["description"] as? String {
                     available = verbage
                 }
-               Beer(id: id!, name: name ?? "", beerDescription: description ?? "", availability: available ?? "", context: (coreDataStack?.mainContext!)!)
+               let thisBeer = Beer(id: id!, name: name ?? "", beerDescription: description ?? "", availability: available ?? "", context: (coreDataStack?.mainContext!)!)
 
                 let breweriesArray = beer["breweries"] as! NSArray
                 for brewery in breweriesArray {
@@ -161,7 +161,7 @@ class BreweryDBClient {
                                 url: locDic["website"] as! String?,
                                 name: breweryDict["name"] as! String))
                         
-                            Brewery(name: breweryDict["name"] as! String,
+                            let thisBrewery = Brewery(inName: breweryDict["name"] as! String,
                                     latitude: locDic["latitude"]?.description,
                                     longitude: locDic["longitude"]?.description,
                                     url: locDic["website"] as! String?,
@@ -169,8 +169,11 @@ class BreweryDBClient {
                                     id: nil,
                                     context: (coreDataStack?.mainContext)!)
                         
+                        thisBeer.brewer = thisBrewery
                             
                         //We might only create the beer if the brewery is open
+                    } else {
+                        print("Closed to the public")
                     }
                     // TODO pull out some other useful information such as website
                     //
@@ -180,6 +183,13 @@ class BreweryDBClient {
                     //                    breweryLocationsArray.append(BreweryLocation(latitude: location["latitude"] as! String, longitude: location["longitude"] as! String))
                 }
             }
+            
+            do {
+                try coreDataStack?.mainContext.save()
+            } catch {
+                fatalError("Saving maain error")
+            }
+            
             break
 
         case .Styles:
