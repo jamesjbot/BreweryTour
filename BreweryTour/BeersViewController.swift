@@ -17,7 +17,7 @@ class BeersViewController: UIViewController {
     
     // MARK: Variables
     
-    private var fetchedResultsController : NSFetchedResultsController<Beer>
+    fileprivate var fetchedResultsController : NSFetchedResultsController<Beer>
     
     // MARK: IBOutlets
     
@@ -83,7 +83,6 @@ class BeersViewController: UIViewController {
 extension BeersViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        <#code#>
     }
     
     
@@ -103,12 +102,12 @@ extension BeersViewController: NSFetchedResultsControllerDelegate {
 extension BeersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        <#code#>
+        return (fetchedResultsController.fetchedObjects?.count)!
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        <#code#>
+        
     }
 }
 
