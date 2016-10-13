@@ -211,6 +211,9 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     </view>
                     <tabBarItem key="tabBarItem" title="Beers" id="Ptn-dv-QwG"/>
+                    <connections>
+                        <outlet property="tableView" destination="7fx-me-ez9" id="arJ-Q7-aRj"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR2-N2-eti" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
