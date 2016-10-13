@@ -48,6 +48,9 @@ class CategoryViewController: UIViewController  {
     // TODO Deselct entry when you get back to this window.
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        // Fix the top title bar when we return
+        navigationController?.navigationBar.topItem?.title =  "Organic Brewery Tour"
+
     }
     
 
@@ -57,6 +60,7 @@ class CategoryViewController: UIViewController  {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+            navigationController?.navigationBar.topItem?.title = "Back To Categories"
     }
 
 
