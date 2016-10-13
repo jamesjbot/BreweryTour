@@ -11,18 +11,62 @@ import CoreData
 
 class BeersViewController: UIViewController {
 
+    // MARK: Constants
+    
+    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    
+    // MARK: Variables
+    
+    private var fetchedResultsController : NSFetchedResultsController<Beer>
+    
+    // MARK: IBOutlets
+    
+    @IBOutlet weak var tableView: UITableView!
+    
+    
+    // MARK: Functions
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        initializeFetchedResultsController()
+        super.init(coder: aDecoder)
+    }
+    
+    
+    private func initializeFetchedResultsController(){
+        
+        // Create a request for Beer objects and fetch the request from Coredata
+        
+        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+        request.sortDescriptors = []
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request,
+                                                              managedObjectContext: (coreDataStack?.mainContext)!,
+                                                              sectionNameKeyPath: nil,
+                                                              cacheName: nil)
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("There was a problem fetching from coredata")
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    
 
+    
+    
     /*
     // MARK: - Navigation
 
@@ -34,14 +78,19 @@ class BeersViewController: UIViewController {
     */
 
 }
+
+
 extension BeersViewController: NSFetchedResultsControllerDelegate {
+    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         <#code#>
     }
     
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         <#code#>
     }
+    
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         <#code#>
@@ -52,9 +101,11 @@ extension BeersViewController: NSFetchedResultsControllerDelegate {
 
 
 extension BeersViewController: UITableViewDataSource {
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         <#code#>
     }
+    
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         <#code#>
@@ -62,6 +113,7 @@ extension BeersViewController: UITableViewDataSource {
 }
 
 extension BeersViewController : UITableViewDelegate {
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         <#code#>
     }
