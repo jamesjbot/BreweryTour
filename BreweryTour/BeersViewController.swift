@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class BeersViewController: UIViewController {
 
@@ -33,6 +34,22 @@ class BeersViewController: UIViewController {
     */
 
 }
+extension BeersViewController: NSFetchedResultsControllerDelegate {
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        <#code#>
+    }
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        <#code#>
+    }
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        <#code#>
+    }
+    
+
+}
+
 
 extension BeersViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
