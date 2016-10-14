@@ -118,8 +118,13 @@ extension BeersViewController: UITableViewDataSource {
 extension BeersViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailView")
-        // TODO push beer information to Detail View Controller
-        navigationController?.pushViewController(destinationViewcontroller!, animated: true)
+        // Create target viewcontroller
+        let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
+        
+        // Push beer information to Detail View Controller
+        destinationViewcontroller.beer = fetchedResultsController.fetchedObjects?[indexPath.row]
+        
+        // Segue to view controller
+        navigationController?.pushViewController(destinationViewcontroller, animated: true)
     }
 }
