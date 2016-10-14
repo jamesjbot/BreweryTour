@@ -10,6 +10,11 @@ import Foundation
 import Alamofire
 
 
+struct style {
+    var id : String
+    var longName : String
+}
+
 struct BreweryLocation : Hashable {
     var latitude : String?
     var longitude : String?
@@ -205,11 +210,7 @@ class BreweryDBClient {
             break
         }
     }
-    
-    struct style {
-        var id : String
-        var longName : String
-    }
+
     
     internal func getBreweries() -> Set<BreweryLocation>{
         return breweryLocationsSet
