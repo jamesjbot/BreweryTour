@@ -20,6 +20,9 @@ class CategoryViewController: UIViewController  {
     @IBOutlet weak var styleTable: UITableView!
     
     // MARK: IBAction clicked
+    @IBAction func organicClicked(_ sender: AnyObject) {
+        setTopTitleBarName()
+    }
     
     @IBAction func switchClicked(_ sender: AnyObject) {
         // TODO Test code remove
@@ -29,6 +32,14 @@ class CategoryViewController: UIViewController  {
         performSegue(withIdentifier:"Go", sender: sender)
     }
 
+    private func setTopTitleBarName(){
+        if organicSwitch.isOn {
+            navigationController?.navigationBar.topItem?.title =  "Organic Brewery Tour"
+        } else {
+            navigationController?.navigationBar.topItem?.title =  "Brewery Tour"
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
@@ -49,8 +60,7 @@ class CategoryViewController: UIViewController  {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Fix the top title bar when we return
-        navigationController?.navigationBar.topItem?.title =  "Organic Brewery Tour"
-
+        setTopTitleBarName()
     }
     
 
