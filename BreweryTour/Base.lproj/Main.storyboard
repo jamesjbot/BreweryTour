@@ -59,10 +59,10 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerTypeCell" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="375" height="43"/>
+                                                    <frame key="frameInset" width="1000" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -301,9 +301,8 @@
                             <constraint firstItem="WlE-Ju-job" firstAttribute="top" secondItem="i00-V0-4W8" secondAttribute="bottom" constant="8" id="C6u-qn-zZ4"/>
                             <constraint firstItem="0z3-QK-mWY" firstAttribute="width" secondItem="y6w-6c-dcQ" secondAttribute="width" id="CSw-FA-uqE"/>
                             <constraint firstItem="UOG-ID-3ve" firstAttribute="height" secondItem="y6w-6c-dcQ" secondAttribute="height" multiplier="0.2" constant="6.5999999999999943" id="Fbj-fo-idR"/>
-                            <constraint firstItem="2cu-Yq-fq3" firstAttribute="leading" secondItem="WlE-Ju-job" secondAttribute="trailing" constant="31" id="NG1-8P-xOu"/>
                             <constraint firstItem="0z3-QK-mWY" firstAttribute="leading" secondItem="y6w-6c-dcQ" secondAttribute="leadingMargin" constant="-16" id="PNo-hH-W9g"/>
-                            <constraint firstItem="0z3-QK-mWY" firstAttribute="height" secondItem="y6w-6c-dcQ" secondAttribute="height" multiplier="0.6" constant="-44.199999999999989" id="aDS-RA-DFz"/>
+                            <constraint firstItem="0z3-QK-mWY" firstAttribute="height" secondItem="y6w-6c-dcQ" secondAttribute="height" multiplier="0.5" id="aDS-RA-DFz"/>
                             <constraint firstItem="UOG-ID-3ve" firstAttribute="top" secondItem="0z3-QK-mWY" secondAttribute="bottom" constant="-1" id="cF1-vS-S7J"/>
                             <constraint firstItem="UOG-ID-3ve" firstAttribute="width" secondItem="y6w-6c-dcQ" secondAttribute="width" id="gO8-0m-oTQ"/>
                             <constraint firstItem="2cu-Yq-fq3" firstAttribute="trailing" secondItem="0z3-QK-mWY" secondAttribute="trailing" id="nnj-tq-mb9"/>
