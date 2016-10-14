@@ -10,6 +10,8 @@ import UIKit
 
 class BeerDetailViewController: UIViewController {
 
+    internal var beer : Beer!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -21,7 +23,10 @@ class BeerDetailViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
     /*
     // MARK: - Navigation
 
