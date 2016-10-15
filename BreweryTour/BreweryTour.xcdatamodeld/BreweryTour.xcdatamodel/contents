@@ -4,6 +4,7 @@
         <attribute name="availability" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="beerDescription" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="beerName" attributeType="String" syncable="YES"/>
+        <attribute name="favorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="style" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tastingNotes" optional="YES" attributeType="String" syncable="YES"/>
@@ -23,7 +24,7 @@
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Beer" positionX="-54" positionY="27" width="128" height="150"/>
+        <element name="Beer" positionX="-54" positionY="27" width="128" height="165"/>
         <element name="Brewery" positionX="-54" positionY="9" width="128" height="150"/>
         <element name="Style" positionX="-63" positionY="-18" width="128" height="75"/>
     </elements>
