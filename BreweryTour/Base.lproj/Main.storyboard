@@ -113,7 +113,7 @@
             </objects>
             <point key="canvasLocation" x="824.79999999999995" y="-59.820089955022496"/>
         </scene>
-        <!--Map-->
+        <!--🌐-->
         <scene sceneID="xjh-Lw-ZkF">
             <objects>
                 <viewController id="kc4-oF-YzA" customClass="MapViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
@@ -147,7 +147,9 @@
                             <constraint firstAttribute="leadingMargin" secondItem="idd-zP-hy0" secondAttribute="leading" constant="16" id="nc7-Xs-ra4"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" id="wBm-jW-G7A"/>
+                    <tabBarItem key="tabBarItem" title="🌐" id="wBm-jW-G7A">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-15"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="mapView" destination="idd-zP-hy0" id="hTM-gR-Klp"/>
                     </connections>
@@ -156,7 +158,7 @@
             </objects>
             <point key="canvasLocation" x="2539.84375" y="-83.203125"/>
         </scene>
-        <!--Beers-->
+        <!--🍻-->
         <scene sceneID="KEQ-HI-GM0">
             <objects>
                 <viewController id="CGT-bu-6NU" customClass="BeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
@@ -212,7 +214,9 @@
                             <constraint firstItem="7fx-me-ez9" firstAttribute="top" secondItem="jgl-nB-2cO" secondAttribute="bottom" id="l38-EX-v3Y"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Beers" id="Ptn-dv-QwG"/>
+                    <tabBarItem key="tabBarItem" title="🍻" id="Ptn-dv-QwG">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-15"/>
+                    </tabBarItem>
                     <connections>
                         <outlet property="tableView" destination="7fx-me-ez9" id="arJ-Q7-aRj"/>
                     </connections>
