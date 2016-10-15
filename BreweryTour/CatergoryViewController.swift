@@ -67,7 +67,10 @@ class CategoryViewController: UIViewController  {
         super.viewWillAppear(animated)
         // Fix the top title bar when we return
         setTopTitleBarName()
-        styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
+        guard styleTable.indexPathForSelectedRow == nil else {
+            styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
+            return
+        }
     }
     
 
@@ -115,7 +118,13 @@ extension CategoryViewController : UITableViewDataSource {
 extension CategoryViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let style = BreweryDBClient.sharedInstance().styleNames[indexPath.row].id
-        BreweryDBClient.sharedInstance().downloadBreweries(styleID: style, isOrganic: organicSwitch.isOn)
+        // TODO put activity indicator animating here
+        BreweryDBClient.sharedInstance().downloadBreweries(styleID: style, isOrganic: organicSwitch.isOn){
+            (success) -> Void in
+            if success {
+                self.performSegue(withIdentifier:"Go", sender: nil)
+            }
+        }
     }
 }
 
