@@ -15,9 +15,13 @@ class CategoryViewController: UIViewController  {
     // MARK: Constants
     
     let cellIdentifier = "BeerTypeCell"
+    
+    
     let searchController = UISearchController(searchResultsController: nil)
+    
     // MARK: IBOutlets
     
+    @IBOutlet weak var newSearchBar: UISearchBar!
     @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var styleTable: UITableView!
     
@@ -47,19 +51,11 @@ class CategoryViewController: UIViewController  {
         // Do any additional setup after loading the view, typically from a nib.
         
         let test = BreweryDBClient.sharedInstance()
-        // TODO Test code remove
-        //test.downloadBreweries(styleID: "1", isOrganic: true)
-        //searchController.searchBar.sel
-        
-        self.searchController.hidesNavigationBarDuringPresentation = false
-        searchController.searchBar.searchBarStyle = .minimal
-        
-        searchController.searchBar.showsScopeBar = false
-        searchController.searchBar.placeholder = "Search or Select a Beer Style below"
+        newSearchBar.delegate = self
+        searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
-        styleTable.tableHeaderView = searchController.searchBar
         
         test.downloadBeerStyles(){
             (success) -> Void in
@@ -93,11 +89,9 @@ class CategoryViewController: UIViewController  {
 extension CategoryViewController : UITableViewDataSource {
     
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
-        print("filtered content called")
         filteredBeers = BreweryDBClient.sharedInstance().styleNames.filter({( s : style) -> Bool in
-            //let categoryMatch = (scope == "All") || (candy.category == scope)
-            //categoryMatch &&
-            return  s.longName.lowercased().contains(searchText.lowercased())
+            let tempbool =  s.longName.lowercased().contains(searchText.lowercased())
+            return tempbool
         })
         styleTable.reloadData()
     }
@@ -105,7 +99,7 @@ extension CategoryViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = styleTable.dequeueReusableCell(withIdentifier: cellIdentifier)
-        if searchController.isActive && searchController.searchBar.text != "" {
+        if newSearchBar.text != "" {
             cell?.textLabel?.text = filteredBeers[indexPath.row].longName
         } else {
             cell?.textLabel?.text = BreweryDBClient.sharedInstance().styleNames[indexPath.row].longName
@@ -114,7 +108,7 @@ extension CategoryViewController : UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.isActive && searchController.searchBar.text != ""{
+        if newSearchBar.text != ""{
             return filteredBeers.count
         }
         return BreweryDBClient.sharedInstance().styleNames.count
@@ -130,16 +124,25 @@ extension CategoryViewController : UITableViewDelegate {
 
 extension CategoryViewController: UISearchBarDelegate {
     // MARK: - UISearchBar Delegate
-    func searchBar(_ searchBar: UISearchBar, selectedScopeButtonIndexDidChange selectedScope: Int) {
-        filterContentForSearchText(searchBar.text!, scope: searchBar.scopeButtonTitles![selectedScope])
+    func searchBar(_: UISearchBar, textDidChange: String){
+        filterContentForSearchText(newSearchBar.text!)
     }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        // Remove text so we stop searching
+        // Put searchbar back into unselected state
+        // Repopulate the table
+        newSearchBar.text = ""
+        newSearchBar.resignFirstResponder()
+        styleTable.reloadData()
+    }
+
 }
 
 extension CategoryViewController: UISearchResultsUpdating {
     // MARK: - UISearchResultsUpdating Delegate
     @objc(updateSearchResultsForSearchController:) func updateSearchResults(for searchController: UISearchController) {
-        let searchBar = searchController.searchBar
-        //let scope = searchBar.scopeButtonTitles![searchBar.selectedScopeButtonIndex]
+        print("UISearchResultsUpdatingcallled")
         filterContentForSearchText(searchController.searchBar.text!)
         
     }
