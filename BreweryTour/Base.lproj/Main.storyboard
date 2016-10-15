@@ -366,16 +366,17 @@
                     <connections>
                         <segue destination="kc4-oF-YzA" kind="relationship" relationship="viewControllers" id="rAk-9J-vAp"/>
                         <segue destination="CGT-bu-6NU" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
+                        <segue destination="aCO-9Y-u6t" kind="relationship" relationship="viewControllers" id="cBq-jY-Rcs"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iAI-zV-wtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1657" y="-45"/>
         </scene>
-        <!--Beers-->
+        <!--Favorites-->
         <scene sceneID="uKn-Pq-Nxn">
             <objects>
-                <viewController id="aCO-9Y-u6t" customClass="BeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Favorites" id="aCO-9Y-u6t" customClass="BeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="447-ox-Iue"/>
                         <viewControllerLayoutGuide type="bottom" id="ctK-gV-tlx"/>
@@ -389,7 +390,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
-                                        <rect key="frame" x="0.0" y="28" width="343" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
                                             <frame key="frameInset" width="343" height="43.5"/>
@@ -428,7 +429,7 @@
                             <constraint firstItem="HiO-eH-bPB" firstAttribute="leading" secondItem="f8t-0B-jgo" secondAttribute="leading" id="n5X-br-pG4"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Beers" id="w2a-uT-5Zv"/>
+                    <tabBarItem key="tabBarItem" systemItem="favorites" id="w2a-uT-5Zv"/>
                     <connections>
                         <outlet property="tableView" destination="HiO-eH-bPB" id="ktB-NK-2j3"/>
                     </connections>
