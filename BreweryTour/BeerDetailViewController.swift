@@ -83,12 +83,28 @@ class BeerDetailViewController: UIViewController {
     
     
     private func saveToCoreData() {
+        // TODO check to make sure it isn't already in the database
+        let beerNotInDB : Bool = false
+        if beerNotInDB {
+            Beer(id: beer.id!, name: beer.beerName!, beerDescription: beer.beerDescription!, availability: beer.availability!, context: (coreDataStack?.persistingContext)!)
+            do {
+                try coreDataStack?.persistingContext.save()
+            } catch {
+                fatalError("Error saving favorite")
+            }
+        }
         
     }
     
     
     private func deleteFromCoreData() {
-        <#code#>
+        let beerNotInDB : Bool = false
+        if beerNotInDB {
+            return
+        } else {
+            // Get beer id delete in persistent
+            // Save persistent
+        }
     }
 
 }
