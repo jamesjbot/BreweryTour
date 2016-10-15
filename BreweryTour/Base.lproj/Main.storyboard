@@ -216,12 +216,12 @@
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-15"/>
                     </tabBarItem>
                     <connections>
-                        <outlet property="tableView" destination="7fx-me-ez9" id="arJ-Q7-aRj"/>
+                        <outlet property="tableView" destination="7fx-me-ez9" id="BsB-19-aSN"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR2-N2-eti" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1640.8" y="681.40929535232385"/>
+            <point key="canvasLocation" x="1556" y="681"/>
         </scene>
         <!--Beer Detail View Controller-->
         <scene sceneID="q91-Un-DBN">
@@ -376,7 +376,7 @@
         <!--Favorites-->
         <scene sceneID="uKn-Pq-Nxn">
             <objects>
-                <viewController title="Favorites" id="aCO-9Y-u6t" customClass="BeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Favorites" id="aCO-9Y-u6t" customClass="FavoritesViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="447-ox-Iue"/>
                         <viewControllerLayoutGuide type="bottom" id="ctK-gV-tlx"/>
@@ -389,27 +389,31 @@
                                 <frame key="frameInset" minX="16" minY="64" width="343" height="554"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
                                         <rect key="frame" x="0.0" y="92" width="343" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
-                                            <frame key="frameInset" width="343" height="43.5"/>
+                                            <frame key="frameInset" width="343" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="65G-I2-bt1">
-                                                    <frame key="frameInset" minX="15" minY="5" width="33.5" height="20.5"/>
+                                                    <frame key="frameInset" minX="82" minY="4" width="34" height="21"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4eR-fy-GSw">
-                                                    <frame key="frameInset" minX="15" minY="25.5" width="44" height="14.5"/>
+                                                    <frame key="frameInset" minX="82" minY="25" width="44" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="SAM_5869 (1).png" id="gVx-aZ-Y5e">
+                                                    <frame key="frameInset" minX="15" width="52" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                     </tableViewCell>
@@ -431,7 +435,7 @@
                     </view>
                     <tabBarItem key="tabBarItem" systemItem="favorites" id="w2a-uT-5Zv"/>
                     <connections>
-                        <outlet property="tableView" destination="HiO-eH-bPB" id="ktB-NK-2j3"/>
+                        <outlet property="tableView" destination="HiO-eH-bPB" id="l7G-Ma-dWd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SXT-6T-y1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
