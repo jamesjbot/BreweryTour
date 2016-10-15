@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi">
+                            <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi">
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="21" translatesAutoresizingMaskIntoConstraints="NO" id="o8R-RJ-Kqh">
                                         <subviews>
@@ -55,14 +55,20 @@
                                             </stackView>
                                         </subviews>
                                     </stackView>
+                                    <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Select Style Below or Search here" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
+                                        <textInputTraits key="textInputTraits"/>
+                                        <connections>
+                                            <outlet property="delegate" destination="RKC-MN-s1K" id="1dR-s0-Mir"/>
+                                        </connections>
+                                    </searchBar>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="759" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerTypeCell" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="1000" height="43.5"/>
+                                                    <frame key="frameInset" width="375" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -95,21 +101,13 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="fW0-c3-9C3"/>
-                        <outlet property="searchDisplayController" destination="Adc-hY-87f" id="glf-a2-yO9"/>
                         <outlet property="styleTable" destination="OSH-8A-abx" id="y1X-oH-hTs"/>
                         <segue destination="aS9-dG-afv" kind="show" identifier="Go" id="ETW-U3-xph"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vff-Wg-WtP" userLabel="First Responder" sceneMemberID="firstResponder"/>
-                <searchDisplayController id="Adc-hY-87f">
-                    <connections>
-                        <outlet property="delegate" destination="RKC-MN-s1K" id="r1R-Vs-rCI"/>
-                        <outlet property="searchContentsController" destination="RKC-MN-s1K" id="HKH-m5-M1s"/>
-                        <outlet property="searchResultsDataSource" destination="RKC-MN-s1K" id="cdE-z9-rVy"/>
-                        <outlet property="searchResultsDelegate" destination="RKC-MN-s1K" id="hhz-8N-Nry"/>
-                    </connections>
-                </searchDisplayController>
             </objects>
             <point key="canvasLocation" x="824.79999999999995" y="-59.820089955022496"/>
         </scene>
