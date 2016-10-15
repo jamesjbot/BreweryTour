@@ -34,6 +34,7 @@ class CategoryViewController: UIViewController  {
         performSegue(withIdentifier:"Go", sender: sender)
     }
 
+    
     private func setTopTitleBarName(){
         if organicSwitch.isOn {
             navigationController?.navigationBar.topItem?.title =  "Organic Brewery Tour"
@@ -41,6 +42,7 @@ class CategoryViewController: UIViewController  {
             navigationController?.navigationBar.topItem?.title =  "Brewery Tour"
         }
     }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,6 +80,7 @@ class CategoryViewController: UIViewController  {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
             navigationController?.navigationBar.topItem?.title = "Back To Categories"
