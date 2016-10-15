@@ -80,7 +80,7 @@ class BreweryDBClient {
     }
     
     // Query for breweries that offer a certain style.
-    internal func downloadBreweries(styleID : String, isOrganic : Bool ){
+    internal func downloadBreweries(styleID : String, isOrganic : Bool , completion: @escaping (_ success: Bool)-> Void ) {
         let methodParameters  = [
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
             Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,
@@ -89,17 +89,19 @@ class BreweryDBClient {
         ]
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryTypes.Beers,parameters: methodParameters)
         Alamofire.request(outputURL.absoluteString!)
-            //Alamofire.request("http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
             .responseJSON { response  in
                 guard response.result.isSuccess else {
                     print("failed \(response.request?.url)")
+                    completion(false)
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
                     print("Invalid tag informatiion")
+                    completion(false)
                     return
                 }
                 self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Beers)
+                completion(true)
                 return
         }
     }
@@ -119,30 +121,31 @@ class BreweryDBClient {
                 
                 // Create the coredata object for each beer
                 // which will include name, description, availability, brewery name, styleID
-                print("beer:\(beer["name"])")
+                //print("beer:\(beer["name"])")
 //                print("beerDescription:\(beer["description"])")
 //                print("labels:\(beer["labels"])")
-//                //print("available:\((beer["available"] as? Dictionary)?["description"])")
 //                print("id:\(beer["id"])")
 //                print(coreDataStack?.mainContext)
                 let id : String? = beer["id"] as? String
                 let name : String? = beer["name"] as? String ?? ""
                 let description : String? = (beer["description"] as? String) ?? ""
                 var available : String? = nil
-                if let interimAvail = beer["available"],
-                    let verbage = interimAvail["description"] as? String {
+                if let interimAvail = beer["available"] {
+                    let verbage = interimAvail["description"] as? String ?? "No Information Provided"
                     available = verbage
                 }
                let thisBeer = Beer(id: id!, name: name ?? "", beerDescription: description ?? "", availability: available ?? "", context: (coreDataStack?.mainContext!)!)
-
-                let breweriesArray = beer["breweries"] as! NSArray
-                for brewery in breweriesArray {
-                    print("Another brewery encoutered")
+                guard let breweriesArray = beer["breweries"]  else {
+                    print("No breweries here move on")
+                    continue
+                }
+                for brewery in breweriesArray as! Array<AnyObject> {
+                    //print("Another brewery encoutered")
                     // The brewery dictionary
                     let breweryDict = brewery as! NSDictionary
-                    //                    for (k,v) in breweryDict {
-                    //                        //print("In brewDict k:\(k) v:\(v)")
-                    //                    }
+                    //for (k,v) in breweryDict {
+                    //    //print("In brewDict k:\(k) v:\(v)")
+                    //}
                     
                     // TODO Save Icons for display
                     if let images = breweryDict["images"] as? [String : AnyObject] {
@@ -152,13 +155,11 @@ class BreweryDBClient {
                         continue
                     }
                     
-                    print(breweryDict)
-                    
                     // TODO Check other information that may be useful for customer
                     let locDic = locationInfo[0] as! [String : AnyObject]
                     // We can't visit a brewery if it's not open to the public
                     if locDic["openToPublic"] as! String == "Y" {
-                        print("Here is a brewery for this beer \(breweryDict["name"] as! String)")
+                        //print("Here is a brewery for this beer \(breweryDict["name"] as! String)")
                         breweryLocationsSet.insert(
                             BreweryLocation(
                                 latitude: locDic["latitude"]?.description,
@@ -186,11 +187,11 @@ class BreweryDBClient {
                     //let location = breweryInfo["locations"] as! [String:AnyObject]
                     //            if location["openToPublic"] as! String == "Y" {
                     //                    breweryLocationsArray.append(BreweryLocation(latitude: location["latitude"] as! String, longitude: location["longitude"] as! String))
+                    }
                 }
-            }
             
             do {
-                try coreDataStack?.mainContext.save()
+                //try coreDataStack?.mainContext.save()
             } catch {
                 fatalError("Saving maain error")
             }
@@ -216,10 +217,14 @@ class BreweryDBClient {
         return breweryLocationsSet
     }
     
+    
     private func createURLFromParameters(queryType: APIQueryTypes, parameters: [String:AnyObject]) -> NSURL {
+        // The url currently takes the form of
+        // "http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
         let components = NSURLComponents()
         components.scheme = Constants.BreweryDB.APIScheme
         components.host = Constants.BreweryDB.APIHost
+        
         switch queryType {
         case .Beers:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
@@ -227,9 +232,12 @@ class BreweryDBClient {
         case .Styles:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Styles
         }
+        
         components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
+        
+        // Build parameters
         for (key, value) in parameters {
             print(key,value)
             let queryItem = NSURLQueryItem(name: key, value: "\(value)")
@@ -239,10 +247,9 @@ class BreweryDBClient {
     }
 }
 
-extension BreweryDBClient {
-    
 
-    
+extension BreweryDBClient {
+
     struct Constants {
         struct BreweryDB {
             static let APIScheme = "http"
