@@ -16,7 +16,6 @@ class CategoryViewController: UIViewController  {
     
     let cellIdentifier = "BeerTypeCell"
     
-    
     let searchController = UISearchController(searchResultsController: nil)
     
     // MARK: IBOutlets
@@ -30,11 +29,8 @@ class CategoryViewController: UIViewController  {
         setTopTitleBarName()
     }
     
+    // TODO Remove this and populate with another switchable property
     @IBAction func switchClicked(_ sender: AnyObject) {
-        // TODO Test code remove
-        guard BreweryDBClient.sharedInstance().isReadyWithBreweryLocations() else {
-            return
-        }
         performSegue(withIdentifier:"Go", sender: sender)
     }
 
@@ -66,11 +62,12 @@ class CategoryViewController: UIViewController  {
         }
     }
     
-    // TODO Deselct entry when you get back to this window.
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // Fix the top title bar when we return
         setTopTitleBarName()
+        styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
     }
     
 
