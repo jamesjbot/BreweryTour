@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 class BeerDetailViewController: UIViewController {
 
@@ -32,8 +33,10 @@ class BeerDetailViewController: UIViewController {
         if isBeerFavorited! {
             image = UIImage(named: "heart_icon.png")
             sender.setImage(image, for: .normal)
+            saveToCoreData()
         } else {
             image = UIImage(named: "heart_icon_black_white_line_art.png")
+            deleteFromCoreData()
         }
         sender.setImage(image, for: .normal)
     }
@@ -42,6 +45,10 @@ class BeerDetailViewController: UIViewController {
     private var isBeerFavorited : Bool!
     
     internal var beer : Beer!
+    
+    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    
+    // MARK: Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,11 +61,6 @@ class BeerDetailViewController: UIViewController {
             availableText.text = "Availability: \(availText)"
         }
         breweryName.text = beer.brewer?.name
-        //        favoriteButton.isSelected = false
-//        let heartImage = UIImage(contentsOfFile: "heart_icon.png")
-//        let heartOff = UIImage(contentsOfFile: "heart_icon_black_white_line_art.png")
-//        favoriteButton.setImage(heartImage, for: .selected )
-//        favoriteButton.setImage(heartOff, for: .normal)
         
         // TODO Change this to beer's favorite status
         isBeerFavorited = false
@@ -67,24 +69,26 @@ class BeerDetailViewController: UIViewController {
         
     }
 
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
 
     }
     
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    
+    private func saveToCoreData() {
+        
     }
-    */
+    
+    
+    private func deleteFromCoreData() {
+        <#code#>
+    }
 
 }
