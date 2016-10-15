@@ -18,6 +18,8 @@ class BeerDetailViewController: UIViewController {
     
     @IBOutlet weak var availableText: UILabel!
     
+    @IBOutlet weak var abv: UILabel!
+    
     @IBOutlet weak var beerDescriptionTextView: UITextView!
     
     @IBOutlet weak var favoriteButton: UIButton!
