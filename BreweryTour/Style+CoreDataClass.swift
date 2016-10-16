@@ -11,5 +11,10 @@ import CoreData
 
 
 public class Style: NSManagedObject {
-
+    convenience init(id: String, name: String, context : NSManagedObjectContext){
+        let entityDescription = NSEntityDescription.entity(forEntityName: "Style", in: context)
+        self.init(entity: entityDescription!, insertInto: context)
+        self.displayName = name
+        self.id = id
+    }
 }
