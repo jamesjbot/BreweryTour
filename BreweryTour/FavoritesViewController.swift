@@ -60,6 +60,14 @@ class FavoritesViewController: UIViewController {
 
 extension FavoritesViewController: NSFetchedResultsControllerDelegate {
     
+    func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
+        guard let selectedObject = fetchedResultsController.object(at: indexPath as IndexPath) as Beer? else { fatalError("Unexpected Object in FetchedResultsController") }
+        // Populate cell from the NSManagedObject instance
+
+    }
+    
+    
+    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("will change called")
         tableView.beginUpdates()
@@ -74,10 +82,9 @@ extension FavoritesViewController: NSFetchedResultsControllerDelegate {
         case .delete:
             tableView.deleteRows(at: [indexPath! as IndexPath], with: UITableViewRowAnimation.fade)
         case .move:
-            // No action needed for this response
             break
         case .update:
-            // No action 
+            configureCell(cell: tableView.cellForRow(at: indexPath!)!, indexPath: indexPath! as NSIndexPath)
             break
         }
     }
