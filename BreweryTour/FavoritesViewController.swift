@@ -50,7 +50,7 @@ class FavoritesViewController: UIViewController {
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request,
-                                                              managedObjectContext: (coreDataStack?.persistingContext)!,
+                                                              managedObjectContext: (coreDataStack?.favoritesContext)!,
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
         super.init(coder: aDecoder)
