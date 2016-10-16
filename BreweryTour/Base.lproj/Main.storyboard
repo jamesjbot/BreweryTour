@@ -68,7 +68,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="375" height="43.5"/>
+                                                    <frame key="frameInset" width="375" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -111,7 +111,7 @@
             </objects>
             <point key="canvasLocation" x="824.79999999999995" y="-59.820089955022496"/>
         </scene>
-        <!--🌐-->
+        <!--Map-->
         <scene sceneID="xjh-Lw-ZkF">
             <objects>
                 <viewController id="kc4-oF-YzA" customClass="MapViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
@@ -145,8 +145,8 @@
                             <constraint firstAttribute="leadingMargin" secondItem="idd-zP-hy0" secondAttribute="leading" constant="16" id="nc7-Xs-ra4"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="🌐" id="wBm-jW-G7A">
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-15"/>
+                    <tabBarItem key="tabBarItem" title="Map" image="map" id="wBm-jW-G7A">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <connections>
                         <outlet property="mapView" destination="idd-zP-hy0" id="hTM-gR-Klp"/>
@@ -156,7 +156,7 @@
             </objects>
             <point key="canvasLocation" x="2539.84375" y="-83.203125"/>
         </scene>
-        <!--🍻-->
+        <!--Beer List-->
         <scene sceneID="KEQ-HI-GM0">
             <objects>
                 <viewController id="CGT-bu-6NU" customClass="BeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
@@ -216,8 +216,8 @@
                             <constraint firstItem="7fx-me-ez9" firstAttribute="top" secondItem="jgl-nB-2cO" secondAttribute="bottom" id="l38-EX-v3Y"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="🍻" id="Ptn-dv-QwG">
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="-15"/>
+                    <tabBarItem key="tabBarItem" title="Beer List" image="list" id="Ptn-dv-QwG">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <connections>
                         <outlet property="tableView" destination="7fx-me-ez9" id="BsB-19-aSN"/>
@@ -312,7 +312,13 @@
                             <constraint firstAttribute="trailing" secondItem="xA2-jK-3bo" secondAttribute="trailing" id="zh1-03-JgC"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="avz-Qr-qrr"/>
+                    <navigationItem key="navigationItem" id="avz-Qr-qrr">
+                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="Eje-Al-yyo">
+                            <connections>
+                                <action selector="deleteAll:" destination="K9j-j9-NEF" id="Kte-gm-gaA"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="abv" destination="Lvo-f0-UCc" id="3Fv-ik-4j4"/>
                         <outlet property="availableText" destination="C23-Bf-8WA" id="Eec-Rb-G3n"/>
@@ -322,11 +328,12 @@
                         <outlet property="breweryName" destination="J1x-Yv-uwY" id="T2q-QP-dgm"/>
                         <outlet property="favoriteButton" destination="SnN-Ct-3WX" id="UDk-E0-fmR"/>
                         <outlet property="ibu" destination="wYK-0U-iDb" id="iOg-Dz-4hE"/>
+                        <outlet property="tasting" destination="UOG-ID-3ve" id="ryl-ta-fpR"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2xF-JH-lUT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="4743.1999999999998" y="630.13493253373315"/>
+            <point key="canvasLocation" x="4034" y="681"/>
         </scene>
         <!--Brewery Tour-->
         <scene sceneID="068-UA-gCJ">
@@ -359,7 +366,7 @@
                     <connections>
                         <segue destination="kc4-oF-YzA" kind="relationship" relationship="viewControllers" id="rAk-9J-vAp"/>
                         <segue destination="CGT-bu-6NU" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
-                        <segue destination="aCO-9Y-u6t" kind="relationship" relationship="viewControllers" id="cBq-jY-Rcs"/>
+                        <segue destination="aCO-9Y-u6t" kind="relationship" relationship="viewControllers" id="ycc-gm-HrD"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iAI-zV-wtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -378,15 +385,14 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HiO-eH-bPB">
-                                <frame key="frameInset" minX="16" minY="64" width="343" height="554"/>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HiO-eH-bPB">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
-                                        <rect key="frame" x="0.0" y="92" width="343" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
-                                            <frame key="frameInset" width="343" height="43"/>
+                                            <frame key="frameInset" width="375" height="43"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="65G-I2-bt1">
@@ -426,14 +432,15 @@
                             <constraint firstItem="HiO-eH-bPB" firstAttribute="leading" secondItem="f8t-0B-jgo" secondAttribute="leading" id="n5X-br-pG4"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="favorites" id="w2a-uT-5Zv"/>
+                    <tabBarItem key="tabBarItem" systemItem="favorites" id="pSD-1f-fdp"/>
+                    <navigationItem key="navigationItem" id="3lJ-ad-mkL"/>
                     <connections>
                         <outlet property="tableView" destination="HiO-eH-bPB" id="l7G-Ma-dWd"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SXT-6T-y1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2368" y="681"/>
+            <point key="canvasLocation" x="2538" y="681"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bzR-Ve-0eM">
@@ -451,12 +458,14 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Meu-eR-fmB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3804" y="629.2353823088456"/>
+            <point key="canvasLocation" x="3314" y="681"/>
         </scene>
     </scenes>
     <resources>
         <image name="Nophoto.png" width="200" height="200"/>
         <image name="heart_icon_black_white_line_art.png" width="305" height="287"/>
+        <image name="list" width="32" height="32"/>
+        <image name="map" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="Kjw-4I-TCa"/>
