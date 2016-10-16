@@ -32,7 +32,7 @@ class BeersViewController: UIViewController {
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request,
-                                                              managedObjectContext: (coreDataStack?.mainContext)!,
+                                                              managedObjectContext: (coreDataStack?.backgroundContext)!,
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
         super.init(coder: aDecoder)
