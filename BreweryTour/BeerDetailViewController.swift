@@ -9,9 +9,27 @@
 import UIKit
 import CoreData
 
-class BeerDetailViewController: UIViewController {
+class BeerDetailViewController: UIViewController, UITextViewDelegate{
 
     // MARK: IBOutlets
+    
+    // TODO Remove this test code
+    @IBAction func deleteAll(_ sender: UIBarButtonItem) {
+    
+            let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Beer")
+            let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
+            do {
+                try favoriteContext?.execute(batch)
+                //try coreDataStack?.mainStoreCoordinator.execute(batch, with: (favoriteContext)!)
+                print("Batch Deleted completed")
+            } catch {
+                fatalError("batchdelete failed")
+            }
+    }
+    
+    // MARK: IBOutlets
+    
+    @IBOutlet weak var tasting: UITextView!
     
     @IBOutlet weak var breweryName: UILabel!
     
@@ -29,6 +47,8 @@ class BeerDetailViewController: UIViewController {
 
     @IBOutlet weak var beerImage: UIImageView!
     
+    // MARK: IBActions
+    
     @IBAction func favoriteClicked(_ sender: UIButton) {
         // Must change the state first
         isBeerFavorited = !isBeerFavorited
@@ -36,10 +56,10 @@ class BeerDetailViewController: UIViewController {
         if isBeerFavorited! {
             image = UIImage(named: "heart_icon.png")
             sender.setImage(image, for: .normal)
-            saveToCoreData()
+            saveToFavoritesInCoreData()
         } else {
             image = UIImage(named: "heart_icon_black_white_line_art.png")
-            deleteFromCoreData()
+            //deleteFromFavoritesInCoreData()
         }
         sender.setImage(image, for: .normal)
     }
@@ -51,28 +71,40 @@ class BeerDetailViewController: UIViewController {
     
     internal var beer : Beer!
     
-    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let favoriteContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.favoritesContext
     
     // MARK: Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
         
+        // Attach delegate to viewcontroller
+        tasting.delegate = self
+        
+        // See if this has already been favorited, if so use the favorite information
+        if let beerFavoriteInformation : Beer = searchForBeerInFavorites() {
+            beer = beerFavoriteInformation
+        }
+        
+        // Set the on screen properties
         beerNameLabel.text = beer.beerName
-        beerDescriptionTextView.text = beer.beerDescription
+        breweryName.text = beer.brewer?.name
         if let availText = beer.availability {
             availableText.text = "Availability: \(availText)"
         }
-        breweryName.text = beer.brewer?.name
+        // TODO add IBU and ABV data to beer
         if let data : NSData = (beer.image) {
             let im = UIImage(data: data as Data)
             beerImage.image = im
         }
-        //beerImage = UIImage(data: beer.image as! Data)
-        let favoriteIcon : UIImage?
+        beerDescriptionTextView.text = beer.beerDescription
+        if let tastingNotes = beer.tastingNotes {
+            tasting.text = tastingNotes
+        }
+        
+        
         // Change this to beer's favorite status
+        let favoriteIcon : UIImage?
         if beer.favorite {
             isBeerFavorited = true
             favoriteIcon = UIImage(named: "heart_icon.png")
@@ -81,13 +113,23 @@ class BeerDetailViewController: UIViewController {
             favoriteIcon = UIImage(named: "heart_icon_black_white_line_art.png")
         }
         favoriteButton.setImage(favoriteIcon, for: .normal)
-        deleteFromCoreData()
     }
 
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
+    private func searchForBeerInFavorites() -> Beer? {
+        // Check to make sure the Beer isn't already in the database
+        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
+        do {
+            let results = try favoriteContext?.fetch(request)
+            if (results?.count)! > 0 {
+                return results?[0]
+            }
+        } catch {
+            fatalError("Error adding a beer")
+        }
+        return nil
     }
     
     
@@ -97,52 +139,76 @@ class BeerDetailViewController: UIViewController {
     }
     
     
-    private func saveToCoreData() {
+    private func saveToFavoritesInCoreData() {
         
         // Check to make sure the Beer isn't already in the database
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
         do {
-            let results = try coreDataStack?.persistingContext.fetch(request)
-            if (results?.count)! == 0 {
-                let b = Beer(id: beer.id!, name: beer.beerName!, beerDescription: beer.beerDescription!, availability: beer.availability!, context: (coreDataStack?.persistingContext)!)
-                b.favorite = true
-                try coreDataStack?.persistingContext.save()
+            let results = try favoriteContext?.fetch(request)
+            switch ((results?.count)! as Int) {
+            case 0 : // No entry in DB save a new one
+                beer.favorite = true
+                beer.tastingNotes = tasting.text
+                // Save the new beer element so we have access to it from everywhere in this class
+                beer = Beer(name: beer.beerName,
+                             brewer: nil,
+                             availability: beer.availability,
+                             image: beer.image,
+                             imageURL: beer.imageUrl,
+                             favorite: beer.favorite,
+                             description: beer.beerDescription,
+                             id: beer.id!,
+                             tasting: beer.tastingNotes,
+                             style: beer.style,
+                             context: favoriteContext!)
+            default: // Just update the notes
+                beer.tastingNotes = tasting.text
+                
             }
+            try favoriteContext?.save()
         } catch {
-            fatalError("Error adding a beer")
+            fatalError("Error adding/saving a beer")
         }
         
     }
     
     
-    private func deleteFromCoreData() {
-        print("attempting to delete")
-        // Check to make sure the Beer isn't already deleted in the database
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-        request.sortDescriptors = []
-        print("beerid:\(beer.id)")
-        request.predicate = NSPredicate(format: "id == %@", argumentArray: [beer.id!])
-        do {
-            let results = try coreDataStack?.persistingContext.fetch(request)
-            if (results?.count)! > 0 {
-                coreDataStack?.persistingContext.delete((results?[0])!)
-                try coreDataStack?.persistingContext.save()
-                print("Deleted")
-            }
-        } catch {
-            fatalError("Error deleting a beer")
-        }
-        do {
-            request.predicate = nil
-            let results = try coreDataStack?.persistingContext.fetch(request)
-            for i in results! as [Beer]{
-                print(i.id)
-            }
-        } catch {
-            
-        }
+//    private func deleteFromFavoritesInCoreData() {
+//        print("attempting to delete")
+//        // Check to make sure the Beer isn't already deleted in the database
+//        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+//        request.sortDescriptors = []
+//        print("beerid:\(beer.id)")
+//        request.predicate = NSPredicate(format: "id == %@", argumentArray: [beer.id!])
+//        do {
+//            let results = try favoriteContext?.fetch(request)
+//            if (results?.count)! > 0 {
+//                favoriteContext?.delete((results?[0])!)
+//                try favoriteContext?.save()
+//                print("Deleted")
+//            }
+//        } catch {
+//            fatalError("Error deleting a beer")
+//        }
+//
+//    }
+    
+    
+    // This clears the textView when the user begins editting the text view
+    func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
+        // TODO Delete test code
+        print("UITextView textViewShouldBeginEditing called")
+        textView.text = ""
+        return true
     }
-
+    
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        saveToFavoritesInCoreData()
+    }
 }
+
+
+
