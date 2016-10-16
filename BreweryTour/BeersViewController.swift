@@ -73,12 +73,10 @@ extension BeersViewController: NSFetchedResultsControllerDelegate {
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print()
     }
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print()
     }
     
 
@@ -97,6 +95,11 @@ extension BeersViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
         cell.textLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].beerName
         cell.detailTextLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].brewer?.name
+        if let data : NSData = (fetchedResultsController.fetchedObjects?[indexPath.row].image) {
+            let im = UIImage(data: data as Data)
+            cell.imageView?.image = im
+        }
+
         return cell
     }
 
