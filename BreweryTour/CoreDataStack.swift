@@ -68,7 +68,8 @@ class CoreDataStack: NSObject {
         // Create the SQL Store in the background
         //dispatch_async(dispatc, block: () -> Void)
         let queue = DispatchQueue(label: "LoadingCoreData")
-        queue.async(qos: .background) {
+        queue.sync() {
+            () -> Void in
             // get the documents directory..
             let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
             // Save the url location of the document directory
@@ -91,7 +92,6 @@ class CoreDataStack: NSObject {
                 fatalError("Error migrating store: \(error)")
             }
         }
-
     }
 }
 
