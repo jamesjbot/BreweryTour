@@ -45,6 +45,10 @@ class CoreDataStack: NSObject {
         // Create the persistent store coordinator
         mainStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: mom)
         
+        // Create the favorites context
+        favoritesContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        favoritesContext.persistentStoreCoordinator = mainStoreCoordinator
+        
         // Create the persisting context
         persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         
@@ -61,8 +65,7 @@ class CoreDataStack: NSObject {
         backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         backgroundContext.parent = mainContext
 
-        favoritesContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        favoritesContext.persistentStoreCoordinator = mainStoreCoordinator
+
         
         // Add an SQL lite store in the documents folder
         // Create the SQL Store in the background
