@@ -189,7 +189,7 @@ extension CategoryViewController: UISearchResultsUpdating {
 }
 
 extension CategoryViewController: NSFetchedResultsControllerDelegate {
-    
+    // TODO need to fill this all in
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("will change content")
     }
