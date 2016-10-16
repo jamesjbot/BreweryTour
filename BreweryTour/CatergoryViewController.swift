@@ -7,12 +7,18 @@
 //
 
 import UIKit
+import CoreData
 
 class CategoryViewController: UIViewController  {
-
-    var filteredBeers = [style]()
     
-    // MARK: Constants
+    var filteredBeers = [Style]()
+    
+    // MARK: Constant
+    fileprivate var fetchedResultsController : NSFetchedResultsController<Style>!
+    
+    let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    
+    let breweryDB = BreweryDBClient.sharedInstance()
     
     let cellIdentifier = "BeerTypeCell"
     
@@ -33,7 +39,7 @@ class CategoryViewController: UIViewController  {
     @IBAction func switchClicked(_ sender: AnyObject) {
         performSegue(withIdentifier:"Go", sender: sender)
     }
-
+    
     
     private func setTopTitleBarName(){
         if organicSwitch.isOn {
@@ -48,19 +54,43 @@ class CategoryViewController: UIViewController  {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        let test = BreweryDBClient.sharedInstance()
+        // Search bar initialization
         newSearchBar.delegate = self
         searchController.hidesNavigationBarDuringPresentation = false
         searchController.searchResultsUpdater = self
         searchController.dimsBackgroundDuringPresentation = false
         definesPresentationContext = true
         
-        test.downloadBeerStyles(){
-            (success) -> Void in
-            if success {
-                self.styleTable.reloadData()
+        let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
+        request.sortDescriptors = []
+        fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (coreDataStack?.persistingContext)!, sectionNameKeyPath: nil, cacheName: nil)
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("Fetch failed critcally")
+        }
+        
+        // If fetch did not return any items query the REST Api
+        if fetchedResultsController.fetchedObjects?.count == 0 {
+            breweryDB.downloadBeerStyles() {
+                (success) -> Void in
+                if success {
+                    // TODO this might not be needed anymore
+                    //self.styleTable.reloadData()
+                }
             }
-            
+        }
+    }
+    
+    
+    private func batchDelete() {
+        let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
+        let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
+        do {
+            try coreDataStack?.mainStoreCoordinator.execute(batch, with: (coreDataStack?.persistingContext)!)
+            print("Batch Deleted completed")
+        } catch {
+            fatalError("batchdelete failed")
         }
     }
     
@@ -73,9 +103,10 @@ class CategoryViewController: UIViewController  {
             styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
             return
         }
+        fetchedResultsController.delegate = self
     }
     
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -83,19 +114,19 @@ class CategoryViewController: UIViewController  {
     
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-            navigationController?.navigationBar.topItem?.title = "Back To Categories"
+        navigationController?.navigationBar.topItem?.title = "Back To Categories"
     }
-
-
+    
+    
 }
 
 extension CategoryViewController : UITableViewDataSource {
     
     func filterContentForSearchText(_ searchText: String, scope: String = "All") {
-        filteredBeers = BreweryDBClient.sharedInstance().styleNames.filter({( s : style) -> Bool in
-            let tempbool =  s.longName.lowercased().contains(searchText.lowercased())
-            return tempbool
-        })
+        
+        filteredBeers = ((fetchedResultsController.fetchedObjects! as [Style]).filter {
+            return ($0.displayName?.lowercased().contains(searchText.lowercased()))!
+        } )
         styleTable.reloadData()
     }
     
@@ -103,9 +134,9 @@ extension CategoryViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = styleTable.dequeueReusableCell(withIdentifier: cellIdentifier)
         if newSearchBar.text != "" {
-            cell?.textLabel?.text = filteredBeers[indexPath.row].longName
+            cell?.textLabel?.text = filteredBeers[indexPath.row].displayName
         } else {
-            cell?.textLabel?.text = BreweryDBClient.sharedInstance().styleNames[indexPath.row].longName
+            cell?.textLabel?.text = ((fetchedResultsController.fetchedObjects?[indexPath.row])! as Style).displayName
         }
         return cell!
     }
@@ -114,15 +145,15 @@ extension CategoryViewController : UITableViewDataSource {
         if newSearchBar.text != ""{
             return filteredBeers.count
         }
-        return BreweryDBClient.sharedInstance().styleNames.count
+        return (fetchedResultsController.fetchedObjects?.count)!
     }
 }
 
 extension CategoryViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let style = BreweryDBClient.sharedInstance().styleNames[indexPath.row].id
+        let style = ((fetchedResultsController.fetchedObjects?[indexPath.row])! as Style).id
         // TODO put activity indicator animating here
-        BreweryDBClient.sharedInstance().downloadBreweries(styleID: style, isOrganic: organicSwitch.isOn){
+        BreweryDBClient.sharedInstance().downloadBreweries(styleID: style!, isOrganic: organicSwitch.isOn){
             (success) -> Void in
             if success {
                 self.performSegue(withIdentifier:"Go", sender: nil)
@@ -145,7 +176,7 @@ extension CategoryViewController: UISearchBarDelegate {
         newSearchBar.resignFirstResponder()
         styleTable.reloadData()
     }
-
+    
 }
 
 extension CategoryViewController: UISearchResultsUpdating {
@@ -155,5 +186,24 @@ extension CategoryViewController: UISearchResultsUpdating {
         filterContentForSearchText(searchController.searchBar.text!)
         
     }
+}
+
+extension CategoryViewController: NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("will change content")
+    }
+    
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("didchange object")
+    }
+    
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("didchange content")
+    }
+    
+    
 }
 
