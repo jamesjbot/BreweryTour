@@ -34,6 +34,7 @@ class FavoritesViewController: UIViewController {
         }
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         print("favorites tab enetered")
@@ -41,10 +42,12 @@ class FavoritesViewController: UIViewController {
         perfromFetchOnResultsController()
     }
     
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
@@ -56,17 +59,20 @@ class FavoritesViewController: UIViewController {
         super.init(coder: aDecoder)
     }
     
-}
-
-extension FavoritesViewController: NSFetchedResultsControllerDelegate {
     
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
         guard let selectedObject = fetchedResultsController.object(at: indexPath as IndexPath) as Beer? else { fatalError("Unexpected Object in FetchedResultsController") }
         // Populate cell from the NSManagedObject instance
-
+        cell.textLabel?.text = selectedObject.beerName
+        cell.detailTextLabel?.text = selectedObject.brewer?.name
+        if let data : NSData = (selectedObject.image) {
+            let im = UIImage(data: data as Data)
+            cell.imageView?.image = im
+        }
     }
-    
-    
+}
+
+extension FavoritesViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("will change called")
@@ -111,8 +117,7 @@ extension FavoritesViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCell", for: indexPath)
-        cell.textLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].beerName
-        cell.detailTextLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].brewer?.name
+        configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
     }
     
