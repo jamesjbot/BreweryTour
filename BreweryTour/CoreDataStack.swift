@@ -14,12 +14,13 @@ class CoreDataStack: NSObject {
     
     // MARK: - Variables
     private var model: NSManagedObjectModel!
-    private var mainStoreCoordinator: NSPersistentStoreCoordinator!
+    internal var mainStoreCoordinator: NSPersistentStoreCoordinator!
     private var modelURL: NSURL!
     private var dbURL: NSURL!
     internal var persistingContext: NSManagedObjectContext!
     internal var backgroundContext : NSManagedObjectContext!
     internal var mainContext: NSManagedObjectContext!
+    internal var favoritesContext: NSManagedObjectContext!
     
     
     // MARK: - Initializers
@@ -47,21 +48,25 @@ class CoreDataStack: NSObject {
         // Create the persisting context
         persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         
+        // TODO Change the name of this as we are not using it as storage anymore
         // Assign coordinator to persisting context
         persistingContext.persistentStoreCoordinator = mainStoreCoordinator
         
         // Create Managed Ojbect Context running on the MainQueue
         mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
+        // TODO Don't need contextCommunicating wih one another
         mainContext.parent = persistingContext
         
+        // TODO Delete this as we don't need a background context
         backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         backgroundContext.parent = mainContext
 
-        
+        favoritesContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        favoritesContext.persistentStoreCoordinator = mainStoreCoordinator
         
         // Add an SQL lite store in the documents folder
         // Create the SQL Store in the background
-        //dispatch_async(dispatc, <#T##block: () -> Void##() -> Void#>)
+        //dispatch_async(dispatc, block: () -> Void)
         let queue = DispatchQueue(label: "LoadingCoreData")
         queue.async(qos: .background) {
             // get the documents directory..
