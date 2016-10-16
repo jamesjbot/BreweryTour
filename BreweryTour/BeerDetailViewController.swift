@@ -21,10 +21,13 @@ class BeerDetailViewController: UIViewController {
     
     @IBOutlet weak var abv: UILabel!
     
+    @IBOutlet weak var ibu: UILabel!
+    
     @IBOutlet weak var beerDescriptionTextView: UITextView!
     
     @IBOutlet weak var favoriteButton: UIButton!
 
+    @IBOutlet weak var beerImage: UIImageView!
     
     @IBAction func favoriteClicked(_ sender: UIButton) {
         // Must change the state first
@@ -63,16 +66,21 @@ class BeerDetailViewController: UIViewController {
             availableText.text = "Availability: \(availText)"
         }
         breweryName.text = beer.brewer?.name
-        let image : UIImage?
+        if let data : NSData = (beer.image) {
+            let im = UIImage(data: data as Data)
+            beerImage.image = im
+        }
+        //beerImage = UIImage(data: beer.image as! Data)
+        let favoriteIcon : UIImage?
         // Change this to beer's favorite status
         if beer.favorite {
             isBeerFavorited = true
-            image = UIImage(named: "heart_icon.png")
+            favoriteIcon = UIImage(named: "heart_icon.png")
         } else {
             isBeerFavorited = false
-            image = UIImage(named: "heart_icon_black_white_line_art.png")
+            favoriteIcon = UIImage(named: "heart_icon_black_white_line_art.png")
         }
-        favoriteButton.setImage(image, for: .normal)
+        favoriteButton.setImage(favoriteIcon, for: .normal)
         deleteFromCoreData()
     }
 
@@ -118,7 +126,6 @@ class BeerDetailViewController: UIViewController {
         request.predicate = NSPredicate(format: "id == %@", argumentArray: [beer.id!])
         do {
             let results = try coreDataStack?.persistingContext.fetch(request)
-            //print("results:\(results)")
             if (results?.count)! > 0 {
                 coreDataStack?.persistingContext.delete((results?[0])!)
                 try coreDataStack?.persistingContext.save()
