@@ -11,9 +11,21 @@ import CoreData
 
 class FavoritesViewController: UIViewController {
     
+
+    @IBAction func deleteAll(_ sender: UIBarButtonItem) {
+            let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Beer")
+            let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
+            do {
+                try coreDataStack?.mainStoreCoordinator.execute(batch, with: (coreDataStack?.favoritesContext)!)
+                print("Batch Deleted completed")
+            } catch {
+                fatalError("batchdelete failed")
+            }
+    }
+    
     // MARK: Constants
     
-    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     
     // MARK: Variables
     
@@ -22,17 +34,7 @@ class FavoritesViewController: UIViewController {
     // MARK: IBOutlets
     
     @IBOutlet weak var tableView: UITableView!
-    
-    
-    private func perfromFetchOnResultsController(){
-        fetchedResultsController.delegate = self
-        // Create a request for Beer objects and fetch the request from Coredata
-        do {
-            try fetchedResultsController.performFetch()
-        } catch {
-            fatalError("There was a problem fetching from coredata")
-        }
-    }
+
     
     
     override func viewDidLoad() {
@@ -57,6 +59,17 @@ class FavoritesViewController: UIViewController {
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
         super.init(coder: aDecoder)
+    }
+    
+
+    private func perfromFetchOnResultsController(){
+        fetchedResultsController.delegate = self
+        // Create a request for Beer objects and fetch the request from Coredata
+        do {
+            try fetchedResultsController.performFetch()
+        } catch {
+            fatalError("There was a problem fetching from coredata")
+        }
     }
     
     
@@ -124,6 +137,19 @@ extension FavoritesViewController: UITableViewDataSource {
 }
 
 extension FavoritesViewController : UITableViewDelegate {
+    
+    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if editingStyle == .delete {
+            let object = (fetchedResultsController.fetchedObjects! as [Beer])[indexPath.row]
+            coreDataStack?.favoritesContext.delete(object)
+            do {
+                try coreDataStack?.favoritesContext.save()
+            } catch {
+                fatalError("Error deleting row")
+            }
+        }
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Create target viewcontroller
