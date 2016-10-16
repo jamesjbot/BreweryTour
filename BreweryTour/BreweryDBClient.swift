@@ -8,12 +8,8 @@
 
 import Foundation
 import Alamofire
+import CoreData
 
-
-struct style {
-    var id : String
-    var longName : String
-}
 
 struct BreweryLocation : Hashable {
     var latitude : String?
@@ -42,7 +38,7 @@ class BreweryDBClient {
     // MARK: Variables
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     internal var breweryLocationsSet : Set<BreweryLocation> = Set<BreweryLocation>()
-    internal var styleNames = [style]()
+    //internal var styleNames = [style]()
  
     // MARK: Singleton Implementation
     
@@ -134,7 +130,22 @@ class BreweryDBClient {
                     let verbage = interimAvail["description"] as? String ?? "No Information Provided"
                     available = verbage
                 }
-               let thisBeer = Beer(id: id!, name: name ?? "", beerDescription: description ?? "", availability: available ?? "", context: (coreDataStack?.mainContext!)!)
+                let thisBeer = Beer(id: id!, name: name ?? "", beerDescription: description ?? "", availability: available ?? "", context: (coreDataStack?.mainContext!)!)
+                
+                // TODO Save Icons for display
+                if let images = beer["labels"] as? [String : AnyObject],
+                    let icon = images["icon"] as! String?,
+                    let medium = images["medium"] as! String?  {
+                    thisBeer.imageUrl = medium
+                    let queue = DispatchQueue(label: "Images")
+                    print("Prior to getting image")
+                    queue.async(qos: .utility) {
+                        print("Getting images in background")
+                        self.downloadImageToCoreData(aturl: NSURL(string: thisBeer.imageUrl!)!, forBeer: thisBeer, updateManagedObjectID: thisBeer.objectID, index: nil)
+                    }
+                }
+                
+                // This beer has no brewery information, continue with the next beer
                 guard let breweriesArray = beer["breweries"]  else {
                     print("No breweries here move on")
                     continue
@@ -143,13 +154,9 @@ class BreweryDBClient {
                     //print("Another brewery encoutered")
                     // The brewery dictionary
                     let breweryDict = brewery as! NSDictionary
-                    //for (k,v) in breweryDict {
-                    //    //print("In brewDict k:\(k) v:\(v)")
-                    //}
+
                     
-                    // TODO Save Icons for display
-                    if let images = breweryDict["images"] as? [String : AnyObject] {
-                    }
+ 
                     
                     guard let locationInfo = breweryDict["locations"] as? NSArray else {
                         continue
@@ -191,9 +198,9 @@ class BreweryDBClient {
                 }
             
             do {
-                //try coreDataStack?.mainContext.save()
+                try coreDataStack?.mainContext.save()
             } catch {
-                fatalError("Saving maain error")
+                fatalError("Saving main error")
             }
             
             break
@@ -204,14 +211,61 @@ class BreweryDBClient {
                 return
             }
             for aStyle in styleArrayOfDict {
-                let localId = aStyle["id"]?.stringValue!
+                print("astyle \(aStyle)")
+                let localId = aStyle["id"]?.stringValue
                 let localName = aStyle["name"]
-                styleNames.append(style(id: localId!  , longName: localName as! String))
+                Style(id: localId!, name: localName! as! String, context: (coreDataStack?.persistingContext)!)
+                // TODO Remove this old placeholder code
+                //styleNames.append(style(id: localId!  , longName: localName as! String))
+            }
+            
+            
+            
+            do {
+                let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
+                request.sortDescriptors = []
+                
+                print("Coredata has this many waiting insert \(coreDataStack?.persistingContext.insertedObjects)")
+                try coreDataStack?.persistingContext.save()
+                print("saved")
+                print("Coredata has this many waiting insert \(coreDataStack?.persistingContext.insertedObjects)")
+                try print("What is in coredata \(coreDataStack?.persistingContext.count(for: request))")
+
+                
+            } catch {
+                fatalError("Error saving styles")
             }
             break
         }
     }
 
+    
+    // Download images in the background then update Coredata when complete
+    internal func downloadImageToCoreData( aturl: NSURL, forBeer: Beer, updateManagedObjectID: NSManagedObjectID, index: NSIndexPath?) {
+        let session = URLSession.shared
+        let task = session.dataTask(with: aturl as URL){
+            (data, response, error) -> Void in
+            if error == nil {
+                if data == nil {
+                    return
+                }
+                self.coreDataStack!.mainContext.performAndWait(){
+                    let beerForUpdate = self.coreDataStack!.mainContext.object(with: updateManagedObjectID) as! Beer
+                    let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
+                    beerForUpdate.image = outputData
+                    do {
+                        try self.coreDataStack!.mainContext.save()
+                        print("Imaged saved")
+                    }
+                    catch {
+                        return
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
+    
     
     internal func getBreweries() -> Set<BreweryLocation>{
         return breweryLocationsSet
