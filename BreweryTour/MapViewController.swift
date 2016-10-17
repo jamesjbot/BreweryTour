@@ -73,7 +73,12 @@ extension MapViewController : MKMapViewDelegate {
             } else {
                 pinView!.pinTintColor = UIColor.red
             }
+            // Here is how i put in the callout
+            pinView?.tintColor = UIColor.gray
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            pinView!.leftCalloutAccessoryView = UIButton(type: .contactAdd)
+            pinView!.detailCalloutAccessoryView?.backgroundColor = UIColor.red
+            //pinView?.detailCalloutAccessoryView? = (UIButton(type: .roundedRect))
         } else {
             pinView!.annotation = annotation
         }
@@ -126,13 +131,27 @@ extension MapViewController : MKMapViewDelegate {
     
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        if control == view.rightCalloutAccessoryView,
-            let url: URL = URL(string: (view.annotation?.subtitle!)!) {
-            if UIApplication.shared.canOpenURL(url) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        print("THE CALLOUT ACCESSORY \(control)")        
+        
+//        if control == view.detailCalloutAccessoryView {//,
+//           // let str : String = (view.annotation?.subtitle)!,
+//            //let url: URL = URL(string: str) {
+//            print("detail accesory view called")
+////            if UIApplication.shared.canOpenURL(url) {
+////                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+////            }
+        if control == view.leftCalloutAccessoryView {
+            print("Left accessory view called")
+            // TODO Add to favorites Brewery
+        } else if control == view.rightCalloutAccessoryView {
+            print("Right accesory view called")
+            // Goto Webpage Information
+            if let str : String = (view.annotation?.subtitle)!,
+                let url: URL = URL(string: str) {
+                        if UIApplication.shared.canOpenURL(url) {
+                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                }
             }
-        } else {
-            print("A different control was pressed")
         }
     }
     
@@ -146,8 +165,6 @@ extension MapViewController : MKMapViewDelegate {
         return polylineRenderer
     }
 }
-
-
 
 
 extension MapViewController: CLLocationManagerDelegate {
