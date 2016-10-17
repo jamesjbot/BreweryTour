@@ -9,8 +9,9 @@ import UIKit
 import Foundation
 import MapKit
 import CoreLocation
+import CoreData
 
-class MapViewController : UIViewController {
+class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: IBOutlet
     
@@ -18,18 +19,32 @@ class MapViewController : UIViewController {
     
     // MARK: Variables
     
-    internal var incomingLocations = Set<BreweryLocation>()
-        
+    private var incomingLocations = [Brewery]()
+    private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
     private let locationManager = CLLocationManager()
+    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    
+    
     // MARK: Functions
+    
+    private func initializeFetchAndFetchBreweries(){
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        do {
+            try incomingLocations = (coreDataStack?.backgroundContext.fetch(request))! as [Brewery]
+        } catch {
+            fatalError("Failure to query breweries")
+        }
+        print("Completed getting Breweries")
+    }
     
     override func viewDidLoad(){
         super.viewDidLoad()
-        //getDataFromTheModel
-        incomingLocations = BreweryDBClient.sharedInstance().breweryLocationsSet
+        
+        initializeFetchAndFetchBreweries()
         populateMap()
         
-        // CoreLocation initialization
+        // CoreLocation initialization for user location
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         if CLLocationManager.locationServicesEnabled() {
@@ -46,7 +61,11 @@ class MapViewController : UIViewController {
             guard i.latitude != nil && i.longitude != nil else {
                 continue
             }
+            
+            // TODO Check if the point is a favorite is so populate accordingly
+            
             let aPin = MKPointAnnotation()
+            print("Last Brewery: \(i)")
             aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
             aPin.title = i.name
             aPin.subtitle = i.url
@@ -86,6 +105,7 @@ extension MapViewController : MKMapViewDelegate {
     }
     
     
+    // Selecting a Pin, draw the route to this pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         print("didSelectAnnotation")
         // Our location
@@ -114,32 +134,28 @@ extension MapViewController : MKMapViewDelegate {
     }
     
     
+    // Removes all routes from ma
     func removeRouteOnMap(){
         mapView.removeOverlays(mapView.overlays)
     }
     
     
+    // Display the route on map
     func displayRouteOnMap(route: MKRoute){
         mapView.add(route.polyline)
         mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: UIEdgeInsetsMake(10.0,10.0,10.0,10.0), animated: true)
     }
     
     
+    // Utility function to convert annotation coordinates to MKMapitems
     func convertToMKMapItemThis(_ view: MKAnnotationView) -> MKMapItem {
         return MKMapItem(placemark: MKPlacemark(coordinate: (view.annotation?.coordinate)!))
     }
     
     
+    // Respond to user taps on the annotation callout
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("THE CALLOUT ACCESSORY \(control)")        
-        
-//        if control == view.detailCalloutAccessoryView {//,
-//           // let str : String = (view.annotation?.subtitle)!,
-//            //let url: URL = URL(string: str) {
-//            print("detail accesory view called")
-////            if UIApplication.shared.canOpenURL(url) {
-////                UIApplication.shared.open(url, options: [:], completionHandler: nil)
-////            }
+        print("THE CALLOUT ACCESSORY \(control)")
         if control == view.leftCalloutAccessoryView {
             print("Left accessory view called")
             // TODO Add to favorites Brewery
@@ -156,6 +172,7 @@ extension MapViewController : MKMapViewDelegate {
     }
     
     
+    // Render the router line
     internal func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         if overlay is MKPolyline {
@@ -167,6 +184,8 @@ extension MapViewController : MKMapViewDelegate {
 }
 
 
+// Place the placemark for User's current location
+
 extension MapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -174,7 +193,7 @@ extension MapViewController: CLLocationManagerDelegate {
             (placemarks, error) -> Void in
             if let placemarks = placemarks {
                 let placemark = placemarks[0]
-                // Here is the placemark for the users location
+                // Here is the placemark for the user's location
                 let userMapItem = MKMapItem(placemark: MKPlacemark(coordinate: placemark.location!.coordinate, addressDictionary: placemark.addressDictionary as! [String:AnyObject]?))
             }
         }
