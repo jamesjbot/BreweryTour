@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class CategoryViewController: UIViewController  {
+class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate  {
     
     var filteredBeers = [Style]()
     
@@ -53,6 +53,7 @@ class CategoryViewController: UIViewController  {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+    
         
         // Search bar initialization
         newSearchBar.delegate = self
@@ -103,6 +104,7 @@ class CategoryViewController: UIViewController  {
             styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
             return
         }
+        // Establish ourselves so we can receive updates
         fetchedResultsController.delegate = self
     }
     
@@ -115,6 +117,23 @@ class CategoryViewController: UIViewController  {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         navigationController?.navigationBar.topItem?.title = "Back To Categories"
+    }
+ 
+    // TODO need to fill this all in
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("will change content")
+    }
+    
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("didchange object")
+    }
+    
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("didchange content")
+        styleTable.reloadData()
     }
     
     
@@ -188,22 +207,4 @@ extension CategoryViewController: UISearchResultsUpdating {
     }
 }
 
-extension CategoryViewController: NSFetchedResultsControllerDelegate {
-    // TODO need to fill this all in
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("will change content")
-    }
-    
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("didchange object")
-    }
-    
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("didchange content")
-    }
-    
-    
-}
 
