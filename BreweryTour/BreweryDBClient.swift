@@ -11,22 +11,6 @@ import Alamofire
 import CoreData
 
 
-struct BreweryLocation : Hashable {
-    var latitude : String?
-    var longitude : String?
-    var url : String?
-    var name : String
-    var hashValue: Int {
-        get {
-            return ("\(latitude)\(longitude)").hashValue
-        }
-    }
-    static func ==(lhs: BreweryLocation, rhs: BreweryLocation) -> Bool {
-        return (lhs.latitude == rhs.latitude && lhs.longitude == rhs.longitude)
-    }
-}
-
-
 class BreweryDBClient {
     
     // MARK: Enumerations
@@ -39,11 +23,8 @@ class BreweryDBClient {
     
     // MARK: Variables
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
-    internal var breweryLocationsSet : Set<BreweryLocation> = Set<BreweryLocation>()
-    //internal var styleNames = [style]()
- 
-    // MARK: Singleton Implementation
     
+    // MARK: Singleton Implementation
     
     private init(){}
     internal class func sharedInstance() -> BreweryDBClient {
@@ -55,10 +36,6 @@ class BreweryDBClient {
     
     
     // MARK: Functions
-    internal func isReadyWithBreweryLocations() -> Bool {
-        return breweryLocationsSet.count > 0
-    }
-    
     
     internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool) -> Void ){
         let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject
@@ -118,6 +95,17 @@ class BreweryDBClient {
                 print("Failed to extract data")
                 return
             }
+            
+            // Clear out previous query from background ManagedObjectContext
+            for i in (coreDataStack?.backgroundContext.registeredObjects)! {
+                coreDataStack?.backgroundContext.delete(i)
+            }
+            do {
+                try coreDataStack?.backgroundContext.save()
+            } catch {
+                
+            }
+
             for beer in beerArray {
                 print("---------------------NextBeer---------------------")
                 // Every beer is a dictionary; that also has an array of brewery information
@@ -163,8 +151,6 @@ class BreweryDBClient {
                     let breweryDict = brewery as! NSDictionary
 
                     
- 
-                    
                     guard let locationInfo = breweryDict["locations"] as? NSArray else {
                         continue
                     }
@@ -172,51 +158,56 @@ class BreweryDBClient {
                     // TODO Check other information that may be useful for customer
                     let locDic = locationInfo[0] as! [String : AnyObject]
                     // We can't visit a brewery if it's not open to the public
-                    if locDic["openToPublic"] as! String == "Y" {
+                    print(locDic["latitude"])
+                    print(locDic["longitude"])
+                    if locDic["openToPublic"] as! String == "Y" &&
+                        locDic["latitude"]?.description != "" &&
+                        locDic["longitude"]?.description != "" &&
+                        locDic["longitude"] != nil &&
+                        locDic["latitude"] != nil   {
                         //print("Here is a brewery for this beer \(breweryDict["name"] as! String)")
-                        breweryLocationsSet.insert(
-                            BreweryLocation(
-                                latitude: locDic["latitude"]?.description,
-                                longitude: locDic["longitude"]?.description,
-                                url: locDic["website"] as! String?,
-                                name: breweryDict["name"] as! String))
-                        
+//                        breweryLocationsSet.insert(
+//                            BreweryLocation(
+//                                latitude: locDic["latitude"]?.description,
+//                                longitude: locDic["longitude"]?.description,
+//                                url: locDic["website"] as! String?,
+//                                name: breweryDict["name"] as! String))
+                    
                             let thisBrewery = Brewery(inName: breweryDict["name"] as! String,
                                     latitude: locDic["latitude"]?.description,
                                     longitude: locDic["longitude"]?.description,
                                     url: locDic["website"] as! String?,
                                     open: (locDic["openToPublic"] as! String == "Y") ? true : false,
-                                    id: nil,
+                                    id: locDic["id"]?.description,
                                     context: (coreDataStack?.backgroundContext)!)
-                        
+                        print("Brewery object created \(locDic["id"])")
+                        // Assign this brewery to this beer
                         thisBeer.brewer = thisBrewery
                             
                         //We might only create the beer if the brewery is open
                     } else {
                         print("Closed to the public")
                     }
-                    // TODO pull out some other useful information such as website
-                    //
-                    //let image = breweryInfo["images"]
-                    //let location = breweryInfo["locations"] as! [String:AnyObject]
-                    //            if location["openToPublic"] as! String == "Y" {
-                    //                    breweryLocationsArray.append(BreweryLocation(latitude: location["latitude"] as! String, longitude: location["longitude"] as! String))
+
                     }
                 }
             
             do {
                 try coreDataStack?.backgroundContext.save()
-            } catch {
-                fatalError("Saving main error")
+            } catch let error {
+                fatalError("Saving background error \(error)")
             }
             
             break
 
         case .Styles:
+            // Styles are saved on the persistingContext because they don't change.
+            // We must have data to process
             guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else {
                 print("Failed to convert")
                 return
             }
+            // Create a style object for every beer style
             for aStyle in styleArrayOfDict {
                 print("astyle \(aStyle)")
                 let localId = aStyle["id"]?.stringValue
@@ -224,19 +215,9 @@ class BreweryDBClient {
                 Style(id: localId!, name: localName! as! String, context: (coreDataStack?.persistingContext)!)
             }
             
-            
-            
+            // Save beer styles to disk
             do {
-                let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
-                request.sortDescriptors = []
-                
-                print("Coredata has this many waiting insert \(coreDataStack?.persistingContext.insertedObjects)")
                 try coreDataStack?.persistingContext.save()
-                print("saved")
-                print("Coredata has this many waiting insert \(coreDataStack?.persistingContext.insertedObjects)")
-                try print("What is in coredata \(coreDataStack?.persistingContext.count(for: request))")
-
-                
             } catch {
                 fatalError("Error saving styles")
             }
@@ -269,11 +250,6 @@ class BreweryDBClient {
             }
         }
         task.resume()
-    }
-    
-    
-    internal func getBreweries() -> Set<BreweryLocation>{
-        return breweryLocationsSet
     }
     
     
