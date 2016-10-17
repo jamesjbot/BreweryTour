@@ -65,10 +65,10 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerTypeCell" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="375" height="43"/>
+                                                    <frame key="frameInset" width="1000" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -367,17 +367,17 @@
                         <segue destination="kc4-oF-YzA" kind="relationship" relationship="viewControllers" id="rAk-9J-vAp"/>
                         <segue destination="CGT-bu-6NU" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
                         <segue destination="aCO-9Y-u6t" kind="relationship" relationship="viewControllers" id="ycc-gm-HrD"/>
-                        <segue destination="rQo-iK-ar2" kind="relationship" relationship="viewControllers" id="mfh-WC-hpS"/>
+                        <segue destination="vMd-lA-jRB" kind="relationship" relationship="viewControllers" id="YgJ-ol-rXl"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iAI-zV-wtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1657" y="-45"/>
+            <point key="canvasLocation" x="1657" y="-59"/>
         </scene>
-        <!--Favorites-->
+        <!--Favorite Beers-->
         <scene sceneID="uKn-Pq-Nxn">
             <objects>
-                <viewController title="Favorites" id="aCO-9Y-u6t" customClass="FavoritesViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Favorite Beers" id="aCO-9Y-u6t" customClass="FavoritesViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="447-ox-Iue"/>
                         <viewControllerLayoutGuide type="bottom" id="ctK-gV-tlx"/>
@@ -390,7 +390,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -443,35 +443,6 @@
             </objects>
             <point key="canvasLocation" x="2538" y="681"/>
         </scene>
-        <!--Favorite Breweries-->
-        <scene sceneID="tBY-XE-w17">
-            <objects>
-                <tableViewController id="rQo-iK-ar2" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="mqG-gC-dzo">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                        <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Hio-GC-pqf">
-                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
-                                <autoresizingMask key="autoresizingMask"/>
-                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hio-GC-pqf" id="2C7-B5-kWo">
-                                    <frame key="frameInset" width="375" height="43"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </tableViewCellContentView>
-                            </tableViewCell>
-                        </prototypes>
-                        <connections>
-                            <outlet property="dataSource" destination="rQo-iK-ar2" id="JW8-U0-gji"/>
-                            <outlet property="delegate" destination="rQo-iK-ar2" id="dfd-C4-E2z"/>
-                        </connections>
-                    </tableView>
-                    <tabBarItem key="tabBarItem" title="Favorite Breweries" image="BreweryTabbarIcon.png" id="ifQ-uE-wsB"/>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="i7b-dN-bUD" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2020" y="-758"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="bzR-Ve-0eM">
             <objects>
@@ -489,6 +460,75 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Meu-eR-fmB" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="3314" y="681"/>
+        </scene>
+        <!--Favorite Breweries-->
+        <scene sceneID="uNa-bO-QQy">
+            <objects>
+                <viewController title="Favorite Breweries" id="vMd-lA-jRB" customClass="FavoriteBreweriesViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="TG5-1t-1Mw"/>
+                        <viewControllerLayoutGuide type="bottom" id="MdR-6K-4Gv"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="6A8-hw-vmK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MTM-AV-wIe">
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="Hmu-ry-dre" detailTextLabel="3Tn-CX-GaW" imageView="Oj6-H2-7ba" style="IBUITableViewCellStyleSubtitle" id="Gy1-u4-ujg">
+                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gy1-u4-ujg" id="1kw-Cs-FXM">
+                                            <frame key="frameInset" width="375" height="43"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Hmu-ry-dre">
+                                                    <frame key="frameInset" minX="73" minY="4" width="34" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="3Tn-CX-GaW">
+                                                    <frame key="frameInset" minX="73" minY="25" width="44" height="15"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Nophoto.png" id="Oj6-H2-7ba">
+                                                    <frame key="frameInset" minX="15" width="43" height="43"/>
+                                                    <autoresizingMask key="autoresizingMask"/>
+                                                </imageView>
+                                            </subviews>
+                                        </tableViewCellContentView>
+                                    </tableViewCell>
+                                </prototypes>
+                                <connections>
+                                    <outlet property="dataSource" destination="vMd-lA-jRB" id="dB0-xU-Bex"/>
+                                    <outlet property="delegate" destination="vMd-lA-jRB" id="Wx4-9O-l58"/>
+                                </connections>
+                            </tableView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="MTM-AV-wIe" firstAttribute="leading" secondItem="6A8-hw-vmK" secondAttribute="leading" id="9WQ-ON-6Ad"/>
+                            <constraint firstItem="MTM-AV-wIe" firstAttribute="top" secondItem="TG5-1t-1Mw" secondAttribute="bottom" id="Wx3-Kq-91F"/>
+                            <constraint firstAttribute="trailing" secondItem="MTM-AV-wIe" secondAttribute="trailing" id="eZf-9H-OHJ"/>
+                            <constraint firstItem="MdR-6K-4Gv" firstAttribute="top" secondItem="MTM-AV-wIe" secondAttribute="bottom" id="oBV-qM-kM1"/>
+                        </constraints>
+                    </view>
+                    <tabBarItem key="tabBarItem" title="Favorite Breweries" image="BreweryTabbarIcon.png" id="GMI-eD-XYO"/>
+                    <navigationItem key="navigationItem" id="ms7-fW-SQV"/>
+                    <connections>
+                        <outlet property="tableView" destination="MTM-AV-wIe" id="N3Y-Fp-yzZ"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="UDx-ZZ-Vmk" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1657" y="-745"/>
         </scene>
     </scenes>
     <resources>
