@@ -26,6 +26,7 @@ struct BreweryLocation : Hashable {
     }
 }
 
+
 class BreweryDBClient {
     
     // MARK: Enumerations
@@ -35,12 +36,14 @@ class BreweryDBClient {
         case Styles
     }
     
+    
     // MARK: Variables
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     internal var breweryLocationsSet : Set<BreweryLocation> = Set<BreweryLocation>()
     //internal var styleNames = [style]()
  
     // MARK: Singleton Implementation
+    
     
     private init(){}
     internal class func sharedInstance() -> BreweryDBClient {
@@ -50,10 +53,12 @@ class BreweryDBClient {
         return Singleton.sharedInstance
     }
     
+    
     // MARK: Functions
     internal func isReadyWithBreweryLocations() -> Bool {
         return breweryLocationsSet.count > 0
     }
+    
     
     internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool) -> Void ){
         let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject
@@ -74,6 +79,7 @@ class BreweryDBClient {
             return
         }
     }
+    
     
     // Query for breweries that offer a certain style.
     internal func downloadBreweries(styleID : String, isOrganic : Bool , completion: @escaping (_ success: Bool)-> Void ) {
@@ -101,6 +107,7 @@ class BreweryDBClient {
                 return
         }
     }
+    
     
     private func parse(response : NSDictionary, asQueryType: APIQueryTypes){
         switch asQueryType {
@@ -130,7 +137,7 @@ class BreweryDBClient {
                     let verbage = interimAvail["description"] as? String ?? "No Information Provided"
                     available = verbage
                 }
-                let thisBeer = Beer(id: id!, name: name ?? "", beerDescription: description ?? "", availability: available ?? "", context: (coreDataStack?.mainContext!)!)
+                let thisBeer = Beer(id: id!, name: name ?? "", beerDescription: description ?? "", availability: available ?? "", context: (coreDataStack?.backgroundContext!)!)
                 
                 // TODO Save Icons for display
                 if let images = beer["labels"] as? [String : AnyObject],
@@ -180,7 +187,7 @@ class BreweryDBClient {
                                     url: locDic["website"] as! String?,
                                     open: (locDic["openToPublic"] as! String == "Y") ? true : false,
                                     id: nil,
-                                    context: (coreDataStack?.mainContext)!)
+                                    context: (coreDataStack?.backgroundContext)!)
                         
                         thisBeer.brewer = thisBrewery
                             
@@ -198,7 +205,7 @@ class BreweryDBClient {
                 }
             
             do {
-                try coreDataStack?.mainContext.save()
+                try coreDataStack?.backgroundContext.save()
             } catch {
                 fatalError("Saving main error")
             }
@@ -215,8 +222,6 @@ class BreweryDBClient {
                 let localId = aStyle["id"]?.stringValue
                 let localName = aStyle["name"]
                 Style(id: localId!, name: localName! as! String, context: (coreDataStack?.persistingContext)!)
-                // TODO Remove this old placeholder code
-                //styleNames.append(style(id: localId!  , longName: localName as! String))
             }
             
             
@@ -249,12 +254,12 @@ class BreweryDBClient {
                 if data == nil {
                     return
                 }
-                self.coreDataStack!.mainContext.performAndWait(){
-                    let beerForUpdate = self.coreDataStack!.mainContext.object(with: updateManagedObjectID) as! Beer
+                self.coreDataStack!.backgroundContext.performAndWait(){
+                    let beerForUpdate = self.coreDataStack!.backgroundContext.object(with: updateManagedObjectID) as! Beer
                     let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                     beerForUpdate.image = outputData
                     do {
-                        try self.coreDataStack!.mainContext.save()
+                        try self.coreDataStack!.backgroundContext.save()
                         print("Imaged saved")
                     }
                     catch {
