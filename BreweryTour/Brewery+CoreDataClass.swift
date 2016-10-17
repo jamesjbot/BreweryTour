@@ -27,4 +27,19 @@ public class Brewery: NSManagedObject {
         self.openToThePublic = open ?? false
         self.name = (inName != nil ? inName : "No Brewery Name Listed")
     }
+    
+    convenience init(inBrewery: Brewery,
+                     context: NSManagedObjectContext){
+        let entity = NSEntityDescription.entity(forEntityName: "Brewery",
+                                                in: context)
+        self.init(entity: entity!, insertInto: context)
+        self.latitude = inBrewery.latitude
+        self.longitude = inBrewery.longitude
+        self.url = inBrewery.url
+        self.id = inBrewery.id
+        self.openToThePublic = inBrewery.openToThePublic
+        self.name = inBrewery.name != nil ? inBrewery.name : "No Brewery Name Listed"
+    }
+    
+    
 }
