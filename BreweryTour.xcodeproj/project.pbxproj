@@ -32,6 +32,8 @@
 		A7B2AB021DA791A400EE844C /* BreweryTourUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */; };
 		A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */; };
 		A7B7524E1DA8CE7B00117ED0 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */; };
+		A7D227221DB4D32C00360A3B /* BeersTabbaricon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D227211DB4D32C00360A3B /* BeersTabbaricon.png */; };
+		A7D227241DB4D90D00360A3B /* BreweryTabbarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D227231DB4D90D00360A3B /* BreweryTabbarIcon.png */; };
 		A7FF1A051DB0E2E200AD0BB3 /* heart_icon.svg in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A041DB0E2E200AD0BB3 /* heart_icon.svg */; };
 		A7FF1A071DB0E67E00AD0BB3 /* heart_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */; };
 		A7FF1A091DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */; };
@@ -87,6 +89,8 @@
 		A7B2AB031DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClient.swift; sourceTree = "<group>"; };
 		A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		A7D227211DB4D32C00360A3B /* BeersTabbaricon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeersTabbaricon.png; sourceTree = "<group>"; };
+		A7D227231DB4D90D00360A3B /* BreweryTabbarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BreweryTabbarIcon.png; sourceTree = "<group>"; };
 		A7FF1A041DB0E2E200AD0BB3 /* heart_icon.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = heart_icon.svg; sourceTree = "<group>"; };
 		A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon.png; sourceTree = "<group>"; };
 		A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon_black_white_line_art.png; sourceTree = "<group>"; };
@@ -224,6 +228,8 @@
 			children = (
 				A788E8AD1DB3C11400FA05E4 /* Nophoto.png */,
 				A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */,
+				A7D227231DB4D90D00360A3B /* BreweryTabbarIcon.png */,
+				A7D227211DB4D32C00360A3B /* BeersTabbaricon.png */,
 				A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */,
 				A7FF1A041DB0E2E200AD0BB3 /* heart_icon.svg */,
 				A76B3B8C1DB0C5A200B0A899 /* SAM_5869 (1).png */,
@@ -344,6 +350,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7D227221DB4D32C00360A3B /* BeersTabbaricon.png in Resources */,
+				A7D227241DB4D90D00360A3B /* BreweryTabbarIcon.png in Resources */,
 				A7B2AAE91DA791A400EE844C /* Assets.xcassets in Resources */,
 				A76B3B8D1DB0C5A200B0A899 /* SAM_5869 (1).png in Resources */,
 				A7FF1A091DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png in Resources */,

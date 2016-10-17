@@ -367,6 +367,7 @@
                         <segue destination="kc4-oF-YzA" kind="relationship" relationship="viewControllers" id="rAk-9J-vAp"/>
                         <segue destination="CGT-bu-6NU" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
                         <segue destination="aCO-9Y-u6t" kind="relationship" relationship="viewControllers" id="ycc-gm-HrD"/>
+                        <segue destination="rQo-iK-ar2" kind="relationship" relationship="viewControllers" id="mfh-WC-hpS"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iAI-zV-wtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -432,7 +433,7 @@
                             <constraint firstItem="HiO-eH-bPB" firstAttribute="leading" secondItem="f8t-0B-jgo" secondAttribute="leading" id="n5X-br-pG4"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" systemItem="favorites" id="pSD-1f-fdp"/>
+                    <tabBarItem key="tabBarItem" title="Favorite Beers" image="BeersTabbaricon.png" id="pSD-1f-fdp"/>
                     <navigationItem key="navigationItem" id="3lJ-ad-mkL"/>
                     <connections>
                         <outlet property="tableView" destination="HiO-eH-bPB" id="l7G-Ma-dWd"/>
@@ -441,6 +442,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SXT-6T-y1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2538" y="681"/>
+        </scene>
+        <!--Favorite Breweries-->
+        <scene sceneID="tBY-XE-w17">
+            <objects>
+                <tableViewController id="rQo-iK-ar2" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" id="mqG-gC-dzo">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" id="Hio-GC-pqf">
+                                <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Hio-GC-pqf" id="2C7-B5-kWo">
+                                    <frame key="frameInset" width="375" height="43"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="rQo-iK-ar2" id="JW8-U0-gji"/>
+                            <outlet property="delegate" destination="rQo-iK-ar2" id="dfd-C4-E2z"/>
+                        </connections>
+                    </tableView>
+                    <tabBarItem key="tabBarItem" title="Favorite Breweries" image="BreweryTabbarIcon.png" id="ifQ-uE-wsB"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="i7b-dN-bUD" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2020" y="-758"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="bzR-Ve-0eM">
@@ -462,6 +492,8 @@
         </scene>
     </scenes>
     <resources>
+        <image name="BeersTabbaricon.png" width="75" height="75"/>
+        <image name="BreweryTabbarIcon.png" width="50" height="50"/>
         <image name="Nophoto.png" width="200" height="200"/>
         <image name="heart_icon_black_white_line_art.png" width="305" height="287"/>
         <image name="list" width="32" height="32"/>
