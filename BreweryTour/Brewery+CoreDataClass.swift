@@ -39,6 +39,7 @@ public class Brewery: NSManagedObject {
         self.id = inBrewery.id
         self.openToThePublic = inBrewery.openToThePublic
         self.name = inBrewery.name != nil ? inBrewery.name : "No Brewery Name Listed"
+        self.image = inBrewery.image
     }
     
     
