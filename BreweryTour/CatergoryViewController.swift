@@ -26,6 +26,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // MARK: IBOutlets
     
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var newSearchBar: UISearchBar!
     @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var styleTable: UITableView!
@@ -35,7 +36,17 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         setTopTitleBarName()
     }
     
-    // TODO Remove this and populate with another switchable property
+    @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
+        switch sender.selectedSegmentIndex{
+        case 0:
+            print("Style")
+        case 1:
+            print("Brewery")
+        default:
+            break
+        }
+    }
+    
     @IBAction func switchClicked(_ sender: AnyObject) {
         performSegue(withIdentifier:"Go", sender: sender)
     }
@@ -51,9 +62,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
-    
+        super.viewDidLoad()  
         
         // Search bar initialization
         newSearchBar.delegate = self
@@ -63,7 +72,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         definesPresentationContext = true
         
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
-        request.sortDescriptors = []
+        request.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
         fetchedResultsController = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (coreDataStack?.persistingContext)!, sectionNameKeyPath: nil, cacheName: nil)
         do {
             try fetchedResultsController.performFetch()
@@ -83,7 +92,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         }
     }
     
-    
+    // TODO Is this testing code I can remove
     private func batchDelete() {
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
         let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
@@ -114,7 +123,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         // Dispose of any resources that can be recreated.
     }
     
-    
+    // Changes the navigation bar to show user they can go back to categories screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         navigationController?.navigationBar.topItem?.title = "Back To Categories"
     }
@@ -168,16 +177,30 @@ extension CategoryViewController : UITableViewDataSource {
     }
 }
 
+
 extension CategoryViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let style = ((fetchedResultsController.fetchedObjects?[indexPath.row])! as Style).id
-        // TODO put activity indicator animating here
-        BreweryDBClient.sharedInstance().downloadBreweries(styleID: style!, isOrganic: organicSwitch.isOn){
-            (success) -> Void in
-            if success {
-                self.performSegue(withIdentifier:"Go", sender: nil)
+        
+        switch segmentedControl.selectedSegmentIndex {
+        case 0: // Search breweries by style
+            // User has selected an onscreen style
+            // Now we go query breweryDB for all the breweries that have that style
+            // On a succesful query we Go to the map
+            let style = ((fetchedResultsController.fetchedObjects?[indexPath.row])! as Style).id
+            // TODO put activity indicator animating here
+            BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style!, isOrganic: organicSwitch.isOn){
+                (success) -> Void in
+                if success {
+                    self.performSegue(withIdentifier:"Go", sender: nil)
+                }
             }
+        case 1: // Search breweries by name
+            print("case 1")
+        default:
+            print("default case")
         }
+        
+
     }
 }
 
