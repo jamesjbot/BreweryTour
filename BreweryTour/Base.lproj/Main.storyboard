@@ -23,9 +23,9 @@
                         <subviews>
                             <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi">
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" distribution="fillEqually" alignment="center" spacing="21" translatesAutoresizingMaskIntoConstraints="NO" id="o8R-RJ-Kqh">
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="lastBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="1R7-fH-Aau">
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="ZCn-Zf-8go">
+                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="x2f-9h-2Hz">
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Organic Only" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Or1-vb-uVo">
                                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -37,20 +37,15 @@
                                                             <action selector="organicClicked:" destination="RKC-MN-s1K" eventType="valueChanged" id="8zT-2d-4mz"/>
                                                         </connections>
                                                     </switch>
-                                                </subviews>
-                                            </stackView>
-                                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="x2f-9h-2Hz">
-                                                <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Available" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="r3w-g7-FB1" userLabel="Available">
-                                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                        <nil key="textColor"/>
-                                                        <nil key="highlightedColor"/>
-                                                    </label>
-                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="nH4-hB-vhC">
+                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mmN-dq-rb5">
+                                                        <segments>
+                                                            <segment title="Style"/>
+                                                            <segment title="Brewery"/>
+                                                        </segments>
                                                         <connections>
-                                                            <action selector="switchClicked:" destination="RKC-MN-s1K" eventType="valueChanged" id="NZI-qj-jMU"/>
+                                                            <action selector="segmentedControlClicked:forEvent:" destination="RKC-MN-s1K" eventType="valueChanged" id="1HX-2h-8LA"/>
                                                         </connections>
-                                                    </switch>
+                                                    </segmentedControl>
                                                 </subviews>
                                             </stackView>
                                         </subviews>
@@ -65,10 +60,10 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerTypeCell" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="370" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="1000" height="43"/>
+                                                    <frame key="frameInset" width="370" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -87,8 +82,8 @@
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
-                            <constraint firstAttribute="trailing" secondItem="FTn-Tc-4mi" secondAttribute="trailing" id="A3i-ph-YMo"/>
-                            <constraint firstItem="FTn-Tc-4mi" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" id="c9X-cx-1HR"/>
+                            <constraint firstAttribute="trailing" secondItem="FTn-Tc-4mi" secondAttribute="trailing" constant="5" id="A3i-ph-YMo"/>
+                            <constraint firstItem="FTn-Tc-4mi" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" constant="8" id="c9X-cx-1HR"/>
                             <constraint firstItem="FTn-Tc-4mi" firstAttribute="leadingMargin" secondItem="ans-at-Olx" secondAttribute="leading" id="m2t-Dl-uGx"/>
                             <constraint firstItem="wrT-1x-h0f" firstAttribute="top" secondItem="FTn-Tc-4mi" secondAttribute="bottom" id="r6E-e3-8Fi"/>
                         </constraints>
@@ -103,6 +98,7 @@
                     <connections>
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="fW0-c3-9C3"/>
+                        <outlet property="segmentedControl" destination="mmN-dq-rb5" id="1vF-MM-mRn"/>
                         <outlet property="styleTable" destination="OSH-8A-abx" id="y1X-oH-hTs"/>
                         <segue destination="aS9-dG-afv" kind="show" identifier="Go" id="ETW-U3-xph"/>
                     </connections>
@@ -477,7 +473,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="Hmu-ry-dre" detailTextLabel="3Tn-CX-GaW" imageView="Oj6-H2-7ba" style="IBUITableViewCellStyleSubtitle" id="Gy1-u4-ujg">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gy1-u4-ujg" id="1kw-Cs-FXM">
                                             <frame key="frameInset" width="375" height="43"/>
