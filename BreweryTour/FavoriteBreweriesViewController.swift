@@ -63,12 +63,14 @@ class FavoriteBreweriesViewController: UIViewController {
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
         guard let selectedObject = fetchedResultsController.object(at: indexPath as IndexPath) as Brewery? else { fatalError("Unexpected Object in FetchedResultsController") }
         // Populate cell from the NSManagedObject instance
-        cell.textLabel?.text = selectedObject.name
+        cell.textLabel?.text = selectedObject.name!
+        // TODO please remove this is temporary so I can see the id
+        cell.detailTextLabel?.text = "(\(selectedObject.id))"
         //cell.detailTextLabel?.text = selectedObject.brewer?.name
-//        if let data : NSData = (selectedObject.image) {
-//            let im = UIImage(data: data as Data)
-//            cell.imageView?.image = im
-//        }
+        if let data : NSData = (selectedObject.image) {
+            let im = UIImage(data: data as Data)
+            cell.imageView?.image = im
+        }
     }
 }
 
