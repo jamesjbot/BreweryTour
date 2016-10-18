@@ -123,7 +123,60 @@ extension CoreDataStack {
         }
     }
     
-    internal func saveToFile() {
+    
+    // Temporary test code
+    internal func stateOfAllContexts(){
+
+        do {
+            let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+            request.sortDescriptors = []
+            try print("background Breweries: \(backgroundContext.count(for: request))")
+            try print("favorites Breweries: \(favoritesContext.count(for: request))")
+            
+            let brequest : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+            brequest.sortDescriptors = []
+            try print("background Beers: \(backgroundContext.count(for: brequest))")
+            try print("favorite Beers: \(favoritesContext.count(for: brequest))")
+            
+            let srequest : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
+            srequest.sortDescriptors = []
+            try print("background Styles: \(backgroundContext.count(for: srequest))")
+            try print("favorite Styles: \(favoritesContext.count(for: srequest))")
+            
+        } catch {
+            
+        }
+    }
+    
+    // Temporary test code
+    internal func deleteBeersAndBreweriesFromBackgroundContext(){
+        stateOfAllContexts()
+        let beerRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        let beerBatch = NSBatchDeleteRequest(fetchRequest: beerRequest as! NSFetchRequest<NSFetchRequestResult> )
+        beerBatch.resultType = .resultTypeCount
+        do {
+            let results = try backgroundContext.execute(beerBatch) as! NSBatchDeleteResult
+            print("Batch Deleted completed on \(results.result) objects")
+            //try backgroundContext.save()
+        } catch {
+            fatalError("batchdelete failed")
+        }
+        let breweryRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        let breweryBatch = NSBatchDeleteRequest(fetchRequest: breweryRequest as! NSFetchRequest<NSFetchRequestResult> )
+        do {
+            let results = try backgroundContext.execute(breweryBatch) as! NSBatchDeleteResult
+            //try mainStoreCoordinator.execute(breweryBatch, with: (backgroundContext)!)
+            print("Batch Deleted completed on \(results.result) objects")
+            // try backgroundContext.save()
+        } catch {
+            fatalError("batchdelete failed")
+        }
+        backgroundContext.reset()
+        stateOfAllContexts()
+    }
+    
+    
+    private func saveToFile() {
         // We call this synchronously, but it's a very fast
         // operation (it doesn't hit the disk). We need to know
         // when it ends so we can call the next save (on the persisting
