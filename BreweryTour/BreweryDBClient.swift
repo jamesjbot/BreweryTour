@@ -18,6 +18,7 @@ class BreweryDBClient {
     internal enum APIQueryTypes {
         case Beers
         case Styles
+        case Brewery
     }
     
     
@@ -36,6 +37,13 @@ class BreweryDBClient {
     
     
     // MARK: Functions
+    // TODO May not need this anymore
+    internal func getBreweryData(id: String){
+        let methodParameters : [String:AnyObject] = ["id":id as AnyObject]
+        let outputURL : NSURL = createURLFromParameters(queryType: .Brewery, parameters: methodParameters)
+        
+    }
+    
     
     internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool) -> Void ){
         let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject
@@ -59,7 +67,7 @@ class BreweryDBClient {
     
     
     // Query for breweries that offer a certain style.
-    internal func downloadBreweries(styleID : String, isOrganic : Bool , completion: @escaping (_ success: Bool)-> Void ) {
+    internal func downloadBreweriesBy(styleID : String, isOrganic : Bool , completion: @escaping (_ success: Bool)-> Void ) {
         let methodParameters  = [
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
             Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,
@@ -129,14 +137,14 @@ class BreweryDBClient {
                 
                 // TODO Save Icons for display
                 if let images = beer["labels"] as? [String : AnyObject],
-                    let icon = images["icon"] as! String?,
+                    //let icon = images["icon"] as! String?,
                     let medium = images["medium"] as! String?  {
                     thisBeer.imageUrl = medium
                     let queue = DispatchQueue(label: "Images")
                     print("Prior to getting image")
                     queue.async(qos: .utility) {
                         print("Getting images in background")
-                        self.downloadImageToCoreData(aturl: NSURL(string: thisBeer.imageUrl!)!, forBeer: thisBeer, updateManagedObjectID: thisBeer.objectID, index: nil)
+                        self.downloadImageToCoreData(aturl: NSURL(string: thisBeer.imageUrl!)!, forBeer: thisBeer, updateManagedObjectID: thisBeer.objectID)
                     }
                 }
                 
@@ -158,8 +166,8 @@ class BreweryDBClient {
                     // TODO Check other information that may be useful for customer
                     let locDic = locationInfo[0] as! [String : AnyObject]
                     // We can't visit a brewery if it's not open to the public
-                    print(locDic["latitude"])
-                    print(locDic["longitude"])
+                    //print(locDic["latitude"])
+                    //print(locDic["longitude"])
                     if locDic["openToPublic"] as! String == "Y" &&
                         locDic["latitude"]?.description != "" &&
                         locDic["longitude"]?.description != "" &&
@@ -180,7 +188,16 @@ class BreweryDBClient {
                                     open: (locDic["openToPublic"] as! String == "Y") ? true : false,
                                     id: locDic["id"]?.description,
                                     context: (coreDataStack?.backgroundContext)!)
-                        print("Brewery object created \(locDic["id"])")
+                        if let imagesDict : [String:AnyObject] = breweryDict["images"] as? [String:AnyObject] {
+                            if let imageURL : String = imagesDict["medium"] as! String? {
+                                let queue = DispatchQueue(label: "Images")
+                                queue.async(qos: .utility) {
+                                    print("Getting images in background")
+                                self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: thisBrewery, updateManagedObjectID: thisBrewery.objectID)
+                            }
+                            }
+                        }
+                        //print("Brewery object created \(locDic["id"])")
                         // Assign this brewery to this beer
                         thisBeer.brewer = thisBrewery
                             
@@ -222,12 +239,15 @@ class BreweryDBClient {
                 fatalError("Error saving styles")
             }
             break
+            
+        case .Brewery:
+            break
         }
     }
 
     
     // Download images in the background then update Coredata when complete
-    internal func downloadImageToCoreData( aturl: NSURL, forBeer: Beer, updateManagedObjectID: NSManagedObjectID, index: NSIndexPath?) {
+    internal func downloadImageToCoreData( aturl: NSURL, forBeer: Beer, updateManagedObjectID: NSManagedObjectID) {
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
@@ -252,6 +272,30 @@ class BreweryDBClient {
         task.resume()
     }
     
+    internal func downloadImageToCoreDataForBrewery( aturl: NSURL, forBrewery: Brewery, updateManagedObjectID: NSManagedObjectID) {
+        let session = URLSession.shared
+        let task = session.dataTask(with: aturl as URL){
+            (data, response, error) -> Void in
+            if error == nil {
+                if data == nil {
+                    return
+                }
+                self.coreDataStack!.backgroundContext.performAndWait(){
+                    let breweryForUpdate = self.coreDataStack!.backgroundContext.object(with: updateManagedObjectID) as! Brewery
+                    let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
+                    breweryForUpdate.image = outputData
+                    do {
+                        try self.coreDataStack!.backgroundContext.save()
+                        print("Attention Brewery Imaged saved")
+                    }
+                    catch {
+                        return
+                    }
+                }
+            }
+        }
+        task.resume()
+    }
     
     private func createURLFromParameters(queryType: APIQueryTypes, parameters: [String:AnyObject]) -> NSURL {
         // The url currently takes the form of
@@ -266,8 +310,11 @@ class BreweryDBClient {
             break
         case .Styles:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Styles
+        case .Brewery:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery
         }
         
+        // Add the API Key QueryItem
         components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
@@ -280,6 +327,10 @@ class BreweryDBClient {
         }
         return components.url! as NSURL
     }
+
+
+
+
 }
 
 
@@ -293,6 +344,7 @@ extension BreweryDBClient {
             struct Methods {
                 static let Beers = "beers"
                 static let Breweries = "breweries"
+                static let Brewery = "brewery"
                 static let Styles = "styles"
             }
         }
