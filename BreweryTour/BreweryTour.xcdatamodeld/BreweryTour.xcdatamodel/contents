@@ -8,11 +8,14 @@
         <attribute name="id" attributeType="String" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" syncable="YES"/>
         <attribute name="imageUrl" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="style" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="isOrganic" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="styleID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tastingNotes" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="brewer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Brewery" inverseName="brewedbeer" inverseEntity="Brewery" syncable="YES"/>
     </entity>
     <entity name="Brewery" representedClassName=".Brewery" syncable="YES">
+        <attribute name="favorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="hasOrganic" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
@@ -27,8 +30,8 @@
         <attribute name="id" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="Beer" positionX="-54" positionY="27" width="128" height="195"/>
-        <element name="Brewery" positionX="-54" positionY="9" width="128" height="165"/>
+        <element name="Beer" positionX="-54" positionY="27" width="128" height="210"/>
+        <element name="Brewery" positionX="-54" positionY="9" width="128" height="195"/>
         <element name="Style" positionX="-63" positionY="-18" width="128" height="75"/>
     </elements>
 </model>
