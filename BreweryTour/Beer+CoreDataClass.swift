@@ -42,7 +42,7 @@ public class Beer: NSManagedObject {
         self.image = image
         self.imageUrl = imageURL
         self.tastingNotes = tasting
-        self.style = style
+        self.styleID = style
     }
     
 

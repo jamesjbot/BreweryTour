@@ -161,7 +161,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
                              description: beer.beerDescription,
                              id: beer.id!,
                              tasting: beer.tastingNotes,
-                             style: beer.style,
+                             style: beer.styleID,
                              context: favoriteContext!)
             default: // Just update the notes
                 beer.tastingNotes = tasting.text
