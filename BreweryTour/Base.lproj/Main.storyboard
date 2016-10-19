@@ -59,7 +59,7 @@
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="759" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerTypeCell" id="kaU-Em-b0H">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="genericTypeCell" id="kaU-Em-b0H">
                                                 <rect key="frame" x="0.0" y="28" width="370" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
@@ -89,6 +89,11 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Organic Brewery Tour" id="OFD-1P-5O8">
+                        <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="WU6-mQ-wHx">
+                            <connections>
+                                <action selector="refresh:" destination="RKC-MN-s1K" id="RAU-ET-spE"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" title="Go To Map" id="fyC-Ho-f67">
                             <connections>
                                 <segue destination="aS9-dG-afv" kind="show" id="Kjw-4I-TCa"/>
@@ -98,6 +103,7 @@
                     <connections>
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="fW0-c3-9C3"/>
+                        <outlet property="refreshDatabase" destination="WU6-mQ-wHx" id="ksN-lo-CZD"/>
                         <outlet property="segmentedControl" destination="mmN-dq-rb5" id="1vF-MM-mRn"/>
                         <outlet property="styleTable" destination="OSH-8A-abx" id="y1X-oH-hTs"/>
                         <segue destination="aS9-dG-afv" kind="show" identifier="Go" id="ETW-U3-xph"/>
