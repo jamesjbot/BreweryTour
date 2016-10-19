@@ -18,6 +18,8 @@ class BreweryDBClient {
     internal enum APIQueryTypes {
         case Beers
         case Styles
+        case Breweries
+        case BeersByABrewery
         case Brewery
     }
     
@@ -38,16 +40,81 @@ class BreweryDBClient {
     
     // MARK: Functions
     // TODO May not need this anymore
-    internal func getBreweryData(id: String){
-        let methodParameters : [String:AnyObject] = ["id":id as AnyObject]
-        let outputURL : NSURL = createURLFromParameters(queryType: .Brewery, parameters: methodParameters)
-        
+    // Purpose: get brewery data by it's id
+//    internal func getBreweryData(id: String){
+//        let methodParameters : [String:AnyObject] = ["id":id as AnyObject]
+//        let outputURL : NSURL = createURLFromParameters(queryType: .Brewery, parameters: methodParameters)
+//        
+//    }
+    internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool) -> Void ) {
+        let methodParameters  = [
+            Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
+            "name" : "*\(name)*" as AnyObject,
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject//,
+            //Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
+        ]
+        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryTypes.Breweries,parameters: methodParameters)
+        Alamofire.request(outputURL.absoluteString!)
+            .responseJSON {
+                response in
+                guard response.result.isSuccess else {
+                    print("failed \(response.request?.url)")
+                    completion(false)
+                    return
+                }
+                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                    print("Invalid tag informatiion")
+                    completion(false)
+                    return
+                }
+                self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Breweries, completion: completion)
+                return
+        }
     }
     
     
+    // Downloads all breweries
+    internal func downloadAllBreweries(isOrganic : Bool , completion: @escaping (_ success: Bool) -> Void ) {
+        var methodParameters = [String:AnyObject]()
+        if isOrganic {
+             methodParameters  = [
+                Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
+                Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+                Constants.BreweryParameterKeys.Organic : "Y" as AnyObject,
+                Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
+            ]
+        } else {
+             methodParameters  = [
+                Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
+                "name" : "*brewery*" as AnyObject,
+                Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject//,
+                //Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
+            ]
+        }
+        
+        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryTypes.Breweries,parameters: methodParameters)
+        Alamofire.request(outputURL.absoluteString!)
+            .responseJSON {
+                response in
+                guard response.result.isSuccess else {
+                    print("failed \(response.request?.url)")
+                    completion(false)
+                    return
+                }
+                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                    print("Invalid tag informatiion")
+                    completion(false)
+                    return
+                }
+                self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Breweries, completion: completion)
+                return
+        }
+    }
+    
+    
+    // Downloads Beer Styles
     internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool) -> Void ){
-        let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject
-]
+        let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject]
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryTypes.Styles,parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
             guard response.result.isSuccess else {
@@ -59,8 +126,7 @@ class BreweryDBClient {
                 completionHandler(false)
                 return
             }
-            self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Styles)
-            completionHandler(true)
+            self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Styles, completion: completionHandler)
             return
         }
     }
@@ -76,7 +142,8 @@ class BreweryDBClient {
         ]
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryTypes.Beers,parameters: methodParameters)
         Alamofire.request(outputURL.absoluteString!)
-            .responseJSON { response  in
+            .responseJSON {
+                response in
                 guard response.result.isSuccess else {
                     print("failed \(response.request?.url)")
                     completion(false)
@@ -87,31 +154,39 @@ class BreweryDBClient {
                     completion(false)
                     return
                 }
-                self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Beers)
-                completion(true)
+                self.parse(response: responseJSON as NSDictionary, asQueryType: APIQueryTypes.Beers, completion: completion)
                 return
         }
     }
     
     
-    private func parse(response : NSDictionary, asQueryType: APIQueryTypes){
+    private func parse(response : NSDictionary, asQueryType: APIQueryTypes, completion: @escaping (_ success :  Bool)-> Void)  {
+
+        // Clear out previous query from background ManagedObjectContext
+        // This will delete both Beers and Breweries but not styles
+        // We currently only save favorites to disk
+        for i in (coreDataStack?.backgroundContext.registeredObjects)! {
+            coreDataStack?.backgroundContext.delete(i)
+        }
+        do {
+            try coreDataStack?.backgroundContext.save()
+        } catch {
+            // Fail because we couldn't delete the old data.
+            completion(false)
+            return
+        }
+        
+        // Process every query type accordingly
         switch asQueryType {
+        
+        // Beers query
         case APIQueryTypes.Beers:
             // The Keys in this dictionary are [status,data,numberOfPages,currentPage,totalResults]
             // Extracting beer data array of dictionaries
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 print("Failed to extract data")
+                completion(false)
                 return
-            }
-            
-            // Clear out previous query from background ManagedObjectContext
-            for i in (coreDataStack?.backgroundContext.registeredObjects)! {
-                coreDataStack?.backgroundContext.delete(i)
-            }
-            do {
-                try coreDataStack?.backgroundContext.save()
-            } catch {
-                
             }
 
             for beer in beerArray {
@@ -120,11 +195,7 @@ class BreweryDBClient {
                 
                 // Create the coredata object for each beer
                 // which will include name, description, availability, brewery name, styleID
-                //print("beer:\(beer["name"])")
-//                print("beerDescription:\(beer["description"])")
-//                print("labels:\(beer["labels"])")
-//                print("id:\(beer["id"])")
-//                print(coreDataStack?.mainContext)
+
                 let id : String? = beer["id"] as? String
                 let name : String? = beer["name"] as? String ?? ""
                 let description : String? = (beer["description"] as? String) ?? ""
@@ -158,7 +229,6 @@ class BreweryDBClient {
                     // The brewery dictionary
                     let breweryDict = brewery as! NSDictionary
 
-                    
                     guard let locationInfo = breweryDict["locations"] as? NSArray else {
                         continue
                     }
@@ -204,6 +274,8 @@ class BreweryDBClient {
                         //We might only create the beer if the brewery is open
                     } else {
                         print("Closed to the public")
+                        print("Location looks like \(locationInfo)")
+                        print("latitude: \(locDic["latitude"]) longitude: \(locDic["longitude"])")
                     }
 
                     }
@@ -211,20 +283,23 @@ class BreweryDBClient {
             
             do {
                 try coreDataStack?.backgroundContext.save()
+                completion(true)
             } catch let error {
+                completion(false)
                 fatalError("Saving background error \(error)")
             }
             
             break
 
+            
         case .Styles:
-            // Styles are saved on the persistingContext because they don't change.
+            // Styles are saved on the persistingContext because they don't change often.
             // We must have data to process
             guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else {
                 print("Failed to convert")
                 return
             }
-            // Create a style object for every beer style
+            // Check to see if the style is already in coredata then skip, else add
             for aStyle in styleArrayOfDict {
                 print("astyle \(aStyle)")
                 let localId = aStyle["id"]?.stringValue
@@ -240,12 +315,117 @@ class BreweryDBClient {
             }
             break
             
+        case .Breweries:
+            guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
+                print("Failed to extract data")
+                return
+            }
+            print("numberofpages:\(response["numberOfPages"]) results:\(response["totalResults"])")
+            print("We are creating \(breweryArray.count) breweries")
+            for breweryDict in breweryArray {
+                // All conditions that prevent us from going to the brewery
+                guard let locationInfo = breweryDict["locations"] as? NSArray?,
+                    let locDic : [String:AnyObject] = locationInfo?[0] as! [String : AnyObject]?,
+                    let openToPublic = locDic["openToPublic"],
+                    openToPublic as! String == "Y",
+                    locDic["latitude"]?.description != "",
+                    locDic["longitude"]?.description != "",
+                    locDic["longitude"] != nil,
+                    locDic["latitude"] != nil
+                    else { continue }
+                //guard openToPublic as! String == "Y" else {return}
+                // Extract location information
+                //let locDic = locationInfo[0] as! [String : AnyObject]
+                // Create the brewery object
+                let thisBrewery : Brewery = Brewery(inName: breweryDict["name"] as! String,
+                                      latitude: locDic["latitude"]?.description,
+                                      longitude: locDic["longitude"]?.description,
+                                      url: locDic["website"] as! String?,
+                                      open: (locDic["openToPublic"] as! String == "Y") ? true : false,
+                                      id: locDic["id"]?.description,
+                                      context: (coreDataStack?.backgroundContext)!)
+                print("creatd brewery object \(thisBrewery.objectID)")
+                // Capture and download images for later use
+                guard let imagesDict : [String:AnyObject] = breweryDict["images"] as? [String:AnyObject],
+                    let imageURL : String = imagesDict["medium"] as! String?
+                    else { continue }
+                // Capture images asynchronously
+                let queue = DispatchQueue(label: "Images")
+                queue.async(qos: .utility) {
+                    print("Getting images in background")
+                    self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!,
+                                                           forBrewery: thisBrewery,
+                                                           updateManagedObjectID: thisBrewery.objectID)
+                }
+                
+            }// for breweryDict in breweryArray {
+            // Save all the Breweries in background context to disk
+            do {
+                try coreDataStack?.backgroundContext.save()
+                print("save breweries to disk")
+                completion(true)
+            } catch let error {
+                completion(false)
+                fatalError("Saving background error \(error)")
+            }
+            break
+            
+            
         case .Brewery:
+            guard let brewery = response["data"] as? [[String:AnyObject]] else {
+                print("Failed to extract data")
+                return
+            }
+            let breweryDict = brewery[0]
+            guard let locationInfo = breweryDict["locations"] as? NSArray else {
+                // Can't build a brewery location if no location exists
+                break
+            }
+            // Brewery stub to populate
+            var thisBrewery : Brewery!
+            
+            // Extract location information
+            let locDic = locationInfo[0] as! [String : AnyObject]
+            
+            // We can't visit a brewery if it's not open to the public
+            if locDic["openToPublic"] as! String == "Y" &&
+                locDic["latitude"]?.description != "" &&
+                locDic["longitude"]?.description != "" &&
+                locDic["longitude"] != nil &&
+                locDic["latitude"] != nil   {
+                // Create the brewery object
+                thisBrewery = Brewery(inName: breweryDict["name"] as! String,
+                                      latitude: locDic["latitude"]?.description,
+                                      longitude: locDic["longitude"]?.description,
+                                      url: locDic["website"] as! String?,
+                                      open: (locDic["openToPublic"] as! String == "Y") ? true : false,
+                                      id: locDic["id"]?.description,
+                                      context: (coreDataStack?.backgroundContext)!)
+                // Capture and download images for later use
+                if let imagesDict : [String:AnyObject] = breweryDict["images"] as? [String:AnyObject],
+                    let imageURL : String = imagesDict["medium"] as! String? {
+                    let queue = DispatchQueue(label: "Images")
+                    queue.async(qos: .utility) {
+                        print("Getting images in background")
+                        self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: thisBrewery, updateManagedObjectID: thisBrewery.objectID)
+                        
+                    }
+                }
+            }
+        // Save the Breweries in background context
+        do {
+            try coreDataStack?.backgroundContext.save()
+        } catch let error {
+            fatalError("Saving background error \(error)")
+        }
+            break
+        
+        default:
             break
         }
     }
 
-    
+
     // Download images in the background then update Coredata when complete
     internal func downloadImageToCoreData( aturl: NSURL, forBeer: Beer, updateManagedObjectID: NSManagedObjectID) {
         let session = URLSession.shared
@@ -310,27 +490,32 @@ class BreweryDBClient {
             break
         case .Styles:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Styles
-        case .Brewery:
-            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery
+        // TODO Remove not using this querytype
+//        case .Brewery:
+//            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery
+        
+        case .Breweries:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Breweries
+            break
+            
+        default:
+            break
         }
         
-        // Add the API Key QueryItem
+        // Add the API Key - QueryItem
         components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
         
-        // Build parameters
+        // Build the other parameters
         for (key, value) in parameters {
             print(key,value)
             let queryItem = NSURLQueryItem(name: key, value: "\(value)")
             components.queryItems?.append(queryItem as URLQueryItem)
         }
+        print("Calling url \(components.url)")
         return components.url! as NSURL
     }
-
-
-
-
 }
 
 
@@ -355,6 +540,8 @@ extension BreweryDBClient {
             static let Organic = "isOrganic"
             static let StyleID = "styleId"
             static let WithBreweries = "withBreweries"
+            static let HasImages = "hasImages"
+            static let WithLocations = "withLocations"
         }
         
         struct BreweryParameterValues {
