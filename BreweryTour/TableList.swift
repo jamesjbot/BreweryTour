@@ -10,9 +10,11 @@ import CoreData
 import UIKit
 
 protocol TableList {
+    var mediator : NSManagedObjectDisplayable! { get set }
     //var data : [NSManagedObject] {get set}
     //var filteredObjects : [NSManagedObject] { get set }
     func getNumberOfRowsInSection(searchText : String?) -> Int
     func filterContentForSearchText(searchText: String) -> [NSManagedObject]
     func cellForRowAt(indexPath : IndexPath, cell : UITableViewCell, searchText : String?) -> UITableViewCell
+    func selected(elementAt: IndexPath, completion: (_ success: Bool) -> Void )
 }

@@ -11,6 +11,10 @@ import MapKit
 import CoreLocation
 import CoreData
 
+// I've changed how this gets the breweries to map
+// It queries the database for the locations it should display
+
+
 class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: IBOutlet
@@ -19,18 +23,23 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: Variables
     
+    // Used to hold the locations we are going to display, loaded from a database query
     private var incomingLocations = [Brewery]()
+    // The query that goes against the database to pull in the brewery location information
     private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
+    // Location manager allows us access to the user's location
     private let locationManager = CLLocationManager()
     
     fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     
     
     // MARK: Functions
+    // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
     private func initializeFetchAndFetchBreweries(){
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "mustDraw == true")
         do {
             try incomingLocations = (coreDataStack?.backgroundContext.fetch(request))! as [Brewery]
         } catch {
@@ -39,12 +48,16 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         print("Completed getting Breweries")
     }
     
+    
+    // Fetch brewery by brewery selected
+    private func getBrewery(){
+        
+    }
+    
+    
     override func viewDidLoad(){
         super.viewDidLoad()
-        print("View did load called")
-
-        
-        // CoreLocation initialization for user location
+        // CoreLocation initialization, ask permission to utilize user location
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
         if CLLocationManager.locationServicesEnabled() {

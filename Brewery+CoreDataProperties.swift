@@ -2,7 +2,7 @@
 //  Brewery+CoreDataProperties.swift
 //  
 //
-//  Created by James Jongsurasithiwat on 10/18/16.
+//  Created by James Jongsurasithiwat on 10/20/16.
 //
 //
 
@@ -15,6 +15,8 @@ extension Brewery {
         return NSFetchRequest<Brewery>(entityName: "Brewery");
     }
 
+    @NSManaged public var favorite: Bool
+    @NSManaged public var hasOrganic: Bool
     @NSManaged public var id: String?
     @NSManaged public var image: NSData?
     @NSManaged public var latitude: String?
@@ -22,8 +24,7 @@ extension Brewery {
     @NSManaged public var name: String?
     @NSManaged public var openToThePublic: Bool
     @NSManaged public var url: String?
-    @NSManaged public var hasOrganic: Bool
-    @NSManaged public var favorite: Bool
+    @NSManaged public var mustDraw: Bool
     @NSManaged public var brewedbeer: NSSet?
 
 }

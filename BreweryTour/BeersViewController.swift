@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class BeersViewController: UIViewController {
+class BeersViewController: UIViewController, Observer {
 
     // MARK: Constants
     
@@ -17,24 +17,30 @@ class BeersViewController: UIViewController {
     
     // MARK: Variables
     
-    fileprivate var fetchedResultsController : NSFetchedResultsController<Beer>
+    fileprivate var frc : NSFetchedResultsController<Beer> = NSFetchedResultsController()
+    
+    internal var listOfBreweryIDToDisplay : [String]!
+    
+    internal let med : Mediator = Mediator.sharedInstance()
+    
+    private let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
+    
     
     // MARK: IBOutlets
     
 
+    
     @IBOutlet weak var tableView: UITableView!
     
     
     // MARK: Functions
     
+    func sendNotify(s: String) {
+        tableView.reloadData()
+    }
+    
     
     required init?(coder aDecoder: NSCoder) {
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-        request.sortDescriptors = []
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request,
-                                                              managedObjectContext: (coreDataStack?.backgroundContext)!,
-                                                              sectionNameKeyPath: nil,
-                                                              cacheName: nil)
         super.init(coder: aDecoder)
     }
     
@@ -43,7 +49,9 @@ class BeersViewController: UIViewController {
         
         // Create a request for Beer objects and fetch the request from Coredata
         do {
-            try fetchedResultsController.performFetch()
+            try frc.performFetch()
+            print("\(#function) returned \(frc.fetchedObjects?.count) objects")
+            
         } catch {
             fatalError("There was a problem fetching from coredata")
         }
@@ -52,7 +60,25 @@ class BeersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        // Get information from the mediator as what we are displaying
+        let managedObject = Mediator.sharedInstance().selectedItem()
+        
+        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+        request.sortDescriptors = []
+        
+        switch managedObject {
+        case is Brewery:
+            request.predicate = NSPredicate(format: "brewer.id == \((managedObject as! Brewery).id)")
+        case is Style:
+            request.predicate = NSPredicate(format: "styleID == \((managedObject as! Style).id)" )
+        default:
+            break
+        }
+        
+        frc = NSFetchedResultsController(fetchRequest: request,
+                                                              managedObjectContext: (coreDataStack?.backgroundContext)!,
+                                                              sectionNameKeyPath: nil,
+                                                              cacheName: nil)
         // Do any additional setup after loading the view.
         perfromFetchOnResultsController()
     }
@@ -63,6 +89,7 @@ class BeersViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
 
+    
 }
 
 
@@ -86,16 +113,16 @@ extension BeersViewController: NSFetchedResultsControllerDelegate {
 extension BeersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (fetchedResultsController.fetchedObjects?.count)!
+        return (frc.fetchedObjects?.count)!
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name
         let cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
-        cell.textLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].beerName
-        cell.detailTextLabel?.text = fetchedResultsController.fetchedObjects?[indexPath.row].brewer?.name
-        if let data : NSData = (fetchedResultsController.fetchedObjects?[indexPath.row].image) {
+        cell.textLabel?.text = frc.fetchedObjects?[indexPath.row].beerName
+        cell.detailTextLabel?.text = frc.fetchedObjects?[indexPath.row].brewer?.name
+        if let data : NSData = (frc.fetchedObjects?[indexPath.row].image) {
             let im = UIImage(data: data as Data)
             cell.imageView?.image = im
         }
@@ -112,7 +139,7 @@ extension BeersViewController : UITableViewDelegate {
         let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
         
         // Push beer information to Detail View Controller
-        destinationViewcontroller.beer = fetchedResultsController.fetchedObjects?[indexPath.row]
+        destinationViewcontroller.beer = frc.fetchedObjects?[indexPath.row]
         
         // Segue to view controller
         navigationController?.pushViewController(destinationViewcontroller, animated: true)

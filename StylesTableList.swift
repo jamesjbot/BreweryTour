@@ -12,7 +12,7 @@ import CoreData
 
 class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate {
     
-    //var data : [NSManagedObject] = [Style]()
+    internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Style] = [Style]()
     internal var frc : NSFetchedResultsController<Style>!
     
@@ -33,13 +33,16 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate 
         }
     }
     
+    
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("StylesTableList willchange")
     }
     
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("Styles changed object")
     }
+    
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("StylesTAbleList didChange")
@@ -55,11 +58,13 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate 
         return frc.fetchedObjects!.count
     }
     
+    
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
         //print("we updated the filtered contents to \(filteredObjects.count)")
         return filteredObjects
     }
+    
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         if searchText != "" {
@@ -71,4 +76,9 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate 
         return cell
     }
     
+    
+    func selected(elementAt: IndexPath, completion: ( _ success : Bool ) -> Void ) {
+        // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
+        print("Call mediator and notify them that this beer style was selected")
+    }
 }

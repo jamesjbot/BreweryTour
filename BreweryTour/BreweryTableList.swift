@@ -10,10 +10,13 @@ import Foundation
 import UIKit
 import CoreData
 
-class BreweryTableList: NSObject, TableList , NSFetchedResultsControllerDelegate {
+class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate {
     
+    internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Brewery] = [Brewery]()
     internal var frc : NSFetchedResultsController<Brewery>!
+    
+    private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     
     let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
     
@@ -138,4 +141,35 @@ class BreweryTableList: NSObject, TableList , NSFetchedResultsControllerDelegate
         return cell
     }
     
+    
+    func selected(elementAt: IndexPath, completion: (_ success : Bool) -> Void ) {
+        Mediator.sharedInstance().selected(this: (frc.fetchedObjects?[elementAt.row])!)
+        // We are only selecting one brewery to display, so we need to remove
+        // all the breweries that are currently displayed. And then turn on the selected brewery
+        let savedBreweryForDisplay = (frc.fetchedObjects?[elementAt.row])! as Brewery
+        // Turn off mustDraw on all breweries that are marked to turn on.
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "mustDraw == true")
+        var stopDrawingTheseBreweries : [Brewery]!
+        do {
+            try stopDrawingTheseBreweries = (coreDataStack?.backgroundContext.fetch(request))! as [Brewery]
+        } catch {
+            fatalError("Failure to query breweries")
+        }
+        print("Completed getting Breweries")
+        // Mark the brewery as must display, the map controller will pull these elements out of the model itself
+        for i in stopDrawingTheseBreweries {
+            i.mustDraw = false
+        }
+        savedBreweryForDisplay.mustDraw = true
+        do {
+            try coreDataStack?.backgroundContext.save()
+        } catch {
+            fatalError()
+        }
+        // TODO need to get all the beers for this brewery
+        completion(true)
+        //print("Tell mediator this brewery was selected")
+    }
 }

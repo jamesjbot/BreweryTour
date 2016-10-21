@@ -479,7 +479,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="Hmu-ry-dre" detailTextLabel="3Tn-CX-GaW" imageView="Oj6-H2-7ba" style="IBUITableViewCellStyleSubtitle" id="Gy1-u4-ujg">
-                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Gy1-u4-ujg" id="1kw-Cs-FXM">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -542,6 +542,6 @@
         <image name="map" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="Kjw-4I-TCa"/>
+        <segue reference="ETW-U3-xph"/>
     </inferredMetricsTieBreakers>
 </document>

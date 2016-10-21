@@ -18,7 +18,7 @@ class CoreDataStack: NSObject {
     private var modelURL: NSURL!
     private var dbURL: NSURL!
     internal var persistingContext: NSManagedObjectContext!
-    internal var backgroundContext : NSManagedObjectContext!
+    public var backgroundContext : NSManagedObjectContext!
     internal var mainContext: NSManagedObjectContext!
     internal var favoritesContext: NSManagedObjectContext!
     
@@ -98,6 +98,7 @@ class CoreDataStack: NSObject {
     }
 }
 
+
 extension CoreDataStack {
     internal func saveBackgroundContext() throws{
         if backgroundContext.hasChanges{
@@ -107,6 +108,7 @@ extension CoreDataStack {
         }
     }
     
+    
     internal func saveMainContext() throws{
         if mainContext.hasChanges{
             do {
@@ -114,6 +116,7 @@ extension CoreDataStack {
             }
         }
     }
+    
     
     internal func savePersistingContext() throws{
         if persistingContext.hasChanges{
@@ -149,23 +152,25 @@ extension CoreDataStack {
     }
     
     // Temporary test code
-    internal func deleteBeersAndBreweriesFromBackgroundContext(){
+    internal func deleteBeersAndBreweries(){
         stateOfAllContexts()
         let beerRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         let beerBatch = NSBatchDeleteRequest(fetchRequest: beerRequest as! NSFetchRequest<NSFetchRequestResult> )
         beerBatch.resultType = .resultTypeCount
         do {
+            try mainStoreCoordinator.execute(beerBatch, with: persistingContext)
             let results = try backgroundContext.execute(beerBatch) as! NSBatchDeleteResult
             print("Batch Deleted completed on \(results.result) objects")
             //try backgroundContext.save()
         } catch {
             fatalError("batchdelete failed")
         }
+        
         let breweryRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         let breweryBatch = NSBatchDeleteRequest(fetchRequest: breweryRequest as! NSFetchRequest<NSFetchRequestResult> )
         do {
             let results = try backgroundContext.execute(breweryBatch) as! NSBatchDeleteResult
-            //try mainStoreCoordinator.execute(breweryBatch, with: (backgroundContext)!)
+            try mainStoreCoordinator.execute(breweryBatch, with: (backgroundContext)!)
             print("Batch Deleted completed on \(results.result) objects")
             // try backgroundContext.save()
         } catch {

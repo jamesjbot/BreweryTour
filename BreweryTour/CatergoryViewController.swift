@@ -11,7 +11,19 @@ import CoreData
 
 class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate  {
     
-    //var filteredObjects = [NSManagedObject]()
+    
+    // TODO Is this testing code I can remove
+    private func batchDelete() {
+        let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
+        let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
+        do {
+            try coreDataStack?.mainStoreCoordinator.execute(batch, with: (coreDataStack?.persistingContext)!)
+            print("Batch Deleted completed")
+        } catch {
+            fatalError("batchdelete failed")
+        }
+    }
+    
     
     // MARK: Constant
     fileprivate var fetchedResultsController : NSFetchedResultsController<NSManagedObject>!
@@ -22,15 +34,14 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     let cellIdentifier = "genericTypeCell"
     
-    let searchController = UISearchController(searchResultsController: nil)
-    
-    //fileprivate var styles = [Style]()
-    fileprivate var breweries = [Brewery]()
-    
     fileprivate var activeTableList : TableList!
     
-    private let styleList : StylesTableList = StylesTableList()
-    private let breweryList : BreweryTableList = BreweryTableList()
+    private let styleList : StylesTableList! = Mediator.sharedInstance().getStyleList()
+    private let breweryList : BreweryTableList! = Mediator.sharedInstance().getBreweryList()
+    
+    private let med : Mediator = Mediator.sharedInstance()
+
+    
     // MARK: IBOutlets
     @IBOutlet weak var refreshDatabase: UIBarButtonItem!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -77,17 +88,11 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        // Search bar initialization
-        //newSearchBar.delegate = self
-        searchController.hidesNavigationBarDuringPresentation = false
-        //searchController.searchResultsUpdater = self
-        searchController.dimsBackgroundDuringPresentation = false
-        definesPresentationContext = true
-        
         // Here we start initializer for style querying
-        fetchStyles()
-        //segmentedControlClicked(nil, forEvent: nil)
+        activeTableList = styleList
+        styleList.mediator = med
+        breweryList.mediator = med
+        
     }
     
     
@@ -95,13 +100,14 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         super.viewWillAppear(animated)
         // Fix the top title bar when we return
         setTopTitleBarName()
+        
+        // Deselect whatever was selected on screen
         guard styleTable.indexPathForSelectedRow == nil else {
             styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
             return
         }
-        // Establish ourselves so we can receive updates
-        //fetchedResultsController.delegate = self
     }
+    
     
     private func setTopTitleBarName(){
         if organicSwitch.isOn {
@@ -112,52 +118,14 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     }
     
     
-    private func fetchStyles() {
-        activeTableList = styleList
-    }
-    
-    
-    private func fetchBreweries() {
-        fatalError()
-    }
-    
-
-    
-    // TODO Is this testing code I can remove
-    private func batchDelete() {
-        let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
-        let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
-        do {
-            try coreDataStack?.mainStoreCoordinator.execute(batch, with: (coreDataStack?.persistingContext)!)
-            print("Batch Deleted completed")
-        } catch {
-            fatalError("batchdelete failed")
-        }
-    }
-    
-    
-
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    
     // Changes the navigation bar to show user they can go back to categories screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         navigationController?.navigationBar.topItem?.title = "Back To Categories"
     }
 }
 
+
 extension CategoryViewController : UITableViewDataSource {
-    
-    func filterContentForSearchText(_ searchText: String, scope: String = "All") {
-        // Filter the tableList
-        activeTableList.filterContentForSearchText(searchText: searchText)
-        styleTable.reloadData()
-    }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -167,6 +135,7 @@ extension CategoryViewController : UITableViewDataSource {
                                          searchText: newSearchBar.text)
         return cell!
     }
+    
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var retVal : Int!
@@ -179,76 +148,83 @@ extension CategoryViewController : UITableViewDataSource {
 
 extension CategoryViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
-        switch segmentedControl.selectedSegmentIndex {
-        case 0: // Search breweries by style
-            break
-            // User has selected an onscreen style
-            // Now we go query breweryDB for all the breweries that have that style
-            // On a succesful query we Go to the map
-            //let style = styles[indexPath.row].id
-            // TODO put activity indicator animating here
-//            BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style!, isOrganic: organicSwitch.isOn){
-//                (success) -> Void in
-//                if success {
-//                    self.performSegue(withIdentifier:"Go", sender: nil)
-//                }
-//            }
-        case 1: // Search breweries by name
-            print("case 1")
-        default:
-            print("default case")
+        activeTableList.selected(elementAt: indexPath){
+        (sucesss) -> Void in
+            self.performSegue(withIdentifier: "Go", sender: nil)
         }
+//        switch segmentedControl.selectedSegmentIndex {
+//        case 0: // Search breweries by style
+//            break
+//            // User has selected an onscreen style
+//            // Now we go query breweryDB for all the breweries that have that style
+//            // On a succesful query we Go to the map
+//            //let style = styles[indexPath.row].id
+//            // TODO put activity indicator animating here
+////            BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style!, isOrganic: organicSwitch.isOn){
+////                (success) -> Void in
+////                if success {
+////                    self.performSegue(withIdentifier:"Go", sender: nil)
+////                }
+////            }
+//        case 1: // Search breweries by name
+//            print("case 1")
+//        default:
+//            print("default case")
+//        }
     }
 }
 
+
 extension CategoryViewController: UISearchBarDelegate {
     
+    
     // MARK: - UISearchBar Delegate
+    
     func searchBar(_: UISearchBar, textDidChange: String){
-        print("Search bar text changed filtering")
-        filterContentForSearchText(newSearchBar.text!)
+        // User entered searchtext filter data
+        activeTableList.filterContentForSearchText(searchText: textDidChange)
+        styleTable.reloadData()
     }
     
+    
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        // Remove text so we stop searching
+        // Remove searchbar text so we stop searching
         // Put searchbar back into unselected state
         // Repopulate the table
-        print("searchbar cancel button clicked")
         newSearchBar.text = ""
         newSearchBar.resignFirstResponder()
         styleTable.reloadData()
     }
     
-    func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
-        print("searchBar Editing ended")
-    }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("searchbar button clicked")
         searchBar.resignFirstResponder()
         // Good place to initiate asynchronous call to db
-        let queue = DispatchQueue(label: "SearchForBrewery")
-        queue.async(qos: .utility){
-            BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchBar.text!){
-                (success) -> Void in
-                if success {
-                    print("Returned from brewery client")
-                    //self.pullDataFromModelAndReloadTableView()
-                }
-            }
+        // If search results are 0 go make a query to the database on the text.
+        // If we're searching for breweries
+        guard activeTableList.filterContentForSearchText(searchText: searchBar.text!).count == 0 else {
+            return
         }
+        guard segmentedControl.selectedSegmentIndex == 1 else {
+            return
+        }
+//        let queue = DispatchQueue(label: "SearchForBrewery")
+//        queue.async(qos: .utility){
+//            BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchBar.text!){
+//                (success) -> Void in
+//                if success {
+//                    print("Returned from brewery client")
+//                    // Notify the brewery list that we have a new brewery
+//                    // This is done by NSFetchResultsController in the brewery list
+//                    // Notify outselves to reload from the brewery
+//                    self.styleTable.reloadData()
+//                    //self.pullDataFromModelAndReloadTableView()
+//                }
+//            }
+//        }
     }
 }
 
-
-extension CategoryViewController: UISearchResultsUpdating {
-    // MARK: - UISearchResultsUpdating Delegate
-    internal func updateSearchResults(for searchController: UISearchController) {
-        fatalError()
-        print("UISearchResultsUpdatingcallled")
-        filterContentForSearchText(searchController.searchBar.text!)
-    }
-}
 
 
