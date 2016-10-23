@@ -133,16 +133,19 @@ extension CoreDataStack {
         do {
             let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
             request.sortDescriptors = []
+            try print("persistent Breweries: \(persistingContext.count(for: request))")
             try print("background Breweries: \(backgroundContext.count(for: request))")
             try print("favorites Breweries: \(favoritesContext.count(for: request))")
             
             let brequest : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
             brequest.sortDescriptors = []
+            try print("persisting Beers: \(persistingContext.count(for: request))")
             try print("background Beers: \(backgroundContext.count(for: brequest))")
             try print("favorite Beers: \(favoritesContext.count(for: brequest))")
             
             let srequest : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
             srequest.sortDescriptors = []
+            try print("persisting Styles: \(persistingContext.count(for: request))")
             try print("background Styles: \(backgroundContext.count(for: srequest))")
             try print("favorite Styles: \(favoritesContext.count(for: srequest))")
             
@@ -154,17 +157,19 @@ extension CoreDataStack {
     // Temporary test code
     internal func deleteBeersAndBreweries(){
         stateOfAllContexts()
-        let beerRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        let beerBatch = NSBatchDeleteRequest(fetchRequest: beerRequest as! NSFetchRequest<NSFetchRequestResult> )
-        beerBatch.resultType = .resultTypeCount
-        do {
-            try mainStoreCoordinator.execute(beerBatch, with: persistingContext)
-            let results = try backgroundContext.execute(beerBatch) as! NSBatchDeleteResult
-            print("Batch Deleted completed on \(results.result) objects")
-            //try backgroundContext.save()
-        } catch {
-            fatalError("batchdelete failed")
-        }
+        deleteFromCoreData(entity: "Beer", context: persistingContext)
+//        let beerRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Beer")
+//        let beerBatch = NSBatchDeleteRequest(fetchRequest: beerRequest as! NSFetchRequest<NSFetchRequestResult> )
+//        beerBatch.resultType = .resultTypeCount
+//        do {
+//            try mainStoreCoordinator.execute(beerBatch, with: persistingContext)
+//            let results = try backgroundContext.execute(beerBatch) as! NSBatchDeleteResult
+//            print("Batch Deleted completed on \(results.result) objects")
+//            try persistingContext.save()
+//            try backgroundContext.save()
+//        } catch {
+//            fatalError("batchdelete failed")
+//        }
         
         let breweryRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         let breweryBatch = NSBatchDeleteRequest(fetchRequest: breweryRequest as! NSFetchRequest<NSFetchRequestResult> )
@@ -172,12 +177,26 @@ extension CoreDataStack {
             let results = try backgroundContext.execute(breweryBatch) as! NSBatchDeleteResult
             try mainStoreCoordinator.execute(breweryBatch, with: (backgroundContext)!)
             print("Batch Deleted completed on \(results.result) objects")
-            // try backgroundContext.save()
+            try backgroundContext.save()
         } catch {
             fatalError("batchdelete failed")
         }
+        persistingContext.reset()
         backgroundContext.reset()
         stateOfAllContexts()
+    }
+    
+    func deleteFromCoreData(entity: String, context: NSManagedObjectContext) {
+        let genericRequest : NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "\(entity)")
+        let genericBatchDelete = NSBatchDeleteRequest(fetchRequest: genericRequest)
+        genericBatchDelete.resultType = .resultTypeCount
+        do {
+            let results = try backgroundContext.execute(genericBatchDelete) as! NSBatchDeleteResult
+            print("Batch deleted \(results) \(entity) on \(context.description)")
+            try context.save()
+        } catch let error {
+            fatalError("Error deleting objects \(error)")
+        }
     }
     
     
