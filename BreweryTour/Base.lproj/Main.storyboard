@@ -79,13 +79,16 @@
                                     <constraint firstItem="OSH-8A-abx" firstAttribute="height" secondItem="FTn-Tc-4mi" secondAttribute="height" multiplier="0.85" id="N5X-9z-QaA"/>
                                 </constraints>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bpZ-cN-Rf5"/>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="FTn-Tc-4mi" secondAttribute="trailing" constant="5" id="A3i-ph-YMo"/>
+                            <constraint firstItem="bpZ-cN-Rf5" firstAttribute="centerX" secondItem="ans-at-Olx" secondAttribute="centerX" id="OKb-ey-Ejd"/>
                             <constraint firstItem="FTn-Tc-4mi" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" constant="8" id="c9X-cx-1HR"/>
                             <constraint firstItem="FTn-Tc-4mi" firstAttribute="leadingMargin" secondItem="ans-at-Olx" secondAttribute="leading" id="m2t-Dl-uGx"/>
                             <constraint firstItem="wrT-1x-h0f" firstAttribute="top" secondItem="FTn-Tc-4mi" secondAttribute="bottom" id="r6E-e3-8Fi"/>
+                            <constraint firstItem="bpZ-cN-Rf5" firstAttribute="centerY" secondItem="ans-at-Olx" secondAttribute="centerY" id="xgj-v9-aDD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="Organic Brewery Tour" id="OFD-1P-5O8">
@@ -101,6 +104,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="bpZ-cN-Rf5" id="1I4-bF-cS4"/>
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="fW0-c3-9C3"/>
                         <outlet property="refreshDatabase" destination="WU6-mQ-wHx" id="ksN-lo-CZD"/>
@@ -392,7 +396,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
-                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
                                             <frame key="frameInset" width="375" height="43"/>
