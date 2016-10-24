@@ -12,6 +12,8 @@ import CoreData
 
 class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate, Subject {
 
+
+
     var observer : Observer!
 
     func registerObserver(view: Observer) {
@@ -185,11 +187,16 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     }
     
     
-    func selected(elementAt: IndexPath, completion: (_ success : Bool) -> Void ) {
+    func selected(elementAt: IndexPath, searchText: String, completion: @escaping (_ success : Bool) -> Void ) {
         Mediator.sharedInstance().selected(this: (frc.fetchedObjects?[elementAt.row])!)
         // We are only selecting one brewery to display, so we need to remove
         // all the breweries that are currently displayed. And then turn on the selected brewery
-        let savedBreweryForDisplay = (frc.fetchedObjects?[elementAt.row])! as Brewery
+        var savedBreweryForDisplay : Brewery!
+        if searchText == "" {
+            savedBreweryForDisplay = (frc.fetchedObjects?[elementAt.row])! as Brewery
+        } else {
+            savedBreweryForDisplay = (filteredObjects[elementAt.row]) as Brewery
+        }
         // Turn off mustDraw on all breweries that are marked to turn on.
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
