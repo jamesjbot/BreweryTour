@@ -120,8 +120,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
 
 
     fileprivate func findBreweryinFavorites(by: MKAnnotation) -> Brewery? {
-        let lat = by.coordinate.latitude
-        let lon = by.coordinate.longitude
+        //let lat = by.coordinate.latitude
+        //let lon = by.coordinate.longitude
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         let frc = NSFetchedResultsController(fetchRequest: request,
@@ -133,7 +133,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             fatalError()
         }
         for i in frc.fetchedObjects! as [Brewery] {
-            if i.latitude == (lat.description) && i.longitude == (lon.description) {
+            if i.name! == by.title! {
                 print("Found brewery in favorites")
                 return i
             }
@@ -168,9 +168,9 @@ extension MapViewController : MKMapViewDelegate {
             //pinView!.leftCalloutAccessoryView = UIButton(type: .contactAdd)
             pinView?.canShowCallout = true
             let foundBrewery = findBreweryinFavorites(by: annotation)
-            if foundBrewery != nil {
+            if foundBrewery?.favorite == true {
                 print("Formating pin, \(annotation.title) This brewery has been favorited")
-                let temp = UIImage(named: "small_heart_icon.png")
+                let temp = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
                 let localButton = UIButton(type: .contactAdd)
                 localButton.setImage(temp, for: .normal)
                 pinView?.leftCalloutAccessoryView = localButton
@@ -179,8 +179,8 @@ extension MapViewController : MKMapViewDelegate {
                 print("Formatting pin, \(annotation.title) This brewery is unseleted")
                 let favoriteBreweryButton = UIButton(type: .contactAdd)
                 //favoriteBreweryButton.imageView?.image =  UIImage(named: "small_heart_icon_black_white_line_art.png")
-                //let temp = UIImage(named: "small_heart_icon_black_white_line_art.png")
-                //favoriteBreweryButton.setImage(temp, for: .normal)
+                let temp = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
+                favoriteBreweryButton.setImage(temp, for: .normal)
                 pinView!.leftCalloutAccessoryView = favoriteBreweryButton
             }
             //pinView!.detailCalloutAccessoryView?.backgroundColor = UIColor.red
@@ -243,43 +243,63 @@ extension MapViewController : MKMapViewDelegate {
     // Respond to user taps on the annotation callout
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         print("THE CALLOUT ACCESSORY \(control)")
-        if control == view.leftCalloutAccessoryView {
+        switch control as UIView {
+        case view.leftCalloutAccessoryView!:
             print("Left accessory view called")
-            // TODO Add to favorites Brewery
-            // If this is already a favorite do nothing for now
+            print("the current image is \((control as! UIButton).currentImage)")
+
+            // Find the brewery object that belongs to this location
             let favBrewery = findBreweryinFavorites(by: view.annotation!)
-            guard favBrewery == nil else { // A favorite encountered no need to add it again.
+
+            guard favBrewery?.favorite == false else { // A favorite encountered no need to add it again.
+                // If this is already a favorite, unfavorite it
                 print("This has already been favorited")
+                favBrewery?.favorite = false
+                do {
+                    
+                    try coreDataStack?.favoritesContext.save()
+                    
+                    DispatchQueue.main.async {
+                        (view.leftCalloutAccessoryView as! UIButton).setImage(UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal), for: .normal)
+                        //(view.leftCalloutAccessoryView as! UIButton).currentImage?.imagere = .alwaysOriginal
+                        view.setNeedsDisplay()
+                        print("UnFavorite Created")
+                    }
+                } catch {
+                    
+                }
+
                 return
             }
-            // TODO Prompt the user that they added this brewery to favorites
-            // Find the brewery object that belongs to this location
-            let targetBrewery : Brewery = findBreweryInCoreData(by: view.annotation!)!
-            // Create a brewery object in the favorites
-            Brewery(inBrewery: targetBrewery, context: (coreDataStack?.favoritesContext)!)
-            // TODO See if we can implement this in coredata
+
+            favBrewery?.favorite = true
             do {
                 
                 try coreDataStack?.favoritesContext.save()
                 
                 DispatchQueue.main.async {
-                    (view.leftCalloutAccessoryView as! UIButton).setImage(UIImage(named: "heart_icon.png"), for: .normal)
+                    (view.leftCalloutAccessoryView as! UIButton).setImage(UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal), for: .normal)
+                    //(view.leftCalloutAccessoryView as! UIButton).currentImage?.imagere = .alwaysOriginal
                     view.setNeedsDisplay()
                     print("Favorite Created")
                 }
             } catch {
                 
             }
-        } else if control == view.rightCalloutAccessoryView {
+            
+        case view.rightCalloutAccessoryView!:
             print("Right accesory view called")
             // Goto Webpage Information
             if let str : String = (view.annotation?.subtitle)!,
                 let url: URL = URL(string: str) {
-                        if UIApplication.shared.canOpenURL(url) {
-                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                if UIApplication.shared.canOpenURL(url) {
+                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
+        default:
+            break
         }
+
     }
     
     // Function to performUIUpdates on main queue
