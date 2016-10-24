@@ -37,6 +37,7 @@ class Model {
     
     internal func getListOfBreweries(onlyOrganic : Bool,
                                      completion: @escaping(_ compelte: Bool ) -> Void) {
+        fatalError()
         // Get all the breweries from coredata
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]

@@ -8,9 +8,14 @@
 
 import UIKit
 import CoreData
-//import Foundation
+import Foundation
 
 class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate {
+    
+    func searchForUserEntered(searchTerm: String, completion: ( (Bool) -> (Void))?) {
+        fatalError("Don't call this \(#file) \(#line)")
+    }
+
     
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Style] = [Style]()

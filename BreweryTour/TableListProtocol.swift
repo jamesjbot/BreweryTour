@@ -1,5 +1,5 @@
 //
-//  TableList.swift
+//  TableListProtocol.swift
 //  BreweryTour
 //
 //  Created by James Jongsurasithiwat on 10/19/16.
@@ -17,4 +17,5 @@ protocol TableList {
     func filterContentForSearchText(searchText: String) -> [NSManagedObject]
     func cellForRowAt(indexPath : IndexPath, cell : UITableViewCell, searchText : String?) -> UITableViewCell
     func selected(elementAt: IndexPath, completion: (_ success: Bool) -> Void )
+    func searchForUserEntered(searchTerm: String, completion: ((_ success : Bool) -> (Void))?)
 }

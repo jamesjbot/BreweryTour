@@ -9,8 +9,13 @@
 import UIKit
 import CoreData
 
-class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate  {
+class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate , Observer  {
     
+    func sendNotify(s: String) {
+        searchBar(newSearchBar, textDidChange: newSearchBar.text!)
+    }
+    
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // TODO Is this testing code I can remove
     private func batchDelete() {
@@ -93,6 +98,11 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         styleList.mediator = med
         breweryList.mediator = med
         
+        
+        // TODO remove test display code
+        coreDataStack?.stateOfAllContexts()
+        
+        breweryList.registerObserver(view: self)
     }
     
     
@@ -196,19 +206,40 @@ extension CategoryViewController: UISearchBarDelegate {
         styleTable.reloadData()
     }
     
-    
+    // I must get from here to to calling brwery db search for a brewery
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         print("searchbar button clicked")
         searchBar.resignFirstResponder()
+        
+        guard !(searchBar.text?.isEmpty)! else {
+            print("Do not search for nothing")
+            return
+        }
+        
         // Good place to initiate asynchronous call to db
         // If search results are 0 go make a query to the database on the text.
         // If we're searching for breweries
         guard activeTableList.filterContentForSearchText(searchText: searchBar.text!).count == 0 else {
+            // TODO prompt the user maybe they still want to search the database
             return
         }
+        // This is currently blocking styles from going thru
         guard segmentedControl.selectedSegmentIndex == 1 else {
+            fatalError("Not coded for styles, maybe not needed styles are static")
             return
         }
+        
+
+        
+        activityIndicator.startAnimating()
+        activeTableList.searchForUserEntered(searchTerm: searchBar.text!
+        ){
+            (success) -> Void in
+            self.activityIndicator.stopAnimating()
+            if success {
+            }
+        }
+        
 //        let queue = DispatchQueue(label: "SearchForBrewery")
 //        queue.async(qos: .utility){
 //            BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchBar.text!){

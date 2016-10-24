@@ -10,7 +10,30 @@ import Foundation
 import UIKit
 import CoreData
 
-class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate {
+class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate, Subject {
+
+    var observer : Observer!
+
+    func registerObserver(view: Observer) {
+        observer = view
+    }
+    
+    internal func searchForUserEntered(searchTerm: String, completion: ((Bool) -> (Void))?) {
+        print("searchForuserEntered beer called")
+        BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
+            (success) -> Void in
+            print("Returned from getting brewery")
+            do {
+                try self.frc.performFetch()
+                print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+                completion!(true)
+            } catch {
+                completion!(false)
+                fatalError("Fetch failed critcally")
+            }
+        }
+    }
+
     
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Brewery] = [Brewery]()
@@ -30,9 +53,10 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate 
 //            request.predicate = NSPredicate(format: "hasOrganic == true")
 //        }
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: backgroundContext!,
+                                         managedObjectContext: persistentContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
+        frc.delegate = self
         do {
             try frc.performFetch()
             //print("Retrieved this many styles \(frc.fetchedObjects?.count)")
@@ -43,27 +67,45 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate 
         guard frc.fetchedObjects?.count == 0 else {
             // We have entries go ahead and display them viewcontroller
             //completion(true)
+            print("\(#file)\n\(#line)We have Brewery Entries don't fetch from the databse")
             return
         }
-        if frc.fetchedObjects?.count == 0 {
-            print("No brewery results going to get them from the database")
-            // TODO Remove organic we will query the database for it
-            BreweryDBClient.sharedInstance().downloadAllBreweries(isOrganic: false){
-                (success) -> Void in
-                if success {
-                    print("Database succeeded populating")
-                    do {
-                        try self.frc.performFetch()
-                        //self.listOfBreweries = frc.fetchedObjects! as [Brewery]
-                        print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
-                        //completion(true)
-                    } catch {
-                        //completion(false)
-                        fatalError("Fetch failed critcally")
-                    }
-                }
+        
+        // Here is where i force  the BreweryTableList to go find another brewery
+        
+        print("Attempting to get brooklyn brewery")
+        BreweryDBClient.sharedInstance().downloadBreweryBy(name: "brooklyn") {
+            (success) -> Void in
+            print("Returned from getting brewery")
+            do {
+                try self.frc.performFetch()
+                print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+                //completion(true)
+            } catch {
+                //completion(false)
+                fatalError("Fetch failed critcally")
             }
+            return
         }
+//        if frc.fetchedObjects?.count == 0 {
+//            print("No brewery results going to get them from the database")
+//            // TODO Remove organic we will query the database for it
+//            BreweryDBClient.sharedInstance().downloadAllBreweries(isOrganic: false){
+//                (success) -> Void in
+//                if success {
+//                    print("Database succeeded populating")
+//                    do {
+//                        try self.frc.performFetch()
+//                        //self.listOfBreweries = frc.fetchedObjects! as [Brewery]
+//                        print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+//                        //completion(true)
+//                    } catch {
+//                        //completion(false)
+//                        fatalError("Fetch failed critcally")
+//                    }
+//                }
+//            }
+//        }
     }
     
     internal func getListOfBreweries(onlyOrganic : Bool,
@@ -113,6 +155,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("Brewery TableList didChange")
+        observer.sendNotify(s: "Useless message telling observer to reload data")
         //Datata = frc.fetchedObjects!
     }
     

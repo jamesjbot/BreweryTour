@@ -12,6 +12,18 @@ import CoreData
 
 class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
     
+    
+    internal func searchForUserEntered(searchTerm: String, completion: ((Bool) -> Void)?) {
+        print("Don't call this here \(#file) \(#line)")
+        fatalError()
+    }
+
+    
+    internal func searchForUserEntered(searchTerm: String) {
+        fatalError("You should call this from you context currently")
+    }
+
+    
     private var display : UIViewController!
     
     internal var mediator: NSManagedObjectDisplayable!
