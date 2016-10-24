@@ -10,7 +10,27 @@ import UIKit
 import CoreData
 import Foundation
 
-class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate {
+class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
+
+
+
+
+    
+    func downloadBeerStyles() {
+        BreweryDBClient.sharedInstance().downloadBeerStyles(){
+            (success) -> Void in
+            if success {
+                self.observer.sendNotify(s: "We have styles")
+            }
+        }
+    }
+    
+    
+    var observer : Observer!
+    
+    func registerObserver(view: Observer) {
+        observer = view
+    }
     
     func searchForUserEntered(searchTerm: String, completion: ( (Bool) -> (Void))?) {
         fatalError("Don't call this \(#file) \(#line)")
@@ -36,6 +56,9 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate 
         } catch {
             fatalError()
         }
+        super.init()
+        frc.delegate = self
+        downloadBeerStyles()
     }
     
     
@@ -51,6 +74,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("StylesTAbleList didChange")
+        observer.sendNotify(s: "Content changed")
         //Datata = frc.fetchedObjects!
     }
     
@@ -80,10 +104,23 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate 
         }
         return cell
     }
-    
-    
-    func selected(elementAt: IndexPath, completion: ( _ success : Bool ) -> Void ) {
+
+    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool) -> Void ) {
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
         print("Call mediator and notify them that this beer style was selected")
+        var style : String
+        if searchText == "" {
+            style = frc.fetchedObjects![elementAt.row].id!
+        } else {
+            style = filteredObjects[elementAt.row].id!
+        }
+        //TODO put activity indicator animating here
+        // TODO temporary bypass organic swift
+        BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style, isOrganic: false){
+            (success) -> Void in
+            if success {
+                completion(true)
+            }
+        }
     }
 }

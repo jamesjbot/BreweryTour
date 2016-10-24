@@ -12,6 +12,7 @@ import CoreData
 
 class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
     
+
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool) -> Void)?) {
         print("Don't call this here \(#file) \(#line)")
@@ -99,9 +100,11 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         return cell
     }
     
-    func selected(elementAt: IndexPath, completion: (Bool) -> Void) {
+    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool) -> Void) {
+        print("currently unused")
         fatalError()
     }
+    
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("BreweryTableList willchange")

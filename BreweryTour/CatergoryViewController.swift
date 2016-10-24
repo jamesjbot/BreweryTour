@@ -11,9 +11,7 @@ import CoreData
 
 class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate , Observer  {
     
-    func sendNotify(s: String) {
-        searchBar(newSearchBar, textDidChange: newSearchBar.text!)
-    }
+
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
@@ -86,6 +84,12 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // MARK: Functions
     
+    // Receive notifcation when the TableList backing the current view has changed
+    func sendNotify(s: String) {
+        // This will update the contents of the table if needed
+        searchBar(newSearchBar, textDidChange: newSearchBar.text!)
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
     }
@@ -102,6 +106,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         // TODO remove test display code
         coreDataStack?.stateOfAllContexts()
         
+        styleList.registerObserver(view: self)
         breweryList.registerObserver(view: self)
     }
     
@@ -130,7 +135,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // Changes the navigation bar to show user they can go back to categories screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        navigationController?.navigationBar.topItem?.title = "Back To Categories"
+        navigationController?.navigationBar.topItem?.title = "Style/Brewery Select"
     }
 }
 
@@ -158,7 +163,7 @@ extension CategoryViewController : UITableViewDataSource {
 
 extension CategoryViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        activeTableList.selected(elementAt: indexPath){
+        activeTableList.selected(elementAt: indexPath, searchText: newSearchBar.text!){
         (sucesss) -> Void in
             self.performSegue(withIdentifier: "Go", sender: nil)
         }

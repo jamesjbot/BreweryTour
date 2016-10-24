@@ -16,6 +16,6 @@ protocol TableList {
     func getNumberOfRowsInSection(searchText : String?) -> Int
     func filterContentForSearchText(searchText: String) -> [NSManagedObject]
     func cellForRowAt(indexPath : IndexPath, cell : UITableViewCell, searchText : String?) -> UITableViewCell
-    func selected(elementAt: IndexPath, completion: (_ success: Bool) -> Void )
-    func searchForUserEntered(searchTerm: String, completion: ((_ success : Bool) -> (Void))?)
+    func selected(elementAt: IndexPath, searchText: String, completion: @escaping (_ success: Bool) -> Void )
+    func searchForUserEntered(searchTerm: String, completion: ((_ success : Bool) -> Void)?)
 }
