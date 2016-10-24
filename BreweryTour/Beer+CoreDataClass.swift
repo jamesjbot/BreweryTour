@@ -43,6 +43,8 @@ public class Beer: NSManagedObject {
         self.imageUrl = imageURL
         self.tastingNotes = tasting
         self.styleID = style
+        // TODO pull this in as a parameter
+        self.breweryID = brewer?.id
     }
     
 
