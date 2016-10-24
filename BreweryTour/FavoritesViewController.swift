@@ -11,7 +11,6 @@ import CoreData
 
 class FavoritesViewController: UIViewController {
     
-
     @IBAction func deleteAll(_ sender: UIBarButtonItem) {
             let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Beer")
             let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
@@ -29,7 +28,7 @@ class FavoritesViewController: UIViewController {
     
     // MARK: Variables
     
-    fileprivate var fetchedResultsController : NSFetchedResultsController<Beer>
+    fileprivate var frc : NSFetchedResultsController<Beer>
     
     // MARK: IBOutlets
     
@@ -40,8 +39,15 @@ class FavoritesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("favorites tab enetered")
-        // Do any additional setup after loading the view.
-        perfromFetchOnResultsController()
+        performFetchOnResultsController()
+
+    }
+    
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        performFetchOnResultsController()
+        print("Favorites view controller sees this many favorite \(frc.fetchedObjects?.count)")
     }
     
     
@@ -54,19 +60,21 @@ class FavoritesViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request,
-                                                              managedObjectContext: (coreDataStack?.favoritesContext)!,
+        request.predicate = NSPredicate( format: "favorite == YES")
+        frc = NSFetchedResultsController(fetchRequest: request,
+                                                              managedObjectContext: (coreDataStack?.persistingContext)!,
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
         super.init(coder: aDecoder)
     }
     
+    
 
-    private func perfromFetchOnResultsController(){
-        fetchedResultsController.delegate = self
+    private func performFetchOnResultsController(){
+        frc.delegate = self
         // Create a request for Beer objects and fetch the request from Coredata
         do {
-            try fetchedResultsController.performFetch()
+            try frc.performFetch()
         } catch {
             fatalError("There was a problem fetching from coredata")
         }
@@ -74,7 +82,7 @@ class FavoritesViewController: UIViewController {
     
     
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        guard let selectedObject = fetchedResultsController.object(at: indexPath as IndexPath) as Beer? else { fatalError("Unexpected Object in FetchedResultsController") }
+        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Beer? else { fatalError("Unexpected Object in FetchedResultsController") }
         // Populate cell from the NSManagedObject instance
         cell.textLabel?.text = selectedObject.beerName
         cell.detailTextLabel?.text = selectedObject.brewer?.name
@@ -122,8 +130,8 @@ extension FavoritesViewController: NSFetchedResultsControllerDelegate {
 extension FavoritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("called favoritesviewcontroller \(fetchedResultsController.fetchedObjects?.count)")
-        return (fetchedResultsController.fetchedObjects?.count)!
+        print("called favoritesviewcontroller tableviewdatasource number of rows in section \(frc.fetchedObjects?.count)")
+        return (frc.fetchedObjects?.count) ?? 0
     }
     
     
@@ -140,7 +148,7 @@ extension FavoritesViewController : UITableViewDelegate {
     
     @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let object = (fetchedResultsController.fetchedObjects! as [Beer])[indexPath.row]
+            let object = (frc.fetchedObjects! as [Beer])[indexPath.row]
             coreDataStack?.favoritesContext.delete(object)
             do {
                 try coreDataStack?.favoritesContext.save()
@@ -156,7 +164,7 @@ extension FavoritesViewController : UITableViewDelegate {
         let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
         
         // Push beer information to Detail View Controller
-        destinationViewcontroller.beer = fetchedResultsController.fetchedObjects?[indexPath.row]
+        destinationViewcontroller.beer = frc.fetchedObjects?[indexPath.row]
         
         // Segue to view controller
         navigationController?.pushViewController(destinationViewcontroller, animated: true)
