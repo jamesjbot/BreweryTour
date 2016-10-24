@@ -138,35 +138,11 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
 
     }
     
-    
+    // All beers are in the database we just mark their favorite status and tasting notes
     private func saveToFavoritesInCoreData(makeFavorite: Bool) {
-        
-        // Check to make sure the Beer isn't already in the database
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@",  beer.id!)
         do {
-            let results = try favoriteContext?.fetch(request)
-            switch ((results?.count)! as Int) {
-            case 0 : // No entry in DB save a new one
-                beer.favorite = true
-                beer.tastingNotes = tasting.text
-                // Save the new beer element so we have access to it from everywhere in this class
-                beer = Beer(name: beer.beerName,
-                             brewer: nil,
-                             availability: beer.availability,
-                             image: beer.image,
-                             imageURL: beer.imageUrl,
-                             favorite: true,
-                             description: beer.beerDescription,
-                             id: beer.id!,
-                             tasting: beer.tastingNotes,
-                             style: beer.styleID,
-                             context: favoriteContext!)
-            default: // Just update the notes
-                beer.favorite = makeFavorite
-                beer.tastingNotes = tasting.text
-            }
+            beer.favorite = makeFavorite
+            beer.tastingNotes = tasting.text
             try favoriteContext?.save()
         } catch {
             fatalError("Error adding/saving a beer")
