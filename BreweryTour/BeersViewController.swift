@@ -45,7 +45,7 @@ class BeersViewController: UIViewController, Observer {
     }
     
     
-    private func perfromFetchOnResultsController(){
+    private func performFetchOnResultsController(){
         
         // Create a request for Beer objects and fetch the request from Coredata
         do {
@@ -68,9 +68,11 @@ class BeersViewController: UIViewController, Observer {
         
         switch managedObject {
         case is Brewery:
-            request.predicate = NSPredicate(format: "brewer.id == \((managedObject as! Brewery).id)")
+            let targetID : String = (managedObject as! Brewery).id!
+            request.predicate = NSPredicate( format: "breweryID == %@", targetID)
         case is Style:
-            request.predicate = NSPredicate(format: "styleID == \((managedObject as! Style).id)" )
+            let targetStyle : String = (managedObject as! Style).id!
+            request.predicate = NSPredicate( format: "styleID == %@", targetStyle )
         default:
             break
         }
@@ -79,8 +81,20 @@ class BeersViewController: UIViewController, Observer {
                                                               managedObjectContext: (coreDataStack?.backgroundContext)!,
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
-        // Do any additional setup after loading the view.
-        perfromFetchOnResultsController()
+        // Create a request for Beer objects and fetch the request from Coredata
+        do {
+            try frc.performFetch()
+            print("\(#function) returned \(frc.fetchedObjects?.count) objects")
+            
+        } catch {
+            fatalError("There was a problem fetching from coredata")
+        }
+        
+        let allbeers = frc.fetchedObjects! as [Beer]
+        for i in allbeers {
+            print("Brewery id \(i.breweryID)")
+        }
+        //performFetchOnResultsController()
     }
 
     
