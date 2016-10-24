@@ -107,14 +107,13 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     }
 
     fileprivate func findBreweryInCoreData(by : MKAnnotation) -> Brewery? {
-        let lat = by.coordinate.latitude
-        let lon = by.coordinate.longitude
         // Iterate across Brewery object on the map
         for i in incomingLocations {
-            if i.latitude == (lat.description) && i.longitude == (lon.description) {
+            if i.name == by.title! {
                 print("found brewery in coredata")
                 return i
             }
+
         }
         return nil
     }
@@ -155,8 +154,9 @@ extension MapViewController : MKMapViewDelegate {
         if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
-            if pinView?.annotation?.coordinate.latitude == mapView.userLocation.coordinate.latitude
-            && pinView?.annotation?.coordinate.longitude == mapView.userLocation.coordinate.longitude {
+            if (pinView?.annotation?.title)! == mapView.userLocation.title {
+//            if pinView?.annotation?.coordinate.latitude == mapView.userLocation.coordinate.latitude
+//            && pinView?.annotation?.coordinate.longitude == mapView.userLocation.coordinate.longitude {
                 pinView!.pinTintColor = UIColor.blue
             } else {
                 pinView!.pinTintColor = UIColor.red

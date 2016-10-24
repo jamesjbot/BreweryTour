@@ -31,6 +31,7 @@
 		A76B3B901DB0E00D00B0A899 /* heart_icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8E1DB0E00D00B0A899 /* heart_icon.pdf */; };
 		A76B3B911DB0E00D00B0A899 /* heart_icon_black_white_line_art.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8F1DB0E00D00B0A899 /* heart_icon_black_white_line_art.pdf */; };
 		A788E8AE1DB3C11400FA05E4 /* Nophoto.png in Resources */ = {isa = PBXBuildFile; fileRef = A788E8AD1DB3C11400FA05E4 /* Nophoto.png */; };
+		A7A4D18A1DBDB054004C0BB9 /* BreweryMKAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A4D1891DBDB054004C0BB9 /* BreweryMKAnnotation.swift */; };
 		A7A69D571DA8938F00E47C8E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */; };
 		A7AA43931DB637BF00317E9D /* Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7AA43921DB637BF00317E9D /* Model.swift */; };
 		A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AADE1DA791A400EE844C /* AppDelegate.swift */; };
@@ -96,6 +97,7 @@
 		A76B3B8E1DB0E00D00B0A899 /* heart_icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = heart_icon.pdf; sourceTree = "<group>"; };
 		A76B3B8F1DB0E00D00B0A899 /* heart_icon_black_white_line_art.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = heart_icon_black_white_line_art.pdf; sourceTree = "<group>"; };
 		A788E8AD1DB3C11400FA05E4 /* Nophoto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Nophoto.png; path = ../Nophoto.png; sourceTree = "<group>"; };
+		A7A4D1891DBDB054004C0BB9 /* BreweryMKAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryMKAnnotation.swift; sourceTree = "<group>"; };
 		A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		A7AA43921DB637BF00317E9D /* Model.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Model.swift; sourceTree = "<group>"; };
 		A7B2AADB1DA791A400EE844C /* BreweryTour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreweryTour.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -267,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				A7D227261DB54D3A00360A3B /* FavoriteButton.swift */,
+				A7A4D1891DBDB054004C0BB9 /* BreweryMKAnnotation.swift */,
 			);
 			name = View;
 			sourceTree = "<group>";
@@ -493,6 +496,7 @@
 				A70F267D1DBCE47800A33564 /* Brewery+CoreDataProperties.swift in Sources */,
 				A709D3F81DAE459C00F11452 /* Brewery+CoreDataClass.swift in Sources */,
 				A7D2272D1DB5620300360A3B /* FavoriteBreweriesViewController.swift in Sources */,
+				A7A4D18A1DBDB054004C0BB9 /* BreweryMKAnnotation.swift in Sources */,
 				A743506A1DB941BF007AE08C /* APINotifiable.swift in Sources */,
 				A7B7524E1DA8CE7B00117ED0 /* MapViewController.swift in Sources */,
 				A709D3FB1DAE459C00F11452 /* Style+CoreDataProperties.swift in Sources */,
