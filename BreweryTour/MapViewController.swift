@@ -16,6 +16,12 @@ import CoreData
 
 
 class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
+    // MARK: Debugging 
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        return
+    }
+    
     
     // MARK: IBOutlet
     
