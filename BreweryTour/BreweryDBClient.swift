@@ -368,19 +368,36 @@ class BreweryDBClient {
                 return
             }
             // Check to see if the style is already in coredata then skip, else add
+            let request = NSFetchRequest<Style>(entityName: "Style")
+            request.sortDescriptors = []
+            print("Style array has this many entries \(styleArrayOfDict.count)")
             for aStyle in styleArrayOfDict {
                 print("astyle \(aStyle)")
                 let localId = aStyle["id"]?.stringValue
                 let localName = aStyle["name"]
+                do {
+                    request.predicate = NSPredicate(format: "id = %@", localId!)
+                    let results = try coreDataStack?.persistingContext.fetch(request)
+                    if (results?.count)! > 0 {
+                        print("This style is already in the database.")
+                        continue
+                    }
+                } catch {
+                    fatalError()
+                }
+                
                 Style(id: localId!, name: localName! as! String, context: (coreDataStack?.persistingContext)!)
             }
             
             // Save beer styles to disk
             do {
                 try coreDataStack?.persistingContext.save()
+                completion(true)
             } catch {
+                completion(false)
                 fatalError("Error saving styles")
             }
+            return
             break
             
             
