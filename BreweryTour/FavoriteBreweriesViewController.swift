@@ -18,7 +18,7 @@ class FavoriteBreweriesViewController: UIViewController {
     
     // MARK: Variables
     
-    fileprivate var fetchedResultsController : NSFetchedResultsController<Brewery>
+    fileprivate var frc : NSFetchedResultsController<Brewery>
     
     // MARK: IBOutlets
     
@@ -28,7 +28,7 @@ class FavoriteBreweriesViewController: UIViewController {
         super.viewDidLoad()
         print("favorites tab enetered")
         // Do any additional setup after loading the view.
-        perfromFetchOnResultsController()
+        performFetchOnResultsController()
     }
     
     
@@ -41,7 +41,8 @@ class FavoriteBreweriesViewController: UIViewController {
     required init?(coder aDecoder: NSCoder) {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
-        fetchedResultsController = NSFetchedResultsController(fetchRequest: request,
+        request.predicate = NSPredicate(format: "favorite = YES")
+        frc = NSFetchedResultsController(fetchRequest: request,
                                                               managedObjectContext: (coreDataStack?.favoritesContext)!,
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
@@ -49,11 +50,11 @@ class FavoriteBreweriesViewController: UIViewController {
     }
     
     
-    private func perfromFetchOnResultsController(){
-        fetchedResultsController.delegate = self
+    private func performFetchOnResultsController(){
+        frc.delegate = self
         // Create a request for Brewery objects and fetch the request from Coredata
         do {
-            try fetchedResultsController.performFetch()
+            try frc.performFetch()
         } catch {
             fatalError("There was a problem fetching from coredata")
         }
@@ -61,7 +62,7 @@ class FavoriteBreweriesViewController: UIViewController {
     
     
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        guard let selectedObject = fetchedResultsController.object(at: indexPath as IndexPath) as Brewery? else { fatalError("Unexpected Object in FetchedResultsController") }
+        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Brewery? else { fatalError("Unexpected Object in FetchedResultsController") }
         // Populate cell from the NSManagedObject instance
         cell.textLabel?.text = selectedObject.name!
         // TODO please remove this is temporary so I can see the id
@@ -111,8 +112,8 @@ extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
 extension FavoriteBreweriesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("called favoritesviewcontroller \(fetchedResultsController.fetchedObjects?.count)")
-        return (fetchedResultsController.fetchedObjects?.count)!
+        print("called favoritesviewcontroller \(frc.fetchedObjects?.count)")
+        return (frc.fetchedObjects?.count)!
     }
     
     
@@ -129,7 +130,7 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     
     @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let object = (fetchedResultsController.fetchedObjects! as [Brewery])[indexPath.row]
+            let object = (frc.fetchedObjects! as [Brewery])[indexPath.row]
             coreDataStack?.favoritesContext.delete(object)
             do {
                 try coreDataStack?.favoritesContext.save()
