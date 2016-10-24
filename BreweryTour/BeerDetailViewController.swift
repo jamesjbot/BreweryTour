@@ -56,10 +56,10 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         if isBeerFavorited! {
             image = UIImage(named: "heart_icon.png")
             sender.setImage(image, for: .normal)
-            saveToFavoritesInCoreData()
+            saveToFavoritesInCoreData(makeFavorite: true)
         } else {
             image = UIImage(named: "heart_icon_black_white_line_art.png")
-            //deleteFromFavoritesInCoreData()
+            saveToFavoritesInCoreData(makeFavorite: false)
         }
         sender.setImage(image, for: .normal)
     }
@@ -139,12 +139,12 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     }
     
     
-    private func saveToFavoritesInCoreData() {
+    private func saveToFavoritesInCoreData(makeFavorite: Bool) {
         
         // Check to make sure the Beer isn't already in the database
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
+        request.predicate = NSPredicate(format: "id = %@",  beer.id!)
         do {
             let results = try favoriteContext?.fetch(request)
             switch ((results?.count)! as Int) {
@@ -157,15 +157,15 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
                              availability: beer.availability,
                              image: beer.image,
                              imageURL: beer.imageUrl,
-                             favorite: beer.favorite,
+                             favorite: true,
                              description: beer.beerDescription,
                              id: beer.id!,
                              tasting: beer.tastingNotes,
                              style: beer.styleID,
                              context: favoriteContext!)
             default: // Just update the notes
+                beer.favorite = makeFavorite
                 beer.tastingNotes = tasting.text
-                
             }
             try favoriteContext?.save()
         } catch {
@@ -206,7 +206,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     
     func textViewDidEndEditing(_ textView: UITextView) {
-        saveToFavoritesInCoreData()
+        saveToFavoritesInCoreData(makeFavorite: true)
     }
 }
 
