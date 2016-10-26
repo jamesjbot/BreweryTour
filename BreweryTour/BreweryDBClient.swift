@@ -40,13 +40,7 @@ class BreweryDBClient {
     
     
     // MARK: Functions
-    // TODO May not need this anymore
-    // Purpose: get brewery data by it's id
-    //    internal func getBreweryData(id: String){
-    //        let methodParameters : [String:AnyObject] = ["id":id as AnyObject]
-    //        let outputURL : NSURL = createURLFromParameters(queryType: .Brewery, parameters: methodParameters)
-    //
-    //    }
+
     internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool) -> Void ) {
         let theOutputType = APIQueryOutputTypes.Breweries
         let methodParameters  = [

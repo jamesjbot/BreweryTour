@@ -44,6 +44,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
     private func initializeFetchAndFetchBreweriesSetIncomingLocations(style : Style){
+        print("Looking for beers with this style \(style)")
         var request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         //request.predicate = NSPredicate(format: "styleId = %@", style.id!) // this will not work breweries are no listed by styleid
@@ -54,15 +55,19 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         } catch {
             fatalError()
         }
-        
+        print("Found these beers \(results)")
         incomingLocations = [Brewery]()
         for i in results {
             var breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
             breweryRequest.sortDescriptors = []
+            breweryRequest.predicate = NSPredicate(format: "id=%@", i.breweryID!)
             do {
                 let b = try (coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
+                print("brewery results\(b.count)")
+                if b.count > 1 {fatalError()}
                 if !incomingLocations.contains(b[0]) {
                     incomingLocations.append(b[0])
+                    print("Adding brewery \(b[0])")
                 }
                 print("Added another brewery")
             } catch {
