@@ -251,9 +251,10 @@ class BreweryDBClient {
                 print("---------------------NextBeer---------------------")
                 // TODO This beer could be in the database already
                 // Skip this beer
+                // Just because this beer is in the database doesn't mean that this brewery is in the database.
                 let b = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
                 if b != nil {
-                    print("This beer is already in the database")
+                    print("This beer is already in the database") // If I skip here how to do i mark the breweries for display?
                     continue
                 }
                 // Every beer is a dictionary; that also has an array of brewery information
@@ -319,13 +320,17 @@ class BreweryDBClient {
                         
                         // Creating beer
                         print("Creating ")
-                        let thisBeer = Beer(id: beerid!, name: beername ?? "", beerDescription: beerdescription ?? "", availability: beeravailable ?? "", context: (coreDataStack?.persistingContext!)!)
-                        thisBeer.breweryID = breweries[0].id
-                        thisBeer.styleID = querySpecificID
-                            //thisBeer.brewer = thisBrewery
+                        // Just because this beer is in the database doesn't mean that this brewery is in the database.
+                        let thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
+                        if thisBeer == nil {
+                            let thisBeer = Beer(id: beerid!, name: beername ?? "", beerDescription: beerdescription ?? "", availability: beeravailable ?? "", context: (coreDataStack?.persistingContext!)!)
+                        }
+                        thisBeer?.breweryID = breweries[0].id
+                        thisBeer?.styleID = querySpecificID
+                        
                             // TODO Save Icons for Beer
                             
-                        saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer)
+                        saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer!)
                         // Mark this brewery for drawing on the map
                         breweries[0].mustDraw = true
                         // Save images for the brewery

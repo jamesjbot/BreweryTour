@@ -10,15 +10,18 @@ import Foundation
 import CoreData
 
 class Mediator : NSManagedObjectDisplayable {
+    
     private var categoryViewer : CategoryViewController!
     private var mapViewer : Observer!
-    private var beersViewer : Observer!
+    private var beersViewer : Observer! // Should this be the Obsever or should it be the beerslist
     
     internal var passingItem : NSManagedObject?
     
     private let styleList : StylesTableList = StylesTableList()
     private let breweryList : BreweryTableList = BreweryTableList()
     private let selectedBeersList : SelectedBeersTableList = SelectedBeersTableList()
+    //private let mapModel : MapViewModel = MapViewModel()
+    
     
     internal func getStyleList() -> StylesTableList {
         return styleList
@@ -34,6 +37,9 @@ class Mediator : NSManagedObjectDisplayable {
         return selectedBeersList
     }
     
+    internal func getMapData() -> NSManagedObject {
+        return passingItem!
+    }
     enum types {
         case Style
         case Brewery
@@ -45,7 +51,12 @@ class Mediator : NSManagedObjectDisplayable {
     
     // MARK: Singleton Implementation
     
-    private init(){}
+    private init(){
+        // Setup to receive message from the lists
+        styleList.mediator = self
+        breweryList.mediator = self
+    }
+    
     internal class func sharedInstance() -> Mediator {
         struct Singleton {
             static var sharedInstance = Mediator()
@@ -78,30 +89,41 @@ class Mediator : NSManagedObjectDisplayable {
     }
     
     
-    func selected(this: NSManagedObject) {
-        passingItem = this
-        if this is Style {
+    func selected(thisItem: NSManagedObject) {
+        passingItem = thisItem
+        print("prior to call: \(passingItem)")
+        selectedBeersList.setSelectedItem(toNSObjectID: passingItem!.objectID)
+        selectedBeersList.mediatorPerformFetch()
+        if thisItem is Style {
             currentlySelectedManagedObjectType = types.Style
-            print("Style selected \(this as! Style)")
+            print("Style selected \(thisItem as! Style)")
             // Tell map view to display breweries with mustdraw
+            //print("sending message to map")
+            //mapViewer.sendNotify(s: "Display MustDraw")
             // Tell the beerslist to show all beers with the specific style id
-        } else if this is Brewery {
+            print("sending message to beers controller")
+            //beersViewer.sendNotify(s: "Show beers with this style")
+        } else if thisItem is Brewery {
             // Tell map view to display the nsmanagedobject w/ id
+            //print("sending message to map viewer")
+            //mapViewer.sendNotify(s: "Draw this brewery")
             // Tell the beerslist to show all beers with te breweryid
+            print("sending message to beers controller")
+            //beersViewer.sendNotify(s: "Show beers by this brewery")
             
             currentlySelectedManagedObjectType = types.Brewery
             
             //selectedBeersList.selected(elementAt: <#T##IndexPath#>, completion: <#T##(Bool) -> Void#>)
             // Query api for beers at this brewery
-            BreweryDBClient.sharedInstance().downloadBeersBy(brewery: this as! Brewery){
-                (success) -> Void in
-            }
+//            BreweryDBClient.sharedInstance().downloadBeersBy(brewery: this as! Brewery){
+//                (success) -> Void in
+//            }
             
             // Tell Beers view controller to load beers with the brewery id
             // I don't need to tell Beers view controller to do this as the NSFetchedResultsController that backs
             // it now will automatically update the view.
             
-            print("Brewery selected \(this as! Brewery)")
+            //print("Brewery selected \(this as! Brewery)")
         }
     }
     

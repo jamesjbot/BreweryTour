@@ -12,10 +12,6 @@ import Foundation
 
 class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
 
-
-
-
-    
     func downloadBeerStyles() {
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
             (success) -> Void in
@@ -105,6 +101,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         return cell
     }
 
+    
     internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool) -> Void ) {
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
         print("Call mediator and notify them that this beer style was selected")
@@ -114,7 +111,17 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         } else {
             style = filteredObjects[elementAt.row].id!
         }
-        //TODO put activity indicator animating here
+        
+        // Tell mediator this is the style I want to display
+        var aStyle : Style
+        if searchText == "" {
+            aStyle = frc.fetchedObjects![elementAt.row]
+        } else {
+            aStyle = filteredObjects[elementAt.row]
+        }
+        mediator.selected(thisItem: aStyle)
+        
+        // TODO put activity indicator animating here
         // TODO temporary bypass organic swift
         BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style, isOrganic: false){
             (success) -> Void in

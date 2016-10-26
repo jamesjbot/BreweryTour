@@ -15,16 +15,9 @@ import CoreData
 // It queries the database for the locations it should display
 
 
-class MapViewController : UIViewController, NSFetchedResultsControllerDelegate, Observer {
-    
-    func sendNotify(s: String) {
-        print("receive notifcation from mediator")
-    }
-    
+class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: Debugging
-    
-    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         return
@@ -50,15 +43,37 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate, 
     // MARK: Functions
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
-    private func initializeFetchAndFetchBreweries(){
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+    private func initializeFetchAndFetchBreweriesSetIncomingLocations(style : Style){
+        var request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "mustDraw == true")
+        //request.predicate = NSPredicate(format: "styleId = %@", style.id!) // this will not work breweries are no listed by styleid
+        request.predicate = NSPredicate(format: "styleID == %@", style.id!)
+        let results : [Beer]!
         do {
-            try incomingLocations = (coreDataStack?.backgroundContext.fetch(request))! as [Brewery]
+            results = try (coreDataStack?.persistingContext.fetch(request))! as [Beer]
         } catch {
-            fatalError("Failure to query breweries")
+            fatalError()
         }
+        
+        incomingLocations = [Brewery]()
+        for i in results {
+            var breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
+            breweryRequest.sortDescriptors = []
+            do {
+                let b = try (coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
+                if !incomingLocations.contains(b[0]) {
+                    incomingLocations.append(b[0])
+                }
+                print("Added another brewery")
+            } catch {
+                fatalError("Failure to query breweries")
+            }
+        }
+        
+
+        //request.predicate = NSPredicate(format: "styleId = %@", style.id!) // this will not work breweries are no listed by styleid
+        //request.predicate = NSPredicate(format: "mustDraw == true")
+
         print("Completed getting Breweries")
     }
     
@@ -66,6 +81,11 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate, 
     // Fetch brewery by brewery selected
     private func getBrewery(){
         
+    }
+    
+    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
     
     
@@ -78,7 +98,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate, 
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.requestLocation()
         }
-        Mediator.sharedInstance().registerAsMapView(view: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -86,7 +105,16 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate, 
         print("View will appear called")
         mapView.removeAnnotations(mapView.annotations)
         print("Mapview now has \(mapView.annotations.count) annotations")
-        initializeFetchAndFetchBreweries()
+        
+        let mapViewData = Mediator.sharedInstance().getMapData()
+        
+        if mapViewData is Style {
+            initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
+        } else if mapViewData is Brewery {
+            incomingLocations.append(mapViewData as! Brewery)
+        } else {
+            return
+        }
         populateMap()
     }
     

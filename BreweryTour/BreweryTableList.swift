@@ -74,7 +74,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         }
         
         // Here is where i force  the BreweryTableList to go find another brewery
-        
+        fatalError()
         print("Attempting to get brooklyn brewery")
         BreweryDBClient.sharedInstance().downloadBreweryBy(name: "brooklyn") {
             (success) -> Void in
@@ -188,7 +188,6 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     
     func selected(elementAt: IndexPath, searchText: String, completion: @escaping (_ success : Bool) -> Void ) {
-        Mediator.sharedInstance().selected(this: (frc.fetchedObjects?[elementAt.row])!)
         // We are only selecting one brewery to display, so we need to remove
         // all the breweries that are currently displayed. And then turn on the selected brewery
         var savedBreweryForDisplay : Brewery!
@@ -197,6 +196,10 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         } else {
             savedBreweryForDisplay = (filteredObjects[elementAt.row]) as Brewery
         }
+        // Tell mediator about the brewery I want to display
+        mediator.selected(thisItem: savedBreweryForDisplay)
+        
+        
         // Turn off mustDraw on all breweries that are marked to turn on.
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []

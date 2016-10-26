@@ -21,9 +21,10 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
 
     
     internal func searchForUserEntered(searchTerm: String) {
-        fatalError("You should call this from you context currently")
+        fatalError("You should call this from your context currently")
     }
-
+    
+    var selectedItem : NSManagedObjectID = NSManagedObjectID()
     
     private var display : UIViewController!
     
@@ -41,6 +42,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         observer = view
     }
     
+    
     override init(){
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
@@ -56,9 +58,18 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         }
     }
     
-    func performFetchRequestFor(brewery: Brewery){
+    func setSelectedItem(toNSObjectID : NSManagedObjectID) {
+        selectedItem = toNSObjectID
+    }
+
+    func performFetchRequestFor(){
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
+        if selectedItem is Brewery {
+            request.predicate = NSPredicate(format: "breweryID == %@", (selectedItem as! Brewery).id!)
+        } else if selectedItem is Style {
+            request.predicate = NSPredicate(format: "styleID == %@", (selectedItem as! Style).id!)
+        }
         frc = NSFetchedResultsController(fetchRequest : request,
                                          managedObjectContext: persistentContext!,
                                          sectionNameKeyPath: nil,
@@ -72,8 +83,9 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         
     }
     
-    func mediator(passesBrewery: Brewery) {
-        performFetchRequestFor(brewery: passesBrewery)
+    
+    func mediatorPerformFetch() {
+        performFetchRequestFor()
     }
     
     
