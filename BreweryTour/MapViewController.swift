@@ -15,8 +15,16 @@ import CoreData
 // It queries the database for the locations it should display
 
 
-class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
-    // MARK: Debugging 
+class MapViewController : UIViewController, NSFetchedResultsControllerDelegate, Observer {
+    
+    func sendNotify(s: String) {
+        print("receive notifcation from mediator")
+    }
+    
+    
+    // MARK: Debugging
+    
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         return
@@ -70,6 +78,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.requestLocation()
         }
+        Mediator.sharedInstance().registerAsMapView(view: self)
     }
     
     override func viewWillAppear(_ animated: Bool) {

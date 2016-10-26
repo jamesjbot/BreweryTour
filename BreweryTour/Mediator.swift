@@ -11,8 +11,8 @@ import CoreData
 
 class Mediator : NSManagedObjectDisplayable {
     private var categoryViewer : CategoryViewController!
-    private var mapViewer : MapViewController!
-    private var beersViewer : BeersViewController!
+    private var mapViewer : Observer!
+    private var beersViewer : Observer!
     
     internal var passingItem : NSManagedObject?
     
@@ -54,7 +54,7 @@ class Mediator : NSManagedObjectDisplayable {
     }
     
     
-    func registerAsBeersViewer(view: BeersViewController) {
+    func registerAsBeersViewer(view: Observer) {
         beersViewer = view
     }
 
@@ -69,6 +69,10 @@ class Mediator : NSManagedObjectDisplayable {
     }
     
     
+    func registerAsMapView(view : Observer){
+        mapViewer = view
+    }
+    
     func selectedItem() -> NSManagedObject? {
         return passingItem
     }
@@ -79,7 +83,11 @@ class Mediator : NSManagedObjectDisplayable {
         if this is Style {
             currentlySelectedManagedObjectType = types.Style
             print("Style selected \(this as! Style)")
+            // Tell map view to display breweries with mustdraw
+            // Tell the beerslist to show all beers with the specific style id
         } else if this is Brewery {
+            // Tell map view to display the nsmanagedobject w/ id
+            // Tell the beerslist to show all beers with te breweryid
             
             currentlySelectedManagedObjectType = types.Brewery
             
