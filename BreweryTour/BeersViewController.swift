@@ -11,17 +11,18 @@ import CoreData
 
 class BeersViewController: UIViewController, Observer {
 
+    
     // MARK: Constants
     
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    
+    //internal let med : Mediator = Mediator.sharedInstance()
+
     // MARK: Variables
     
     fileprivate var frc : NSFetchedResultsController<Beer> = NSFetchedResultsController()
     
     internal var listOfBreweryIDToDisplay : [String]!
     
-    internal let med : Mediator = Mediator.sharedInstance()
     
     private let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
     
@@ -56,7 +57,10 @@ class BeersViewController: UIViewController, Observer {
             fatalError("There was a problem fetching from coredata")
         }
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        selectedBeersTableList.registerObserver(view: self)
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
