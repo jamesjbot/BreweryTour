@@ -31,7 +31,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     // MARK: Variables
     
     // Used to hold the locations we are going to display, loaded from a database query
-    private var incomingLocations = [Brewery]()
+    private var mappableBreweries = [Brewery]()
     // The query that goes against the database to pull in the brewery location information
     private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
     // Location manager allows us access to the user's location
@@ -41,14 +41,13 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     
     // MARK: Functions
+    
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
     private func initializeFetchAndFetchBreweriesSetIncomingLocations(style : Style){
-        print("Looking for beers with this style \(style)")
         var request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
-        //request.predicate = NSPredicate(format: "styleId = %@", style.id!) // this will not work breweries are no listed by styleid
-        request.predicate = NSPredicate(format: "styleID == %@", style.id!)
+        request.predicate = NSPredicate(format: "styleID = %@", style.id!)
         let results : [Beer]!
         do {
             results = try (coreDataStack?.persistingContext.fetch(request))! as [Beer]
@@ -56,29 +55,22 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             fatalError()
         }
         print("Found these beers \(results)")
-        incomingLocations = [Brewery]()
+        mappableBreweries = [Brewery]()
         for i in results {
             var breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
             breweryRequest.sortDescriptors = []
-            breweryRequest.predicate = NSPredicate(format: "id=%@", i.breweryID!)
+            breweryRequest.predicate = NSPredicate(format: "id  %@", i.breweryID!)
             do {
                 let b = try (coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
                 print("brewery results\(b.count)")
                 if b.count > 1 {fatalError()}
-                if !incomingLocations.contains(b[0]) {
-                    incomingLocations.append(b[0])
-                    print("Adding brewery \(b[0])")
+                if !mappableBreweries.contains(b[0]) {
+                    mappableBreweries.append(b[0])
                 }
-                print("Added another brewery")
             } catch {
                 fatalError("Failure to query breweries")
             }
         }
-        
-
-        //request.predicate = NSPredicate(format: "styleId = %@", style.id!) // this will not work breweries are no listed by styleid
-        //request.predicate = NSPredicate(format: "mustDraw == true")
-
         print("Completed getting Breweries")
     }
     
@@ -116,7 +108,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         if mapViewData is Style {
             initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
         } else if mapViewData is Brewery {
-            incomingLocations.append(mapViewData as! Brewery)
+            mappableBreweries.append(mapViewData as! Brewery)
         } else {
             return
         }
@@ -130,7 +122,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         // Remove all the annotation and repopulate
         mapView.removeAnnotations(mapView.annotations)
         var annotations = [MKAnnotation]()
-        for i in incomingLocations {
+        for i in mappableBreweries {
             guard i.latitude != nil && i.longitude != nil else {
                 continue
             }
@@ -147,28 +139,26 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         mapView.addAnnotations(annotations)
         _ = mapView.userLocation
     }
-
+    
     fileprivate func findBreweryInCoreData(by : MKAnnotation) -> Brewery? {
         // Iterate across Brewery object on the map
-        for i in incomingLocations {
+        for i in mappableBreweries {
             if i.name == by.title! {
                 print("found brewery in coredata")
                 return i
             }
-
+            
         }
         return nil
     }
-
-
+    
+    
     fileprivate func findBreweryinFavorites(by: MKAnnotation) -> Brewery? {
-        //let lat = by.coordinate.latitude
-        //let lon = by.coordinate.longitude
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         let frc = NSFetchedResultsController(fetchRequest: request,
-                                                      managedObjectContext: (coreDataStack?.favoritesContext)!,
-                                                      sectionNameKeyPath: nil, cacheName: nil)
+                                             managedObjectContext: (coreDataStack?.favoritesContext)!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
         do {
             try frc.performFetch()
         } catch {
@@ -187,7 +177,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
 
 
 extension MapViewController : MKMapViewDelegate {
-
+    
     // This formats the pins and calloutAccessory views on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
         print("Formatting of pins and callouts")
@@ -197,8 +187,6 @@ extension MapViewController : MKMapViewDelegate {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
             if (pinView?.annotation?.title)! == mapView.userLocation.title {
-//            if pinView?.annotation?.coordinate.latitude == mapView.userLocation.coordinate.latitude
-//            && pinView?.annotation?.coordinate.longitude == mapView.userLocation.coordinate.longitude {
                 pinView!.pinTintColor = UIColor.blue
             } else {
                 pinView!.pinTintColor = UIColor.red
@@ -206,7 +194,6 @@ extension MapViewController : MKMapViewDelegate {
             
             // Format annotation callouts here
             pinView?.tintColor = UIColor.red
-            //pinView!.leftCalloutAccessoryView = UIButton(type: .contactAdd)
             pinView?.canShowCallout = true
             let foundBrewery = findBreweryinFavorites(by: annotation)
             if foundBrewery?.favorite == true {
@@ -215,18 +202,15 @@ extension MapViewController : MKMapViewDelegate {
                 let localButton = UIButton(type: .contactAdd)
                 localButton.setImage(temp, for: .normal)
                 pinView?.leftCalloutAccessoryView = localButton
-                //(pinView?.leftCalloutAccessoryView as! UIButton).isSelected = true
             } else {
                 print("Formatting pin, \(annotation.title) This brewery is unseleted")
                 let favoriteBreweryButton = UIButton(type: .contactAdd)
-                //favoriteBreweryButton.imageView?.image =  UIImage(named: "small_heart_icon_black_white_line_art.png")
                 let temp = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
                 favoriteBreweryButton.setImage(temp, for: .normal)
                 pinView!.leftCalloutAccessoryView = favoriteBreweryButton
             }
+            
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            //pinView!.detailCalloutAccessoryView?.backgroundColor = UIColor.red
-            //pinView?.detailCalloutAccessoryView? = (UIButton(type: .roundedRect))
         } else { // TODO why would I not reformat the pinView no matter what
             pinView!.annotation = annotation
         }
@@ -236,10 +220,9 @@ extension MapViewController : MKMapViewDelegate {
     
     // Selecting a Pin, draw the route to this pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print("didSelectAnnotation")
         // Our location
         let origin = MKMapItem(placemark: MKPlacemark(coordinate: mapView.userLocation.coordinate))
-        // The brewerery selected
+        // The brewery selected
         let destination = convertToMKMapItemThis(view)
         // Getting plottable directions
         let request = MKDirectionsRequest()
@@ -252,7 +235,7 @@ extension MapViewController : MKMapViewDelegate {
             (response , error ) -> Void in
             if let routeResponse = response?.routes {
                 self.removeRouteOnMap()
-                // As you can see the response will list many routes, need to sort to just the fastest one
+                // The response will list many routes, need to sort to just the fastest travel time one
                 let quickestRoute : MKRoute = routeResponse.sorted(by: {$0.expectedTravelTime < $1.expectedTravelTime})[0]
                 self.displayRouteOnMap(route: quickestRoute)
             } else {
@@ -263,7 +246,7 @@ extension MapViewController : MKMapViewDelegate {
     }
     
     
-    // Removes all routes from ma
+    // Removes all routes from map
     func removeRouteOnMap(){
         mapView.removeOverlays(mapView.overlays)
     }
@@ -286,52 +269,34 @@ extension MapViewController : MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         // Did the user favorite or ask for more information on the brewery
         switch control as UIView {
+            
+        // Favorite or unfavorite a brewery
         case view.leftCalloutAccessoryView!:
-
+            
             // Find the brewery object that belongs to this location
             let favBrewery = findBreweryinFavorites(by: view.annotation!)
-
-            guard favBrewery?.favorite == false else {
-                // If this is already a favorite, unfavorite it
-                print("This has already been favorited")
-                favBrewery?.favorite = false
-                do {
-                    
-                    try coreDataStack?.favoritesContext.save()
-                    
-                    DispatchQueue.main.async {
-                        (view.leftCalloutAccessoryView as! UIButton).setImage(UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal), for: .normal)
-                        //(view.leftCalloutAccessoryView as! UIButton).currentImage?.imagere = .alwaysOriginal
-                        view.setNeedsDisplay()
-                        print("UnFavorite Created")
-                    }
-                } catch {
-                    
-                }
-
-                return
+            // Flip favorite state in the database and in the ui
+            favBrewery?.favorite = !(favBrewery?.favorite)!
+            let image : UIImage!
+            if favBrewery?.favorite == true {
+                image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
+            } else {
+                image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
             }
-
-            favBrewery?.favorite = true
             do {
-                
-                try coreDataStack?.favoritesContext.save()
-                
+                try coreDataStack?.persistingContext.save()
                 DispatchQueue.main.async {
-                    (view.leftCalloutAccessoryView as! UIButton).setImage(UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal), for: .normal)
-                    //(view.leftCalloutAccessoryView as! UIButton).currentImage?.imagere = .alwaysOriginal
+                    (view.leftCalloutAccessoryView as! UIButton).setImage(image!, for: .normal)
                     view.setNeedsDisplay()
-                    print("Favorite Created")
                 }
             } catch {
-                
+                fatalError()
             }
-
+            return
             
-            
+        // Goto Webpage Information
         case view.rightCalloutAccessoryView!:
-            print("Right accesory view called")
-            // Goto Webpage Information
+            
             if let str : String = (view.annotation?.subtitle)!,
                 let url: URL = URL(string: str) {
                 if UIApplication.shared.canOpenURL(url) {
@@ -341,12 +306,6 @@ extension MapViewController : MKMapViewDelegate {
         default:
             break
         }
-
-    }
-    
-    // Function to performUIUpdates on main queue
-    private func performUpdatesOnMain(updates: () -> Void) {
-
     }
     
     
