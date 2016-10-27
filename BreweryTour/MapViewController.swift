@@ -206,7 +206,6 @@ extension MapViewController : MKMapViewDelegate {
             
             // Format annotation callouts here
             pinView?.tintColor = UIColor.red
-            //pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             //pinView!.leftCalloutAccessoryView = UIButton(type: .contactAdd)
             pinView?.canShowCallout = true
             let foundBrewery = findBreweryinFavorites(by: annotation)
@@ -225,6 +224,7 @@ extension MapViewController : MKMapViewDelegate {
                 favoriteBreweryButton.setImage(temp, for: .normal)
                 pinView!.leftCalloutAccessoryView = favoriteBreweryButton
             }
+            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             //pinView!.detailCalloutAccessoryView?.backgroundColor = UIColor.red
             //pinView?.detailCalloutAccessoryView? = (UIButton(type: .roundedRect))
         } else { // TODO why would I not reformat the pinView no matter what
@@ -284,16 +284,14 @@ extension MapViewController : MKMapViewDelegate {
     
     // Respond to user taps on the annotation callout
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        print("THE CALLOUT ACCESSORY \(control)")
+        // Did the user favorite or ask for more information on the brewery
         switch control as UIView {
         case view.leftCalloutAccessoryView!:
-            print("Left accessory view called")
-            print("the current image is \((control as! UIButton).currentImage)")
 
             // Find the brewery object that belongs to this location
             let favBrewery = findBreweryinFavorites(by: view.annotation!)
 
-            guard favBrewery?.favorite == false else { // A favorite encountered no need to add it again.
+            guard favBrewery?.favorite == false else {
                 // If this is already a favorite, unfavorite it
                 print("This has already been favorited")
                 favBrewery?.favorite = false
@@ -328,6 +326,8 @@ extension MapViewController : MKMapViewDelegate {
             } catch {
                 
             }
+
+            
             
         case view.rightCalloutAccessoryView!:
             print("Right accesory view called")
