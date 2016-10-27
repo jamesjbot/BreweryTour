@@ -278,7 +278,7 @@ extension MapViewController : MKMapViewDelegate {
             // Flip favorite state in the database and in the ui
             favBrewery?.favorite = !(favBrewery?.favorite)!
             let image : UIImage!
-            if favBrewery?.favorite == true {
+            if favBrewery?.favorite == false {
                 image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
             } else {
                 image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
