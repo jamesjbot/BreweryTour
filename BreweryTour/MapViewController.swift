@@ -59,7 +59,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         for i in results {
             var breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
             breweryRequest.sortDescriptors = []
-            breweryRequest.predicate = NSPredicate(format: "id  %@", i.breweryID!)
+            breweryRequest.predicate = NSPredicate(format: "id = %@", i.breweryID!)
             do {
                 let b = try (coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
                 print("brewery results\(b.count)")
