@@ -33,8 +33,11 @@ class FavoriteBreweriesViewController: UIViewController {
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        print("FavoriteBreweries view will appear called")
         super.viewWillAppear(animated)
+        print("Fetching breweries")
         performFetchOnResultsController()
+        tableView.reloadData()
     }
     
     
@@ -57,7 +60,7 @@ class FavoriteBreweriesViewController: UIViewController {
     }
     
     
-    private func performFetchOnResultsController(){
+    fileprivate func performFetchOnResultsController(){
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "favorite = 1")
@@ -68,8 +71,16 @@ class FavoriteBreweriesViewController: UIViewController {
         // Create a request for Brewery objects and fetch the request from Coredata
         do {
             try frc.performFetch()
+            print("Number of favorite breweries returned \(frc.fetchedObjects?.count)")
         } catch {
             fatalError("There was a problem fetching from coredata")
+        }
+        print("While direct fetch shows")
+        do {
+            let results = try coreDataStack?.persistingContext.fetch(request)
+            print("Direct fetch results says \(results?.count)")
+        } catch {
+            fatalError()
         }
     }
     
@@ -131,6 +142,7 @@ extension FavoriteBreweriesViewController: UITableViewDataSource {
         print("called favoritesviewcontroller \(frc.fetchedObjects?.count)")
         assert(frc != nil)
         assert(frc.fetchedObjects != nil)
+        performFetchOnResultsController()
         return (frc.fetchedObjects?.count)!
     }
     
@@ -146,16 +158,30 @@ extension FavoriteBreweriesViewController: UITableViewDataSource {
 
 extension FavoriteBreweriesViewController : UITableViewDelegate {
     
-    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let object = (frc.fetchedObjects! as [Brewery])[indexPath.row]
-            coreDataStack?.persistingContext.delete(object)
+//    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+
+//        }
+//    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
+            (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
+            print("Action to do when you want to remove")
+            let object = (self.frc.fetchedObjects! as [Brewery])[indexPath.row]
+            object.favorite = false
+            self.coreDataStack?.persistingContext
             do {
-                try coreDataStack?.persistingContext.save()
+                try self.coreDataStack?.persistingContext.save()
             } catch {
                 fatalError("Error deleting row")
             }
+            tableView.reloadData()
         }
+        deleteAction.backgroundColor = UIColor.green
+        
+        return [deleteAction]
     }
     
     
