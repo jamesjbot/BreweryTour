@@ -112,12 +112,12 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         } else {
             return
         }
-        populateMap()
+        populateMapWithAnnotations()
     }
     
     
     // Puts all the Brewery entries on to the map
-    private func populateMap(){
+    private func populateMapWithAnnotations(){
         print("populateMapCalled")
         // Remove all the annotation and repopulate
         mapView.removeAnnotations(mapView.annotations)
@@ -140,24 +140,23 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         _ = mapView.userLocation
     }
     
-    fileprivate func findBreweryInCoreData(by : MKAnnotation) -> Brewery? {
-        // Iterate across Brewery object on the map
-        for i in mappableBreweries {
-            if i.name == by.title! {
-                print("found brewery in coredata")
-                return i
-            }
-            
-        }
-        return nil
-    }
+//    fileprivate func findBreweryInCoreData(by : MKAnnotation) -> NSManagedObjectID? {
+//        // Iterate across Brewery object on the map
+//        for i in mappableBreweries {
+//            if i.name == by.title! {
+//                print("found brewery in coredata")
+//                return i.objectID
+//            }
+//        }
+//        return nil
+//    }
     
     
-    fileprivate func findBreweryinFavorites(by: MKAnnotation) -> Brewery? {
+    fileprivate func findBreweryinFavorites(by: MKAnnotation) -> NSManagedObjectID? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         let frc = NSFetchedResultsController(fetchRequest: request,
-                                             managedObjectContext: (coreDataStack?.favoritesContext)!,
+                                             managedObjectContext: (coreDataStack?.persistingContext)!,
                                              sectionNameKeyPath: nil, cacheName: nil)
         do {
             try frc.performFetch()
@@ -165,11 +164,14 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             fatalError()
         }
         for i in frc.fetchedObjects! as [Brewery] {
+            print(i.name)
             if i.name! == by.title! {
                 print("Found brewery in favorites")
-                return i
+                return i.objectID
             }
         }
+        // Debug code
+        fatalError("Searching for \(by.title)" )
         return nil
     }
     
@@ -187,7 +189,9 @@ extension MapViewController : MKMapViewDelegate {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
             if (pinView?.annotation?.title)! == mapView.userLocation.title {
+                // User's location has doesn't need the other decorations
                 pinView!.pinTintColor = UIColor.blue
+                return pinView
             } else {
                 pinView!.pinTintColor = UIColor.red
             }
@@ -195,8 +199,14 @@ extension MapViewController : MKMapViewDelegate {
             // Format annotation callouts here
             pinView?.tintColor = UIColor.red
             pinView?.canShowCallout = true
-            let foundBrewery = findBreweryinFavorites(by: annotation)
-            if foundBrewery?.favorite == true {
+            // TODO test code remove
+            var breweryObjectID : NSManagedObjectID!
+            let temp : NSManagedObjectID = findBreweryinFavorites(by: annotation)!
+            assert(temp != nil)
+            breweryObjectID = temp
+            print("the object id is \(type(of: breweryObjectID))")
+            let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
+            if foundBrewery.favorite == true {
                 print("Formating pin, \(annotation.title) This brewery has been favorited")
                 let temp = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
                 let localButton = UIButton(type: .contactAdd)
@@ -273,25 +283,39 @@ extension MapViewController : MKMapViewDelegate {
         // Favorite or unfavorite a brewery
         case view.leftCalloutAccessoryView!:
             
+            guard (view.annotation?.title)! != "My Locations" else {
+                // Do not respond to taps on the user's location callout
+                return
+            }
             // Find the brewery object that belongs to this location
-            let favBrewery = findBreweryinFavorites(by: view.annotation!)
+            let temp = findBreweryinFavorites(by: view.annotation!)
+            // Fetch object from context
+            let favBrewery = coreDataStack?.persistingContext.object(with: temp!) as! Brewery
             // Flip favorite state in the database and in the ui
-            favBrewery?.favorite = !(favBrewery?.favorite)!
+            favBrewery.favorite = !(favBrewery.favorite)
+            assert(favBrewery != nil)
             let image : UIImage!
-            if favBrewery?.favorite == false {
+            if favBrewery.favorite == false {
                 image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
             } else {
                 image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
             }
+            // Save favorite status and update map
             do {
+                print("prior to update")
+                print(coreDataStack?.persistingContext.updatedObjects)
                 try coreDataStack?.persistingContext.save()
-                DispatchQueue.main.async {
-                    (view.leftCalloutAccessoryView as! UIButton).setImage(image!, for: .normal)
-                    view.setNeedsDisplay()
-                }
+                print("after update")
+                print(coreDataStack?.persistingContext.updatedObjects)
             } catch {
                 fatalError()
             }
+            DispatchQueue.main.async {
+                (view.leftCalloutAccessoryView as! UIButton).setImage(image!, for: .normal)
+                view.setNeedsDisplay()
+            }
+            //veriftyFavoriteStatus()
+            
             return
             
         // Goto Webpage Information
@@ -308,6 +332,61 @@ extension MapViewController : MKMapViewDelegate {
         }
     }
     
+    func veriftyFavoriteStatus(){
+        let thirdrequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        thirdrequest.sortDescriptors = []
+        //request.predicate = NSPredicate(format: "favorite = %@", "YES")
+        // Create a request for Brewery objects and fetch the request from Coredata
+        do {
+            let results = try coreDataStack?.persistingContext.fetch(thirdrequest)
+            print("Tertiary way to check breweries matches")
+            for i in results! as [Brewery] {
+                if i.favorite == true {
+                    print("<------ What the hell is this")
+                }
+                print("\(i.name):\(i.favorite)")
+            }
+        } catch {
+            fatalError("There was a problem fetching from coredata")
+        }
+        
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "favorite = %@", "YES")
+        let frc = NSFetchedResultsController(fetchRequest: request,
+                                         managedObjectContext: (coreDataStack?.persistingContext)!,
+                                         sectionNameKeyPath: nil,
+                                         cacheName: nil)
+        // Create a request for Brewery objects and fetch the request from Coredata
+        do {
+            try frc.performFetch()
+            for i in frc.fetchedObjects! as [Brewery] {
+                print("The favorite objects are \(i.name) \(i.favorite)")
+            }
+        } catch {
+            fatalError("There was a problem fetching from coredata")
+        }
+        
+        let secondrequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        secondrequest.sortDescriptors = []
+        //request.predicate = NSPredicate(format: "favorite = %@", "YES")
+        // Create a request for Brewery objects and fetch the request from Coredata
+        do {
+            let results = try coreDataStack?.persistingContext.fetch(secondrequest)
+            print("Secondary way to check breweries matches")
+            for i in results! as [Brewery] {
+                if i.favorite == true {
+                    print("<------ What the hell is this")
+                }
+                print("\(i.name):\(i.favorite)")
+            }
+        } catch {
+            fatalError("There was a problem fetching from coredata")
+        }
+        
+        print("There are this many favorites \(frc.fetchedObjects?.count)")
+        
+    }
     
     // Render the router line
     internal func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
