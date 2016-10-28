@@ -19,7 +19,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
             let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Beer")
             let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
             do {
-                try favoriteContext?.execute(batch)
+                try persistentContext?.execute(batch)
                 //try coreDataStack?.mainStoreCoordinator.execute(batch, with: (favoriteContext)!)
                 print("Batch Deleted completed")
             } catch {
@@ -71,7 +71,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     internal var beer : Beer!
     
-    private let favoriteContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.favoritesContext
+    private let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
     
     // MARK: Functions
     
@@ -122,7 +122,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
         do {
-            let results = try favoriteContext?.fetch(request)
+            let results = try persistentContext?.fetch(request)
             if (results?.count)! > 0 {
                 return results?[0]
             }
@@ -140,10 +140,11 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     // All beers are in the database we just mark their favorite status and tasting notes
     private func saveToFavoritesInCoreData(makeFavorite: Bool) {
+        // TODO there is an error saveing
         do {
             beer.favorite = makeFavorite
             beer.tastingNotes = tasting.text
-            try favoriteContext?.save()
+            try persistentContext?.save()
         } catch {
             fatalError("Error adding/saving a beer")
         }
