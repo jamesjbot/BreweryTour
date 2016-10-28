@@ -27,7 +27,13 @@ class FavoriteBreweriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         print("favorites tab enetered")
+        frc.delegate = self
         // Do any additional setup after loading the view.
+        performFetchOnResultsController()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         performFetchOnResultsController()
     }
     
@@ -43,15 +49,22 @@ class FavoriteBreweriesViewController: UIViewController {
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "favorite = YES")
         frc = NSFetchedResultsController(fetchRequest: request,
-                                                              managedObjectContext: (coreDataStack?.favoritesContext)!,
+                                                              managedObjectContext: (coreDataStack?.persistingContext)!,
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
         super.init(coder: aDecoder)
+        performFetchOnResultsController()
     }
     
     
     private func performFetchOnResultsController(){
-        frc.delegate = self
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "favorite = 1")
+        frc = NSFetchedResultsController(fetchRequest: request,
+                                         managedObjectContext: (coreDataStack?.persistingContext)!,
+                                         sectionNameKeyPath: nil,
+                                         cacheName: nil)
         // Create a request for Brewery objects and fetch the request from Coredata
         do {
             try frc.performFetch()
@@ -78,23 +91,26 @@ class FavoriteBreweriesViewController: UIViewController {
 extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("will change called")
+        print("=========>will change called")
         tableView.beginUpdates()
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("didChange called")
+        print("=========>didChange called")
         switch (type){
         case .insert:
+            print("======> Insert called")
             tableView.insertRows(at: [newIndexPath! as IndexPath], with: UITableViewRowAnimation.fade)
             break
         case .delete:
+            print("=======> Delete called")
             tableView.deleteRows(at: [indexPath! as IndexPath], with: UITableViewRowAnimation.fade)
             break
         case .move:
             break
         case .update:
+            print("=======> Update called")
             configureCell(cell: tableView.cellForRow(at: indexPath!)!, indexPath: indexPath! as NSIndexPath)
             break
         }
@@ -113,6 +129,8 @@ extension FavoriteBreweriesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("called favoritesviewcontroller \(frc.fetchedObjects?.count)")
+        assert(frc != nil)
+        assert(frc.fetchedObjects != nil)
         return (frc.fetchedObjects?.count)!
     }
     
@@ -131,9 +149,9 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
             let object = (frc.fetchedObjects! as [Brewery])[indexPath.row]
-            coreDataStack?.favoritesContext.delete(object)
+            coreDataStack?.persistingContext.delete(object)
             do {
-                try coreDataStack?.favoritesContext.save()
+                try coreDataStack?.persistingContext.save()
             } catch {
                 fatalError("Error deleting row")
             }
