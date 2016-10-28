@@ -246,6 +246,7 @@ class BreweryDBClient {
                 // TODO This beer could be in the database already
                 // Skip this beer
                 // Just because this beer is in the database doesn't mean that this brewery is in the database.
+                // Because the user could have deleted the brewery.
                 let b = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
                 if b != nil {
                     print("This beer is already in the database") // If I skip here how to do i mark the breweries for display?
@@ -285,7 +286,8 @@ class BreweryDBClient {
                         locDic["longitude"]?.description != "" &&
                         locDic["longitude"] != nil &&
                         locDic["latitude"] != nil   {
-                        // Check to make sure we are not already in the database
+                        
+                        // Check to make sure the brewery is not already in the database
                         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
                         request.sortDescriptors = []
                         request.predicate = NSPredicate(format: "id == %@",locDic["id"] as! CVarArg)
@@ -299,9 +301,9 @@ class BreweryDBClient {
                         } catch {
                             fatalError()
                         }
-                        
+                        var newBrewery : Brewery!
                         if !isBreweryInDB { // Create a brewery object
-                            let newBrewery = Brewery(inName: breweryDict["name"] as! String,
+                             newBrewery = Brewery(inName: breweryDict["name"] as! String,
                                                      latitude: locDic["latitude"]?.description,
                                                      longitude: locDic["longitude"]?.description,
                                                      url: locDic["website"] as! String?,
@@ -315,20 +317,21 @@ class BreweryDBClient {
                         // Creating beer
                         print("Creating ")
                         // Just because this beer is in the database doesn't mean that this brewery is in the database.
-                        let thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
+                        var thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
                         if thisBeer == nil {
-                            let thisBeer = Beer(id: beerid!, name: beername ?? "", beerDescription: beerdescription ?? "", availability: beeravailable ?? "", context: (coreDataStack?.persistingContext!)!)
+                            thisBeer = Beer(id: beerid!, name: beername ?? "", beerDescription: beerdescription ?? "", availability: beeravailable ?? "", context: (coreDataStack?.persistingContext!)!)
                         }
                         thisBeer?.breweryID = breweries[0].id
+                        thisBeer?.brewer = newBrewery
                         thisBeer?.styleID = querySpecificID
                         
                             // TODO Save Icons for Beer
                             
                         saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer!)
                         // Mark this brewery for drawing on the map
-                        breweries[0].mustDraw = true
+                        //breweries[0].mustDraw = true
                         // Save images for the brewery
-                        saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: breweries[0])
+                        saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: newBrewery)
                         
                         //What is wrong with this line, because it crashes
                         //thisBeer.brewer = thisBrewery
@@ -351,9 +354,11 @@ class BreweryDBClient {
             do {
                 try coreDataStack?.persistingContext.save()
                 completion(true)
+                return
             } catch let error {
                 completion(false)
                 fatalError("Saving background error \(error)")
+                return
             }
             
             break
@@ -392,9 +397,11 @@ class BreweryDBClient {
             do {
                 try coreDataStack?.persistingContext.save()
                 completion(true)
+                return
             } catch {
                 completion(false)
                 fatalError("Error saving styles")
+                return
             }
             return
             break
@@ -466,9 +473,11 @@ class BreweryDBClient {
                 try coreDataStack?.persistingContext.save()
                 print("Brewery Saved to Persisting context")
                 completion(true)
+                return
             } catch let error {
                 completion(false)
                 fatalError("Saving background error \(error)")
+                return
             }
             break
             
@@ -575,6 +584,7 @@ class BreweryDBClient {
                 do {
                     try coreDataStack?.persistingContext.save()
                     completion(true)
+                    return
                 } catch let error {
                     completion(false)
                     fatalError("Saving background error \(error)")
@@ -613,14 +623,14 @@ class BreweryDBClient {
     }
     
     
-    func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery) {
-        if let imagesDict : [String:AnyObject] = input as? [String:AnyObject] {
-            if let imageURL : String = imagesDict["medium"] as! String? {
-                let queue = DispatchQueue(label: "Images")
-                queue.async(qos: .utility) {
-                    print("Getting images in background")
-                    self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: inputBrewery, updateManagedObjectID: inputBrewery.objectID)
-                }
+    func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
+        if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
+            let imageURL : String = imagesDict["medium"] as! String?,
+            let targetBrewery = inputBrewery {
+            let queue = DispatchQueue(label: "Images")
+            queue.async(qos: .utility) {
+                print("Getting images in background")
+                self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
             }
         }
     }
