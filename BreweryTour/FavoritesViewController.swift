@@ -47,6 +47,7 @@ class FavoritesViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
+        tableView.reloadData()
         print("Favorites view controller sees this many favorite \(frc.fetchedObjects?.count)")
     }
     
@@ -70,7 +71,7 @@ class FavoritesViewController: UIViewController {
     
     
 
-    private func performFetchOnResultsController(){
+    fileprivate func performFetchOnResultsController(){
         frc.delegate = self
         // Create a request for Beer objects and fetch the request from Coredata
         do {
@@ -103,11 +104,18 @@ extension FavoritesViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("didChange called")
+//        for (i,j) in (frc.fetchedObjects?.enumerated())! {
+//            let path = IndexPath(row: i, section: 0)
+//            let direct = frc.object(at: path) as Beer
+//            print("direct: \(direct.beerName), set: \((j as Beer).beerName)")
+//        }
         switch (type){
         case .insert:
             tableView.insertRows(at: [newIndexPath! as IndexPath], with: UITableViewRowAnimation.fade)
+            break
         case .delete:
             tableView.deleteRows(at: [indexPath! as IndexPath], with: UITableViewRowAnimation.fade)
+            break
         case .move:
             break
         case .update:
@@ -118,9 +126,10 @@ extension FavoritesViewController: NSFetchedResultsControllerDelegate {
     
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        tableView.endUpdates()
+        performFetchOnResultsController()
         tableView.reloadData()
-        print("finished")
+        tableView.endUpdates()
+        print("finished fetching and reloading table data.")
     }
     
     
@@ -137,6 +146,7 @@ extension FavoritesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name
+        print("Called cell for row at index path \(indexPath)")
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCell", for: indexPath)
         configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
@@ -148,7 +158,7 @@ extension FavoritesViewController : UITableViewDelegate {
     
     @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == .delete {
-            let object = (frc.fetchedObjects! as [Beer])[indexPath.row]
+            let object = (frc.object(at: indexPath) as Beer)
             coreDataStack?.favoritesContext.delete(object)
             do {
                 try coreDataStack?.favoritesContext.save()
@@ -164,7 +174,12 @@ extension FavoritesViewController : UITableViewDelegate {
         let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
         
         // Push beer information to Detail View Controller
-        destinationViewcontroller.beer = frc.fetchedObjects?[indexPath.row]
+        if tableView.cellForRow(at: indexPath)?.textLabel?.text != frc.object(at: indexPath).beerName {
+            fatalError()
+        }
+        print("OnScreen name:\(tableView.cellForRow(at: indexPath)?.textLabel?.text)")
+        print("Background name: \(frc.object(at: indexPath).beerName)")
+        destinationViewcontroller.beer = frc.object(at: indexPath)
         
         // Segue to view controller
         navigationController?.pushViewController(destinationViewcontroller, animated: true)
