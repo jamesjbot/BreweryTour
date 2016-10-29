@@ -310,7 +310,7 @@ class BreweryDBClient {
                                                      open: (locDic["openToPublic"] as! String == "Y") ? true : false,
                                                      id: locDic["id"]?.description,
                                                      context: (coreDataStack?.persistingContext)!)
-                            savePersitent()
+                            //savePersitent()
                             breweries.append(newBrewery) // Brewery object should be empty
                         } else { print("Brewery is in database skipping Brewery creation") }
                         
@@ -325,21 +325,15 @@ class BreweryDBClient {
                         thisBeer?.brewer = newBrewery
                         thisBeer?.styleID = querySpecificID
                         
-                            // TODO Save Icons for Beer
-                            
+                        // TODO Save Icons for Beer
                         saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer!)
-                        // Mark this brewery for drawing on the map
-                        //breweries[0].mustDraw = true
                         // Save images for the brewery
                         saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: newBrewery)
                         
-                        //What is wrong with this line, because it crashes
-                        //thisBeer.brewer = thisBrewery
-                        //thisBeer.breweryID = thisBrewery.id
                         print("----->Finished adding a new beer and a brewery")
                         print("This many objects need updating \(coreDataStack?.persistingContext.updatedObjects)")
                         print("This many objects need inserting \(coreDataStack?.persistingContext.insertedObjects)")
-                        savePersitent()
+                        //savePersitent()
                         print("This many objects were updating \(coreDataStack?.persistingContext.updatedObjects)")
                         print("This many objects were inserting \(coreDataStack?.persistingContext.insertedObjects)")
 
@@ -719,13 +713,13 @@ class BreweryDBClient {
                 if data == nil {
                     return
                 }
-                self.coreDataStack!.backgroundContext.performAndWait(){
-                    let beerForUpdate = self.coreDataStack!.backgroundContext.object(with: updateManagedObjectID) as! Beer
+                self.coreDataStack!.persistingContext.performAndWait(){
+                    let beerForUpdate = self.coreDataStack!.persistingContext.object(with: updateManagedObjectID) as! Beer
                     let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                     beerForUpdate.image = outputData
                     do {
-                        try self.coreDataStack!.backgroundContext.save()
-                        print("Imaged saved")
+                        try self.coreDataStack!.persistingContext.save()
+                        print("Beer Imaged saved for beer \(forBeer.beerName)")
                     }
                     catch {
                         return
@@ -748,13 +742,13 @@ class BreweryDBClient {
                 if data == nil {
                     return
                 }
-                self.coreDataStack!.backgroundContext.performAndWait(){
-                    let breweryForUpdate = self.coreDataStack!.backgroundContext.object(with: updateManagedObjectID) as! Brewery
+                self.coreDataStack!.persistingContext.performAndWait(){
+                    let breweryForUpdate = self.coreDataStack!.persistingContext.object(with: updateManagedObjectID) as! Brewery
                     let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                     breweryForUpdate.image = outputData
                     do {
-                        try self.coreDataStack!.backgroundContext.save()
-                        print("Attention Brewery Imaged saved")
+                        try self.coreDataStack!.persistingContext.save()
+                        print("Attention Brewery Imaged saved for brewery \(forBrewery.name)")
                     }
                     catch {
                         return
