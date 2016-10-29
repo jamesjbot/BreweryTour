@@ -156,16 +156,36 @@ extension FavoritesViewController: UITableViewDataSource {
 
 extension FavoritesViewController : UITableViewDelegate {
     
-    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            let object = (frc.object(at: indexPath) as Beer)
-            coreDataStack?.favoritesContext.delete(object)
+//    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+//        if editingStyle == .delete {
+//            let object = (frc.object(at: indexPath) as Beer)
+//            coreDataStack?.favoritesContext.delete(object)
+//            do {
+//                try coreDataStack?.favoritesContext.save()
+//            } catch {
+//                fatalError("Error deleting row")
+//            }
+//        }
+//    }
+    
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        
+        let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
+            (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
+            print("Action to do when you want to remove")
+            let object = self.frc.object(at: indexPath) as Beer
+            object.favorite = false
             do {
-                try coreDataStack?.favoritesContext.save()
+                try self.coreDataStack?.persistingContext.save()
             } catch {
                 fatalError("Error deleting row")
             }
+            tableView.reloadData()
         }
+        deleteAction.backgroundColor = UIColor.green
+        
+        return [deleteAction]
     }
     
     
