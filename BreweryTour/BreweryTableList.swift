@@ -59,6 +59,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         frc.delegate = self
+        
         do {
             try frc.performFetch()
             //print("Retrieved this many styles \(frc.fetchedObjects?.count)")
@@ -157,7 +158,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("Brewery TableList didChange")
-        observer.sendNotify(s: "Useless message telling observer to reload data")
+        observer.sendNotify(s: "reload data")
         //Datata = frc.fetchedObjects!
     }
     

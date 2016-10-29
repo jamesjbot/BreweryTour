@@ -119,7 +119,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         } else {
             aStyle = filteredObjects[elementAt.row]
         }
-        print("Looking for style \(aStyle)")
+        //print("Looking for style \(aStyle)")
         mediator.selected(thisItem: aStyle)
         
         // TODO put activity indicator animating here

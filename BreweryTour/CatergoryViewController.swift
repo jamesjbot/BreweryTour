@@ -67,9 +67,11 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         switch sender.selectedSegmentIndex{
         case 0:
             activeTableList = styleList
+            print("telling category reload styles now")
             styleTable.reloadData()
         case 1:
             activeTableList = breweryList
+            print("telling category to reload brewery now")
             styleTable.reloadData()
         default:
             break
@@ -87,6 +89,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(s: String) {
         // This will update the contents of the table if needed
+        if s == "reload data" {
+            styleTable.reloadData()
+        }
         searchBar(newSearchBar, textDidChange: newSearchBar.text!)
     }
     
