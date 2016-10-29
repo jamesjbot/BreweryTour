@@ -169,9 +169,8 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
             print("Action to do when you want to remove")
-            let object = (self.frc.fetchedObjects! as [Brewery])[indexPath.row]
+            let object = self.frc.object(at: indexPath) as Brewery
             object.favorite = false
-            self.coreDataStack?.persistingContext
             do {
                 try self.coreDataStack?.persistingContext.save()
             } catch {
