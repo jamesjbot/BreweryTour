@@ -5,14 +5,23 @@
 //  Created by James Jongsurasithiwat on 10/8/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/**
+    This program displays the breweries selected by the user.
+    It gets the selection from the mediator and display a red pin for breweries
+    and a blue pin for the user's location
+    If the user presses on the pin a callout will show allowing the user to 
+    favorite the brewery, or go the the website for the brewery to check open
+    times and current beer selection.
+    Clicking on the pin will also zoom in to the pin and give a routing to the 
+    brewery.
+**/
+
+
 import UIKit
 import Foundation
 import MapKit
 import CoreLocation
 import CoreData
-
-// I've changed how this gets the breweries to map
-// It queries the database for the locations it should display
 
 
 class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
@@ -23,10 +32,13 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         return
     }
     
+    // MARK: Constants
     
-    // MARK: IBOutlet
+    // Location manager allows us access to the user's location
+    private let locationManager = CLLocationManager()
     
-    @IBOutlet weak var mapView: MKMapView!
+    fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    
     
     // MARK: Variables
     
@@ -34,10 +46,11 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     private var mappableBreweries = [Brewery]()
     // The query that goes against the database to pull in the brewery location information
     private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
-    // Location manager allows us access to the user's location
-    private let locationManager = CLLocationManager()
+
     
-    fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    // MARK: IBOutlet
+    
+    @IBOutlet weak var mapView: MKMapView!
     
     
     // MARK: Functions
@@ -54,38 +67,27 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         } catch {
             fatalError()
         }
-        print("Found these beers \(results)")
+        // Array to hold breweries
         mappableBreweries = [Brewery]()
-        for i in results {
+        for beer in results {
             var breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
             breweryRequest.sortDescriptors = []
-            breweryRequest.predicate = NSPredicate(format: "id = %@", i.breweryID!)
+            breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
             do {
-                let b = try (coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
-                print("brewery results\(b.count)")
-                if b.count > 1 {fatalError()}
-                if !mappableBreweries.contains(b[0]) {
-                    mappableBreweries.append(b[0])
+                let brewery = try (coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
+                // TODO Remove this debug code
+                if brewery.count > 1 {fatalError()}
+                if !mappableBreweries.contains(brewery[0]) {
+                    mappableBreweries.append(brewery[0])
                 }
             } catch {
                 fatalError("Failure to query breweries")
             }
         }
-        print("Completed getting Breweries")
     }
     
     
-    // Fetch brewery by brewery selected
-    private func getBrewery(){
-        
-    }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    
+    // Ask user for access to their location
     override func viewDidLoad(){
         super.viewDidLoad()
         // CoreLocation initialization, ask permission to utilize user location
@@ -97,14 +99,14 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         }
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("View will appear called")
-        mapView.removeAnnotations(mapView.annotations)
-        print("Mapview now has \(mapView.annotations.count) annotations")
         
+        // Get new selections
         let mapViewData = Mediator.sharedInstance().getMapData()
         
+        // Map brewery or breweries by style
         if mapViewData is Style {
             initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
         } else if mapViewData is Brewery {
@@ -118,26 +120,27 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // Puts all the Brewery entries on to the map
     private func populateMapWithAnnotations(){
-        print("populateMapCalled")
-        // Remove all the annotation and repopulate
+        // Remove all the old annotation
         mapView.removeAnnotations(mapView.annotations)
+        // Create new array of annotations
         var annotations = [MKAnnotation]()
         for i in mappableBreweries {
+            // Sometimes the breweries don't have a location
             guard i.latitude != nil && i.longitude != nil else {
                 continue
             }
             
-            // TODO Check if the point is a favorite is so populate accordingly
-            
             let aPin = MKPointAnnotation()
-            //print("Last Brewery: \(i)")
             aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
             aPin.title = i.name
             aPin.subtitle = i.url
             annotations.append(aPin)
         }
         mapView.addAnnotations(annotations)
-        _ = mapView.userLocation
+        // Add the user's location
+        mapView.showsUserLocation = true
+        mapView.showsTraffic = true
+        mapView.showsScale = true
     }
     
 //    fileprivate func findBreweryInCoreData(by : MKAnnotation) -> NSManagedObjectID? {
@@ -152,7 +155,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
 //    }
     
     
-    fileprivate func findBreweryinFavorites(by: MKAnnotation) -> NSManagedObjectID? {
+    // Find breweries
+    fileprivate func findBreweryinPersistentContext(by: MKAnnotation) -> NSManagedObjectID? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         let frc = NSFetchedResultsController(fetchRequest: request,
@@ -166,12 +170,12 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         for i in frc.fetchedObjects! as [Brewery] {
             print(i.name)
             if i.name! == by.title! {
-                print("Found brewery in favorites")
                 return i.objectID
             }
         }
-        // Debug code
+        // TODO Remove Debug code
         fatalError("Searching for \(by.title)" )
+        
         return nil
     }
     
@@ -182,7 +186,6 @@ extension MapViewController : MKMapViewDelegate {
     
     // This formats the pins and calloutAccessory views on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        print("Formatting of pins and callouts")
         let reuseId = "pin"
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         if pinView == nil {
@@ -201,8 +204,9 @@ extension MapViewController : MKMapViewDelegate {
             pinView?.canShowCallout = true
             // TODO test code remove
             var breweryObjectID : NSManagedObjectID!
-            let temp : NSManagedObjectID = findBreweryinFavorites(by: annotation)!
+            let temp : NSManagedObjectID = findBreweryinPersistentContext(by: annotation)!
             assert(temp != nil)
+            
             breweryObjectID = temp
             print("the object id is \(type(of: breweryObjectID))")
             let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
@@ -288,7 +292,7 @@ extension MapViewController : MKMapViewDelegate {
                 return
             }
             // Find the brewery object that belongs to this location
-            let temp = findBreweryinFavorites(by: view.annotation!)
+            let temp = findBreweryinPersistentContext(by: view.annotation!)
             // Fetch object from context
             let favBrewery = coreDataStack?.persistingContext.object(with: temp!) as! Brewery
             // Flip favorite state in the database and in the ui
