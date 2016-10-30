@@ -5,15 +5,25 @@
 //  Created by James Jongsurasithiwat on 10/7/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/** This is the main screen where users can choose to explore Beers by style.
+    Once a style have been selected, the program will go get beers names and
+    breweryies that posses that style of beer.
+    The user will then be automatically brought to the map screen showing all
+    breweries that were retried.
+    The user can come back to the screen with the back button and select a
+    brewery instead.
+    If the user does this the user will be brought to the map showing only the 
+    brewery they choose.
+    The user can search through available styles and available breweries to see 
+    if they have the one they are looking for.
+    Finally we can select if we want to show only organic beers.
+**/
+
 
 import UIKit
 import CoreData
 
 class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate , Observer  {
-    
-
-    
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     
     // TODO Is this testing code I can remove
     private func batchDelete() {
@@ -29,7 +39,6 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     
     // MARK: Constant
-    fileprivate var fetchedResultsController : NSFetchedResultsController<NSManagedObject>!
     
     let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     
@@ -37,22 +46,29 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     let cellIdentifier = "genericTypeCell"
     
-    fileprivate var activeTableList : TableList!
-    
     private let styleList : StylesTableList! = Mediator.sharedInstance().getStyleList()
     private let breweryList : BreweryTableList! = Mediator.sharedInstance().getBreweryList()
     
     private let med : Mediator = Mediator.sharedInstance()
-
+    
+    
+    // MARK: Variables
+    
+    fileprivate var fetchedResultsController : NSFetchedResultsController<NSManagedObject>!
+    
+    fileprivate var activeTableList : TableList!
+    
     
     // MARK: IBOutlets
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshDatabase: UIBarButtonItem!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var newSearchBar: UISearchBar!
     @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var styleTable: UITableView!
     
-    // MARK: IBAction clicked
+    
+    // MARK: IBActions
     @IBAction func refresh(_ sender: AnyObject) {
         coreDataStack?.deleteBeersAndBreweries()
     }
@@ -67,11 +83,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         switch sender.selectedSegmentIndex{
         case 0:
             activeTableList = styleList
-            print("telling category reload styles now")
             styleTable.reloadData()
         case 1:
             activeTableList = breweryList
-            print("telling category to reload brewery now")
             styleTable.reloadData()
         default:
             break
@@ -94,6 +108,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         }
         searchBar(newSearchBar, textDidChange: newSearchBar.text!)
     }
+    
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
@@ -160,46 +175,31 @@ extension CategoryViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         var retVal : Int!
         retVal = activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
-        print("Number of rows in sections called returning \(retVal)")
         return retVal
     }
 }
 
 
+    // MARK: UITableViewDelegate
+
 extension CategoryViewController : UITableViewDelegate {
+    
+    // Capture user selections, communicate with the mediator on what the
+    // selection is and then proceed to the map on success
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         activeTableList.selected(elementAt: indexPath, searchText: newSearchBar.text!){
         (sucesss) -> Void in
             self.performSegue(withIdentifier: "Go", sender: nil)
         }
-//        switch segmentedControl.selectedSegmentIndex {
-//        case 0: // Search breweries by style
-//            break
-//            // User has selected an onscreen style
-//            // Now we go query breweryDB for all the breweries that have that style
-//            // On a succesful query we Go to the map
-//            //let style = styles[indexPath.row].id
-//            // TODO put activity indicator animating here
-////            BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style!, isOrganic: organicSwitch.isOn){
-////                (success) -> Void in
-////                if success {
-////                    self.performSegue(withIdentifier:"Go", sender: nil)
-////                }
-////            }
-//        case 1: // Search breweries by name
-//            print("case 1")
-//        default:
-//            print("default case")
-//        }
     }
 }
 
 
+    // MARK: - UISearchBar Delegate
+
 extension CategoryViewController: UISearchBarDelegate {
     
-    
-    // MARK: - UISearchBar Delegate
-    
+    // A filter out selections not conforming to the searchbar text
     func searchBar(_: UISearchBar, textDidChange: String){
         // User entered searchtext filter data
         activeTableList.filterContentForSearchText(searchText: textDidChange)
@@ -216,13 +216,14 @@ extension CategoryViewController: UISearchBarDelegate {
         styleTable.reloadData()
     }
     
+    
+    // TODO calling database for brewery not currently downloaded.
     // I must get from here to to calling brwery db search for a brewery
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("searchbar button clicked")
         searchBar.resignFirstResponder()
         
+        // Do nothing, because nothing entered in search bar
         guard !(searchBar.text?.isEmpty)! else {
-            print("Do not search for nothing")
             return
         }
         
@@ -239,8 +240,6 @@ extension CategoryViewController: UISearchBarDelegate {
             return
         }
         
-
-        
         activityIndicator.startAnimating()
         activeTableList.searchForUserEntered(searchTerm: searchBar.text!
         ){
@@ -249,7 +248,7 @@ extension CategoryViewController: UISearchBarDelegate {
             if success {
             }
         }
-        
+        // TODO code to download user searched breweries
 //        let queue = DispatchQueue(label: "SearchForBrewery")
 //        queue.async(qos: .utility){
 //            BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchBar.text!){
