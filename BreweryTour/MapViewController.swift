@@ -290,12 +290,11 @@ extension MapViewController : MKMapViewDelegate {
                 return
             }
             // Find the brewery object that belongs to this location
-            let temp = findBreweryinPersistentContext(by: view.annotation!)
+            let tempObjectID = findBreweryinPersistentContext(by: view.annotation!)
             // Fetch object from context
-            let favBrewery = coreDataStack?.persistingContext.object(with: temp!) as! Brewery
+            let favBrewery = coreDataStack?.persistingContext.object(with: tempObjectID!) as! Brewery
             // Flip favorite state in the database and in the ui
             favBrewery.favorite = !(favBrewery.favorite)
-            assert(favBrewery != nil)
             let image : UIImage!
             if favBrewery.favorite == false {
                 image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
@@ -304,19 +303,15 @@ extension MapViewController : MKMapViewDelegate {
             }
             // Save favorite status and update map
             do {
-                print("prior to update")
-                print(coreDataStack?.persistingContext.updatedObjects)
                 try coreDataStack?.persistingContext.save()
-                print("after update")
-                print(coreDataStack?.persistingContext.updatedObjects)
             } catch {
                 fatalError()
             }
+            // Update favorite icon
             DispatchQueue.main.async {
                 (view.leftCalloutAccessoryView as! UIButton).setImage(image!, for: .normal)
                 view.setNeedsDisplay()
             }
-            //veriftyFavoriteStatus()
             
             return
             
