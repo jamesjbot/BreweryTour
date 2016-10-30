@@ -619,7 +619,7 @@ class BreweryDBClient {
     
     func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
         if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
-            let imageURL : String = imagesDict["medium"] as! String?,
+            let imageURL : String = imagesDict["icon"] as! String?,
             let targetBrewery = inputBrewery {
             let queue = DispatchQueue(label: "Images")
             queue.async(qos: .utility) {
