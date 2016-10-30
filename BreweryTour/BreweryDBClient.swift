@@ -310,7 +310,7 @@ class BreweryDBClient {
                                                      open: (locDic["openToPublic"] as! String == "Y") ? true : false,
                                                      id: locDic["id"]?.description,
                                                      context: (coreDataStack?.persistingContext)!)
-                            //savePersitent()
+                            savePersitent()
                             breweries.append(newBrewery) // Brewery object should be empty
                         } else { print("Brewery is in database skipping Brewery creation") }
                         
