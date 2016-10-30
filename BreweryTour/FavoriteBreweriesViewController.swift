@@ -8,6 +8,7 @@
 
 import UIKit
 import CoreData
+import CoreGraphics
 
 class FavoriteBreweriesViewController: UIViewController {
     
@@ -90,11 +91,12 @@ class FavoriteBreweriesViewController: UIViewController {
         // Populate cell from the NSManagedObject instance
         cell.textLabel?.text = selectedObject.name!
         // TODO please remove this is temporary so I can see the id
-        cell.detailTextLabel?.text = "(\(selectedObject.id))"
+        cell.detailTextLabel?.text = "edited(\(selectedObject.id))"
         //cell.detailTextLabel?.text = selectedObject.brewer?.name
         if let data : NSData = (selectedObject.image) {
             let im = UIImage(data: data as Data)
             cell.imageView?.image = im
+            print("the output size will be \(cell.imageView?.frame.size)")
         }
     }
 }
