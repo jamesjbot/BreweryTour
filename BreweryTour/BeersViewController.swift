@@ -39,20 +39,21 @@ class BeersViewController: UIViewController, Observer {
         // Create a request for Beer objects and fetch the request from Coredata
         do {
             try frc.performFetch()
-            print("\(#function) returned \(frc.fetchedObjects?.count) objects")
-            
         } catch {
             fatalError("There was a problem fetching from coredata")
         }
     }
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         selectedBeersTableList.registerObserver(view: self)
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Get information from the mediator as what we are displaying
+        // Get information from the mediator as to what we are displaying
         let managedObject = Mediator.sharedInstance().selectedItem()
         
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
@@ -76,16 +77,14 @@ class BeersViewController: UIViewController, Observer {
         // Create a request for Beer objects and fetch the request from Coredata
         do {
             try frc.performFetch()
-            print("\(#function) returned \(frc.fetchedObjects?.count) objects")
-            
         } catch {
             fatalError("There was a problem fetching from coredata")
         }
         
-        let allbeers = frc.fetchedObjects! as [Beer]
-        for i in allbeers {
-            print("Brewery id \(i.breweryID)")
-        }
+//        let allbeers = frc.fetchedObjects! as [Beer]
+//        for i in allbeers {
+//            print("Brewery id \(i.breweryID)")
+//        }
         //performFetchOnResultsController()
     }
 
