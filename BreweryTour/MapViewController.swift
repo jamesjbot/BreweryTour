@@ -206,26 +206,23 @@ extension MapViewController : MKMapViewDelegate {
             var breweryObjectID : NSManagedObjectID!
             let temp : NSManagedObjectID = findBreweryinPersistentContext(by: annotation)!
             assert(temp != nil)
-            
             breweryObjectID = temp
-            print("the object id is \(type(of: breweryObjectID))")
+            // Set the favaorite icon on pin
             let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
+            var localButton = UIButton(type: .contactAdd)
+            var tempImage : UIImage!
             if foundBrewery.favorite == true {
-                print("Formating pin, \(annotation.title) This brewery has been favorited")
-                let temp = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
-                let localButton = UIButton(type: .contactAdd)
-                localButton.setImage(temp, for: .normal)
-                pinView?.leftCalloutAccessoryView = localButton
+                tempImage = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
             } else {
-                print("Formatting pin, \(annotation.title) This brewery is unseleted")
-                let favoriteBreweryButton = UIButton(type: .contactAdd)
-                let temp = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
-                favoriteBreweryButton.setImage(temp, for: .normal)
-                pinView!.leftCalloutAccessoryView = favoriteBreweryButton
+                tempImage = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
             }
-            
+            localButton.setImage(tempImage, for: .normal)
+            pinView?.leftCalloutAccessoryView = localButton
+            // Set the information icon on the right button
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         } else { // TODO why would I not reformat the pinView no matter what
+            // There is a pinview
+            fatalError()
             pinView!.annotation = annotation
         }
         return pinView
@@ -253,6 +250,7 @@ extension MapViewController : MKMapViewDelegate {
                 let quickestRoute : MKRoute = routeResponse.sorted(by: {$0.expectedTravelTime < $1.expectedTravelTime})[0]
                 self.displayRouteOnMap(route: quickestRoute)
             } else {
+                // TODO prompt with a warning window
                 print("There are no routes avaialble")
             }
         }
@@ -269,7 +267,7 @@ extension MapViewController : MKMapViewDelegate {
     // Display the route on map
     func displayRouteOnMap(route: MKRoute){
         mapView.add(route.polyline)
-        mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: UIEdgeInsetsMake(100.0,100.0,100.0,100.0), animated: true)
+        mapView.setVisibleMapRect(route.polyline.boundingMapRect, edgePadding: UIEdgeInsetsMake(120.0,120.0,120.0,120.0), animated: true)
     }
     
     
