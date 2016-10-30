@@ -15,34 +15,22 @@ class BeersViewController: UIViewController, Observer {
     // MARK: Constants
     
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    //internal let med : Mediator = Mediator.sharedInstance()
-
+    private let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
+    
     // MARK: Variables
     
     fileprivate var frc : NSFetchedResultsController<Beer> = NSFetchedResultsController()
     
     internal var listOfBreweryIDToDisplay : [String]!
-    
-    
-    private let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
-    
-    
+
     // MARK: IBOutlets
     
-
-    
     @IBOutlet weak var tableView: UITableView!
-    
     
     // MARK: Functions
     
     func sendNotify(s: String) {
         tableView.reloadData()
-    }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
     }
     
     
