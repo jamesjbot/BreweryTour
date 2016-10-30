@@ -324,68 +324,69 @@ extension MapViewController : MKMapViewDelegate {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
+            
         default:
             break
         }
     }
     
-    func veriftyFavoriteStatus(){
-        let thirdrequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        thirdrequest.sortDescriptors = []
-        //request.predicate = NSPredicate(format: "favorite = %@", "YES")
-        // Create a request for Brewery objects and fetch the request from Coredata
-        do {
-            let results = try coreDataStack?.persistingContext.fetch(thirdrequest)
-            print("Tertiary way to check breweries matches")
-            for i in results! as [Brewery] {
-                if i.favorite == true {
-                    print("<------ What the hell is this")
-                }
-                print("\(i.name):\(i.favorite)")
-            }
-        } catch {
-            fatalError("There was a problem fetching from coredata")
-        }
-        
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "favorite = %@", "YES")
-        let frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: (coreDataStack?.persistingContext)!,
-                                         sectionNameKeyPath: nil,
-                                         cacheName: nil)
-        // Create a request for Brewery objects and fetch the request from Coredata
-        do {
-            try frc.performFetch()
-            for i in frc.fetchedObjects! as [Brewery] {
-                print("The favorite objects are \(i.name) \(i.favorite)")
-            }
-        } catch {
-            fatalError("There was a problem fetching from coredata")
-        }
-        
-        let secondrequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        secondrequest.sortDescriptors = []
-        //request.predicate = NSPredicate(format: "favorite = %@", "YES")
-        // Create a request for Brewery objects and fetch the request from Coredata
-        do {
-            let results = try coreDataStack?.persistingContext.fetch(secondrequest)
-            print("Secondary way to check breweries matches")
-            for i in results! as [Brewery] {
-                if i.favorite == true {
-                    print("<------ What the hell is this")
-                }
-                print("\(i.name):\(i.favorite)")
-            }
-        } catch {
-            fatalError("There was a problem fetching from coredata")
-        }
-        
-        print("There are this many favorites \(frc.fetchedObjects?.count)")
-        
-    }
+//    func veriftyFavoriteStatus(){
+//        let thirdrequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+//        thirdrequest.sortDescriptors = []
+//        //request.predicate = NSPredicate(format: "favorite = %@", "YES")
+//        // Create a request for Brewery objects and fetch the request from Coredata
+//        do {
+//            let results = try coreDataStack?.persistingContext.fetch(thirdrequest)
+//            print("Tertiary way to check breweries matches")
+//            for i in results! as [Brewery] {
+//                if i.favorite == true {
+//                    print("<------ What the hell is this")
+//                }
+//                print("\(i.name):\(i.favorite)")
+//            }
+//        } catch {
+//            fatalError("There was a problem fetching from coredata")
+//        }
+//        
+//        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+//        request.sortDescriptors = []
+//        request.predicate = NSPredicate(format: "favorite = %@", "YES")
+//        let frc = NSFetchedResultsController(fetchRequest: request,
+//                                         managedObjectContext: (coreDataStack?.persistingContext)!,
+//                                         sectionNameKeyPath: nil,
+//                                         cacheName: nil)
+//        // Create a request for Brewery objects and fetch the request from Coredata
+//        do {
+//            try frc.performFetch()
+//            for i in frc.fetchedObjects! as [Brewery] {
+//                print("The favorite objects are \(i.name) \(i.favorite)")
+//            }
+//        } catch {
+//            fatalError("There was a problem fetching from coredata")
+//        }
+//        
+//        let secondrequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+//        secondrequest.sortDescriptors = []
+//        //request.predicate = NSPredicate(format: "favorite = %@", "YES")
+//        // Create a request for Brewery objects and fetch the request from Coredata
+//        do {
+//            let results = try coreDataStack?.persistingContext.fetch(secondrequest)
+//            print("Secondary way to check breweries matches")
+//            for i in results! as [Brewery] {
+//                if i.favorite == true {
+//                    print("<------ What the hell is this")
+//                }
+//                print("\(i.name):\(i.favorite)")
+//            }
+//        } catch {
+//            fatalError("There was a problem fetching from coredata")
+//        }
+//        
+//        print("There are this many favorites \(frc.fetchedObjects?.count)")
+//        
+//    }
     
-    // Render the router line
+    // Render the route line
     internal func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         if overlay is MKPolyline {
@@ -398,22 +399,23 @@ extension MapViewController : MKMapViewDelegate {
 
 
 // Place the placemark for User's current location
-
+// All code needed for the CLLocationManager to work
 extension MapViewController: CLLocationManagerDelegate {
     
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         CLGeocoder().reverseGeocodeLocation(locations.last!){
             (placemarks, error) -> Void in
-            if let placemarks = placemarks {
-                let placemark = placemarks[0]
-                // Here is the placemark for the user's location
-                let userMapItem = MKMapItem(placemark: MKPlacemark(coordinate: placemark.location!.coordinate, addressDictionary: placemark.addressDictionary as! [String:AnyObject]?))
-            }
+//            if let placemarks = placemarks {
+//                let placemark = placemarks[0]
+//                // Here is the placemark for the user's location
+//                let userMapItem = MKMapItem(placemark: MKPlacemark(coordinate: placemark.location!.coordinate, addressDictionary: placemark.addressDictionary as! [String:AnyObject]?))
+//            }
         }
     }
     
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
-        
+        return
     }
+
 }
 
