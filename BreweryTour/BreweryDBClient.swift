@@ -259,14 +259,10 @@ class BreweryDBClient {
                 
                 let beerid : String? = beer["id"] as? String
                 let beername : String? = beer["name"] as? String ?? ""
-                let beerdescription : String? = (beer["description"] as? String) ?? ""
-                var beeravailable : String? = nil
+                let beerdescription : String? = beer["description"] as? String
+                let beeravailable : String? = beer["available"] as? String
                 let beerabv : String? = beer["abv"] as? String
                 let beeribu : String? = beer["ibu"] as? String
-                if let interimAvail = beer["available"] {
-                    let verbage = interimAvail["description"] as? String ?? "No Information Provided"
-                    beeravailable = verbage
-                }
                 // This beer has no brewery information, continue with the next beer
                 guard let breweriesArray = beer["breweries"]  else {
                     print("No breweries here move on")
@@ -321,19 +317,22 @@ class BreweryDBClient {
                         // Just because this beer is in the database doesn't mean that this brewery is in the database.
                         var thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
                         if thisBeer == nil {
-                            thisBeer = Beer(id: beerid!, name: beername ?? "", beerDescription: beerdescription ?? "", availability: beeravailable ?? "", context: (coreDataStack?.persistingContext!)!)
+                            thisBeer = Beer(id: beerid!,
+                                            name:beername ?? "Information N/A",
+                                            beerDescription: beerdescription ?? "Information N/A",
+                                            availability: beeravailable ?? "Information N/A",
+                                            context: (coreDataStack?.persistingContext!)!)
                         }
                         thisBeer?.breweryID = breweries[0].id
                         thisBeer?.brewer = newBrewery
                         thisBeer?.styleID = querySpecificID
-                        thisBeer?.abv = beerabv ?? "N/A"
-                        thisBeer?.ibu = beeribu ?? "N/A"
-                        // TODO Save Icons for Beer
+                        thisBeer?.abv = beerabv ?? "Information N/A"
+                        thisBeer?.ibu = beeribu ?? "Information N/A"
+                        // Save Icons for Beer
                         saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer!)
                         // Save images for the brewery
                         saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: newBrewery)
                         
-                        print("----->Finished adding a new beer and a brewery")
                         print("This many objects need updating \(coreDataStack?.persistingContext.updatedObjects)")
                         print("This many objects need inserting \(coreDataStack?.persistingContext.insertedObjects)")
                         //savePersitent()
