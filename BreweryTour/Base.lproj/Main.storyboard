@@ -136,8 +136,7 @@
                                     <navigationItem title="Title" id="g7F-4F-F43"/>
                                 </items>
                             </navigationBar>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="idd-zP-hy0">
-                                <frame key="frameInset" minX="4" minY="64" width="1016" height="1253"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" showsUserLocation="YES" translatesAutoresizingMaskIntoConstraints="NO" id="idd-zP-hy0">
                                 <connections>
                                     <outlet property="delegate" destination="kc4-oF-YzA" id="UHU-69-8jl"/>
                                 </connections>
@@ -161,7 +160,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9jM-88-BYD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2539.84375" y="-83.203125"/>
+            <point key="canvasLocation" x="2538.4000000000001" y="-83.208395802098963"/>
         </scene>
         <!--Selected Beers-->
         <scene sceneID="KEQ-HI-GM0">
@@ -179,7 +178,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerCell" textLabel="F2c-bs-Vb5" detailTextLabel="A3i-fU-GAB" imageView="Co2-DY-qqn" style="IBUITableViewCellStyleSubtitle" id="Tcx-Kc-hK0">
-                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tcx-Kc-hK0" id="AcN-pE-EtA">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -383,7 +382,7 @@
         <!--Favorite Beers-->
         <scene sceneID="uKn-Pq-Nxn">
             <objects>
-                <viewController title="Favorite Beers" id="aCO-9Y-u6t" customClass="FavoritesViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController title="Favorite Beers" id="aCO-9Y-u6t" customClass="FavoriteBeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="447-ox-Iue"/>
                         <viewControllerLayoutGuide type="bottom" id="ctK-gV-tlx"/>
@@ -396,7 +395,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
-                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
                                             <frame key="frameInset" width="375" height="43"/>

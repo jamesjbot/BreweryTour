@@ -13,7 +13,7 @@
 		A709D3FA1DAE459C00F11452 /* Style+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A709D3F41DAE459C00F11452 /* Style+CoreDataClass.swift */; };
 		A709D3FB1DAE459C00F11452 /* Style+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A709D3F51DAE459C00F11452 /* Style+CoreDataProperties.swift */; };
 		A70F267D1DBCE47800A33564 /* Brewery+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70F267C1DBCE47800A33564 /* Brewery+CoreDataProperties.swift */; };
-		A71DC9BE1DB2984C00AF81CD /* FavoritesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71DC9BD1DB2984C00AF81CD /* FavoritesViewController.swift */; };
+		A71DC9BE1DB2984C00AF81CD /* FavoriteBeersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71DC9BD1DB2984C00AF81CD /* FavoriteBeersViewController.swift */; };
 		A743501B1DB78615007AE08C /* TableListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743501A1DB78615007AE08C /* TableListProtocol.swift */; };
 		A74350621DB7B0F6007AE08C /* StylesTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350611DB7B0F6007AE08C /* StylesTableList.swift */; };
 		A74350641DB7D6D2007AE08C /* BreweryTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350631DB7D6D2007AE08C /* BreweryTableList.swift */; };
@@ -78,7 +78,7 @@
 		A709D3F41DAE459C00F11452 /* Style+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Style+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A709D3F51DAE459C00F11452 /* Style+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Style+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A70F267C1DBCE47800A33564 /* Brewery+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Brewery+CoreDataProperties.swift"; path = "../Brewery+CoreDataProperties.swift"; sourceTree = "<group>"; };
-		A71DC9BD1DB2984C00AF81CD /* FavoritesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoritesViewController.swift; sourceTree = "<group>"; };
+		A71DC9BD1DB2984C00AF81CD /* FavoriteBeersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteBeersViewController.swift; sourceTree = "<group>"; };
 		A743501A1DB78615007AE08C /* TableListProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableListProtocol.swift; sourceTree = "<group>"; };
 		A74350611DB7B0F6007AE08C /* StylesTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StylesTableList.swift; path = ../StylesTableList.swift; sourceTree = "<group>"; };
 		A74350631DB7D6D2007AE08C /* BreweryTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryTableList.swift; sourceTree = "<group>"; };
@@ -175,7 +175,7 @@
 				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
 				A752344C1DAEA666008EF071 /* BeersViewController.swift */,
 				A752344E1DAEDB59008EF071 /* BeerDetailViewController.swift */,
-				A71DC9BD1DB2984C00AF81CD /* FavoritesViewController.swift */,
+				A71DC9BD1DB2984C00AF81CD /* FavoriteBeersViewController.swift */,
 				A7D2272C1DB5620300360A3B /* FavoriteBreweriesViewController.swift */,
 			);
 			name = Controller;
@@ -510,7 +510,7 @@
 				A74350681DB91454007AE08C /* NSManagedObjectDisplayable.swift in Sources */,
 				A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */,
 				A7B2AAE11DA791A400EE844C /* CatergoryViewController.swift in Sources */,
-				A71DC9BE1DB2984C00AF81CD /* FavoritesViewController.swift in Sources */,
+				A71DC9BE1DB2984C00AF81CD /* FavoriteBeersViewController.swift in Sources */,
 				A743501B1DB78615007AE08C /* TableListProtocol.swift in Sources */,
 				A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */,
 			);

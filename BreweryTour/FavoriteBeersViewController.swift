@@ -1,5 +1,5 @@
 //
-//  FavoritesViewController.swift
+//  FavoritesBeersViewController.swift
 //  BreweryTour
 //
 //  Created by James Jongsurasithiwat on 10/15/16.
@@ -9,7 +9,7 @@
 import UIKit
 import CoreData
 
-class FavoritesViewController: UIViewController {
+class FavoriteBeersViewController: UIViewController {
     
     @IBAction func deleteAll(_ sender: UIBarButtonItem) {
             let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Beer")
@@ -94,7 +94,7 @@ class FavoritesViewController: UIViewController {
     }
 }
 
-extension FavoritesViewController: NSFetchedResultsControllerDelegate {
+extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("will change called")
@@ -136,7 +136,7 @@ extension FavoritesViewController: NSFetchedResultsControllerDelegate {
 }
 
 
-extension FavoritesViewController: UITableViewDataSource {
+extension FavoriteBeersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("called favoritesviewcontroller tableviewdatasource number of rows in section \(frc.fetchedObjects?.count)")
@@ -154,7 +154,7 @@ extension FavoritesViewController: UITableViewDataSource {
     
 }
 
-extension FavoritesViewController : UITableViewDelegate {
+extension FavoriteBeersViewController : UITableViewDelegate {
     
 //    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 //        if editingStyle == .delete {
