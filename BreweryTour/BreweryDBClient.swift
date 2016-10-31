@@ -261,6 +261,8 @@ class BreweryDBClient {
                 let beername : String? = beer["name"] as? String ?? ""
                 let beerdescription : String? = (beer["description"] as? String) ?? ""
                 var beeravailable : String? = nil
+                let beerabv : String? = beer["abv"] as? String
+                let beeribu : String? = beer["ibu"] as? String
                 if let interimAvail = beer["available"] {
                     let verbage = interimAvail["description"] as? String ?? "No Information Provided"
                     beeravailable = verbage
@@ -324,7 +326,8 @@ class BreweryDBClient {
                         thisBeer?.breweryID = breweries[0].id
                         thisBeer?.brewer = newBrewery
                         thisBeer?.styleID = querySpecificID
-                        
+                        thisBeer?.abv = beerabv
+                        thisBeer?.ibu = beeribu
                         // TODO Save Icons for Beer
                         saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer!)
                         // Save images for the brewery
@@ -401,10 +404,9 @@ class BreweryDBClient {
             break
             
             
-            
         case .Breweries:
             guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
-                print("\(#function) \(#line):Unable to parse Brewery Failed to extract data, there was no data component")
+                //Unable to parse Brewery Failed to extract data, there was no data component
                 return
             }
             // These number of pages means we can pull in more breweries
