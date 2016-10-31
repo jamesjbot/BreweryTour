@@ -11,6 +11,9 @@ import CoreData
 
 class FavoriteBeersViewController: UIViewController {
     
+    // TODO Delete Debugging code
+    // TODO Delete storyboard button as well
+    
     @IBAction func deleteAll(_ sender: UIBarButtonItem) {
             let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Beer")
             let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
@@ -35,12 +38,11 @@ class FavoriteBeersViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
     
+    // MARK: Function
     
     override func viewDidLoad() {
         super.viewDidLoad()
         print("favorites tab enetered")
-        performFetchOnResultsController()
-
     }
     
     
@@ -48,7 +50,6 @@ class FavoriteBeersViewController: UIViewController {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
         tableView.reloadData()
-        print("Favorites view controller sees this many favorite \(frc.fetchedObjects?.count)")
     }
     
     
