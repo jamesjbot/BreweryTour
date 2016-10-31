@@ -5,13 +5,13 @@
 //  Created by James Jongsurasithiwat on 10/12/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-
+/** This program shows the details of a beer.
+ **/
 import UIKit
 import CoreData
 
 class BeerDetailViewController: UIViewController, UITextViewDelegate{
 
-    // MARK: IBOutlets
     
     // TODO Remove this test code
     @IBAction func deleteAll(_ sender: UIBarButtonItem) {
@@ -113,6 +113,9 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
             favoriteIcon = UIImage(named: "heart_icon_black_white_line_art.png")
         }
         favoriteButton.setImage(favoriteIcon, for: .normal)
+        
+        abv.text = beer.abv
+        ibu.text = beer.ibu
     }
 
     

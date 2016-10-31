@@ -326,8 +326,8 @@ class BreweryDBClient {
                         thisBeer?.breweryID = breweries[0].id
                         thisBeer?.brewer = newBrewery
                         thisBeer?.styleID = querySpecificID
-                        thisBeer?.abv = beerabv
-                        thisBeer?.ibu = beeribu
+                        thisBeer?.abv = beerabv ?? "N/A"
+                        thisBeer?.ibu = beeribu ?? "N/A"
                         // TODO Save Icons for Beer
                         saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer!)
                         // Save images for the brewery
