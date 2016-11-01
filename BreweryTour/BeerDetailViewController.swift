@@ -96,7 +96,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
             beerImage.image = im
         }
         beerDescriptionTextView.text = beer.beerDescription
-        tasting.text = beer.tastingNotes ?? "Information N/A"
+        tasting.text = beer.tastingNotes ?? "Your tasting notes"
 
         // Change this to beer's favorite status
         let favoriteIcon : UIImage?
