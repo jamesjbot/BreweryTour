@@ -6,6 +6,8 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /** This program shows the details of a beer.
+    You can unfavorite / favorite a beer.
+    You can also add tasting notes to the beer that will be saved.
  **/
 import UIKit
 import CoreData

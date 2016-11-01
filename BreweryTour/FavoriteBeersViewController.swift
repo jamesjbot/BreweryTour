@@ -5,6 +5,11 @@
 //  Created by James Jongsurasithiwat on 10/15/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/** This program show all the favorited beers in the database.
+    Clicking on any beer will show you the detail.
+    You can also swipe left to remove the beer from favorites
+ **/
+
 
 import UIKit
 import CoreData

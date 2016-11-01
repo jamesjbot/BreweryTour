@@ -5,6 +5,10 @@
 //  Created by James Jongsurasithiwat on 10/17/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/** This program show the favorited breweries.
+    You can swipe left to remove the brewery from favorites.
+    You can click on a brewery to show up on the map.
+ **/
 
 import UIKit
 import CoreData
