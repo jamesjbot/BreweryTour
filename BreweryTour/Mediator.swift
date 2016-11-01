@@ -93,38 +93,6 @@ class Mediator : NSManagedObjectDisplayable {
         passingItem = thisItem
         print("prior to call: \(passingItem)")
         selectedBeersList.setSelectedItem(toNSObjectID: passingItem!.objectID)
-        selectedBeersList.mediatorPerformFetch()
-//        if thisItem is Style {
-//            currentlySelectedManagedObjectType = types.Style
-//            print("Style selected \(thisItem as! Style)")
-//            // Tell map view to display breweries with mustdraw
-//            //print("sending message to map")
-//            //mapViewer.sendNotify(s: "Display MustDraw")
-//            // Tell the beerslist to show all beers with the specific style id
-//            print("sending message to beers controller")
-//            //beersViewer.sendNotify(s: "Show beers with this style")
-//        } else if thisItem is Brewery {
-//            // Tell map view to display the nsmanagedobject w/ id
-//            //print("sending message to map viewer")
-//            //mapViewer.sendNotify(s: "Draw this brewery")
-//            // Tell the beerslist to show all beers with te breweryid
-//            print("sending message to beers controller")
-            //beersViewer.sendNotify(s: "Show beers by this brewery")
-            
-        //currentlySelectedManagedObjectType = types.Brewery
-            
-            //selectedBeersList.selected(elementAt: //, completion: <#T##(Bool) -> Void#>)
-            // Query api for beers at this brewery
-//            BreweryDBClient.sharedInstance().downloadBeersBy(brewery: this as! Brewery){
-//                (success) -> Void in
-//            }
-            
-            // Tell Beers view controller to load beers with the brewery id
-            // I don't need to tell Beers view controller to do this as the NSFetchedResultsController that backs
-            // it now will automatically update the view.
-            
-            //print("Brewery selected \(this as! Brewery)")
-    //}
     }
     
 }

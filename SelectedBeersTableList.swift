@@ -60,6 +60,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     func setSelectedItem(toNSObjectID : NSManagedObjectID) {
         selectedItem = toNSObjectID
+        performFetchRequestFor()
     }
 
     func performFetchRequestFor(){
