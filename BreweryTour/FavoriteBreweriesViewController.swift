@@ -160,12 +160,6 @@ extension FavoriteBreweriesViewController: UITableViewDataSource {
 
 extension FavoriteBreweriesViewController : UITableViewDelegate {
     
-//    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-
-//        }
-//    }
-    
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
