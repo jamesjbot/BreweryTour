@@ -18,21 +18,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         observer = view
     }
     
-    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
-        print("searchForuserEntered beer called")
-        BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
-            (success) -> Void in
-            print("Returned from getting brewery")
-            do {
-                try self.frc.performFetch()
-                print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
-                completion!(true, "Success")
-            } catch {
-                completion!(false, "Failed Request")
-                fatalError("Fetch failed critcally")
-            }
-        }
-    }
+
 
     
     internal var mediator: NSManagedObjectDisplayable!
@@ -226,4 +212,26 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         completion(true, "Success")
         //print("Tell mediator this brewery was selected")
     }
+    
+    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
+        print("searchForuserEntered beer called")
+        BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
+            (success, msg) -> Void in
+            print("Returned from getting brewery")
+            guard success == true else {
+                completion!(success,msg)
+                return
+            }
+            // If the query succeeded repopulate this view model and notify view to update itself.
+            do {
+                try self.frc.performFetch()
+                print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+                completion!(true, "Success")
+            } catch {
+                completion!(false, "Failed Request")
+                fatalError("Fetch failed critcally")
+            }
+        }
+    }
+    
 }

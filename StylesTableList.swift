@@ -29,7 +29,8 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     }
     
     func searchForUserEntered(searchTerm: String, completion: ( (Bool, String?) -> (Void))?) {
-        // This stub is needed to conform to the interface.
+        // Styles are automatically downloaded on start up so searching again will not yield anything new
+        completion!(false,"There are no more new styles")
     }
 
     

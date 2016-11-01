@@ -361,14 +361,8 @@ class BreweryDBClient {
             
             
         case .Breweries:
-            guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
-                //Unable to parse Brewery Failed to extract data, there was no data component
-                return
-            }
-            // These number of pages means we can pull in more breweries
-            print("numberofpages:\(response["numberOfPages"]) results:\(response["totalResults"])")
-            print("We are creating \(breweryArray.count) breweries")
-            guard let pagesOfResult = Int((response["numberOfPages"] as? String)!) else {
+            // The number of pages means we can pull in more breweries
+            guard let pagesOfResult = response["numberOfPages"] as? Int else {
                 completion(false, "No results returned")
                 return
             }
@@ -376,7 +370,11 @@ class BreweryDBClient {
                 completion(false, "Too many Breweries match, be more specific")
                 return
             }
-            
+            guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
+                //Unable to parse Brewery Failed to extract data, there was no data component
+                completion(false, "Network error please try again")
+                return
+            }
             
             for breweryDict in breweryArray {
                 // All conditions that prevent us from going to the brewery
