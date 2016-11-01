@@ -12,15 +12,13 @@ import CoreData
 
 class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate, Subject {
 
-
-
     var observer : Observer!
 
     func registerObserver(view: Observer) {
         observer = view
     }
     
-    internal func searchForUserEntered(searchTerm: String, completion: ((Bool) -> (Void))?) {
+    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
         print("searchForuserEntered beer called")
         BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
             (success) -> Void in
@@ -28,9 +26,9 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             do {
                 try self.frc.performFetch()
                 print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
-                completion!(true)
+                completion!(true, "Success")
             } catch {
-                completion!(false)
+                completion!(false, "Failed Request")
                 fatalError("Fetch failed critcally")
             }
         }
@@ -188,7 +186,9 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     }
     
     
-    func selected(elementAt: IndexPath, searchText: String, completion: @escaping (_ success : Bool) -> Void ) {
+    func selected(elementAt: IndexPath,
+                  searchText: String,
+                  completion: @escaping (_ success : Bool, _ msg : String?) -> Void ) {
         // We are only selecting one brewery to display, so we need to remove
         // all the breweries that are currently displayed. And then turn on the selected brewery
         var savedBreweryForDisplay : Brewery!
@@ -223,7 +223,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             fatalError()
         }
         // TODO need to get all the beers for this brewery
-        completion(true)
+        completion(true, "Success")
         //print("Tell mediator this brewery was selected")
     }
 }

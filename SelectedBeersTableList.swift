@@ -12,9 +12,7 @@ import CoreData
 
 class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
     
-
-    
-    internal func searchForUserEntered(searchTerm: String, completion: ((Bool) -> Void)?) {
+    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
         print("Don't call this here \(#file) \(#line)")
         fatalError()
     }
@@ -113,7 +111,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         return cell
     }
     
-    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool) -> Void) {
+    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool, String?) -> Void) {
         print("currently unused")
         fatalError()
     }

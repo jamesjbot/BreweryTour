@@ -14,7 +14,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
 
     func downloadBeerStyles() {
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
-            (success) -> Void in
+            (success, msg) -> Void in
             if success {
                 self.observer.sendNotify(s: "We have styles")
             }
@@ -28,8 +28,8 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         observer = view
     }
     
-    func searchForUserEntered(searchTerm: String, completion: ( (Bool) -> (Void))?) {
-        fatalError("Don't call this \(#file) \(#line)")
+    func searchForUserEntered(searchTerm: String, completion: ( (Bool, String?) -> (Void))?) {
+        // This stub is needed to conform to the interface.
     }
 
     
@@ -86,14 +86,12 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
-        //print("we updated the filtered contents to \(filteredObjects.count)")
         return filteredObjects
     }
     
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         if searchText != "" {
-            //print("size:\(filteredObjects.count) want:\(indexPath.row) ")
             cell.textLabel?.text = (filteredObjects[indexPath.row]).displayName
         } else {
             cell.textLabel?.text = (frc.fetchedObjects![indexPath.row]).displayName
@@ -102,7 +100,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     }
 
     
-    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool) -> Void ) {
+    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool, String?) -> Void ) {
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
         print("Call mediator and notify them that this beer style was selected")
         var style : String
@@ -124,7 +122,9 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         
         // TODO put activity indicator animating here
         // TODO temporary bypass organic swift
-        BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style, isOrganic: false, completion: completion)
+        BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style,
+                                                             isOrganic: false,
+                                                             completion: completion)
         
     }
 }

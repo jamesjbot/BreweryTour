@@ -41,7 +41,7 @@ class BreweryDBClient {
     
     // MARK: Functions
 
-    internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool) -> Void ) {
+    internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
         let theOutputType = APIQueryOutputTypes.Breweries
         let methodParameters  = [
             "name" : "*\(name)*" as AnyObject,
@@ -56,13 +56,11 @@ class BreweryDBClient {
             .responseJSON {
                 response in
                 guard response.result.isSuccess else {
-                    print("failed \(response.request?.url)")
-                    completion(false)
+                    completion(false, "Failed request")
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    print("Invalid tag informatiion")
-                    completion(false)
+                    completion(false, "Failed request")
                     return
                 }
                 self.parse(response: responseJSON as NSDictionary,
@@ -75,63 +73,62 @@ class BreweryDBClient {
     
     
     // Downloads all breweries
-    internal func downloadAllBreweries(isOrganic : Bool , completion: @escaping (_ success: Bool) -> Void ) {
-        var methodParameters = [String:AnyObject]()
-        if isOrganic {
-            methodParameters  = [
-                Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
-                Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
-                Constants.BreweryParameterKeys.Organic : "Y" as AnyObject,
-                Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
-            ]
-        } else {
-            methodParameters  = [
-                Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
-                "name" : "*brewery*" as AnyObject,
-                Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject//,
-                //Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
-            ]
-        }
-        
-        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.Breweries,
-                                                        querySpecificID: nil,
-                                                        parameters: methodParameters)
-        Alamofire.request(outputURL.absoluteString!)
-            .responseJSON {
-                response in
-                guard response.result.isSuccess else {
-                    print("failed \(response.request?.url)")
-                    completion(false)
-                    return
-                }
-                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    print("Invalid tag informatiion")
-                    completion(false)
-                    return
-                }
-                self.parse(response: responseJSON as NSDictionary,
-                           querySpecificID:  nil,
-                           outputType: APIQueryOutputTypes.Breweries,
-                           completion: completion)
-                return
-        }
-    }
+//    internal func downloadAllBreweries(isOrganic : Bool , completion: @escaping (_ success: Bool) -> Void ) {
+//        var methodParameters = [String:AnyObject]()
+//        if isOrganic {
+//            methodParameters  = [
+//                Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
+//                Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+//                Constants.BreweryParameterKeys.Organic : "Y" as AnyObject,
+//                Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
+//            ]
+//        } else {
+//            methodParameters  = [
+//                Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
+//                "name" : "*brewery*" as AnyObject,
+//                Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject//,
+//                //Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
+//            ]
+//        }
+//        
+//        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.Breweries,
+//                                                        querySpecificID: nil,
+//                                                        parameters: methodParameters)
+//        Alamofire.request(outputURL.absoluteString!)
+//            .responseJSON {
+//                response in
+//                guard response.result.isSuccess else {
+//                    print("failed \(response.request?.url)")
+//                    completion(false)
+//                    return
+//                }
+//                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+//                    print("Invalid tag informatiion")
+//                    completion(false)
+//                    return
+//                }
+//                self.parse(response: responseJSON as NSDictionary,
+//                           querySpecificID:  nil,
+//                           outputType: APIQueryOutputTypes.Breweries,
+//                           completion: completion)
+//                return
+//        }
+//    }
     
     
     // Downloads Beer Styles
-    internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool) -> Void ) {
+    internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void ) {
         let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject]
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.Styles,
                                                         querySpecificID: nil,
                                                         parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
             guard response.result.isSuccess else {
-                completionHandler(false)
+                completionHandler(false,"Failed Request")
                 return
             }
             guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                print("Invalid tag informatiion")
-                completionHandler(false)
+                completionHandler(false, "Failed Request")
                 return
             }
             self.parse(response: responseJSON as NSDictionary,
@@ -146,7 +143,7 @@ class BreweryDBClient {
     // Download all beers from a Brewery
     // GET: /brewery/:breweryId/beers
     internal func downloadBeersBy(brewery: Brewery,
-                                  completionHandler: @escaping ( _ success: Bool ) -> Void ) {
+                                  completionHandler: @escaping ( _ success: Bool, _ msg: String? ) -> Void ) {
         let consistentOutput = APIQueryOutputTypes.BeersByBreweryID
         let methodParameter : [String:AnyObject] =
             [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
@@ -156,12 +153,11 @@ class BreweryDBClient {
                                                         parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
             guard response.result.isSuccess else {
-                completionHandler(false)
+                completionHandler(false, "Failed Request")
                 return
             }
             guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                print("Invalid tag informatiion")
-                completionHandler(false)
+                completionHandler(false,"Failed Request")
                 return
             }
             self.parse(response: responseJSON as NSDictionary,
@@ -174,7 +170,8 @@ class BreweryDBClient {
     
     
     // Query for breweries that offer a certain style.
-    internal func downloadBreweriesBy(styleID : String, isOrganic : Bool , completion: @escaping (_ success: Bool)-> Void ) {
+    internal func downloadBreweriesBy(styleID : String, isOrganic : Bool ,
+                                      completion: @escaping (_ success: Bool, _ msg: String?)-> Void ) {
         let methodParameters  = [
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
             Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,
@@ -189,12 +186,12 @@ class BreweryDBClient {
                 response in
                 guard response.result.isSuccess else {
                     print("failed \(response.request?.url)")
-                    completion(false)
+                    completion(false, "Failed Request")
+
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    print("Invalid tag informatiion")
-                    completion(false)
+                    completion(false, "Failed Request")
                     return
                 }
                 self.parse(response: responseJSON as NSDictionary,
@@ -209,7 +206,7 @@ class BreweryDBClient {
     private func parse(response : NSDictionary,
                        querySpecificID : String?,
                        outputType: APIQueryOutputTypes,
-                       completion: @escaping (_ success :  Bool)-> Void)  {
+                       completion: @escaping (_ success :  Bool, _ msg: String?)-> Void)  {
         
         // Process every query type accordingly
         switch outputType {
@@ -220,8 +217,7 @@ class BreweryDBClient {
             // The Keys in this dictionary are [status,data,numberOfPages,currentPage,totalResults]
             // Extracting beer data array of dictionaries
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                print("Failed to extract data \n \(response)")
-                completion(false)
+                completion(false, "Failed Request")
                 // No beers were returned, which can happen
                 return
             }
@@ -305,7 +301,7 @@ class BreweryDBClient {
                 // This will save every beer
                 
             } // end of beer loop
-            completion(true)
+            completion(true, "Success")
             //            print("Attempting to save all beers and breweries")
             //            do {
             //                try coreDataStack?.persistingContext.save()
@@ -352,10 +348,10 @@ class BreweryDBClient {
             // Save beer styles to disk
             do {
                 try coreDataStack?.persistingContext.save()
-                completion(true)
+                completion(true, "Success")
                 return
             } catch {
-                completion(false)
+                completion(false, "Failed Request")
                 fatalError("Error saving styles")
                 return
             }
@@ -371,6 +367,11 @@ class BreweryDBClient {
             // These number of pages means we can pull in more breweries
             print("numberofpages:\(response["numberOfPages"]) results:\(response["totalResults"])")
             print("We are creating \(breweryArray.count) breweries")
+            if let pagesOfResult = Int((response["numberOfPages"] as? String)!) {
+                
+            } else {
+                completion(false, "No results returned")
+            }
             
             for breweryDict in breweryArray {
                 // All conditions that prevent us from going to the brewery
@@ -427,10 +428,10 @@ class BreweryDBClient {
             do {
                 try coreDataStack?.persistingContext.save()
                 print("Brewery Saved to Persisting context")
-                completion(true)
+                completion(true, "Success")
                 return
             } catch let error {
-                completion(false)
+                completion(false, "Failed Request")
                 fatalError("Saving background error \(error)")
                 return
             }
@@ -492,19 +493,16 @@ class BreweryDBClient {
             print("Capturing Beers By Brewery")
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 print("Failed to extract data")
-                completion(false)
+                completion(false, "Failed Request")
+
                 return
             }
-            print("There are \(beerArray.count) beers pulled back from BreweryDB querys")
             for beer in beerArray {
                 print("---------------------NextBeer---------------------")
                 // Every beer is a dictionary; that also has an array of brewery information
                 
                 // Create the coredata object for each beer
                 // which will include name, description, availability, brewery name, styleID
-                
-                // TODO before we go any further if  we already have this beer get out
-                // guard
                 
                 let id : String? = beer["id"] as? String
                 let name : String? = beer["name"] as? String ?? ""
@@ -515,7 +513,7 @@ class BreweryDBClient {
                     available = verbage
                 }
                 
-                // TODO test to see if beer is already in context
+                // Test to see if beer is already in context
                 let dbBeer = getBeerByID(id: id!, context: (coreDataStack?.persistingContext)!)
                 guard dbBeer == nil else {
                     print("Encountered a beer of this type already skipping creation")
@@ -531,10 +529,10 @@ class BreweryDBClient {
                 
                 do {
                     try coreDataStack?.persistingContext.save()
-                    completion(true)
+                    completion(true, "Success")
                     return
                 } catch let error {
-                    completion(false)
+                    completion(false, "Failed Request")
                     fatalError("Saving background error \(error)")
                 }
                 
@@ -612,20 +610,6 @@ class BreweryDBClient {
         print("Attempting to get beer \(id)")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
-        //        do {
-        //            let frc = NSFetchedResultsController(fetchRequest: request, managedObjectContext: (coreDataStack?.persistingContext)!, sectionNameKeyPath: nil, cacheName: nil)
-        //            try frc.performFetch()
-        //            for i in frc.fetchedObjects! {
-        //                let b = i as Beer
-        //                if b.id == id {
-        //                    print("found it")
-        //                } else {
-        //                    print(b.id)
-        //                }
-        //            }
-        //        } catch {
-        //
-        //        }
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
         
         do {

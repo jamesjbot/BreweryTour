@@ -241,28 +241,12 @@ extension CategoryViewController: UISearchBarDelegate {
         }
         
         activityIndicator.startAnimating()
-        activeTableList.searchForUserEntered(searchTerm: searchBar.text!
-        ){
-            (success) -> Void in
+        activeTableList.searchForUserEntered(searchTerm: searchBar.text!) {
+            (success, msg) -> Void in
             self.activityIndicator.stopAnimating()
             if success {
             }
         }
-        // TODO code to download user searched breweries
-//        let queue = DispatchQueue(label: "SearchForBrewery")
-//        queue.async(qos: .utility){
-//            BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchBar.text!){
-//                (success) -> Void in
-//                if success {
-//                    print("Returned from brewery client")
-//                    // Notify the brewery list that we have a new brewery
-//                    // This is done by NSFetchResultsController in the brewery list
-//                    // Notify outselves to reload from the brewery
-//                    self.styleTable.reloadData()
-//                    //self.pullDataFromModelAndReloadTableView()
-//                }
-//            }
-//        }
     }
 }
 
