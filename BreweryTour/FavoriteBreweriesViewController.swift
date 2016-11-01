@@ -181,15 +181,9 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Create target viewcontroller
-        // Selecting a brewery should go to the map
-//        let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
-//        
-//        // Push beer information to Detail View Controller
-//        destinationViewcontroller.beer = fetchedResultsController.fetchedObjects?[indexPath.row]
-//        
-//        // Segue to view controller
-//        navigationController?.pushViewController(destinationViewcontroller, animated: true)
+        // Send the brewery to the mediator, then switch to the map tab
+        Mediator.sharedInstance().selected(thisItem: frc.object(at: indexPath))
+        self.tabBarController?.selectedIndex = 0
     }
 }
 
