@@ -5,33 +5,28 @@
 //  Created by James Jongsurasithiwat on 10/21/16.
 //
 //
+/** This program is the view model for the selected beers tab.
+ **/
 
 import UIKit
-//import Foundation
 import CoreData
 
 class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
-    
-    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
-        print("Don't call this here \(#file) \(#line)")
-        fatalError()
-    }
 
+    // MARK: Constants
     
-    internal func searchForUserEntered(searchTerm: String) {
-        fatalError("You should call this from your context currently")
-    }
+    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
+
+    // MARK: Variables
     
     var selectedItem : NSManagedObjectID = NSManagedObjectID()
-    
+
     private var display : UIViewController!
     
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Beer] = [Beer]()
     internal var frc : NSFetchedResultsController<Beer>!
-    
-    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
-    
+
     var observer : Observer!
     
     // MARK: Functions
@@ -111,6 +106,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         return cell
     }
     
+    
     internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool, String?) -> Void) {
         print("currently unused")
         fatalError()
@@ -121,9 +117,11 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         print("BreweryTableList willchange")
     }
     
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("Brewery changed object")
     }
+    
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("Brewery TableList didChange")
@@ -138,6 +136,11 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         display = view
     }
     
-
+    
+    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
+        // Search not enabled on beers tabs
+        // TODO someday add
+        completion!(false,"Search not enabled on this function")
+    }
     
 }

@@ -5,6 +5,10 @@
 //  Created by James Jongsurasithiwat on 10/19/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/** This is the view model backing the brewery table on the main category view
+    controller
+ **/
+
 
 import Foundation
 import UIKit

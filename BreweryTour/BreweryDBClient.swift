@@ -5,6 +5,8 @@
 //  Created by James Jongsurasithiwat on 10/7/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/** This is the api driver, that makes all the requests to the breweryDB
+ **/
 
 import Foundation
 import Alamofire

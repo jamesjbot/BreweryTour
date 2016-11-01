@@ -5,6 +5,8 @@
 //  Created by James Jongsurasithiwat on 9/4/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/** This is the coredata model for the whole project
+ **/
 
 import CoreData
 
