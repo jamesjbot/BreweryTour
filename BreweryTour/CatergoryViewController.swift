@@ -234,20 +234,32 @@ extension CategoryViewController: UISearchBarDelegate {
             // TODO prompt the user maybe they still want to search the database
             return
         }
-        // This is currently blocking styles from going thru
-        guard segmentedControl.selectedSegmentIndex == 1 else {
-            fatalError("Not coded for styles, maybe not needed styles are static")
-            return
-        }
         
-        activityIndicator.startAnimating()
-        activeTableList.searchForUserEntered(searchTerm: searchBar.text!) {
-            (success, msg) -> Void in
-            self.activityIndicator.stopAnimating()
-            if success {
+        // Prompt user should we go search online for the Brewery or style
+        // Create action for prompt
+        func searchOnline(_ action: UIAlertAction){
+            activityIndicator.startAnimating()
+            activeTableList.searchForUserEntered(searchTerm: searchBar.text!) {
+                (success, msg) -> Void in
+                self.activityIndicator.stopAnimating()
+                print("Returned from brewerydbclient")
+                if success {
+                    self.styleTable.reloadData()
+                } else {
+                    self.displayAlertWindow(title: "Search Failed", msg: msg!)
+                }
             }
         }
+        let action = UIAlertAction(title: "Search Online",
+                                   style: .default,
+                                   handler: searchOnline)
+        displayAlertWindow(title: "Search Online",
+                           msg: "Cannot find match on device,\nsearch online?",
+                           actions: [action])
+        
+
     }
+    
 }
 
 
