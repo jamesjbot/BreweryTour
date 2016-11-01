@@ -220,9 +220,7 @@ extension MapViewController : MKMapViewDelegate {
             pinView?.leftCalloutAccessoryView = localButton
             // Set the information icon on the right button
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        } else { // TODO why would I not reformat the pinView no matter what
-            // There is a pinview
-            fatalError()
+        } else { // Reusing an onscreen pin annotation
             pinView!.annotation = annotation
         }
         return pinView
