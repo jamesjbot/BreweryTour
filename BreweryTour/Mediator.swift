@@ -68,11 +68,6 @@ class Mediator : NSManagedObjectDisplayable {
     func registerAsBeersViewer(view: Observer) {
         beersViewer = view
     }
-
-    
-//    func tellBeersViewerToDisplayThis(styleID: String?, breweryID : String?) {
-//        
-//    }
     
     
     func registerAsCategoryView(view: CategoryViewController) {
