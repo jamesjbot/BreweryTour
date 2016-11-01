@@ -42,6 +42,7 @@ class FavoriteBeersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        frc.delegate = self
         print("favorites tab enetered")
     }
     
@@ -64,16 +65,14 @@ class FavoriteBeersViewController: UIViewController {
         request.sortDescriptors = []
         request.predicate = NSPredicate( format: "favorite == YES")
         frc = NSFetchedResultsController(fetchRequest: request,
-                                                              managedObjectContext: (coreDataStack?.persistingContext)!,
-                                                              sectionNameKeyPath: nil,
-                                                              cacheName: nil)
+                                         managedObjectContext: (coreDataStack?.persistingContext)!,
+                                         sectionNameKeyPath: nil,
+                                         cacheName: nil)
         super.init(coder: aDecoder)
     }
     
-    
 
     fileprivate func performFetchOnResultsController(){
-        frc.delegate = self
         // Create a request for Beer objects and fetch the request from Coredata
         do {
             try frc.performFetch()
@@ -95,6 +94,7 @@ class FavoriteBeersViewController: UIViewController {
     }
 }
 
+
 extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -105,11 +105,6 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("didChange called")
-//        for (i,j) in (frc.fetchedObjects?.enumerated())! {
-//            let path = IndexPath(row: i, section: 0)
-//            let direct = frc.object(at: path) as Beer
-//            print("direct: \(direct.beerName), set: \((j as Beer).beerName)")
-//        }
         switch (type){
         case .insert:
             tableView.insertRows(at: [newIndexPath! as IndexPath], with: UITableViewRowAnimation.fade)
@@ -132,8 +127,6 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
         tableView.endUpdates()
         print("finished fetching and reloading table data.")
     }
-    
-    
 }
 
 
@@ -156,19 +149,6 @@ extension FavoriteBeersViewController: UITableViewDataSource {
 }
 
 extension FavoriteBeersViewController : UITableViewDelegate {
-    
-//    @objc(tableView:commitEditingStyle:forRowAtIndexPath:) func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-//        if editingStyle == .delete {
-//            let object = (frc.object(at: indexPath) as Beer)
-//            coreDataStack?.favoritesContext.delete(object)
-//            do {
-//                try coreDataStack?.favoritesContext.save()
-//            } catch {
-//                fatalError("Error deleting row")
-//            }
-//        }
-//    }
-    
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
@@ -198,8 +178,6 @@ extension FavoriteBeersViewController : UITableViewDelegate {
         if tableView.cellForRow(at: indexPath)?.textLabel?.text != frc.object(at: indexPath).beerName {
             fatalError()
         }
-        print("OnScreen name:\(tableView.cellForRow(at: indexPath)?.textLabel?.text)")
-        print("Background name: \(frc.object(at: indexPath).beerName)")
         destinationViewcontroller.beer = frc.object(at: indexPath)
         
         // Segue to view controller
