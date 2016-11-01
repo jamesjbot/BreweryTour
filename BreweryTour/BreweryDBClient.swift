@@ -40,7 +40,8 @@ class BreweryDBClient {
     
     
     // MARK: Functions
-
+    
+    // Download Breweries by *name*
     internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
         let theOutputType = APIQueryOutputTypes.Breweries
         let methodParameters  = [
@@ -202,7 +203,7 @@ class BreweryDBClient {
         }
     }
     
-    
+    // Parse results into objects
     private func parse(response : NSDictionary,
                        querySpecificID : String?,
                        outputType: APIQueryOutputTypes,
@@ -367,11 +368,15 @@ class BreweryDBClient {
             // These number of pages means we can pull in more breweries
             print("numberofpages:\(response["numberOfPages"]) results:\(response["totalResults"])")
             print("We are creating \(breweryArray.count) breweries")
-            if let pagesOfResult = Int((response["numberOfPages"] as? String)!) {
-                
-            } else {
+            guard let pagesOfResult = Int((response["numberOfPages"] as? String)!) else {
                 completion(false, "No results returned")
+                return
             }
+            guard pagesOfResult == 1 else {
+                completion(false, "Too many Breweries match, be more specific")
+                return
+            }
+            
             
             for breweryDict in breweryArray {
                 // All conditions that prevent us from going to the brewery
