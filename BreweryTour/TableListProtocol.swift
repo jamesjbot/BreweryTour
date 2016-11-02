@@ -21,7 +21,7 @@ protocol TableList {
                       searchText : String?) -> UITableViewCell
     func selected(elementAt: IndexPath,
                   searchText: String,
-                  completion: @escaping (_ success: Bool, _ msg: String?) -> Void )
+                  completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) -> AnyObject?
     func searchForUserEntered(searchTerm: String,
                               completion: ((_ success : Bool, _ msg : String?) -> Void)?)
 }

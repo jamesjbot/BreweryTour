@@ -178,7 +178,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     func selected(elementAt: IndexPath,
                   searchText: String,
-                  completion: @escaping (_ success : Bool, _ msg : String?) -> Void ) {
+                  completion: @escaping (_ success : Bool, _ msg : String?) -> Void ) -> AnyObject? {
         // We are only selecting one brewery to display, so we need to remove
         // all the breweries that are currently displayed. And then turn on the selected brewery
         var savedBreweryForDisplay : Brewery!
@@ -192,29 +192,30 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         
         
         // Turn off mustDraw on all breweries that are marked to turn on.
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "mustDraw == true")
-        var stopDrawingTheseBreweries : [Brewery]!
-        do {
-            try stopDrawingTheseBreweries = (coreDataStack?.backgroundContext.fetch(request))! as [Brewery]
-        } catch {
-            fatalError("Failure to query breweries")
-        }
-        print("Completed getting Breweries")
-        // Mark the brewery as must display, the map controller will pull these elements out of the model itself
-        for i in stopDrawingTheseBreweries {
-            i.mustDraw = false
-        }
-        savedBreweryForDisplay.mustDraw = true
-        do {
-            try coreDataStack?.backgroundContext.save()
-        } catch {
-            fatalError()
-        }
+////        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+////        request.sortDescriptors = []
+////        request.predicate = NSPredicate(format: "mustDraw == true")
+////        var stopDrawingTheseBreweries : [Brewery]!
+////        do {
+////            try stopDrawingTheseBreweries = (coreDataStack?.backgroundContext.fetch(request))! as [Brewery]
+////        } catch {
+////            fatalError("Failure to query breweries")
+////        }
+////        print("Completed getting Breweries")
+////        // Mark the brewery as must display, the map controller will pull these elements out of the model itself
+////        for i in stopDrawingTheseBreweries {
+////            i.mustDraw = false
+////        }
+//        savedBreweryForDisplay.mustDraw = true
+//        do {
+//            try coreDataStack?.backgroundContext.save()
+//        } catch {
+//            fatalError()
+//        }
         // TODO need to get all the beers for this brewery
         completion(true, "Success")
         //print("Tell mediator this brewery was selected")
+        return nil
     }
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {

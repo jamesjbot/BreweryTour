@@ -15,6 +15,7 @@ import Foundation
 
 class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
 
+    
     func downloadBeerStyles() {
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
             (success, msg) -> Void in
@@ -27,9 +28,11 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     var observer : Observer!
     
+    
     func registerObserver(view: Observer) {
         observer = view
     }
+    
     
     func searchForUserEntered(searchTerm: String, completion: ( (Bool, String?) -> (Void))?) {
         // Styles are automatically downloaded on start up so searching again will not yield anything new
@@ -104,7 +107,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     }
 
     
-    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool, String?) -> Void ) {
+    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool, String?) -> Void ) -> AnyObject? {
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
         print("Call mediator and notify them that this beer style was selected")
         var style : String
@@ -129,6 +132,6 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style,
                                                              isOrganic: false,
                                                              completion: completion)
-        
+      return nil
     }
 }
