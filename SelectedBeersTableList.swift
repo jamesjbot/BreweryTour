@@ -45,7 +45,6 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
                                          cacheName: nil)
         do {
             try frc.performFetch()
-            //print("Retrieved this many styles \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
