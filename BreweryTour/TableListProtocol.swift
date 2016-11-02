@@ -5,14 +5,15 @@
 //  Created by James Jongsurasithiwat on 10/19/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/** This is the interface file for all view models that back up a table.
+ **/
+
 import Foundation
 import CoreData
 import UIKit
 
 protocol TableList {
     var mediator : NSManagedObjectDisplayable! { get set }
-    //var data : [NSManagedObject] {get set}
-    //var filteredObjects : [NSManagedObject] { get set }
     func getNumberOfRowsInSection(searchText : String?) -> Int
     func filterContentForSearchText(searchText: String) -> [NSManagedObject]
     func cellForRowAt(indexPath : IndexPath,
