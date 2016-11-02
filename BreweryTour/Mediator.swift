@@ -86,7 +86,7 @@ class Mediator : NSManagedObjectDisplayable {
     
     func selected(thisItem: NSManagedObject) {
         passingItem = thisItem
-        print("prior to call: \(passingItem)")
+        print("Mediator setting selectedBeersList prior to call: \(passingItem)")
         selectedBeersList.setSelectedItem(toNSObjectID: passingItem!.objectID)
     }
     

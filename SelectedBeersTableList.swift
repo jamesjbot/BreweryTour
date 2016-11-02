@@ -18,9 +18,9 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
 
     // MARK: Variables
-    
-    var selectedItem : NSManagedObjectID = NSManagedObjectID()
-
+    var allBeersMode : Bool = false
+    var selectedItemID : NSManagedObjectID = NSManagedObjectID()
+    var selectedObject : NSManagedObject! = nil
     private var display : UIViewController!
     
     internal var mediator: NSManagedObjectDisplayable!
@@ -50,42 +50,69 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         }
     }
     
+    
     func setSelectedItem(toNSObjectID : NSManagedObjectID) {
-        selectedItem = toNSObjectID
+        selectedItemID = toNSObjectID
         performFetchRequestFor()
     }
 
+    
+    func toggleAllBeersMode() {
+        allBeersMode = !allBeersMode
+        print("Toggled all beers mode to \(allBeersMode)")
+        performFetchRequestFor()
+        observer.sendNotify(s: "Reload table")
+    }
+    
+    
     func performFetchRequestFor(){
+        print("Perform fetch request called")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
-        if selectedItem is Brewery {
-            request.predicate = NSPredicate(format: "breweryID == %@", (selectedItem as! Brewery).id!)
-        } else if selectedItem is Style {
-            request.predicate = NSPredicate(format: "styleID == %@", (selectedItem as! Style).id!)
+        selectedObject = Mediator.sharedInstance().passingItem
+        switch allBeersMode {
+        case true:
+            print("All beers mode is on")
+            break
+        case false :
+            print("All beers mode is OFF")
+            if selectedObject is Brewery {
+                request.predicate = NSPredicate(format: "breweryID == %@", (selectedObject as! Brewery).id!)
+                print("operating on brewery")
+            } else if selectedObject is Style {
+                request.predicate = NSPredicate(format: "styleID == %@", (selectedObject as! Style).id!)
+                print("operating on style")
+            } else {
+                print("I don't know what this selected item is \(selectedObject)                \(selectedObject is Brewery)")
+            }
+            break
         }
+
         frc = NSFetchedResultsController(fetchRequest : request,
                                          managedObjectContext: persistentContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         do {
             try frc.performFetch()
-            //print("Retrieved this many styles \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
-        
     }
     
     
     func mediatorPerformFetch() {
         performFetchRequestFor()
     }
-    
+  
     
     func getNumberOfRowsInSection(searchText: String?) -> Int {
+        performFetchRequestFor()
+        print("selectedbeerstablelist getnumberof rows called")
         if searchText != "" {
+            print("searched filtered object \(filteredObjects.count)")
             return filteredObjects.count
         } else {
+            print("searched all object \(frc.fetchedObjects?.count)")
             return (frc.fetchedObjects?.count)!
         }
     }

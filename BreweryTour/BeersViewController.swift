@@ -31,27 +31,20 @@ class BeersViewController: UIViewController, Observer {
     
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
         print("Segmented display clicked")
+        selectedBeersTableList.toggleAllBeersMode()
     }
     // MARK: Functions
     
     func sendNotify(s: String) {
+        "Beers View Controller was notified"
         tableView.reloadData()
     }
     
     
-//    private func performFetchOnResultsController(){
-//        
-//        // Create a request for Beer objects and fetch the request from Coredata
-//        do {
-//            try frc.performFetch()
-//        } catch {
-//            fatalError("There was a problem fetching from coredata")
-//        }
-//    }
-    
-    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        tableView.reloadData()
+        print("Called reload data")
         //selectedBeersTableList.registerObserver(view: self)
     }
     
@@ -59,9 +52,9 @@ class BeersViewController: UIViewController, Observer {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
-        // Get information from the mediator as to what we are displaying
-        let managedObject = Mediator.sharedInstance().selectedItem()
         selectedBeersTableList.registerObserver(view: self)
+        // Get information from the mediator as to what we are displaying
+        // let managedObject = Mediator.sharedInstance().selectedItem()
 //        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
 //        request.sortDescriptors = []
 //        
@@ -99,31 +92,25 @@ class BeersViewController: UIViewController, Observer {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-    
-    
-    func showAllBeers() {
-        
-    }
     
 }
 
 
-extension BeersViewController: NSFetchedResultsControllerDelegate {
-    
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-    
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-    }
-    
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-    
-
-}
+//extension BeersViewController: NSFetchedResultsControllerDelegate {
+//    
+//    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//    }
+//    
+//    
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+//    }
+//    
+//    
+//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//    }
+//    
+//
+//}
 
 
 extension BeersViewController: UITableViewDataSource {
