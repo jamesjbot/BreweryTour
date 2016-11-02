@@ -93,23 +93,39 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
-        return [NSManagedObject]()
+        filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
+        return filteredObjects
     }
     
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         if searchText != "" {
             cell.textLabel?.text = (filteredObjects[indexPath.row]).beerName
+            cell.detailTextLabel?.text = (filteredObjects[indexPath.row]).brewer?.name
+            if let data : NSData = (filteredObjects[indexPath.row]).image {
+                let im = UIImage(data: data as Data)
+                cell.imageView?.image = im
+            }
         } else {
             cell.textLabel?.text = (frc.fetchedObjects?[indexPath.row])?.beerName
+            cell.detailTextLabel?.text = frc.fetchedObjects?[indexPath.row].brewer?.name
+            if let data : NSData = (frc.fetchedObjects?[indexPath.row].image) {
+                let im = UIImage(data: data as Data)
+                cell.imageView?.image = im
+            }
         }
         return cell
     }
     
     
-    internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool, String?) -> Void) {
-        print("currently unused")
-        fatalError()
+    internal func selected(elementAt: IndexPath,
+                           searchText: String,
+                           completion:  @escaping (Bool, String?) -> Void) -> AnyObject? {
+        if searchText != "" {
+            return filteredObjects[elementAt.row]
+        } else {
+            return frc.fetchedObjects?[elementAt.row]
+        }
     }
     
     
