@@ -93,6 +93,8 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         availableText.text = "Availability: " + beer.availability!
         
         // Populate beer image if it is in the database
+        // TODO Some beer images not being pulled in Andrimnir / Ale Storm
+        // even though they are shown on the table view in selected beers
         if let data : NSData = (beer.image) {
             let im = UIImage(data: data as Data)
             beerImage.image = im
