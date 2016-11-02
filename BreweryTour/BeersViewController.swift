@@ -27,6 +27,9 @@ class BeersViewController: UIViewController, Observer {
     
     @IBOutlet weak var tableView: UITableView!
     
+    @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
+        print("Segmented display clicked")
+    }
     // MARK: Functions
     
     func sendNotify(s: String) {
