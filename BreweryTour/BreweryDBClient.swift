@@ -171,10 +171,16 @@ class BreweryDBClient {
         }
     }
     
+    // Query for beers with a specific name
+    internal func downloadBeerBy(name: String,
+                                 completion: @escaping (_ success : Bool , _ msg : String? ) -> Void ) {
+        completion(true, "Success")
+    }
+    
     
     // Query for breweries that offer a certain style.
     internal func downloadBreweriesBy(styleID : String, isOrganic : Bool ,
-                                      completion: @escaping (_ success: Bool, _ msg: String?)-> Void ) {
+                                      completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
         let methodParameters  = [
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
             Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,

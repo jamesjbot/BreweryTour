@@ -183,9 +183,23 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
-        // Search not enabled on beers tabs
-        // TODO someday add
-        completion!(false,"Search not enabled on this function")
+        BreweryDBClient.sharedInstance().downloadBeerBy(name: searchTerm) {
+            (success, msg) -> Void in
+            print("Returned from getting brewery")
+            guard success == true else {
+                completion!(success,msg)
+                return
+            }
+            // If the query succeeded repopulate this view model and notify view to update itself.
+            do {
+                try self.frc.performFetch()
+                print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+                completion!(true, "Success")
+            } catch {
+                completion!(false, "Failed Request")
+                fatalError("Fetch failed critcally")
+            }
+        }
     }
     
 }

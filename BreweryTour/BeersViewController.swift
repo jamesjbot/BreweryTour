@@ -96,23 +96,6 @@ class BeersViewController: UIViewController, Observer {
 }
 
 
-//extension BeersViewController: NSFetchedResultsControllerDelegate {
-//    
-//    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//    }
-//    
-//    
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//    }
-//    
-//    
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//    }
-//    
-//
-//}
-
-
 extension BeersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -133,6 +116,7 @@ extension BeersViewController: UITableViewDataSource {
 
 }
 
+
 extension BeersViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -150,6 +134,7 @@ extension BeersViewController : UITableViewDelegate {
     }
 
 }
+
 
 extension BeersViewController : UISearchBarDelegate {
     func searchBar(_: UISearchBar, textDidChange: String){
@@ -185,24 +170,24 @@ extension BeersViewController : UISearchBarDelegate {
         
         // Prompt user should we go search online for the Brewery or style
         // Create action for prompt
-//        func searchOnline(_ action: UIAlertAction) {
-//            activityIndicator.startAnimating()
-//            activeTableList.searchForUserEntered(searchTerm: searchBar.text!) {
-//                (success, msg) -> Void in
-//                self.activityIndicator.stopAnimating()
-//                print("Returned from brewerydbclient")
-//                if success {
-//                    self.styleTable.reloadData()
-//                } else {
-//                    self.displayAlertWindow(title: "Search Failed", msg: msg!)
-//                }
-//            }
-//        }
-//        let action = UIAlertAction(title: "Search Online",
-//                                   style: .default,
-//                                   handler: searchOnline)
-//        displayAlertWindow(title: "Search Online",
-//                           msg: "Cannot find match on device,\nsearch online?",
-//                           actions: [action])
+        func searchOnline(_ action: UIAlertAction) {
+            //activityIndicator.startAnimating()
+            selectedBeersTableList.searchForUserEntered(searchTerm: searchBar.text!) {
+                (success, msg) -> Void in
+                //self.activityIndicator.stopAnimating()
+                print("Returned from brewerydbclient")
+                if success {
+                    self.tableView.reloadData()
+                } else {
+                    self.displayAlertWindow(title: "Search Failed", msg: msg!)
+                }
+            }
+        }
+        let action = UIAlertAction(title: "Search Online",
+                                   style: .default,
+                                   handler: searchOnline)
+        displayAlertWindow(title: "Search Online",
+                           msg: "Cannot find match on device,\nsearch online?",
+                           actions: [action])
     }
 }
