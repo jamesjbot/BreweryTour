@@ -172,9 +172,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
                 return i.objectID
             }
         }
-        // TODO Remove Debug code
-        fatalError("Searching for \(by.title)" )
-        
         return nil
     }
     
