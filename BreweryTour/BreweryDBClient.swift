@@ -329,7 +329,6 @@ class BreweryDBClient {
                 return
             } catch {
                 completion(false, "Failed Request")
-                fatalError("Error saving styles")
                 return
             }
             return
@@ -409,7 +408,7 @@ class BreweryDBClient {
                 print("Brewery Saved to Persisting context")
                 completion(true, "Success")
                 return
-            } catch let error {
+            } catch {
                 completion(false, "Failed Request")
                 return
             }
@@ -680,7 +679,7 @@ class BreweryDBClient {
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
         
         do {
-            if let beer : [Beer] = try context.fetch(request){
+            if let beer : [Beer] = try context.fetch(request) {
                 //This type is in the database
                 guard beer.count > 0 else {
                     return nil}
