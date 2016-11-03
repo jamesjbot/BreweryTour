@@ -15,6 +15,18 @@ import Foundation
 
 class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
 
+    // MARK: Constants
+    
+    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
+
+    // MARK: Variables
+    
+    internal var mediator: NSManagedObjectDisplayable!
+    internal var filteredObjects: [Style] = [Style]()
+    internal var frc : NSFetchedResultsController<Style>!
+    var observer : Observer!
+    
+    // MARK: Functions
     
     func downloadBeerStyles() {
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
@@ -26,9 +38,6 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     }
     
     
-    var observer : Observer!
-    
-    
     func registerObserver(view: Observer) {
         observer = view
     }
@@ -38,13 +47,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         // Styles are automatically downloaded on start up so searching again will not yield anything new
         completion!(false,"There are no more new styles")
     }
-
     
-    internal var mediator: NSManagedObjectDisplayable!
-    internal var filteredObjects: [Style] = [Style]()
-    internal var frc : NSFetchedResultsController<Style>!
-    
-    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
     
     override init(){
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
@@ -55,7 +58,6 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
                                          cacheName: nil)
         do {
             try frc.performFetch()
-            //print("Retrieved this many styles \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
@@ -78,12 +80,10 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("StylesTAbleList didChange")
         observer.sendNotify(s: "Content changed")
-        //Datata = frc.fetchedObjects!
     }
     
     
     func getNumberOfRowsInSection(searchText: String?) -> Int {
-        //print("getNumberofrows on \(searchText)")
         guard searchText == "" else {
             return filteredObjects.count
         }
