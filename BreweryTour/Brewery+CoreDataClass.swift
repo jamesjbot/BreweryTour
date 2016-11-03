@@ -18,17 +18,6 @@ public class Brewery: NSManagedObject {
                      open: Bool?,
                      id: String?,
                      context: NSManagedObjectContext){
-        // Check to make sure we are not already in the database
-//        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-//        request.sortDescriptors = []
-//        request.predicate = NSPredicate(format: "id == \(id)")
-//        do {
-//            let breweries : [Brewery] = try context.fetch(request) as [Brewery]
-//            // This brewery is in the database already
-//            if breweries.count > 0 {return}
-//        } catch {
-//            fatalError()
-//        }
         // Insert new Brewery in database
         let entity = NSEntityDescription.entity(forEntityName: "Brewery", in: context)
         self.init(entity: entity!, insertInto: context)
@@ -42,17 +31,6 @@ public class Brewery: NSManagedObject {
     
     convenience init(inBrewery: Brewery,
                      context: NSManagedObjectContext){
-//        // Check to make sure we are not already in the database
-//        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-//        request.sortDescriptors = []
-//        request.predicate = NSPredicate(format: "id == \(inBrewery.id)")
-//        do {
-//            let breweries : [Brewery] = try context.fetch(request) as [Brewery]
-//            // This brewery is in the database already
-//            if breweries.count > 0 {return}
-//        } catch {
-//            fatalError()
-//        }
         // Insert new Brewery in database
         let entity = NSEntityDescription.entity(forEntityName: "Brewery",
                                                 in: context)
