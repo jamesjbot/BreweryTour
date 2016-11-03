@@ -12,7 +12,7 @@
         <!--Brewery Tour-->
         <scene sceneID="At4-3c-UfP">
             <objects>
-                <viewController title="Brewery Tour" id="RKC-MN-s1K" customClass="CategoryViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Category" title="Brewery Tour" id="RKC-MN-s1K" customClass="CategoryViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="Yu6-64-6UL"/>
                         <viewControllerLayoutGuide type="bottom" id="wrT-1x-h0f"/>
@@ -120,7 +120,7 @@
         <!--Map-->
         <scene sceneID="xjh-Lw-ZkF">
             <objects>
-                <viewController id="kc4-oF-YzA" customClass="MapViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="Map" id="kc4-oF-YzA" customClass="MapViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="ebl-Op-6EE"/>
                         <viewControllerLayoutGuide type="bottom" id="Mkt-qc-S4V"/>
@@ -165,7 +165,7 @@
         <!--Selected Beers-->
         <scene sceneID="KEQ-HI-GM0">
             <objects>
-                <viewController id="CGT-bu-6NU" customClass="BeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SelectedBeers" id="CGT-bu-6NU" customClass="BeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jgl-nB-2cO"/>
                         <viewControllerLayoutGuide type="bottom" id="qHD-Am-IJw"/>
@@ -361,7 +361,7 @@
         <!--Brewery Tour-->
         <scene sceneID="068-UA-gCJ">
             <objects>
-                <navigationController title="Brewery Tour" automaticallyAdjustsScrollViewInsets="NO" id="H0g-oq-XOD" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="BreweryTourNavigationController" title="Brewery Tour" automaticallyAdjustsScrollViewInsets="NO" id="H0g-oq-XOD" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="qaX-sf-HGS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
@@ -379,7 +379,7 @@
         <!--Tab Bar Controller-->
         <scene sceneID="GwX-NA-Dpp">
             <objects>
-                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="aS9-dG-afv" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="TabbarController" automaticallyAdjustsScrollViewInsets="NO" id="aS9-dG-afv" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" id="rvT-cl-HIG">
                         <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
@@ -400,7 +400,7 @@
         <!--Favorite Beers-->
         <scene sceneID="uKn-Pq-Nxn">
             <objects>
-                <viewController title="Favorite Beers" id="aCO-9Y-u6t" customClass="FavoriteBeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FavoriteBeersController" title="Favorite Beers" id="aCO-9Y-u6t" customClass="FavoriteBeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="447-ox-Iue"/>
                         <viewControllerLayoutGuide type="bottom" id="ctK-gV-tlx"/>
@@ -469,7 +469,7 @@
         <!--Favorite Breweries-->
         <scene sceneID="uNa-bO-QQy">
             <objects>
-                <viewController title="Favorite Breweries" id="vMd-lA-jRB" customClass="FavoriteBreweriesViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="FavoriteBreweryController" title="Favorite Breweries" id="vMd-lA-jRB" customClass="FavoriteBreweriesViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="TG5-1t-1Mw"/>
                         <viewControllerLayoutGuide type="bottom" id="MdR-6K-4Gv"/>
