@@ -22,8 +22,6 @@ class CoreDataStack: NSObject {
     internal var persistingContext: NSManagedObjectContext!
     public var backgroundContext : NSManagedObjectContext!
     internal var mainContext: NSManagedObjectContext!
-    internal var favoritesContext: NSManagedObjectContext!
-    
     
     // MARK: - Initializers
     init?(modelName: String) {
@@ -46,10 +44,6 @@ class CoreDataStack: NSObject {
         
         // Create the persistent store coordinator
         mainStoreCoordinator = NSPersistentStoreCoordinator(managedObjectModel: mom)
-        
-        // Create the favorites context
-        favoritesContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        favoritesContext.persistentStoreCoordinator = mainStoreCoordinator
         
         // Create the persisting context
         persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
@@ -137,19 +131,19 @@ extension CoreDataStack {
             request.sortDescriptors = []
             try print("persistent Breweries: \(persistingContext.count(for: request))")
             try print("background Breweries: \(backgroundContext.count(for: request))")
-            try print("favorites Breweries: \(favoritesContext.count(for: request))")
+            //try print("favorites Breweries: \(favoritesContext.count(for: request))")
             
             let brequest : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
             brequest.sortDescriptors = []
             try print("persisting Beers: \(persistingContext.count(for: request))")
             try print("background Beers: \(backgroundContext.count(for: brequest))")
-            try print("favorite Beers: \(favoritesContext.count(for: brequest))")
+            //try print("favorite Beers: \(favoritesContext.count(for: brequest))")
             
             let srequest : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
             srequest.sortDescriptors = []
             try print("persisting Styles: \(persistingContext.count(for: request))")
             try print("background Styles: \(backgroundContext.count(for: srequest))")
-            try print("favorite Styles: \(favoritesContext.count(for: srequest))")
+            //try print("favorite Styles: \(favoritesContext.count(for: srequest))")
             
         } catch {
             
