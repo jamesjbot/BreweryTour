@@ -183,7 +183,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
-        BreweryDBClient.sharedInstance().downloadBeerBy(name: searchTerm) {
+        BreweryDBClient.sharedInstance().downloadBeersBy(name: searchTerm) {
             (success, msg) -> Void in
             print("Returned from getting brewery")
             guard success == true else {
@@ -193,6 +193,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
                 try self.frc.performFetch()
+                self.observer.sendNotify(s: "Reload data")
                 print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
                 completion!(true, "Success")
             } catch {
