@@ -53,28 +53,12 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         }
         
         guard frc.fetchedObjects?.count == 0 else {
-            // We have entries go ahead and display them viewcontroller
-            //completion(true)
-            print("\(#file)\n\(#line)We have Brewery Entries don't fetch from the databse")
+            // We have brewery entries go ahead and display them viewcontroller
             return
         }
         
-        // Here is where i force  the BreweryTableList to go find another brewery
-        fatalError()
-        print("Attempting to get brooklyn brewery")
-        BreweryDBClient.sharedInstance().downloadBreweryBy(name: "brooklyn") {
-            (success) -> Void in
-            print("Returned from getting brewery")
-            do {
-                try self.frc.performFetch()
-                print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
-                //completion(true)
-            } catch {
-                //completion(false)
-                fatalError("Fetch failed critcally")
-            }
-            return
-        }
+        // TODO Do we want to download all the breweries this will take a long time.
+        
 //        if frc.fetchedObjects?.count == 0 {
 //            print("No brewery results going to get them from the database")
 //            // TODO Remove organic we will query the database for it
@@ -134,11 +118,11 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     }
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("Brewery changed object")
+        print("BreweryTableList changed object")
     }
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("Brewery TableList didChange")
+        print("BreweryTableList didChange")
         observer.sendNotify(s: "reload data")
         //Datata = frc.fetchedObjects!
     }
