@@ -58,7 +58,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
     private func initializeFetchAndFetchBreweriesSetIncomingLocations(style : Style){
-        var request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "styleID = %@", style.id!)
         let results : [Beer]!
@@ -70,7 +70,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         // Array to hold breweries
         mappableBreweries = [Brewery]()
         for beer in results {
-            var breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
+            let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
             breweryRequest.sortDescriptors = []
             breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
             do {
@@ -168,7 +168,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             fatalError()
         }
         for i in frc.fetchedObjects! as [Brewery] {
-            print(i.name)
             if i.name! == by.title! {
                 return i.objectID
             }
@@ -209,7 +208,7 @@ extension MapViewController : MKMapViewDelegate {
             breweryObjectID = temp
             // Set the favaorite icon on pin
             let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
-            var localButton = UIButton(type: .contactAdd)
+            let localButton = UIButton(type: .contactAdd)
             var tempImage : UIImage!
             if foundBrewery.favorite == true {
                 tempImage = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
