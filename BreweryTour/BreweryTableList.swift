@@ -22,9 +22,6 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         observer = view
     }
     
-
-
-    
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Brewery] = [Brewery]()
     internal var frc : NSFetchedResultsController<Brewery>!
@@ -102,10 +99,6 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     internal func getListOfBreweries(onlyOrganic : Bool,
                                      completion: @escaping(_ compelte: Bool ) -> Void) {
         // Get all the breweries from coredata
-        
-
-        
-
         // First we see if we already have the styles saved to coredata;
         // if so use the coredata saved styles
         // If we don't have the styles save go query BreweryDB for them.
@@ -183,7 +176,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         // all the breweries that are currently displayed. And then turn on the selected brewery
         var savedBreweryForDisplay : Brewery!
         if searchText == "" {
-            savedBreweryForDisplay = (frc.fetchedObjects?[elementAt.row])! as Brewery
+            savedBreweryForDisplay = (frc.object(at:elementAt)) as Brewery
         } else {
             savedBreweryForDisplay = (filteredObjects[elementAt.row]) as Brewery
         }

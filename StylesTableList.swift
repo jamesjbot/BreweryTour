@@ -101,7 +101,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         if searchText != "" {
             cell.textLabel?.text = (filteredObjects[indexPath.row]).displayName
         } else {
-            cell.textLabel?.text = (frc.fetchedObjects![indexPath.row]).displayName
+            cell.textLabel?.text = (frc.object(at: indexPath ) ).displayName
         }
         return cell
     }
