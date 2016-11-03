@@ -117,14 +117,10 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Here we start initializer for style querying
+        // Here we start initializer for style and brewery querying
         activeTableList = styleList
         styleList.mediator = med
         breweryList.mediator = med
-        
-        
-        // TODO remove test display code
-        coreDataStack?.stateOfAllContexts()
         
         styleList.registerObserver(view: self)
         breweryList.registerObserver(view: self)
@@ -217,8 +213,7 @@ extension CategoryViewController: UISearchBarDelegate {
     }
     
     
-    // TODO calling database for brewery not currently downloaded.
-    // I must get from here to to calling brwery db search for a brewery
+    // Querying BreweryDB for style/brewery not currently downloaded.
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
@@ -227,11 +222,9 @@ extension CategoryViewController: UISearchBarDelegate {
             return
         }
         
-        // Good place to initiate asynchronous call to db
         // If search results are 0 go make a query to the database on the text.
         // If we're searching for breweries
         guard activeTableList.filterContentForSearchText(searchText: searchBar.text!).count == 0 else {
-            // TODO prompt the user maybe they still want to search the database
             return
         }
         
