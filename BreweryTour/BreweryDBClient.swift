@@ -411,7 +411,6 @@ class BreweryDBClient {
                 return
             } catch let error {
                 completion(false, "Failed Request")
-                fatalError("Saving background error \(error)")
                 return
             }
             break
