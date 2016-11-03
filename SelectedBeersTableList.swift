@@ -124,22 +124,25 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
     
     
+    // Configures Tableviewcell for display
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
+        // Set a default image
+        // Depending on what data is shown populate image and text data.
+        var im =  UIImage(named: "Nophoto.png")
         if searchText != "" {
+            if let data : NSData = (filteredObjects[indexPath.row]).image {
+                im = UIImage(data: data as Data)
+            }
             cell.textLabel?.text = (filteredObjects[indexPath.row]).beerName
             cell.detailTextLabel?.text = (filteredObjects[indexPath.row]).brewer?.name
-            if let data : NSData = (filteredObjects[indexPath.row]).image {
-                let im = UIImage(data: data as Data)
-                cell.imageView?.image = im
-            }
         } else {
-            cell.textLabel?.text = (frc.fetchedObjects?[indexPath.row])?.beerName
-            cell.detailTextLabel?.text = frc.fetchedObjects?[indexPath.row].brewer?.name
-            if let data : NSData = (frc.fetchedObjects?[indexPath.row].image) {
-                let im = UIImage(data: data as Data)
-                cell.imageView?.image = im
+            if let data : NSData = (self.frc.object(at: indexPath).image) {
+                im = UIImage(data: data as Data)
             }
+            cell.textLabel?.text = self.frc.object(at: indexPath).beerName
+            cell.detailTextLabel?.text = self.frc.object(at: indexPath).brewer?.name
         }
+        cell.imageView?.image = im
         return cell
     }
     

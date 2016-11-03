@@ -121,9 +121,13 @@ extension BeersViewController: UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        // Get a cell from the tableview and populate with name
+        // Get a cell from the tableview and populate with name, brewery and image if available
         var cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
+        cell.imageView?.image = nil
         cell = selectedBeersTableList.cellForRowAt(indexPath: indexPath, cell: cell, searchText: searchBar.text)
+        DispatchQueue.main.async {
+            cell.setNeedsDisplay()
+        }
         return cell
     }
 
@@ -140,7 +144,6 @@ extension BeersViewController : UITableViewDelegate {
         
         // Push beer information to Detail View Controller
         destinationViewcontroller.beer = beer as! Beer
-
         
         // Segue to view controller
         self.navigationController?.pushViewController(destinationViewcontroller, animated: true)
