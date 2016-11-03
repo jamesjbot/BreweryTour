@@ -159,17 +159,17 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList willchange")
+        print("SelectedBeersTableList willchange")
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("Brewery changed object")
+        print("SelctedBeersTableList changed object")
     }
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("Brewery TableList didChange")
+        print("SelectedBeersTableList didChange")
         //Datata = frc.fetchedObjects!
         // Tell what ever view controller that is registerd to refresh itself from me
         //TODO
