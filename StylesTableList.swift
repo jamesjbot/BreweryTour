@@ -129,7 +129,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         
         // TODO put activity indicator animating here
         // TODO temporary bypass organic swift
-        BreweryDBClient.sharedInstance().downloadBreweriesBy(styleID: style,
+        BreweryDBClient.sharedInstance().downloadBeersBy(styleID: style,
                                                              isOrganic: false,
                                                              completion: completion)
       return nil
