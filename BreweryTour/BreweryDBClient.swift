@@ -248,13 +248,13 @@ class BreweryDBClient {
                     
                     let locDic = locationInfo[0] as! [String : AnyObject]
                     // We can't visit a brewery if it's not open to the public or we don't have coordinates
-                    assert(locDic["latitude"]?.description != "")
-                    assert(locDic["longitude"]?.description != "")
-                    assert(locDic["longitude"] != nil)
-                    assert(locDic["latitude"] != nil)
+                    //assert(locDic["latitude"]?.description != "")
+                    //assert(locDic["longitude"]?.description != "")
+                    //assert(locDic["longitude"] != nil)
+                    //assert(locDic["latitude"] != nil)
                     guard locDic["openToPublic"] as! String == "Y" &&
-                        locDic["latitude"]?.description != "" &&
-                        locDic["longitude"]?.description != "" &&
+                        //locDic["latitude"]?.description != "" &&
+                        //locDic["longitude"]?.description != "" &&
                         locDic["longitude"] != nil &&
                         locDic["latitude"] != nil else {
                             continue beerLoop
@@ -300,22 +300,19 @@ class BreweryDBClient {
             // Styles are saved on the persistingContext because they don't change often.
             // We must have data to process
             guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else {
-                print("Failed to convert")
+                completion(false, "No styles data" )
                 return
             }
             // Check to see if the style is already in coredata then skip, else add
             let request = NSFetchRequest<Style>(entityName: "Style")
             request.sortDescriptors = []
-            print("Style array has this many entries \(styleArrayOfDict.count)")
             for aStyle in styleArrayOfDict {
-                print("astyle \(aStyle)")
                 let localId = aStyle["id"]?.stringValue
                 let localName = aStyle["name"]
                 do {
                     request.predicate = NSPredicate(format: "id = %@", localId!)
                     let results = try coreDataStack?.persistingContext.fetch(request)
                     if (results?.count)! > 0 {
-                        print("This style is already in the database.")
                         continue
                     }
                 } catch {
@@ -543,7 +540,9 @@ class BreweryDBClient {
                                              open: (locDic["openToPublic"] as! String == "Y") ? true : false,
                                              id: locDic["id"]?.description,
                                              context: (coreDataStack?.persistingContext)!)
-                    } else { print("Brewery is in database skipping Brewery creation") }
+                    } else {
+                        //Brewery is in database skipping Brewery creation
+                    }
                     
                     thisBeer = Beer(id: beerid!,
                                     name:beername ?? "Information N/A",
@@ -616,19 +615,8 @@ class BreweryDBClient {
                     fatalError("Saving background error \(error)")
                 }
                 
-                // TODO Save Icons for display
-                if let images = beer["labels"] as? [String : AnyObject],
-                    //let icon = images["icon"] as! String?,
-                    let medium = images["medium"] as! String?  {
-                    thisBeer.imageUrl = medium
-                    let queue = DispatchQueue(label: "Images")
-                    print("Prior to getting image")
-                    queue.async(qos: .utility) {
-                        print("Getting beer label images in background")
-                        self.downloadImageToCoreData(aturl: NSURL(string: thisBeer.imageUrl!)!, forBeer: thisBeer, updateManagedObjectID: thisBeer.objectID)
-                    }
-                }
-                
+                saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer)
+
             }
             break
         }
