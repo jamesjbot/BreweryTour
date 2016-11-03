@@ -128,10 +128,6 @@ extension BeersViewController : UISearchBarDelegate {
             return
         }
         
-        guard selectedBeersTableList.filterContentForSearchText(searchText: searchBar.text!).count == 0 else {
-            return
-        }
-        
         // Prompt user to search online for beer
         // Create action for prompt
         func searchOnline(_ action: UIAlertAction) {
