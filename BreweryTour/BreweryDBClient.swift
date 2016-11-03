@@ -44,82 +44,6 @@ class BreweryDBClient {
     
     // MARK: Functions
     
-    // Download Breweries by *name*
-    internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-        let theOutputType = APIQueryOutputTypes.Breweries
-        let methodParameters  = [
-            "name" : "*\(name)*" as AnyObject,
-            Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
-            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject//,
-            //Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
-        ]
-        let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
-                                                        querySpecificID: nil,
-                                                        parameters: methodParameters)
-        Alamofire.request(outputURL.absoluteString!)
-            .responseJSON {
-                response in
-                guard response.result.isSuccess else {
-                    completion(false, "Failed request")
-                    return
-                }
-                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed request")
-                    return
-                }
-                self.parse(response: responseJSON as NSDictionary,
-                           querySpecificID:  nil,
-                           outputType: theOutputType,
-                           completion: completion)
-                return
-        }
-    }
-    
-    
-    // Downloads all breweries
-//    internal func downloadAllBreweries(isOrganic : Bool , completion: @escaping (_ success: Bool) -> Void ) {
-//        var methodParameters = [String:AnyObject]()
-//        if isOrganic {
-//            methodParameters  = [
-//                Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
-//                Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
-//                Constants.BreweryParameterKeys.Organic : "Y" as AnyObject,
-//                Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
-//            ]
-//        } else {
-//            methodParameters  = [
-//                Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
-//                "name" : "*brewery*" as AnyObject,
-//                Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject//,
-//                //Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
-//            ]
-//        }
-//        
-//        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.Breweries,
-//                                                        querySpecificID: nil,
-//                                                        parameters: methodParameters)
-//        Alamofire.request(outputURL.absoluteString!)
-//            .responseJSON {
-//                response in
-//                guard response.result.isSuccess else {
-//                    print("failed \(response.request?.url)")
-//                    completion(false)
-//                    return
-//                }
-//                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-//                    print("Invalid tag informatiion")
-//                    completion(false)
-//                    return
-//                }
-//                self.parse(response: responseJSON as NSDictionary,
-//                           querySpecificID:  nil,
-//                           outputType: APIQueryOutputTypes.Breweries,
-//                           completion: completion)
-//                return
-//        }
-//    }
-    
-    
     // Downloads Beer Styles
     internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void ) {
         let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject]
@@ -181,8 +105,7 @@ class BreweryDBClient {
             "name" : "*\(name)*" as AnyObject,
             Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
             Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
-            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject//,
-            //Constants.BreweryParameterKeys.HasImages : "Y" as AnyObject
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject
         ]
         let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
                                                         querySpecificID: nil,
@@ -204,7 +127,37 @@ class BreweryDBClient {
                            completion: completion)
                 return
         }
-        //completion(true, "Success")
+    }
+    
+    
+    // Query for breweries with a specific name
+    internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+        let theOutputType = APIQueryOutputTypes.Breweries
+        let methodParameters  = [
+            "name" : "*\(name)*" as AnyObject,
+            Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject//,
+        ]
+        let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
+                                                        querySpecificID: nil,
+                                                        parameters: methodParameters)
+        Alamofire.request(outputURL.absoluteString!)
+            .responseJSON {
+                response in
+                guard response.result.isSuccess else {
+                    completion(false, "Failed request")
+                    return
+                }
+                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                    completion(false, "Failed request")
+                    return
+                }
+                self.parse(response: responseJSON as NSDictionary,
+                           querySpecificID:  nil,
+                           outputType: theOutputType,
+                           completion: completion)
+                return
+        }
     }
     
     
@@ -224,7 +177,6 @@ class BreweryDBClient {
             .responseJSON {
                 response in
                 guard response.result.isSuccess else {
-                    print("failed \(response.request?.url)")
                     completion(false, "Failed Request")
 
                     return
@@ -843,6 +795,7 @@ class BreweryDBClient {
                                          parameters: [String:AnyObject]) -> NSURL {
         // The url currently takes the form of
         // "http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
+        
         let components = NSURLComponents()
         components.scheme = Constants.BreweryDB.APIScheme
         components.host = Constants.BreweryDB.APIHost
@@ -850,6 +803,7 @@ class BreweryDBClient {
         switch queryType {
         case .BeersByName:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
+            break
         case .BeersByStyleID:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
             break
@@ -866,13 +820,9 @@ class BreweryDBClient {
             // GET: /brewery/:breweryId/beers
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery + "/" +
                 querySpecificID! + "/" + Constants.BreweryDB.Methods.Beers
-        default:
-            break
         }
         
-        
         components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
-        
         
         // Build the other parameters
         for (key, value) in parameters {
@@ -881,11 +831,10 @@ class BreweryDBClient {
             components.queryItems?.append(queryItem as URLQueryItem)
         }
         
-        // Add the API Key - QueryItem
+        // Finally Add the API Key - QueryItem
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
         
-        print("Calling url \(components.url)")
         return components.url! as NSURL
     }
 }
