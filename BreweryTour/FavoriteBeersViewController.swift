@@ -16,20 +16,6 @@ import CoreData
 
 class FavoriteBeersViewController: UIViewController {
     
-    // TODO Delete Debugging code
-    // TODO Delete storyboard button as well
-    
-    @IBAction func deleteAll(_ sender: UIBarButtonItem) {
-            let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Beer")
-            let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
-            do {
-                try coreDataStack?.mainStoreCoordinator.execute(batch, with: (coreDataStack?.favoritesContext)!)
-                print("Batch Deleted completed")
-            } catch {
-                fatalError("batchdelete failed")
-            }
-    }
-    
     // MARK: Constants
     
     fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
