@@ -68,17 +68,14 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("StylesTableList willchange")
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("Styles changed object")
     }
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("StylesTAbleList didChange")
         observer.sendNotify(s: "Content changed")
     }
     
@@ -109,7 +106,6 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     internal func selected(elementAt: IndexPath, searchText: String, completion:  @escaping (Bool, String?) -> Void ) -> AnyObject? {
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
-        print("Call mediator and notify them that this beer style was selected")
         var style : String
         if searchText == "" {
             style = frc.fetchedObjects![elementAt.row].id!
@@ -124,14 +120,13 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         } else {
             aStyle = filteredObjects[elementAt.row]
         }
-        //print("Looking for style \(aStyle)")
         mediator.selected(thisItem: aStyle)
         
         // TODO put activity indicator animating here
         // TODO temporary bypass organic swift
         BreweryDBClient.sharedInstance().downloadBeersBy(styleID: style,
-                                                             isOrganic: false,
-                                                             completion: completion)
+                                                         isOrganic: false,
+                                                         completion: completion)
       return nil
     }
 }
