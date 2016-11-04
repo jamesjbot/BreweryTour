@@ -63,7 +63,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="370" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="370" height="43"/>
+                                                    <frame key="frameInset" width="370" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -456,7 +456,7 @@
                             <constraint firstItem="HiO-eH-bPB" firstAttribute="leading" secondItem="f8t-0B-jgo" secondAttribute="leading" id="n5X-br-pG4"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Favorite Beers" image="BeersTabbaricon.png" id="pSD-1f-fdp"/>
+                    <tabBarItem key="tabBarItem" title="Favorite Beers" image="BeersTabbaricon2.png" id="pSD-1f-fdp"/>
                     <navigationItem key="navigationItem" id="3lJ-ad-mkL"/>
                     <connections>
                         <outlet property="tableView" destination="HiO-eH-bPB" id="l7G-Ma-dWd"/>
@@ -538,7 +538,7 @@
         </scene>
     </scenes>
     <resources>
-        <image name="BeersTabbaricon.png" width="75" height="75"/>
+        <image name="BeersTabbaricon2.png" width="75" height="75"/>
         <image name="BreweryTabbarIcon.png" width="50" height="50"/>
         <image name="Nophoto.png" width="200" height="200"/>
         <image name="heart_icon_black_white_line_art.png" width="305" height="287"/>
