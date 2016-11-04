@@ -63,7 +63,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="370" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="370" height="43.5"/>
+                                                    <frame key="frameInset" width="370" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -250,7 +250,7 @@
             </objects>
             <point key="canvasLocation" x="1556" y="680.5097451274363"/>
         </scene>
-        <!--Beer Detail View Controller-->
+        <!--Beer Detail View-->
         <scene sceneID="q91-Un-DBN">
             <objects>
                 <viewController storyboardIdentifier="BeerDetailViewController" id="K9j-j9-NEF" customClass="BeerDetailViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
@@ -335,13 +335,7 @@
                             <constraint firstAttribute="trailing" secondItem="xA2-jK-3bo" secondAttribute="trailing" id="zh1-03-JgC"/>
                         </constraints>
                     </view>
-                    <navigationItem key="navigationItem" id="avz-Qr-qrr">
-                        <barButtonItem key="rightBarButtonItem" systemItem="trash" id="Eje-Al-yyo">
-                            <connections>
-                                <action selector="deleteAll:" destination="K9j-j9-NEF" id="Kte-gm-gaA"/>
-                            </connections>
-                        </barButtonItem>
-                    </navigationItem>
+                    <navigationItem key="navigationItem" title="Beer Detail View" id="avz-Qr-qrr"/>
                     <connections>
                         <outlet property="abv" destination="Lvo-f0-UCc" id="3Fv-ik-4j4"/>
                         <outlet property="availableText" destination="C23-Bf-8WA" id="Eec-Rb-G3n"/>
@@ -413,7 +407,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -482,7 +476,7 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FavoriteCell" textLabel="L0G-7N-7Tr" detailTextLabel="tyv-eG-Ufw" imageView="Isa-JK-NWA" style="IBUITableViewCellStyleSubtitle" id="EPN-e6-10X">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EPN-e6-10X" id="Q1S-to-2h3">
                                             <frame key="frameInset" width="375" height="43"/>
