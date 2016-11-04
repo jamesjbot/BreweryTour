@@ -93,8 +93,6 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         availableText.text = "Availability: " + beer.availability!
         
         // Populate beer image if it is in the database
-        // TODO Some beer images not being pulled in Andrimnir / Ale Storm
-        // even though they are shown on the table view in selected beers
         if let data : NSData = (beer.image) {
             let im = UIImage(data: data as Data)
             beerImage.image = im
@@ -142,13 +140,12 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     // All beers are in the database we just mark their favorite status and tasting notes
     private func saveToBeerInCoreData(makeFavorite: Bool) {
-        // TODO there is an error saveing
         do {
             beer.favorite = makeFavorite
             beer.tastingNotes = tasting.text
             try persistentContext?.save()
         } catch {
-            fatalError("Error adding/saving a beer")
+            displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
         }
     }
     
