@@ -34,7 +34,6 @@ class FavoriteBeersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         frc.delegate = self
-        print("favorites tab enetered")
     }
     
     
@@ -89,13 +88,11 @@ class FavoriteBeersViewController: UIViewController {
 extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("will change called")
         tableView.beginUpdates()
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("didChange called")
         switch (type){
         case .insert:
             tableView.insertRows(at: [newIndexPath! as IndexPath], with: UITableViewRowAnimation.fade)
@@ -116,7 +113,6 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
         performFetchOnResultsController()
         tableView.reloadData()
         tableView.endUpdates()
-        print("finished fetching and reloading table data.")
     }
 }
 
@@ -124,14 +120,12 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
 extension FavoriteBeersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("called favoritesviewcontroller tableviewdatasource number of rows in section \(frc.fetchedObjects?.count)")
         return (frc.fetchedObjects?.count) ?? 0
     }
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name
-        print("Called cell for row at index path \(indexPath)")
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCell", for: indexPath)
         configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
@@ -145,14 +139,12 @@ extension FavoriteBeersViewController : UITableViewDelegate {
         
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
-            print("Action to do when you want to remove")
             let object = self.frc.object(at: indexPath) as Beer
             object.favorite = false
             do {
                 try self.coreDataStack?.persistingContext.save()
             } catch {
-                fatalError("Error deleting row")
-            }
+                self.displayAlertWindow(title: "Remove Error", msg: "Error removing item,\nplease try agains")            }
             tableView.reloadData()
         }
         deleteAction.backgroundColor = UIColor.green
