@@ -52,11 +52,11 @@ class BreweryDBClient {
                                                         parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
             guard response.result.isSuccess else {
-                completionHandler(false,"Failed Request")
+                completionHandler(false,"Failed Request \(#line) \(#function)")
                 return
             }
             guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completionHandler(false, "Failed Request")
+                completionHandler(false, "Failed Request \(#line) \(#function)")
                 return
             }
             self.parse(response: responseJSON as NSDictionary,
@@ -81,11 +81,11 @@ class BreweryDBClient {
                                                         parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
             guard response.result.isSuccess else {
-                completionHandler(false, "Failed Request")
+                completionHandler(false, "Failed Request \(#line) \(#function)")
                 return
             }
             guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completionHandler(false,"Failed Request")
+                completionHandler(false,"Failed Request \(#line) \(#function)")
                 return
             }
             self.parse(response: responseJSON as NSDictionary,
@@ -99,7 +99,7 @@ class BreweryDBClient {
     
     // Query for beers with a specific name
     internal func downloadBeersBy(name: String,
-                                 completion: @escaping (_ success : Bool , _ msg : String? ) -> Void ) {
+                                  completion: @escaping (_ success : Bool , _ msg : String? ) -> Void ) {
         let theOutputType = APIQueryOutputTypes.BeersByName
         let methodParameters  = [
             "name" : "*\(name)*" as AnyObject,
@@ -114,11 +114,11 @@ class BreweryDBClient {
             .responseJSON {
                 response in
                 guard response.result.isSuccess else {
-                    completion(false, "Failed request")
+                    completion(false, "Failed Request \(#line) \(#function)")
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed request")
+                    completion(false, "Failed Request \(#line) \(#function)")
                     return
                 }
                 self.parse(response: responseJSON as NSDictionary,
@@ -145,11 +145,11 @@ class BreweryDBClient {
             .responseJSON {
                 response in
                 guard response.result.isSuccess else {
-                    completion(false, "Failed request")
+                    completion(false, "Failed Request \(#line) \(#function)")
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed request")
+                    completion(false, "Failed Request \(#line) \(#function)")
                     return
                 }
                 self.parse(response: responseJSON as NSDictionary,
@@ -162,7 +162,7 @@ class BreweryDBClient {
     
     
     // Query for breweries that offer a certain style.
-    internal func downloadBreweriesBy(styleID : String, isOrganic : Bool ,
+    internal func downloadBeersBy(styleID : String, isOrganic : Bool ,
                                       completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
         let methodParameters  = [
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
@@ -177,12 +177,12 @@ class BreweryDBClient {
             .responseJSON {
                 response in
                 guard response.result.isSuccess else {
-                    completion(false, "Failed Request")
-
+                    completion(false, "Failed Request \(#line) \(#function)")
+                    
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request")
+                    completion(false, "Failed Request \(#line) \(#function)")
                     return
                 }
                 self.parse(response: responseJSON as NSDictionary,
@@ -208,46 +208,47 @@ class BreweryDBClient {
             // The Keys in this dictionary are [status,data,numberOfPages,currentPage,totalResults]
             // Extracting beer data array of dictionaries
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                completion(false, "Failed Request")
+                completion(false, "Failed Request \(#line) \(#function)")
                 // No beers were returned, which can happen
                 return
             }
             
-            beerLoop: for beer in beerArray {
-                print("---------------------NextBeer---------------------")
-
+            createBeerLoop: for (i,beer) in beerArray.enumerated() {
+                print("---------------------NextBeer---------------------\(i)")
+                
                 // Creating beer
                 print("Check if beer needs to be created")
                 // Check to see if this beer is in the database already
                 var thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
                 // If the beer is in the coredata skip adding it
                 if thisBeer != nil {
-                    continue beerLoop
+                    print("Beer already created \(#line)")
+                    continue createBeerLoop
                 }
-                // Every beer is a dictionary; that also has an array of brewery information
+                // Every beer has an array of brewery information
                 
-                // Create the coredata object for each beer
-                // which will include name, description, availability, brewery name, styleID
-                let beerid : String? = beer["id"] as? String
-                let beername : String? = beer["name"] as? String ?? ""
-                let beerdescription : String? = beer["description"] as? String
-                let beeravailable : String? = beer["available"] as? String
-                let beerabv : String? = beer["abv"] as? String
-                let beeribu : String? = beer["ibu"] as? String
                 // This beer has no brewery information, continue with the next beer
                 guard let breweriesArray = beer["breweries"]  else {
-                    continue beerLoop
+                    print("No breawery information \(#line)")
+                    continue createBeerLoop
                 }
                 
                 for brewery in breweriesArray as! Array<AnyObject> {
                     let breweryDict = brewery as! [String : AnyObject]
                     
+                    // There is no location info to display on the map.
                     guard let locationInfo = breweryDict["locations"] as? NSArray else {
-                        continue
+                        print("No location information \(#line)")
+                        continue createBeerLoop
                     }
                     
                     let locDic = locationInfo[0] as! [String : AnyObject]
                     // We can't visit a brewery if it's not open to the public or we don't have coordinates
+                    // TODO Debug code to catch undesired data.
+                    if locDic["latitude"]?.description == "" ||
+                        locDic["longitude"]?.description == "" {
+                        fatalError()
+                    }
                     //assert(locDic["latitude"]?.description != "")
                     //assert(locDic["longitude"]?.description != "")
                     //assert(locDic["longitude"] != nil)
@@ -257,36 +258,59 @@ class BreweryDBClient {
                         //locDic["longitude"]?.description != "" &&
                         locDic["longitude"] != nil &&
                         locDic["latitude"] != nil else {
-                            continue beerLoop
+                            print("Missing latitude and longitude \(#line)")
+                        continue createBeerLoop
                     }
                     
+                    // Sometimes the breweries have no name, making it useless
+                    guard breweryDict["name"] != nil else {
+                        print("Missing brewery name \(#line)")
+                        continue createBeerLoop
+                    }
+                    
+                    // TODO Debug code
+                    print("Brewery name in client:\(breweryDict["name"]):")
+                    
                     // Check to make sure the brewery is not already in the database
-                    var newBrewery : Brewery!
-                    newBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
-                    if newBrewery == nil { // Create a brewery object
-                        newBrewery = Brewery(inName: breweryDict["name"] as! String,
-                                             latitude: locDic["latitude"]?.description,
-                                             longitude: locDic["longitude"]?.description,
-                                             url: locDic["website"] as! String?,
-                                             open: (locDic["openToPublic"] as! String == "Y") ? true : false,
-                                             id: locDic["id"]?.description,
-                                             context: (coreDataStack?.persistingContext)!)
-                    } else { print("Brewery is in database skipping Brewery creation") }
+                    var dbBrewery : Brewery!
+                    dbBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
+
+                    
+                    if dbBrewery == nil { // Create a brewery object when needed.
+                        print("Creating brewery \(breweryDict["name"])")
+                        dbBrewery = Brewery(inName: breweryDict["name"] as! String,
+                                                 latitude: locDic["latitude"]?.description,
+                                                 longitude: locDic["longitude"]?.description,
+                                                 url: locDic["website"] as! String?,
+                                                 open: (locDic["openToPublic"] as! String == "Y") ? true : false,
+                                                 id: locDic["id"]?.description,
+                                                 context: (coreDataStack?.persistingContext)!)
+                    }
+                    
+                    
+                    // Create elements needed for the beer object
+                    // which will include name, description, availability, brewery name, styleID
+                    let beerid : String? = beer["id"] as? String
+                    let beername : String? = beer["name"] as? String ?? ""
+                    let beerdescription : String? = beer["description"] as? String
+                    let beeravailable : String? = beer["available"] as? String
+                    let beerabv : String? = beer["abv"] as? String
+                    let beeribu : String? = beer["ibu"] as? String
                     
                     thisBeer = Beer(id: beerid!,
                                     name:beername ?? "Information N/A",
                                     beerDescription: beerdescription ?? "Information N/A",
                                     availability: beeravailable ?? "Information N/A",
                                     context: (coreDataStack?.persistingContext!)!)
-                    thisBeer?.breweryID = newBrewery.id
-                    thisBeer?.brewer = newBrewery
+                    thisBeer?.breweryID = dbBrewery.id
+                    thisBeer?.brewer = dbBrewery
                     thisBeer?.styleID = querySpecificID
                     thisBeer?.abv = beerabv ?? "Information N/A"
                     thisBeer?.ibu = beeribu ?? "Information N/A"
                     // Save Icons for Beer
                     saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer!)
                     // Save images for the brewery
-                    saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: newBrewery)
+                    saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: dbBrewery)
                     //savePersitent()
                 } // End of For Brewery
                 // This will save every beer
@@ -328,7 +352,7 @@ class BreweryDBClient {
                 completion(true, "Success")
                 return
             } catch {
-                completion(false, "Failed Request")
+                completion(false, "Failed Request \(#line) \(#function)")
                 return
             }
             return
@@ -409,7 +433,7 @@ class BreweryDBClient {
                 completion(true, "Success")
                 return
             } catch {
-                completion(false, "Failed Request")
+                completion(false, "Failed Request \(#line) \(#function)")
                 return
             }
             break
@@ -476,7 +500,7 @@ class BreweryDBClient {
             // The Keys in this dictionary are [status,data,numberOfPages,currentPage,totalResults]
             // Extracting beer data array of dictionaries
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                completion(false, "Failed Request")
+                completion(false, "Failed Request \(#line) \(#function)")
                 // No beers were returned, which can happen
                 return
             }
@@ -570,8 +594,8 @@ class BreweryDBClient {
             print("Capturing Beers By Brewery")
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 print("Failed to extract data")
-                completion(false, "Failed Request")
-
+                completion(false, "Failed Request \(#line) \(#function)")
+                
                 return
             }
             for beer in beerArray {
@@ -609,12 +633,12 @@ class BreweryDBClient {
                     completion(true, "Success")
                     return
                 } catch let error {
-                    completion(false, "Failed Request")
+                    completion(false, "Failed Request \(#line) \(#function)")
                     fatalError("Saving background error \(error)")
                 }
                 
                 saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer)
-
+                
             }
             break
         }
@@ -693,22 +717,22 @@ class BreweryDBClient {
     
     
     
-    func isElementInDatabase(entityType: String,
-                             id: String,
-                             context: NSManagedObjectContext ) -> Bool {
-        // Check to make sure we are not already in the database
-        let request : NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityType)
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id == \(id)")
-        do {
-            let types : [NSFetchRequestResult] = try context.fetch(request)
-            //This type is in the database
-            return types.count > 0
-        } catch {
-            fatalError()
-        }
-        return false
-    }
+//    func isElementInDatabase(entityType: String,
+//                             id: String,
+//                             context: NSManagedObjectContext ) -> Bool {
+//        // Check to make sure we are not already in the database
+//        let request : NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityType)
+//        request.sortDescriptors = []
+//        request.predicate = NSPredicate(format: "id == \(id)")
+//        do {
+//            let types : [NSFetchRequestResult] = try context.fetch(request)
+//            //This type is in the database
+//            return types.count > 0
+//        } catch {
+//            fatalError()
+//        }
+//        return false
+//    }
     
     
     // Download images in the background then update Coredata when complete
@@ -826,40 +850,3 @@ class BreweryDBClient {
 }
 
 
-extension BreweryDBClient {
-    
-    struct Constants {
-        struct BreweryDB {
-            static let APIScheme = "http"
-            static let APIHost = "api.brewerydb.com"
-            static let APIPath = "/v2/"
-            struct Methods {
-                static let Beers = "beers"
-                static let Breweries = "breweries"
-                static let Brewery = "brewery"
-                static let Styles = "styles"
-                static let Beer = "beer"
-            }
-        }
-        
-        struct BreweryParameterKeys {
-            static let Key = "key"
-            static let Format = "format"
-            static let Organic = "isOrganic"
-            static let StyleID = "styleId"
-            static let WithBreweries = "withBreweries"
-            static let HasImages = "hasImages"
-            static let WithLocations = "withLocations"
-        }
-        
-        struct BreweryParameterValues {
-            static let APIKey = "8e63b90f589c3b3f2001c5e396f5d300"
-            static let FormatJSON = "json"
-        }
-        
-        struct BreweryLocation {
-            var latitude : String
-            var longitude : String
-        }
-    }
-}
