@@ -142,18 +142,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         mapView.showsTraffic = true
         mapView.showsScale = true
     }
-    
-//    fileprivate func findBreweryInCoreData(by : MKAnnotation) -> NSManagedObjectID? {
-//        // Iterate across Brewery object on the map
-//        for i in mappableBreweries {
-//            if i.name == by.title! {
-//                print("found brewery in coredata")
-//                return i.objectID
-//            }
-//        }
-//        return nil
-//    }
-    
+
     
     // Find breweries
     fileprivate func findBreweryinPersistentContext(by: MKAnnotation) -> NSManagedObjectID? {
@@ -198,13 +187,12 @@ extension MapViewController : MKMapViewDelegate {
             // Format annotation callouts here
             pinView?.tintColor = UIColor.red
             pinView?.canShowCallout = true
-            // TODO test code remove
-            var breweryObjectID : NSManagedObjectID!
-            let temp : NSManagedObjectID = findBreweryinPersistentContext(by: annotation)!
-            assert(temp != nil)
-            breweryObjectID = temp
-            // Set the favaorite icon on pin
+
+            // Find the brewery in the proper context
+            let breweryObjectID : NSManagedObjectID! = findBreweryinPersistentContext(by: annotation)!
             let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
+            
+            // Set the favorite icon on pin
             let localButton = UIButton(type: .contactAdd)
             var tempImage : UIImage!
             if foundBrewery.favorite == true {
@@ -244,9 +232,8 @@ extension MapViewController : MKMapViewDelegate {
                 let quickestRoute : MKRoute = routeResponse.sorted(by: {$0.expectedTravelTime < $1.expectedTravelTime})[0]
                 self.displayRouteOnMap(route: quickestRoute)
             } else {
-                // TODO prompt with a warning window
-                print("There are no routes avaialble")
-            }
+                // Prompt with a warning window
+                self.displayAlertWindow(title: "No Routes", msg: "There are no routes available.")            }
         }
         
     }
@@ -324,61 +311,6 @@ extension MapViewController : MKMapViewDelegate {
         }
     }
     
-//    func veriftyFavoriteStatus(){
-//        let thirdrequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-//        thirdrequest.sortDescriptors = []
-//        //request.predicate = NSPredicate(format: "favorite = %@", "YES")
-//        // Create a request for Brewery objects and fetch the request from Coredata
-//        do {
-//            let results = try coreDataStack?.persistingContext.fetch(thirdrequest)
-//            print("Tertiary way to check breweries matches")
-//            for i in results! as [Brewery] {
-//                if i.favorite == true {
-//                    print("<------ What the hell is this")
-//                }
-//                print("\(i.name):\(i.favorite)")
-//            }
-//        } catch {
-//            fatalError("There was a problem fetching from coredata")
-//        }
-//        
-//        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-//        request.sortDescriptors = []
-//        request.predicate = NSPredicate(format: "favorite = %@", "YES")
-//        let frc = NSFetchedResultsController(fetchRequest: request,
-//                                         managedObjectContext: (coreDataStack?.persistingContext)!,
-//                                         sectionNameKeyPath: nil,
-//                                         cacheName: nil)
-//        // Create a request for Brewery objects and fetch the request from Coredata
-//        do {
-//            try frc.performFetch()
-//            for i in frc.fetchedObjects! as [Brewery] {
-//                print("The favorite objects are \(i.name) \(i.favorite)")
-//            }
-//        } catch {
-//            fatalError("There was a problem fetching from coredata")
-//        }
-//        
-//        let secondrequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-//        secondrequest.sortDescriptors = []
-//        //request.predicate = NSPredicate(format: "favorite = %@", "YES")
-//        // Create a request for Brewery objects and fetch the request from Coredata
-//        do {
-//            let results = try coreDataStack?.persistingContext.fetch(secondrequest)
-//            print("Secondary way to check breweries matches")
-//            for i in results! as [Brewery] {
-//                if i.favorite == true {
-//                    print("<------ What the hell is this")
-//                }
-//                print("\(i.name):\(i.favorite)")
-//            }
-//        } catch {
-//            fatalError("There was a problem fetching from coredata")
-//        }
-//        
-//        print("There are this many favorites \(frc.fetchedObjects?.count)")
-//        
-//    }
     
     // Render the route line
     internal func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
@@ -399,11 +331,6 @@ extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         CLGeocoder().reverseGeocodeLocation(locations.last!){
             (placemarks, error) -> Void in
-//            if let placemarks = placemarks {
-//                let placemark = placemarks[0]
-//                // Here is the placemark for the user's location
-//                let userMapItem = MKMapItem(placemark: MKPlacemark(coordinate: placemark.location!.coordinate, addressDictionary: placemark.addressDictionary as! [String:AnyObject]?))
-//            }
         }
     }
     
