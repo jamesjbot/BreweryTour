@@ -47,7 +47,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         
         do {
             try frc.performFetch()
-            //print("Retrieved this many styles \(frc.fetchedObjects?.count)")
+            print("Retrieved this many styles \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
@@ -117,9 +117,11 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         print("BreweryTableList willchange")
     }
     
+    
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("BreweryTableList changed object")
     }
+    
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("BreweryTableList didChange")
@@ -128,26 +130,48 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     }
     
     
+    func temporaryFetchData(){
+        do {
+            try frc.performFetch()
+            print("Retrieved this many styles \(frc.fetchedObjects?.count)")
+        } catch {
+            fatalError()
+        }
+    }
+    
+    
     func getNumberOfRowsInSection(searchText: String?) -> Int {
-        //print("getNumberofrows on \(searchText)")
+        temporaryFetchData()
+        print("\(#function) getNumberofrows on \(searchText)")
         guard searchText == "" else {
+            print("\(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
+        print("\(#function) fetched objects count \(frc.fetchedObjects?.count)")
         return frc.fetchedObjects!.count
     }
     
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
+        // Debugging code because breweries with a nil name are leadking thru
+        assert((frc.fetchedObjects?.count)! > 0)
+        print("\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
+        for i in frc.fetchedObjects! {
+            print("Brewery name: \(i.name) \(i.id)")
+            assert(i.name != nil)
+        }
+        
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
         //print("we updated the filtered contents to \(filteredObjects.count)")
         return filteredObjects
     }
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        if searchText != "" {
-            //print("size:\(filteredObjects.count) want:\(indexPath.row) ")
-            cell.textLabel?.text = (filteredObjects[indexPath.row]).name
-        } else {
-            cell.textLabel?.text = (frc.fetchedObjects![indexPath.row]).name
+        DispatchQueue.main.async {
+            if searchText != "" {
+                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name
+            } else {
+                cell.textLabel?.text = (self.frc.fetchedObjects![indexPath.row]).name
+            }
         }
         return cell
     }
