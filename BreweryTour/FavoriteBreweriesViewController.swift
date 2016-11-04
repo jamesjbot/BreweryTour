@@ -31,16 +31,13 @@ class FavoriteBreweriesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("favorites tab enetered")
         frc.delegate = self
         // Do any additional setup after loading the view.
         performFetchOnResultsController()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print("FavoriteBreweries view will appear called")
         super.viewWillAppear(animated)
-        print("Fetching breweries")
         performFetchOnResultsController()
         tableView.reloadData()
     }
@@ -76,14 +73,11 @@ class FavoriteBreweriesViewController: UIViewController {
         // Create a request for Brewery objects and fetch the request from Coredata
         do {
             try frc.performFetch()
-            print("Number of favorite breweries returned \(frc.fetchedObjects?.count)")
         } catch {
-            fatalError("There was a problem fetching from coredata")
+            displayAlertWindow(title: "Read Coredata", msg: "Error reading local device\nplease try again")
         }
-        print("While direct fetch shows")
         do {
             let results = try coreDataStack?.persistingContext.fetch(request)
-            print("Direct fetch results says \(results?.count)")
         } catch {
             fatalError()
         }
@@ -94,13 +88,9 @@ class FavoriteBreweriesViewController: UIViewController {
         guard let selectedObject = frc.object(at: indexPath as IndexPath) as Brewery? else { fatalError("Unexpected Object in FetchedResultsController") }
         // Populate cell from the NSManagedObject instance
         cell.textLabel?.text = selectedObject.name!
-        // TODO please remove this is temporary so I can see the id
-        cell.detailTextLabel?.text = "edited(\(selectedObject.id))"
-        //cell.detailTextLabel?.text = selectedObject.brewer?.name
         if let data : NSData = (selectedObject.image) {
             let im = UIImage(data: data as Data)
             cell.imageView?.image = im
-            print("the output size will be \(cell.imageView?.frame.size)")
         }
     }
 }
@@ -108,26 +98,21 @@ class FavoriteBreweriesViewController: UIViewController {
 extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("=========>will change called")
         tableView.beginUpdates()
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("=========>didChange called")
         switch (type){
         case .insert:
-            print("======> Insert called")
             tableView.insertRows(at: [newIndexPath! as IndexPath], with: UITableViewRowAnimation.fade)
             break
         case .delete:
-            print("=======> Delete called")
             tableView.deleteRows(at: [indexPath! as IndexPath], with: UITableViewRowAnimation.fade)
             break
         case .move:
             break
         case .update:
-            print("=======> Update called")
             configureCell(cell: tableView.cellForRow(at: indexPath!)!, indexPath: indexPath! as NSIndexPath)
             break
         }
@@ -137,7 +122,6 @@ extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         tableView.endUpdates()
         tableView.reloadData()
-        print("finished")
     }
 }
 
@@ -145,9 +129,6 @@ extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
 extension FavoriteBreweriesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("called favoritesviewcontroller \(frc.fetchedObjects?.count)")
-        assert(frc != nil)
-        assert(frc.fetchedObjects != nil)
         performFetchOnResultsController()
         return (frc.fetchedObjects?.count)!
     }
@@ -168,13 +149,12 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
         
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
-            print("Action to do when you want to remove")
             let object = self.frc.object(at: indexPath) as Brewery
             object.favorite = false
             do {
                 try self.coreDataStack?.persistingContext.save()
             } catch {
-                fatalError("Error deleting row")
+                self.displayAlertWindow(title: "Error Removing", msg: "Error removing item\nplease try again")
             }
             tableView.reloadData()
         }
