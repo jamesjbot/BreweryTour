@@ -47,7 +47,6 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         
         do {
             try frc.performFetch()
-            print("Retrieved this many styles \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
@@ -57,60 +56,8 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             return
         }
         
-        // TODO Do we want to download all the breweries this will take a long time.
-        
-//        if frc.fetchedObjects?.count == 0 {
-//            print("No brewery results going to get them from the database")
-//            // TODO Remove organic we will query the database for it
-//            BreweryDBClient.sharedInstance().downloadAllBreweries(isOrganic: false){
-//                (success) -> Void in
-//                if success {
-//                    print("Database succeeded populating")
-//                    do {
-//                        try self.frc.performFetch()
-//                        //self.listOfBreweries = frc.fetchedObjects! as [Brewery]
-//                        print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
-//                        //completion(true)
-//                    } catch {
-//                        //completion(false)
-//                        fatalError("Fetch failed critcally")
-//                    }
-//                }
-//            }
-//        }
     }
     
-    internal func getListOfBreweries(onlyOrganic : Bool,
-                                     completion: @escaping(_ compelte: Bool ) -> Void) {
-        // Get all the breweries from coredata
-        // First we see if we already have the styles saved to coredata;
-        // if so use the coredata saved styles
-        // If we don't have the styles save go query BreweryDB for them.
-        //        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        //        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        //        fetchedResultsController = NSFetchedResultsController(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult>, managedObjectContext: (coreDataStack?.backgroundContext)!, sectionNameKeyPath: nil, cacheName: nil)
-        //        fetchedResultsController.delegate = self
-        //        do {
-        //            try fetchedResultsController.performFetch()
-        //            print("Fetch breweries complete \(fetchedResultsController.fetchedObjects?.count)")
-        //
-        //        } catch {
-        //            fatalError("Fetch failed critcally")
-        //        }
-        
-        // This was already dont
-        // If fetch did not return any items query the REST Api
-        //        if fetchedResultsController.fetchedObjects?.count == 0 {
-        //            breweryDB.downloadBeerStyles() {
-        //                (success) -> Void in
-        //                if success {
-        //                    // TODO this might not be needed anymore
-        //                    //self.styleTable.reloadData()
-        //                    // Now that the delegate is properly hooked up
-        //                }
-        //            }
-        //        }
-    }
     
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -141,8 +88,9 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     
     func getNumberOfRowsInSection(searchText: String?) -> Int {
+        // If we batch delete in the background frc will not retrieve delete results. 
+        //Fetch data because when we use the on screen segemented display to switch to this it will not display, because of the back delete.
         temporaryFetchData()
-        print("\(#function) getNumberofrows on \(searchText)")
         guard searchText == "" else {
             print("\(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
@@ -191,28 +139,6 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         // Tell mediator about the brewery I want to display
         mediator.selected(thisItem: savedBreweryForDisplay)
         
-        
-        // Turn off mustDraw on all breweries that are marked to turn on.
-////        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-////        request.sortDescriptors = []
-////        request.predicate = NSPredicate(format: "mustDraw == true")
-////        var stopDrawingTheseBreweries : [Brewery]!
-////        do {
-////            try stopDrawingTheseBreweries = (coreDataStack?.backgroundContext.fetch(request))! as [Brewery]
-////        } catch {
-////            fatalError("Failure to query breweries")
-////        }
-////        print("Completed getting Breweries")
-////        // Mark the brewery as must display, the map controller will pull these elements out of the model itself
-////        for i in stopDrawingTheseBreweries {
-////            i.mustDraw = false
-////        }
-//        savedBreweryForDisplay.mustDraw = true
-//        do {
-//            try coreDataStack?.backgroundContext.save()
-//        } catch {
-//            fatalError()
-//        }
         // TODO need to get all the beers for this brewery
         completion(true, "Success")
         //print("Tell mediator this brewery was selected")
@@ -223,7 +149,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         print("searchForuserEntered beer called")
         BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
             (success, msg) -> Void in
-            print("Returned from getting brewery")
+            print("BreweryTableList Returned from BreweryDBClient")
             guard success == true else {
                 completion!(success,msg)
                 return
@@ -231,11 +157,10 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
                 try self.frc.performFetch()
-                print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+                print("BreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
                 completion!(true, "Success")
             } catch {
                 completion!(false, "Failed Request")
-                fatalError("Fetch failed critcally")
             }
         }
     }
