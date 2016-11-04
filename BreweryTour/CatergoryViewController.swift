@@ -31,10 +31,10 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
         do {
             try coreDataStack?.mainStoreCoordinator.execute(batch, with: (coreDataStack?.persistingContext)!)
-            print("Batch Deleted completed")
         } catch {
             fatalError("batchdelete failed")
         }
+        tableView(styleTable, numberOfRowsInSection: 0)
     }
     
     
@@ -169,9 +169,8 @@ extension CategoryViewController : UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        var retVal : Int!
-        retVal = activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
-        return retVal
+        return activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
+        
     }
 }
 
@@ -222,12 +221,6 @@ extension CategoryViewController: UISearchBarDelegate {
             return
         }
         
-        // If search results are 0 go make a query to the database on the text.
-        // If we're searching for breweries
-        guard activeTableList.filterContentForSearchText(searchText: searchBar.text!).count == 0 else {
-            return
-        }
-        
         // Prompt user should we go search online for the Brewery or style
         // Create action for prompt
         func searchOnline(_ action: UIAlertAction){
@@ -235,7 +228,6 @@ extension CategoryViewController: UISearchBarDelegate {
             activeTableList.searchForUserEntered(searchTerm: searchBar.text!) {
                 (success, msg) -> Void in
                 self.activityIndicator.stopAnimating()
-                print("Returned from brewerydbclient")
                 if success {
                     self.styleTable.reloadData()
                 } else {
