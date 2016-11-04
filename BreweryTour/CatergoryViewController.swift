@@ -151,7 +151,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // Changes the navigation bar to show user they can go back to categories screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        navigationController?.navigationBar.topItem?.title = "Style/Brewery Select"
+        navigationController?.navigationBar.topItem?.title = "Style/Brewery"
     }
 }
 
