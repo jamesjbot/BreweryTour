@@ -430,28 +430,10 @@ class BreweryDBClient {
                                             context: (coreDataStack?.persistingContext)!)
                     }
                     
+                    createBeerObject(beer: beer)
                     
-                    // Create elements needed for the beer object
-                    // which will include name, description, availability, brewery name, styleID
-                    let beerid : String? = beer["id"] as? String
-                    let beername : String? = beer["name"] as? String ?? ""
-                    let beerdescription : String? = beer["description"] as? String
-                    let beeravailable : String? = beer["available"] as? String
-                    let beerabv : String? = beer["abv"] as? String
-                    let beeribu : String? = beer["ibu"] as? String
-                    
-                    thisBeer = Beer(id: beerid!,
-                                    name:beername ?? "Information N/A",
-                                    beerDescription: beerdescription ?? "Information N/A",
-                                    availability: beeravailable ?? "Information N/A",
-                                    context: (coreDataStack?.persistingContext!)!)
-                    thisBeer?.breweryID = dbBrewery.id
-                    thisBeer?.brewer = dbBrewery
-                    thisBeer?.styleID = querySpecificID
-                    thisBeer?.abv = beerabv ?? "Information N/A"
-                    thisBeer?.ibu = beeribu ?? "Information N/A"
                     // Save Icons for Beer
-                    saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer!)
+                    saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer!)
                     // Save images for the brewery
                     saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: dbBrewery)
                     //savePersitent()
@@ -509,10 +491,7 @@ class BreweryDBClient {
                 completion!(false, "No results returned")
                 return
             }
-            guard pagesOfResult == 1 else {
-                completion!(false, "Too many Breweries match, be more specific")
-                return
-            }
+
             guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
                 //Unable to parse Brewery Failed to extract data, there was no data component
                 completion!(false, "Network error please try again")
@@ -638,8 +617,8 @@ class BreweryDBClient {
                 return
             }
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                completion!(false, "Failed Request \(#line) \(#function)")
                 // No beers were returned, which can happen
+                completion!(false, "Failed Request \(#line) \(#function)")
                 return
             }
             
@@ -693,7 +672,7 @@ class BreweryDBClient {
                                       breweryID: newBrewery.id!,
                                       completion: completion!)
                     // Save Icons for Beer
-                    saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer)
+                    saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
                     // Save images for the brewery
                     saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: newBrewery)
                     //savePersitent()
@@ -729,7 +708,7 @@ class BreweryDBClient {
                                     breweryID: querySpecificID!,
                                     completion: completion!)
                 
-                saveBeerImageIfPossible(imagesDict: beer["labels"] as AnyObject, beer: thisBeer)
+                saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
             }
             break
         }
@@ -770,7 +749,6 @@ class BreweryDBClient {
             available = verbage
         }
         
-        
         let thisBeer = Beer(id: id!, name: name!,
                             beerDescription: description!,
                             availability: available!,
@@ -781,8 +759,8 @@ class BreweryDBClient {
         return thisBeer
     }
     
-    func saveBeerImageIfPossible(imagesDict: AnyObject , beer: Beer){
-        if let images : [String:AnyObject] = imagesDict as? [String:AnyObject],
+    func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer){
+        if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
             let medium = images["medium"] as! String?  {
             beer.imageUrl = medium
             let queue = DispatchQueue(label: "Images")
