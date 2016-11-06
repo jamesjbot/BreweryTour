@@ -410,14 +410,9 @@ class BreweryDBClient {
                         fatalError()
                     }
                     
-                    
-                    // TODO Debug code
-                    print("BreweryDBClient Brewery name in client:\(breweryDict["name"]):")
-                    
                     // Check to make sure the brewery is not already in the database
                     var dbBrewery : Brewery!
                     dbBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
-                    
                     
                     if dbBrewery == nil { // Create a brewery object when needed.
                         print("Creating brewery \(breweryDict["name"])")
@@ -431,12 +426,10 @@ class BreweryDBClient {
                     }
                     
                     createBeerObject(beer: beer)
-                    
                     // Save Icons for Beer
                     saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer!)
                     // Save images for the brewery
                     saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: dbBrewery)
-                    //savePersitent()
                 } // End of For Brewery
                 // This will save every beer
                 
