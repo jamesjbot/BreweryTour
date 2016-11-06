@@ -21,9 +21,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" distribution="equalSpacing" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi">
+                            <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi">
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="lastBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="1R7-fH-Aau">
+                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="1R7-fH-Aau">
                                         <subviews>
                                             <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="x2f-9h-2Hz">
                                                 <subviews>
@@ -50,13 +50,13 @@
                                             </stackView>
                                         </subviews>
                                     </stackView>
-                                    <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Select Style Below or Search here" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
+                                    <searchBar contentMode="redraw" verticalHuggingPriority="240" searchBarStyle="minimal" placeholder="Select Style Below or Search here" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
                                         <textInputTraits key="textInputTraits"/>
                                         <connections>
                                             <outlet property="delegate" destination="RKC-MN-s1K" id="1dR-s0-Mir"/>
                                         </connections>
                                     </searchBar>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="759" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="300" verticalCompressionResistancePriority="759" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="genericTypeCell" id="kaU-Em-b0H">
@@ -78,6 +78,11 @@
                                     <constraint firstItem="OSH-8A-abx" firstAttribute="width" secondItem="FTn-Tc-4mi" secondAttribute="width" id="DxO-jS-vSs"/>
                                     <constraint firstItem="OSH-8A-abx" firstAttribute="height" secondItem="FTn-Tc-4mi" secondAttribute="height" multiplier="0.85" id="N5X-9z-QaA"/>
                                 </constraints>
+                                <variation key="default">
+                                    <mask key="constraints">
+                                        <exclude reference="N5X-9z-QaA"/>
+                                    </mask>
+                                </variation>
                             </stackView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bpZ-cN-Rf5"/>
                         </subviews>
@@ -176,7 +181,7 @@
                         <subviews>
                             <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="GXl-K7-CVw">
                                 <subviews>
-                                    <segmentedControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="fill" contentVerticalAlignment="fill" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qRp-gV-DlY">
+                                    <segmentedControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qRp-gV-DlY">
                                         <segments>
                                             <segment title="Selected"/>
                                             <segment title="All"/>
@@ -191,7 +196,7 @@
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="300" verticalCompressionResistancePriority="800" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7fx-me-ez9">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
-                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerCell" textLabel="F2c-bs-Vb5" detailTextLabel="A3i-fU-GAB" imageView="Co2-DY-qqn" style="IBUITableViewCellStyleSubtitle" id="Tcx-Kc-hK0">
+                                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="BeerCell" textLabel="F2c-bs-Vb5" detailTextLabel="A3i-fU-GAB" imageView="Co2-DY-qqn" style="IBUITableViewCellStyleSubtitle" id="Tcx-Kc-hK0">
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tcx-Kc-hK0" id="AcN-pE-EtA">
@@ -232,7 +237,7 @@
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="GXl-K7-CVw" secondAttribute="trailing" id="9s1-EP-FZl"/>
-                            <constraint firstAttribute="bottomMargin" secondItem="GXl-K7-CVw" secondAttribute="bottom" id="kLi-Tx-oOb"/>
+                            <constraint firstItem="qHD-Am-IJw" firstAttribute="top" secondItem="GXl-K7-CVw" secondAttribute="bottom" id="aA4-bD-3Du"/>
                             <constraint firstItem="GXl-K7-CVw" firstAttribute="leading" secondItem="79S-bs-Ki0" secondAttribute="leading" id="obb-Tg-flP"/>
                             <constraint firstItem="GXl-K7-CVw" firstAttribute="top" secondItem="jgl-nB-2cO" secondAttribute="bottom" id="ph1-25-X4E"/>
                         </constraints>
@@ -277,6 +282,11 @@
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Availability:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C23-Bf-8WA">
+                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Style:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L8O-9W-M7W">
                                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
@@ -345,6 +355,7 @@
                         <outlet property="breweryName" destination="J1x-Yv-uwY" id="T2q-QP-dgm"/>
                         <outlet property="favoriteButton" destination="SnN-Ct-3WX" id="UDk-E0-fmR"/>
                         <outlet property="ibu" destination="wYK-0U-iDb" id="iOg-Dz-4hE"/>
+                        <outlet property="style" destination="L8O-9W-M7W" id="sk1-m5-k9i"/>
                         <outlet property="tasting" destination="UOG-ID-3ve" id="ryl-ta-fpR"/>
                     </connections>
                 </viewController>
@@ -406,7 +417,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HiO-eH-bPB">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
                                         <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
@@ -475,7 +486,7 @@
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MTM-AV-wIe">
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FavoriteCell" textLabel="L0G-7N-7Tr" detailTextLabel="tyv-eG-Ufw" imageView="Isa-JK-NWA" style="IBUITableViewCellStyleSubtitle" id="EPN-e6-10X">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FavoriteCell" textLabel="L0G-7N-7Tr" detailTextLabel="tyv-eG-Ufw" imageView="Isa-JK-NWA" style="IBUITableViewCellStyleSubtitle" id="EPN-e6-10X">
                                         <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EPN-e6-10X" id="Q1S-to-2h3">
