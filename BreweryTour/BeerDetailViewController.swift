@@ -41,6 +41,8 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     @IBOutlet weak var abv: UILabel!
     
+    @IBOutlet weak var style: UILabel!
+    
     @IBOutlet weak var ibu: UILabel!
     
     @IBOutlet weak var beerDescriptionTextView: UITextView!
@@ -110,11 +112,25 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
             favoriteIcon = UIImage(named: "heart_icon_black_white_line_art.png")
         }
         favoriteButton.setImage(favoriteIcon, for: .normal)
-        
-        abv.text = "ABV:" + beer.abv!
-        ibu.text = "IBU:" + beer.ibu!
+        style.text = "Style:" + getStyleName(id: beer.styleID!)
+        abv.text = "ABV:" + beer.abv! ?? ""
+        ibu.text = "IBU:" + beer.ibu! ?? ""
     }
 
+    
+    private func getStyleName(id : String) -> String {
+        let request = NSFetchRequest<Style>(entityName: "Style")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format : "id = %@", id )
+        do {
+            let result = try persistentContext?.fetch(request)
+            return result![0].displayName!
+        } catch {
+            // StyleID not in database.
+            return ""
+        }
+    }
+    
     
     private func searchForBeerInCoreData() -> Beer? {
         // Check to make sure the Beer isn't already in the database
