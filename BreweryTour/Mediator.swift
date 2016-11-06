@@ -79,9 +79,9 @@ class Mediator : NSManagedObjectDisplayable {
         mapViewer = view
     }
     
-    func selectedItem() -> NSManagedObject? {
-        return passingItem
-    }
+//    func getSelectedItem() -> NSManagedObject? {
+//        return passingItem
+//    }
     
     
     func selected(thisItem: NSManagedObject) {
