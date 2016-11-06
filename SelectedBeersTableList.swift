@@ -53,6 +53,18 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     func setSelectedItem(toNSObjectID : NSManagedObjectID) {
         selectedItemID = toNSObjectID
+        // Is passing object id still needed?
+        let object = Mediator.sharedInstance().passingItem
+        //change object id in to object
+        //then get stuff
+        // TODO fetch all the beers for this object
+        //if toNSObjectID\
+        if object is Brewery {
+            BreweryDBClient.sharedInstance().downloadBeersBy(brewery: object as! Brewery) {
+                (success,msg) -> Void in
+                self.performFetchRequestFor()
+            }
+        }
         performFetchRequestFor()
     }
 
@@ -83,7 +95,8 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
                 request.predicate = NSPredicate(format: "styleID == %@", (selectedObject as! Style).id!)
                 print("operating on style")
             } else {
-                print("I don't know what this selected item is \(selectedObject)                \(selectedObject is Brewery)")
+                print("All beers mode again default")
+                break
             }
             break
         }
@@ -185,7 +198,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
         BreweryDBClient.sharedInstance().downloadBeersBy(name: searchTerm) {
             (success, msg) -> Void in
-            print("Returned from getting brewery")
+            print("Returned from getting beers")
             guard success == true else {
                 completion!(success,msg)
                 return
@@ -194,7 +207,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
             do {
                 try self.frc.performFetch()
                 self.observer.sendNotify(s: "Reload data")
-                print("Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+                print("Saved this many beers in model \(self.frc.fetchedObjects?.count)")
                 completion!(true, "Success")
             } catch {
                 completion!(false, "Failed Request")

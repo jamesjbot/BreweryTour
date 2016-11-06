@@ -96,9 +96,9 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         if searchText != "" {
-            cell.textLabel?.text = (filteredObjects[indexPath.row]).displayName
+            cell.textLabel?.text = (filteredObjects[indexPath.row]).id! + (filteredObjects[indexPath.row]).displayName!
         } else {
-            cell.textLabel?.text = (frc.object(at: indexPath ) ).displayName
+            cell.textLabel?.text = (frc.object(at: indexPath ) ).id! + (frc.object(at: indexPath ) ).displayName!
         }
         return cell
     }
@@ -114,6 +114,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         }
         
         // Tell mediator this is the style I want to display
+        // Then mediator will tell selectedBeersList what to display.
         var aStyle : Style
         if searchText == "" {
             aStyle = frc.fetchedObjects![elementAt.row]
@@ -124,7 +125,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         
         // TODO put activity indicator animating here
         // TODO temporary bypass organic swift
-        BreweryDBClient.sharedInstance().downloadBeersBy(styleID: style,
+        BreweryDBClient.sharedInstance().downloadBeersAndBreweriesBy(styleID: style,
                                                          isOrganic: false,
                                                          completion: completion)
       return nil
