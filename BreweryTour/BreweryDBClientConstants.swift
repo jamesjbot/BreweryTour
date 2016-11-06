@@ -32,6 +32,7 @@ extension BreweryDBClient {
             static let WithBreweries = "withBreweries"
             static let HasImages = "hasImages"
             static let WithLocations = "withLocations"
+            static let Page = "p"
         }
         
         struct BreweryParameterValues {
