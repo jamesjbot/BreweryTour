@@ -183,8 +183,8 @@ extension CategoryViewController : UITableViewDelegate {
     // selection is and then proceed to the map on success
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         activeTableList.selected(elementAt: indexPath, searchText: newSearchBar.text!){
-        (sucesss) -> Void in
-            self.performSegue(withIdentifier: "Go", sender: nil)
+        (sucesss,msg) -> Void in
+            //self.performSegue(withIdentifier: "Go", sender: nil)
         }
     }
 }
