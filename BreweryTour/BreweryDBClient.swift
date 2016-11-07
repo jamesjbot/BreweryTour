@@ -184,14 +184,9 @@ class BreweryDBClient {
                                        completion: completion)
                     }
                 }
-
         }
     }
-    
-    
-    
-    
-    
+
     
     // Query for breweries that offer a certain style.
     internal func downloadBeersAndBreweriesBy(styleID : String, isOrganic : Bool ,
@@ -425,7 +420,7 @@ class BreweryDBClient {
                                             context: (coreDataStack?.persistingContext)!)
                     }
                     
-                    createBeerObject(beer: beer)
+                    thisBeer = createBeerObject(beer: beer)
                     // Save Icons for Beer
                     saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer!)
                     // Save images for the brewery
@@ -437,7 +432,6 @@ class BreweryDBClient {
             
             completion!(true, "Success")
             break
-            
             
         case .Styles:
             // Styles are saved on the persistingContext because they don't change often.
@@ -491,7 +485,7 @@ class BreweryDBClient {
                 return
             }
             
-            for breweryDict in breweryArray {
+            breweryLoop: for breweryDict in breweryArray {
                 // All conditions that prevent us from going to the brewery
                 guard let locationInfo = breweryDict["locations"] as? NSArray
                     // Can't build a brewery location if no location exists
@@ -499,46 +493,25 @@ class BreweryDBClient {
                 guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
                     let openToPublic = locDic["openToPublic"],
                     openToPublic as! String == "Y",
-                    locDic["latitude"]?.description != "",
-                    locDic["longitude"]?.description != "",
                     locDic["longitude"] != nil,
                     locDic["latitude"] != nil
-                    else { continue }
+                    else { continue breweryLoop }
                 
                 // Extract location information
                 
                 // Create the brewery object
                 
                 // Don't repeat breweries in the database
-                let brewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
-                guard brewery == nil else {
+                var thisbrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
+                guard thisbrewery == nil else {
                     continue
                 }
-                
-                let thisBrewery : Brewery = Brewery(inName: breweryDict["name"] as! String,
-                                                    latitude: locDic["latitude"]?.description,
-                                                    longitude: locDic["longitude"]?.description,
-                                                    url: locDic["website"] as! String?,
-                                                    open: (locDic["openToPublic"] as! String == "Y") ? true : false,
-                                                    id: locDic["id"]?.description,
-                                                    context: (coreDataStack?.persistingContext)!)
-                print("creatd brewery object \(thisBrewery.objectID)")
-                // Capture and download images for later use
-                guard let imagesDict : [String:AnyObject] = breweryDict["images"] as? [String:AnyObject],
-                    let imageURL : String = imagesDict["medium"] as! String?
-                    else {
-                        // We loaded this Brewery already but it has no images
-                        // Skip image capture and continue to load breweries
-                        continue
-                }
+                thisbrewery = createBreweryObject(breweryDict: breweryDict,
+                                                  locationDict: locDic)
+                print("created brewery object \(thisbrewery?.objectID)")
                 // Capture images asynchronously
-                let queue = DispatchQueue(label: "Images")
-                queue.async(qos: .utility) {
-                    print("Getting images in background")
-                    self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!,
-                                                           forBrewery: thisBrewery,
-                                                           updateManagedObjectID: thisBrewery.objectID)
-                }
+                saveBreweryImagesIfPossible(input: breweryDict["images"],
+                                            inputBrewery: thisbrewery)
                 
             }// Go back to the breweryArray and save another brewery
             
@@ -575,31 +548,16 @@ class BreweryDBClient {
             
             // We can't visit a brewery if it's not open to the public
             if locDic["openToPublic"] as! String == "Y" &&
-                locDic["latitude"]?.description != "" &&
-                locDic["longitude"]?.description != "" &&
                 locDic["longitude"] != nil &&
                 locDic["latitude"] != nil   {
                 // Create the brewery object
-                thisBrewery = Brewery(inName: breweryDict["name"] as! String,
-                                      latitude: locDic["latitude"]?.description,
-                                      longitude: locDic["longitude"]?.description,
-                                      url: locDic["website"] as! String?,
-                                      open: (locDic["openToPublic"] as! String == "Y") ? true : false,
-                                      id: locDic["id"]?.description,
-                                      context: (coreDataStack?.persistingContext)!)
+                thisBrewery = createBreweryObject(breweryDict: breweryDict,
+                                                     locationDict: locDic)
+
                 // Capture and download images for later use
                 print("brewery created from brewery name search\(#line)")
-                if let imagesDict : [String:AnyObject] = breweryDict["images"] as? [String:AnyObject],
-                    let imageURL : String = imagesDict["medium"] as! String? {
-                    let queue = DispatchQueue(label: "Images")
-                    queue.async(qos: .utility) {
-                        print("Getting brewery images in background")
-                        self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!,
-                                                               forBrewery: thisBrewery,
-                                                               updateManagedObjectID: thisBrewery.objectID)
-                        
-                    }
-                }
+                saveBreweryImagesIfPossible(input: breweryDict["images"],
+                                            inputBrewery: thisBrewery)
             }
             break
             
@@ -618,11 +576,10 @@ class BreweryDBClient {
             beerLoop: for beer in beerArray {
                 print("---------------------NextBeer---------------------")
                 // Creating beer
-                print("Check if beer needs to be created")
                 // Check to see if this beer is in the database already
                 var thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
                 // If the beer is in the coredata skip adding it
-                if thisBeer != nil {
+                guard thisBeer == nil else {
                     continue beerLoop
                 }
                 // This beer has no brewery information, continue with the next beer
@@ -630,11 +587,11 @@ class BreweryDBClient {
                     continue beerLoop
                 }
                 
-                for brewery in breweriesArray as! Array<AnyObject> {
+                breweryLoop: for brewery in breweriesArray as! Array<AnyObject> {
                     let breweryDict = brewery as! [String : AnyObject]
                     
                     guard let locationInfo = breweryDict["locations"] as? NSArray else {
-                        continue
+                        continue breweryLoop
                     }
                     
                     let locDic = locationInfo[0] as! [String : AnyObject]
@@ -642,25 +599,20 @@ class BreweryDBClient {
                     guard locDic["openToPublic"] as! String == "Y" &&
                         locDic["longitude"] != nil &&
                         locDic["latitude"] != nil else {
-                            continue beerLoop
+                            continue breweryLoop
                     }
                     
                     // Check to make sure the brewery is not already in the database
                     var newBrewery : Brewery!
                     newBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
-                    if newBrewery == nil { // Create a brewery object
-                        newBrewery = Brewery(inName: breweryDict["name"] as! String,
-                                             latitude: locDic["latitude"]?.description,
-                                             longitude: locDic["longitude"]?.description,
-                                             url: locDic["website"] as! String?,
-                                             open: (locDic["openToPublic"] as! String == "Y") ? true : false,
-                                             id: locDic["id"]?.description,
-                                             context: (coreDataStack?.persistingContext)!)
-                    } else {
-                        //Brewery is in database skipping Brewery creation
-                    }
-                    let thisBeer = createBeerObject(beer: beer)
 
+                    if newBrewery == nil { // Create a brewery object
+                        newBrewery = createBreweryObject(breweryDict: breweryDict,
+                                                         locationDict: locDic)
+                    }
+                    
+                    let thisBeer = createBeerObject(beer: beer)
+                    // Set Brewery
                     setBeerBrewerData(beer: thisBeer,
                                       breweryID: newBrewery.id!,
                                       completion: completion!)
@@ -668,7 +620,9 @@ class BreweryDBClient {
                     saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
                     // Save images for the brewery
                     saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: newBrewery)
-                    //savePersitent()
+                    // Future Improvement.
+                    // Currently datamodel cannot accomodate multple brewery locations for a beer
+                    break
                 } // End of For Brewery
                 // This will save every beer
                 
@@ -706,7 +660,7 @@ class BreweryDBClient {
             break
         }
         
-        // This is save after all the switch cases in parse are resolved
+        // TODO This is save after all the switch cases in parse are resolved
     }
     
     // This set brewerid when brewerid is supplied
@@ -738,8 +692,9 @@ class BreweryDBClient {
         let beerabv : String? = beer["abv"] as? String
         let beeribu : String? = beer["ibu"] as? String
         if let interimAvail = beer["available"] {
-            let verbage = interimAvail["description"] as? String ?? "No Information Provided"
-            available = verbage
+            available = interimAvail["description"] as? String ?? "No Information Provided"
+        } else {
+            available = "No Information Provided"
         }
         
         let thisBeer = Beer(id: id!, name: name!,
@@ -751,6 +706,18 @@ class BreweryDBClient {
         thisBeer.ibu = beeribu ?? "Information N/A"
         return thisBeer
     }
+    
+    
+    func createBreweryObject(breweryDict: [String:AnyObject], locationDict locDict:[String:AnyObject]) -> Brewery {
+        return Brewery(inName: breweryDict["name"] as! String,
+                             latitude: locDict["latitude"]?.description,
+                             longitude: locDict["longitude"]?.description,
+                             url: locDict["website"] as! String?,
+                             open: (locDict["openToPublic"] as! String == "Y") ? true : false,
+                             id: locDict["id"]?.description,
+                             context: (coreDataStack?.persistingContext)!)
+    }
+    
     
     func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer){
         if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
