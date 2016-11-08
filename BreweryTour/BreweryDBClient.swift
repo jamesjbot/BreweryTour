@@ -64,11 +64,6 @@ class BreweryDBClient {
                 //completion(false, "No results")
                 return
             }
-            
-            fatalError()
-            
-            
-            
             self.parse(response: responseJSON as NSDictionary,
                        querySpecificID:  nil,
                        outputType: APIQueryOutputTypes.Styles,
@@ -170,7 +165,6 @@ class BreweryDBClient {
                             response in
                             guard response.result.isSuccess else {
                                 completion(false, "Failed Request \(#line) \(#function)")
-                                
                                 return
                             }
                             guard let responseJSON = response.result.value as? [String:AnyObject] else {
@@ -180,7 +174,8 @@ class BreweryDBClient {
                             self.parse(response: responseJSON as NSDictionary,
                                        querySpecificID:  nil,
                                        outputType: APIQueryOutputTypes.BeersByStyleID,
-                                       completion: completion)
+                                       completion: completion,
+                                       finalPage: numberOfPages == i ? true : false)
                     }
                 }
         }
@@ -251,7 +246,8 @@ class BreweryDBClient {
                             self.parse(response: responseJSON as NSDictionary,
                                        querySpecificID:  styleID,
                                        outputType: APIQueryOutputTypes.BeersByStyleID,
-                                       completion: completion)
+                                       completion: completion,
+                                       finalPage: numberOfPages == i ? true : false)
                             print("page# \(i)")
                     }
                 }
@@ -296,7 +292,7 @@ class BreweryDBClient {
                            querySpecificID:  nil,
                            outputType: theOutputType,
                            completion: completion)
-                // The follow block of code downloads all subsequesnt pages
+                // The following block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
                     completion(true, "Finished")
                     return
@@ -322,7 +318,8 @@ class BreweryDBClient {
                             self.parse(response: responseJSON as NSDictionary,
                                        querySpecificID:  nil,
                                        outputType: APIQueryOutputTypes.BeersByStyleID,
-                                       completion: completion)
+                                       completion: completion,
+                                       finalPage: numberOfPages == i ? true : false)
                             print("page# \(i)")
                     }
                 }
@@ -335,7 +332,8 @@ class BreweryDBClient {
     private func parse(response : NSDictionary,
                        querySpecificID : String?,
                        outputType: APIQueryOutputTypes,
-                       completion: (( (_ success :  Bool, _ msg: String?) -> Void )?) ){
+                       completion: (( (_ success :  Bool, _ msg: String?) -> Void )?),
+                       finalPage: Bool = false){
         
         // Process every query type accordingly
         switch outputType {
@@ -386,7 +384,11 @@ class BreweryDBClient {
                     saveBreweryImagesIfPossible(input: breweryDict?["images"], inputBrewery: dbBrewery)
                 }
             } // end of beer loop
-            completion!(true, "Success")
+            if finalPage == false {
+                completion!(true, "Success")
+            } else {
+                completion!(true, "Final Page")
+            }
             break
             
         case .Styles:
@@ -467,16 +469,21 @@ class BreweryDBClient {
                                             inputBrewery: thisbrewery)
                 
             }// Go back to the breweryArray and save another brewery
-            
+            // TODO Work on saving these values.
             // Save all the Breweries in background context to disk
-            do {
-                try coreDataStack?.persistingContext.save()
-                print("Brewery Saved to Persisting context")
+//            do {
+//                try coreDataStack?.persistingContext.save()
+//                print("Brewery Saved to Persisting context")
+//                completion!(true, "Success")
+//                return
+//            } catch {
+//                completion!(false, "Failed Request \(#line) \(#function)")
+//                return
+//            }
+            if finalPage == false {
                 completion!(true, "Success")
-                return
-            } catch {
-                completion!(false, "Failed Request \(#line) \(#function)")
-                return
+            } else {
+                completion!(true, "Final Page")
             }
             break
             
@@ -546,7 +553,11 @@ class BreweryDBClient {
                 // This will save every beer
                 
             } // end of beer loop
-            completion!(true, "Success")
+            if finalPage == false {
+                completion!(true, "Success")
+            } else {
+                completion!(true, "Final Page")
+            }
             break
             
         case .BeersByBreweryID:
@@ -578,11 +589,10 @@ class BreweryDBClient {
             }
             break
         }
-        
-        // TODO This is save after all the switch cases in parse are resolved
     }
     
-    // This set brewerid when brewerid is supplied
+    
+    // This sets brewerid when brewerid is supplied
     // and save the brewery
     func setBeerBrewerData(beer thisBeer: Beer,
                              breweryID querySpecificID: String,
@@ -590,16 +600,16 @@ class BreweryDBClient {
         thisBeer.brewer = getBreweryByID(id: querySpecificID, context: (coreDataStack?.persistingContext)!)
         
         thisBeer.breweryID = thisBeer.brewer?.id
-        print("----->A beer added by breweryID \(thisBeer.brewer?.id) \(thisBeer.breweryID)")
+        //print("----->A beer added by breweryID \(thisBeer.brewer?.id) \(thisBeer.breweryID)")
         
-        do {
-            try coreDataStack?.persistingContext.save()
-            completion(true, "Success")
-            return
-        } catch let error {
-            completion(false, "Failed Request \(#line) \(#function)")
-            fatalError("Saving background error \(error)")
-        }
+//        do {
+//            try coreDataStack?.persistingContext.save()
+//            completion(true, "Success")
+//            return
+//        } catch let error {
+//            completion(false, "Failed Request \(#line) \(#function)")
+//            fatalError("Saving background error \(error)")
+//        }
     }
     
     
@@ -643,9 +653,9 @@ class BreweryDBClient {
             let medium = images["medium"] as! String?  {
             beer.imageUrl = medium
             let queue = DispatchQueue(label: "Images")
-            print("Prior to getting image")
+            //print("Prior to getting image")
             queue.async(qos: .utility) {
-                print("Getting images in background")
+                //print("Getting images in background")
                 self.downloadImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
             }
         }
@@ -658,7 +668,7 @@ class BreweryDBClient {
             let targetBrewery = inputBrewery {
             let queue = DispatchQueue(label: "Images")
             queue.async(qos: .utility) {
-                print("Getting images in background")
+                //print("Getting images in background")
                 self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
             }
         }
@@ -685,7 +695,7 @@ class BreweryDBClient {
     
     
     func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
-        print("Attempting to get beer \(id)")
+        //print("Attempting to get beer \(id)")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
@@ -740,7 +750,7 @@ class BreweryDBClient {
                     beerForUpdate.image = outputData
                     do {
                         try self.coreDataStack!.mainContext.save()
-                        print("Beer Imaged saved for beer \(forBeer.beerName)")
+                        //print("Beer Imaged saved for beer \(forBeer.beerName)")
                     }
                     catch {
                         return
@@ -769,7 +779,7 @@ class BreweryDBClient {
                     breweryForUpdate.image = outputData
                     do {
                         try self.coreDataStack!.mainContext.save()
-                        print("Attention Brewery Imaged saved for brewery \(forBrewery.name)")
+                        //print("Attention Brewery Imaged saved for brewery \(forBrewery.name)")
                     }
                     catch {
                         return
@@ -821,7 +831,7 @@ class BreweryDBClient {
         
         // Build the other parameters
         for (key, value) in parameters {
-            print(key,value)
+            //print(key,value)
             let queryItem = NSURLQueryItem(name: key, value: "\(value)")
             components.queryItems?.append(queryItem as URLQueryItem)
         }
