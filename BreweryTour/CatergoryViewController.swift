@@ -101,9 +101,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // MARK: Functions
     
     // Receive notifcation when the TableList backing the current view has changed
-    func sendNotify(s: String) {
+    func sendNotify(s message : String) {
         // This will update the contents of the table if needed
-        if s == "reload data" {
+        if message == "reload data" {
             styleTable.reloadData()
         }
         searchBar(newSearchBar, textDidChange: newSearchBar.text!)
@@ -184,7 +184,9 @@ extension CategoryViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         activeTableList.selected(elementAt: indexPath, searchText: newSearchBar.text!){
         (sucesss,msg) -> Void in
-            //self.performSegue(withIdentifier: "Go", sender: nil)
+            if msg == "Final Page" {
+                self.performSegue(withIdentifier: "Go", sender: nil)
+            }
         }
     }
 }
