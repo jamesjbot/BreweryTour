@@ -84,10 +84,10 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         selectedObject = Mediator.sharedInstance().passingItem
         switch allBeersMode {
         case true:
-            print("All beers mode is on")
+            //print("All beers mode is on")
             break
         case false :
-            print("All beers mode is OFF")
+            //print("All beers mode is OFF")
             if selectedObject is Brewery {
                 request.predicate = NSPredicate(format: "breweryID == %@", (selectedObject as! Brewery).id!)
                 print("operating on brewery")
@@ -95,7 +95,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
                 request.predicate = NSPredicate(format: "styleID == %@", (selectedObject as! Style).id!)
                 print("operating on style")
             } else {
-                print("All beers mode again default")
+                //print("All beers mode again default")
                 break
             }
             break
@@ -114,11 +114,13 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     
     func mediatorPerformFetch() {
+        print("mediator perform fetch called")
         performFetchRequestFor()
     }
   
     
     func getNumberOfRowsInSection(searchText: String?) -> Int {
+        print("getNumberofRowsInSection fetch called")
         performFetchRequestFor()
         print("selectedbeerstablelist getnumberof rows called")
         if searchText != "" {
@@ -205,6 +207,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
             }
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
+                print("Searchforuserentered performfetchcalled")
                 try self.frc.performFetch()
                 self.observer.sendNotify(s: "Reload data")
                 print("Saved this many beers in model \(self.frc.fetchedObjects?.count)")
