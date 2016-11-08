@@ -75,8 +75,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
             do {
                 let brewery = try (coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
-                // TODO Remove this debug code
-                if brewery.count > 1 {fatalError()}
                 if !mappableBreweries.contains(brewery[0]) {
                     mappableBreweries.append(brewery[0])
                 }
