@@ -221,17 +221,17 @@ class BreweryDBClient {
                            outputType: APIQueryOutputTypes.BeersByStyleID,
                            completion: completion)
                 
-                // The follow block of code downloads all subsequesnt pages
+                // The following block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
                     completion(true, "Finished")
                     return
                 }
                 print("Total pages \(numberOfPages)")
                 
-                // Synchronized group
+                // Asynchronous page processing
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
-
+                
                 
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
@@ -263,7 +263,7 @@ class BreweryDBClient {
                         } //Outside alamo but inside async
                     } //Outside queue.async
                 }  // Outside for loop
-
+                
                 group.notify(queue: queue) {
                     completion(true, "All Pages Processed")
                 }
@@ -312,34 +312,49 @@ class BreweryDBClient {
                     completion(true, "Finished")
                     return
                 }
+                
+                print("Total pages \(numberOfPages)")
+                
+                // Asynchronous page processing
+                let queue : DispatchQueue = DispatchQueue.global()
+                let group : DispatchGroup = DispatchGroup()
+                
                 print("Total pages \(numberOfPages)")
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
-                    Alamofire.request(outputURL.absoluteString!)
-                        .responseJSON {
-                            response in
-                            guard response.result.isSuccess else {
-                                completion(false, "Failed Request \(#line) \(#function)")
-                                
-                                return
-                            }
-                            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                completion(false, "Failed Request \(#line) \(#function)")
-                                return
-                            }
-                            self.parse(response: responseJSON as NSDictionary,
-                                       querySpecificID:  nil,
-                                       outputType: APIQueryOutputTypes.BeersByStyleID,
-                                       completion: completion,
-                                       finalPage: numberOfPages == i ? true : false)
-                            print("page# \(i)")
+                    group.enter()
+                    queue.async(group: group) {
+                        Alamofire.request(outputURL.absoluteString!)
+                            .responseJSON {
+                                response in
+                                guard response.result.isSuccess else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    
+                                    return
+                                }
+                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    return
+                                }
+                                self.parse(response: responseJSON as NSDictionary,
+                                           querySpecificID:  nil,
+                                           outputType: APIQueryOutputTypes.BeersByStyleID,
+                                           completion: completion,
+                                           finalPage: numberOfPages == i ? true : false)
+                                print("page# \(i)")
+                                group.leave()
+                        }
                     }
                 }
-                return
+                group.notify(queue: queue) {
+                    completion(true, "All Pages Processed")
+                }
         }
+        
+        return
     }
     
     
