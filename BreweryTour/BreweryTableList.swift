@@ -61,17 +61,17 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList willchange")
+        //print("BreweryTableList willchange")
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("BreweryTableList changed object")
+        //print("BreweryTableList changed object")
     }
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList didChange")
+        //print("BreweryTableList didChange")
         observer.sendNotify(s: "reload data")
         //Datata = frc.fetchedObjects!
     }
