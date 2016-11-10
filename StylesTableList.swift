@@ -108,7 +108,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
         var style : String
         if searchText == "" {
-            style = frc.fetchedObjects![elementAt.row].id!
+            style = frc.object(at: elementAt).id!
         } else {
             style = filteredObjects[elementAt.row].id!
         }
