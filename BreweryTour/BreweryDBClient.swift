@@ -142,7 +142,7 @@ class BreweryDBClient {
                     completion(false, "No results")
                     return
                 }
-
+                
                 
                 // Process first page
                 self.parse(response: responseJSON as NSDictionary,
@@ -155,6 +155,7 @@ class BreweryDBClient {
                     completion(true, "Finished")
                     return
                 }
+                
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
@@ -180,7 +181,7 @@ class BreweryDBClient {
                 }
         }
     }
-
+    
     
     // Query for breweries that offer a certain style.
     internal func downloadBeersAndBreweriesBy(styleID : String, isOrganic : Bool ,
@@ -226,32 +227,46 @@ class BreweryDBClient {
                     return
                 }
                 print("Total pages \(numberOfPages)")
+                
+                // Synchronized group
+                let queue : DispatchQueue = DispatchQueue.global()
+                let group : DispatchGroup = DispatchGroup()
+
+                
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
-                                                                    querySpecificID: nil,
-                                                                    parameters: methodParameters)
-                    Alamofire.request(outputURL.absoluteString!)
-                        .responseJSON {
-                            response in
-                            guard response.result.isSuccess else {
-                                completion(false, "Failed Request \(#line) \(#function)")
+                                                                         querySpecificID: nil,
+                                                                         parameters: methodParameters)
+                    group.enter()
+                    queue.async(group: group) {
+                        Alamofire.request(outputURL.absoluteString!)
+                            .responseJSON {
+                                response in
+                                guard response.result.isSuccess else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    
+                                    return
+                                }
+                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    return
+                                }
                                 
-                                return
-                            }
-                            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                completion(false, "Failed Request \(#line) \(#function)")
-                                return
-                            }
-                            self.parse(response: responseJSON as NSDictionary,
-                                       querySpecificID:  styleID,
-                                       outputType: APIQueryOutputTypes.BeersByStyleID,
-                                       completion: completion,
-                                       finalPage: numberOfPages == i ? true : false)
-                            print("page# \(i)")
-                    }
+                                self.parse(response: responseJSON as NSDictionary,
+                                           querySpecificID:  styleID,
+                                           outputType: APIQueryOutputTypes.BeersByStyleID,
+                                           completion: completion,
+                                           finalPage: numberOfPages == i ? true : false)
+                                print("page# \(i)")
+                                group.leave()
+                        } //Outside alamo but inside async
+                    } //Outside queue.async
+                }  // Outside for loop
+
+                group.notify(queue: queue) {
+                    completion(true, "All Pages Processed")
                 }
-                
         }
         return
     }
@@ -363,8 +378,8 @@ class BreweryDBClient {
                     // We can't visit a brewery if it's not open to the public or we don't have coordinates
                     guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
                         locDic["openToPublic"] as! String == "Y" &&
-                        locDic["longitude"] != nil && locDic["latitude"] != nil else {
-                            continue createBeerLoop
+                            locDic["longitude"] != nil && locDic["latitude"] != nil else {
+                                continue createBeerLoop
                     }
                     // Sometimes the breweries have no name, making it useless
                     guard breweryDict?["name"] != nil else {
@@ -386,8 +401,6 @@ class BreweryDBClient {
             } // end of beer loop
             if finalPage == false {
                 completion!(true, "Success")
-            } else {
-                completion!(true, "Final Page")
             }
             break
             
@@ -436,7 +449,7 @@ class BreweryDBClient {
                 completion!(false, "No results returned")
                 return
             }
-
+            
             guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
                 //Unable to parse Brewery Failed to extract data, there was no data component
                 completion!(false, "Network error please try again")
@@ -471,15 +484,15 @@ class BreweryDBClient {
             }// Go back to the breweryArray and save another brewery
             // TODO Work on saving these values.
             // Save all the Breweries in background context to disk
-//            do {
-//                try coreDataStack?.persistingContext.save()
-//                print("Brewery Saved to Persisting context")
-//                completion!(true, "Success")
-//                return
-//            } catch {
-//                completion!(false, "Failed Request \(#line) \(#function)")
-//                return
-//            }
+            //            do {
+            //                try coreDataStack?.persistingContext.save()
+            //                print("Brewery Saved to Persisting context")
+            //                completion!(true, "Success")
+            //                return
+            //            } catch {
+            //                completion!(false, "Failed Request \(#line) \(#function)")
+            //                return
+            //            }
             if finalPage == false {
                 completion!(true, "Success")
             } else {
@@ -531,7 +544,7 @@ class BreweryDBClient {
                     // Check to make sure the brewery is not already in the database
                     var newBrewery : Brewery!
                     newBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
-
+                    
                     if newBrewery == nil { // Create a brewery object
                         newBrewery = createBreweryObject(breweryDict: breweryDict,
                                                          locationDict: locDic)
@@ -582,8 +595,8 @@ class BreweryDBClient {
                 let thisBeer = createBeerObject(beer: beer)
                 
                 setBeerBrewerData(beer: thisBeer,
-                                    breweryID: querySpecificID!,
-                                    completion: completion!)
+                                  breweryID: querySpecificID!,
+                                  completion: completion!)
                 
                 saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
             }
@@ -595,21 +608,21 @@ class BreweryDBClient {
     // This sets brewerid when brewerid is supplied
     // and save the brewery
     func setBeerBrewerData(beer thisBeer: Beer,
-                             breweryID querySpecificID: String,
-                             completion: (Bool,String) -> Void) {
+                           breweryID querySpecificID: String,
+                           completion: (Bool,String) -> Void) {
         thisBeer.brewer = getBreweryByID(id: querySpecificID, context: (coreDataStack?.persistingContext)!)
         
         thisBeer.breweryID = thisBeer.brewer?.id
         //print("----->A beer added by breweryID \(thisBeer.brewer?.id) \(thisBeer.breweryID)")
         
-//        do {
-//            try coreDataStack?.persistingContext.save()
-//            completion(true, "Success")
-//            return
-//        } catch let error {
-//            completion(false, "Failed Request \(#line) \(#function)")
-//            fatalError("Saving background error \(error)")
-//        }
+        //        do {
+        //            try coreDataStack?.persistingContext.save()
+        //            completion(true, "Success")
+        //            return
+        //        } catch let error {
+        //            completion(false, "Failed Request \(#line) \(#function)")
+        //            fatalError("Saving background error \(error)")
+        //        }
     }
     
     
@@ -639,12 +652,12 @@ class BreweryDBClient {
     
     func createBreweryObject(breweryDict: [String:AnyObject], locationDict locDict:[String:AnyObject]) -> Brewery {
         return Brewery(inName: breweryDict["name"] as! String,
-                             latitude: locDict["latitude"]?.description,
-                             longitude: locDict["longitude"]?.description,
-                             url: locDict["website"] as! String?,
-                             open: (locDict["openToPublic"] as! String == "Y") ? true : false,
-                             id: locDict["id"]?.description,
-                             context: (coreDataStack?.persistingContext)!)
+                       latitude: locDict["latitude"]?.description,
+                       longitude: locDict["longitude"]?.description,
+                       url: locDict["website"] as! String?,
+                       open: (locDict["openToPublic"] as! String == "Y") ? true : false,
+                       id: locDict["id"]?.description,
+                       context: (coreDataStack?.persistingContext)!)
     }
     
     

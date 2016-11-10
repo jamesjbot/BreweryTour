@@ -185,8 +185,11 @@ extension CategoryViewController : UITableViewDelegate {
         activityIndicator.startAnimating()
         activeTableList.selected(elementAt: indexPath, searchText: newSearchBar.text!){
         (sucesss,msg) -> Void in
-            if msg == "Final Page" {
-                self.performSegue(withIdentifier: "Go", sender: nil)
+            print(msg)
+            if msg == "All Pages Processed" {
+                DispatchQueue.main.async {
+                    self.performSegue(withIdentifier: "Go", sender: nil)
+                }
             }
         }
     }
