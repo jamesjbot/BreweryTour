@@ -156,28 +156,41 @@ class BreweryDBClient {
                     return
                 }
                 
+                // Processing Pages
+                let queue : DispatchQueue = DispatchQueue.global()
+                let group = DispatchGroup()
+                
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
-                    Alamofire.request(outputURL.absoluteString!)
-                        .responseJSON {
-                            response in
-                            guard response.result.isSuccess else {
-                                completion(false, "Failed Request \(#line) \(#function)")
-                                return
-                            }
-                            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                completion(false, "Failed Request \(#line) \(#function)")
-                                return
-                            }
-                            self.parse(response: responseJSON as NSDictionary,
-                                       querySpecificID:  nil,
-                                       outputType: APIQueryOutputTypes.BeersByStyleID,
-                                       completion: completion,
-                                       finalPage: numberOfPages == i ? true : false)
+                    group.enter()
+                    queue.async(group: group) {
+                        
+                        
+                        Alamofire.request(outputURL.absoluteString!)
+                            .responseJSON {
+                                response in
+                                guard response.result.isSuccess else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    return
+                                }
+                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    return
+                                }
+                                self.parse(response: responseJSON as NSDictionary,
+                                           querySpecificID:  nil,
+                                           outputType: APIQueryOutputTypes.BeersByStyleID,
+                                           completion: completion,
+                                           finalPage: numberOfPages == i ? true : false)
+                                group.leave()
+                        }
                     }
+                }
+                group.notify(queue: queue){
+                    completion(true, "All Pages Processed")
                 }
         }
     }
@@ -232,7 +245,6 @@ class BreweryDBClient {
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
                 
-                
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
@@ -264,6 +276,93 @@ class BreweryDBClient {
                     } //Outside queue.async
                 }  // Outside for loop
                 
+                group.notify(queue: queue) {
+                    completion(true, "All Pages Processed")
+                }
+        }
+        return
+    }
+    
+    
+    // Query for breweries with a specific name
+    internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+        let theOutputType = APIQueryOutputTypes.Breweries
+        var methodParameters  = [
+            Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+            Constants.BreweryParameterKeys.Page : "1" as AnyObject
+        ]
+        let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
+                                                        querySpecificID: nil,
+                                                        parameters: methodParameters)
+        Alamofire.request(outputURL.absoluteString!)
+            .responseJSON {
+                response in
+                guard response.result.isSuccess else {
+                    completion(false, "Failed Request \(#line) \(#function)")
+                    return
+                }
+                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                    completion(false, "Failed Request \(#line) \(#function)")
+                    return
+                }
+                
+                guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
+                    completion(false, "No results")
+                    return
+                }
+                
+                // Process subsequent records
+                self.parse(response: responseJSON as NSDictionary,
+                           querySpecificID:  nil,
+                           outputType: theOutputType,
+                           completion: completion)
+                // The following block of code downloads all subsequesnt pages
+                guard numberOfPages > 1 else {
+                    completion(true, "All Pages Processed")
+                    return
+                }
+                
+                print("Total pages \(numberOfPages)")
+                
+                // Asynchronous page processing
+                let queue : DispatchQueue = DispatchQueue.global()
+                let group : DispatchGroup = DispatchGroup()
+                
+                print("Total pages \(numberOfPages)")
+                for i in 2...numberOfPages {
+                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
+                    let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                                                                         querySpecificID: nil,
+                                                                         parameters: methodParameters)
+                    group.enter()
+                    queue.async(group: group) {
+                        Alamofire.request(outputURL.absoluteString!)
+                            .responseJSON {
+                                response in
+                                guard response.result.isSuccess else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    return
+                                }
+                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    return
+                                }
+                                self.parse(response: responseJSON as NSDictionary,
+                                           querySpecificID:  nil,
+                                           outputType: APIQueryOutputTypes.BeersByStyleID,
+                                           completion: completion,
+                                           finalPage: numberOfPages == i ? true : false)
+                                print("page# \(i)")
+                                print("Prior to saving \(self.coreDataStack?.mainContext.updatedObjects.count)")
+                                print("Prior to saving hasChanges: \(self.coreDataStack?.mainContext.hasChanges)")
+                                print("Prior to saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
+                                self.saveMain()
+                                print("After saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
+                                group.leave()
+                        }
+                    }
+                }
                 group.notify(queue: queue) {
                     completion(true, "All Pages Processed")
                 }
@@ -353,7 +452,6 @@ class BreweryDBClient {
                     completion(true, "All Pages Processed")
                 }
         }
-        
         return
     }
     
@@ -477,6 +575,7 @@ class BreweryDBClient {
                     else {
                         continue
                 }
+                
                 guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
                     let openToPublic = locDic["openToPublic"],
                     openToPublic as! String == "Y",
@@ -485,11 +584,13 @@ class BreweryDBClient {
                     else {
                         continue breweryLoop
                 }
+                
                 // Don't repeat breweries in the database
                 var thisbrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
                 guard thisbrewery == nil else {
                     continue
                 }
+                
                 thisbrewery = createBreweryObject(breweryDict: breweryDict,
                                                   locationDict: locDic)
                 // Capture images asynchronously
@@ -508,11 +609,11 @@ class BreweryDBClient {
             //                completion!(false, "Failed Request \(#line) \(#function)")
             //                return
             //            }
-            if finalPage == false {
-                completion!(true, "Success")
-            } else {
-                completion!(true, "Final Page")
-            }
+//            if finalPage == false {
+//                completion!(true, "Success")
+//            } else {
+//                completion!(true, "Final Page")
+//            }
             break
             
         case .BeersByName:
@@ -658,6 +759,7 @@ class BreweryDBClient {
                             beerDescription: description!,
                             availability: available!,
                             context: (coreDataStack?.persistingContext!)!)
+        thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
         thisBeer.styleID = beer["styleID"] as? String
         thisBeer.abv = beerabv ?? "Information N/A"
         thisBeer.ibu = beeribu ?? "Information N/A"
@@ -666,13 +768,14 @@ class BreweryDBClient {
     
     
     func createBreweryObject(breweryDict: [String:AnyObject], locationDict locDict:[String:AnyObject]) -> Brewery {
+        print("Creating brewery with name \(breweryDict["name"])")
         return Brewery(inName: breweryDict["name"] as! String,
                        latitude: locDict["latitude"]?.description,
                        longitude: locDict["longitude"]?.description,
                        url: locDict["website"] as! String?,
                        open: (locDict["openToPublic"] as! String == "Y") ? true : false,
                        id: locDict["id"]?.description,
-                       context: (coreDataStack?.persistingContext)!)
+                       context: (coreDataStack?.mainContext)!)
     }
     
     
@@ -816,6 +919,14 @@ class BreweryDBClient {
             }
         }
         task.resume()
+    }
+    
+    private func saveMain(){
+        do {
+            try coreDataStack?.mainContext.save()
+        } catch let error {
+            fatalError("Saving main error \(error)")
+        }
     }
     
     private func savePersitent(){
