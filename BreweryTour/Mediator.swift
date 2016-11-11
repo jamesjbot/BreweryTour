@@ -16,7 +16,7 @@ class Mediator : NSManagedObjectDisplayable {
     private var beersViewer : Observer! // Should this be the Obsever or should it be the beerslist
     
     internal var passingItem : NSManagedObject?
-    
+    internal var organic : Bool?
     private let styleList : StylesTableList = StylesTableList()
     private let breweryList : BreweryTableList = BreweryTableList()
     private let selectedBeersList : SelectedBeersTableList = SelectedBeersTableList()
