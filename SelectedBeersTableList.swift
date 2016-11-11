@@ -89,10 +89,12 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         case false :
             //print("All beers mode is OFF")
             if selectedObject is Brewery {
-                request.predicate = NSPredicate(format: "breweryID == %@", (selectedObject as! Brewery).id!)
+                request.predicate = NSPredicate(format: "breweryID == %@",
+                                                (selectedObject as! Brewery).id!)
                 print("operating on brewery")
             } else if selectedObject is Style {
-                request.predicate = NSPredicate(format: "styleID == %@", (selectedObject as! Style).id!)
+                request.predicate = NSPredicate(format: "styleID == %@",
+                                                (selectedObject as! Style).id!)
                 print("operating on style")
             } else {
                 //print("All beers mode again default")

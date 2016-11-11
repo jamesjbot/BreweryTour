@@ -56,6 +56,19 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             return
         }
         
+        // Fetch all the breweries in the database.
+        BreweryDBClient.sharedInstance().downloadAllBreweries() {
+            (success, msg) -> Void in
+            if msg == "All Pages Processed" {
+                print(msg)
+                do {
+                    try self.frc.performFetch()
+                } catch {
+                    fatalError()
+                }
+            }
+
+        }
     }
     
     
@@ -100,8 +113,8 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     }
     
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
-        // Debugging code because breweries with a nil name are leadking thru
-        assert((frc.fetchedObjects?.count)! > 0)
+        // Debugging code because breweries with a nil name are leaking thru
+        // assert((frc.fetchedObjects?.count)! > 0)
         print("\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
         for i in frc.fetchedObjects! {
             print("Brewery name: \(i.name) \(i.id)")
