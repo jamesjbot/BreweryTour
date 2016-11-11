@@ -638,6 +638,9 @@ class BreweryDBClient {
                     continue beerLoop
                 }
                 // This beer has no brewery information, continue with the next beer
+                guard beer["name"] != nil && beer["name"] as! String != "" else {
+                    continue beerLoop
+                }
                 guard let breweriesArray = beer["breweries"]  else {
                     continue beerLoop
                 }
@@ -655,6 +658,10 @@ class BreweryDBClient {
                         locDic["longitude"] != nil &&
                         locDic["latitude"] != nil else {
                             continue breweryLoop
+                    }
+                    
+                    guard breweryDict["name"] != nil else {
+                        continue breweryLoop
                     }
                     
                     // Check to make sure the brewery is not already in the database
