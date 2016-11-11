@@ -76,6 +76,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     @IBAction func organicClicked(_ sender: AnyObject) {
         setTopTitleBarName()
+        med.organic = organicSwitch.isOn
     }
     
     
@@ -187,6 +188,7 @@ extension CategoryViewController : UITableViewDelegate {
         (sucesss,msg) -> Void in
             print(msg)
             if msg == "All Pages Processed" {
+                self.activityIndicator.stopAnimating()
                 DispatchQueue.main.async {
                     self.performSegue(withIdentifier: "Go", sender: nil)
                 }
@@ -247,8 +249,6 @@ extension CategoryViewController: UISearchBarDelegate {
         displayAlertWindow(title: "Search Online",
                            msg: "Cannot find match on device,\nsearch online?",
                            actions: [action])
-        
-
     }
     
 }
