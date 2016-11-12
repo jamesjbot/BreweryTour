@@ -63,7 +63,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="370" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="370" height="43"/>
+                                                    <frame key="frameInset" width="370" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -232,11 +232,14 @@
                                     </tableView>
                                 </subviews>
                             </stackView>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="WhL-1F-Lh4"/>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstAttribute="trailing" secondItem="GXl-K7-CVw" secondAttribute="trailing" id="9s1-EP-FZl"/>
+                            <constraint firstItem="WhL-1F-Lh4" firstAttribute="centerY" secondItem="79S-bs-Ki0" secondAttribute="centerY" id="Kb6-5g-G4H"/>
+                            <constraint firstItem="WhL-1F-Lh4" firstAttribute="centerX" secondItem="79S-bs-Ki0" secondAttribute="centerX" id="NgE-It-HZ6"/>
                             <constraint firstItem="qHD-Am-IJw" firstAttribute="top" secondItem="GXl-K7-CVw" secondAttribute="bottom" id="aA4-bD-3Du"/>
                             <constraint firstItem="GXl-K7-CVw" firstAttribute="leading" secondItem="79S-bs-Ki0" secondAttribute="leading" id="obb-Tg-flP"/>
                             <constraint firstItem="GXl-K7-CVw" firstAttribute="top" secondItem="jgl-nB-2cO" secondAttribute="bottom" id="ph1-25-X4E"/>
@@ -247,6 +250,7 @@
                     </tabBarItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
+                        <outlet property="activityIndicator" destination="WhL-1F-Lh4" id="fDr-il-RgC"/>
                         <outlet property="searchBar" destination="vz7-RO-sWr" id="FKy-Vd-mS3"/>
                         <outlet property="tableView" destination="7fx-me-ez9" id="BsB-19-aSN"/>
                     </connections>
@@ -302,6 +306,11 @@
                                                             <action selector="favoriteClicked:" destination="K9j-j9-NEF" eventType="touchUpInside" id="e1j-5g-DNY"/>
                                                         </connections>
                                                     </button>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Organic:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v3I-gw-3vZ">
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ABV:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvo-f0-UCc">
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
@@ -355,6 +364,7 @@
                         <outlet property="breweryName" destination="J1x-Yv-uwY" id="T2q-QP-dgm"/>
                         <outlet property="favoriteButton" destination="SnN-Ct-3WX" id="UDk-E0-fmR"/>
                         <outlet property="ibu" destination="wYK-0U-iDb" id="iOg-Dz-4hE"/>
+                        <outlet property="organicLabel" destination="v3I-gw-3vZ" id="yts-gD-duU"/>
                         <outlet property="style" destination="L8O-9W-M7W" id="sk1-m5-k9i"/>
                         <outlet property="tasting" destination="UOG-ID-3ve" id="ryl-ta-fpR"/>
                     </connections>
