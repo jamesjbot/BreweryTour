@@ -733,9 +733,10 @@ class BreweryDBClient {
     func setBeerBrewerData(beer thisBeer: Beer,
                            breweryID querySpecificID: String,
                            completion: (Bool,String) -> Void) {
-        thisBeer.brewer = getBreweryByID(id: querySpecificID, context: (coreDataStack?.persistingContext)!)
+        thisBeer.brewer = getBreweryByID(id: querySpecificID, context: (coreDataStack?.mainContext)!)
         
         thisBeer.breweryID = thisBeer.brewer?.id
+        assert(thisBeer.breweryID != nil)
         //print("----->A beer added by breweryID \(thisBeer.brewer?.id) \(thisBeer.breweryID)")
         
         //        do {
@@ -765,9 +766,10 @@ class BreweryDBClient {
         let thisBeer = Beer(id: id!, name: name!,
                             beerDescription: description!,
                             availability: available!,
-                            context: (coreDataStack?.persistingContext!)!)
+                            context: (coreDataStack?.mainContext!)!)
         thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
-        thisBeer.styleID = beer["styleID"] as? String
+        thisBeer.styleID = (beer["styleId"] as! NSNumber).description
+        assert(thisBeer.styleID != nil)
         thisBeer.abv = beerabv ?? "Information N/A"
         thisBeer.ibu = beeribu ?? "Information N/A"
         return thisBeer
