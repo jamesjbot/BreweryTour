@@ -24,6 +24,7 @@ class BeersViewController: UIViewController, Observer {
 
     // MARK: IBOutlets
     
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
     
     @IBOutlet weak var tableView: UITableView!
@@ -85,7 +86,11 @@ extension BeersViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Open the beer detail view screen.
-        let beer = selectedBeersTableList.selected(elementAt: indexPath, searchText: searchBar.text!) {
+        // Temporarily put in false for organic type.
+        // TODO pull the organic type from mediator.
+        let beer = selectedBeersTableList.selected(elementAt: indexPath,
+                                                   searchText: searchBar.text!,
+                                                   organic : false ) {
             (success,msg) -> Void in
         }
         // Create target viewcontroller
@@ -131,10 +136,10 @@ extension BeersViewController : UISearchBarDelegate {
         // Prompt user to search online for beer
         // Create action for prompt
         func searchOnline(_ action: UIAlertAction) {
-            //activityIndicator.startAnimating()
+            activityIndicator.startAnimating()
             selectedBeersTableList.searchForUserEntered(searchTerm: searchBar.text!) {
                 (success, msg) -> Void in
-                //self.activityIndicator.stopAnimating()
+                self.activityIndicator.stopAnimating()
                 if success {
                     self.tableView.reloadData()
                 } else {
