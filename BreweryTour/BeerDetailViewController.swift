@@ -39,6 +39,8 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     @IBOutlet weak var availableText: UILabel!
     
+    @IBOutlet weak var organicLabel: UILabel!
+    
     @IBOutlet weak var abv: UILabel!
     
     @IBOutlet weak var style: UILabel!
@@ -112,7 +114,8 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
             favoriteIcon = UIImage(named: "heart_icon_black_white_line_art.png")
         }
         favoriteButton.setImage(favoriteIcon, for: .normal)
-        style.text = "Style:" + getStyleName(id: beer.styleID!)
+        style.text = "Style:" + getStyleName(id: beer.styleID!) ?? ""
+        organicLabel.text = "Organic: " + beer.isOrganic.description
         abv.text = "ABV:" + beer.abv! ?? ""
         ibu.text = "IBU:" + beer.ibu! ?? ""
     }
