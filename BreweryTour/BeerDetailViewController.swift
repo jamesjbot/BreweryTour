@@ -114,10 +114,10 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
             favoriteIcon = UIImage(named: "heart_icon_black_white_line_art.png")
         }
         favoriteButton.setImage(favoriteIcon, for: .normal)
-        style.text = "Style:" + getStyleName(id: beer.styleID!) ?? ""
-        organicLabel.text = "Organic: " + beer.isOrganic.description
-        abv.text = "ABV:" + beer.abv! ?? ""
-        ibu.text = "IBU:" + beer.ibu! ?? ""
+        style.text = "Style: \(beer.styleID)" + getStyleName(id: beer.styleID!)
+        organicLabel.text = "Organic: " + (beer.isOrganic == true ? "Yes" : "No")
+        abv.text = "ABV: " + (beer.abv ?? "")
+        ibu.text = "IBU: " + (beer.ibu ?? "")
     }
 
     

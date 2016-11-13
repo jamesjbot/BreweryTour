@@ -166,7 +166,8 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Send the brewery to the mediator, then switch to the map tab
-        Mediator.sharedInstance().selected(thisItem: frc.object(at: indexPath))
+         // TODO I temporarily inserted a false this is wrong.
+        Mediator.sharedInstance().selected(thisItem: frc.object(at: indexPath), organic : false)
         self.tabBarController?.selectedIndex = 0
     }
 }

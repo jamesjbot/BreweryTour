@@ -102,7 +102,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     func getNumberOfRowsInSection(searchText: String?) -> Int {
         // If we batch delete in the background frc will not retrieve delete results. 
-        //Fetch data because when we use the on screen segemented display to switch to this it will not display, because of the back delete.
+        // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
         temporaryFetchData()
         guard searchText == "" else {
             print("\(#function) filtered object count \(filteredObjects.count)")

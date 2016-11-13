@@ -10,5 +10,5 @@ import Foundation
 import CoreData
 
 protocol NSManagedObjectDisplayable {
-    func selected(thisItem: NSManagedObject)
+    func selected(thisItem: NSManagedObject, organic : Bool)
 }

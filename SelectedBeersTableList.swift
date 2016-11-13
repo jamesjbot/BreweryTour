@@ -51,7 +51,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
     
     
-    func setSelectedItem(toNSObjectID : NSManagedObjectID) {
+    func setSelectedItem(toNSObjectID : NSManagedObjectID, organic : Bool ) {
         selectedItemID = toNSObjectID
         // Is passing object id still needed?
         let object = Mediator.sharedInstance().passingItem
@@ -62,22 +62,31 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         if object is Brewery {
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery: object as! Brewery) {
                 (success,msg) -> Void in
-                self.performFetchRequestFor()
+                //self.performFetchRequestFor()
             }
         }
-        performFetchRequestFor()
+        performFetchRequestFor(organic: organic)
     }
 
     
     func toggleAllBeersMode() {
         allBeersMode = !allBeersMode
         print("Toggled all beers mode to \(allBeersMode)")
-        performFetchRequestFor()
+        performFetchRequestFor(organic: nil)
         observer.sendNotify(s: "Reload table")
     }
     
     
-    func performFetchRequestFor(){
+    // TODO remove organic parameter.
+    func performFetchRequestFor(organic : Bool?){
+        // Add a selector for organic beers only.
+        var subPredicates = [NSPredicate]()
+        if let organic = Mediator.sharedInstance().organic {
+            subPredicates.append(NSPredicate(format: "isOrganic == %@",
+                                             NSNumber(value: organic) ))
+            subPredicates.append(NSPredicate(format: "favorite == YES", []))
+            print(subPredicates)
+        }
         print("Perform fetch request called")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
@@ -89,12 +98,14 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         case false :
             //print("All beers mode is OFF")
             if selectedObject is Brewery {
-                request.predicate = NSPredicate(format: "breweryID == %@",
-                                                (selectedObject as! Brewery).id!)
+                subPredicates.append(NSPredicate(format: "breweryID == %@",
+                                                (selectedObject as! Brewery).id!))
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subPredicates)
                 print("operating on brewery")
             } else if selectedObject is Style {
-                request.predicate = NSPredicate(format: "styleID == %@",
-                                                (selectedObject as! Style).id!)
+                subPredicates.append(NSPredicate(format: "styleID == %@",
+                                                (selectedObject as! Style).id!))
+                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subPredicates)
                 print("operating on style")
             } else {
                 //print("All beers mode again default")
@@ -117,13 +128,13 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     func mediatorPerformFetch() {
         print("mediator perform fetch called")
-        performFetchRequestFor()
+        performFetchRequestFor(organic : nil)
     }
   
     
     func getNumberOfRowsInSection(searchText: String?) -> Int {
         print("getNumberofRowsInSection fetch called")
-        performFetchRequestFor()
+        performFetchRequestFor(organic : nil )
         print("selectedbeerstablelist getnumberof rows called")
         if searchText != "" {
             print("searched filtered object \(filteredObjects.count)")
@@ -166,6 +177,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     internal func selected(elementAt: IndexPath,
                            searchText: String,
+                           organic: Bool,
                            completion:  @escaping (Bool, String?) -> Void) -> AnyObject? {
         if searchText != "" {
             return filteredObjects[elementAt.row]

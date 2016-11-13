@@ -84,10 +84,10 @@ class Mediator : NSManagedObjectDisplayable {
 //    }
     
     
-    func selected(thisItem: NSManagedObject) {
+    func selected(thisItem: NSManagedObject, organic : Bool) {
         passingItem = thisItem
         print("Mediator setting selectedBeersList prior to call: \(passingItem)")
-        selectedBeersList.setSelectedItem(toNSObjectID: passingItem!.objectID)
+        selectedBeersList.setSelectedItem(toNSObjectID: passingItem!.objectID, organic: organic)
     }
     
 }

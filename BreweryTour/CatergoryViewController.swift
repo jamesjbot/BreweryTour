@@ -184,7 +184,9 @@ extension CategoryViewController : UITableViewDelegate {
     // selection is and then proceed to the map on success
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         activityIndicator.startAnimating()
-        activeTableList.selected(elementAt: indexPath, searchText: newSearchBar.text!){
+        activeTableList.selected(elementAt: indexPath,
+                                 searchText: newSearchBar.text!,
+                                 organic : organicSwitch.isOn){
         (sucesss,msg) -> Void in
             print(msg)
             if msg == "All Pages Processed" {
