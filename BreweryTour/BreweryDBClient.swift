@@ -752,6 +752,7 @@ class BreweryDBClient {
     
     func createBeerObject(beer : [String:AnyObject] ) -> Beer {
         let id : String? = beer["id"] as? String
+        print(beer["name"])
         let name : String? = beer["name"] as? String ?? ""
         let description : String? = (beer["description"] as? String) ?? ""
         var available : String? = nil
@@ -767,7 +768,9 @@ class BreweryDBClient {
                             beerDescription: description!,
                             availability: available!,
                             context: (coreDataStack?.mainContext!)!)
+        print(beer["isOrganic"])
         thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
+        print(beer["styleId"])
         thisBeer.styleID = (beer["styleId"] as! NSNumber).description
         assert(thisBeer.styleID != nil)
         thisBeer.abv = beerabv ?? "Information N/A"
@@ -777,14 +780,21 @@ class BreweryDBClient {
     
     
     func createBreweryObject(breweryDict: [String:AnyObject], locationDict locDict:[String:AnyObject]) -> Brewery {
-        print("Creating brewery with name \(breweryDict["name"])")
-        return Brewery(inName: breweryDict["name"] as! String,
+        print("Creating brewery with name \(breweryDict["name"]!)")
+        let brewer = Brewery(inName: breweryDict["name"] as! String,
                        latitude: locDict["latitude"]?.description,
                        longitude: locDict["longitude"]?.description,
                        url: locDict["website"] as! String?,
                        open: (locDict["openToPublic"] as! String == "Y") ? true : false,
                        id: locDict["id"]?.description,
                        context: (coreDataStack?.mainContext)!)
+        do {
+            try coreDataStack?.saveMainContext()
+            print("Save Brewery save in main context")
+        } catch {
+            fatalError()
+        }
+        return brewer
     }
     
     

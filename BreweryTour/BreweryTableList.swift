@@ -84,7 +84,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("BreweryTableList didChange")
+        print("BreweryTableList controllerdidChangeContent notify observer")
         observer.sendNotify(s: "reload data")
         //Datata = frc.fetchedObjects!
     }
@@ -93,7 +93,25 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     func temporaryFetchData(){
         do {
             try frc.performFetch()
-            print("Retrieved this many styles \(frc.fetchedObjects?.count)")
+            print("Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
+        } catch {
+            fatalError()
+        }
+        do {
+            try frc.performFetch()
+            print("Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
+        } catch {
+            fatalError()
+        }
+        do {
+            try frc.performFetch()
+            print("Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
+        } catch {
+            fatalError()
+        }
+        do {
+            try frc.performFetch()
+            print("Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
@@ -103,7 +121,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     func getNumberOfRowsInSection(searchText: String?) -> Int {
         // If we batch delete in the background frc will not retrieve delete results. 
         // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
-        temporaryFetchData()
+        //er crektemporaryFetchData()
         guard searchText == "" else {
             print("\(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
