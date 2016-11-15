@@ -37,7 +37,7 @@ class BeersViewController: UIViewController, Observer {
     }
     
     @IBAction func organicSwitch(_ sender: UISwitch) {
-        selectedBeersTableList.organic = sender.isOn
+        selectedBeersTableList.changeOrganicState(iOrganic: sender.isOn)
     }
     
     // MARK: Functions

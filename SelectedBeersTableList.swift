@@ -18,12 +18,10 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
 
     // MARK: Variables
-    var organic : Bool = false
-    var allBeersMode : Bool = false
-    var selectedItemID : NSManagedObjectID = NSManagedObjectID()
-    var selectedObject : NSManagedObject! = nil
-    private var display : UIViewController!
-    
+    private var organic : Bool = false
+    private var allBeersMode : Bool = false
+    internal var selectedItemID : NSManagedObjectID = NSManagedObjectID()
+    private var selectedObject : NSManagedObject! = nil
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Beer] = [Beer]()
     internal var frc : NSFetchedResultsController<Beer>!
@@ -51,8 +49,13 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         }
     }
     
+    internal func changeOrganicState(iOrganic : Bool) {
+        organic = iOrganic
+    }
     
-    func setSelectedItem(toNSObjectID : NSManagedObjectID) {
+    // Mediator Selections
+    // The mediator tell the SelectedBeersTable what object was selected.
+    internal func setSelectedItem(toNSObjectID : NSManagedObjectID) {
         selectedItemID = toNSObjectID
         // Is passing object id still needed?
         let object = Mediator.sharedInstance().passingItem
@@ -206,9 +209,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
 
     
-    func accept(view: UIViewController){
-        display = view
-    }
+
     
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
