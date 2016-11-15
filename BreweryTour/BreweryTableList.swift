@@ -166,10 +166,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         }
         // Tell mediator about the brewery I want to display
         // Then mediator will tell selectedBeerList what to display
-        mediator.selected(thisItem: savedBreweryForDisplay)
-        
-        // TODO need to get all the beers for this brewery
-        completion(true, "Success")
+        mediator.selected(thisItem: savedBreweryForDisplay, completion: completion)
         return nil
     }
     
