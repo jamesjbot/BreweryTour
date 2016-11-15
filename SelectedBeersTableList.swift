@@ -18,6 +18,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
 
     // MARK: Variables
+    var organic : Bool = false
     var allBeersMode : Bool = false
     var selectedItemID : NSManagedObjectID = NSManagedObjectID()
     var selectedObject : NSManagedObject! = nil
@@ -51,7 +52,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
     
     
-    func setSelectedItem(toNSObjectID : NSManagedObjectID, organic : Bool ) {
+    func setSelectedItem(toNSObjectID : NSManagedObjectID) {
         selectedItemID = toNSObjectID
         // Is passing object id still needed?
         let object = Mediator.sharedInstance().passingItem
@@ -177,7 +178,6 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     internal func selected(elementAt: IndexPath,
                            searchText: String,
-                           organic: Bool,
                            completion:  @escaping (Bool, String?) -> Void) -> AnyObject? {
         if searchText != "" {
             return filteredObjects[elementAt.row]

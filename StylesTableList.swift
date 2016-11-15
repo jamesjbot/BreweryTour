@@ -106,7 +106,6 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     internal func selected(elementAt: IndexPath,
                            searchText: String,
-                           organic : Bool,
                            completion:  @escaping (Bool, String?) -> Void ) -> AnyObject? {
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
         var style : String
@@ -124,7 +123,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         } else {
             aStyle = filteredObjects[elementAt.row]
         }
-        mediator.selected(thisItem: aStyle, organic: organic )
+        mediator.selected(thisItem: aStyle )
         
         // TODO put activity indicator animating here
         // TODO temporary bypass organic swift

@@ -169,8 +169,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" misplaced="YES" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="GXl-K7-CVw">
-                                <frame key="frameInset" minY="67" width="375" height="554"/>
+                            <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="GXl-K7-CVw">
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Sn8-81-Sbh">
                                         <subviews>
@@ -182,6 +181,7 @@
                                             <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" verticalCompressionResistancePriority="751" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="Bhi-4d-Bab">
                                                 <connections>
                                                     <action selector="organicClicked:" destination="RKC-MN-s1K" eventType="valueChanged" id="8zT-2d-4mz"/>
+                                                    <action selector="organicSwitch:" destination="CGT-bu-6NU" eventType="valueChanged" id="PMW-xD-PwS"/>
                                                 </connections>
                                             </switch>
                                             <segmentedControl opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="qRp-gV-DlY">
@@ -256,6 +256,7 @@
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="activityIndicator" destination="WhL-1F-Lh4" id="fDr-il-RgC"/>
+                        <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="V1C-WU-clI"/>
                         <outlet property="searchBar" destination="vz7-RO-sWr" id="FKy-Vd-mS3"/>
                         <outlet property="tableView" destination="7fx-me-ez9" id="BsB-19-aSN"/>
                     </connections>

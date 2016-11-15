@@ -185,8 +185,7 @@ extension CategoryViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         activityIndicator.startAnimating()
         activeTableList.selected(elementAt: indexPath,
-                                 searchText: newSearchBar.text!,
-                                 organic : organicSwitch.isOn){
+                                 searchText: newSearchBar.text!){
         (sucesss,msg) -> Void in
             print(msg)
             if msg == "All Pages Processed" {

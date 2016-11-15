@@ -158,7 +158,6 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     func selected(elementAt: IndexPath,
                   searchText: String,
-                  organic : Bool,
                   completion: @escaping (_ success : Bool, _ msg : String?) -> Void ) -> AnyObject? {
         // We are only selecting one brewery to display, so we need to remove
         // all the breweries that are currently displayed. And then turn on the selected brewery
@@ -170,7 +169,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         }
         // Tell mediator about the brewery I want to display
         // Then mediator will tell selectedBeerList what to display
-        mediator.selected(thisItem: savedBreweryForDisplay, organic: organic)
+        mediator.selected(thisItem: savedBreweryForDisplay)
         
         // TODO need to get all the beers for this brewery
         completion(true, "Success")

@@ -15,6 +15,7 @@ class BeersViewController: UIViewController, Observer {
     
     // MARK: Constants
     
+    
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     fileprivate let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
     
@@ -24,9 +25,9 @@ class BeersViewController: UIViewController, Observer {
 
     // MARK: IBOutlets
     
+    @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
-    
     @IBOutlet weak var tableView: UITableView!
     
     // MARK: IBActions
@@ -34,6 +35,11 @@ class BeersViewController: UIViewController, Observer {
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
         selectedBeersTableList.toggleAllBeersMode()
     }
+    
+    @IBAction func organicSwitch(_ sender: UISwitch) {
+        selectedBeersTableList.organic = sender.isOn
+    }
+    
     // MARK: Functions
     
     func sendNotify(s: String) {
@@ -89,8 +95,7 @@ extension BeersViewController : UITableViewDelegate {
         // Temporarily put in false for organic type.
         // TODO pull the organic type from mediator.
         let beer = selectedBeersTableList.selected(elementAt: indexPath,
-                                                   searchText: searchBar.text!,
-                                                   organic : false ) {
+                                                   searchText: searchBar.text!) {
             (success,msg) -> Void in
         }
         // Create target viewcontroller
