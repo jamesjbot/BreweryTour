@@ -41,9 +41,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // MARK: Constant
     
     let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    
-    let breweryDB = BreweryDBClient.sharedInstance()
-    
+        
     let cellIdentifier = "genericTypeCell"
     
     private let styleList : StylesTableList! = Mediator.sharedInstance().getStyleList()
