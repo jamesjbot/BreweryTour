@@ -36,9 +36,6 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         super.init()
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-//        if onlyOrganic {
-//            request.predicate = NSPredicate(format: "hasOrganic == true")
-//        }
         frc = NSFetchedResultsController(fetchRequest: request,
                                          managedObjectContext: persistentContext!,
                                          sectionNameKeyPath: nil,
@@ -173,7 +170,6 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         
         // TODO need to get all the beers for this brewery
         completion(true, "Success")
-        //print("Tell mediator this brewery was selected")
         return nil
     }
     
