@@ -102,7 +102,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         }
         return cell
     }
-
+    
     
     internal func selected(elementAt: IndexPath,
                            searchText: String,
@@ -123,13 +123,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         } else {
             aStyle = filteredObjects[elementAt.row]
         }
-        mediator.selected(thisItem: aStyle )
-        
-        // TODO put activity indicator animating here
-        // TODO temporary bypass organic swift
-        BreweryDBClient.sharedInstance().downloadBeersAndBreweriesBy(styleID: style,
-                                                         isOrganic: false,
-                                                         completion: completion)
-      return nil
+        mediator.selected(thisItem: aStyle, completion: completion)
+        return nil
     }
 }
