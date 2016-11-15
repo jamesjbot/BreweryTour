@@ -108,6 +108,7 @@ class BreweryDBClient {
                        outputType: consistentOutput,
                        completion: completionHandler)
         }
+        completionHandler(true, "All Pages Processed")
         return
     }
     
@@ -284,7 +285,8 @@ class BreweryDBClient {
     }
     
     
-    // Query for breweries with a specific name
+    // Query for all breweries
+    // TODO not completing
     internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
         let theOutputType = APIQueryOutputTypes.Breweries
         var methodParameters  = [
