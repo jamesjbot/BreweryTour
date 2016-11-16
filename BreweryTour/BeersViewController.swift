@@ -33,7 +33,7 @@ class BeersViewController: UIViewController, Observer {
     // MARK: IBActions
     
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
-        selectedBeersTableList.toggleAllBeersMode()
+        selectedBeersTableList.toggleAllBeersMode(control: sender)
     }
     
     @IBAction func organicSwitch(_ sender: UISwitch) {

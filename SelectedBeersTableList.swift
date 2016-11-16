@@ -113,8 +113,15 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
 
     
-    internal func toggleAllBeersMode() {
-        allBeersMode = !allBeersMode
+    internal func toggleAllBeersMode(control : UISegmentedControl) {
+        switch control.selectedSegmentIndex {
+        case 0: // Selected Beers
+            allBeersMode = false
+        case 1: // All Beers
+            allBeersMode = true
+        default:
+            break
+        }
         print("Toggled all beers mode to \(allBeersMode)")
         performFetchRequestFor(organic: nil)
         observer.sendNotify(s: "Reload table")
