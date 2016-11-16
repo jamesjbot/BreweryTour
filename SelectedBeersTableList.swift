@@ -14,7 +14,7 @@ import CoreData
 class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
 
     // MARK: Constants
-    
+    let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
 
     // MARK: Variables
@@ -26,16 +26,13 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     internal var filteredObjects: [Beer] = [Beer]()
     internal var frc : NSFetchedResultsController<Beer>!
 
-    var observer : Observer!
+    private var observer : Observer!
     
     // MARK: Functions
     
-    func registerObserver(view: Observer) {
-        observer = view
-    }
-    
-    
-    override init(){
+    // Initialization to create a an NSFetchRequest we can use later.
+    // The default query is for all beers sorted by beer name
+    internal override init(){
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
@@ -49,31 +46,74 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         }
     }
     
-    internal func changeOrganicState(iOrganic : Bool) {
-        organic = iOrganic
+    
+    // Register the ViewController that will display this data
+    internal func registerObserver(view: Observer) {
+        observer = view
     }
     
-    // Mediator Selections
-    // The mediator tell the SelectedBeersTable what object was selected.
+    
+    // Function that responds to changes in whether the user wants to display 
+    // only organic beers
+    internal func changeOrganicState(iOrganic : Bool) {
+        organic = iOrganic
+        performFetchRequestFor(organic: organic)
+    }
+    
+    
+    // Mediator Selector
+    // The mediator tells the SelectedBeersTable what object was selected.
     internal func setSelectedItem(toNSObjectID : NSManagedObjectID) {
+        // This allows the external object to set the itemID
         selectedItemID = toNSObjectID
-        // Is passing object id still needed?
-        let object = Mediator.sharedInstance().passingItem
+        // This grabs the item using a global variable.
+        //let object = Mediator.sharedInstance().passingItem
+        
         //change object id in to object
+        let object = coreDataStack?.mainContext.object(with: toNSObjectID)
         //then get stuff
-        // TODO fetch all the beers for this object
-        //if toNSObjectID\
+        // Fetch all the beers for this object
+
+        // TODO see this is the ambiguity on the category view controller I look for 
+        // Beers and Breweries that fit for the style
+        // But for here I call call the beers for brewery.
+        // So I am calling this function in two places 
+        // I should consolidate where I call the function from. 
+        // Either it gets called in category or it gets called here.
+        // Pro for callng in category
+        // Calling in category will yield effectively a prefetch
+        // Only brewery can be selected from the category view controller.
+        
+        // Con for calling in category
+        // A model function is embedded in the viewcontroller
+        
+        // Pro for calling here
+        // Simple to implement
+        // Con for calling here
+        // No time for loading user will have to wait
+        
+        // Now I've move decision making on processing brewery or style selected to the beer list 
+        // Does this make sense?
+        // Nope
+        
+        // These methods should have been called by mediator on switch why do I need them here?
         if object is Brewery {
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery: object as! Brewery) {
                 (success,msg) -> Void in
-                //self.performFetchRequestFor()
+                self.performFetchRequestFor(organic: self.organic)
+            }
+        } else if object is Style {
+            BreweryDBClient.sharedInstance().downloadBeersAndBreweriesBy(styleID: (object as! Style).id!,
+                                                                         isOrganic: false) {
+                (success,msg) -> Void in
+                self.performFetchRequestFor(organic: self.organic)
             }
         }
-        performFetchRequestFor(organic: organic)
+        //performFetchRequestFor(organic: organic)
     }
 
     
-    func toggleAllBeersMode() {
+    internal func toggleAllBeersMode() {
         allBeersMode = !allBeersMode
         print("Toggled all beers mode to \(allBeersMode)")
         performFetchRequestFor(organic: nil)
@@ -82,7 +122,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     
     // TODO remove organic parameter.
-    func performFetchRequestFor(organic : Bool?){
+    private func performFetchRequestFor(organic : Bool?){
         // Add a selector for organic beers only.
         var subPredicates = [NSPredicate]()
         if let organic = Mediator.sharedInstance().organic {
@@ -130,13 +170,14 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
     
     
-    func mediatorPerformFetch() {
+    internal func mediatorPerformFetch() {
         print("mediator perform fetch called")
-        performFetchRequestFor(organic : nil)
+        performFetchRequestFor(organic : organic)
     }
   
     
-    func getNumberOfRowsInSection(searchText: String?) -> Int {
+    // TableView function
+    internal func getNumberOfRowsInSection(searchText: String?) -> Int {
         print("getNumberofRowsInSection fetch called")
         performFetchRequestFor(organic : nil )
         print("selectedbeerstablelist getnumberof rows called")
@@ -149,15 +190,9 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         }
     }
     
-    
-    func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
-        filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
-        return filteredObjects
-    }
-    
-    
+
     // Configures Tableviewcell for display
-    func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
+    internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // Set a default image
         // Depending on what data is shown populate image and text data.
         var im =  UIImage(named: "Nophoto.png")
@@ -190,17 +225,17 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
     
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    internal func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("SelectedBeersTableList willchange")
     }
     
     
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+    internal func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("SelctedBeersTableList changed object")
     }
     
     
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("SelectedBeersTableList didChange")
         //Datata = frc.fetchedObjects!
         // Tell what ever view controller that is registerd to refresh itself from me
@@ -209,7 +244,10 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
 
     
-
+    internal func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
+        filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
+        return filteredObjects
+    }
     
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
