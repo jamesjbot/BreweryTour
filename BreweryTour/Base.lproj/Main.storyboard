@@ -169,9 +169,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="GXl-K7-CVw">
+                            <stackView opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="GXl-K7-CVw" userLabel="TotalStackView">
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="Sn8-81-Sbh">
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="4" translatesAutoresizingMaskIntoConstraints="NO" id="Sn8-81-Sbh" userLabel="FirstBarStackView">
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Organic Only" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Or1-vb-uVo">
                                                 <fontDescription key="fontDescription" type="system" pointSize="20"/>
@@ -194,6 +194,7 @@
                                                 </connections>
                                             </segmentedControl>
                                         </subviews>
+                                        <edgeInsets key="layoutMargins" top="5" left="5" bottom="0.0" right="5"/>
                                     </stackView>
                                     <searchBar contentMode="redraw" searchBarStyle="minimal" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="vz7-RO-sWr">
                                         <textInputTraits key="textInputTraits"/>
@@ -245,7 +246,7 @@
                             <constraint firstAttribute="trailing" secondItem="GXl-K7-CVw" secondAttribute="trailing" id="9s1-EP-FZl"/>
                             <constraint firstItem="WhL-1F-Lh4" firstAttribute="centerY" secondItem="79S-bs-Ki0" secondAttribute="centerY" id="Kb6-5g-G4H"/>
                             <constraint firstItem="WhL-1F-Lh4" firstAttribute="centerX" secondItem="79S-bs-Ki0" secondAttribute="centerX" id="NgE-It-HZ6"/>
-                            <constraint firstItem="qHD-Am-IJw" firstAttribute="top" secondItem="GXl-K7-CVw" secondAttribute="bottom" id="aA4-bD-3Du"/>
+                            <constraint firstItem="qHD-Am-IJw" firstAttribute="top" secondItem="GXl-K7-CVw" secondAttribute="bottom" constant="5" id="aA4-bD-3Du"/>
                             <constraint firstItem="GXl-K7-CVw" firstAttribute="leading" secondItem="79S-bs-Ki0" secondAttribute="leading" id="obb-Tg-flP"/>
                             <constraint firstItem="GXl-K7-CVw" firstAttribute="top" secondItem="jgl-nB-2cO" secondAttribute="bottom" id="ph1-25-X4E"/>
                         </constraints>
