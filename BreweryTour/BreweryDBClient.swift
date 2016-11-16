@@ -59,11 +59,6 @@ class BreweryDBClient {
                 return
             }
             
-            // Debugging code
-            guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
-                //completion(false, "No results")
-                return
-            }
             self.parse(response: responseJSON as NSDictionary,
                        querySpecificID:  nil,
                        outputType: APIQueryOutputTypes.Styles,
@@ -542,12 +537,12 @@ class BreweryDBClient {
                     fatalError()
                 }
                 
-                Style(id: localId!, name: localName! as! String, context: (coreDataStack?.persistingContext)!)
+                Style(id: localId!, name: localName! as! String, context: (coreDataStack?.mainContext)!)
             }
             
             // Save beer styles to disk
             do {
-                try coreDataStack?.persistingContext.save()
+                try coreDataStack?.mainContext.save()
                 completion!(true, "Success")
                 return
             } catch {
@@ -706,7 +701,7 @@ class BreweryDBClient {
                 completion!(false, "Failed Request \(#line) \(#function)")
                 return
             }
-            
+            print("This many beers at this brewery: \(beerArray.count)")
             for beer in beerArray {
                 print("---------------------NextBeer---------------------")
                 // Create the coredata object for each beer
