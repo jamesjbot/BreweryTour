@@ -76,7 +76,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        observer.sendNotify(s: "Content changed")
+        observer.sendNotify(s: "reload data")
     }
     
     
