@@ -128,24 +128,12 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Fix the top title bar when we return
-        //setTopTitleBarName()
-        
         // Deselect whatever was selected on screen
         guard styleTable.indexPathForSelectedRow == nil else {
             styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
             return
         }
     }
-    
-    
-//    private func setTopTitleBarName(){
-//        if organicSwitch.isOn {
-//            navigationController?.navigationBar.topItem?.title =  "Organic Brewery Tour"
-//        } else {
-//            navigationController?.navigationBar.topItem?.title =  "Brewery Tour"
-//        }
-//    }
     
     
     // Changes the navigation bar to show user they can go back to categories screen
