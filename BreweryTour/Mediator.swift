@@ -40,6 +40,7 @@ class Mediator : NSManagedObjectDisplayable {
     internal func getMapData() -> NSManagedObject? {
         return passingItem
     }
+    
     enum types {
         case Style
         case Brewery
@@ -49,8 +50,7 @@ class Mediator : NSManagedObjectDisplayable {
     
     // MARK: Functions
     
-    // MARK: Singleton Implementation
-    
+    // Singleton Implementation
     private init(){
         // Setup to receive message from the lists
         styleList.mediator = self
@@ -79,15 +79,20 @@ class Mediator : NSManagedObjectDisplayable {
         mapViewer = view
     }
     
-//    func getSelectedItem() -> NSManagedObject? {
-//        return passingItem
-//    }
     
-    
-    func selected(thisItem: NSManagedObject) {
+    // When an element on categoryScreen is selected process on BreweryDBClient
+    func selected(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passingItem = thisItem
         print("Mediator setting selectedBeersList prior to call: \(passingItem)")
         selectedBeersList.setSelectedItem(toNSObjectID: passingItem!.objectID)
+        if thisItem is Brewery {
+            print("Calling mediator to downloadbeers by brewery")
+            BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
+                                                             completionHandler : completion)
+        } else if thisItem is Style {
+            BreweryDBClient.sharedInstance().downloadBeersAndBreweriesBy(styleID: (thisItem as! Style).id!,
+                                                                         isOrganic: false,
+                                                                         completion: completion)
+        }
     }
-    
 }
