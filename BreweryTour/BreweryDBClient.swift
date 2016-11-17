@@ -701,7 +701,9 @@ class BreweryDBClient {
                 completion!(false, "Failed Request \(#line) \(#function)")
                 return
             }
-            print("This many beers at this brewery: \(beerArray.count)")
+            
+            print("\(#line) why is this called twice. This many beers at this brewery: \(beerArray.count)")
+            
             for beer in beerArray {
                 print("---------------------NextBeer---------------------")
                 // Create the coredata object for each beer
