@@ -15,13 +15,13 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
 
     // MARK: Constants
     let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
+    let mainContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.mainContext
 
     // MARK: Variables
     private var organic : Bool = false
     private var allBeersMode : Bool = false
-    internal var selectedItemID : NSManagedObjectID = NSManagedObjectID()
-    private var selectedObject : NSManagedObject! = nil
+    //internal var selectedItemID : NSManagedObjectID = NSManagedObjectID()
+    internal var selectedObject : NSManagedObject! = nil
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Beer] = [Beer]()
     internal var frc : NSFetchedResultsController<Beer>!
@@ -36,7 +36,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: persistentContext!,
+                                         managedObjectContext: mainContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         do {
@@ -63,53 +63,8 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     // Mediator Selector
     // The mediator tells the SelectedBeersTable what object was selected.
-    internal func setSelectedItem(toNSObjectID : NSManagedObjectID) {
-        // This allows the external object to set the itemID
-        selectedItemID = toNSObjectID
-        // This grabs the item using a global variable.
-        //let object = Mediator.sharedInstance().passingItem
-        
-        //change object id in to object
-        let object = coreDataStack?.mainContext.object(with: toNSObjectID)
-        //then get stuff
-        // Fetch all the beers for this object
-
-        // TODO see this is the ambiguity on the category view controller I look for 
-        // Beers and Breweries that fit for the style
-        // But for here I call call the beers for brewery.
-        // So I am calling this function in two places 
-        // I should consolidate where I call the function from. 
-        // Either it gets called in category or it gets called here.
-        // Pro for callng in category
-        // Calling in category will yield effectively a prefetch
-        // Only brewery can be selected from the category view controller.
-        
-        // Con for calling in category
-        // A model function is embedded in the viewcontroller
-        
-        // Pro for calling here
-        // Simple to implement
-        // Con for calling here
-        // No time for loading user will have to wait
-        
-        // Now I've move decision making on processing brewery or style selected to the beer list 
-        // Does this make sense?
-        // Nope
-        
-        // These methods should have been called by mediator on switch why do I need them here?
-        if object is Brewery {
-            BreweryDBClient.sharedInstance().downloadBeersBy(brewery: object as! Brewery) {
-                (success,msg) -> Void in
-                self.performFetchRequestFor(organic: self.organic)
-            }
-        } else if object is Style {
-            BreweryDBClient.sharedInstance().downloadBeersAndBreweriesBy(styleID: (object as! Style).id!,
-                                                                         isOrganic: false) {
-                (success,msg) -> Void in
-                self.performFetchRequestFor(organic: self.organic)
-            }
-        }
-        //performFetchRequestFor(organic: organic)
+    internal func setSelectedItem(toNSObject : NSManagedObject) {
+        selectedObject = toNSObject
     }
 
     
@@ -141,7 +96,6 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         print("Perform fetch request called")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
-        selectedObject = Mediator.sharedInstance().passingItem
         switch allBeersMode {
         case true:
             //print("All beers mode is on")
@@ -166,7 +120,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         }
 
         frc = NSFetchedResultsController(fetchRequest : request,
-                                         managedObjectContext: persistentContext!,
+                                         managedObjectContext: mainContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         do {
