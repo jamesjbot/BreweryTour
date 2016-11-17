@@ -84,7 +84,7 @@ class Mediator : NSManagedObjectDisplayable {
     func selected(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passingItem = thisItem
         print("Mediator setting selectedBeersList prior to call: \(passingItem)")
-        selectedBeersList.setSelectedItem(toNSObjectID: passingItem!.objectID)
+        selectedBeersList.setSelectedItem(toNSObject: passingItem!)
         if thisItem is Brewery {
             print("Calling mediator to downloadbeers by brewery")
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
