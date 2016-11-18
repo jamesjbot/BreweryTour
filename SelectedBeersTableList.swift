@@ -6,6 +6,8 @@
 //
 //
 /** This program is the view model for the selected beers tab.
+    We create the NSFetchRequest based on what needs to be displayed on screen.
+ Currently it will be either all beers or selection of beers based on brewery or style of beer.
  **/
 
 import UIKit
@@ -87,11 +89,11 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     private func performFetchRequestFor(organic : Bool?){
         // Add a selector for organic beers only.
         var subPredicates = [NSPredicate]()
-        if let organic = Mediator.sharedInstance().organic {
+        if let organic = organic {
             subPredicates.append(NSPredicate(format: "isOrganic == %@",
                                              NSNumber(value: organic) ))
             subPredicates.append(NSPredicate(format: "favorite == YES", []))
-            print(subPredicates)
+            print("predicates \(subPredicates)")
         }
         print("Perform fetch request called")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
@@ -125,6 +127,8 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
                                          cacheName: nil)
         do {
             try frc.performFetch()
+            print("data fetched")
+            observer.sendNotify(s: "reload data")
         } catch {
             fatalError()
         }
