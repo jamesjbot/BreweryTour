@@ -148,7 +148,7 @@ class BreweryDBClient {
                 
                 // The follow block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
-                    completion(true, "Finished")
+                    completion(true, "All Pages Processed")
                     return
                 }
                 
@@ -232,7 +232,7 @@ class BreweryDBClient {
                 
                 // The following block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
-                    completion(true, "Finished")
+                    completion(true, "All Pages Processed")
                     return
                 }
                 print("Total pages \(numberOfPages)")
@@ -405,7 +405,7 @@ class BreweryDBClient {
                            completion: completion)
                 // The following block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
-                    completion(true, "Finished")
+                    completion(true, "All Pages Processed")
                     return
                 }
                 
