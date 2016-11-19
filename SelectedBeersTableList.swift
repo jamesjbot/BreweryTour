@@ -80,7 +80,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
             break
         }
         print("Toggled all beers mode to \(allBeersMode)")
-        performFetchRequestFor(organic: nil,observerNeedsNotification: true)
+        performFetchRequestFor(organic: organic, observerNeedsNotification: true)
     }
     
     
@@ -88,10 +88,10 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     // Function to perform fetch on dynamic request.
     // After fetch is completed the user interface
     // needs to be notified of changes with observer.notify(msg:"")
-    private func performFetchRequestFor(organic : Bool?, observerNeedsNotification: Bool){
+    private func performFetchRequestFor(organic : Bool, observerNeedsNotification: Bool){
         // Add a selector for organic beers only.
         var subPredicates = [NSPredicate]()
-        if let organic = organic {
+        if organic == true {
             subPredicates.append(NSPredicate(format: "isOrganic == %@",
                                              NSNumber(value: organic) ))
             // TODO Test code to see what is wrong with predicates maybe
