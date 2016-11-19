@@ -105,33 +105,28 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         // Adds additional NSPredicates
         switch allBeersMode {
         case true:
-            //print("All beers in database mode is on")
+            // Display all beers from breweries and styles
             break
         case false :
-            //print("All beers in database mode is OFF")
+            // Display only selected beers
             if selectedObject is Brewery {
                 subPredicates.append(NSPredicate(format: "breweryID == %@",
                                                 (selectedObject as! Brewery).id!))
-                print("operating on brewery")
             } else if selectedObject is Style {
                 subPredicates.append(NSPredicate(format: "styleID == %@",
                                                 (selectedObject as! Style).id!))
-                print("operating on style")
-            } else {
-                //print("All beers mode again default")
-                break
             }
             break
         }
         // Set all predicates
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subPredicates)
+        // Create a new fetchedresultscontroller
         frc = NSFetchedResultsController(fetchRequest : request,
                                          managedObjectContext: mainContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         do {
             try frc.performFetch()
-            print("data fetched")
             if observerNeedsNotification {
                 observer.sendNotify(s: "reload data")
             }
