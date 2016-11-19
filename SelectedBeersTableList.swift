@@ -55,11 +55,10 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
     
     
-    // Function that responds to changes in whether the user wants to display 
-    // only organic beers
+    // Respond to user interface (only) changes on displaying organic beers.
     internal func changeOrganicState(iOrganic : Bool) {
         organic = iOrganic
-        performFetchRequestFor(organic: organic)
+        performFetchRequestFor(organic: organic,observerNeedsNotification: true)
     }
     
     
@@ -69,7 +68,8 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         selectedObject = toNSObject
     }
 
-    
+    // TODO Decides on whether to display all data or not
+    // Needs organic tag.
     internal func toggleAllBeersMode(control : UISegmentedControl) {
         switch control.selectedSegmentIndex {
         case 0: // Selected Beers
@@ -80,19 +80,22 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
             break
         }
         print("Toggled all beers mode to \(allBeersMode)")
-        performFetchRequestFor(organic: nil)
-        observer.sendNotify(s: "Reload table")
+        performFetchRequestFor(organic: nil,observerNeedsNotification: true)
     }
     
     
     // TODO remove organic parameter.
-    private func performFetchRequestFor(organic : Bool?){
+    // Function to perform fetch on dynamic request.
+    // After fetch is completed the user interface
+    // needs to be notified of changes with observer.notify(msg:"")
+    private func performFetchRequestFor(organic : Bool?, observerNeedsNotification: Bool){
         // Add a selector for organic beers only.
         var subPredicates = [NSPredicate]()
         if let organic = organic {
             subPredicates.append(NSPredicate(format: "isOrganic == %@",
                                              NSNumber(value: organic) ))
-            subPredicates.append(NSPredicate(format: "favorite == YES", []))
+            // TODO Test code to see what is wrong with predicates maybe
+            //subPredicates.append(NSPredicate(format: "favorite == YES", []))
             print("predicates \(subPredicates)")
         }
         print("Perform fetch request called")
@@ -128,7 +131,9 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         do {
             try frc.performFetch()
             print("data fetched")
-            observer.sendNotify(s: "reload data")
+            if observerNeedsNotification {
+                observer.sendNotify(s: "reload data")
+            }
         } catch {
             fatalError()
         }
@@ -137,14 +142,15 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     internal func mediatorPerformFetch() {
         print("mediator perform fetch called")
-        performFetchRequestFor(organic : organic)
+        performFetchRequestFor(organic : organic, observerNeedsNotification: true)
     }
   
     
     // TableView function
     internal func getNumberOfRowsInSection(searchText: String?) -> Int {
         print("getNumberofRowsInSection fetch called")
-        performFetchRequestFor(organic : nil )
+        // Since the query is dynamic we need to refresh the data incase something changed.
+        performFetchRequestFor(organic : organic, observerNeedsNotification: false )
         print("selectedbeerstablelist getnumberof rows called")
         if searchText != "" {
             print("searched filtered object \(filteredObjects.count)")
