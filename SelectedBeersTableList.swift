@@ -101,21 +101,21 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         print("Perform fetch request called")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
+        
+        // Adds additional NSPredicates
         switch allBeersMode {
         case true:
-            //print("All beers mode is on")
+            //print("All beers in database mode is on")
             break
         case false :
-            //print("All beers mode is OFF")
+            //print("All beers in database mode is OFF")
             if selectedObject is Brewery {
                 subPredicates.append(NSPredicate(format: "breweryID == %@",
                                                 (selectedObject as! Brewery).id!))
-                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subPredicates)
                 print("operating on brewery")
             } else if selectedObject is Style {
                 subPredicates.append(NSPredicate(format: "styleID == %@",
                                                 (selectedObject as! Style).id!))
-                request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subPredicates)
                 print("operating on style")
             } else {
                 //print("All beers mode again default")
@@ -123,7 +123,8 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
             }
             break
         }
-
+        // Set all predicates
+        request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subPredicates)
         frc = NSFetchedResultsController(fetchRequest : request,
                                          managedObjectContext: mainContext!,
                                          sectionNameKeyPath: nil,
