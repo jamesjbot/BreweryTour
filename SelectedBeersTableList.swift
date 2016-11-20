@@ -192,21 +192,18 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
     
     
-    internal func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("SelectedBeersTableList willchange")
-    }
-    
-    
-    internal func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("SelctedBeersTableList changed object")
-    }
+//    internal func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//        print("SelectedBeersTableList willchange")
+//    }
+//    
+//    
+//    internal func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+//        print("SelctedBeersTableList changed object")
+//    }
     
     
     internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("SelectedBeersTableList didChange")
-        //Datata = frc.fetchedObjects!
         // Tell what ever view controller that is registerd to refresh itself from me
-        //TODO
         observer.sendNotify(s: "You were updated")
     }
 
