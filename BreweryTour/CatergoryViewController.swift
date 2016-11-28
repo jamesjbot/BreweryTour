@@ -22,8 +22,11 @@
 
 import UIKit
 import CoreData
+import SwiftyWalkthrough
 
-class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate , Observer  {
+class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate ,
+    Observer
+    {
     
     // TODO Is this testing code I can remove
     private func batchDelete() {
@@ -65,6 +68,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var styleTable: UITableView!
     
+    @IBOutlet weak var tutorialView: UIView!
     
     // MARK: IBActions
     @IBAction func refresh(_ sender: AnyObject) {
@@ -133,6 +137,18 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
             return
         }
+//        let hole = UIView(frame: segmentedControl.frame)
+//        hole.alpha = 0.0
+//        tutorialView.addSubview(MakeTransparentHoleOnOverlayView(frame: segmentedControl.frame))
+//        print("tutorialView CGRect \(tutorialView.frame)")
+//        print("selfView CGRect \(self.view.frame)")
+//        print("segmentedControl: \(segmentedControl.frame)")
+//        tutorialView.setNeedsDisplay()
+        // Testing walkthroug
+        //enumerateSubview(view:  view, allowFull: segmentedControl)
+        
+        //makeAllViewsTransparent(inSet: view.subviews, exceptView: segmentedControl)
+        
     }
     
     
@@ -140,6 +156,42 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         navigationController?.navigationBar.topItem?.title = "Style/Brewery"
     }
+    
+    
+//    func enumerateSubview(view: UIView, allowFull: UIView){
+//        print("I am \(view)")
+//        if view.subviews.isEmpty {
+//            print("I have no subviews")
+//            if view == allowFull || view is UIStackView {
+//                view.alpha = 1.0
+//            } else {
+//                view.alpha = 0.1
+//            }
+//        }
+//
+//        for i in view.subviews {
+//            enumerateSubview(view: i, allowFull: allowFull)
+//        }
+//    }
+//    
+//    
+//    func makeAllViewsTransparent(inSet: [UIView], exceptView: UIView){
+//        //print(inSet.subviews.contains(exceptView))
+//        if inSet.count == 1 {
+//            if view != exceptView {
+//                print(view)
+//                view.alpha = 0.25
+//                DispatchQueue.main.async {
+//                    self.view.setNeedsDisplay()
+//                }
+//            }
+//        } else {
+//            for i in inSet {
+//                //makeAllViewsTransparent(inSet: i, exceptView: exceptView)
+//            }
+//        }
+//
+//    }
 }
 
 

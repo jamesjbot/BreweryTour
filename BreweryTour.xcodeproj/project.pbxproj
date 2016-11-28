@@ -26,6 +26,7 @@
 		A74350761DBAA1AA007AE08C /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350751DBAA1AA007AE08C /* Subject.swift */; };
 		A752344D1DAEA666008EF071 /* BeersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A752344C1DAEA666008EF071 /* BeersViewController.swift */; };
 		A752344F1DAEDB59008EF071 /* BeerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A752344E1DAEDB59008EF071 /* BeerDetailViewController.swift */; };
+		A76723FB1DEA77AA0099A60B /* TransparentHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = A76723FA1DEA77AA0099A60B /* TransparentHole.swift */; };
 		A76B3B8B1DB0C03700B0A899 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8A1DB0C03700B0A899 /* Launch Screen.storyboard */; };
 		A76B3B8D1DB0C5A200B0A899 /* SAM_5869 (1).png in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8C1DB0C5A200B0A899 /* SAM_5869 (1).png */; };
 		A76B3B901DB0E00D00B0A899 /* heart_icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8E1DB0E00D00B0A899 /* heart_icon.pdf */; };
@@ -92,6 +93,7 @@
 		A74350751DBAA1AA007AE08C /* Subject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
 		A752344C1DAEA666008EF071 /* BeersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeersViewController.swift; sourceTree = "<group>"; };
 		A752344E1DAEDB59008EF071 /* BeerDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeerDetailViewController.swift; sourceTree = "<group>"; };
+		A76723FA1DEA77AA0099A60B /* TransparentHole.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TransparentHole.swift; sourceTree = "<group>"; };
 		A76B3B8A1DB0C03700B0A899 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		A76B3B8C1DB0C5A200B0A899 /* SAM_5869 (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SAM_5869 (1).png"; sourceTree = "<group>"; };
 		A76B3B8E1DB0E00D00B0A899 /* heart_icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = heart_icon.pdf; sourceTree = "<group>"; };
@@ -174,6 +176,7 @@
 			isa = PBXGroup;
 			children = (
 				A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */,
+				A76723FA1DEA77AA0099A60B /* TransparentHole.swift */,
 				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
 				A752344C1DAEA666008EF071 /* BeersViewController.swift */,
 				A752344E1DAEDB59008EF071 /* BeerDetailViewController.swift */,
@@ -508,6 +511,7 @@
 				A78020881DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift in Sources */,
 				A74350761DBAA1AA007AE08C /* Subject.swift in Sources */,
 				A709D3F61DAE459C00F11452 /* Beer+CoreDataClass.swift in Sources */,
+				A76723FB1DEA77AA0099A60B /* TransparentHole.swift in Sources */,
 				A74350661DB8FBA1007AE08C /* Mediator.swift in Sources */,
 				A711EC091DC8EBDF008E114A /* ExtensionUIViewController.swift in Sources */,
 				A74350741DBAA17F007AE08C /* Observer.swift in Sources */,
