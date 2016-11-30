@@ -42,7 +42,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     
     // MARK: Constant
-    
+    let paddingForPoint : CGFloat = 40
     let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
         
     let cellIdentifier = "genericTypeCell"
@@ -65,6 +65,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBInspectable var fillColor: UIColor = UIColor.green
     // MARK: IBOutlets
 
+
+    @IBOutlet weak var tutorialTextConstraint: NSLayoutConstraint!
     @IBOutlet weak var pointer: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshDatabase: UIBarButtonItem!
@@ -132,6 +134,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         
         styleList.registerObserver(view: self)
         breweryList.registerObserver(view: self)
+        
+
     }
     
     
@@ -153,16 +157,29 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         //enumerateSubview(view:  view, allowFull: segmentedControl)
         
         //makeAllViewsTransparent(inSet: view.subviews, exceptView: segmentedControl)
-        
+        // Tutorial text
+        tutorialTextConstraint.constant = paddingForPoint * 2
     }
     
-    
+    // Why is it taking me along time because the coordinates are changing when I apply them
+    // to the tutorial text.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        UIView.animateKeyframes(withDuration: 1.2,
+        // Find the target end position and beginning position 
+        // of the white pointer
+        // Table tutorial
+        let coordinates : CGPoint = view.convert(styleTable.frame.origin, to: self.view)
+        print("Coordinates are \(coordinates)")
+        coordinateValues.init(x: coordinates.x, y: coordinates.y)
+        //let pointerCoord = CGPoint(x: coordinate.x, y: coordinates.y)
+        pointer.frame.origin.x = CGFloat(floatLiteral: CGFloat.NativeType(coordinates.x))
+        pointer.frame.origin.y = CGFloat(coordinates.y)
+        //enumerateSubview(view: self.view, allowFull: styleTable)
+        print("The pointer is at \(pointer.frame.origin)")
+        UIView.animateKeyframes(withDuration: 1.0,
                                 delay: 0.0,
                                 options: [ .autoreverse, .repeat ],
-                                animations: { self.pointer.center.y += self.view.bounds.width },
+                                animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
                                 completion: nil)
     }
     
@@ -172,6 +189,21 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         navigationController?.navigationBar.topItem?.title = "Style/Brewery"
     }
     
+    func enumerateSubview(view: UIView, allowFull: UIView) {
+        // Everything will be a parent view here
+        print("Parent View: \(view)")
+        let coordinates = view.convert(view.frame.origin, to: self.view)
+        print("Coordinates: \(view.frame) Converted: \(view.convert(view.frame.origin, to: self.view))\n")
+        if view == allowFull {
+            print("found the view above\n")
+print("\(view.convert(allowFull.frame.origin, to: self.view))")
+            //CGRect(x: coordinates.x, y: coordinates.y, width: view.frame.width, height: view.frame.height)
+        } else {
+            for i in view.subviews {
+                 enumerateSubview(view: i, allowFull: allowFull)
+            }
+        }
+    }
     
 //    func enumerateSubview(view: UIView, allowFull: UIView){
 //        print("I am \(view)")
