@@ -59,8 +59,13 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     fileprivate var activeTableList : TableList!
     
-    
+    private var explainedTable : Bool = false
+    private var explainedSegmented : Bool = false
+
+    @IBInspectable var fillColor: UIColor = UIColor.green
     // MARK: IBOutlets
+
+    @IBOutlet weak var pointer: UIView!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshDatabase: UIBarButtonItem!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -149,6 +154,16 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         
         //makeAllViewsTransparent(inSet: view.subviews, exceptView: segmentedControl)
         
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        UIView.animateKeyframes(withDuration: 1.2,
+                                delay: 0.0,
+                                options: [ .autoreverse, .repeat ],
+                                animations: { self.pointer.center.y += self.view.bounds.width },
+                                completion: nil)
     }
     
     
