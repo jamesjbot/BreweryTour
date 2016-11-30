@@ -22,10 +22,6 @@ class CircleView: UIView {
         var lineWidth : CGFloat = 0.5
         
         var full = CGFloat(M_PI*2)
-        var quarter = CGFloat(M_PI/2)
-        var half = CGFloat(M_PI)
-        var threeQuarters = CGFloat(3*M_PI/2)
- 
     
         func drawCirleCenteredAt(center: CGPoint, withRadius radius: CGFloat) -> UIBezierPath {
             let circlePath = UIBezierPath(arcCenter: centerOfCirclesView,
@@ -39,7 +35,6 @@ class CircleView: UIView {
     
         override func draw(_ rect: CGRect) {
             // Drawing code
-
             let path = drawCirleCenteredAt(center: centerOfCirclesView, withRadius: halfOfViewSize)
             path.close()
             UIColor.white.setFill()
