@@ -52,8 +52,19 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     private let med : Mediator = Mediator.sharedInstance()
     
+    enum CategoryTutorialStage {
+        case SegementedControl
+        case Table
+    }
+    
     
     // MARK: Variables
+    
+    var tutorialModeOn : Bool = false {
+        didSet {
+            tutorialView.isHidden = !tutorialModeOn
+        }
+    }
     
     fileprivate var fetchedResultsController : NSFetchedResultsController<NSManagedObject>!
     
@@ -78,6 +89,18 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBOutlet weak var tutorialView: UIView!
     
     // MARK: IBActions
+    @IBAction func tutorialButton(_ sender: UIBarButtonItem) {
+        tutorialModeOn = true
+    }
+
+    @IBAction func dissMissTutorial(_ sender: UIButton) {
+        tutorialModeOn = false
+    }
+    
+    @IBAction func nextCommandPressed(_ sender: AnyObject) {
+        
+    }
+    
     @IBAction func refresh(_ sender: AnyObject) {
         coreDataStack?.deleteBeersAndBreweries()
     }
@@ -169,8 +192,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         // of the white pointer
         // Table tutorial
         let coordinates : CGPoint = view.convert(styleTable.frame.origin, to: self.view)
-        print("Coordinates are \(coordinates)")
-        coordinateValues.init(x: coordinates.x, y: coordinates.y)
+        //print("Coordinates are \(coordinates)")
+        //coordinateValues.init(x: coordinates.x, y: coordinates.y)
         //let pointerCoord = CGPoint(x: coordinate.x, y: coordinates.y)
         pointer.frame.origin.x = CGFloat(floatLiteral: CGFloat.NativeType(coordinates.x))
         pointer.frame.origin.y = CGFloat(coordinates.y)
