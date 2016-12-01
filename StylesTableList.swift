@@ -89,16 +89,16 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
-        filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
+        filteredObjects = (frc.fetchedObjects?.filter({ ( ( $0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
         return filteredObjects
     }
     
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         if searchText != "" {
-            cell.textLabel?.text = (filteredObjects[indexPath.row]).id! + (filteredObjects[indexPath.row]).displayName!
+            cell.textLabel?.text = (filteredObjects[indexPath.row]).displayName!
         } else {
-            cell.textLabel?.text = (frc.object(at: indexPath ) ).id! + (frc.object(at: indexPath ) ).displayName!
+            cell.textLabel?.text = (frc.object(at: indexPath )).displayName!
         }
         return cell
     }
