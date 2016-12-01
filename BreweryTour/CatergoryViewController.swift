@@ -42,6 +42,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     
     // MARK: Constant
+    let segmentedControlPaddding : CGFloat = 8
     let paddingForPoint : CGFloat = 40
     let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
         
@@ -60,11 +61,12 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // MARK: Variables
     
-    var tutorialModeOn : Bool = false {
+    private var tutorialModeOn : Bool = false {
         didSet {
             tutorialView.isHidden = !tutorialModeOn
         }
     }
+    private var tutorialState : CategoryTutorialStage = .SegementedControl
     
     fileprivate var fetchedResultsController : NSFetchedResultsController<NSManagedObject>!
     
@@ -72,13 +74,18 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     private var explainedTable : Bool = false
     private var explainedSegmented : Bool = false
-
+    
+    
     @IBInspectable var fillColor: UIColor = UIColor.green
+    
     // MARK: IBOutlets
 
-
+    // Tutorial outlets
+    @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var tutorialTextConstraint: NSLayoutConstraint!
     @IBOutlet weak var pointer: UIView!
+    @IBOutlet weak var tutorialView: UIView!
+    
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var refreshDatabase: UIBarButtonItem!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -86,7 +93,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var styleTable: UITableView!
     
-    @IBOutlet weak var tutorialView: UIView!
+
     
     // MARK: IBActions
     @IBAction func tutorialButton(_ sender: UIBarButtonItem) {
@@ -98,7 +105,45 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     }
     
     @IBAction func nextCommandPressed(_ sender: AnyObject) {
-        
+        // TODO advance the tutorial state
+        //
+        switch tutorialState {
+        case .SegementedControl:
+            //TODO Hide Table element
+            //TODO Show Segmented Control Elements
+            // Set the initial point
+            tutorialText.text = "Select Style to show all breweries with that specific style on map, or select Brewery to view just that brewery on the map"
+            let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.center.y + segmentedControlPaddding)
+            print("Placing pointer at segmented \(segmentPoint)")
+            print("Segmented control center: \(segmentedControl.center)")
+            print("Segmented frame rect: \(segmentedControl.frame)")
+            pointer.center = segmentPoint
+            print("Pointer center: \(pointer.center)")
+            print("Textview alpha: \(tutorialText.alpha)")
+            print("Super alpha: \(tutorialText.superview?.alpha)")
+            tutorialText.superview?.alpha = 1.0
+            UIView.animateKeyframes(withDuration: 0.2,
+                                    delay: 0.0,
+                                    options: [ .autoreverse, .repeat ],
+                                    animations: { self.pointer.center.x += self.segmentedControl.frame.width - self.segmentedControlPaddding},
+                                    completion: nil)
+            break
+        case .Table:
+            //TODO Hide Segemented Control Elements
+            //TODO Show Table elements
+            tutorialText.text = "Select style or brewery from list to show on map"
+            let tablePoint = CGPoint(x: styleTable.center.x , y: styleTable.frame.origin.y)
+            print("Placing pointer at table \(tablePoint)")
+            pointer.center = tablePoint
+            print("Table center: \(styleTable.center)")
+            print("Pointer center: \(pointer.center)")
+            UIView.animateKeyframes(withDuration: 0.4,
+                                    delay: 0.0,
+                                    options: [ .autoreverse, .repeat ],
+                                    animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
+                                    completion: nil)
+            break
+        }
     }
     
     @IBAction func refresh(_ sender: AnyObject) {
@@ -157,8 +202,6 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         
         styleList.registerObserver(view: self)
         breweryList.registerObserver(view: self)
-        
-
     }
     
     
@@ -181,7 +224,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         
         //makeAllViewsTransparent(inSet: view.subviews, exceptView: segmentedControl)
         // Tutorial text
-        tutorialTextConstraint.constant = paddingForPoint * 2
+        //tutorialTextConstraint.constant = paddingForPoint * 2
     }
     
     // Why is it taking me along time because the coordinates are changing when I apply them
@@ -199,7 +242,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         pointer.frame.origin.y = CGFloat(coordinates.y)
         //enumerateSubview(view: self.view, allowFull: styleTable)
         print("The pointer is at \(pointer.frame.origin)")
-        UIView.animateKeyframes(withDuration: 1.0,
+        UIView.animateKeyframes(withDuration: 20.0,
                                 delay: 0.0,
                                 options: [ .autoreverse, .repeat ],
                                 animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
