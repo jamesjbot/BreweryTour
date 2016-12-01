@@ -79,8 +79,7 @@
                                 <subviews>
                                     <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AIv-0r-wQn" userLabel="Shadow View">
                                         <subviews>
-                                            <view clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jRB-Sa-1bJ" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
-                                                <frame key="frameInset" minX="66" minY="295" width="40" height="40"/>
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jRB-Sa-1bJ" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="jRB-Sa-1bJ" secondAttribute="height" multiplier="1:1" id="z6j-n9-x79"/>
                                                     <constraint firstAttribute="width" constant="40" id="zRo-5m-UrT"/>
@@ -89,6 +88,7 @@
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
+                                            <constraint firstItem="jRB-Sa-1bJ" firstAttribute="leading" secondItem="AIv-0r-wQn" secondAttribute="leading" constant="15" id="YfI-I1-nXZ"/>
                                             <constraint firstItem="jRB-Sa-1bJ" firstAttribute="top" secondItem="AIv-0r-wQn" secondAttribute="top" constant="295" id="u7F-xw-Nab"/>
                                         </constraints>
                                     </view>
