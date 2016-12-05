@@ -105,8 +105,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     }
     
     @IBAction func nextCommandPressed(_ sender: AnyObject) {
-        // TODO advance the tutorial state
-        //
+        // Advance the tutorial state
         switch tutorialState {
         case .SegementedControl:
             tutorialState = .Table
