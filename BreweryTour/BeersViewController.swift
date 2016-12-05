@@ -15,20 +15,34 @@ class BeersViewController: UIViewController, Observer {
     
     // MARK: Constants
     
+    enum SelectedBeersTutorialStage {
+        case Table
+        case SegementedControl
+        case Organic
+    }
     
+    let segmentedControlPaddding : CGFloat = 8
+    let paddingForPoint : CGFloat = 20
+
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     fileprivate let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
     
     // MARK: Variables
     
     internal var listOfBreweryIDToDisplay : [String]!
-
+    private var tutorialState : SelectedBeersTutorialStage = .Table
     // MARK: IBOutlets
     
+    @IBOutlet weak var tutorialText: UITextView!
+    
+    @IBOutlet weak var nextLessonButton: UIButton!
+    @IBOutlet weak var dismissTutorialButton: UIButton!
+    @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     // MARK: IBActions
     
@@ -38,6 +52,49 @@ class BeersViewController: UIViewController, Observer {
     
     @IBAction func organicSwitch(_ sender: UISwitch) {
         selectedBeersTableList.changeOrganicState(iOrganic: sender.isOn)
+    }
+    
+    @IBAction func nextLesson(_ sender: UIButton) {
+        // Advance the tutorial state
+        switch tutorialState {
+        case .Table:
+            tutorialState = .SegementedControl
+        case .SegementedControl:
+            tutorialState = .Organic
+        case .Organic:
+            tutorialState = .Table
+        }
+        
+        switch tutorialState {
+        case .SegementedControl:
+            // Set the initial point
+            tutorialText.text = "Select Style to show all breweries with that style on map, or\nSelect Brewery to show that brewery on the map"
+            let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.center.y + segmentedControlPaddding)
+            pointer.center = segmentPoint
+            UIView.animateKeyframes(withDuration: 0.5,
+                                    delay: 0.0,
+                                    options: [ .autoreverse, .repeat ],
+                                    animations: { self.pointer.center.x += self.segmentedControl.frame.width - self.segmentedControlPaddding},
+                                    completion: nil)
+            break
+            
+        case .Table:
+            tutorialText.text = "Select a style or brewery from list to show on map"
+            let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
+            pointer.center = tablePoint
+            UIView.animateKeyframes(withDuration: 0.5,
+                                    delay: 0.0,
+                                    options: [ .autoreverse, .repeat ],
+                                    animations: { self.pointer.center.y += self.tableView.frame.height - self.paddingForPoint },
+                                    completion: nil)
+            break
+        
+        case .Organic:
+            break
+        }
+    }
+    
+    @IBAction func dismissTutorial(_ sender: UIButton) {
     }
     
     // MARK: Functions

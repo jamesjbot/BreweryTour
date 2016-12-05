@@ -446,6 +446,7 @@ Click on information to bring up brewery website.</string>
                                                 </userDefinedRuntimeAttributes>
                                                 <connections>
                                                     <action selector="nextCommandPressed:" destination="RKC-MN-s1K" eventType="touchUpInside" id="jvi-pJ-XXn"/>
+                                                    <action selector="nextLesson:" destination="CGT-bu-6NU" eventType="touchUpInside" id="On4-zM-poL"/>
                                                 </connections>
                                             </button>
                                         </subviews>
@@ -480,6 +481,7 @@ Click on information to bring up brewery website.</string>
                                             </userDefinedRuntimeAttribute>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
+                                            <action selector="dismissTutorial:" destination="CGT-bu-6NU" eventType="touchUpInside" id="ZUx-tJ-PNA"/>
                                             <action selector="dissMissTutorial:" destination="RKC-MN-s1K" eventType="touchUpInside" id="VCd-Vu-Jqt"/>
                                         </connections>
                                     </button>
@@ -520,9 +522,15 @@ Click on information to bring up brewery website.</string>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <connections>
                         <outlet property="activityIndicator" destination="WhL-1F-Lh4" id="fDr-il-RgC"/>
+                        <outlet property="dismissTutorial" destination="2HY-at-mr5" id="cAf-VQ-z2e"/>
+                        <outlet property="dismissTutorialButton" destination="2HY-at-mr5" id="tls-fp-SM7"/>
+                        <outlet property="nextLessonButton" destination="Ssx-no-b7L" id="Jx2-E2-4hk"/>
                         <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="V1C-WU-clI"/>
+                        <outlet property="pointer" destination="LfQ-Vx-7hc" id="gcn-iO-Ffd"/>
                         <outlet property="searchBar" destination="vz7-RO-sWr" id="FKy-Vd-mS3"/>
+                        <outlet property="segmentedControl" destination="qRp-gV-DlY" id="AfS-Oy-JdL"/>
                         <outlet property="tableView" destination="7fx-me-ez9" id="BsB-19-aSN"/>
+                        <outlet property="tutorialText" destination="bRR-25-uaE" id="suE-oo-gu2"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR2-N2-eti" userLabel="First Responder" sceneMemberID="firstResponder"/>
