@@ -50,6 +50,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: IBOutlet
     
+    @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var mapView: MKMapView!
     
     
@@ -95,6 +96,13 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.requestLocation()
         }
+        let fixedWidth = tutorialText.frame.size.width
+        tutorialText.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        let newSize = tutorialText.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
+        var newFrame = tutorialText.frame
+        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
+        tutorialText.frame = newFrame;
+        //tutorialText.frame.size = tutorialText.intrinsicContentSize
     }
     
     
