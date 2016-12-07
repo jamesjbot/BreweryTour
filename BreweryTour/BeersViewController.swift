@@ -218,3 +218,9 @@ extension BeersViewController : UISearchBarDelegate {
                            actions: [action])
     }
 }
+
+extension BeersViewController : DismissableTutorial {
+    internal func enableTutorial() {
+        tutorialView.isHidden = false
+    }
+}

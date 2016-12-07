@@ -425,7 +425,7 @@ Click on information to bring up brewery website.</string>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3h4-CW-XGp" userLabel="Tutorial View">
                                 <userGuides>
                                     <userLayoutGuide location="289" affinity="minY"/>
-                                    <userLayoutGuide location="188" affinity="minX"/>
+                                    <userLayoutGuide location="53" affinity="minX"/>
                                 </userGuides>
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cju-sI-fYm" userLabel="Shadow View">
@@ -436,9 +436,7 @@ Click on information to bring up brewery website.</string>
                                                     <constraint firstAttribute="width" secondItem="LfQ-Vx-7hc" secondAttribute="height" multiplier="1:1" id="Eh8-Jx-5EY"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ssx-no-b7L">
-                                                <frame key="frameInset" minX="162" minY="513" width="50" height="33"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ssx-no-b7L">
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
@@ -458,6 +456,7 @@ Click on information to bring up brewery website.</string>
                                         <constraints>
                                             <constraint firstItem="LfQ-Vx-7hc" firstAttribute="top" secondItem="cju-sI-fYm" secondAttribute="top" constant="295" id="Ibp-lw-fyP"/>
                                             <constraint firstItem="LfQ-Vx-7hc" firstAttribute="leading" secondItem="cju-sI-fYm" secondAttribute="leading" constant="15" id="KZ9-4V-Zf9"/>
+                                            <constraint firstItem="Ssx-no-b7L" firstAttribute="bottom" secondItem="cju-sI-fYm" secondAttribute="bottomMargin" id="tNK-6l-D8D"/>
                                         </constraints>
                                     </view>
                                     <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a beer to see its details." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRR-25-uaE" userLabel="TableTutorialText">
@@ -486,7 +485,6 @@ Click on information to bring up brewery website.</string>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="dismissTutorial:" destination="CGT-bu-6NU" eventType="touchUpInside" id="MSE-uE-cHU"/>
-                                            <action selector="dissMissTutorial:" destination="RKC-MN-s1K" eventType="touchUpInside" id="VCd-Vu-Jqt"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -496,6 +494,7 @@ Click on information to bring up brewery website.</string>
                                     <constraint firstAttribute="bottom" secondItem="cju-sI-fYm" secondAttribute="bottom" id="JG5-TQ-Hvp"/>
                                     <constraint firstAttribute="trailingMargin" secondItem="bRR-25-uaE" secondAttribute="trailing" constant="8" id="Vdc-c1-6ff"/>
                                     <constraint firstAttribute="bottom" secondItem="2HY-at-mr5" secondAttribute="bottom" constant="8" id="eSx-HN-g6q"/>
+                                    <constraint firstItem="2HY-at-mr5" firstAttribute="leading" secondItem="Ssx-no-b7L" secondAttribute="trailing" constant="8" id="etd-Uk-60L"/>
                                     <constraint firstAttribute="trailing" secondItem="2HY-at-mr5" secondAttribute="trailing" constant="16" id="gd5-qX-Gtd"/>
                                     <constraint firstItem="cju-sI-fYm" firstAttribute="leading" secondItem="3h4-CW-XGp" secondAttribute="leading" id="n0r-cC-8IE"/>
                                     <constraint firstAttribute="trailing" secondItem="cju-sI-fYm" secondAttribute="trailingMargin" constant="-8" id="umt-2H-aqG"/>
@@ -530,7 +529,6 @@ Click on information to bring up brewery website.</string>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="activityIndicator" destination="WhL-1F-Lh4" id="fDr-il-RgC"/>
-                        <outlet property="dismissTutorialButton" destination="2HY-at-mr5" id="tls-fp-SM7"/>
                         <outlet property="nextLessonButton" destination="Ssx-no-b7L" id="Jx2-E2-4hk"/>
                         <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="V1C-WU-clI"/>
                         <outlet property="pointer" destination="LfQ-Vx-7hc" id="gcn-iO-Ffd"/>

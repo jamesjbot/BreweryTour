@@ -24,7 +24,7 @@ import CoreLocation
 import CoreData
 
 
-class MapViewController : UIViewController, NSFetchedResultsControllerDelegate, DismissableTutorial {
+class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: Debugging
     
