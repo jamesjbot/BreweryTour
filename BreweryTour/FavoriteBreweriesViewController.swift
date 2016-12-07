@@ -33,6 +33,7 @@ class FavoriteBreweriesViewController: UIViewController {
     // MARK: IBActions
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
+        tutorialView.isHidden = true
     }
     
     
