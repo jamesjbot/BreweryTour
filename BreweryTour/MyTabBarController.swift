@@ -27,6 +27,7 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
 
     internal func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        print("--->A tab bar was selected")
         let dismissable = viewController as! DismissableTutorial
         let helpButton = UIBarButtonItem(title: "Help?", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
         self.navigationItem.rightBarButtonItem = helpButton

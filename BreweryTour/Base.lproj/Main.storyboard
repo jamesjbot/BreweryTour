@@ -51,10 +51,10 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="genericTypeCell" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="368" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="368" height="43.5"/>
+                                                    <frame key="frameInset" width="1000" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -179,7 +179,7 @@
                                     <segue destination="aS9-dG-afv" kind="show" identifier="Go" id="Kjw-4I-TCa"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Help" id="TjJ-dl-rXy">
+                            <barButtonItem title="Help?" id="TjJ-dl-rXy">
                                 <connections>
                                     <action selector="tutorialButton:" destination="RKC-MN-s1K" id="Xly-1G-AdI"/>
                                 </connections>
@@ -230,10 +230,6 @@
                                 </connections>
                             </mapView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Wr-de-AeO" userLabel="Tutorial View">
-                                <userGuides>
-                                    <userLayoutGuide location="289" affinity="minY"/>
-                                    <userLayoutGuide location="188" affinity="minX"/>
-                                </userGuides>
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6HM-s5-dg9" userLabel="Shadow View">
                                         <subviews>
@@ -243,22 +239,6 @@
                                                     <constraint firstAttribute="width" secondItem="DB0-f6-MiY" secondAttribute="height" multiplier="1:1" id="l5e-k1-Qvr"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Pc-m6-hEY">
-                                                <frame key="frameInset" minX="162" minY="513" width="50" height="33"/>
-                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                                <state key="normal" title="Next"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                        <integer key="value" value="5"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="nextCommandPressed:" destination="RKC-MN-s1K" eventType="touchUpInside" id="x4o-T6-Bkb"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -266,8 +246,7 @@
                                             <constraint firstItem="DB0-f6-MiY" firstAttribute="top" secondItem="6HM-s5-dg9" secondAttribute="top" constant="295" id="o3Q-o3-xg3"/>
                                         </constraints>
                                     </view>
-                                    <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" misplaced="YES" bounces="NO" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pci-Qx-EEF" userLabel="TableTutorialText">
-                                        <frame key="frameInset" minX="127" minY="318" width="240" height="187"/>
+                                    <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pci-Qx-EEF" userLabel="TableTutorialText">
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" id="KbS-7T-6eP"/>
@@ -299,16 +278,32 @@ Click on information to bring up brewery website.</string>
                                             <action selector="dissMissTutorial:" destination="RKC-MN-s1K" eventType="touchUpInside" id="6tp-kA-19C"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Pc-m6-hEY">
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <state key="normal" title="Next"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="nextCommandPressed:" destination="RKC-MN-s1K" eventType="touchUpInside" id="x4o-T6-Bkb"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="bottom" secondItem="6HM-s5-dg9" secondAttribute="bottom" id="0sH-s5-ofk"/>
                                     <constraint firstItem="ww0-IL-u8i" firstAttribute="top" secondItem="Pci-Qx-EEF" secondAttribute="bottom" constant="8" id="4QX-h6-9i5"/>
+                                    <constraint firstItem="8Pc-m6-hEY" firstAttribute="baseline" secondItem="ww0-IL-u8i" secondAttribute="baseline" id="8RQ-rt-7La"/>
                                     <constraint firstItem="6HM-s5-dg9" firstAttribute="height" secondItem="2Wr-de-AeO" secondAttribute="height" id="9K4-sb-M0i"/>
-                                    <constraint firstAttribute="trailing" secondItem="6HM-s5-dg9" secondAttribute="trailingMargin" constant="-8" id="FGa-HS-sbY"/>
+                                    <constraint firstAttribute="trailing" secondItem="6HM-s5-dg9" secondAttribute="trailing" id="FGa-HS-sbY"/>
                                     <constraint firstItem="6HM-s5-dg9" firstAttribute="top" secondItem="2Wr-de-AeO" secondAttribute="top" id="OzU-f5-RhZ"/>
-                                    <constraint firstAttribute="trailingMargin" secondItem="Pci-Qx-EEF" secondAttribute="trailing" constant="8" id="PEd-6u-YRm"/>
+                                    <constraint firstAttribute="trailingMargin" secondItem="Pci-Qx-EEF" secondAttribute="trailing" id="PEd-6u-YRm"/>
                                     <constraint firstAttribute="bottom" secondItem="ww0-IL-u8i" secondAttribute="bottom" constant="8" id="eO2-Y3-lDB"/>
-                                    <constraint firstAttribute="trailing" secondItem="ww0-IL-u8i" secondAttribute="trailing" constant="16" id="gLo-l4-5je"/>
+                                    <constraint firstAttribute="trailing" secondItem="ww0-IL-u8i" secondAttribute="trailing" constant="8" id="gLo-l4-5je"/>
+                                    <constraint firstItem="ww0-IL-u8i" firstAttribute="leading" secondItem="8Pc-m6-hEY" secondAttribute="trailing" constant="8" id="tD1-y2-CzM"/>
                                     <constraint firstItem="6HM-s5-dg9" firstAttribute="leading" secondItem="2Wr-de-AeO" secondAttribute="leading" id="wRw-lR-A7x"/>
                                 </constraints>
                             </view>
@@ -321,11 +316,11 @@ Click on information to bring up brewery website.</string>
                             <constraint firstItem="Mkt-qc-S4V" firstAttribute="top" secondItem="idd-zP-hy0" secondAttribute="bottom" id="KTq-hN-8vc"/>
                             <constraint firstItem="6HM-s5-dg9" firstAttribute="top" secondItem="ebl-Op-6EE" secondAttribute="bottom" id="N6Y-We-wnq"/>
                             <constraint firstItem="Mkt-qc-S4V" firstAttribute="top" secondItem="2Wr-de-AeO" secondAttribute="bottom" id="NAG-dt-6Rs"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="idd-zP-hy0" secondAttribute="trailing" constant="-16" id="TLQ-nN-vGp"/>
+                            <constraint firstAttribute="trailing" secondItem="idd-zP-hy0" secondAttribute="trailing" id="TLQ-nN-vGp"/>
                             <constraint firstItem="Pci-Qx-EEF" firstAttribute="width" secondItem="bSb-va-KkV" secondAttribute="width" multiplier="0.75" id="VSb-qy-ENe"/>
                             <constraint firstItem="2Wr-de-AeO" firstAttribute="top" secondItem="ebl-Op-6EE" secondAttribute="bottom" id="XF3-Ib-koR"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="2Wr-de-AeO" secondAttribute="trailingMargin" constant="-16" id="hlr-2X-UNL"/>
-                            <constraint firstAttribute="leadingMargin" secondItem="idd-zP-hy0" secondAttribute="leading" constant="16" id="nc7-Xs-ra4"/>
+                            <constraint firstAttribute="trailing" secondItem="2Wr-de-AeO" secondAttribute="trailing" id="hlr-2X-UNL"/>
+                            <constraint firstAttribute="leading" secondItem="idd-zP-hy0" secondAttribute="leading" id="nc7-Xs-ra4"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map" id="wBm-jW-G7A">
@@ -339,7 +334,7 @@ Click on information to bring up brewery website.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="9jM-88-BYD" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2538.4000000000001" y="-83.208395802098963"/>
+            <point key="canvasLocation" x="2706" y="340"/>
         </scene>
         <!--Selected Beers-->
         <scene sceneID="KEQ-HI-GM0">
@@ -423,10 +418,6 @@ Click on information to bring up brewery website.</string>
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3h4-CW-XGp" userLabel="Tutorial View">
-                                <userGuides>
-                                    <userLayoutGuide location="289" affinity="minY"/>
-                                    <userLayoutGuide location="53" affinity="minX"/>
-                                </userGuides>
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cju-sI-fYm" userLabel="Shadow View">
                                         <subviews>
@@ -456,7 +447,6 @@ Click on information to bring up brewery website.</string>
                                         <constraints>
                                             <constraint firstItem="LfQ-Vx-7hc" firstAttribute="top" secondItem="cju-sI-fYm" secondAttribute="top" constant="295" id="Ibp-lw-fyP"/>
                                             <constraint firstItem="LfQ-Vx-7hc" firstAttribute="leading" secondItem="cju-sI-fYm" secondAttribute="leading" constant="15" id="KZ9-4V-Zf9"/>
-                                            <constraint firstItem="Ssx-no-b7L" firstAttribute="bottom" secondItem="cju-sI-fYm" secondAttribute="bottomMargin" id="tNK-6l-D8D"/>
                                         </constraints>
                                     </view>
                                     <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a beer to see its details." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bRR-25-uaE" userLabel="TableTutorialText">
@@ -489,16 +479,16 @@ Click on information to bring up brewery website.</string>
                                     </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="2HY-at-mr5" firstAttribute="top" secondItem="bRR-25-uaE" secondAttribute="bottom" constant="8" id="2kd-Ig-jb2"/>
+                                    <constraint firstItem="Ssx-no-b7L" firstAttribute="baseline" secondItem="2HY-at-mr5" secondAttribute="baseline" id="6E0-JA-IbD"/>
                                     <constraint firstItem="cju-sI-fYm" firstAttribute="top" secondItem="3h4-CW-XGp" secondAttribute="top" id="6Tn-EP-fAN"/>
                                     <constraint firstAttribute="bottom" secondItem="cju-sI-fYm" secondAttribute="bottom" id="JG5-TQ-Hvp"/>
-                                    <constraint firstAttribute="trailingMargin" secondItem="bRR-25-uaE" secondAttribute="trailing" constant="8" id="Vdc-c1-6ff"/>
-                                    <constraint firstAttribute="bottom" secondItem="2HY-at-mr5" secondAttribute="bottom" constant="8" id="eSx-HN-g6q"/>
-                                    <constraint firstItem="2HY-at-mr5" firstAttribute="leading" secondItem="Ssx-no-b7L" secondAttribute="trailing" constant="8" id="etd-Uk-60L"/>
-                                    <constraint firstAttribute="trailing" secondItem="2HY-at-mr5" secondAttribute="trailing" constant="16" id="gd5-qX-Gtd"/>
+                                    <constraint firstAttribute="trailing" secondItem="bRR-25-uaE" secondAttribute="trailing" constant="8" id="Vdc-c1-6ff"/>
+                                    <constraint firstItem="2HY-at-mr5" firstAttribute="bottom" secondItem="cju-sI-fYm" secondAttribute="bottom" constant="-8" id="XLy-B0-GZK"/>
+                                    <constraint firstAttribute="trailing" secondItem="cju-sI-fYm" secondAttribute="trailing" id="YBP-vO-k2j"/>
+                                    <constraint firstItem="2HY-at-mr5" firstAttribute="leading" secondItem="Ssx-no-b7L" secondAttribute="trailing" constant="8" id="aHi-hO-Rav"/>
+                                    <constraint firstItem="2HY-at-mr5" firstAttribute="top" secondItem="bRR-25-uaE" secondAttribute="bottom" constant="8" id="gSF-45-CrO"/>
                                     <constraint firstItem="cju-sI-fYm" firstAttribute="leading" secondItem="3h4-CW-XGp" secondAttribute="leading" id="n0r-cC-8IE"/>
-                                    <constraint firstAttribute="trailing" secondItem="cju-sI-fYm" secondAttribute="trailingMargin" constant="-8" id="umt-2H-aqG"/>
-                                    <constraint firstItem="cju-sI-fYm" firstAttribute="height" secondItem="3h4-CW-XGp" secondAttribute="height" id="wte-dv-oSf"/>
+                                    <constraint firstItem="cju-sI-fYm" firstAttribute="trailing" secondItem="2HY-at-mr5" secondAttribute="trailing" constant="8" id="yzr-dC-3ml"/>
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="WhL-1F-Lh4"/>
@@ -506,25 +496,23 @@ Click on information to bring up brewery website.</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstItem="3h4-CW-XGp" firstAttribute="top" secondItem="jgl-nB-2cO" secondAttribute="bottom" id="1uj-9y-1ee"/>
                             <constraint firstAttribute="trailing" secondItem="GXl-K7-CVw" secondAttribute="trailing" id="9s1-EP-FZl"/>
                             <constraint firstItem="WhL-1F-Lh4" firstAttribute="centerY" secondItem="79S-bs-Ki0" secondAttribute="centerY" id="Kb6-5g-G4H"/>
                             <constraint firstItem="WhL-1F-Lh4" firstAttribute="centerX" secondItem="79S-bs-Ki0" secondAttribute="centerX" id="NgE-It-HZ6"/>
-                            <constraint firstItem="3h4-CW-XGp" firstAttribute="centerY" secondItem="79S-bs-Ki0" secondAttribute="centerY" id="Ngr-ix-9Wh"/>
                             <constraint firstItem="bRR-25-uaE" firstAttribute="width" secondItem="79S-bs-Ki0" secondAttribute="width" multiplier="0.75" id="Npe-N8-h3o"/>
-                            <constraint firstItem="3h4-CW-XGp" firstAttribute="centerX" secondItem="WhL-1F-Lh4" secondAttribute="centerX" id="Vql-56-Oqi"/>
-                            <constraint firstItem="qHD-Am-IJw" firstAttribute="top" secondItem="GXl-K7-CVw" secondAttribute="bottom" constant="5" id="aA4-bD-3Du"/>
+                            <constraint firstItem="qHD-Am-IJw" firstAttribute="top" secondItem="GXl-K7-CVw" secondAttribute="bottom" id="aA4-bD-3Du"/>
+                            <constraint firstItem="3h4-CW-XGp" firstAttribute="trailing" secondItem="GXl-K7-CVw" secondAttribute="trailing" id="kFi-2S-Xnl"/>
                             <constraint firstItem="GXl-K7-CVw" firstAttribute="leading" secondItem="79S-bs-Ki0" secondAttribute="leading" id="obb-Tg-flP"/>
                             <constraint firstItem="GXl-K7-CVw" firstAttribute="top" secondItem="jgl-nB-2cO" secondAttribute="bottom" id="ph1-25-X4E"/>
-                            <constraint firstItem="qHD-Am-IJw" firstAttribute="top" secondItem="3h4-CW-XGp" secondAttribute="bottom" constant="8" symbolic="YES" id="sHm-na-jnD"/>
-                            <constraint firstItem="3h4-CW-XGp" firstAttribute="leading" secondItem="79S-bs-Ki0" secondAttribute="leadingMargin" constant="-20" id="zt4-qy-fiy"/>
+                            <constraint firstItem="qHD-Am-IJw" firstAttribute="top" secondItem="3h4-CW-XGp" secondAttribute="bottom" id="sHm-na-jnD"/>
+                            <constraint firstItem="3h4-CW-XGp" firstAttribute="leading" secondItem="79S-bs-Ki0" secondAttribute="leading" id="zt4-qy-fiy"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Selected Beers" image="list" id="Ptn-dv-QwG">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
-                    <toolbarItems>
-                        <barButtonItem title="Item" id="yj9-UQ-lYB"/>
-                    </toolbarItems>
+                    <toolbarItems/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
@@ -541,7 +529,7 @@ Click on information to bring up brewery website.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR2-N2-eti" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1556" y="680.5097451274363"/>
+            <point key="canvasLocation" x="1321" y="794"/>
         </scene>
         <!--Beer Detail View-->
         <scene sceneID="q91-Un-DBN">
@@ -662,7 +650,7 @@ Click on information to bring up brewery website.</string>
             <objects>
                 <navigationController storyboardIdentifier="BreweryTourNavigationController" title="Brewery Tour" automaticallyAdjustsScrollViewInsets="NO" id="H0g-oq-XOD" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="qaX-sf-HGS">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qaX-sf-HGS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -749,12 +737,92 @@ Click on information to bring up brewery website.</string>
                                     <outlet property="delegate" destination="aCO-9Y-u6t" id="Rii-6b-Y5N"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ws9-nT-7up" userLabel="Tutorial View">
+                                <subviews>
+                                    <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3PX-Bp-dPH" userLabel="Shadow View">
+                                        <subviews>
+                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fkm-L6-PwO" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
+                                                <constraints>
+                                                    <constraint firstAttribute="width" secondItem="fkm-L6-PwO" secondAttribute="height" multiplier="1:1" id="chq-v6-Pdq"/>
+                                                    <constraint firstAttribute="width" constant="40" id="vWX-RL-Apc"/>
+                                                </constraints>
+                                            </view>
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dng-sO-x7w">
+                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                                <state key="normal" title="Next"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="nextCommandPressed:" destination="RKC-MN-s1K" eventType="touchUpInside" id="hTX-Eu-T0Q"/>
+                                                    <action selector="nextLesson:" destination="CGT-bu-6NU" eventType="touchUpInside" id="6wY-Vf-Ugs"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="fkm-L6-PwO" firstAttribute="top" secondItem="3PX-Bp-dPH" secondAttribute="top" constant="295" id="VIq-Ea-Xap"/>
+                                            <constraint firstItem="fkm-L6-PwO" firstAttribute="leading" secondItem="3PX-Bp-dPH" secondAttribute="leading" constant="15" id="h6S-YA-GhE"/>
+                                        </constraints>
+                                    </view>
+                                    <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a beer to see its details." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBt-SP-ZqP" userLabel="TableTutorialText">
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" id="Jde-vZ-cjr"/>
+                                        </constraints>
+                                        <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                    </textView>
+                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i0o-YN-JMV">
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <state key="normal" title="Dismiss Tutorial">
+                                            <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        </state>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="spacing">
+                                                <integer key="value" value="0"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="dismissTutorial:" destination="CGT-bu-6NU" eventType="touchUpInside" id="S0e-2r-UmV"/>
+                                            <action selector="dismissTutorial:" destination="aCO-9Y-u6t" eventType="touchUpInside" id="eIE-7G-9zW"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="i0o-YN-JMV" secondAttribute="trailing" constant="8" id="2oW-zb-ttP"/>
+                                    <constraint firstAttribute="bottom" secondItem="3PX-Bp-dPH" secondAttribute="bottom" id="3Gf-43-2IE"/>
+                                    <constraint firstItem="3PX-Bp-dPH" firstAttribute="leading" secondItem="ws9-nT-7up" secondAttribute="leading" id="Ho0-Uz-Gaa"/>
+                                    <constraint firstItem="Dng-sO-x7w" firstAttribute="baseline" secondItem="i0o-YN-JMV" secondAttribute="baseline" id="PW3-z5-KOr"/>
+                                    <constraint firstAttribute="trailing" secondItem="WBt-SP-ZqP" secondAttribute="trailing" constant="8" id="Woh-DM-qZl"/>
+                                    <constraint firstAttribute="bottom" secondItem="i0o-YN-JMV" secondAttribute="bottom" constant="8" id="f4t-Tf-bFn"/>
+                                    <constraint firstAttribute="trailing" secondItem="3PX-Bp-dPH" secondAttribute="trailing" id="oqU-tz-zEZ"/>
+                                    <constraint firstItem="i0o-YN-JMV" firstAttribute="top" secondItem="WBt-SP-ZqP" secondAttribute="bottom" constant="8" id="pac-2c-Enl"/>
+                                    <constraint firstItem="i0o-YN-JMV" firstAttribute="leading" secondItem="Dng-sO-x7w" secondAttribute="trailing" constant="8" id="slo-jo-zR3"/>
+                                    <constraint firstItem="3PX-Bp-dPH" firstAttribute="top" secondItem="ws9-nT-7up" secondAttribute="top" id="tqo-ki-td9"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="HiO-eH-bPB" firstAttribute="top" secondItem="447-ox-Iue" secondAttribute="bottom" id="6gP-zD-pHw"/>
+                            <constraint firstItem="ws9-nT-7up" firstAttribute="top" secondItem="447-ox-Iue" secondAttribute="bottom" id="8Os-WJ-n8s"/>
                             <constraint firstItem="ctK-gV-tlx" firstAttribute="top" secondItem="HiO-eH-bPB" secondAttribute="bottom" id="GzY-HC-CSp"/>
+                            <constraint firstItem="ctK-gV-tlx" firstAttribute="top" secondItem="ws9-nT-7up" secondAttribute="bottom" id="OUv-KT-saH"/>
+                            <constraint firstItem="ws9-nT-7up" firstAttribute="leading" secondItem="f8t-0B-jgo" secondAttribute="leading" id="RWb-yM-xzB"/>
+                            <constraint firstAttribute="trailing" secondItem="ws9-nT-7up" secondAttribute="trailing" id="Xna-Hz-rw1"/>
+                            <constraint firstItem="WBt-SP-ZqP" firstAttribute="width" secondItem="f8t-0B-jgo" secondAttribute="width" multiplier="0.75" id="c7Y-Us-D6g"/>
                             <constraint firstAttribute="trailing" secondItem="HiO-eH-bPB" secondAttribute="trailing" id="f3M-Gm-Kbp"/>
                             <constraint firstItem="HiO-eH-bPB" firstAttribute="leading" secondItem="f8t-0B-jgo" secondAttribute="leading" id="n5X-br-pG4"/>
                         </constraints>
@@ -763,11 +831,13 @@ Click on information to bring up brewery website.</string>
                     <navigationItem key="navigationItem" id="3lJ-ad-mkL"/>
                     <connections>
                         <outlet property="tableView" destination="HiO-eH-bPB" id="l7G-Ma-dWd"/>
+                        <outlet property="tutorialText" destination="WBt-SP-ZqP" id="s80-Zb-kfB"/>
+                        <outlet property="tutorialView" destination="ws9-nT-7up" id="tt1-ez-1Zb"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SXT-6T-y1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2538" y="681"/>
+            <point key="canvasLocation" x="2007" y="796"/>
         </scene>
         <!--Favorite Breweries-->
         <scene sceneID="uNa-bO-QQy">
@@ -777,7 +847,7 @@ Click on information to bring up brewery website.</string>
                         <viewControllerLayoutGuide type="top" id="TG5-1t-1Mw"/>
                         <viewControllerLayoutGuide type="bottom" id="MdR-6K-4Gv"/>
                     </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" misplaced="YES" id="6A8-hw-vmK">
+                    <view key="view" contentMode="scaleToFill" id="6A8-hw-vmK">
                         <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
@@ -819,28 +889,108 @@ Click on information to bring up brewery website.</string>
                                     <outlet property="delegate" destination="vMd-lA-jRB" id="Wx4-9O-l58"/>
                                 </connections>
                             </tableView>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPp-fq-N67" userLabel="Tutorial View">
+                                <subviews>
+                                    <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fCF-E4-Faw" userLabel="Shadow View">
+                                        <subviews>
+                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A06-Fi-xnD" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
+                                                <constraints>
+                                                    <constraint firstAttribute="width" constant="40" id="HSv-6M-zgt"/>
+                                                    <constraint firstAttribute="width" secondItem="A06-Fi-xnD" secondAttribute="height" multiplier="1:1" id="hCm-pS-Fyh"/>
+                                                </constraints>
+                                            </view>
+                                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a brewery to see it on the map." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66j-wi-SEc" userLabel="TableTutorialText">
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <constraints>
+                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" id="bJm-u2-m51"/>
+                                                </constraints>
+                                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                            </textView>
+                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B9e-Ht-eQN">
+                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                                <state key="normal" title="Next"/>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="nextCommandPressed:" destination="RKC-MN-s1K" eventType="touchUpInside" id="kur-7s-RWf"/>
+                                                    <action selector="nextLesson:" destination="CGT-bu-6NU" eventType="touchUpInside" id="ubm-5g-UZw"/>
+                                                </connections>
+                                            </button>
+                                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zd5-8B-CTh">
+                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                                <state key="normal" title="Dismiss Tutorial">
+                                                    <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
+                                                <userDefinedRuntimeAttributes>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                        <integer key="value" value="5"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                    <userDefinedRuntimeAttribute type="number" keyPath="spacing">
+                                                        <integer key="value" value="0"/>
+                                                    </userDefinedRuntimeAttribute>
+                                                </userDefinedRuntimeAttributes>
+                                                <connections>
+                                                    <action selector="dismissTutorial:" destination="vMd-lA-jRB" eventType="touchUpInside" id="Gnm-9v-Eht"/>
+                                                    <action selector="dismissTutorial:" destination="CGT-bu-6NU" eventType="touchUpInside" id="Nna-Gy-PLo"/>
+                                                </connections>
+                                            </button>
+                                        </subviews>
+                                        <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <constraints>
+                                            <constraint firstAttribute="trailing" secondItem="66j-wi-SEc" secondAttribute="trailing" constant="8" id="5UW-OM-nAx"/>
+                                            <constraint firstItem="A06-Fi-xnD" firstAttribute="top" secondItem="fCF-E4-Faw" secondAttribute="top" constant="295" id="8mM-CD-tTu"/>
+                                            <constraint firstItem="zd5-8B-CTh" firstAttribute="top" secondItem="66j-wi-SEc" secondAttribute="bottom" constant="8" id="HrI-dl-JG2"/>
+                                            <constraint firstAttribute="bottom" secondItem="zd5-8B-CTh" secondAttribute="bottom" constant="8" id="ODk-2r-YIG"/>
+                                            <constraint firstItem="A06-Fi-xnD" firstAttribute="leading" secondItem="fCF-E4-Faw" secondAttribute="leading" constant="15" id="fuV-g0-d8f"/>
+                                            <constraint firstItem="zd5-8B-CTh" firstAttribute="leading" secondItem="B9e-Ht-eQN" secondAttribute="trailing" constant="8" id="klf-Pw-TTr"/>
+                                            <constraint firstItem="B9e-Ht-eQN" firstAttribute="baseline" secondItem="zd5-8B-CTh" secondAttribute="baseline" id="wLM-NL-Gxn"/>
+                                            <constraint firstAttribute="trailing" secondItem="zd5-8B-CTh" secondAttribute="trailing" constant="8" id="wcL-0L-Qng"/>
+                                        </constraints>
+                                    </view>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstAttribute="trailing" secondItem="fCF-E4-Faw" secondAttribute="trailing" id="2HH-WA-Srv"/>
+                                    <constraint firstAttribute="bottom" secondItem="fCF-E4-Faw" secondAttribute="bottom" id="7iJ-Cx-V9U"/>
+                                    <constraint firstItem="fCF-E4-Faw" firstAttribute="top" secondItem="uPp-fq-N67" secondAttribute="top" id="AOW-wg-Nmt"/>
+                                    <constraint firstItem="fCF-E4-Faw" firstAttribute="leading" secondItem="uPp-fq-N67" secondAttribute="leading" id="o3d-Fg-1FB"/>
+                                    <constraint firstAttribute="trailing" secondItem="fCF-E4-Faw" secondAttribute="trailing" id="oyH-Be-gZ3"/>
+                                </constraints>
+                            </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="MTM-AV-wIe" firstAttribute="leading" secondItem="6A8-hw-vmK" secondAttribute="leading" id="9WQ-ON-6Ad"/>
+                            <constraint firstItem="uPp-fq-N67" firstAttribute="leading" secondItem="6A8-hw-vmK" secondAttribute="leading" id="BNf-ur-K6g"/>
+                            <constraint firstItem="MdR-6K-4Gv" firstAttribute="top" secondItem="uPp-fq-N67" secondAttribute="bottom" id="ClY-6p-hLB"/>
+                            <constraint firstItem="66j-wi-SEc" firstAttribute="width" secondItem="6A8-hw-vmK" secondAttribute="width" multiplier="0.75" id="HvJ-CB-HJn"/>
                             <constraint firstItem="MTM-AV-wIe" firstAttribute="top" secondItem="TG5-1t-1Mw" secondAttribute="bottom" id="Wx3-Kq-91F"/>
                             <constraint firstAttribute="trailing" secondItem="MTM-AV-wIe" secondAttribute="trailing" id="eZf-9H-OHJ"/>
+                            <constraint firstItem="uPp-fq-N67" firstAttribute="top" secondItem="TG5-1t-1Mw" secondAttribute="bottom" id="kWO-YS-XSK"/>
                             <constraint firstItem="MdR-6K-4Gv" firstAttribute="top" secondItem="MTM-AV-wIe" secondAttribute="bottom" id="oBV-qM-kM1"/>
+                            <constraint firstAttribute="trailing" secondItem="uPp-fq-N67" secondAttribute="trailing" id="zai-2z-dYr"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Favorite Breweries" image="BreweryTabbarIcon.png" id="GMI-eD-XYO"/>
-                    <navigationItem key="navigationItem" title="MYTitle" prompt="I'm a prompt" id="ms7-fW-SQV">
-                        <barButtonItem key="backBarButtonItem" title="Hello there" id="vos-uw-D4I"/>
-                    </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
                         <outlet property="tableView" destination="MTM-AV-wIe" id="N3Y-Fp-yzZ"/>
+                        <outlet property="tutorialText" destination="66j-wi-SEc" id="sq6-aL-0zv"/>
+                        <outlet property="tutorialView" destination="uPp-fq-N67" id="GAP-FX-d2B"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UDx-ZZ-Vmk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1656.8" y="-745.27736131934034"/>
+            <point key="canvasLocation" x="2702" y="-397"/>
         </scene>
     </scenes>
     <resources>

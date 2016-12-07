@@ -16,7 +16,6 @@ import CoreGraphics
 
 class FavoriteBreweriesViewController: UIViewController {
     
-    
     // MARK: Constants
     
     fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
@@ -27,7 +26,15 @@ class FavoriteBreweriesViewController: UIViewController {
     
     // MARK: IBOutlets
     
+    @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var tableView: UITableView!
+    
+    // MARK: IBActions
+    
+    @IBAction func dismissTutorial(_ sender: UIButton) {
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,6 +47,12 @@ class FavoriteBreweriesViewController: UIViewController {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
         tableView.reloadData()
+    }
+    
+    
+    override func viewDidAppear(_ animated : Bool) {
+        super.viewDidAppear(animated)
+        //print(self.navigationController?.viewControllers)
     }
     
     
@@ -57,6 +70,7 @@ class FavoriteBreweriesViewController: UIViewController {
                                                               managedObjectContext: (coreDataStack?.persistingContext)!,
                                                               sectionNameKeyPath: nil,
                                                               cacheName: nil)
+        // Needed as compiler complains that this isn't initialized
         super.init(coder: aDecoder)
         performFetchOnResultsController()
     }
@@ -172,6 +186,12 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
             (success, msg) -> Void in
         }
         self.tabBarController?.selectedIndex = 0
+    }
+}
+
+extension FavoriteBreweriesViewController : DismissableTutorial {
+    func enableTutorial() {
+        tutorialView.isHidden = false
     }
 }
 
