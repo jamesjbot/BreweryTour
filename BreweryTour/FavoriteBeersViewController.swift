@@ -26,13 +26,14 @@ class FavoriteBeersViewController: UIViewController {
     
     // MARK: IBOutlets
     
-    @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var tableView: UITableView!
 
     // MARK: IBACtion
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
+        tutorialView.isHidden = true
     }
     
     // MARK: Function
