@@ -33,10 +33,10 @@ class BeersViewController: UIViewController, Observer {
     private var tutorialState : SelectedBeersTutorialStage = .Table
     // MARK: IBOutlets
     
+    @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var tutorialText: UITextView!
     
     @IBOutlet weak var nextLessonButton: UIButton!
-    @IBOutlet weak var dismissTutorialButton: UIButton!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -45,6 +45,9 @@ class BeersViewController: UIViewController, Observer {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     // MARK: IBActions
+    @IBAction func dismissTutorial(_ sender: UIButton) {
+        tutorialView.isHidden = true
+    }
     
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
         selectedBeersTableList.toggleAllBeersMode(control: sender)
@@ -93,9 +96,7 @@ class BeersViewController: UIViewController, Observer {
             break
         }
     }
-    
-    @IBAction func dismissTutorial(_ sender: UIButton) {
-    }
+
     
     // MARK: Functions
     

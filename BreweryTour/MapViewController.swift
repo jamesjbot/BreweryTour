@@ -24,7 +24,7 @@ import CoreLocation
 import CoreData
 
 
-class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
+class MapViewController : UIViewController, NSFetchedResultsControllerDelegate, DismissableTutorial {
     
     // MARK: Debugging
     
@@ -52,6 +52,14 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var tutorialView: UIView!
+    
+    
+    // MARK: IBAction
+    
+    @IBAction func dismissTutorial(_ sender: UIButton) {
+        tutorialView.isHidden = true
+    }
     
     
     // MARK: Functions
@@ -121,6 +129,15 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             return
         }
         populateMapWithAnnotations()
+        
+        // TODO Remove UINavigationController repair
+        //self.navigationController?.setNavigationBarHidden(true, animated: false)
+    }
+    
+    
+    override func viewDidAppear(_ animated : Bool) {
+        super.viewDidAppear(animated)
+        //print(self.navigationController?.viewControllers)
     }
     
     
@@ -344,5 +361,11 @@ extension MapViewController: CLLocationManagerDelegate {
         return
     }
 
+}
+
+extension MapViewController : DismissableTutorial {
+    internal func enableTutorial() {
+        tutorialView.isHidden = false
+    }
 }
 
