@@ -48,6 +48,8 @@ class BeersViewController: UIViewController, Observer {
     // MARK: IBActions
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
+        UserDefaults.standard.set(false, forKey: g_constants.SelectedBeersTutorial)
+        UserDefaults.standard.synchronize()
     }
     
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
@@ -149,16 +151,14 @@ class BeersViewController: UIViewController, Observer {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tutorialState = .SearchBar
-        nextLesson(nextLessonButton)
-//        tutorialText.text = "Select a beer to show the details."
-//        let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
-//        pointer.center = tablePoint
-//        UIView.animateKeyframes(withDuration: 0.5,
-//                                delay: 0.0,
-//                                options: [ .autoreverse, .repeat ],
-//                                animations: { self.pointer.center.y += self.tableView.frame.height - (2*self.paddingForPoint) },
-//                                completion: nil)
+        if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
+            // Prime the state
+            tutorialState = .SearchBar
+            // Display the tutorial
+            nextLesson(nextLessonButton)
+        } else {
+            tutorialView.isHidden = true
+        }
     }
 }
 
