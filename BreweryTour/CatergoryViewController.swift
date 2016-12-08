@@ -203,18 +203,6 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
             return
         }
-//        let hole = UIView(frame: segmentedControl.frame)
-//        hole.alpha = 0.0
-//        tutorialView.addSubview(MakeTransparentHoleOnOverlayView(frame: segmentedControl.frame))
-//        print("tutorialView CGRect \(tutorialView.frame)")
-//        print("selfView CGRect \(self.view.frame)")
-//        print("segmentedControl: \(segmentedControl.frame)")
-//        tutorialView.setNeedsDisplay()
-        // Testing walkthroug
-        //enumerateSubview(view:  view, allowFull: segmentedControl)
-        
-        //makeAllViewsTransparent(inSet: view.subviews, exceptView: segmentedControl)
-        // Tutorial text
     }
     
     // Why is it taking me along time because the coordinates are changing when I apply them
