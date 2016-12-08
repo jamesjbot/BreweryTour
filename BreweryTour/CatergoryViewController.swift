@@ -102,6 +102,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
 
     @IBAction func dissMissTutorial(_ sender: UIButton) {
         tutorialModeOn = false
+        UserDefaults.standard.set(false, forKey: g_constants.CategoryViewTutorial)
+        UserDefaults.standard.synchronize()
     }
     
     @IBAction func nextCommandPressed(_ sender: AnyObject) {
@@ -209,16 +211,14 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // to the tutorial text.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+
+        // Always prime the tutorial
+        nextCommandPressed(self)
         // Show tutorial
         if UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) {
-            let coordinates : CGPoint = view.convert(styleTable.frame.origin, to: self.view)
-            //print("Coordinates are \(coordinates)")
-            //coordinateValues.init(x: coordinates.x, y: coordinates.y)
-            //let pointerCoord = CGPoint(x: coordinate.x, y: coordinates.y)
-            pointer.frame.origin.x = CGFloat(floatLiteral: CGFloat.NativeType(coordinates.x))
-            pointer.frame.origin.y = CGFloat(coordinates.y)
-            // Animate the tutorial pointer
-            nextCommandPressed(self)
+            // Do nothing because the tutorial will show automatically.
+        } else {
+            tutorialView.isHidden = true
         }
     }
     
