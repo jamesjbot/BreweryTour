@@ -221,22 +221,17 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // to the tutorial text.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Find the target end position and beginning position 
-        // of the white pointer
-        // Table tutorial
-        let coordinates : CGPoint = view.convert(styleTable.frame.origin, to: self.view)
-        //print("Coordinates are \(coordinates)")
-        //coordinateValues.init(x: coordinates.x, y: coordinates.y)
-        //let pointerCoord = CGPoint(x: coordinate.x, y: coordinates.y)
-        pointer.frame.origin.x = CGFloat(floatLiteral: CGFloat.NativeType(coordinates.x))
-        pointer.frame.origin.y = CGFloat(coordinates.y)
-        // Animate the pointer
-        nextCommandPressed(self)
-//        UIView.animateKeyframes(withDuration: 20.0,
-//                                delay: 0.0,
-//                                options: [ .autoreverse, .repeat ],
-//                                animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
-//                                completion: nil)
+        // Show tutorial
+        if UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) {
+            let coordinates : CGPoint = view.convert(styleTable.frame.origin, to: self.view)
+            //print("Coordinates are \(coordinates)")
+            //coordinateValues.init(x: coordinates.x, y: coordinates.y)
+            //let pointerCoord = CGPoint(x: coordinate.x, y: coordinates.y)
+            pointer.frame.origin.x = CGFloat(floatLiteral: CGFloat.NativeType(coordinates.x))
+            pointer.frame.origin.y = CGFloat(coordinates.y)
+            // Animate the tutorial pointer
+            nextCommandPressed(self)
+        }
     }
     
     

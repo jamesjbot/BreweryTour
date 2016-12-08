@@ -74,19 +74,21 @@ class BeersViewController: UIViewController, Observer {
         switch tutorialState {
         case .SegementedControl:
             // Set the initial point
-            tutorialText.text = "Choose selection to show beers from style/brewery selection, Choose all to show all beers currently historically viewed."
-            let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.center.y)
+            tutorialText.text = "Choose 'Selected Beers' to show beers from style/brewery selection, Choose 'All Beers' to show all beers ever viewed on this device."
+            let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding,
+                                        y: segmentedControl.center.y)
             pointer.center = segmentPoint
             UIView.animateKeyframes(withDuration: 0.5,
                                     delay: 0.0,
                                     options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.x += self.segmentedControl.frame.width - self.segmentedControlPaddding},
+                                    animations: { self.pointer.center.x += self.segmentedControl.frame.width - (2*self.segmentedControlPaddding)},
                                     completion: nil)
             break
             
         case .Table:
             tutorialText.text = "Select a beer to show its details."
-            let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
+            let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint ,
+                                     y: tableView.frame.origin.y)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: 0.5,
                                     delay: 0.0,
@@ -97,23 +99,24 @@ class BeersViewController: UIViewController, Observer {
         
         case .Organic:
             tutorialText.text = "Turn on Organic switch to only see organic beers."
-            let tablePoint = CGPoint(x: organicLabel.frame.origin.x + paddingForPoint , y: organicLabel.frame.origin.y)
+            let tablePoint = CGPoint(x: organicLabel.frame.origin.x + paddingForPoint,
+                                     y: segmentedControl.center.y)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: 0.5,
                                     delay: 0.0,
                                     options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.x += self.organicSwitch.frame.width - self.paddingForPoint },
+                                    animations: { self.pointer.center.x += self.organicSwitch.frame.maxX - (2*self.paddingForPoint) },
                                     completion: nil)
             break
         
         case .SearchBar:
             tutorialText.text = "Enter the name of a beer, and we will search online for it."
-            let tablePoint = CGPoint(x: searchBar.frame.origin.x + paddingForPoint , y: searchBar.frame.origin.y)
+            let tablePoint = CGPoint(x: searchBar.frame.origin.x + paddingForPoint , y: searchBar.frame.midY)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: 0.5,
                                     delay: 0.0,
                                     options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.x += self.searchBar.frame.width - self.paddingForPoint },
+                                    animations: { self.pointer.center.x += self.searchBar.frame.maxX - (2*self.paddingForPoint) },
                                     completion: nil)
         
         }
@@ -146,14 +149,16 @@ class BeersViewController: UIViewController, Observer {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        tutorialText.text = "Select a beer to show the details"
-        let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
-        pointer.center = tablePoint
-        UIView.animateKeyframes(withDuration: 0.5,
-                                delay: 0.0,
-                                options: [ .autoreverse, .repeat ],
-                                animations: { self.pointer.center.y += self.tableView.frame.height - (2*self.paddingForPoint) },
-                                completion: nil)
+        tutorialState = .SearchBar
+        nextLesson(nextLessonButton)
+//        tutorialText.text = "Select a beer to show the details."
+//        let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
+//        pointer.center = tablePoint
+//        UIView.animateKeyframes(withDuration: 0.5,
+//                                delay: 0.0,
+//                                options: [ .autoreverse, .repeat ],
+//                                animations: { self.pointer.center.y += self.tableView.frame.height - (2*self.paddingForPoint) },
+//                                completion: nil)
     }
 }
 

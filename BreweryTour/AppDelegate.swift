@@ -14,9 +14,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     let coreDataStack = CoreDataStack.init(modelName: "BreweryTour")
-
+    
+    func checkIfFirstLaunched() {
+        if UserDefaults.standard.bool(forKey: g_constants.FirstLaunched) {
+            // Do nothing
+        } else {
+            UserDefaults.standard.set(true, forKey: g_constants.FirstLaunched)
+            UserDefaults.standard.set(true, forKey: g_constants.CategoryViewTutorial)
+            UserDefaults.standard.set(true, forKey: g_constants.MapViewTutorial)
+            UserDefaults.standard.set(true, forKey: g_constants.SelectedBeersTutorial)
+            UserDefaults.standard.set(true, forKey: g_constants.FavoriteBeersTutorial)
+            UserDefaults.standard.set(true, forKey: g_constants.FavoriteBreweriesTutorial)
+        }
+    }
+    
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        checkIfFirstLaunched()
         return true
     }
 
