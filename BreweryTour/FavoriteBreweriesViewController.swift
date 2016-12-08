@@ -18,6 +18,7 @@ class FavoriteBreweriesViewController: UIViewController {
     
     // MARK: Constants
     
+    let paddingForPoint : CGFloat = 20
     fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     
     // MARK: Variables
@@ -25,9 +26,10 @@ class FavoriteBreweriesViewController: UIViewController {
     fileprivate var frc : NSFetchedResultsController<Brewery>
     
     // MARK: IBOutlets
-    
     @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
+    
     @IBOutlet weak var tableView: UITableView!
     
     // MARK: IBActions
@@ -51,9 +53,16 @@ class FavoriteBreweriesViewController: UIViewController {
     }
     
     
-    override func viewDidAppear(_ animated : Bool) {
+    override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        //print(self.navigationController?.viewControllers)
+        tutorialText.text = "Select a brewery to show its location on the map"
+        let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
+        pointer.center = tablePoint
+        UIView.animateKeyframes(withDuration: 0.5,
+                                delay: 0.0,
+                                options: [ .autoreverse, .repeat ],
+                                animations: { self.pointer.center.y += self.tableView.frame.height - (3*self.paddingForPoint) - (self.tabBarController?.tabBar.frame.height)! },
+                                completion: nil)
     }
     
     

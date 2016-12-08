@@ -18,6 +18,7 @@ class FavoriteBeersViewController: UIViewController {
     
     // MARK: Constants
     
+    let paddingForPoint : CGFloat = 20
     fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     
     // MARK: Variables
@@ -25,9 +26,10 @@ class FavoriteBeersViewController: UIViewController {
     fileprivate var frc : NSFetchedResultsController<Beer>
     
     // MARK: IBOutlets
-    
     @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
+    
     @IBOutlet weak var tableView: UITableView!
 
     // MARK: IBACtion
@@ -48,6 +50,19 @@ class FavoriteBeersViewController: UIViewController {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
         tableView.reloadData()
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tutorialText.text = "Select a beer to show its details"
+        let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
+        pointer.center = tablePoint
+        UIView.animateKeyframes(withDuration: 0.5,
+                                delay: 0.0,
+                                options: [ .autoreverse, .repeat ],
+                                animations: { self.pointer.center.y += self.tableView.frame.height - (3*self.paddingForPoint) - (self.tabBarController?.tabBar.frame.height)! },
+                                completion: nil)
     }
     
     

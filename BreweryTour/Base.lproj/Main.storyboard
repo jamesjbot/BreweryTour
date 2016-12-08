@@ -51,10 +51,10 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="genericTypeCell" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="368" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="1000" height="43"/>
+                                                    <frame key="frameInset" width="368" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -233,7 +233,7 @@
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6HM-s5-dg9" userLabel="Shadow View">
                                         <subviews>
-                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DB0-f6-MiY" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DB0-f6-MiY" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="BZV-eu-1zg"/>
                                                     <constraint firstAttribute="width" secondItem="DB0-f6-MiY" secondAttribute="height" multiplier="1:1" id="l5e-k1-Qvr"/>
@@ -328,6 +328,7 @@ Click on information to bring up brewery website.</string>
                     </tabBarItem>
                     <connections>
                         <outlet property="mapView" destination="idd-zP-hy0" id="hTM-gR-Klp"/>
+                        <outlet property="pointer" destination="DB0-f6-MiY" id="DJk-9Q-Vxb"/>
                         <outlet property="tutorialText" destination="Pci-Qx-EEF" id="YLM-XF-4kJ"/>
                         <outlet property="tutorialView" destination="2Wr-de-AeO" id="b58-JM-AsU"/>
                     </connections>
@@ -416,12 +417,15 @@ Click on information to bring up brewery website.</string>
                                         </connections>
                                     </tableView>
                                 </subviews>
+                                <constraints>
+                                    <constraint firstItem="7fx-me-ez9" firstAttribute="top" secondItem="GXl-K7-CVw" secondAttribute="top" constant="116" id="WL0-3i-x3t"/>
+                                </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3h4-CW-XGp" userLabel="Tutorial View">
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="cju-sI-fYm" userLabel="Shadow View">
                                         <subviews>
-                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LfQ-Vx-7hc" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="LfQ-Vx-7hc" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="EGZ-MD-cqA"/>
                                                     <constraint firstAttribute="width" secondItem="LfQ-Vx-7hc" secondAttribute="height" multiplier="1:1" id="Eh8-Jx-5EY"/>
@@ -518,8 +522,9 @@ Click on information to bring up brewery website.</string>
                     <connections>
                         <outlet property="activityIndicator" destination="WhL-1F-Lh4" id="fDr-il-RgC"/>
                         <outlet property="nextLessonButton" destination="Ssx-no-b7L" id="Jx2-E2-4hk"/>
+                        <outlet property="organicLabel" destination="Or1-vb-uVo" id="AQi-CG-afX"/>
                         <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="V1C-WU-clI"/>
-                        <outlet property="pointer" destination="LfQ-Vx-7hc" id="gcn-iO-Ffd"/>
+                        <outlet property="pointer" destination="LfQ-Vx-7hc" id="baa-3h-br4"/>
                         <outlet property="searchBar" destination="vz7-RO-sWr" id="FKy-Vd-mS3"/>
                         <outlet property="segmentedControl" destination="qRp-gV-DlY" id="AfS-Oy-JdL"/>
                         <outlet property="tableView" destination="7fx-me-ez9" id="BsB-19-aSN"/>
@@ -529,7 +534,7 @@ Click on information to bring up brewery website.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR2-N2-eti" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1321" y="794"/>
+            <point key="canvasLocation" x="1320.8" y="793.8530734632684"/>
         </scene>
         <!--Beer Detail View-->
         <scene sceneID="q91-Un-DBN">
@@ -704,7 +709,7 @@ Click on information to bring up brewery website.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
-                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -741,7 +746,7 @@ Click on information to bring up brewery website.</string>
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3PX-Bp-dPH" userLabel="Shadow View">
                                         <subviews>
-                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fkm-L6-PwO" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fkm-L6-PwO" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <constraints>
                                                     <constraint firstAttribute="width" secondItem="fkm-L6-PwO" secondAttribute="height" multiplier="1:1" id="chq-v6-Pdq"/>
                                                     <constraint firstAttribute="width" constant="40" id="vWX-RL-Apc"/>
@@ -830,6 +835,7 @@ Click on information to bring up brewery website.</string>
                     <tabBarItem key="tabBarItem" title="Favorite Beers" image="BeersTabbaricon2.png" id="pSD-1f-fdp"/>
                     <navigationItem key="navigationItem" id="3lJ-ad-mkL"/>
                     <connections>
+                        <outlet property="pointer" destination="fkm-L6-PwO" id="q2Q-kO-8V3"/>
                         <outlet property="tableView" destination="HiO-eH-bPB" id="l7G-Ma-dWd"/>
                         <outlet property="tutorialText" destination="WBt-SP-ZqP" id="s80-Zb-kfB"/>
                         <outlet property="tutorialView" destination="ws9-nT-7up" id="tt1-ez-1Zb"/>
@@ -893,7 +899,7 @@ Click on information to bring up brewery website.</string>
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fCF-E4-Faw" userLabel="Shadow View">
                                         <subviews>
-                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A06-Fi-xnD" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
+                                            <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A06-Fi-xnD" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="HSv-6M-zgt"/>
                                                     <constraint firstAttribute="width" secondItem="A06-Fi-xnD" secondAttribute="height" multiplier="1:1" id="hCm-pS-Fyh"/>
@@ -983,6 +989,7 @@ Click on information to bring up brewery website.</string>
                     <tabBarItem key="tabBarItem" title="Favorite Breweries" image="BreweryTabbarIcon.png" id="GMI-eD-XYO"/>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
                     <connections>
+                        <outlet property="pointer" destination="A06-Fi-xnD" id="jan-mX-h0X"/>
                         <outlet property="tableView" destination="MTM-AV-wIe" id="N3Y-Fp-yzZ"/>
                         <outlet property="tutorialText" destination="66j-wi-SEc" id="sq6-aL-0zv"/>
                         <outlet property="tutorialView" destination="uPp-fq-N67" id="GAP-FX-d2B"/>

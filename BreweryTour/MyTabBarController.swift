@@ -17,9 +17,8 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // TODO Do i want to populate these optional values
-        self.navigationItem.title = "Navigation title"
-        self.navigationItem.backBarButtonItem?.title = "Back button title"
+
+        self.navigationItem.title = "Brewery Tour"
         
         let dismissable = selectedViewController as! DismissableTutorial
         let helpButton = UIBarButtonItem(title: "Help?", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
@@ -27,7 +26,6 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
 
     internal func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        print("--->A tab bar was selected")
         let dismissable = viewController as! DismissableTutorial
         let helpButton = UIBarButtonItem(title: "Help?", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
         self.navigationItem.rightBarButtonItem = helpButton
