@@ -50,9 +50,12 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: IBOutlet
     
-    @IBOutlet weak var tutorialText: UITextView!
-    @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var pointer: CircleView!
+    @IBOutlet weak var tutorialText: UITextView!
+    
+    @IBOutlet weak var mapView: MKMapView!
+
     
     
     // MARK: IBAction
