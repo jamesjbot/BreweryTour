@@ -62,6 +62,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
+        UserDefaults.standard.set(false, forKey: g_constants.CategoryViewTutorial)
+        UserDefaults.standard.synchronize()
     }
     
     
@@ -133,6 +135,11 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)
+        if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
+            // Do nothing because the tutorial will show automatically.
+        } else {
+            tutorialView.isHidden = true
+        }
     }
     
     
