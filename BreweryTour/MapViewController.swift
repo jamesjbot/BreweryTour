@@ -62,7 +62,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
-        UserDefaults.standard.set(false, forKey: g_constants.CategoryViewTutorial)
+        UserDefaults.standard.set(false, forKey: g_constants.MapViewTutorial)
         UserDefaults.standard.synchronize()
     }
     
