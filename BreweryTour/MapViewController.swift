@@ -107,13 +107,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.requestLocation()
         }
-        let fixedWidth = tutorialText.frame.size.width
-        tutorialText.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        let newSize = tutorialText.sizeThatFits(CGSize(width: fixedWidth, height: CGFloat.greatestFiniteMagnitude))
-        var newFrame = tutorialText.frame
-        newFrame.size = CGSize(width: max(newSize.width, fixedWidth), height: newSize.height)
-        tutorialText.frame = newFrame;
-        //tutorialText.frame.size = tutorialText.intrinsicContentSize
     }
     
     
@@ -140,7 +133,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)
-        //print(self.navigationController?.viewControllers)
     }
     
     
