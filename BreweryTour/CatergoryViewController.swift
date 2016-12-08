@@ -230,9 +230,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         //let pointerCoord = CGPoint(x: coordinate.x, y: coordinates.y)
         pointer.frame.origin.x = CGFloat(floatLiteral: CGFloat.NativeType(coordinates.x))
         pointer.frame.origin.y = CGFloat(coordinates.y)
-        //enumerateSubview(view: self.view, allowFull: styleTable)
+        // Animate the pointer
         nextCommandPressed(self)
-        print("The pointer is at \(pointer.frame.origin)")
 //        UIView.animateKeyframes(withDuration: 20.0,
 //                                delay: 0.0,
 //                                options: [ .autoreverse, .repeat ],
