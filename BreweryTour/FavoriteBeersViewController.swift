@@ -36,6 +36,8 @@ class FavoriteBeersViewController: UIViewController {
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
+        UserDefaults.standard.set(false, forKey: g_constants.FavoriteBeersTutorial)
+        UserDefaults.standard.synchronize()
     }
     
     // MARK: Function
@@ -55,6 +57,7 @@ class FavoriteBeersViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // Always prime the tutorial
         tutorialText.text = "Select a beer to show its details"
         let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
         pointer.center = tablePoint
@@ -63,6 +66,14 @@ class FavoriteBeersViewController: UIViewController {
                                 options: [ .autoreverse, .repeat ],
                                 animations: { self.pointer.center.y += self.tableView.frame.height - (3*self.paddingForPoint) - (self.tabBarController?.tabBar.frame.height)! },
                                 completion: nil)
+
+        // Show tutorial
+        if UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) {
+            // Do nothing because the tutorial will show automatically.
+        } else {
+            tutorialView.isHidden = true
+        }
+    
     }
     
     
