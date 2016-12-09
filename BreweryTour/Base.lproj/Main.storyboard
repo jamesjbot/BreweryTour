@@ -431,21 +431,6 @@ Click on information to bring up brewery website.</string>
                                                     <constraint firstAttribute="width" secondItem="LfQ-Vx-7hc" secondAttribute="height" multiplier="1:1" id="Eh8-Jx-5EY"/>
                                                 </constraints>
                                             </view>
-                                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ssx-no-b7L">
-                                                <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                                <state key="normal" title="Next"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                        <integer key="value" value="5"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="nextCommandPressed:" destination="RKC-MN-s1K" eventType="touchUpInside" id="jvi-pJ-XXn"/>
-                                                    <action selector="nextLesson:" destination="CGT-bu-6NU" eventType="touchUpInside" id="On4-zM-poL"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
@@ -458,7 +443,7 @@ Click on information to bring up brewery website.</string>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" id="S4y-dk-J5Y"/>
                                         </constraints>
-                                        <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
@@ -466,9 +451,7 @@ Click on information to bring up brewery website.</string>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                        <state key="normal" title="Dismiss Tutorial">
-                                            <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
+                                        <state key="normal" title="Dismiss Tutorial"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="5"/>
@@ -481,17 +464,32 @@ Click on information to bring up brewery website.</string>
                                             <action selector="dismissTutorial:" destination="CGT-bu-6NU" eventType="touchUpInside" id="MSE-uE-cHU"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ssx-no-b7L">
+                                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <state key="normal" title="Next"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="nextCommandPressed:" destination="RKC-MN-s1K" eventType="touchUpInside" id="jvi-pJ-XXn"/>
+                                            <action selector="nextLesson:" destination="CGT-bu-6NU" eventType="touchUpInside" id="On4-zM-poL"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
-                                    <constraint firstItem="Ssx-no-b7L" firstAttribute="baseline" secondItem="2HY-at-mr5" secondAttribute="baseline" id="6E0-JA-IbD"/>
                                     <constraint firstItem="cju-sI-fYm" firstAttribute="top" secondItem="3h4-CW-XGp" secondAttribute="top" id="6Tn-EP-fAN"/>
                                     <constraint firstAttribute="bottom" secondItem="cju-sI-fYm" secondAttribute="bottom" id="JG5-TQ-Hvp"/>
                                     <constraint firstAttribute="trailing" secondItem="bRR-25-uaE" secondAttribute="trailing" constant="8" id="Vdc-c1-6ff"/>
                                     <constraint firstItem="2HY-at-mr5" firstAttribute="bottom" secondItem="cju-sI-fYm" secondAttribute="bottom" constant="-8" id="XLy-B0-GZK"/>
                                     <constraint firstAttribute="trailing" secondItem="cju-sI-fYm" secondAttribute="trailing" id="YBP-vO-k2j"/>
-                                    <constraint firstItem="2HY-at-mr5" firstAttribute="leading" secondItem="Ssx-no-b7L" secondAttribute="trailing" constant="8" id="aHi-hO-Rav"/>
+                                    <constraint firstItem="2HY-at-mr5" firstAttribute="leading" secondItem="Ssx-no-b7L" secondAttribute="trailing" constant="8" id="ckO-lh-ikA"/>
                                     <constraint firstItem="2HY-at-mr5" firstAttribute="top" secondItem="bRR-25-uaE" secondAttribute="bottom" constant="8" id="gSF-45-CrO"/>
                                     <constraint firstItem="cju-sI-fYm" firstAttribute="leading" secondItem="3h4-CW-XGp" secondAttribute="leading" id="n0r-cC-8IE"/>
+                                    <constraint firstItem="Ssx-no-b7L" firstAttribute="baseline" secondItem="2HY-at-mr5" secondAttribute="baseline" id="u0q-mK-Jo4"/>
                                     <constraint firstItem="cju-sI-fYm" firstAttribute="trailing" secondItem="2HY-at-mr5" secondAttribute="trailing" constant="8" id="yzr-dC-3ml"/>
                                 </constraints>
                             </view>
