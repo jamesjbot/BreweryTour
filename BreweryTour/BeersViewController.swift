@@ -151,11 +151,13 @@ class BeersViewController: UIViewController, Observer {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        // Always prime the tutorial
+        // Prime the state
+        tutorialState = .SearchBar
+        // Display the tutorial
+        nextLesson(nextLessonButton)
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
-            // Prime the state
-            tutorialState = .SearchBar
-            // Display the tutorial
-            nextLesson(nextLessonButton)
+            // Do nothing
         } else {
             tutorialView.isHidden = true
         }
