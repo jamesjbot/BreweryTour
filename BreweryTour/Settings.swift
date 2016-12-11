@@ -17,6 +17,7 @@ class Settings: UIViewController {
 
     // MARK: IBOutlet
     @IBOutlet weak var deleteButton: UIButton!
+    @IBOutlet weak var activityIndic: UIActivityIndicatorView!
     
     @IBAction func deleteBeersBrewery(_ sender: AnyObject) {
     // Prompt user should we delete all the beers and breweries
@@ -24,6 +25,7 @@ class Settings: UIViewController {
         func deleteAll(_ action: UIAlertAction){
             //activityIndicator.startAnimating()
             let success = coreDataStack?.deleteBeersAndBreweries()
+            activityIndic.stopAnimating()
             if success == true {
                 displayAlertWindow(title: "Delete Data", msg: "Successful")
             } else {
@@ -31,6 +33,8 @@ class Settings: UIViewController {
             }
             
         }
+        activityIndic.startAnimating()
+        activityIndic.isHidden = false
         let action = UIAlertAction(title: "Delete",
                                    style: .default,
                                    handler: deleteAll)
@@ -38,17 +42,4 @@ class Settings: UIViewController {
                            msg: "Are you sure you want to delete all data, this includes tasting notes and favorites?",
                            actions: [action])
     }
-    
-    
-    // This function will delete all breweries and beer data.
-//    private func batchDelete() {
-//        let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
-//        let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
-//        do {
-//            try coreDataStack?.mainStoreCoordinator.execute(batch, with: (coreDataStack?.persistingContext)!)
-//            displayAlertWindow(title: "Deleted Data", msg: "Completed Deletion")
-//        } catch {
-//            displayAlertWindow(title: "Error", msg: "There was an error deleting database, \nPlease try again")
-//        }
-//    }
 }
