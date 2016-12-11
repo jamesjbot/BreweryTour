@@ -193,19 +193,17 @@ extension CoreDataStack {
     }
     
     
-    // TODO remove this temporary test function
+    // This function delete all the entities from core data.
     private func deleteFromCoreData(entity: String, context: NSManagedObjectContext) -> Bool {
         let genericRequest : NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "\(entity)")
         let genericBatchDelete = NSBatchDeleteRequest(fetchRequest: genericRequest)
         genericBatchDelete.resultType = .resultTypeCount
         do {
             let results = try backgroundContext.execute(genericBatchDelete) as! NSBatchDeleteResult
-            print("Batch deleted \(results) \(entity) on \(context.description)")
             try context.save()
             return true
         } catch let error {
             return false
-            fatalError("Error deleting objects \(error)")
         }
     }
     
