@@ -17,7 +17,6 @@ class BeersViewController: UIViewController, Observer {
     enum SelectedBeersTutorialStage {
         case Table
         case SegementedControl
-        case Organic
         case SearchBar
     }
     
@@ -36,10 +35,7 @@ class BeersViewController: UIViewController, Observer {
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var nextLessonButton: UIButton!
-    @IBOutlet weak var organicLabel: UILabel!
 
-    
-    @IBOutlet weak var organicSwitch: UISwitch!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
@@ -56,16 +52,10 @@ class BeersViewController: UIViewController, Observer {
         selectedBeersTableList.toggleAllBeersMode(control: sender)
     }
     
-    @IBAction func organicSwitch(_ sender: UISwitch) {
-        selectedBeersTableList.changeOrganicState(iOrganic: sender.isOn)
-    }
-    
     @IBAction func nextLesson(_ sender: UIButton) {
         // Advance the tutorial state
         switch tutorialState {
         case .Table:
-            tutorialState = .Organic
-        case .Organic:
             tutorialState = .SegementedControl
         case .SegementedControl:
             tutorialState = .SearchBar
@@ -99,17 +89,6 @@ class BeersViewController: UIViewController, Observer {
                                     completion: nil)
             break
         
-        case .Organic:
-            tutorialText.text = "Turn on Organic switch to only see organic beers."
-            let tablePoint = CGPoint(x: organicLabel.frame.origin.x + paddingForPoint,
-                                     y: segmentedControl.center.y)
-            pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: 0.5,
-                                    delay: 0.0,
-                                    options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.x += self.organicSwitch.frame.maxX - (2*self.paddingForPoint) },
-                                    completion: nil)
-            break
         
         case .SearchBar:
             tutorialText.text = "Enter the name of a beer, and we will search online for it."
@@ -120,6 +99,7 @@ class BeersViewController: UIViewController, Observer {
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.x += self.searchBar.frame.maxX - (2*self.paddingForPoint) },
                                     completion: nil)
+            break
         
         }
     }
@@ -191,8 +171,6 @@ extension BeersViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Open the beer detail view screen.
-        // Temporarily put in false for organic type.
-        // TODO pull the organic type from mediator.
         let beer = selectedBeersTableList.selected(elementAt: indexPath,
                                                    searchText: searchBar.text!) {
             (success,msg) -> Void in
