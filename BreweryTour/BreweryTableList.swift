@@ -45,7 +45,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         do {
             try frc.performFetch()
         } catch {
-            fatalError()
+            observer.sendNotify(s: "Error fetching data")
         }
         
         guard frc.fetchedObjects?.count == 0 else {
