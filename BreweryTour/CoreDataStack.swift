@@ -182,7 +182,9 @@ extension CoreDataStack {
         stateOfAllContexts()
     }
     
-    func deleteFromCoreData(entity: String, context: NSManagedObjectContext) {
+    
+    // TODO remove this temporary test function
+    private func deleteFromCoreData(entity: String, context: NSManagedObjectContext) {
         let genericRequest : NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "\(entity)")
         let genericBatchDelete = NSBatchDeleteRequest(fetchRequest: genericRequest)
         genericBatchDelete.resultType = .resultTypeCount
