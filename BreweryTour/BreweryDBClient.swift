@@ -534,7 +534,8 @@ class BreweryDBClient {
                         continue
                     }
                 } catch {
-                    fatalError()
+                    completion!(false, "Failed Request")
+                    return
                 }
                 
                 Style(id: localId!, name: localName! as! String, context: (coreDataStack?.mainContext)!)
@@ -546,7 +547,7 @@ class BreweryDBClient {
                 completion!(true, "Success")
                 return
             } catch {
-                completion!(false, "Failed Request \(#line) \(#function)")
+                completion!(false, "Failed Request")
                 return
             }
             return
