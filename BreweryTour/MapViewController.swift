@@ -331,7 +331,8 @@ extension MapViewController : MKMapViewDelegate {
             do {
                 try coreDataStack?.persistingContext.save()
             } catch {
-                fatalError()
+                displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+                return
             }
             // Update favorite icon
             DispatchQueue.main.async {
