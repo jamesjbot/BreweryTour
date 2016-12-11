@@ -59,7 +59,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         do {
             try frc.performFetch()
         } catch {
-            fatalError()
+            observer.sendNotify(s: "Error fetching data")
         }
         super.init()
         frc.delegate = self
