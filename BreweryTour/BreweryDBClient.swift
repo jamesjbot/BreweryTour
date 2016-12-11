@@ -943,21 +943,23 @@ class BreweryDBClient {
         task.resume()
     }
     
-    private func saveMain(){
+    private func saveMain() -> Bool {
         do {
             try coreDataStack?.mainContext.save()
-        } catch let error {
-            fatalError("Saving main error \(error)")
+            return true
+        } catch {
+            return false
         }
     }
     
-    private func savePersitent(){
-        do {
-            try coreDataStack?.persistingContext.save()
-        } catch let error {
-            fatalError("Saving persistent error \(error)")
-        }
-    }
+//    private func savePersitent() -> Bool {
+//        do {
+//            try coreDataStack?.persistingContext.save()
+//            return true
+//        } catch let error {
+//            return false
+//        }
+//    }
     
     private func createURLFromParameters(queryType: APIQueryOutputTypes,
                                          querySpecificID: String?,
