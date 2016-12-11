@@ -102,8 +102,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     private func addCircularPathToPointer() {
         let systemVersion = UIDevice.current.model
-        print("SystemVersion: \(systemVersion)")
-        // Circular path 
+        // Circular path
         var point = CGPoint(x: view.frame.midX, y: view.frame.midY)
         var rotationRadius = view.frame.width/4
         if systemVersion == "iPhone" {
