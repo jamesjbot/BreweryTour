@@ -68,8 +68,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         selectedObject = toNSObject
     }
 
-    // TODO Decides on whether to display all data or not
-    // Needs organic tag.
+    // Toggles between showing all beers or just selected beers based on brewery or style.
     internal func toggleAllBeersMode(control : UISegmentedControl) {
         switch control.selectedSegmentIndex {
         case 0: // Selected Beers
