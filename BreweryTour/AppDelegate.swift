@@ -44,7 +44,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try coreDataStack?.saveMainContext()
             try coreDataStack?.savePersistingContext()
         } catch {
-            print("Error saving to coredata.")
+            fatalError("Error saving to coredata.")
         }
     }
 
@@ -58,7 +58,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try coreDataStack?.saveMainContext()
             try coreDataStack?.savePersistingContext()
         } catch {
-            print("Error saving to coredata.")
+            fatalError("Error saving to coredata.")
         }
     }
 
@@ -81,7 +81,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try coreDataStack?.saveMainContext()
             try coreDataStack?.savePersistingContext()
         } catch {
-            print("Error saving to coredata.")
+            fatalError("Error saving to coredata.")
         }
     }
 
