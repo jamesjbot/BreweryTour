@@ -79,7 +79,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         do {
             results = try (coreDataStack?.persistingContext.fetch(request))! as [Beer]
         } catch {
-            fatalError()
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
+            return
         }
         // Array to hold breweries
         mappableBreweries = [Brewery]()
