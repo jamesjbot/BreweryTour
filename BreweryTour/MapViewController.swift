@@ -157,6 +157,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         addCircularPathToPointer()
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
             // Do nothing because the tutorial will show automatically.
+            tutorialView.isHidden = false
         } else {
             tutorialView.isHidden = true
         }
