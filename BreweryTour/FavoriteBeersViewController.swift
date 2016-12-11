@@ -100,7 +100,7 @@ class FavoriteBeersViewController: UIViewController {
         do {
             try frc.performFetch()
         } catch {
-            fatalError("There was a problem fetching from coredata")
+            displayAlertWindow(title: "Data access", msg: "Sorry there was an error accessing data try again.")
         }
     }
     
