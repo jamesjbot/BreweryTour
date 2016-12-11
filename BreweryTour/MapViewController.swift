@@ -101,9 +101,15 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     }
     
     private func addCircularPathToPointer() {
-        // Circular path
-        let point = CGPoint(x: view.frame.midX, y: view.frame.midY)
-        let rotationRadius = view.frame.width/4
+        let systemVersion = UIDevice.current.model
+        print("SystemVersion: \(systemVersion)")
+        // Circular path 
+        var point = CGPoint(x: view.frame.midX, y: view.frame.midY)
+        var rotationRadius = view.frame.width/4
+        if systemVersion == "iPhone" {
+            point = CGPoint(x: view.frame.midX, y: view.frame.midY*0.5)
+            rotationRadius = view.frame.width/8
+        }
         let circlePath = UIBezierPath(arcCenter: point,
                                       radius: rotationRadius,
                                       startAngle: 0,
