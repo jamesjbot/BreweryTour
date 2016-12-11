@@ -94,7 +94,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
                     mappableBreweries.append(brewery[0])
                 }
             } catch {
-                fatalError("Failure to query breweries")
+                displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+                return
             }
         }
     }
@@ -198,7 +199,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         do {
             try frc.performFetch()
         } catch {
-            fatalError()
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+            return
         }
         for i in frc.fetchedObjects! as [Brewery] {
             if i.name! == by.title! {
