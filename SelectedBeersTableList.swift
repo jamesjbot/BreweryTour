@@ -44,7 +44,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         do {
             try frc.performFetch()
         } catch {
-            fatalError()
+            observer.sendNotify(s: "Error fetching data.")
         }
     }
     
@@ -131,7 +131,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
                 observer.sendNotify(s: "reload data")
             }
         } catch {
-            fatalError()
+            observer.sendNotify(s: "Error fetching data")
         }
     }
     
@@ -231,7 +231,6 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
                 completion!(true, "Success")
             } catch {
                 completion!(false, "Failed Request")
-                fatalError("Fetch failed critcally")
             }
         }
     }
