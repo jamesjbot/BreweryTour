@@ -13,21 +13,6 @@ import UIKit
 import CoreData
 
 class BeerDetailViewController: UIViewController, UITextViewDelegate{
-
-    
-    // TODO Remove this test code
-    @IBAction func deleteAll(_ sender: UIBarButtonItem) {
-    
-            let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Beer")
-            let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
-            do {
-                try persistentContext?.execute(batch)
-                //try coreDataStack?.mainStoreCoordinator.execute(batch, with: (favoriteContext)!)
-                print("Batch Deleted completed")
-            } catch {
-                fatalError("batchdelete failed")
-            }
-    }
     
     // MARK: IBOutlets
     
