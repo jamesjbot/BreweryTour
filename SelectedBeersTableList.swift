@@ -83,8 +83,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         performFetchRequestFor(organic: organic, observerNeedsNotification: true)
     }
     
-    
-    // TODO remove organic parameter.
+
     // Function to perform fetch on dynamic request.
     // After fetch is completed the user interface
     // needs to be notified of changes with observer.notify(msg:"")
@@ -92,10 +91,6 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     private func performFetchRequestFor(organic : Bool, observerNeedsNotification: Bool){
         // Add a selector for organic beers only.
         var subPredicates = [NSPredicate]()
-        if organic == true {
-            subPredicates.append(NSPredicate(format: "isOrganic == %@",
-                                             NSNumber(value: organic) ))
-        }
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         
