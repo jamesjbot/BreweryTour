@@ -106,7 +106,10 @@ class FavoriteBeersViewController: UIViewController {
     
     
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Beer? else { fatalError("Unexpected Object in FetchedResultsController") }
+        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Beer? else {
+            displayAlertWindow(title: "Data Access", msg: "Sorry there was an error accessing data please try again")
+            return
+        }
         // Populate cell from the NSManagedObject instance
         cell.textLabel?.text = selectedObject.beerName
         cell.detailTextLabel?.text = selectedObject.brewer?.name
@@ -192,7 +195,7 @@ extension FavoriteBeersViewController : UITableViewDelegate {
         
         // Push beer information to Detail View Controller
         if tableView.cellForRow(at: indexPath)?.textLabel?.text != frc.object(at: indexPath).beerName {
-            fatalError()
+            displayAlertWindow(title: "Data access", msg: "Sorry there was a problem accessing data please try again")
         }
         destinationViewcontroller.beer = frc.object(at: indexPath)
         
