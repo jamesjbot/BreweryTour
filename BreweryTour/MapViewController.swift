@@ -141,6 +141,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         if mapViewData is Style {
             initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
         } else if mapViewData is Brewery {
+            mappableBreweries.removeAll()
             mappableBreweries.append(mapViewData as! Brewery)
         } else {
             return

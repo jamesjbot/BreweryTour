@@ -204,10 +204,10 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     // When we select a favorite brewery lets zoom to that brewery on the map
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Send the brewery to the mediator, then switch to the map tab
-         // TODO I temporarily inserted a false this is wrong.
         Mediator.sharedInstance().selected(thisItem: frc.object(at: indexPath)) {
             (success, msg) -> Void in
         }
+        // Switch to map tab
         self.tabBarController?.selectedIndex = 0
     }
 }
