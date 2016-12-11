@@ -108,12 +108,12 @@ class FavoriteBreweriesViewController: UIViewController {
         do {
             try frc.performFetch()
         } catch {
-            displayAlertWindow(title: "Read Coredata", msg: "Error reading local device\nplease try again")
+            displayAlertWindow(title: "Read Coredata", msg: "orry there was an error, \nplease try again.")
         }
         do {
             let results = try coreDataStack?.persistingContext.fetch(request)
         } catch {
-            fatalError()
+            displayAlertWindow(title: "Read Coredata", msg: "Sorry there was an error, \nplease try again.")
         }
     }
     
