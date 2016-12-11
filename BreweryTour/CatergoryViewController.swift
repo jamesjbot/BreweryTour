@@ -227,7 +227,10 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
             return
         }
+        // Always reload the table data. Incase new breweries were pulled in
         styleTable.reloadData()
+        // Change the Navigator name
+        navigationController?.navigationBar.topItem?.title = "Brewery Tour"
     }
     
     // Why is it taking me along time because the coordinates are changing when I apply them
