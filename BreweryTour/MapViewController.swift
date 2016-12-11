@@ -148,8 +148,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         }
 
         populateMapWithAnnotations()
-        // TODO Remove UINavigationController repair
-        //self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
     
     

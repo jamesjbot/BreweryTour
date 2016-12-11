@@ -58,8 +58,8 @@ class CoreDataStack: NSObject {
         mainContext.parent = persistingContext
         
         // TODO Delete this as we don't need a background context
-        backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-        backgroundContext.parent = mainContext
+//        backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//        backgroundContext.parent = mainContext
 
 
         

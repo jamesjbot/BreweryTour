@@ -598,7 +598,8 @@ class BreweryDBClient {
                 saveBreweryImagesIfPossible(input: breweryDict["images"],
                                             inputBrewery: thisbrewery)
                 
-            }// Go back to the breweryArray and save another brewery
+            }
+            // Go back to the breweryArray and save another brewery
             // TODO Work on saving these values.
             // Save all the Breweries in background context to disk
             //            do {
@@ -771,11 +772,12 @@ class BreweryDBClient {
                             beerDescription: description!,
                             availability: available!,
                             context: (coreDataStack?.mainContext!)!)
-        print(beer["isOrganic"])
+        print("Organic:\(beer["isOrganic"])")
         thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
-        print(beer["styleId"])
-        thisBeer.styleID = (beer["styleId"] as! NSNumber).description
-        assert(thisBeer.styleID != nil)
+        print("Style:\(beer["styleId"])")
+        if beer["styleId"] != nil {
+            thisBeer.styleID = (beer["styleId"] as! NSNumber).description
+        }
         thisBeer.abv = beerabv ?? "Information N/A"
         thisBeer.ibu = beeribu ?? "Information N/A"
         return thisBeer
