@@ -51,10 +51,10 @@
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="genericTypeCell" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="368" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="368" height="43.5"/>
+                                                    <frame key="frameInset" width="1000" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -175,7 +175,7 @@
                     <navigationItem key="navigationItem" title="Brewery Tour" id="OFD-1P-5O8">
                         <barButtonItem key="leftBarButtonItem" systemItem="refresh" id="WU6-mQ-wHx">
                             <connections>
-                                <action selector="refresh:" destination="RKC-MN-s1K" id="RAU-ET-spE"/>
+                                <segue destination="RxT-d5-hZA" kind="show" id="GMp-du-1Rh"/>
                             </connections>
                         </barButtonItem>
                         <rightBarButtonItems>
@@ -196,7 +196,6 @@
                         <outlet property="mapButton" destination="fyC-Ho-f67" id="4jp-ky-liF"/>
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="pointer" destination="jRB-Sa-1bJ" id="cRy-a1-03F"/>
-                        <outlet property="refreshDatabase" destination="WU6-mQ-wHx" id="ksN-lo-CZD"/>
                         <outlet property="segmentedControl" destination="mmN-dq-rb5" id="1vF-MM-mRn"/>
                         <outlet property="styleTable" destination="OSH-8A-abx" id="y1X-oH-hTs"/>
                         <outlet property="tutorialText" destination="chy-Gf-XC8" id="HRg-12-ZWA"/>
@@ -658,6 +657,46 @@ Click on information to bring up brewery website.</string>
             </objects>
             <point key="canvasLocation" x="3383" y="681"/>
         </scene>
+        <!--Settings-->
+        <scene sceneID="jS1-XL-H9X">
+            <objects>
+                <viewController id="RxT-d5-hZA" customClass="Settings" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="oB0-OH-5mh"/>
+                        <viewControllerLayoutGuide type="bottom" id="bf2-bC-tom"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="pKa-uA-FlV">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ge0-dr-cbJ">
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                <inset key="contentEdgeInsets" minX="5" minY="0.0" maxX="5" maxY="0.0"/>
+                                <state key="normal" title="Delete All Breweries and Beers"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="5"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="deleteBeersBrewery:" destination="RxT-d5-hZA" eventType="touchUpInside" id="R2K-eh-5hg"/>
+                                </connections>
+                            </button>
+                        </subviews>
+                        <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
+                        <constraints>
+                            <constraint firstItem="Ge0-dr-cbJ" firstAttribute="centerY" secondItem="pKa-uA-FlV" secondAttribute="centerY" id="6j5-vC-YFx"/>
+                            <constraint firstItem="Ge0-dr-cbJ" firstAttribute="centerX" secondItem="pKa-uA-FlV" secondAttribute="centerX" id="XDK-rA-9av"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="deleteButton" destination="Ge0-dr-cbJ" id="tEf-VY-d4Z"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="lT6-7r-ceh" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="852" y="-790"/>
+        </scene>
         <!--Brewery Tour-->
         <scene sceneID="068-UA-gCJ">
             <objects>
@@ -717,7 +756,7 @@ Click on information to bring up brewery website.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="FavoriteCell" textLabel="65G-I2-bt1" detailTextLabel="4eR-fy-GSw" imageView="gVx-aZ-Y5e" style="IBUITableViewCellStyleSubtitle" id="E3a-pT-flO">
-                                        <rect key="frame" x="0.0" y="92" width="1000" height="44"/>
+                                        <rect key="frame" x="0.0" y="92" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
                                             <frame key="frameInset" width="375" height="43"/>
@@ -874,7 +913,7 @@ Click on information to bring up brewery website.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FavoriteCell" textLabel="L0G-7N-7Tr" detailTextLabel="tyv-eG-Ufw" imageView="Isa-JK-NWA" style="IBUITableViewCellStyleSubtitle" id="EPN-e6-10X">
-                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EPN-e6-10X" id="Q1S-to-2h3">
                                             <frame key="frameInset" width="375" height="43"/>

@@ -58,8 +58,8 @@ class CoreDataStack: NSObject {
         mainContext.parent = persistingContext
         
         // TODO Delete this as we don't need a background context
-//        backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
-//        backgroundContext.parent = mainContext
+        backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+        backgroundContext.parent = mainContext
 
 
         
@@ -151,9 +151,12 @@ extension CoreDataStack {
     }
     
     // Temporary test code
-    internal func deleteBeersAndBreweries(){
+    internal func deleteBeersAndBreweries() -> Bool {
         stateOfAllContexts()
-        deleteFromCoreData(entity: "Beer", context: persistingContext)
+        var success = deleteFromCoreData(entity: "Beer", context: persistingContext)
+        guard success == true else {
+            return false
+        }
 //        let beerRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Beer")
 //        let beerBatch = NSBatchDeleteRequest(fetchRequest: beerRequest as! NSFetchRequest<NSFetchRequestResult> )
 //        beerBatch.resultType = .resultTypeCount
@@ -166,25 +169,32 @@ extension CoreDataStack {
 //        } catch {
 //            fatalError("batchdelete failed")
 //        }
-        
-        let breweryRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        let breweryBatch = NSBatchDeleteRequest(fetchRequest: breweryRequest as! NSFetchRequest<NSFetchRequestResult> )
-        do {
-            let results = try backgroundContext.execute(breweryBatch) as! NSBatchDeleteResult
-            try mainStoreCoordinator.execute(breweryBatch, with: (backgroundContext)!)
-            print("Batch Deleted completed on \(results.result) objects")
-            try backgroundContext.save()
-        } catch {
-            fatalError("batchdelete failed")
+        success = deleteFromCoreData(entity: "Brewery", context: persistingContext)
+//        let breweryRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+//        let breweryBatch = NSBatchDeleteRequest(fetchRequest: breweryRequest as! NSFetchRequest<NSFetchRequestResult> )
+//        do {
+//            let results = try backgroundContext.execute(breweryBatch) as! NSBatchDeleteResult
+//            try mainStoreCoordinator.execute(breweryBatch, with: (backgroundContext)!)
+//            print("Batch Deleted completed on \(results.result) objects")
+//            try backgroundContext.save()
+//        } catch {
+//            return false
+//            fatalError("batchdelete failed")
+//        }
+        guard success == true else {
+            return false
         }
+        
         persistingContext.reset()
         backgroundContext.reset()
         stateOfAllContexts()
+        
+        return true
     }
     
     
     // TODO remove this temporary test function
-    private func deleteFromCoreData(entity: String, context: NSManagedObjectContext) {
+    private func deleteFromCoreData(entity: String, context: NSManagedObjectContext) -> Bool {
         let genericRequest : NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "\(entity)")
         let genericBatchDelete = NSBatchDeleteRequest(fetchRequest: genericRequest)
         genericBatchDelete.resultType = .resultTypeCount
@@ -192,7 +202,9 @@ extension CoreDataStack {
             let results = try backgroundContext.execute(genericBatchDelete) as! NSBatchDeleteResult
             print("Batch deleted \(results) \(entity) on \(context.description)")
             try context.save()
+            return true
         } catch let error {
+            return false
             fatalError("Error deleting objects \(error)")
         }
     }

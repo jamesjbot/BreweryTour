@@ -27,20 +27,6 @@ import SwiftyWalkthrough
 class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate ,
     Observer
     {
-    
-    // TODO Is this testing code I can remove
-    private func batchDelete() {
-        let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
-        let batch = NSBatchDeleteRequest(fetchRequest: request as! NSFetchRequest<NSFetchRequestResult> )
-        do {
-            try coreDataStack?.mainStoreCoordinator.execute(batch, with: (coreDataStack?.persistingContext)!)
-        } catch {
-            fatalError("batchdelete failed")
-        }
-        tableView(styleTable, numberOfRowsInSection: 0)
-    }
-    
-    
     // MARK: Constant
     let segmentedControlPaddding : CGFloat = 8
     let paddingForPoint : CGFloat = 20
@@ -59,6 +45,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         case BreweryTable
         case InitialScreen
         case Map
+        case RefreshDB
     }
     
     private let pointerDuration : CGFloat = 1.0
@@ -92,7 +79,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBOutlet weak var tutorialView: UIView!
     
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var refreshDatabase: UIBarButtonItem!
+    //@IBOutlet weak var refreshDatabase: UIBarButtonItem!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var newSearchBar: UISearchBar!
     @IBOutlet weak var organicSwitch: UISwitch!
@@ -123,6 +110,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         case .BreweryTable:
             tutorialState = .Map
         case .Map:
+            tutorialState = .RefreshDB
+        case .RefreshDB:
             tutorialState = .InitialScreen
         }
         
@@ -162,15 +151,18 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
                                     completion: nil)
+        
         case .Map:
             tutorialText.text = "Click on Map to proceed to the map, to view your last selection."
             pointer.isHidden = true
             pointer.setNeedsDisplay()
+        
+        
+        case .RefreshDB:
+            tutorialText.text = "If you would like to delete all beers and brewery information click refresh button. To go to the deletion screen"
+            pointer.isHidden = true
+            pointer.setNeedsDisplay()
         }
-    }
-    
-    @IBAction func refresh(_ sender: AnyObject) {
-        coreDataStack?.deleteBeersAndBreweries()
     }
 
     
@@ -235,6 +227,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
             return
         }
+        styleTable.reloadData()
     }
     
     // Why is it taking me along time because the coordinates are changing when I apply them

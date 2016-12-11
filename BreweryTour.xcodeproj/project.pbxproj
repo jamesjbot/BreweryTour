@@ -15,6 +15,7 @@
 		A709D3FB1DAE459C00F11452 /* Style+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A709D3F51DAE459C00F11452 /* Style+CoreDataProperties.swift */; };
 		A70F267D1DBCE47800A33564 /* Brewery+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70F267C1DBCE47800A33564 /* Brewery+CoreDataProperties.swift */; };
 		A711EC091DC8EBDF008E114A /* ExtensionUIViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711EC081DC8EBDF008E114A /* ExtensionUIViewController.swift */; };
+		A7189CFB1DFDD487001409FA /* Settings.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7189CFA1DFDD487001409FA /* Settings.swift */; };
 		A71DC9BE1DB2984C00AF81CD /* FavoriteBeersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71DC9BD1DB2984C00AF81CD /* FavoriteBeersViewController.swift */; };
 		A743501B1DB78615007AE08C /* TableListProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A743501A1DB78615007AE08C /* TableListProtocol.swift */; };
 		A74350621DB7B0F6007AE08C /* StylesTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350611DB7B0F6007AE08C /* StylesTableList.swift */; };
@@ -85,6 +86,7 @@
 		A709D3F51DAE459C00F11452 /* Style+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Style+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A70F267C1DBCE47800A33564 /* Brewery+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Brewery+CoreDataProperties.swift"; path = "../Brewery+CoreDataProperties.swift"; sourceTree = "<group>"; };
 		A711EC081DC8EBDF008E114A /* ExtensionUIViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionUIViewController.swift; sourceTree = "<group>"; };
+		A7189CFA1DFDD487001409FA /* Settings.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Settings.swift; sourceTree = "<group>"; };
 		A71DC9BD1DB2984C00AF81CD /* FavoriteBeersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteBeersViewController.swift; sourceTree = "<group>"; };
 		A743501A1DB78615007AE08C /* TableListProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableListProtocol.swift; sourceTree = "<group>"; };
 		A74350611DB7B0F6007AE08C /* StylesTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StylesTableList.swift; path = ../StylesTableList.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				A7D2272C1DB5620300360A3B /* FavoriteBreweriesViewController.swift */,
 				A748FAD31DF6E95F005637BD /* MyTabBarController.swift */,
 				A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */,
+				A7189CFA1DFDD487001409FA /* Settings.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -528,6 +531,7 @@
 				A711EC091DC8EBDF008E114A /* ExtensionUIViewController.swift in Sources */,
 				A74350741DBAA17F007AE08C /* Observer.swift in Sources */,
 				A74350681DB91454007AE08C /* NSManagedObjectDisplayable.swift in Sources */,
+				A7189CFB1DFDD487001409FA /* Settings.swift in Sources */,
 				A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */,
 				A7B2AAE11DA791A400EE844C /* CatergoryViewController.swift in Sources */,
 				A71DC9BE1DB2984C00AF81CD /* FavoriteBeersViewController.swift in Sources */,
