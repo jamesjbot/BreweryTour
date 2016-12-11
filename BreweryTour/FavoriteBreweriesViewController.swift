@@ -119,7 +119,10 @@ class FavoriteBreweriesViewController: UIViewController {
     
     
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Brewery? else { fatalError("Unexpected Object in FetchedResultsController") }
+        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Brewery? else {
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error formating page, \nplease try again.")
+            return
+        }
         // Populate cell from the NSManagedObject instance
         cell.textLabel?.text = selectedObject.name!
         if let data : NSData = (selectedObject.image) {
