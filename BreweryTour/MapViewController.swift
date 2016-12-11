@@ -200,7 +200,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             try frc.performFetch()
         } catch {
             displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
-            return
         }
         for i in frc.fetchedObjects! as [Brewery] {
             if i.name! == by.title! {
