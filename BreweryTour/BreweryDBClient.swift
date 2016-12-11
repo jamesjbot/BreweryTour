@@ -500,6 +500,9 @@ class BreweryDBClient {
                     var dbBrewery : Brewery! = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
                     if dbBrewery == nil { // Create a brewery object when needed.
                         dbBrewery = createBreweryObject(breweryDict: breweryDict!, locationDict: locDic)
+                        if dbBrewery == nil {
+                            completion!(false, "Error saving data")
+                        }
                     }
                     let thisBeer = createBeerObject(beer: beer)
                     setBeerBrewerData(beer: thisBeer, breweryID: dbBrewery.id!, completion: completion!)
@@ -779,7 +782,7 @@ class BreweryDBClient {
     }
     
     
-    func createBreweryObject(breweryDict: [String:AnyObject], locationDict locDict:[String:AnyObject]) -> Brewery {
+    private func createBreweryObject(breweryDict: [String:AnyObject], locationDict locDict:[String:AnyObject]) -> Brewery? {
         print("Creating brewery with name \(breweryDict["name"]!)")
         let brewer = Brewery(inName: breweryDict["name"] as! String,
                        latitude: locDict["latitude"]?.description,
@@ -792,13 +795,13 @@ class BreweryDBClient {
             try coreDataStack?.saveMainContext()
             print("Save Brewery save in main context")
         } catch {
-            fatalError()
+            return nil
         }
         return brewer
     }
     
     
-    func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer){
+    private func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer){
         if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
             let medium = images["medium"] as! String?  {
             beer.imageUrl = medium
