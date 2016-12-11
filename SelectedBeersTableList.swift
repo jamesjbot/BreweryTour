@@ -88,17 +88,14 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     // Function to perform fetch on dynamic request.
     // After fetch is completed the user interface
     // needs to be notified of changes with observer.notify(msg:"")
+    // Who is a good test brewery for organic beers
     private func performFetchRequestFor(organic : Bool, observerNeedsNotification: Bool){
         // Add a selector for organic beers only.
         var subPredicates = [NSPredicate]()
         if organic == true {
             subPredicates.append(NSPredicate(format: "isOrganic == %@",
                                              NSNumber(value: organic) ))
-            // TODO Test code to see what is wrong with predicates maybe
-            //subPredicates.append(NSPredicate(format: "favorite == YES", []))
-            print("predicates \(subPredicates)")
         }
-        print("Perform fetch request called")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         
