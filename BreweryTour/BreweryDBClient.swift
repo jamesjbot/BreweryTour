@@ -828,7 +828,7 @@ class BreweryDBClient {
     }
     
     
-    func getBreweryByID(id : String, context : NSManagedObjectContext) -> Brewery? {
+    private func getBreweryByID(id : String, context : NSManagedObjectContext) -> Brewery? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
@@ -840,7 +840,7 @@ class BreweryDBClient {
                 return brewery[0]
             }
         } catch {
-            fatalError()
+            return nil
         }
         return nil
     }
