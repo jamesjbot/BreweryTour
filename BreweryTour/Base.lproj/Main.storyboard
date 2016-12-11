@@ -188,6 +188,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="bpZ-cN-Rf5" id="1I4-bF-cS4"/>
+                        <outlet property="mapButton" destination="fyC-Ho-f67" id="4jp-ky-liF"/>
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="organicSwitch" destination="Bhi-4d-Bab" id="fW0-c3-9C3"/>
                         <outlet property="pointer" destination="jRB-Sa-1bJ" id="cRy-a1-03F"/>

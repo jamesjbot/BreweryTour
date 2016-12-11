@@ -56,6 +56,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     enum CategoryTutorialStage {
         case SegementedControl
         case Table
+        case BreweryTable
+        case InitialScreen
+        case Map
     }
     
     private let pointerDuration : CGFloat = 1.0
@@ -67,7 +70,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             tutorialView.isHidden = !tutorialModeOn
         }
     }
-    private var tutorialState : CategoryTutorialStage = .SegementedControl
+    
+    private var tutorialState : CategoryTutorialStage = .InitialScreen
     
     fileprivate var fetchedResultsController : NSFetchedResultsController<NSManagedObject>!
     
@@ -82,6 +86,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // MARK: IBOutlets
 
     // Tutorial outlets
+    @IBOutlet weak var mapButton: UIBarButtonItem!
     @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var pointer: UIView!
     @IBOutlet weak var tutorialView: UIView!
@@ -109,15 +114,27 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBAction func nextCommandPressed(_ sender: AnyObject) {
         // Advance the tutorial state
         switch tutorialState {
+        case .InitialScreen:
+            tutorialState = .SegementedControl
         case .SegementedControl:
             tutorialState = .Table
         case .Table:
-            tutorialState = .SegementedControl
+            tutorialState = .BreweryTable
+        case .BreweryTable:
+            tutorialState = .Map
+        case .Map:
+            tutorialState = .InitialScreen
         }
+        
         switch tutorialState {
+        case .InitialScreen:
+            pointer.isHidden = true
+            pointer.setNeedsDisplay()
+            tutorialText.text = "Welcome to Brewery Tour. This app was designed to help you plan a trip to breweries that serve your favorite beer styles. Please step thru this tutorial with the next button. Dismiss it when you are done. To bring the tutorial back press Help?"
         case .SegementedControl:
-            // Set the initial point
-            tutorialText.text = "Select Style to show all breweries with that style on map, or\nSelect Brewery to show that brewery on the map"
+            pointer.isHidden = false
+            pointer.setNeedsDisplay()
+            tutorialText.text = "Select Style to show all breweries with that style on map, or\nSelect Brewery to show that brewery on the map. When in Brewery mode if you don't see any breweries go back to styles and select a style. \nThe visible breweries are populated you select more styles."
             let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.center.y + segmentedControlPaddding)
             pointer.center = segmentPoint
             UIView.animateKeyframes(withDuration: 0.5,
@@ -127,7 +144,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
                                     completion: nil)
             break
         case .Table:
-            tutorialText.text = "Select a style or brewery from list to show on map"
+            tutorialText.text = "Select a style or a brewery from list, and you will be instantly taken to the map to show its locations"
             let tablePoint = CGPoint(x: styleTable.frame.origin.x + paddingForPoint , y: styleTable.frame.origin.y)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: 0.5,
@@ -136,6 +153,19 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
                                     animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
                                     completion: nil)
             break
+        case .BreweryTable:
+            tutorialText.text = "Don't see any breweries in Brewery Mode that is because there are alot of breweries. Go back and choose a style of beer you'd like to explore."
+            let tablePoint = CGPoint(x: styleTable.frame.origin.x + paddingForPoint , y: styleTable.frame.origin.y)
+            pointer.center = tablePoint
+            UIView.animateKeyframes(withDuration: 0.5,
+                                    delay: 0.0,
+                                    options: [ .autoreverse, .repeat ],
+                                    animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
+                                    completion: nil)
+        case .Map:
+            tutorialText.text = "Click on Map to proceed to the map, to view your last selection."
+            pointer.isHidden = true
+            pointer.setNeedsDisplay()
         }
     }
     
@@ -244,40 +274,6 @@ print("\(view.convert(allowFull.frame.origin, to: self.view))")
         }
     }
     
-//    func enumerateSubview(view: UIView, allowFull: UIView){
-//        print("I am \(view)")
-//        if view.subviews.isEmpty {
-//            print("I have no subviews")
-//            if view == allowFull || view is UIStackView {
-//                view.alpha = 1.0
-//            } else {
-//                view.alpha = 0.1
-//            }
-//        }
-//
-//        for i in view.subviews {
-//            enumerateSubview(view: i, allowFull: allowFull)
-//        }
-//    }
-//    
-//    
-//    func makeAllViewsTransparent(inSet: [UIView], exceptView: UIView){
-//        //print(inSet.subviews.contains(exceptView))
-//        if inSet.count == 1 {
-//            if view != exceptView {
-//                print(view)
-//                view.alpha = 0.25
-//                DispatchQueue.main.async {
-//                    self.view.setNeedsDisplay()
-//                }
-//            }
-//        } else {
-//            for i in inSet {
-//                //makeAllViewsTransparent(inSet: i, exceptView: exceptView)
-//            }
-//        }
-//
-//    }
 }
 
 
