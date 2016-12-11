@@ -54,7 +54,7 @@
                                                 <rect key="frame" x="0.0" y="28" width="368" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <frame key="frameInset" width="368" height="43"/>
+                                                    <frame key="frameInset" width="368" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -352,7 +352,7 @@ Click on information to bring up brewery website.</string>
         <!--Selected Beers-->
         <scene sceneID="KEQ-HI-GM0">
             <objects>
-                <viewController storyboardIdentifier="SelectedBeers" id="CGT-bu-6NU" customClass="BeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="SelectedBeers" id="CGT-bu-6NU" customClass="SelectedBeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="jgl-nB-2cO"/>
                         <viewControllerLayoutGuide type="bottom" id="qHD-Am-IJw"/>
@@ -874,7 +874,7 @@ Click on information to bring up brewery website.</string>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FavoriteCell" textLabel="L0G-7N-7Tr" detailTextLabel="tyv-eG-Ufw" imageView="Isa-JK-NWA" style="IBUITableViewCellStyleSubtitle" id="EPN-e6-10X">
-                                        <rect key="frame" x="0.0" y="28" width="1000" height="44"/>
+                                        <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EPN-e6-10X" id="Q1S-to-2h3">
                                             <frame key="frameInset" width="375" height="43"/>
