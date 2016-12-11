@@ -6,15 +6,15 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /**
-    This program displays the breweries selected by the user.
-    It gets the selection from the mediator and display a red pin for breweries
-    and a blue pin for the user's location
-    If the user presses on the pin a callout will show allowing the user to 
-    favorite the brewery, or go the the website for the brewery to check open
-    times and current beer selection.
-    Clicking on the pin will also zoom in to the pin and give a routing to the 
-    brewery.
-**/
+ This program displays the breweries selected by the user.
+ It gets the selection from the mediator and display a red pin for breweries
+ and a blue pin for the user's location
+ If the user presses on the pin a callout will show allowing the user to
+ favorite the brewery, or go the the website for the brewery to check open
+ times and current beer selection.
+ Clicking on the pin will also zoom in to the pin and give a routing to the
+ brewery.
+ **/
 
 
 import UIKit
@@ -46,7 +46,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     private var mappableBreweries = [Brewery]()
     // The query that goes against the database to pull in the brewery location information
     private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
-
+    
     
     // MARK: IBOutlet
     
@@ -55,7 +55,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     @IBOutlet weak var tutorialText: UITextView!
     
     @IBOutlet weak var mapView: MKMapView!
-
+    
     
     
     // MARK: IBAction
@@ -98,6 +98,23 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         }
     }
     
+    private func addCircularPathToPointer() {
+        // Circular path
+        let point = CGPoint(x: view.frame.midX, y: view.frame.midY)
+        let rotationRadius = view.frame.width/4
+        let circlePath = UIBezierPath(arcCenter: point,
+                                      radius: rotationRadius,
+                                      startAngle: 0,
+                                      endAngle:CGFloat(M_PI)*2,
+                                      clockwise: true)
+        let circularAnimation = CAKeyframeAnimation(keyPath: "position")
+        circularAnimation.duration = 5
+        circularAnimation.repeatCount = MAXFLOAT
+        circularAnimation.path = circlePath.cgPath
+        pointer.layer.add(circularAnimation, forKey: nil)
+        pointer.isHidden = false
+    }
+    
     
     // Ask user for access to their location
     override func viewDidLoad(){
@@ -126,8 +143,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         } else {
             return
         }
+
         populateMapWithAnnotations()
-        
         // TODO Remove UINavigationController repair
         //self.navigationController?.setNavigationBarHidden(true, animated: false)
     }
@@ -135,6 +152,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)
+        addCircularPathToPointer()
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
             // Do nothing because the tutorial will show automatically.
         } else {
@@ -167,7 +185,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         mapView.showsTraffic = true
         mapView.showsScale = true
     }
-
+    
     
     // Find breweries
     fileprivate func findBreweryinPersistentContext(by: MKAnnotation) -> NSManagedObjectID? {
@@ -212,7 +230,7 @@ extension MapViewController : MKMapViewDelegate {
             // Format annotation callouts here
             pinView?.tintColor = UIColor.red
             pinView?.canShowCallout = true
-
+            
             // Find the brewery in the proper context
             let breweryObjectID : NSManagedObjectID! = findBreweryinPersistentContext(by: annotation)!
             let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
@@ -362,7 +380,7 @@ extension MapViewController: CLLocationManagerDelegate {
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         return
     }
-
+    
 }
 
 extension MapViewController : DismissableTutorial {
