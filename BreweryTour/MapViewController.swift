@@ -206,6 +206,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         } catch {
             displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
         }
+        // Match Brewery name by Title
         for i in frc.fetchedObjects! as [Brewery] {
             if i.name! == by.title! {
                 return i.objectID
@@ -335,8 +336,8 @@ extension MapViewController : MKMapViewDelegate {
             // Save favorite status and update map
             do {
                 try coreDataStack?.persistingContext.save()
-            } catch {
-                displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+            } catch let error {
+                displayAlertWindow(title: "Error", msg: "Sorry there was an error saving your favorite, \nplease try again")
                 return
             }
             // Update favorite icon
