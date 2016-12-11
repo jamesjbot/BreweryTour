@@ -847,7 +847,7 @@ class BreweryDBClient {
     
     
     
-    func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
+    private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
         //print("Attempting to get beer \(id)")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
@@ -861,7 +861,7 @@ class BreweryDBClient {
                 return beer[0]
             }
         } catch {
-            fatalError()
+            return nil
         }
         return nil
     }
