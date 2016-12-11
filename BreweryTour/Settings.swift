@@ -33,13 +33,13 @@ class Settings: UIViewController {
             }
             
         }
-        activityIndic.startAnimating()
-        activityIndic.isHidden = false
         let action = UIAlertAction(title: "Delete",
                                    style: .default,
                                    handler: deleteAll)
         displayAlertWindow(title: "Delete All Data",
                            msg: "Are you sure you want to delete all data, this includes tasting notes and favorites?",
                            actions: [action])
+        activityIndic.startAnimating()
+        activityIndic.isHidden = false
     }
 }
