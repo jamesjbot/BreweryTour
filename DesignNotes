@@ -1,5 +1,5 @@
 Main Context Observers
-SelectedBeers frc observers the mainContext
+SelectedBeersTableList frc observers the mainContext
 
 Persistent Context Observers
 BreweryTable
@@ -25,6 +25,24 @@ NO CONTEXT
 (Has no context adopts its calling function)settingBeerBrewerData
 (Delegate to downloadImageToCoreData)saveBeerImage
 (Delegate to downloadImageToCoreDataForBrewery)saveBreweryImage
+
+What are the problems
+1.When favoriting a brewery from the map, I'm told that the action failed
+but its completion is 50/50
+2.When deleting all beers and breweries, I'm confronted with the same warning.
+3.The SelectedBeers list does not show current labels.
+4.UI is unresponsive when creating breweries
+5.Add keyboard and dismiss to all tableview.
+What are you testing now
+I'm testing if changing the code for createBrewery to perfrom on
+managed object context without blocking'
+
+What did you learn from the stanford course
+When doing saves on the manged object context always complete them within the
+context with code like this
+managedObjectContext.perform {
+
+}
 
 
 

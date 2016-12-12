@@ -107,7 +107,7 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     
     // MARK: Functions
-    
+    // All notification to SelectedBeersViewController will reload the table.
     func sendNotify(s: String) {
         tableView.reloadData()
         // Prompts the tableView to refilter search listings.
