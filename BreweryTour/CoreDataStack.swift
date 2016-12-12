@@ -178,7 +178,9 @@ extension CoreDataStack {
                     do{
                         try self.persistingContext.save()
                     }catch{
-                        fatalError("Error while saving persisting context: \(error)")
+                        // BUG Occurs here when going to webpage
+                        // Dangling reference
+                        //fatalError("Error while saving persisting context: \(error)")
                     }
                 }
             }
