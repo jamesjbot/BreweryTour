@@ -11,6 +11,7 @@
 import CoreData
 
 class CoreDataStack: NSObject {
+    
     // MARK: - Constants
     private let sqlFilename : String = "com.breweries.jamesjongs.sqlite"
     
@@ -61,8 +62,6 @@ class CoreDataStack: NSObject {
         backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         backgroundContext.parent = mainContext
 
-
-        
         // Add an SQL lite store in the documents folder
         // Create the SQL Store in the background
         //dispatch_async(dispatc, block: () -> Void)
@@ -123,7 +122,6 @@ extension CoreDataStack {
     }
     
     
-    
     // Delete beers and Brewers with a batchrequest
     internal func deleteBeersAndBreweries() -> Bool {
         var success = deleteFromCoreData(entity: "Beer", context: persistingContext)
@@ -149,8 +147,7 @@ extension CoreDataStack {
             let results = try backgroundContext.execute(genericBatchDelete) as! NSBatchDeleteResult
             try context.save()
             return true
-        } catch let error {
-            print("Deletion error: \(error)")
+        } catch {
             return false
         }
     }
