@@ -29,6 +29,9 @@ class BreweryDBClient {
     // MARK: Variables
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     
+    // TODO Remove debugging variable
+    public var rejectedBreweries : Int = 0
+    
     // MARK: Singleton Implementation
     
     private init(){}
@@ -329,7 +332,7 @@ class BreweryDBClient {
                 print("Total pages \(numberOfPages)")
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
-                    let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                    let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
                     group.enter()
@@ -347,7 +350,7 @@ class BreweryDBClient {
                                 }
                                 self.parse(response: responseJSON as NSDictionary,
                                            querySpecificID:  nil,
-                                           outputType: APIQueryOutputTypes.BeersByStyleID,
+                                           outputType: theOutputType,
                                            completion: completion,
                                            finalPage: numberOfPages == i ? true : false)
                                 print("page# \(i)")
@@ -574,6 +577,7 @@ class BreweryDBClient {
                 // Can't build a brewery location if no location exist
                 guard let locationInfo = breweryDict["locations"] as? NSArray
                     else {
+                        rejectedBreweries += 1
                         continue
                 }
                 
@@ -583,12 +587,14 @@ class BreweryDBClient {
                     locDic["longitude"] != nil,
                     locDic["latitude"] != nil
                     else {
+                        rejectedBreweries += 1
                         continue breweryLoop
                 }
                 
                 // Don't repeat breweries in the database
                 var thisbrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
                 guard thisbrewery == nil else {
+                    rejectedBreweries += 1
                     continue
                 }
                 
