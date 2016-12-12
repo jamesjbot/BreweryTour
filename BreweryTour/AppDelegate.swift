@@ -41,8 +41,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
         UserDefaults.standard.synchronize()
         do {
-            try coreDataStack?.saveMainContext()
-            try coreDataStack?.savePersistingContext()
+            try coreDataStack?.saveToFile()
         } catch {
             fatalError("Error saving to coredata.")
         }
@@ -55,8 +54,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Save user preferences
         UserDefaults.standard.synchronize()
         do {
-            try coreDataStack?.saveMainContext()
-            try coreDataStack?.savePersistingContext()
+            try coreDataStack?.saveToFile()
         } catch {
             fatalError("Error saving to coredata.")
         }
@@ -78,8 +76,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Save User preferences
         UserDefaults.standard.synchronize()
         do {
-            try coreDataStack?.saveMainContext()
-            try coreDataStack?.savePersistingContext()
+            try coreDataStack?.saveToFile()
         } catch {
             fatalError("Error saving to coredata.")
         }
