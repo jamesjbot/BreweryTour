@@ -36,6 +36,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         super.init()
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+        request.fetchLimit = 10000
         frc = NSFetchedResultsController(fetchRequest: request,
                                          managedObjectContext: persistentContext!,
                                          sectionNameKeyPath: nil,
@@ -54,18 +55,20 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         }
         
         // Fetch all the breweries in the database.
-//        BreweryDBClient.sharedInstance().downloadAllBreweries() {
-//            (success, msg) -> Void in
-//            if msg == "All Pages Processed" {
-//                print(msg)
+        BreweryDBClient.sharedInstance().downloadAllBreweries() {
+            (success, msg) -> Void in
+            if msg == "All Pages Processed" {
+                print(msg)
+                self.observer.sendNotify(s: "reload data")
 //                do {
+//                    print("Is this fetch needed?")
 //                    try self.frc.performFetch()
 //                } catch {
 //                    fatalError()
 //                }
-//            }
-//
-//        }
+            }
+
+        }
     }
     
     
@@ -81,8 +84,10 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList controllerdidChangeContent notify observer")
-        observer.sendNotify(s: "reload data")
+        //print("BreweryTableList controllerdidChangeContent notify observer")
+        //observer.sendNotify(s: "reload data")
+        print("there are now this many breweries \(controller.fetchedObjects?.count)")
+        print("Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
         //Datata = frc.fetchedObjects!
     }
     
@@ -130,11 +135,11 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
         // Debugging code because breweries with a nil name are leaking thru
         // assert((frc.fetchedObjects?.count)! > 0)
-        print("\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
-        for i in frc.fetchedObjects! {
-            print("Brewery name: \(i.name) \(i.id)")
-            assert(i.name != nil)
-        }
+        //print("\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
+//        for i in frc.fetchedObjects! {
+//            //print("Filtering content Brewery name: \(i.name) \(i.id)")
+//            assert(i.name != nil)
+//        }
         
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
         //print("we updated the filtered contents to \(filteredObjects.count)")
