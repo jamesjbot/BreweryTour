@@ -123,36 +123,9 @@ extension CoreDataStack {
     }
     
     
-    // Temporary test code
-    internal func stateOfAllContexts(){
-
-        do {
-            let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-            request.sortDescriptors = []
-            try print("persistent Breweries: \(persistingContext.count(for: request))")
-            //try print("background Breweries: \(backgroundContext.count(for: request))")
-            //try print("favorites Breweries: \(favoritesContext.count(for: request))")
-            
-            let brequest : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-            brequest.sortDescriptors = []
-            try print("persisting Beers: \(persistingContext.count(for: request))")
-            //try print("background Beers: \(backgroundContext.count(for: brequest))")
-            //try print("favorite Beers: \(favoritesContext.count(for: brequest))")
-            
-            let srequest : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
-            srequest.sortDescriptors = []
-            try print("persisting Styles: \(persistingContext.count(for: request))")
-            //try print("background Styles: \(backgroundContext.count(for: srequest))")
-            //try print("favorite Styles: \(favoritesContext.count(for: srequest))")
-            
-        } catch {
-            
-        }
-    }
     
-    // Temporary test code
+    // Delete beers and Brewers with a batchrequest
     internal func deleteBeersAndBreweries() -> Bool {
-        stateOfAllContexts()
         var success = deleteFromCoreData(entity: "Beer", context: persistingContext)
         guard success == true else {
             return false
