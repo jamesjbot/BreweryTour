@@ -81,7 +81,7 @@ class CoreDataStack: NSObject {
             // Name the SQL Lite file we are creating
             self.dbURL = docURL.appendingPathComponent(self.sqlFilename) as NSURL!
             
-            // Migrate to new DataModel with photoalbum
+            // Migrate to new DataModel
             let options = [NSInferMappingModelAutomaticallyOption: true,
                            NSMigratePersistentStoresAutomaticallyOption: true]
             
@@ -157,30 +157,7 @@ extension CoreDataStack {
         guard success == true else {
             return false
         }
-//        let beerRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Beer")
-//        let beerBatch = NSBatchDeleteRequest(fetchRequest: beerRequest as! NSFetchRequest<NSFetchRequestResult> )
-//        beerBatch.resultType = .resultTypeCount
-//        do {
-//            try mainStoreCoordinator.execute(beerBatch, with: persistingContext)
-//            let results = try backgroundContext.execute(beerBatch) as! NSBatchDeleteResult
-//            print("Batch Deleted completed on \(results.result) objects")
-//            try persistingContext.save()
-//            try backgroundContext.save()
-//        } catch {
-//            fatalError("batchdelete failed")
-//        }
         success = deleteFromCoreData(entity: "Brewery", context: persistingContext)
-//        let breweryRequest : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-//        let breweryBatch = NSBatchDeleteRequest(fetchRequest: breweryRequest as! NSFetchRequest<NSFetchRequestResult> )
-//        do {
-//            let results = try backgroundContext.execute(breweryBatch) as! NSBatchDeleteResult
-//            try mainStoreCoordinator.execute(breweryBatch, with: (backgroundContext)!)
-//            print("Batch Deleted completed on \(results.result) objects")
-//            try backgroundContext.save()
-//        } catch {
-//            return false
-//            fatalError("batchdelete failed")
-//        }
         guard success == true else {
             return false
         }
@@ -203,6 +180,7 @@ extension CoreDataStack {
             try context.save()
             return true
         } catch let error {
+            print("Deletion error: \(error)")
             return false
         }
     }
