@@ -100,6 +100,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         }
     }
     
+    // Tutoral Function to plot a circular path for the pointer
     private func addCircularPathToPointer() {
         let systemVersion = UIDevice.current.model
         // Circular path
@@ -146,8 +147,11 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         if mapViewData is Style {
             initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
         } else if mapViewData is Brewery {
+            // Remove all traces of previous breweries
+            removeRouteOnMap()
             mappableBreweries.removeAll()
             mappableBreweries.append(mapViewData as! Brewery)
+            
         } else {
             return
         }
@@ -158,6 +162,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)
+        
+        // Display tutorial view.
         addCircularPathToPointer()
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
             // Do nothing because the tutorial will show automatically.
@@ -186,11 +192,13 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             aPin.subtitle = i.url
             annotations.append(aPin)
         }
+
         mapView.addAnnotations(annotations)
         // Add the user's location
         mapView.showsUserLocation = true
         mapView.showsTraffic = true
         mapView.showsScale = true
+        mapView.showAnnotations(mapView.annotations, animated: true)
     }
     
     
@@ -222,9 +230,10 @@ extension MapViewController : MKMapViewDelegate {
     
     // This formats the pins and calloutAccessory views on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        print("Pin formatting occuring")
         let reuseId = "pin"
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
-        if pinView == nil {
+        //if pinView == nil {
             pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
             pinView!.canShowCallout = true
             if (pinView?.annotation?.title)! == mapView.userLocation.title {
@@ -255,12 +264,17 @@ extension MapViewController : MKMapViewDelegate {
             pinView?.leftCalloutAccessoryView = localButton
             // Set the information icon on the right button
             pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        } else { // Reusing an onscreen pin annotation
+       // } else { // Reusing an onscreen pin annotation
             pinView!.annotation = annotation
-        }
+       // }
         return pinView
     }
-    
+//    
+//    func zoomToComfortableLevel() {
+//        let span = MKCoordinateSpanMake(63 , 63)
+//        let region = MKCoordinateRegion(center: centerCoord , span: span)
+//        mapView.setRegion(region, animated: true)
+//    }
     
     // Selecting a Pin, draw the route to this pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -326,25 +340,33 @@ extension MapViewController : MKMapViewDelegate {
             // Fetch object from context
             let favBrewery = coreDataStack?.persistingContext.object(with: tempObjectID!) as! Brewery
             // Flip favorite state in the database and in the ui
+            print("favortie before: \(favBrewery.favorite)")
             favBrewery.favorite = !(favBrewery.favorite)
+            print("favortie after: \(favBrewery.favorite)")
             let image : UIImage!
             if favBrewery.favorite == false {
+                print("false run")
                 image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
             } else {
+                print("true run")
                 image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
-            }
-            // Save favorite status and update map
-            do {
-                try coreDataStack?.persistingContext.save()
-            } catch let error {
-                displayAlertWindow(title: "Error", msg: "Sorry there was an error saving your favorite, \nplease try again")
-                return
             }
             // Update favorite icon
             DispatchQueue.main.async {
                 (view.leftCalloutAccessoryView as! UIButton).setImage(image!, for: .normal)
                 view.setNeedsDisplay()
             }
+            // Save favorite status and update map
+            DispatchQueue.main.async {
+                do {
+                    try self.coreDataStack?.persistingContext.save()
+                } catch let error {
+                    self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite, \nplease try again")
+                    print("Error:\(error)")
+                    return
+                }
+            }
+
             
             return
             
