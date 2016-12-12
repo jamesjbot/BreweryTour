@@ -60,7 +60,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     private var tutorialState : CategoryTutorialStage = .InitialScreen
     
-    fileprivate var fetchedResultsController : NSFetchedResultsController<NSManagedObject>!
+    //TODO delete this when it's verified it's unneeded.
+    //fileprivate var frc : NSFetchedResultsController<NSManagedObject>!
     
     fileprivate var activeTableList : TableList!
     

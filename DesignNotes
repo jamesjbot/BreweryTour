@@ -1,0 +1,31 @@
+Main Context Observers
+SelectedBeers frc observers the mainContext
+
+Persistent Context Observers
+BreweryTable
+CategoryView
+FavoriteBeers
+FavoriteBreweries
+MapView
+StylesTable
+
+Persitent Context Updaters
+FavoritingBrewery Function
+Beerdetail favorting and tasting note
+(Deletable) Eventually Brewery parsing will save in persistent
+downloadImageToCoreDataForBrewery
+
+Main Context Updaters
+Styles creation
+createBeerObject
+createBreweryObject
+downloadImagetoCoreData
+
+NO CONTEXT
+(Has no context adopts its calling function)settingBeerBrewerData
+(Delegate to downloadImageToCoreData)saveBeerImage
+(Delegate to downloadImageToCoreDataForBrewery)saveBreweryImage
+
+
+
+
