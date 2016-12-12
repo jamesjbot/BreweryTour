@@ -48,16 +48,16 @@ class CoreDataStack: NSObject {
         // Create the persisting context
         persistingContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         
-        // TODO Change the name of this as we are not using it as storage anymore
         // Assign coordinator to persisting context
         persistingContext.persistentStoreCoordinator = mainStoreCoordinator
         
         // Create Managed Ojbect Context running on the MainQueue
         mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
-        // TODO Don't need contextCommunicating wih one another
+        
+        // Set persistingContext as parent.
         mainContext.parent = persistingContext
         
-        // TODO Delete this as we don't need a background context
+        // Load a background context
         backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         backgroundContext.parent = mainContext
 
@@ -130,19 +130,19 @@ extension CoreDataStack {
             let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
             request.sortDescriptors = []
             try print("persistent Breweries: \(persistingContext.count(for: request))")
-            try print("background Breweries: \(backgroundContext.count(for: request))")
+            //try print("background Breweries: \(backgroundContext.count(for: request))")
             //try print("favorites Breweries: \(favoritesContext.count(for: request))")
             
             let brequest : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
             brequest.sortDescriptors = []
             try print("persisting Beers: \(persistingContext.count(for: request))")
-            try print("background Beers: \(backgroundContext.count(for: brequest))")
+            //try print("background Beers: \(backgroundContext.count(for: brequest))")
             //try print("favorite Beers: \(favoritesContext.count(for: brequest))")
             
             let srequest : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
             srequest.sortDescriptors = []
             try print("persisting Styles: \(persistingContext.count(for: request))")
-            try print("background Styles: \(backgroundContext.count(for: srequest))")
+            //try print("background Styles: \(backgroundContext.count(for: srequest))")
             //try print("favorite Styles: \(favoritesContext.count(for: srequest))")
             
         } catch {
@@ -161,11 +161,8 @@ extension CoreDataStack {
         guard success == true else {
             return false
         }
-        
         persistingContext.reset()
         backgroundContext.reset()
-        stateOfAllContexts()
-        
         return true
     }
     
