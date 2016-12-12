@@ -24,6 +24,8 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Brewery] = [Brewery]()
+    
+    // Currently watches the persistentContext
     internal var frc : NSFetchedResultsController<Brewery>!
     
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
@@ -85,7 +87,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         //print("BreweryTableList controllerdidChangeContent notify observer")
-        //observer.sendNotify(s: "reload data")
+        observer.sendNotify(s: "reload data")
         print("there are now this many breweries \(controller.fetchedObjects?.count)")
         print("Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
         //Datata = frc.fetchedObjects!

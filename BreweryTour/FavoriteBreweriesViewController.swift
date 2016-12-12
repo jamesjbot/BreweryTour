@@ -22,7 +22,7 @@ class FavoriteBreweriesViewController: UIViewController {
     fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     
     // MARK: Variables
-    
+    // Currently this runs on persistent
     fileprivate var frc : NSFetchedResultsController<Brewery>
     
     // MARK: IBOutlets

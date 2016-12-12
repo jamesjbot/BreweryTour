@@ -23,6 +23,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Style] = [Style]()
+    // Runs off of persistentContext
     internal var frc : NSFetchedResultsController<Style>!
     var observer : Observer!
     

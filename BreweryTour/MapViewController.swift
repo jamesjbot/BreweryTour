@@ -45,6 +45,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     // Used to hold the locations we are going to display, loaded from a database query
     private var mappableBreweries = [Brewery]()
     // The query that goes against the database to pull in the brewery location information
+    // This runs on persistent
     private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
     
     

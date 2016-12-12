@@ -26,6 +26,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     internal var selectedObject : NSManagedObject! = nil
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Beer] = [Beer]()
+    // This currently runs off of mainContext
     internal var frc : NSFetchedResultsController<Beer>!
 
     private var observer : Observer!
