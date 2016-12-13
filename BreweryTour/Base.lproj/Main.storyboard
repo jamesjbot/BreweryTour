@@ -230,7 +230,7 @@
                                     <outlet property="delegate" destination="kc4-oF-YzA" id="UHU-69-8jl"/>
                                 </connections>
                             </mapView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Wr-de-AeO" userLabel="Tutorial View">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2Wr-de-AeO" userLabel="Tutorial View">
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6HM-s5-dg9" userLabel="Shadow View">
                                         <subviews>
