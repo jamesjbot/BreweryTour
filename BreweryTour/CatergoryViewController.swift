@@ -300,11 +300,12 @@ extension CategoryViewController : UITableViewDelegate {
     // Capture user selections, communicate with the mediator on what the
     // selection is and then proceed to the map on success
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("CategoryViewControler \(#line) tableView didSelectRowAt clled ")
         activityIndicator.startAnimating()
         activeTableList.selected(elementAt: indexPath,
                                  searchText: newSearchBar.text!){
         (sucesss,msg) -> Void in
-            print(msg)
+            print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
             if msg == "All Pages Processed" {
                 self.activityIndicator.stopAnimating()
                 DispatchQueue.main.async {

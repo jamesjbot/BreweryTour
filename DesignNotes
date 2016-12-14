@@ -18,8 +18,11 @@ downloadImageToCoreDataForBrewery
 Main Context Updaters
 Styles creation
 createBeerObject
-createBreweryObject
 downloadImagetoCoreData
+
+Background Context Updates
+createBreweryObject
+
 
 NO CONTEXT
 (Has no context adopts its calling function)settingBeerBrewerData
@@ -27,14 +30,30 @@ NO CONTEXT
 (Delegate to downloadImageToCoreDataForBrewery)saveBreweryImage
 
 What are the problems
-1.When favoriting a brewery from the map, I'm told that the action failed
-but its completion is 50/50
-2.When deleting all beers and breweries, I'm confronted with the same warning.
-3.The SelectedBeers list does not show current labels.
-4.UI is unresponsive when creating breweries
-5.Add keyboard and dismiss to all tableview.
-What are you testing now
-I'm testing if changing the code for createBrewery to perfrom on
+1. When favoriting a brewery from the map, I'm told that the action failed
+but its completion is 50/50 (This may have been solved with fix 5.)
+2. When deleting all beers and breweries, I'm confronted with the same warning. (This may have been solved with fix 5.)
+--------------------------------------------------------------------------------
+
+What are you working on now?
+6. Not All Breweries are loaded into the brewery table after download is complete.
+Observations:
+When you start with no breweries and I click around to use the UI. The breweries
+are not completely loaded.
+What happens when I just let it load without mucking up the UI?
+Again, it does not load all the breweries.
+I can see Zeta Brewing and Zeroday Brewering are listed but are they save.
+Thesis: It's too many attempts to save different context in recursive functions
+Solution: Going to try and save everything in createBreweryObject and also take
+all other references to saving, on the downloadAllBreweries path
+Problems Introduce By Solution: 
+--------------------------------------------------------------------------------
+
+Who is firing the completion handler in BreweryDB to return back to the
+CategoryViewController with All Pages Processed?
+That would be the downloadBeersAndBreweriesByStyle group notify All Pages Processed
+
+I'm testing if changing the code for createBrewery to perform on
 managed object context without blocking'
 
 What did you learn from the stanford course
@@ -44,6 +63,31 @@ managedObjectContext.perform {
 
 }
 
+Completed Problems
+3.The SelectedBeers list does not show current labels.
+Why
+3. SelectedBeers list does not show current beers.
+3a. SelectedBeers list is now showing current beers but not showing the correct images
+Thesis: I'm thinking the beers are in the wrong context so the query cannot see them.
+Solution: The beer object that I was attaching the image to was in the Persistent Context.
+The beer object is being created in the MainContext
+4.UI is unresponsive when creating breweries
+Thesis: Create Brewery Objects in the mainContext puts them on the mainQueue.
+Move these either to the backup queue
+Perform these asynchronously instead of serial.
 
-
-
+Done! First things first fix the perform as we are jumping to fatalerror.
+Done! Complete removing a return object from createBrewery and use a completion handler
+instead.
+Done very responsive.
+5. Breweries are not showing up on the map
+5a. Breweries are not showing up on the map the first time around
+Observations
+If I tab away from the map and then tab back the locations show up.
+When it first gets segued too. The MapView see 0 beers that match the style
+What are you doing to test
+Thesis: The beer object when it was being save was not being save with the
+relationship brewer. This was causing it to randomly not request to fetches
+Solution: Added code to the createBeerObject that would requires a brewery.
+Then add that brewery as the brewer and brewerID.
+This makes setBeerBrewerData information obsolete.
