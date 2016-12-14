@@ -109,12 +109,12 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
                            searchText: String,
                            completion:  @escaping (Bool, String?) -> Void ) -> AnyObject? {
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
-        var style : String
-        if searchText == "" {
-            style = frc.object(at: elementAt).id!
-        } else {
-            style = filteredObjects[elementAt.row].id!
-        }
+//        var style : String
+//        if searchText == "" {
+//            style = frc.object(at: elementAt).id!
+//        } else {
+//            style = filteredObjects[elementAt.row].id!
+//        }
         
         // Tell mediator this is the style I want to display
         // Then mediator will tell selectedBeersList what to display.
