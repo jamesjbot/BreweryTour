@@ -73,29 +73,16 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
     private func initializeFetchAndFetchBreweriesSetIncomingLocations(style : Style){
+        print("MapView \(#line) Requesting style: \(style.id!) ")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "styleID = %@", style.id!)
-        let results : [Beer]!
-        do {
-            results = try (coreDataStack?.persistingContext.fetch(request))! as [Beer]
-        } catch {
-            displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
-            return
-        }
-        // Array to hold breweries
-        mappableBreweries = [Brewery]()
-        for beer in results {
-            let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
-            breweryRequest.sortDescriptors = []
-            breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
+        var results : [Beer]!
+        coreDataStack?.persistingContext.performAndWait {
             do {
-                let brewery = try (coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
-                if !mappableBreweries.contains(brewery[0]) {
-                    mappableBreweries.append(brewery[0])
-                }
+                results = try (self.coreDataStack?.persistingContext.fetch(request))! as [Beer]
             } catch {
-                displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
                 return
             }
         }
@@ -149,15 +136,16 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
         } else if mapViewData is Brewery {
             // Remove all traces of previous breweries
+            print("MapView \(#line) this is a brewery")
             removeRouteOnMap()
             mappableBreweries.removeAll()
             mappableBreweries.append(mapViewData as! Brewery)
-            
+            populateMapWithAnnotations()
         } else {
             return
         }
-
-        populateMapWithAnnotations()
+        
+        //populateMapWithAnnotations()
     }
     
     
