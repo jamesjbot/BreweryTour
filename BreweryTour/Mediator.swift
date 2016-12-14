@@ -83,10 +83,10 @@ class Mediator : NSManagedObjectDisplayable {
     // When an element on categoryScreen is selected process on BreweryDBClient
     func selected(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passingItem = thisItem
-        print("Mediator setting selectedBeersList prior to call: \(passingItem)")
+        print("Mediator \(#line) setting selectedBeersList prior to call: \(passingItem)")
         selectedBeersList.setSelectedItem(toNSObject: passingItem!)
         if thisItem is Brewery {
-            print("Calling mediator to downloadbeers by brewery")
+            print("Mediator\(#line) Calling mediator to downloadbeers by brewery")
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
                                                              completionHandler : completion)
         } else if thisItem is Style {
