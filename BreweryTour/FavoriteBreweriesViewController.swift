@@ -111,7 +111,7 @@ class FavoriteBreweriesViewController: UIViewController {
             displayAlertWindow(title: "Read Coredata", msg: "orry there was an error, \nplease try again.")
         }
         do {
-            let results = try coreDataStack?.persistingContext.fetch(request)
+            _ = try coreDataStack?.persistingContext.fetch(request)
         } catch {
             displayAlertWindow(title: "Read Coredata", msg: "Sorry there was an error, \nplease try again.")
         }
