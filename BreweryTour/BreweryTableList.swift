@@ -48,7 +48,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         do {
             try frc.performFetch()
         } catch {
-            observer.sendNotify(s: "Error fetching data")
+            observer.sendNotify(from: self, withMsg: "Error fetching data")
         }
         
         guard frc.fetchedObjects?.count == 0 else {
@@ -60,10 +60,11 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         BreweryDBClient.sharedInstance().downloadAllBreweries() {
             (success, msg) -> Void in
             if msg == "All Pages Processed" {
-                print(msg)
-                self.observer.sendNotify(s: "reload data")
+                print("BreweryTableList \(#line) init() msg:\(msg) dbbrewery client sent back completion handlers saying success:\(success))")
+                print("BreweryTableList \(#line) Sending CategoryView a notification to reload breweryTablelist ")
+                self.observer.sendNotify(from: self, withMsg: "reload data")
 //                do {
-//                    print("Is this fetch needed?")
+//                    print("BreweryTableList \(#line)BreweryTableList \(#line)Is this fetch needed?")
 //                    try self.frc.performFetch()
 //                } catch {
 //                    fatalError()
@@ -76,20 +77,21 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("BreweryTableList willchange")
+        //print("BreweryTableList \(#line)BreweryTableList \(#line)BreweryTableList willchange")
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        //print("BreweryTableList changed object")
+        //print("BreweryTableList \(#line)BreweryTableList \(#line)BreweryTableList changed object")
     }
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("BreweryTableList controllerdidChangeContent notify observer")
-        observer.sendNotify(s: "reload data")
-        print("there are now this many breweries \(controller.fetchedObjects?.count)")
-        print("Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
+        print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
+        // TODO We're preloading breweries do I still need this notify
+        observer.sendNotify(from: self, withMsg: "reload data")
+        print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
+        print("BreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
         //Datata = frc.fetchedObjects!
     }
     
@@ -97,25 +99,25 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     func temporaryFetchData(){
         do {
             try frc.performFetch()
-            print("Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
+            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
         do {
             try frc.performFetch()
-            print("Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
+            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
         do {
             try frc.performFetch()
-            print("Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
+            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
         do {
             try frc.performFetch()
-            print("Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
+            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
         } catch {
             fatalError()
         }
@@ -127,34 +129,36 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
         //er crektemporaryFetchData()
         guard searchText == "" else {
-            print("\(#function) filtered object count \(filteredObjects.count)")
+            print("BreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
-        print("\(#function) fetched objects count \(frc.fetchedObjects?.count)")
+        print("BreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)")
         return frc.fetchedObjects!.count
     }
     
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
         // Debugging code because breweries with a nil name are leaking thru
         // assert((frc.fetchedObjects?.count)! > 0)
-        //print("\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
+        //print("BreweryTableList \(#line)\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
 //        for i in frc.fetchedObjects! {
-//            //print("Filtering content Brewery name: \(i.name) \(i.id)")
+//            //print("BreweryTableList \(#line)Filtering content Brewery name: \(i.name) \(i.id)")
 //            assert(i.name != nil)
 //        }
         
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
-        //print("we updated the filtered contents to \(filteredObjects.count)")
+        //print("BreweryTableList \(#line)we updated the filtered contents to \(filteredObjects.count)")
         return filteredObjects
     }
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         DispatchQueue.main.async {
+            print("BreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
             if searchText != "" {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name
             } else {
                 cell.textLabel?.text = (self.frc.fetchedObjects![indexPath.row]).name
             }
+            cell.setNeedsDisplay()
         }
         return cell
     }
@@ -178,10 +182,10 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     }
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
-        print("searchForuserEntered beer called")
+        print("BreweryTableList \(#line)searchForuserEntered beer called")
         BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
             (success, msg) -> Void in
-            print("BreweryTableList Returned from BreweryDBClient")
+            print("BreweryTableList \(#line)BreweryTableList Returned from BreweryDBClient")
             guard success == true else {
                 completion!(success,msg)
                 return
@@ -189,7 +193,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
                 try self.frc.performFetch()
-                print("BreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+                print("BreweryTableList \(#line)BreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
                 completion!(true, "Success")
             } catch {
                 completion!(false, "Failed Request")
