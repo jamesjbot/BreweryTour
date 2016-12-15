@@ -198,10 +198,24 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(from: AnyObject, withMsg msg: String) {
         // This will update the contents of the table if needed
-        if message == "reload data" {
-            styleTable.reloadData()
+        print("CategoryViewController \(#line) Received msg:\(msg)\n from: \(from) ")
+        // TODO We're going to need to upgrade this function to accomodate all message.
+        switch msg {
+        case "reload data":
+            // Only the active table should respond to a table reload command
+            if (activeTableList as AnyObject) === from {
+                print("CategoryViewController \(#line) Reloading data")
+                styleTable.reloadData()
+                searchBar(newSearchBar, textDidChange: newSearchBar.text!)
+            }
+            break
+        case "We have styles":
+            break
+        case "failure":
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
+        default:
+            fatalError("uncaught message \(msg)")
         }
-        searchBar(newSearchBar, textDidChange: newSearchBar.text!)
     }
     
     
