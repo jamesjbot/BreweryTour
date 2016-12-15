@@ -70,6 +70,23 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // MARK: Functions
     
+    func d_showAllBeers() {
+        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+        request.sortDescriptors = []
+        //request.predicate = []
+        //request.predicate = NSPredicate(format: "styleID = %@", style.id!)
+        var results : [Beer]!
+        coreDataStack?.persistingContext.performAndWait {
+            do {
+                results = try (self.coreDataStack?.persistingContext.fetch(request))! as [Beer]
+                print("Here are the results\n\(results)")
+            } catch {
+                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
+                return
+            }
+        }
+    }
+    
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
     private func initializeFetchAndFetchBreweriesSetIncomingLocations(style : Style){
@@ -115,6 +132,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     // Ask user for access to their location
     override func viewDidLoad(){
         super.viewDidLoad()
+        print("MapView \(#line) ViewDidLoad called ")
         // CoreLocation initialization, ask permission to utilize user location
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -133,6 +151,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         
         // Map brewery or breweries by style
         if mapViewData is Style {
+            print("MapView \(#line) this is a style")
             initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
         } else if mapViewData is Brewery {
             // Remove all traces of previous breweries
@@ -142,6 +161,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             mappableBreweries.append(mapViewData as! Brewery)
             populateMapWithAnnotations()
         } else {
+            //TODO remove this return and else
             return
         }
         
@@ -165,6 +185,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     // Puts all the Brewery entries on to the map
     private func populateMapWithAnnotations(){
+        print("MapView \(#line) populateMapWithAnnotations before persistentPerform completes is an error")
         // Remove all the old annotation
         mapView.removeAnnotations(mapView.annotations)
         // Create new array of annotations
@@ -223,39 +244,39 @@ extension MapViewController : MKMapViewDelegate {
         let reuseId = "pin"
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         //if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
-            pinView!.canShowCallout = true
-            if (pinView?.annotation?.title)! == mapView.userLocation.title {
-                // User's location has doesn't need the other decorations
-                pinView!.pinTintColor = UIColor.blue
-                return pinView
-            } else {
-                pinView!.pinTintColor = UIColor.red
-            }
-            
-            // Format annotation callouts here
-            pinView?.tintColor = UIColor.red
-            pinView?.canShowCallout = true
-            
-            // Find the brewery in the proper context
-            let breweryObjectID : NSManagedObjectID! = findBreweryinPersistentContext(by: annotation)!
-            let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
-            
-            // Set the favorite icon on pin
-            let localButton = UIButton(type: .contactAdd)
-            var tempImage : UIImage!
-            if foundBrewery.favorite == true {
-                tempImage = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
-            } else {
-                tempImage = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
-            }
-            localButton.setImage(tempImage, for: .normal)
-            pinView?.leftCalloutAccessoryView = localButton
-            // Set the information icon on the right button
-            pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-       // } else { // Reusing an onscreen pin annotation
-            pinView!.annotation = annotation
-       // }
+        pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+        pinView!.canShowCallout = true
+        if (pinView?.annotation?.title)! == mapView.userLocation.title {
+            // User's location has doesn't need the other decorations
+            pinView!.pinTintColor = UIColor.blue
+            return pinView
+        } else {
+            pinView!.pinTintColor = UIColor.red
+        }
+        
+        // Format annotation callouts here
+        pinView?.tintColor = UIColor.red
+        pinView?.canShowCallout = true
+        
+        // Find the brewery in the proper context
+        let breweryObjectID : NSManagedObjectID! = findBreweryinPersistentContext(by: annotation)!
+        let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
+        
+        // Set the favorite icon on pin
+        let localButton = UIButton(type: .contactAdd)
+        var tempImage : UIImage!
+        if foundBrewery.favorite == true {
+            tempImage = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
+        } else {
+            tempImage = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
+        }
+        localButton.setImage(tempImage, for: .normal)
+        pinView?.leftCalloutAccessoryView = localButton
+        // Set the information icon on the right button
+        pinView!.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+        // } else { // Reusing an onscreen pin annotation
+        pinView!.annotation = annotation
+        // }
         return pinView
     }
 //    
