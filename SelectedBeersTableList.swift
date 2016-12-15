@@ -36,6 +36,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     // Initialization to create a an NSFetchRequest we can use later.
     // The default query is for all beers sorted by beer name
     internal override init(){
+        print("SelectedBeersTable \(#line) initializer called ")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
@@ -45,8 +46,10 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         do {
             try frc.performFetch()
         } catch {
-            observer.sendNotify(s: "Error fetching data.")
+            // TODO can't send self then don't know what to send
+            //observer.sendNotify(from: self, withMsg: "Error fetching data.")
         }
+        print("SelectedBeersTable \(#line) initializer completed ")
     }
     
     
@@ -66,6 +69,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     // Mediator Selector
     // The mediator tells the SelectedBeersTable what object was selected.
     internal func setSelectedItem(toNSObject : NSManagedObject) {
+        print("SelectedBeersTable \(#line) told what was selected.")
         selectedObject = toNSObject
     }
 
@@ -79,7 +83,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         default:
             break
         }
-        print("Toggled all beers mode to \(allBeersMode)")
+        print("SelectedBeersTableList \(#line)Toggled all beers mode to \(allBeersMode)")
         performFetchRequestFor(organic: organic, observerNeedsNotification: true)
     }
     
@@ -89,6 +93,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     // needs to be notified of changes with observer.notify(msg:"")
     // Who is a good test brewery for organic beers
     private func performFetchRequestFor(organic : Bool, observerNeedsNotification: Bool){
+        print("SelectedBeersTable \(#line) performFetchRequest called on MainContext ")
         // Add a selector for organic beers only.
         var subPredicates = [NSPredicate]()
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
@@ -119,32 +124,39 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
                                          cacheName: nil)
         do {
             try frc.performFetch()
+            print("SelectedBeersTable \(#line) Fetch Performed results: \(frc.fetchedObjects?.count) ")
             if observerNeedsNotification {
-                observer.sendNotify(s: "reload data")
+                observer.sendNotify(from: self, withMsg: "reload data")
             }
         } catch {
-            observer.sendNotify(s: "Error fetching data")
+            observer.sendNotify(from: self, withMsg: "Error fetching data")
         }
     }
     
     
     internal func mediatorPerformFetch() {
-        print("mediator perform fetch called")
+        print("SelectedBeersTableList \(#line) mediatorPerformFetch called")
         performFetchRequestFor(organic : organic, observerNeedsNotification: true)
     }
   
     
     // TableView function
     internal func getNumberOfRowsInSection(searchText: String?) -> Int {
-        print("getNumberofRowsInSection fetch called")
+        print("SelectedBeersTableList \(#line) getNumberofRowsInSection fetch called")
         // Since the query is dynamic we need to refresh the data incase something changed.
         performFetchRequestFor(organic : organic, observerNeedsNotification: false )
-        print("selectedbeerstablelist getnumberof rows called")
+        print("SelectedBeersTableList \(#line) selectedbeerstablelist getnumberof rows called")
+        /* 
+         On SelectedBeers ViewController we have two selections
+         The segmentedControl is serviced by the IBAction attached to the 
+         segmentedcontrol. While here we send back filtered or unfilterd 
+         results, based on user having search text in the search bar.
+         */
         if searchText != "" {
-            print("searched filtered object \(filteredObjects.count)")
+            print("SelectedBeersTableList \(#line) searched filtered beers \(filteredObjects.count)")
             return filteredObjects.count
         } else {
-            print("searched all object \(frc.fetchedObjects?.count)")
+            print("SelectedBeersTableList \(#line) searched all beers \(frc.fetchedObjects?.count)")
             return (frc.fetchedObjects?.count)!
         }
     }
@@ -155,13 +167,13 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
         // Set a default image
         // Depending on what data is shown populate image and text data.
         var im =  UIImage(named: "Nophoto.png")
-        if searchText != "" {
+        if searchText != "" { // If there is something in searchText use filteredObject
             if let data : NSData = (filteredObjects[indexPath.row]).image {
                 im = UIImage(data: data as Data)
             }
             cell.textLabel?.text = (filteredObjects[indexPath.row]).beerName
             cell.detailTextLabel?.text = (filteredObjects[indexPath.row]).brewer?.name
-        } else {
+        } else { // Use unfilteredObjects
             if let data : NSData = (self.frc.object(at: indexPath).image) {
                 im = UIImage(data: data as Data)
             }
@@ -185,18 +197,18 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     
     
 //    internal func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        print("SelectedBeersTableList willchange")
+//        print("SelectedBeersTableList \(#line)SelectedBeersTableList willchange")
 //    }
 //    
 //    
 //    internal func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        print("SelctedBeersTableList changed object")
+//        print("SelectedBeersTableList \(#line)SelctedBeersTableList changed object")
 //    }
     
     
     internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Tell what ever view controller that is registerd to refresh itself from me
-        observer.sendNotify(s: "You were updated")
+        observer.sendNotify(from: self, withMsg: "You were updated")
     }
 
     
@@ -209,17 +221,17 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
         BreweryDBClient.sharedInstance().downloadBeersBy(name: searchTerm) {
             (success, msg) -> Void in
-            print("Returned from getting beers")
+            print("SelectedBeersTableList \(#line)Returned from getting beers")
             guard success == true else {
                 completion!(success,msg)
                 return
             }
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
-                print("Searchforuserentered performfetchcalled")
+                print("SelectedBeersTableList \(#line)Searchforuserentered performfetchcalled")
                 try self.frc.performFetch()
-                self.observer.sendNotify(s: "Reload data")
-                print("Saved this many beers in model \(self.frc.fetchedObjects?.count)")
+                self.observer.sendNotify(from: self, withMsg: "Reload data")
+                print("SelectedBeersTableList \(#line)Saved this many beers in model \(self.frc.fetchedObjects?.count)")
                 completion!(true, "Success")
             } catch {
                 completion!(false, "Failed Request")
