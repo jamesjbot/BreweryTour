@@ -79,6 +79,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBOutlet weak var pointer: UIView!
     @IBOutlet weak var tutorialView: UIView!
     
+    // Normal UI outlets
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     //@IBOutlet weak var refreshDatabase: UIBarButtonItem!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
@@ -195,7 +196,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // MARK: Functions
     
     // Receive notifcation when the TableList backing the current view has changed
-    func sendNotify(s message : String) {
+    func sendNotify(from: AnyObject, withMsg msg: String) {
         // This will update the contents of the table if needed
         if message == "reload data" {
             styleTable.reloadData()
@@ -362,11 +363,11 @@ extension CategoryViewController: UISearchBarDelegate {
                 }
             }
         }
-        let action = UIAlertAction(title: "Search Online",
+        let action = UIAlertAction(title: "Search Online?",
                                    style: .default,
                                    handler: searchOnline)
         displayAlertWindow(title: "Search Online",
-                           msg: "Cannot find match on device,\nsearch online?",
+                           msg: "Dismiss to review the search results so far or press Search Online to search for more.",
                            actions: [action])
     }
     
