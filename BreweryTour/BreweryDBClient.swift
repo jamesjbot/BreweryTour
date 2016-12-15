@@ -52,7 +52,8 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.Styles,
                                                         querySpecificID: nil,
                                                         parameters: methodParameter)
-        Alamofire.request(outputURL.absoluteString!).responseJSON(){ response in
+        Alamofire.request(outputURL.absoluteString!).responseJSON(){
+            response in
             guard response.result.isSuccess else {
                 completionHandler(false,"Failed Request \(#line) \(#function)")
                 return
@@ -106,6 +107,7 @@ class BreweryDBClient {
                        outputType: consistentOutput,
                        completion: completionHandler)
         }
+        print("BreweryDB \(#line) downloadBeersByBrewery completing with All Pages processed")
         completionHandler(true, "All Pages Processed")
         return
     }
@@ -151,6 +153,7 @@ class BreweryDBClient {
                 
                 // The follow block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
+                    print("BreweryDb \(#line) downloadBeerByName returning completion Allpagesprocessed ")
                     completion(true, "All Pages Processed")
                     return
                 }
@@ -166,7 +169,6 @@ class BreweryDBClient {
                                                                          parameters: methodParameters)
                     group.enter()
                     queue.async(group: group) {
-                        
                         
                         Alamofire.request(outputURL.absoluteString!)
                             .responseJSON {
@@ -184,11 +186,13 @@ class BreweryDBClient {
                                            outputType: APIQueryOutputTypes.BeersByStyleID,
                                            completion: completion,
                                            finalPage: numberOfPages == i ? true : false)
+                                print("BreweryDB \(#line) downloadBeersByName Firing group leave ")
                                 group.leave()
                         }
                     }
                 }
                 group.notify(queue: queue){
+                    print("BreweryDB \(#line) downloadBeersByName Completing with All Pages Processed")
                     completion(true, "All Pages Processed")
                 }
         }
@@ -323,14 +327,15 @@ class BreweryDBClient {
                     return
                 }
                 
-                print("Total pages \(numberOfPages)")
+                print("BreweryDB \(#line)Total pages \(numberOfPages)")
                 
                 // Asynchronous page processing
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
                 
-                print("Total pages \(numberOfPages)")
-                for i in 2...numberOfPages {
+                print("BreweryDB \(#line)Total pages \(numberOfPages)")
+                for i in 2...15 {
+                    //TODO for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
                                                                          querySpecificID: nil,
@@ -412,13 +417,15 @@ class BreweryDBClient {
                     return
                 }
                 
-                print("Total pages \(numberOfPages)")
+                print("BreweryDB \(#line)Total pages \(numberOfPages)")
                 
                 // Asynchronous page processing
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
                 
-                print("Total pages \(numberOfPages)")
+                print("BreweryDB \(#line)Total pages \(numberOfPages)")
+                
+                // TODO Why does downloading BreweryByNames use BreweryByStyleID
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
@@ -443,7 +450,7 @@ class BreweryDBClient {
                                            outputType: APIQueryOutputTypes.BeersByStyleID,
                                            completion: completion,
                                            finalPage: numberOfPages == i ? true : false)
-                                print("page# \(i)")
+                                print("BreweryDB \(#line)page# \(i)")
                                 group.leave()
                         }
                     }
@@ -488,7 +495,8 @@ class BreweryDBClient {
                     guard let locationInfo = breweryDict?["locations"] as? NSArray else {
                         continue createBeerLoop
                     }
-                    // We can't visit a brewery if it's not open to the public or we don't have coordinates
+                    // We can't visit a brewery if it's not open to the public 
+                    // or we don't have coordinates
                     guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
                         locDic["openToPublic"] as! String == "Y" &&
                             locDic["longitude"] != nil && locDic["latitude"] != nil else {
@@ -549,6 +557,7 @@ class BreweryDBClient {
             
             // Save beer styles to disk
             do {
+                print("BreweryDB \(#line) Styles download now saving in MainContext ")
                 try coreDataStack?.mainContext.save()
                 completion!(true, "Success")
                 return
@@ -561,8 +570,9 @@ class BreweryDBClient {
             
             
         case .Breweries:
-            // The number of pages means we can pull in more breweries
+            print("BreweryDB \(#line) Parse type .Breweries ")
             guard let pagesOfResult = response["numberOfPages"] as? Int else {
+                // The number of pages means we cant pull in any breweries
                 completion!(false, "No results returned")
                 return
             }
@@ -636,7 +646,7 @@ class BreweryDBClient {
             }
             
             beerLoop: for beer in beerArray {
-                print("---------------------NextBeer---------------------")
+                print("BreweryDB \(#line)---------------------NextBeer---------------------")
                 // Creating beer
                 // Check to see if this beer is in the database already
                 var thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
@@ -704,7 +714,7 @@ class BreweryDBClient {
             break
             
         case .BeersByBreweryID:
-            print("Capturing Beers By Brewery")
+            print("BreweryDB \(#line)Capturing Beers By Brewery")
             
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 // Failed to extract data
@@ -712,16 +722,16 @@ class BreweryDBClient {
                 return
             }
             
-            print("\(#line) why is this called twice. This many beers at this brewery: \(beerArray.count)")
+            print("BreweryDB \(#line)\(#line) why is this called twice. This many beers at this brewery: \(beerArray.count)")
             
             for beer in beerArray {
-                print("---------------------NextBeer---------------------")
+                print("BreweryDB \(#line)---------------------NextBeer---------------------")
                 // Create the coredata object for each beer
                 // Test to see if beer is already in context
                 let id : String? = beer["id"] as? String
                 let dbBeer = getBeerByID(id: id!, context: (coreDataStack?.persistingContext)!)
                 guard dbBeer == nil else {
-                    print("Encountered a beer of this type already skipping creation")
+                    print("BreweryDB \(#line)Encountered a beer of this type already skipping creation")
                     continue
                 }
                 let thisBeer = createBeerObject(beer: beer)
@@ -761,7 +771,7 @@ class BreweryDBClient {
     
     func createBeerObject(beer : [String:AnyObject] ) -> Beer {
         let id : String? = beer["id"] as? String
-        print(beer["name"])
+        print("BreweryDB \(#line) beername: \(beer["name"])")
         let name : String? = beer["name"] as? String ?? ""
         let description : String? = (beer["description"] as? String) ?? ""
         var available : String? = nil
@@ -779,7 +789,7 @@ class BreweryDBClient {
                             context: (coreDataStack?.mainContext!)!)
         print("Organic:\(beer["isOrganic"])")
         thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
-        print("Style:\(beer["styleId"])")
+        print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
         if beer["styleId"] != nil {
             thisBeer.styleID = (beer["styleId"] as! NSNumber).description
         }
@@ -813,9 +823,9 @@ class BreweryDBClient {
             let medium = images["medium"] as! String?  {
             beer.imageUrl = medium
             let queue = DispatchQueue(label: "Images")
-            //print("Prior to getting image")
+            print("BreweryDB \(#line) Prior to getting Beer image")
             queue.async(qos: .utility) {
-                //print("Getting images in background")
+                print("BreweryDB \(#line) Getting Beer image in background")
                 self.downloadImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
             }
         }
@@ -827,8 +837,9 @@ class BreweryDBClient {
             let imageURL : String = imagesDict["icon"] as! String?,
             let targetBrewery = inputBrewery {
             let queue = DispatchQueue(label: "Images")
+            print("BreweryDB \(#line) Prior to getting Brewery image")
             queue.async(qos: .utility) {
-                //print("Getting images in background")
+                print("BreweryDB \(#line) Getting Brewery image in background")
                 self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
             }
         }
@@ -855,7 +866,7 @@ class BreweryDBClient {
     
     
     private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
-        //print("Attempting to get beer \(id)")
+        //print("BreweryDB \(#line)Attempting to get beer \(id)")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
@@ -897,6 +908,7 @@ class BreweryDBClient {
     internal func downloadImageToCoreData( aturl: NSURL,
                                            forBeer: Beer,
                                            updateManagedObjectID: NSManagedObjectID) {
+        print("BreweryDB \(#line) Async DonwloadBeerImage in mainContext\(forBeer.beerName)")
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
@@ -926,6 +938,7 @@ class BreweryDBClient {
     internal func downloadImageToCoreDataForBrewery( aturl: NSURL,
                                                      forBrewery: Brewery,
                                                      updateManagedObjectID: NSManagedObjectID) {
+        print("BreweryDB \(#line) Async DonwloadBreweryImage in PersistentContext\(forBrewery.name)")
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
@@ -939,7 +952,7 @@ class BreweryDBClient {
                     breweryForUpdate.image = outputData
                     do {
                         try self.coreDataStack!.mainContext.save()
-                        //print("Attention Brewery Imaged saved for brewery \(forBrewery.name)")
+                        print("BreweryDB \(#line)Attention Brewery Imaged saved in PersistentContext for brewery \(forBrewery.name)")
                     }
                     catch {
                         return
@@ -951,6 +964,7 @@ class BreweryDBClient {
     }
     
     private func saveMain() -> Bool {
+        print("BreweryDB \(#line) Saving MainContext called ")
         do {
             try coreDataStack?.mainContext.save()
             return true
@@ -1001,7 +1015,7 @@ class BreweryDBClient {
         
         // Build the other parameters
         for (key, value) in parameters {
-            //print(key,value)
+            //print("BreweryDB \(#line)key,value")
             let queryItem = NSURLQueryItem(name: key, value: "\(value)")
             components.queryItems?.append(queryItem as URLQueryItem)
         }
@@ -1010,7 +1024,7 @@ class BreweryDBClient {
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
         
-        print("\(components.url!)")
+        print("BreweryDB \(#line) \(components.url!)")
         return components.url! as NSURL
     }
 }
