@@ -108,7 +108,7 @@ class SelectedBeersViewController: UIViewController, Observer {
     
     // MARK: Functions
     // All notification to SelectedBeersViewController will reload the table.
-    func sendNotify(s: String) {
+    func sendNotify(from: AnyObject, withMsg msg: String) {
         tableView.reloadData()
         // Prompts the tableView to refilter search listings.
         searchBar(searchBar, textDidChange: searchBar.text!)
@@ -154,6 +154,7 @@ extension SelectedBeersViewController: UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("SelectedBeers \(#line) cellForRowAt ")
         // Get a cell from the tableview and populate with name, brewery and image if available
         var cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
         cell.imageView?.image = nil
