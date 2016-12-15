@@ -15,6 +15,8 @@ import CoreData
 
 class BreweryDBClient {
     
+    var d_timestopass: Int = 0
+    
     // MARK: Enumerations
     
     internal enum APIQueryOutputTypes {
@@ -62,6 +64,13 @@ class BreweryDBClient {
                 completionHandler(false, "Failed Request \(#line) \(#function)")
                 return
             }
+        //TODO put this in later to check results
+//            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+//                completionHandler(false, "No results")
+//                return
+//            }
+            
+//            print("BreweryDB \(#line)We have this many results for that query \(numberOfResults)")
             
             self.parse(response: responseJSON as NSDictionary,
                        querySpecificID:  nil,
@@ -95,6 +104,13 @@ class BreweryDBClient {
                 completionHandler(false,"Failed Request \(#line) \(#function)")
                 return
             }
+            
+//            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+//                completionHandler(false, "No results")
+//                return
+//            }
+//            
+//            print("BreweryDB \(#line)We have this many results for that query \(numberOfResults)")
             
             // query is brewery/breweryID/beers
             // Returned data is
@@ -405,6 +421,12 @@ class BreweryDBClient {
                     return
                 }
                 
+//                guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+//                    completion(false, "No results")
+//                    return
+//                }
+//                
+//                print("BreweryDB \(#line)We have this many results for that query \(numberOfResults)")
                 
                 // Process subsequent records
                 self.parse(response: responseJSON as NSDictionary,
