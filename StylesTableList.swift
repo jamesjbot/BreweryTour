@@ -33,8 +33,10 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
             (success, msg) -> Void in
             if success {
-                self.observer.sendNotify(s: "We have styles")
-            }
+                self.observer.sendNotify(from: self, withMsg: "We have styles")
+            } //else {
+              //  self.observer.sendNotify(s: msg!)
+            //}
         }
     }
     
@@ -77,7 +79,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        observer.sendNotify(s: "reload data")
+        observer.sendNotify(from: self, withMsg: "reload data")
     }
     
     
