@@ -102,6 +102,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
                 self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
                 return
             }
+            //Scrapbookcode 1
         }
     }
     
