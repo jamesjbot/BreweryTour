@@ -99,11 +99,16 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
+        // Move this UI update to main queue.
+        DispatchQueue.main.async {
+            print("StylesTablesList \(#line) I'm updating UITableView cell on main ")
         if searchText != "" {
-            cell.textLabel?.text = (filteredObjects[indexPath.row]).displayName!
+            cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName!
         } else {
-            cell.textLabel?.text = (frc.object(at: indexPath )).displayName!
+            cell.textLabel?.text = (self.frc.object(at: indexPath )).displayName!
         }
+        cell.setNeedsDisplay()
+    }
         return cell
     }
     
