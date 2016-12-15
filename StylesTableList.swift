@@ -62,7 +62,8 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         do {
             try frc.performFetch()
         } catch {
-            observer.sendNotify(s: "Error fetching data")
+            // TODO can't send self don't know what to send then.
+            //observer.sendNotify(from: self, withMsg: "Error fetching data")
         }
         super.init()
         frc.delegate = self
