@@ -988,9 +988,16 @@ class BreweryDBClient {
     private func saveMain() -> Bool {
         print("BreweryDB \(#line) Saving MainContext called ")
         do {
-            try coreDataStack?.mainContext.save()
+            try coreDataStack?.saveMainContext()
+            try coreDataStack?.savePersistingContext()
+            //try coreDataStack?.mainContext.save()
+            print("BreweryDB \(#line) MainContext objects should be in Persistent Context now <------------------------")
+            //try coreDataStack?.persistingContext.save()
             return true
-        } catch {
+        } catch let error {
+            print("BreweryDB \(#line) We dont died on the coredataSave <----- ")
+            print("The error is \n\(error)")
+            fatalError()
             return false
         }
     }
