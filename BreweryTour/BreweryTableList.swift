@@ -56,7 +56,8 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             return
         }
         
-        // Fetch all the breweries in the database.
+        // Since we didn't exit trying to find  the breweries above
+        // Fetch all the breweries from the internet.
         BreweryDBClient.sharedInstance().downloadAllBreweries() {
             (success, msg) -> Void in
             if msg == "All Pages Processed" {
