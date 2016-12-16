@@ -350,7 +350,7 @@ class BreweryDBClient {
                 let group : DispatchGroup = DispatchGroup()
                 
                 print("BreweryDB \(#line)Total pages \(numberOfPages)")
-                for i in 2...15 {
+                for i in 2...numberOfPages {
                     //TODO for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
