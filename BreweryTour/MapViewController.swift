@@ -102,7 +102,27 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
                 self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
                 return
             }
-            //Scrapbookcode 1
+            //Now that we have Beers with that style, what breweries are associated with these beers
+            //Array to hold breweries
+            self.mappableBreweries = [Brewery]()
+            print("MapView \(#line) were there any beers that matched style\n\(results)")
+            for beer in results {
+                let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
+                breweryRequest.sortDescriptors = []
+                breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
+                do {
+                    let brewery = try (self.coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
+                    if !self.mappableBreweries.contains(brewery[0]) {
+                        self.mappableBreweries.append(brewery[0])
+                    }
+                } catch {
+                    self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+                    return
+                }
+            }
+            print("MapView \(#line) PerformFetch completed ")
+            // The map must be populated when the fetchRequest completes
+            self.populateMapWithAnnotations()
         }
     }
     
