@@ -228,76 +228,72 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
                                                         querySpecificID: nil,
                                                         parameters: methodParameters)
-        Alamofire.request(outputURL.absoluteString!)
-            .responseJSON {
-                response in
-                guard response.result.isSuccess else {
-                    completion(false, "Failed Request \(#line) \(#function)")
-                    
-                    return
-                }
-                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request \(#line) \(#function)")
-                    return
-                }
-                
-                guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
-                    completion(false, "No results")
-                    return
-                }
-                
-                // p = page number
-                // Process first page.
-                self.parse(response: responseJSON as NSDictionary,
-                           querySpecificID:  styleID,
-                           outputType: APIQueryOutputTypes.BeersByStyleID,
-                           completion: completion)
-                
-                // The following block of code downloads all subsequesnt pages
-                guard numberOfPages > 1 else {
-                    completion(true, "All Pages Processed")
-                    return
-                }
-                print("Total pages \(numberOfPages)")
-                
-                // Asynchronous page processing
-                let queue : DispatchQueue = DispatchQueue.global()
-                let group : DispatchGroup = DispatchGroup()
-                
-                for i in 2...numberOfPages {
-                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
-                    let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
-                                                                         querySpecificID: nil,
-                                                                         parameters: methodParameters)
-                    group.enter()
-                    queue.async(group: group) {
-                        Alamofire.request(outputURL.absoluteString!)
-                            .responseJSON {
-                                response in
-                                guard response.result.isSuccess else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
-                                    
-                                    return
-                                }
-                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
-                                    return
-                                }
-                                
-                                self.parse(response: responseJSON as NSDictionary,
-                                           querySpecificID:  styleID,
-                                           outputType: APIQueryOutputTypes.BeersByStyleID,
-                                           completion: completion,
-                                           finalPage: numberOfPages == i ? true : false)
-                                print("page# \(i)")
-                                group.leave()
-                        } //Outside alamo but inside async
-                    } //Outside queue.async
-                }  // Outside for loop
-                
-                group.notify(queue: queue) {
-                    completion(true, "All Pages Processed")
-                }
+        
+        // Initial Alamofire Request to determine Results and Pages of Results we have to process
+        var numberOfPages: Int!
+        
+        Alamofire.request(outputURL.absoluteString!).responseJSON {
+            response in
+            guard response.result.isSuccess else {
+                completion(false, "Failed Request \(#line) \(#function)")
+                return
+            }
+            guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                completion(false, "Failed Request \(#line) \(#function)")
+                return
+            }
+            guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
+                completion(false, "No results")
+                return
+            }
+            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+                completion(false, "No results")
+                return
+            }
+            numberOfPages = numberOfPagesInt
+            print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
+            
+            print("BreweryDB \(#line) Total pages \(numberOfPages)")
+            
+            // Asynchronous page processing
+            let queue : DispatchQueue = DispatchQueue.global()
+            let group : DispatchGroup = DispatchGroup()
+            
+            for p in 1...numberOfPages {
+                methodParameters[Constants.BreweryParameterKeys.Page] = p as AnyObject
+                let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                                                                     querySpecificID: nil,
+                                                                     parameters: methodParameters)
+                group.enter()
+                queue.async(group: group) {
+                    Alamofire.request(outputURL.absoluteString!)
+                        .responseJSON {
+                            response in
+                            guard response.result.isSuccess else {
+                                completion(false, "Failed Request \(#line) \(#function)")
+                                return
+                            }
+                            guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                                completion(false, "Failed Request \(#line) \(#function)")
+                                return
+                            }
+                            
+                            self.parse(response: responseJSON as NSDictionary,
+                                       querySpecificID:  styleID,
+                                       outputType: APIQueryOutputTypes.BeersByStyleID,
+                                       completion: completion,
+                                       finalPage: numberOfPages == p ? true : false,
+                                       group: group)
+                            print("BreweryDB \(#line) page# \(p)")
+                            // TODO Return this line of code as I pushed group.leave down in the self.parse function. and it fails there
+                            //group.leave()
+                    } //Outside alamo but inside async
+                } //Outside queue.async
+            }  // Outside for loop
+            
+            group.notify(queue: queue) {
+                completion(true, "All Pages Processed")
+            }
         }
         return
     }
