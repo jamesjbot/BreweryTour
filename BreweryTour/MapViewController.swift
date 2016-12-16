@@ -444,7 +444,10 @@ extension MapViewController: CLLocationManagerDelegate {
     
 }
 
+
+// Tutorial code.
 extension MapViewController : DismissableTutorial {
+
     internal func enableTutorial() {
         tutorialView.isHidden = false
     }
