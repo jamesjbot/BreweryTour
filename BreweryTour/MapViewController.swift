@@ -381,7 +381,7 @@ extension MapViewController : MKMapViewDelegate {
                 print("true run")
                 image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
             }
-            // Update favorite icon
+            // Update favorite icon in accessory callout
             DispatchQueue.main.async {
                 (view.leftCalloutAccessoryView as! UIButton).setImage(image!, for: .normal)
                 view.setNeedsDisplay()
@@ -391,8 +391,7 @@ extension MapViewController : MKMapViewDelegate {
                 do {
                     try self.coreDataStack?.persistingContext.save()
                 } catch let error {
-                    self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite, \nplease try again")
-                    print("Error:\(error)")
+                    self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite brewery, \nplease try again")
                     return
                 }
             }
