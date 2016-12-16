@@ -223,7 +223,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             aPin.subtitle = i.url
             annotations.append(aPin)
         }
-
+        
         mapView.addAnnotations(annotations)
         // Add the user's location
         mapView.showsUserLocation = true
@@ -299,12 +299,12 @@ extension MapViewController : MKMapViewDelegate {
         // }
         return pinView
     }
-//    
-//    func zoomToComfortableLevel() {
-//        let span = MKCoordinateSpanMake(63 , 63)
-//        let region = MKCoordinateRegion(center: centerCoord , span: span)
-//        mapView.setRegion(region, animated: true)
-//    }
+    //
+    //    func zoomToComfortableLevel() {
+    //        let span = MKCoordinateSpanMake(63 , 63)
+    //        let region = MKCoordinateRegion(center: centerCoord , span: span)
+    //        mapView.setRegion(region, animated: true)
+    //    }
     
     // Selecting a Pin, draw the route to this pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
@@ -396,7 +396,7 @@ extension MapViewController : MKMapViewDelegate {
                     return
                 }
             }
-
+            
             
             return
             
