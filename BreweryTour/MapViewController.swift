@@ -207,7 +207,6 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         mapView.addAnnotations(annotations)
         // Add the user's location
         mapView.showsUserLocation = true
-        mapView.showsTraffic = true
         mapView.showsScale = true
         mapView.showAnnotations(mapView.annotations, animated: true)
     }
