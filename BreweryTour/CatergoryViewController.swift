@@ -210,6 +210,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             }
             break
         case "We have styles":
+            //searchBar(newSearchBar, textDidChange: newSearchBar.text!)
             break
         case "failure":
             displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
@@ -319,14 +320,19 @@ extension CategoryViewController : UITableViewDelegate {
         activityIndicator.startAnimating()
         activeTableList.selected(elementAt: indexPath,
                                  searchText: newSearchBar.text!){
-        (sucesss,msg) -> Void in
-            print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
-            if msg == "All Pages Processed" {
-                self.activityIndicator.stopAnimating()
-                DispatchQueue.main.async {
-                    self.performSegue(withIdentifier: "Go", sender: nil)
-                }
-            }
+                                    (sucesss,msg) -> Void in
+                                    print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
+                                    self.activityIndicator.stopAnimating()
+                                    if !sucesss {
+                                        self.displayAlertWindow(title: "Error with Internet", msg: "Sorry there was an error online,\nplease try again later")
+                                    }
+                                    if msg == "All Pages Processed" {
+                                        DispatchQueue.main.async {
+                                            self.performSegue(withIdentifier: "Go", sender: nil)
+                                        }
+                                    }
+
+                                    
         }
     }
 }
