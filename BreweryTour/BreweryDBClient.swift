@@ -654,17 +654,20 @@ class BreweryDBClient {
                                             inputBrewery: thisbrewery)
                 
             }
-             //Go back to the breweryArray and save another brewery
-             //Save all the Breweries in background context to disk
-                        do {
-                            try coreDataStack?.persistingContext.save()
-                            print("Brewery Saved to Persisting context")
-                            completion!(true, "Success")
-                            return
-                        } catch {
-                            completion!(false, "Failed Request \(#line) \(#function)")
-                            return
-                        }
+            // TODO Contemplate deleting this block of code.
+            //Go back to the breweryArray and save another brewery
+            //Save all the Breweries in background context to disk
+            do {
+                print("BreweryDB \(#line) Saving from .Breweries switch case of parse function ")
+                try coreDataStack?.persistingContext.save()
+                print("BreweryDB \(#line) Brewery Saved to Persisting context")
+                completion!(true, "Success")
+                return
+            } catch {
+                completion!(false, "Failed Request \(#line) \(#function)")
+                return
+            }
+            completion!(true, "Success")
             if finalPage == false {
                 completion!(true, "Success")
             } else {
