@@ -487,7 +487,8 @@ class BreweryDBClient {
                        querySpecificID : String?,
                        outputType: APIQueryOutputTypes,
                        completion: (( (_ success :  Bool, _ msg: String?) -> Void )?),
-                       finalPage: Bool = false){
+                       finalPage: Bool = false,
+                       group: DispatchGroup? = nil){
         
         // Process every query type accordingly
         switch outputType {
@@ -541,7 +542,13 @@ class BreweryDBClient {
                     // Save images for the brewery
                     saveBreweryImagesIfPossible(input: breweryDict?["images"], inputBrewery: dbBrewery)
                 }
-            } // end of beer loop
+            }
+            // end of beer loop
+            print("BreweryDB \(#line) This group.leave cannot be called before the brewery are verified to have been created or present.")
+            print("BreweryDB \(#line) This also cannot be called before our beears are created")
+            group?.leave()
+            
+            // TODO Remove finalpage logic as we are using gcd to complete the functions
             if finalPage == false {
                 completion!(true, "Success")
             }
