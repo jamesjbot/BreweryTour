@@ -500,7 +500,9 @@ class BreweryDBClient {
                 completion!(false, "Failed Request \(#line) \(#function)")
                 return
             }
-            createBeerLoop: for (i,beer) in beerArray.enumerated() {
+            print("BreweryDB \(#line) Beerloop starts after ")
+            createBeerLoop: for beer in beerArray {
+                print("Brewerydb \(#line) In beer loop ")
                 // Check to see if this beer is in the database already, and skip if so
                 guard getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!) == nil else {
                     continue createBeerLoop
