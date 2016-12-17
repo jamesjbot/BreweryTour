@@ -547,13 +547,12 @@ class BreweryDBClient {
                             // Save images for the brewery
                             self.saveBreweryImagesIfPossible(input: breweryDict?["images"], inputBrewery: dbBrewery)
                         }
+                    } else { // Brewery already in Coredata
+                        print("BreweryDB \(#line) Brewery already  in Coredata: \(dbBrewery.name)")
+                        let thisBeer = self.createBeerObject(beer: beer, brewery: dbBrewery)
+                        // TODO plan to move this function into the function above.
+                        self.saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
                     }
-                    let thisBeer = createBeerObject(beer: beer)
-                    setBeerBrewerData(beer: thisBeer, breweryID: dbBrewery.id!, completion: completion!)
-                    // Save Icons for Beer
-                    saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
-                    // Save images for the brewery
-                    saveBreweryImagesIfPossible(input: breweryDict?["images"], inputBrewery: dbBrewery)
                 }
             }
             // end of beer loop
