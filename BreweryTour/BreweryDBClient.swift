@@ -552,8 +552,7 @@ class BreweryDBClient {
                 }
             }
             // end of beer loop
-            print("BreweryDB \(#line) This group.leave cannot be called before the brewery are verified to have been created or present.")
-            print("BreweryDB \(#line) This also cannot be called before our beears are created")
+            // This page of results has processed signal GCD that it's complete.
             group?.leave()
             break
             
