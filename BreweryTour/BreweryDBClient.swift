@@ -938,6 +938,7 @@ class BreweryDBClient {
                                            updateManagedObjectID: NSManagedObjectID) {
         print("BreweryDB \(#line) Async DonwloadBeerImage in mainContext\(forBeer.beerName)")
         let session = URLSession.shared
+        let thisContext = coreDataStack?.mainContext
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
             if error == nil {
@@ -945,12 +946,12 @@ class BreweryDBClient {
                     return
                 }
                 self.coreDataStack!.mainContext.performAndWait(){
-                    let beerForUpdate = self.coreDataStack!.persistingContext.object(with: updateManagedObjectID) as! Beer
+                    let beerForUpdate = thisContext?.object(with: updateManagedObjectID) as! Beer
                     let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                     beerForUpdate.image = outputData
                     do {
-                        try self.coreDataStack!.mainContext.save()
-                        //print("Beer Imaged saved for beer \(forBeer.beerName)")
+                        try thisContext?.save()
+                        print("BreweryDB \(#line) Beer Imaged saved in MainContext for beer \(forBeer.beerName)")
                     }
                     catch {
                         return
