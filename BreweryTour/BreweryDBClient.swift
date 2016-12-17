@@ -1040,20 +1040,25 @@ class BreweryDBClient {
         task.resume()
     }
     
-    private func saveMain() -> Bool {
+    private func saveMain() {
         print("BreweryDB \(#line) Saving MainContext called ")
-        do {
-            try coreDataStack?.saveMainContext()
-            try coreDataStack?.savePersistingContext()
-            //try coreDataStack?.mainContext.save()
-            print("BreweryDB \(#line) MainContext objects should be in Persistent Context now <------------------------")
-            //try coreDataStack?.persistingContext.save()
-            return true
-        } catch let error {
-            print("BreweryDB \(#line) We dont died on the coredataSave <----- ")
-            print("The error is \n\(error)")
-            fatalError()
-            return false
+        coreDataStack?.mainContext.performAndWait {
+            do {
+                try self.coreDataStack?.saveMainContext()
+                try self.coreDataStack?.savePersistingContext()
+                //try coreDataStack?.mainContext.save()
+                print("BreweryDB \(#line) All beers before this have been saved")
+                print("BreweryDB \(#line) MainContext objects should be in Persistent Context now <------------------------")
+                //try coreDataStack?.persistingContext.save()
+                //true
+            } catch let error {
+                print("BreweryDB \(#line) We died on the coredataSave <----- ")
+                print("The error is \n\(error)")
+                fatalError()
+                // TODO you want to send back a false and capture that false
+                // And send back the correct completion handler.
+                //return false
+            }
         }
     }
     
