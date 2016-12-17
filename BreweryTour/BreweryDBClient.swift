@@ -281,9 +281,7 @@ class BreweryDBClient {
                                        outputType: APIQueryOutputTypes.BeersByStyleID,
                                        completion: completion,
                                        group: group)
-                            print("BreweryDB \(#line) page# \(p)")
-                            // TODO Return this line of code as I pushed group.leave down in the self.parse function. and it fails there
-                            //group.leave()
+                            print("BreweryDB \(#line) launched parsing on page# \(p)")
                     } //Outside alamo but inside async
                 } //Outside queue.async
             }  // Outside for loop
