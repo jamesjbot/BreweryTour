@@ -646,8 +646,9 @@ class BreweryDBClient {
                     continue
                 }
                 
-                thisbrewery = createBreweryObject(breweryDict: breweryDict,
-                                                  locationDict: locDic)
+                createBreweryObject(breweryDict: breweryDict,                                                   locationDict: locDic){
+                    (thisbrewery) -> Void in
+                }
                 // Capture images asynchronously
                 saveBreweryImagesIfPossible(input: breweryDict["images"],
                                             inputBrewery: thisbrewery)
@@ -724,8 +725,10 @@ class BreweryDBClient {
                     newBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
                     
                     if newBrewery == nil { // Create a brewery object
-                        newBrewery = createBreweryObject(breweryDict: breweryDict,
-                                                         locationDict: locDic)
+                        createBreweryObject(breweryDict: breweryDict,
+                                            locationDict: locDic){
+                                                (newBrewery) -> Void in
+                        }
                     }
                     
                     let thisBeer = createBeerObject(beer: beer)
@@ -825,7 +828,9 @@ class BreweryDBClient {
                             beerDescription: description!,
                             availability: available!,
                             context: (coreDataStack?.mainContext!)!)
-        print("Organic:\(beer["isOrganic"])")
+        thisBeer.brewer = coreDataStack?.mainContext.object(with: (brewery?.objectID)!) as! Brewery?
+        thisBeer.breweryID = thisBeer.brewer?.id
+        print("BreweryDB \(#line) Is Beer Organic:\(beer["isOrganic"]!)")
         thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
         print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
         if beer["styleId"] != nil {
@@ -837,22 +842,42 @@ class BreweryDBClient {
     }
     
     
-    private func createBreweryObject(breweryDict: [String:AnyObject], locationDict locDict:[String:AnyObject]) -> Brewery? {
-        print("Creating brewery with name \(breweryDict["name"]!)")
-        let brewer = Brewery(inName: breweryDict["name"] as! String,
-                       latitude: locDict["latitude"]?.description,
-                       longitude: locDict["longitude"]?.description,
-                       url: locDict["website"] as! String?,
-                       open: (locDict["openToPublic"] as! String == "Y") ? true : false,
-                       id: locDict["id"]?.description,
-                       context: (coreDataStack?.mainContext)!)
-        do {
-            try coreDataStack?.saveMainContext()
-            print("Save Brewery save in main context")
-        } catch {
-            return nil
+    // TODO Phase 1 introduce completion handler
+    // The breweries are created sent back but they are not showing up in the table.
+    // Phase 2 call in backgroundContext
+    // This will save background, main and persistent context
+    private func createBreweryObject(breweryDict: [String:AnyObject],
+                                     locationDict locDict:[String:AnyObject],
+                                     completion: @escaping (_ out : Brewery) -> () ) {
+        // Remember to change all the references to this context below
+        // There are two more entries on the last parameter
+        // And in the do catch block
+        coreDataStack?.backgroundContext.performAndWait {
+            print("BreweryDB \(#line) Creating brewery with name \(breweryDict["name"]!)")
+            let brewer = Brewery(inName: breweryDict["name"] as! String,
+                                 latitude: locDict["latitude"]?.description,
+                                 longitude: locDict["longitude"]?.description,
+                                 url: locDict["website"] as! String?,
+                                 open: (locDict["openToPublic"] as! String == "Y") ? true : false,
+                                 id: locDict["id"]?.description,
+                                 context: (self.coreDataStack?.backgroundContext)!)
+            do {
+                print("BreweryDB \(#line) Saving from createBreweryObject into BackgroundContext")
+                try self.coreDataStack?.saveBackgroundContext()
+                try self.coreDataStack?.saveMainContext()
+                try self.coreDataStack?.savePersistingContext()
+                print("BreweryDB \(#line) Save Brewery save in background context moving Brewery into Main Context, Who is oberserving the maincontext? Last time it was SelectedBeersTableList. BreweryTable is looking at PersistentContext so I don't think it will see this.")
+                self.d_timestopass += 1
+                print("BreweryDB \(#line) \(self.d_timestopass) Sending back the brewery object we created, to the parse function.")
+                completion(brewer)
+                print("BreweryDb \(#line) You are in the a background context ")
+            } catch {
+            }
         }
-        return brewer
+        // We are falling thru to this line because of the perfrom async
+        // We should never get here
+        //fatalError()
+        //return nil
     }
     
     
