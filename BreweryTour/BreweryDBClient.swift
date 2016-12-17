@@ -1000,9 +1000,6 @@ class BreweryDBClient {
                 print("BreweryDB \(#line) We died on the coredataSave <----- ")
                 print("The error is \n\(error)")
                 fatalError()
-                // TODO you want to send back a false and capture that false
-                // And send back the correct completion handler.
-                //return false
             }
         }
     }
