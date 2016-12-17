@@ -535,8 +535,7 @@ class BreweryDBClient {
                             }
                             let thisBeer = self.createBeerObject(beer: beer, brewery: dbBrewery)
                             //self.setBeerBrewerData(beer: thisBeer, breweryID: dbBrewery.id!, completion: completion!)
-                            // Save Icons for Beer
-                            self.saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
+
                             // TODO should this be in the Create brewery function
                             // Save images for the brewery
                             self.saveBreweryImagesIfPossible(input: breweryDict?["images"], inputBrewery: dbBrewery)
@@ -544,8 +543,6 @@ class BreweryDBClient {
                     } else { // Brewery already in Coredata
                         print("BreweryDB \(#line) Brewery already  in Coredata: \(dbBrewery.name)")
                         let thisBeer = self.createBeerObject(beer: beer, brewery: dbBrewery)
-                        // TODO plan to move this function into the function above.
-                        self.saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
                     }
                 }
             }
@@ -718,11 +715,6 @@ class BreweryDBClient {
                     }
                     
                     let thisBeer = createBeerObject(beer: beer, brewery: newBrewery)
-                    // Set Brewery
-                    // TODO Decide if this is not needed anymore
-                    //setBeerBrewerData(beer: thisBeer,breweryID: newBrewery.id!,completion: completion!)
-                    // Save Icons for Beer
-                    saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
                     // Save images for the brewery
                     saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: newBrewery)
                     // Future Improvement.
@@ -759,7 +751,6 @@ class BreweryDBClient {
                 // Get the brewery based on objectID
                 let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: (coreDataStack?.persistingContext)!)
                 let thisBeer = createBeerObject(beer: beer, brewery: dbBrewery)
-                saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
             }
             break
         }
@@ -768,6 +759,18 @@ class BreweryDBClient {
     
     // Creates beer objects in the mainContext.
     func createBeerObject(beer : [String:AnyObject], brewery: Brewery? = nil, brewerID: String? = nil ) -> Beer {
+        func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer) {
+            if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
+                let medium = images["medium"] as! String?  {
+                beer.imageUrl = medium
+                let queue = DispatchQueue(label: "Images")
+                print("BreweryDB \(#line) Prior to getting Beer image")
+                queue.async(qos: .utility) {
+                    print("BreweryDB \(#line) Getting Beer image in background")
+                    self.downloadImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
+                }
+            }
+        }
         // Non optional paramters: beerName, breweryID, id
         print("BreweryDB \(#line) Creating Beer object in MainContext")
         let id : String? = beer["id"] as? String
@@ -805,6 +808,7 @@ class BreweryDBClient {
         print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
         print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
         _ = saveMain()
+        saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
         return thisBeer
     }
     
@@ -848,20 +852,7 @@ class BreweryDBClient {
     }
     
     
-    private func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer){
-        if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
-            let medium = images["medium"] as! String?  {
-            beer.imageUrl = medium
-            let queue = DispatchQueue(label: "Images")
-            print("BreweryDB \(#line) Prior to getting Beer image")
-            queue.async(qos: .utility) {
-                print("BreweryDB \(#line) Getting Beer image in background")
-                self.downloadImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
-            }
-        }
-    }
-    
-    
+
     func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
         if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
             let imageURL : String = imagesDict["icon"] as! String?,
