@@ -531,10 +531,21 @@ class BreweryDBClient {
                     }
                     // Check to make sure the brewery is not already in the database
                     var dbBrewery : Brewery! = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
-                    if dbBrewery == nil { // Create a brewery object when needed.
-                        dbBrewery = createBreweryObject(breweryDict: breweryDict!, locationDict: locDic)
-                        if dbBrewery == nil {
-                            completion!(false, "Error saving data")
+                    if dbBrewery == nil { // Create a brewery object when none.
+                        createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
+                            (Brewery) -> Void in
+                            dbBrewery = Brewery
+                            guard dbBrewery != nil else {
+                                completion!(false, "Error saving data")
+                                return
+                            }
+                            let thisBeer = self.createBeerObject(beer: beer, brewery: dbBrewery)
+                            //self.setBeerBrewerData(beer: thisBeer, breweryID: dbBrewery.id!, completion: completion!)
+                            // Save Icons for Beer
+                            self.saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
+                            // TODO should this be in the Create brewery function
+                            // Save images for the brewery
+                            self.saveBreweryImagesIfPossible(input: breweryDict?["images"], inputBrewery: dbBrewery)
                         }
                     }
                     let thisBeer = createBeerObject(beer: beer)
