@@ -370,12 +370,13 @@ class BreweryDBClient {
                                            outputType: theOutputType,
                                            completion: completion,
                                            finalPage: numberOfPages == i ? true : false)
-                                print("page# \(i)")
-                                print("Prior to saving \(self.coreDataStack?.mainContext.updatedObjects.count)")
-                                print("Prior to saving hasChanges: \(self.coreDataStack?.mainContext.hasChanges)")
-                                print("Prior to saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
+                                print("BreweryDB \(#line)page# \(i)")
+                                print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.updatedObjects.count)")
+                                print("BreweryDB \(#line)Prior to saving hasChanges: \(self.coreDataStack?.mainContext.hasChanges)")
+                                print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
+                                // TODO Consider removing this
                                 self.saveMain()
-                                print("After saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
+                                print("BreweryDB \(#line)After saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
                                 group.leave()
                         }
                     }
@@ -710,9 +711,8 @@ class BreweryDBClient {
                     
                     let thisBeer = createBeerObject(beer: beer)
                     // Set Brewery
-                    setBeerBrewerData(beer: thisBeer,
-                                      breweryID: newBrewery.id!,
-                                      completion: completion!)
+                    // TODO Decide if this is not needed anymore
+                    //setBeerBrewerData(beer: thisBeer,breweryID: newBrewery.id!,completion: completion!)
                     // Save Icons for Beer
                     saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
                     // Save images for the brewery
@@ -724,11 +724,12 @@ class BreweryDBClient {
                 // This will save every beer
                 
             } // end of beer loop
-            if finalPage == false {
-                completion!(true, "Success")
-            } else {
-                completion!(true, "Final Page")
-            }
+            // Consider if this is not needed anymore
+                        if finalPage == false {
+                            completion!(true, "Success")
+                        } else {
+                            completion!(true, "Final Page")
+                        }
             break
             
         case .BeersByBreweryID:
@@ -764,7 +765,7 @@ class BreweryDBClient {
         }
     }
     
-    
+    //TODO Consider if this is not needed anymore
     // This sets brewerid when brewerid is supplied
     // and save the brewery
     func setBeerBrewerData(beer thisBeer: Beer,
@@ -774,7 +775,7 @@ class BreweryDBClient {
         
         thisBeer.breweryID = thisBeer.brewer?.id
         assert(thisBeer.breweryID != nil)
-        //print("----->A beer added by breweryID \(thisBeer.brewer?.id) \(thisBeer.breweryID)")
+        //print("BreweryDB \(#line)----->A beer added by breweryID \(thisBeer.brewer?.id) \(thisBeer.breweryID)")
         
         //        do {
         //            try coreDataStack?.persistingContext.save()
