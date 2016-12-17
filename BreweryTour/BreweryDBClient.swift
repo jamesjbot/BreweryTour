@@ -734,7 +734,7 @@ class BreweryDBClient {
                         }
                     }
                     
-                    let thisBeer = createBeerObject(beer: beer)
+                    let thisBeer = createBeerObject(beer: beer, brewery: newBrewery)
                     // Set Brewery
                     // TODO Decide if this is not needed anymore
                     //setBeerBrewerData(beer: thisBeer,breweryID: newBrewery.id!,completion: completion!)
@@ -778,8 +778,9 @@ class BreweryDBClient {
                     print("BreweryDB \(#line)Encountered a beer of this type already skipping creation")
                     continue
                 }
-                let thisBeer = createBeerObject(beer: beer)
-                
+                let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: (coreDataStack?.persistingContext)!)
+                let thisBeer = createBeerObject(beer: beer, brewery: dbBrewery)
+                // TODO Consider if this is not needed anymore
                 setBeerBrewerData(beer: thisBeer,
                                   breweryID: querySpecificID!,
                                   completion: completion!)
@@ -813,7 +814,10 @@ class BreweryDBClient {
     }
     
     
-    func createBeerObject(beer : [String:AnyObject] ) -> Beer {
+    // Creates beer objects in the mainContext.
+    func createBeerObject(beer : [String:AnyObject], brewery: Brewery? = nil, brewerID: String? = nil ) -> Beer {
+        // Non optional paramters: beerName, breweryID, id
+        print("BreweryDB \(#line) Creating Beer object in MainContext")
         let id : String? = beer["id"] as? String
         print("BreweryDB \(#line) beername: \(beer["name"])")
         let name : String? = beer["name"] as? String ?? ""
@@ -841,6 +845,12 @@ class BreweryDBClient {
         }
         thisBeer.abv = beerabv ?? "Information N/A"
         thisBeer.ibu = beeribu ?? "Information N/A"
+        print("BreweryDb \(#line) Returning the beer we created.")
+        // Saving this beer from Main to PersistentContext
+        print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
+        print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
+        print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
+        _ = saveMain()
         return thisBeer
     }
     
