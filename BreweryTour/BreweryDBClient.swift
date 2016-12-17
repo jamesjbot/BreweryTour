@@ -64,14 +64,13 @@ class BreweryDBClient {
                 completionHandler(false, "Failed Request \(#line) \(#function)")
                 return
             }
-        //TODO put this in later to check results
-//            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
-//                completionHandler(false, "No results")
-//                return
-//            }
-            
-//            print("BreweryDB \(#line)We have this many results for that query \(numberOfResults)")
-            
+            guard let numberOfResults = responseJSON["totalResults"] as! Int?
+                else {
+                completionHandler(false, "No results")
+                return
+            }
+
+            // All the beer styles currently fit on one page.
             self.parse(response: responseJSON as NSDictionary,
                        querySpecificID:  nil,
                        outputType: APIQueryOutputTypes.Styles,
