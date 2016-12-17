@@ -735,6 +735,7 @@ class BreweryDBClient {
             break
             
         case .BeersByBreweryID:
+            // Since were ware querying by brewery ID we can be guaranteed that the brewery exists.
             print("BreweryDB \(#line)Capturing Beers By Brewery")
             
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
@@ -755,41 +756,15 @@ class BreweryDBClient {
                     print("BreweryDB \(#line)Encountered a beer of this type already skipping creation")
                     continue
                 }
+                // Get the brewery based on objectID
                 let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: (coreDataStack?.persistingContext)!)
                 let thisBeer = createBeerObject(beer: beer, brewery: dbBrewery)
-                // TODO Consider if this is not needed anymore
-                setBeerBrewerData(beer: thisBeer,
-                                  breweryID: querySpecificID!,
-                                  completion: completion!)
-                
                 saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
             }
             break
         }
     }
-    
-    //TODO Consider if this is not needed anymore
-    // This sets brewerid when brewerid is supplied
-    // and save the brewery
-    func setBeerBrewerData(beer thisBeer: Beer,
-                           breweryID querySpecificID: String,
-                           completion: (Bool,String) -> Void) {
-        thisBeer.brewer = getBreweryByID(id: querySpecificID, context: (coreDataStack?.mainContext)!)
-        
-        thisBeer.breweryID = thisBeer.brewer?.id
-        assert(thisBeer.breweryID != nil)
-        //print("BreweryDB \(#line)----->A beer added by breweryID \(thisBeer.brewer?.id) \(thisBeer.breweryID)")
-        
-        //        do {
-        //            try coreDataStack?.persistingContext.save()
-        //            completion(true, "Success")
-        //            return
-        //        } catch let error {
-        //            completion(false, "Failed Request \(#line) \(#function)")
-        //            fatalError("Saving background error \(error)")
-        //        }
-    }
-    
+
     
     // Creates beer objects in the mainContext.
     func createBeerObject(beer : [String:AnyObject], brewery: Brewery? = nil, brewerID: String? = nil ) -> Beer {
@@ -813,7 +788,9 @@ class BreweryDBClient {
                             availability: available!,
                             context: (coreDataStack?.mainContext!)!)
         thisBeer.brewer = coreDataStack?.mainContext.object(with: (brewery?.objectID)!) as! Brewery?
+        
         thisBeer.breweryID = thisBeer.brewer?.id
+        
         print("BreweryDB \(#line) Is Beer Organic:\(beer["isOrganic"]!)")
         thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
         print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
