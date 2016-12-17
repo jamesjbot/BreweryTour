@@ -185,7 +185,6 @@ class BreweryDBClient {
                                                                          parameters: methodParameters)
                     group.enter()
                     queue.async(group: group) {
-                        
                         Alamofire.request(outputURL.absoluteString!)
                             .responseJSON {
                                 response in
@@ -201,7 +200,7 @@ class BreweryDBClient {
                                            querySpecificID:  nil,
                                            outputType: APIQueryOutputTypes.BeersByStyleID,
                                            completion: completion,
-                                           finalPage: numberOfPages == i ? true : false)
+                                           group: group)
                                 print("BreweryDB \(#line) downloadBeersByName Firing group leave ")
                                 group.leave()
                         }
@@ -282,7 +281,6 @@ class BreweryDBClient {
                                        querySpecificID:  styleID,
                                        outputType: APIQueryOutputTypes.BeersByStyleID,
                                        completion: completion,
-                                       finalPage: numberOfPages == p ? true : false,
                                        group: group)
                             print("BreweryDB \(#line) page# \(p)")
                             // TODO Return this line of code as I pushed group.leave down in the self.parse function. and it fails there
@@ -369,7 +367,7 @@ class BreweryDBClient {
                                            querySpecificID:  nil,
                                            outputType: theOutputType,
                                            completion: completion,
-                                           finalPage: numberOfPages == i ? true : false)
+                                           group: group)
                                 print("BreweryDB \(#line)page# \(i)")
                                 print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.updatedObjects.count)")
                                 print("BreweryDB \(#line)Prior to saving hasChanges: \(self.coreDataStack?.mainContext.hasChanges)")
@@ -468,7 +466,7 @@ class BreweryDBClient {
                                            querySpecificID:  nil,
                                            outputType: APIQueryOutputTypes.BeersByStyleID,
                                            completion: completion,
-                                           finalPage: numberOfPages == i ? true : false)
+                                           group: group)
                                 print("BreweryDB \(#line)page# \(i)")
                                 group.leave()
                         }
@@ -487,7 +485,6 @@ class BreweryDBClient {
                        querySpecificID : String?,
                        outputType: APIQueryOutputTypes,
                        completion: (( (_ success :  Bool, _ msg: String?) -> Void )?),
-                       finalPage: Bool = false,
                        group: DispatchGroup? = nil){
         
         // Process every query type accordingly
@@ -559,11 +556,6 @@ class BreweryDBClient {
             print("BreweryDB \(#line) This group.leave cannot be called before the brewery are verified to have been created or present.")
             print("BreweryDB \(#line) This also cannot be called before our beears are created")
             group?.leave()
-            
-            // TODO Remove finalpage logic as we are using gcd to complete the functions
-            if finalPage == false {
-                completion!(true, "Success")
-            }
             break
             
         case .Styles:
@@ -668,11 +660,6 @@ class BreweryDBClient {
                 return
             }
             completion!(true, "Success")
-            if finalPage == false {
-                completion!(true, "Success")
-            } else {
-                completion!(true, "Final Page")
-            }
             break
             
         case .BeersByName:
@@ -749,12 +736,6 @@ class BreweryDBClient {
                 // This will save every beer
                 
             } // end of beer loop
-            // Consider if this is not needed anymore
-                        if finalPage == false {
-                            completion!(true, "Success")
-                        } else {
-                            completion!(true, "Final Page")
-                        }
             break
             
         case .BeersByBreweryID:
