@@ -58,21 +58,21 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         
         // Since we didn't exit trying to find  the breweries above
         // Fetch all the breweries from the internet.
-        BreweryDBClient.sharedInstance().downloadAllBreweries() {
-            (success, msg) -> Void in
-            if msg == "All Pages Processed" {
-                print("BreweryTableList \(#line) init() msg:\(msg) dbbrewery client sent back completion handlers saying success:\(success))")
-                print("BreweryTableList \(#line) Sending CategoryView a notification to reload breweryTablelist ")
-                self.observer.sendNotify(from: self, withMsg: "reload data")
-//                do {
-//                    print("BreweryTableList \(#line)BreweryTableList \(#line)Is this fetch needed?")
-//                    try self.frc.performFetch()
-//                } catch {
-//                    fatalError()
-//                }
-            }
-
-        }
+//        BreweryDBClient.sharedInstance().downloadAllBreweries() {
+//            (success, msg) -> Void in
+//            if msg == "All Pages Processed" {
+//                print("BreweryTableList \(#line) init() msg:\(msg) dbbrewery client sent back completion handlers saying success:\(success))")
+//                print("BreweryTableList \(#line) Sending CategoryView a notification to reload breweryTablelist ")
+//                self.observer.sendNotify(from: self, withMsg: "reload data")
+////                do {
+////                    print("BreweryTableList \(#line)BreweryTableList \(#line)Is this fetch needed?")
+////                    try self.frc.performFetch()
+////                } catch {
+////                    fatalError()
+////                }
+//            }
+//
+//        }
     }
     
     
@@ -138,6 +138,8 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     }
     
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
+        // BreweryTableList Observes the persistent Context and I only saved them
+        // the main context and so there are none.
         // Debugging code because breweries with a nil name are leaking thru
         // assert((frc.fetchedObjects?.count)! > 0)
         //print("BreweryTableList \(#line)\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
