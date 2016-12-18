@@ -104,7 +104,9 @@ extension CoreDataStack {
     }
     
     
-    internal func saveMainContext() throws{
+    internal func saveMainContext() throws {
+        print("CoreDataStack \(#line) Someone called save main context ")
+//        fatalError()
         if mainContext.hasChanges{
             do {
                 try mainContext.save()
