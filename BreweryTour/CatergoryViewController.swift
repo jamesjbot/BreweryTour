@@ -177,9 +177,11 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
         switch sender.selectedSegmentIndex{
         case 0:
+            print("CategoryViewController \(#line) Switching to StylesTableList and reloading ")
             activeTableList = styleList
             styleTable.reloadData()
         case 1:
+            print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             activeTableList = breweryList
             styleTable.reloadData()
         default:
@@ -198,7 +200,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(from: AnyObject, withMsg msg: String) {
         // This will update the contents of the table if needed
-        print("CategoryViewController \(#line) Received msg:\(msg)\n from: \(from) ")
+        print("CategoryViewController \(#line) Received msg:\(msg)\n from:\(from) ")
         // TODO We're going to need to upgrade this function to accomodate all message.
         switch msg {
         case "reload data":
@@ -294,17 +296,21 @@ extension CategoryViewController : UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("CategoryViewController \(#line) cellForRowAt called ")
         var cell = styleTable.dequeueReusableCell(withIdentifier: cellIdentifier)
         cell = activeTableList.cellForRowAt(indexPath: indexPath,
                                          cell: cell!,
                                          searchText: newSearchBar.text)
+        print("CategoryViewController \(#line) cellForRowAt exited ")
         return cell!
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("CategoryViewController \(#line) numberOfRowsInsection called ")
+        print("CategoryViewController \(#line) numberOfRowsInsection exited ")
         return activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
-        
+
     }
 }
 
