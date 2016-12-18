@@ -56,17 +56,13 @@ class BreweryDBClient {
                                                         parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){
             response in
+            // Note: Styles Request does not return number of results.
             guard response.result.isSuccess else {
                 completionHandler(false,"Failed Request \(#line) \(#function)")
                 return
             }
             guard let responseJSON = response.result.value as? [String:AnyObject] else {
                 completionHandler(false, "Failed Request \(#line) \(#function)")
-                return
-            }
-            guard let numberOfResults = responseJSON["totalResults"] as! Int?
-                else {
-                completionHandler(false, "No results")
                 return
             }
 
@@ -574,14 +570,16 @@ class BreweryDBClient {
                     completion!(false, "Failed Request")
                     return
                 }
-                
+                // Create styles in mainContext
                 Style(id: localId!, name: localName! as! String, context: (coreDataStack?.mainContext)!)
             }
             
-            // Save beer styles to disk
+            // Save beer styles in main and persistent.
             do {
                 print("BreweryDB \(#line) Styles download now saving in MainContext ")
-                try coreDataStack?.mainContext.save()
+                // TODO Reinstate this change
+                //try coreDataStack?.mainContext.save()
+                try coreDataStack?.saveMainContext()
                 completion!(true, "Success")
                 return
             } catch {
