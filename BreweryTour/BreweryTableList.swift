@@ -149,10 +149,10 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
 //            //print("BreweryTableList \(#line)Filtering content Brewery name: \(i.name) \(i.id)")
 //            assert(i.name != nil)
 //        }
-        // Is the following line of code helping or hurting the production fix.
-//        guard (frc.fetchedObjects?.count)! > 0 else {
-//            return []
-//        }
+        // Only filter object if there are objects to filter.
+        guard (frc.fetchedObjects?.count)! > 0 else {
+            return []
+        }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
         //print("BreweryTableList \(#line)we updated the filtered contents to \(filteredObjects.count)")
         return filteredObjects
