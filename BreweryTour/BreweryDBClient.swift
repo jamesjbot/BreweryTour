@@ -769,6 +769,8 @@ class BreweryDBClient {
                 }
             }
         }
+        // Upgrade code
+        //let thisContext = coreDataStack?.backgroundContext
         // Non optional paramters: beerName, breweryID, id
         print("BreweryDB \(#line) Creating Beer object in MainContext")
         let id : String? = beer["id"] as? String
@@ -783,7 +785,10 @@ class BreweryDBClient {
         } else {
             available = "No Information Provided"
         }
-        
+        // Upgraded code
+        // change coreDataStack?.mainContext!)! to thisContext
+        // Within the maincontext the brewery must have already been created.
+        assert(brewery != nil)
         let thisBeer = Beer(id: id!, name: name!,
                             beerDescription: description!,
                             availability: available!,
@@ -802,6 +807,17 @@ class BreweryDBClient {
         thisBeer.ibu = beeribu ?? "Information N/A"
         print("BreweryDb \(#line) Returning the beer we created.")
         // Saving this beer from Main to PersistentContext
+        // Begin Upgraded Code
+        //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
+        //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
+        //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
+        //do {
+        //    try coreDataStack?.saveBackgroundContext()
+        //} catch {
+        //    fatalError()
+        //}
+        // End Upgraded code
+        //_ = saveMain()
         print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
         print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
         print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
@@ -833,6 +849,10 @@ class BreweryDBClient {
             do {
                 print("BreweryDB \(#line) Saving from createBreweryObject into BackgroundContext")
                 try self.coreDataStack?.saveBackgroundContext()
+                // Begin Upgradedcode
+                //try self.coreDataStack?.saveMainContext()
+                //try self.coreDataStack?.savePersistingContext()
+                // End UpgradedCode
                 try self.coreDataStack?.saveMainContext()
                 try self.coreDataStack?.savePersistingContext()
                 print("BreweryDB \(#line) Save Brewery save in background context moving Brewery into Main Context, Who is oberserving the maincontext? Last time it was SelectedBeersTableList. BreweryTable is looking at PersistentContext so I don't think it will see this.")
@@ -929,9 +949,12 @@ class BreweryDBClient {
     internal func downloadBeerImageToCoreData( aturl: NSURL,
                                            forBeer: Beer,
                                            updateManagedObjectID: NSManagedObjectID) {
+        // Begin Upgraded code
+        //print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
+        //let thisContext = coreDataStack?.backgroundContext
+        // End Upgraded code
         print("BreweryDB \(#line) Async DonwloadBeerImage in mainContext\(forBeer.beerName)")
         let session = URLSession.shared
-        let thisContext = coreDataStack?.mainContext
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
             print("BreweryDB \(#line) Returned from getting Beer image ")
@@ -939,12 +962,18 @@ class BreweryDBClient {
                 if data == nil {
                     return
                 }
+                // Upgraded code
+                //thisContext?.perform(){
                 self.coreDataStack!.mainContext.performAndWait(){
-                    let beerForUpdate = thisContext?.object(with: updateManagedObjectID) as! Beer
+                    // Upgraded code
+                    //let beerForUpdate = thisContext?.object(with: updateManagedObjectID) as! Beer
+                    let beerForUpdate = self.coreDataStack?.mainContext.object(with: updateManagedObjectID) as! Beer
                     let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                     beerForUpdate.image = outputData
                     do {
-                        try thisContext?.save()
+                        // Upgraded code
+                        //try thisContext?.save()
+                        try self.coreDataStack?.mainContext.save()
                         print("BreweryDB \(#line) Beer Imaged saved in MainContext for beer \(forBeer.beerName)")
                     }
                     catch {
@@ -961,7 +990,9 @@ class BreweryDBClient {
     internal func downloadImageToCoreDataForBrewery( aturl: NSURL,
                                                      forBrewery: Brewery,
                                                      updateManagedObjectID: NSManagedObjectID) {
-        print("BreweryDB \(#line) Async DonwloadBreweryImage in PersistentContext\(forBrewery.name)")
+        print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext\(forBrewery.name)")
+        // Upgraded code.
+        // let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
@@ -970,10 +1001,13 @@ class BreweryDBClient {
                 if data == nil {
                     return
                 }
+                // Upgraded code change to thisContext, and remove the perfromandwait?
+                
                 self.coreDataStack!.mainContext.performAndWait(){
                     let breweryForUpdate = self.coreDataStack!.persistingContext.object(with: updateManagedObjectID) as! Brewery
                     let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                     breweryForUpdate.image = outputData
+                    // Upgraded code change this to thisContext.
                     do {
                         try self.coreDataStack!.mainContext.save()
                         print("BreweryDB \(#line)Attention Brewery Imaged saved in PersistentContext for brewery \(forBrewery.name)")
