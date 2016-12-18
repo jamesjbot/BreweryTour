@@ -934,6 +934,7 @@ class BreweryDBClient {
         let thisContext = coreDataStack?.mainContext
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
+            print("BreweryDB \(#line) Returned from getting Beer image ")
             if error == nil {
                 if data == nil {
                     return
@@ -964,6 +965,7 @@ class BreweryDBClient {
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
+            print("BreweryDB \(#line) Returned from getting BreweryImage ")
             if error == nil {
                 if data == nil {
                     return
