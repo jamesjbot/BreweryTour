@@ -53,6 +53,8 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
         
         guard frc.fetchedObjects?.count == 0 else {
             // We have brewery entries go ahead and display them viewcontroller
+            // TODO remove this temporary code to detect if there are breweries here already
+            //fatalError()
             return
         }
         
@@ -78,12 +80,12 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("BreweryTableList \(#line)BreweryTableList \(#line)BreweryTableList willchange")
+        print("BreweryTableList \(#line)BreweryTableList \(#line) BreweryTableList willchange")
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        //print("BreweryTableList \(#line)BreweryTableList \(#line)BreweryTableList changed object")
+        print("BreweryTableList \(#line)BreweryTableList \(#line) BreweryTableList changed object")
     }
     
     
@@ -133,7 +135,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             print("BreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
-        print("BreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)")
+        print("BreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)\n\(frc.fetchedObjects?.first)")
         return frc.fetchedObjects!.count
     }
     
@@ -147,7 +149,10 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
 //            //print("BreweryTableList \(#line)Filtering content Brewery name: \(i.name) \(i.id)")
 //            assert(i.name != nil)
 //        }
-        
+        // Is the following line of code helping or hurting the production fix.
+//        guard (frc.fetchedObjects?.count)! > 0 else {
+//            return []
+//        }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
         //print("BreweryTableList \(#line)we updated the filtered contents to \(filteredObjects.count)")
         return filteredObjects
