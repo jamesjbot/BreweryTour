@@ -765,7 +765,7 @@ class BreweryDBClient {
                 print("BreweryDB \(#line) Prior to getting Beer image")
                 queue.async(qos: .utility) {
                     print("BreweryDB \(#line) Getting Beer image in background")
-                    self.downloadImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
+                    self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
                 }
             }
         }
@@ -924,7 +924,9 @@ class BreweryDBClient {
     
     
     // Download images in the background then update Coredata when complete
-    internal func downloadImageToCoreData( aturl: NSURL,
+    // Beer images are currently being grabbed and saved in the main context
+    // This help with updateing selected beers screen I guess.
+    internal func downloadBeerImageToCoreData( aturl: NSURL,
                                            forBeer: Beer,
                                            updateManagedObjectID: NSManagedObjectID) {
         print("BreweryDB \(#line) Async DonwloadBeerImage in mainContext\(forBeer.beerName)")
