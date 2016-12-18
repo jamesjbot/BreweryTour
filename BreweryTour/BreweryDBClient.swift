@@ -75,6 +75,48 @@ class BreweryDBClient {
         }
     }
     
+    // Debugging function to list the number of results for a style.
+    internal func downloadStylesCount(styleID : String,
+                                      completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+        let methodParameters  = [
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+            Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
+            Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
+            Constants.BreweryParameterKeys.Page : "1" as AnyObject
+        ]
+        let outputURL : NSURL =
+            createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                                    querySpecificID: nil,
+                                    parameters: methodParameters)
+        
+        // Initial Alamofire Request to determine Results and Pages of Results we have to process
+        var numberOfPages: Int!
+        Alamofire.request(outputURL.absoluteString!).responseJSON {
+            response in
+            guard response.result.isSuccess else {
+                completion(false, "Failed Request \(#line) \(#function)")
+                return
+            }
+            guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                completion(false, "Failed Request \(#line) \(#function)")
+                return
+            }
+            guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
+                completion(false, "No results")
+                return
+            }
+            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+                completion(false, "No results")
+                return
+            }
+            numberOfPages = numberOfPagesInt
+            print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
+            
+            print("BreweryDB \(#line) Total pages \(numberOfPages)")
+            completion(true, "\(numberOfResults)")
+        }
+    }
+    
     
     // Download all beers from a Brewery
     // GET: /brewery/:breweryId/beers
