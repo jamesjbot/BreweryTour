@@ -60,8 +60,10 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     private var isBeerFavorited : Bool!
     
     internal var beer : Beer!
-    
-    private let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
+    // TODO Temporary remove to use coreDataStack function to save persistent
+    // rather than addressing it directly
+    //private let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     
     // MARK: Functions
     
@@ -111,7 +113,8 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         request.sortDescriptors = []
         request.predicate = NSPredicate(format : "id = %@", id )
         do {
-            let result = try persistentContext?.fetch(request)
+            // TODO Remove 2nd persistingContext because I'm trying to test.
+            let result = try coreDataStack?.persistingContext.fetch(request)
             return result![0].displayName!
         } catch {
             // StyleID not in database.
@@ -126,7 +129,8 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
         do {
-            let results = try persistentContext?.fetch(request)
+            // TODO Remove 2nd persistingContext because I'm testing
+            let results = try coreDataStack?.persistingContext.fetch(request)
             if (results?.count)! > 0 {
                 return results?[0]
             }
@@ -147,7 +151,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         do {
             beer.favorite = makeFavorite
             beer.tastingNotes = tasting.text
-            try persistentContext?.save()
+            try coreDataStack?.savePersistingContext()
         } catch {
             displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
         }
