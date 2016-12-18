@@ -100,15 +100,19 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // Move this UI update to main queue.
-        DispatchQueue.main.async {
-            print("StylesTablesList \(#line) I'm updating UITableView cell on main ")
-        if searchText != "" {
-            cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName!
-        } else {
-            cell.textLabel?.text = (self.frc.object(at: indexPath )).displayName!
+        // TODO Remove temporary code to see results
+        BreweryDBClient.sharedInstance().downloadStylesCount(styleID: self.frc.object(at: indexPath).id!) {
+            (success, results) -> Void in
+            DispatchQueue.main.async {
+                print("StylesTablesList \(#line) I'm updating UITableView cell on main ")
+                if searchText != "" {
+                    cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName!
+                } else {
+                    cell.textLabel?.text = "\(results!) " + (self.frc.object(at: indexPath )).displayName!
+                }
+            }
+            cell.setNeedsDisplay()
         }
-        cell.setNeedsDisplay()
-    }
         return cell
     }
     
