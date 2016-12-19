@@ -69,7 +69,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     
     
     // MARK: Functions
-    
+    // Debug function please remove
     func d_showAllBeers() {
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
