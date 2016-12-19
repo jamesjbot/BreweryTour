@@ -135,7 +135,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
             print("BreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
-        print("BreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)\n\(frc.fetchedObjects?.first)")
+        print("BreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)\nfrc:\(frc.fetchedObjects?.first)")
         return frc.fetchedObjects!.count
     }
     
@@ -150,6 +150,9 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
 //            assert(i.name != nil)
 //        }
         // Only filter object if there are objects to filter.
+        guard frc.fetchedObjects != nil else {
+            return []
+        }
         guard (frc.fetchedObjects?.count)! > 0 else {
             return []
         }
