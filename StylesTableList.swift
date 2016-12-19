@@ -5,8 +5,8 @@
 //  Created by James Jongsurasithiwat on 10/19/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/** This is the view model backing the Styles switch on the main category view 
-    controller
+/** This is the view model backing the Styles switch on the main category view
+ controller
  **/
 
 import UIKit
@@ -14,11 +14,15 @@ import CoreData
 import Foundation
 
 class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
-
+    
+    // TODO Remove Debug code
+    var firstRun : Bool = true
+    
+    
     // MARK: Constants
     
     let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
-
+    
     // MARK: Variables
     
     internal var mediator: NSManagedObjectDisplayable!
@@ -35,7 +39,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
             if success {
                 self.observer.sendNotify(from: self, withMsg: "We have styles")
             } //else {
-              //  self.observer.sendNotify(s: msg!)
+            //  self.observer.sendNotify(s: msg!)
             //}
         }
     }
@@ -121,12 +125,12 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
                            searchText: String,
                            completion:  @escaping (Bool, String?) -> Void ) -> AnyObject? {
         // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
-//        var style : String
-//        if searchText == "" {
-//            style = frc.object(at: elementAt).id!
-//        } else {
-//            style = filteredObjects[elementAt.row].id!
-//        }
+        //        var style : String
+        //        if searchText == "" {
+        //            style = frc.object(at: elementAt).id!
+        //        } else {
+        //            style = filteredObjects[elementAt.row].id!
+        //        }
         
         // Tell mediator this is the style I want to display
         // Then mediator will tell selectedBeersList what to display.
