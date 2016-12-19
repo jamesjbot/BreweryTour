@@ -573,10 +573,6 @@ class BreweryDBClient {
                             }
                             let thisBeer = self.createBeerObject(beer: beer, brewery: dbBrewery)
                             //self.setBeerBrewerData(beer: thisBeer, breweryID: dbBrewery.id!, completion: completion!)
-
-                            // TODO should this be in the Create brewery function
-                            // Save images for the brewery
-                            self.saveBreweryImagesIfPossible(input: breweryDict?["images"], inputBrewery: dbBrewery)
                         }
                     } else { // Brewery already in Coredata
                         print("BreweryDB \(#line) Brewery already  in Coredata: \(dbBrewery.name)")
@@ -674,10 +670,6 @@ class BreweryDBClient {
                 createBreweryObject(breweryDict: breweryDict,                                                   locationDict: locDic){
                     (thisbrewery) -> Void in
                 }
-                // Capture images asynchronously
-                saveBreweryImagesIfPossible(input: breweryDict["images"],
-                                            inputBrewery: thisbrewery)
-                
             }
             // TODO Contemplate deleting this block of code.
             //Go back to the breweryArray and save another brewery
@@ -755,8 +747,6 @@ class BreweryDBClient {
                     }
                     
                     let thisBeer = createBeerObject(beer: beer, brewery: newBrewery)
-                    // Save images for the brewery
-                    saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: newBrewery)
                     // Future Improvement.
                     // Currently datamodel cannot accomodate multple brewery locations for a beer
                     break
@@ -876,12 +866,23 @@ class BreweryDBClient {
     private func createBreweryObject(breweryDict: [String:AnyObject],
                                      locationDict locDict:[String:AnyObject],
                                      completion: @escaping (_ out : Brewery) -> () ) {
+        func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
+            if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
+                let imageURL : String = imagesDict["icon"] as! String?,
+                let targetBrewery = inputBrewery {
+                let queue = DispatchQueue(label: "Images")
+                print("BreweryDB \(#line) Prior to getting Brewery image")
+                queue.async(qos: .utility) {
+                    print("BreweryDB \(#line) Getting Brewery image in background")
+                    self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
+                }
+            }
+        }
         // Remember to change all the references to this context below
         // There are two more entries on the last parameter
         // And in the do catch block
         coreDataStack?.backgroundContext.performAndWait {
-            print("BreweryDB \(#line) Creating brewery with name \(breweryDict["name"]!)")
-            let brewer = Brewery(inName: breweryDict["name"] as! String,
+           let brewer = Brewery(inName: breweryDict["name"] as! String,
                                  latitude: locDict["latitude"]?.description,
                                  longitude: locDict["longitude"]?.description,
                                  url: locDict["website"] as! String?,
@@ -892,7 +893,7 @@ class BreweryDBClient {
                 print("BreweryDB \(#line) Saving from createBreweryObject into BackgroundContext")
                 try self.coreDataStack?.saveBackgroundContext()
                 // Begin Upgradedcode
-                //try self.coreDataStack?.saveMainContext()
+                try self.coreDataStack?.saveMainContext()
                 //try self.coreDataStack?.savePersistingContext()
                 // End UpgradedCode
                 try self.coreDataStack?.saveMainContext()
@@ -904,29 +905,15 @@ class BreweryDBClient {
                 print("BreweryDb \(#line) You are in the a background context ")
             } catch {
             }
+            saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
         }
         // We are falling thru to this line because of the perfrom async
         // We should never get here
         //fatalError()
         //return nil
     }
-    
-    
 
-    func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
-        if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
-            let imageURL : String = imagesDict["icon"] as! String?,
-            let targetBrewery = inputBrewery {
-            let queue = DispatchQueue(label: "Images")
-            print("BreweryDB \(#line) Prior to getting Brewery image")
-            queue.async(qos: .utility) {
-                print("BreweryDB \(#line) Getting Brewery image in background")
-                self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
-            }
-        }
-    }
-    
-    
+        
     private func getBreweryByID(id : String, context : NSManagedObjectContext) -> Brewery? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
