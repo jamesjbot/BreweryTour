@@ -130,11 +130,29 @@ extension CoreDataStack {
         guard success == true else {
             return false
         }
+        success = deleteFromCoreData(entity: "Beer", context: mainContext)
+        guard success == true else {
+            return false
+        }
+        success = deleteFromCoreData(entity: "Beer", context: backgroundContext)
+        guard success == true else {
+            return false
+        }
+        success = deleteFromCoreData(entity: "Brewery", context: backgroundContext)
+        guard success == true else {
+            return false
+        }
+        success = deleteFromCoreData(entity: "Brewery", context: mainContext)
+        guard success == true else {
+            return false
+        }
         success = deleteFromCoreData(entity: "Brewery", context: persistingContext)
         guard success == true else {
             return false
         }
+        // Remove all objects from contexts.
         persistingContext.reset()
+        mainContext.reset()
         backgroundContext.reset()
         return true
     }
