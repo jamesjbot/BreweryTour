@@ -89,21 +89,17 @@ class FavoriteBreweriesViewController: UIViewController {
     
     
     fileprivate func performFetchOnResultsController(){
+        let theContext : NSManagedObjectContext = (coreDataStack?.mainContext)!
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "favorite = 1")
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: (coreDataStack?.persistingContext)!,
+                                         managedObjectContext: (theContext),
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         // Create a request for Brewery objects and fetch the request from Coredata
         do {
             try frc.performFetch()
-        } catch {
-            displayAlertWindow(title: "Read Coredata", msg: "orry there was an error, \nplease try again.")
-        }
-        do {
-            _ = try coreDataStack?.persistingContext.fetch(request)
         } catch {
             displayAlertWindow(title: "Read Coredata", msg: "Sorry there was an error, \nplease try again.")
         }
