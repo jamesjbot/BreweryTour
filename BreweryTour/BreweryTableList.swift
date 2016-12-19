@@ -14,7 +14,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate, Subject {
+class BreweryTableList: NSObject, TableList, Subject {
 
     var observer : Observer!
 
@@ -79,24 +79,7 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     
     
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList \(#line)BreweryTableList \(#line) BreweryTableList willchange")
-    }
-    
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("BreweryTableList \(#line)BreweryTableList \(#line) BreweryTableList changed object")
-    }
-    
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
-        // TODO We're preloading breweries do I still need this notify
-        observer.sendNotify(from: self, withMsg: "reload data")
-        print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
-        print("BreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
-        //Datata = frc.fetchedObjects!
-    }
+
     
     
     func temporaryFetchData(){
@@ -213,3 +196,26 @@ class BreweryTableList: NSObject, TableList, NSFetchedResultsControllerDelegate,
     }
     
 }
+
+extension BreweryTableList : NSFetchedResultsControllerDelegate {
+    
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("BreweryTableList \(#line) BreweryTableList willchange")
+    }
+    
+    
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("BreweryTableList \(#line) BreweryTableList changed object")
+    }
+    
+    
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
+        // TODO We're preloading breweries do I still need this notify
+        observer.sendNotify(from: self, withMsg: "reload data")
+        print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
+        print("BreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
+        //Datata = frc.fetchedObjects!
+    }
+}
+
