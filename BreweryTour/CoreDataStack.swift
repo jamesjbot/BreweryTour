@@ -51,17 +51,17 @@ class CoreDataStack: NSObject {
         
         // Assign coordinator to persisting context
         persistingContext.persistentStoreCoordinator = mainStoreCoordinator
-        
+        persistingContext.name = "PersistingContext"
         // Create Managed Ojbect Context running on the MainQueue
         mainContext = NSManagedObjectContext(concurrencyType: .mainQueueConcurrencyType)
         
         // Set persistingContext as parent.
         mainContext.parent = persistingContext
-        
+        mainContext.name = "MainContext"
         // Load a background context
         backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         backgroundContext.parent = mainContext
-
+        backgroundContext.name = "BackgroundContext"
         // Add an SQL lite store in the documents folder
         // Create the SQL Store in the background
         //dispatch_async(dispatc, block: () -> Void)
