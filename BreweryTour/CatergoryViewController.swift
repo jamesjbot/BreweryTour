@@ -190,7 +190,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     }
     
     
-    @IBAction func switchClicked(_ sender: AnyObject) {
+    @IBAction func mapButtonClicked(_ sender: AnyObject) {
+        resignFirstResponder()
         performSegue(withIdentifier:"Go", sender: sender)
     }
     
