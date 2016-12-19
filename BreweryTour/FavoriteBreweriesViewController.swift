@@ -23,7 +23,7 @@ class FavoriteBreweriesViewController: UIViewController {
     
     // MARK: Variables
     // Currently this runs on persistent
-    fileprivate var frc : NSFetchedResultsController<Brewery>
+    fileprivate var frc : NSFetchedResultsController<Brewery>! 
     
     // MARK: IBOutlets
     @IBOutlet weak var tutorialView: UIView!
@@ -81,16 +81,8 @@ class FavoriteBreweriesViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    
+    // Favorite Breweries now runs off of MainContext
     required init?(coder aDecoder: NSCoder) {
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "favorite = YES")
-        frc = NSFetchedResultsController(fetchRequest: request,
-                                                              managedObjectContext: (coreDataStack?.persistingContext)!,
-                                                              sectionNameKeyPath: nil,
-                                                              cacheName: nil)
-        // Needed as compiler complains that this isn't initialized
         super.init(coder: aDecoder)
         performFetchOnResultsController()
     }
