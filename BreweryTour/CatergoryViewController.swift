@@ -335,7 +335,8 @@ extension CategoryViewController : UITableViewDelegate {
                                     if !sucesss {
                                         self.displayAlertWindow(title: "Error with Internet", msg: "Sorry there was an error online,\nplease try again later")
                                     }
-                                    if msg == "All Pages Processed" {
+                                    // TODO Temporarily relaxed requirements on callback.
+                                    if (msg?.contains("All Pages Processed"))! {
                                         DispatchQueue.main.async {
                                             self.performSegue(withIdentifier: "Go", sender: nil)
                                         }
