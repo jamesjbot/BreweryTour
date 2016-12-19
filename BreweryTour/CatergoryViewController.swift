@@ -209,6 +209,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
                 print("CategoryViewController \(#line) Reloading data")
                 styleTable.reloadData()
                 searchBar(newSearchBar, textDidChange: newSearchBar.text!)
+            } else {
+                print("CategoryViewController \(#line) Ignoring reload as you are not active")
             }
             break
         case "We have styles":
@@ -273,21 +275,21 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         navigationController?.navigationBar.topItem?.title = "Style/Brewery"
     }
     
-    func enumerateSubview(view: UIView, allowFull: UIView) {
-        // Everything will be a parent view here
-        print("Parent View: \(view)")
-        let coordinates = view.convert(view.frame.origin, to: self.view)
-        print("Coordinates: \(view.frame) Converted: \(view.convert(view.frame.origin, to: self.view))\n")
-        if view == allowFull {
-            print("found the view above\n")
-print("\(view.convert(allowFull.frame.origin, to: self.view))")
-            //CGRect(x: coordinates.x, y: coordinates.y, width: view.frame.width, height: view.frame.height)
-        } else {
-            for i in view.subviews {
-                 enumerateSubview(view: i, allowFull: allowFull)
-            }
-        }
-    }
+//    func enumerateSubview(view: UIView, allowFull: UIView) {
+//        // Everything will be a parent view here
+//        print("Parent View: \(view)")
+//        let coordinates = view.convert(view.frame.origin, to: self.view)
+//        print("Coordinates: \(view.frame) Converted: \(view.convert(view.frame.origin, to: self.view))\n")
+//        if view == allowFull {
+//            print("found the view above\n")
+//print("\(view.convert(allowFull.frame.origin, to: self.view))")
+//            //CGRect(x: coordinates.x, y: coordinates.y, width: view.frame.width, height: view.frame.height)
+//        } else {
+//            for i in view.subviews {
+//                 enumerateSubview(view: i, allowFull: allowFull)
+//            }
+//        }
+//    }
     
 }
 
