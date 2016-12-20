@@ -14,6 +14,20 @@
  times and current beer selection.
  Clicking on the pin will also zoom in to the pin and give a routing to the
  brewery.
+ 
+ Internals
+ The MapViewController only considers what the Mediator currently has selected
+ 
+ When choosing style from CategoryViewController:
+ This program will look for beers created with that style ID on the MAIN
+ context.
+ Then we will grab the breweries by brewer relationship (these also will be pulled from the MAIN context)
+ and then map them according to their locations.
+ 
+ When choosing brewery from CategoryViewController:
+ The mediator will provide the brewery object, we will map it according to its
+ location.
+ 
  **/
 
 
@@ -95,9 +109,13 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "styleID = %@", style.id!)
         var results : [Beer]!
-        coreDataStack?.persistingContext.performAndWait {
+        // Presave the mainContext maybe that's why I cant see any results.
+        let thisContext = coreDataStack?.mainContext
+        // This must block because the mapView must be populated before it displays.
+        thisContext?.performAndWait {
             do {
-                results = try (self.coreDataStack?.persistingContext.fetch(request))! as [Beer]
+                results = try (thisContext!.fetch(request)) as [Beer]
+                print("The results are zero \(results.count)")
             } catch {
                 self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
                 return
@@ -105,13 +123,14 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             //Now that we have Beers with that style, what breweries are associated with these beers
             //Array to hold breweries
             self.mappableBreweries = [Brewery]()
-            print("MapView \(#line) were there any beers that matched style\n\(results)")
+            print("MapView \(#line) were there any beers that matched style\n")
+            //print("MapView \(#line) \(results)")
             for beer in results {
                 let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
                 breweryRequest.sortDescriptors = []
                 breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
                 do {
-                    let brewery = try (self.coreDataStack?.persistingContext.fetch(breweryRequest))! as [Brewery]
+                    let brewery = try (thisContext!.fetch(breweryRequest)) as [Brewery]
                     if !self.mappableBreweries.contains(brewery[0]) {
                         self.mappableBreweries.append(brewery[0])
                     }
@@ -229,15 +248,18 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         mapView.showsUserLocation = true
         mapView.showsScale = true
         mapView.showAnnotations(mapView.annotations, animated: true)
+        DispatchQueue.main.async {
+            self.mapView.setNeedsDisplay()
+        }
     }
     
     
     // Find breweries
-    fileprivate func findBreweryinPersistentContext(by: MKAnnotation) -> NSManagedObjectID? {
+    fileprivate func findBreweryinMainContext(by: MKAnnotation) -> NSManagedObjectID? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         let frc = NSFetchedResultsController(fetchRequest: request,
-                                             managedObjectContext: (coreDataStack?.persistingContext)!,
+                                             managedObjectContext: (coreDataStack?.mainContext)!,
                                              sectionNameKeyPath: nil, cacheName: nil)
         do {
             try frc.performFetch()
@@ -279,7 +301,7 @@ extension MapViewController : MKMapViewDelegate {
         pinView?.canShowCallout = true
         
         // Find the brewery in the proper context
-        let breweryObjectID : NSManagedObjectID! = findBreweryinPersistentContext(by: annotation)!
+        let breweryObjectID : NSManagedObjectID! = findBreweryinMainContext(by: annotation)!
         let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
         
         // Set the favorite icon on pin
@@ -366,7 +388,7 @@ extension MapViewController : MKMapViewDelegate {
                 return
             }
             // Find the brewery object that belongs to this location
-            let tempObjectID = findBreweryinPersistentContext(by: view.annotation!)
+            let tempObjectID = findBreweryinMainContext(by: view.annotation!)
             // Fetch object from context
             let favBrewery = coreDataStack?.persistingContext.object(with: tempObjectID!) as! Brewery
             // Flip favorite state in the database and in the ui
