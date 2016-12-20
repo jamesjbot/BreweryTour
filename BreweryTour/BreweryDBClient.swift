@@ -161,7 +161,7 @@ class BreweryDBClient {
                        completion: completionHandler)
         }
         print("BreweryDB \(#line) downloadBeersByBrewery completing with All Pages processed")
-        completionHandler(true, "All Pages Processed")
+        completionHandler(true, "All Pages Processed downloadBeersByBrewery")
         return
     }
     
@@ -207,7 +207,7 @@ class BreweryDBClient {
                 // The follow block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
                     print("BreweryDb \(#line) downloadBeerByName returning completion Allpagesprocessed ")
-                    completion(true, "All Pages Processed")
+                    completion(true, "All Pages Processed downloadBeersByName")
                     return
                 }
                 
@@ -245,7 +245,7 @@ class BreweryDBClient {
                 }
                 group.notify(queue: queue){
                     print("BreweryDB \(#line) downloadBeersByName Completing with All Pages Processed")
-                    completion(true, "All Pages Processed")
+                    completion(true, "All Pages Processed downloadBeersByName")
                 }
         }
     }
@@ -325,7 +325,7 @@ class BreweryDBClient {
             }  // Outside for loop
             
             group.notify(queue: queue) {
-                completion(true, "All Pages Processed")
+                completion(true, "All Pages Processed DownloadBeerAndBreweriesByStyleID")
             }
         }
         return
@@ -368,7 +368,7 @@ class BreweryDBClient {
                            completion: completion)
                 // The following block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
-                    completion(true, "All Pages Processed")
+                    completion(true, "All Pages Processed downloadAllBreweries")
                     return
                 }
                 
@@ -415,7 +415,7 @@ class BreweryDBClient {
                     }
                 }
                 group.notify(queue: queue) {
-                    completion(true, "All Pages Processed")
+                    completion(true, "All Pages Processed downloadAllBreweries")
                 }
         }
         return
@@ -465,7 +465,7 @@ class BreweryDBClient {
                            completion: completion)
                 // The following block of code downloads all subsequesnt pages
                 guard numberOfPages > 1 else {
-                    completion(true, "All Pages Processed")
+                    completion(true, "All Pages Processed downloadBreweryByName")
                     return
                 }
                 
@@ -508,7 +508,7 @@ class BreweryDBClient {
                     }
                 }
                 group.notify(queue: queue) {
-                    completion(true, "All Pages Processed")
+                    completion(true, "All Pages Processed downloadBreweryByName")
                 }
         }
         return
@@ -796,7 +796,7 @@ class BreweryDBClient {
                 let queue = DispatchQueue(label: "Images")
                 print("BreweryDB \(#line) Prior to getting Beer image")
                 queue.async(qos: .utility) {
-                    print("BreweryDB \(#line) Getting Beer image in background")
+                    print("BreweryDB \(#line) In queue Async Getting Beer image in background")
                     self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
                 }
             }
