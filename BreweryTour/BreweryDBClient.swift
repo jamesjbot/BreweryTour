@@ -593,21 +593,23 @@ class BreweryDBClient {
             // Check to see if the style is already in coredata then skip, else add
             let request = NSFetchRequest<Style>(entityName: "Style")
             request.sortDescriptors = []
-            for aStyle in styleArrayOfDict {
-                let localId = aStyle["id"]?.stringValue
-                let localName = aStyle["name"]
-                do {
-                    request.predicate = NSPredicate(format: "id = %@", localId!)
-                    let results = try coreDataStack?.persistingContext.fetch(request)
-                    if (results?.count)! > 0 {
-                        continue
+            coreDataStack?.persistingContext.perform {
+                for aStyle in styleArrayOfDict {
+                    let localId = aStyle["id"]?.stringValue
+                    let localName = aStyle["name"]
+                    do {
+                        request.predicate = NSPredicate(format: "id = %@", localId!)
+                        let results = try self.coreDataStack?.persistingContext.fetch(request)
+                        if (results?.count)! > 0 {
+                            continue
+                        }
+                    } catch {
+                        completion!(false, "Failed Request")
+                        return
                     }
-                } catch {
-                    completion!(false, "Failed Request")
-                    return
+                    // If style not present adds new styles into MainContext
+                    Style(id: localId!, name: localName! as! String, context: (self.coreDataStack?.mainContext)!)
                 }
-                // Create styles in mainContext
-                Style(id: localId!, name: localName! as! String, context: (coreDataStack?.mainContext)!)
             }
             
             // Save beer styles in main and persistent.
