@@ -407,8 +407,6 @@ class BreweryDBClient {
                                 print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.updatedObjects.count)")
                                 print("BreweryDB \(#line)Prior to saving hasChanges: \(self.coreDataStack?.mainContext.hasChanges)")
                                 print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
-                                // TODO Consider removing this
-                                self.saveMain()
                                 print("BreweryDB \(#line)After saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
                                 group.leave()
                         }
@@ -536,7 +534,7 @@ class BreweryDBClient {
             createBeerLoop: for beer in beerArray {
                 print("Brewerydb \(#line) In beer loop ")
                 // Check to see if this beer is in the database already, and skip if so
-                guard getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!) == nil else {
+                guard getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.backgroundContext)!) == nil else {
                     continue createBeerLoop
                 }
                 // This beer has no brewery information, continue with the next beer
@@ -802,9 +800,9 @@ class BreweryDBClient {
             }
         }
         // Upgrade code
-        //let thisContext = coreDataStack?.backgroundContext
+        let thisContext = coreDataStack?.backgroundContext
         // Non optional paramters: beerName, breweryID, id
-        print("BreweryDB \(#line) Creating Beer object in MainContext")
+        print("BreweryDB \(#line) Working to create Beer object in \(thisContext?.name)")
         let id : String? = beer["id"] as? String
         print("BreweryDB \(#line) beername: \(beer["name"])")
         let name : String? = beer["name"] as? String ?? ""
@@ -820,41 +818,50 @@ class BreweryDBClient {
         // Upgraded code
         // change coreDataStack?.mainContext!)! to thisContext
         // Within the maincontext the brewery must have already been created.
-        assert(brewery != nil)
+        //
         let thisBeer = Beer(id: id!, name: name!,
                             beerDescription: description!,
                             availability: available!,
-                            context: (coreDataStack?.mainContext!)!)
-        thisBeer.brewer = coreDataStack?.mainContext.object(with: (brewery?.objectID)!) as! Brewery?
+                            context: thisContext!)
+        // TODO Bug accomodate nil brewery, when selecting brewery
+        assert(brewery != nil || brewerID != nil)
+        // I must use one of these
+        
+        thisBeer.brewer = thisContext?.object(with: (brewery?.objectID)!) as! Brewery?
         
         thisBeer.breweryID = thisBeer.brewer?.id
         
-        print("BreweryDB \(#line) Is Beer Organic:\(beer["isOrganic"]!)")
+        //print("BreweryDB \(#line) Is Beer Organic:\(beer["isOrganic"]!)")
         thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
-        print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
+        //print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
         if beer["styleId"] != nil {
             thisBeer.styleID = (beer["styleId"] as! NSNumber).description
         }
         thisBeer.abv = beerabv ?? "Information N/A"
         thisBeer.ibu = beeribu ?? "Information N/A"
-        print("BreweryDb \(#line) Returning the beer we created.")
         // Saving this beer from Main to PersistentContext
         // Begin Upgraded Code
         //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
         //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
         //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-        //do {
-        //    try coreDataStack?.saveBackgroundContext()
-        //} catch {
-        //    fatalError()
-        //}
-        // End Upgraded code
+        //print("\nBrewerydb \(#line) next line will block for beers \(thisContext)")
+        thisContext?.perform() {
+            self.saveBackground()
+//            print("BreweryDB \(#line) In blocking for beer save ")
+//            do {
+//                try thisContext?.save()
+//                print("BreweryDB \(#line) Beer created and saved in this context \(thisContext) ")
+//            } catch {
+//                fatalError()
+//            }
+            print("BreweryDb \(#line) Exiting blocking for beers\n")
+        }
+        //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
+        //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
+        //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
         //_ = saveMain()
-        print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
-        print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
-        print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-        _ = saveMain()
         saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
+        print("BreweryDb \(#line) Returning the beer we created.")
         return thisBeer
     }
     
@@ -881,32 +888,39 @@ class BreweryDBClient {
         // Remember to change all the references to this context below
         // There are two more entries on the last parameter
         // And in the do catch block
-        coreDataStack?.backgroundContext.performAndWait {
-           let brewer = Brewery(inName: breweryDict["name"] as! String,
+        print("\nBreweryDb \(#line) Blocking for create brewery in backgroundContext ")
+        var brewer : Brewery!
+        coreDataStack?.backgroundContext.perform {
+            brewer = Brewery(inName: breweryDict["name"] as! String,
                                  latitude: locDict["latitude"]?.description,
                                  longitude: locDict["longitude"]?.description,
                                  url: locDict["website"] as! String?,
                                  open: (locDict["openToPublic"] as! String == "Y") ? true : false,
                                  id: locDict["id"]?.description,
                                  context: (self.coreDataStack?.backgroundContext)!)
-            do {
-                print("BreweryDB \(#line) Saving from createBreweryObject into BackgroundContext")
-                try self.coreDataStack?.saveBackgroundContext()
-                // Begin Upgradedcode
-                try self.coreDataStack?.saveMainContext()
-                //try self.coreDataStack?.savePersistingContext()
-                // End UpgradedCode
-                try self.coreDataStack?.saveMainContext()
-                try self.coreDataStack?.savePersistingContext()
-                print("BreweryDB \(#line) Save Brewery save in background context moving Brewery into Main Context, Who is oberserving the maincontext? Last time it was SelectedBeersTableList. BreweryTable is looking at PersistentContext so I don't think it will see this.")
-                self.d_timestopass += 1
-                print("BreweryDB \(#line) \(self.d_timestopass) Sending back the brewery object we created, to the parse function.")
-                completion(brewer)
-                print("BreweryDb \(#line) You are in the a background context ")
-            } catch {
-            }
-            saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
+            self.saveBackground()
+            //            do {
+//                print("BreweryDB \(#line) Commiting from createBreweryObject into BackgroundContext")
+//                try self.coreDataStack?.saveBackgroundContext()
+//                print("BreweryDB \(#line) Committed from createBreweryObject into BackgroundContext")
+//                // Begin Upgradedcode
+//                //try self.coreDataStack?.saveMainContext()
+//                //try self.coreDataStack?.savePersistingContext()
+//                // End UpgradedCode
+//                //try self.coreDataStack?.saveMainContext()
+//                //try self.coreDataStack?.savePersistingContext()
+//                print("BreweryDB \(#line) Save Brewery save in background context moving Brewery into Main Context, Who is oberserving the maincontext? Last time it was SelectedBeersTableList. BreweryTable is looking at PersistentContext so I don't think it will see this.")
+//                self.d_timestopass += 1
+//                print("BreweryDB \(#line) \(self.d_timestopass) Sending back the brewery object we created, to the parse function.")
+//                print("BreweryDb \(#line) You are in the a background context ")
+//            } catch {
+//            }
+            print("BreweryDB \(#line) Exiting Brewery blocking\n")
+            completion(brewer)
         }
+        // This following line blocksandwait is being called in a block and wait so it
+        // gets trapped.
+        saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
         // We are falling thru to this line because of the perfrom async
         // We should never get here
         //fatalError()
@@ -930,7 +944,6 @@ class BreweryDBClient {
         }
         return nil
     }
-    
     
     
     private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
@@ -980,34 +993,39 @@ class BreweryDBClient {
                                            updateManagedObjectID: NSManagedObjectID) {
         // Begin Upgraded code
         //print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
-        //let thisContext = coreDataStack?.backgroundContext
+        // TODO Breaking BreweryList and MapView Style selection, MapView Brewery selection will be unharmed.
         // End Upgraded code
-        print("BreweryDB \(#line) Async DonwloadBeerImage in mainContext\(forBeer.beerName)")
+        print("BreweryDB \(#line) Async DownloadBeerImage in background context\(forBeer.beerName)")
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
-            print("BreweryDB \(#line) Returned from getting Beer image ")
+            print("BreweryDB \(#line) Returned from Async DownloadBeerImage")
             if error == nil {
                 if data == nil {
                     return
                 }
                 // Upgraded code
-                //thisContext?.perform(){
-                self.coreDataStack!.mainContext.performAndWait(){
+                let thisContext = self.coreDataStack?.backgroundContext
+                //print("\nBrewerydb \(#line) Preceding to Blocking for beerImage update in \(thisContext)")
+                thisContext?.perform(){
+                    print("Brewerydb \(#line) Blocking on beerimage update ")
+                //self.coreDataStack!.mainContext.performAndWait(){
                     // Upgraded code
-                    //let beerForUpdate = thisContext?.object(with: updateManagedObjectID) as! Beer
-                    let beerForUpdate = self.coreDataStack?.mainContext.object(with: updateManagedObjectID) as! Beer
+                    let beerForUpdate = thisContext?.object(with: updateManagedObjectID) as! Beer
+                    //let beerForUpdate = self.coreDataStack?.mainContext.object(with: updateManagedObjectID) as! Beer
                     let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                     beerForUpdate.image = outputData
-                    do {
-                        // Upgraded code
-                        //try thisContext?.save()
-                        try self.coreDataStack?.mainContext.save()
-                        print("BreweryDB \(#line) Beer Imaged saved in MainContext for beer \(forBeer.beerName)")
-                    }
-                    catch {
-                        return
-                    }
+                    self.saveBackground()
+//                    do {
+//                        // Upgraded code
+//                        try thisContext?.save()
+//                        //try self.coreDataStack?.mainContext.save()
+//                        print("BreweryDB \(#line) Beer Imaged saved in \(thisContext) for beer \(forBeer.beerName)")
+//                    }
+//                    catch {
+//                        return
+//                    }
+                    print("BreweryDb \(#line) Completed blocking on beer image update\n")
                 }
             }
         }
@@ -1019,56 +1037,69 @@ class BreweryDBClient {
     internal func downloadImageToCoreDataForBrewery( aturl: NSURL,
                                                      forBrewery: Brewery,
                                                      updateManagedObjectID: NSManagedObjectID) {
-        print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext\(forBrewery.name)")
         // Upgraded code.
-        // let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
+        let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
+        print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext \(forBrewery.name)")
+
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
-            print("BreweryDB \(#line) Returned from getting BreweryImage ")
+            print("BreweryDB \(#line) Returned from Async DownloadBreweryImage ")
             if error == nil {
                 if data == nil {
                     return
                 }
                 // Upgraded code change to thisContext, and remove the perfromandwait?
-                
-                self.coreDataStack!.mainContext.performAndWait(){
-                    let breweryForUpdate = self.coreDataStack!.persistingContext.object(with: updateManagedObjectID) as! Brewery
+                print("\nBreweryDB \(#line) preceeding to block brewery image update in \(thisContext)")
+                thisContext.perform(){
+                    print("BreweryDB \(#line) blocking on brewery image update ")
+                    let breweryForUpdate = thisContext.object(with: updateManagedObjectID) as! Brewery
                     let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                     breweryForUpdate.image = outputData
                     // Upgraded code change this to thisContext.
-                    do {
-                        try self.coreDataStack!.mainContext.save()
-                        print("BreweryDB \(#line)Attention Brewery Imaged saved in PersistentContext for brewery \(forBrewery.name)")
-                    }
-                    catch {
-                        return
-                    }
+                    self.saveBackground()
+//                    do {
+//                        try thisContext.save()
+//                        print("BreweryDB \(#line) Attention Brewery Imaged saved in \(thisContext.name) for brewery \(forBrewery.name)")
+//                    }
+//                    catch let error {
+//                        fatalError("Error \(error)")
+//                    }
+                    print("BreweryDB \(#line) Complete blocking on brewery image update\n ")
                 }
             }
         }
         task.resume()
     }
     
-    private func saveMain() {
-        print("BreweryDB \(#line) Saving MainContext called ")
-        coreDataStack?.mainContext.performAndWait {
-            do {
-                try self.coreDataStack?.saveMainContext()
-                try self.coreDataStack?.savePersistingContext()
-                //try coreDataStack?.mainContext.save()
-                print("BreweryDB \(#line) All beers before this have been saved")
-                print("BreweryDB \(#line) MainContext objects should be in Persistent Context now <------------------------")
-                //try coreDataStack?.persistingContext.save()
-                //true
-            } catch let error {
-                print("BreweryDB \(#line) We died on the coredataSave <----- ")
-                print("The error is \n\(error)")
-                fatalError()
+//    private func saveMain() {
+//        print("BreweryDB \(#line) Saving MainContext called ")
+//        coreDataStack?.mainContext.performAndWait {
+//            do {
+//                try self.coreDataStack?.saveMainContext()
+//                //try self.coreDataStack?.savePersistingContext()
+//                //try coreDataStack?.mainContext.save()
+//                print("BreweryDB \(#line) All beers before this have been saved")
+//                //print("BreweryDB \(#line) MainContext objects should be in Persistent Context now <------------------------")
+//                //try coreDataStack?.persistingContext.save()
+//                //true
+//            } catch let error {
+//                print("BreweryDB \(#line) We died on the coredataSave <----- ")
+//                print("The error is \n\(error)")
+//                fatalError()
+//            }
+//        }
+//    }
+        private func saveBackground() {
+            coreDataStack?.backgroundContext.performAndWait {
+                do {
+                    try self.coreDataStack?.backgroundContext.save()
+                } catch let error {
+                    fatalError("error:\n\(error)")
+                }
             }
+
         }
-    }
-    
 //    private func savePersitent() -> Bool {
 //        do {
 //            try coreDataStack?.persistingContext.save()
