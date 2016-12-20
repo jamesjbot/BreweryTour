@@ -101,7 +101,22 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         return filteredObjects
     }
     
-    
+    /*
+     * 2 Adambier
+     * 34 Aged beer
+     * 24 American style amber low calorie
+     * 163 American style amber lager
+     * 1905 American style amber red/ale
+     * 583 American style barley wine
+     * 609 American style black ale
+     * 1389 American style brown ale
+     * 415 American style cream ale
+     * 123 American style dark lager.
+     * 3 American style ice lager
+     * 232 American Style imperial porter
+     * 1353 American style imperial stout
+     * 5519 American style india pale ale
+     */
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // Move this UI update to main queue.
         // TODO Remove temporary code to see results
