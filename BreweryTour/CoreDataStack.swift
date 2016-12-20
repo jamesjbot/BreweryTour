@@ -151,9 +151,15 @@ extension CoreDataStack {
             return false
         }
         // Remove all objects from contexts.
-        persistingContext.reset()
-        mainContext.reset()
-        backgroundContext.reset()
+        persistingContext.perform {
+            self.persistingContext.reset()
+        }
+        mainContext.perform {
+            self.mainContext.reset()
+        }
+        backgroundContext.perform {
+            self.backgroundContext.reset()
+        }
         return true
     }
     
@@ -163,13 +169,17 @@ extension CoreDataStack {
         let genericRequest : NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "\(entity)")
         let genericBatchDelete = NSBatchDeleteRequest(fetchRequest: genericRequest)
         genericBatchDelete.resultType = .resultTypeCount
-        do {
-            let results = try backgroundContext.execute(genericBatchDelete) as! NSBatchDeleteResult
-            try context.save()
-            return true
-        } catch {
-            return false
+        var success: Bool?
+        context.performAndWait {
+            do {
+                try context.execute(genericBatchDelete) as! NSBatchDeleteResult
+                try context.save()
+                success = true
+            } catch {
+                success = false
+            }
         }
+        return success!
     }
     
     
