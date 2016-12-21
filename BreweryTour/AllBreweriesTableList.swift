@@ -194,7 +194,7 @@ class AllBreweriesTableList: NSObject, TableList, Subject {
     
 }
 
-extension BreweryTableList : NSFetchedResultsControllerDelegate {
+extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("BreweryTableList \(#line) BreweryTableList willchange")
