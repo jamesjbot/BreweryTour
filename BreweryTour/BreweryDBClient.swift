@@ -141,16 +141,9 @@ class BreweryDBClient {
                 completionHandler(false,"Failed Request \(#line) \(#function)")
                 return
             }
-            
-//            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
-//                completionHandler(false, "No results")
-//                return
-//            }
-//            
-//            print("BreweryDB \(#line)We have this many results for that query \(numberOfResults)")
-            
+            // Note: This request does not return "totalResults", so we don't check for it
             // query is brewery/breweryID/beers
-            // Returned data is
+            // Returned data is of format
             // "message":"READ ONLY MODE: Request Successful"
             // "data":[...]
             // "status":"success"
