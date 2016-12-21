@@ -36,6 +36,7 @@
 		A76B3B911DB0E00D00B0A899 /* heart_icon_black_white_line_art.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8F1DB0E00D00B0A899 /* heart_icon_black_white_line_art.pdf */; };
 		A77E0C031DF9ECBF0007E55F /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */; };
 		A78020881DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78020871DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift */; };
+		A782BA151E032D4F00FB0B63 /* ScrapbookCode in Resources */ = {isa = PBXBuildFile; fileRef = A782BA141E032D4F00FB0B63 /* ScrapbookCode */; };
 		A788E8AE1DB3C11400FA05E4 /* Nophoto.png in Resources */ = {isa = PBXBuildFile; fileRef = A788E8AD1DB3C11400FA05E4 /* Nophoto.png */; };
 		A7A69D571DA8938F00E47C8E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */; };
 		A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AADE1DA791A400EE844C /* AppDelegate.swift */; };
@@ -108,6 +109,7 @@
 		A76B3B8F1DB0E00D00B0A899 /* heart_icon_black_white_line_art.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = heart_icon_black_white_line_art.pdf; sourceTree = "<group>"; };
 		A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		A78020871DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Beer+CoreDataProperties.swift"; path = "../Beer+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		A782BA141E032D4F00FB0B63 /* ScrapbookCode */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = ScrapbookCode; sourceTree = "<group>"; };
 		A788E8AD1DB3C11400FA05E4 /* Nophoto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = Nophoto.png; path = ../Nophoto.png; sourceTree = "<group>"; };
 		A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		A7B2AADB1DA791A400EE844C /* BreweryTour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreweryTour.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -132,7 +134,7 @@
 		A7D2272C1DB5620300360A3B /* FavoriteBreweriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteBreweriesViewController.swift; sourceTree = "<group>"; };
 		A7DDC3F61DCC24080077F34A /* BeersTabbaricon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeersTabbaricon2.png; sourceTree = "<group>"; };
 		A7DDC3F81DCC3A770077F34A /* BreweryDBClientConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClientConstants.swift; sourceTree = "<group>"; };
-		A7E01CAC1DFEE0C300CA6FE9 /* DesignNotes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DesignNotes; sourceTree = "<group>"; };
+		A7E01CAC1DFEE0C300CA6FE9 /* DesignNotes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DesignNotes; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = "<none>"; };
 		A7FF1A041DB0E2E200AD0BB3 /* heart_icon.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = heart_icon.svg; sourceTree = "<group>"; };
 		A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon.png; sourceTree = "<group>"; };
 		A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon_black_white_line_art.png; sourceTree = "<group>"; };
@@ -228,6 +230,7 @@
 			isa = PBXGroup;
 			children = (
 				A7E01CAC1DFEE0C300CA6FE9 /* DesignNotes */,
+				A782BA141E032D4F00FB0B63 /* ScrapbookCode */,
 				A7B2AADD1DA791A400EE844C /* BreweryTour */,
 				A7B2AAF51DA791A400EE844C /* BreweryTourTests */,
 				A7B2AB001DA791A400EE844C /* BreweryTourUITests */,
@@ -436,6 +439,7 @@
 				A7FF1A071DB0E67E00AD0BB3 /* heart_icon.png in Resources */,
 				A76B3B901DB0E00D00B0A899 /* heart_icon.pdf in Resources */,
 				A7E01CAD1DFEE0C300CA6FE9 /* DesignNotes in Resources */,
+				A782BA151E032D4F00FB0B63 /* ScrapbookCode in Resources */,
 				A7B2AAE41DA791A400EE844C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
