@@ -577,8 +577,7 @@ class BreweryDBClient {
                         let thisBeer = self.createBeerObject(beer: beer, brewery: dbBrewery)
                     }
                 }
-            }
-            // end of beer loop
+            } // end of beer loop
             // This page of results has processed signal GCD that it's complete.
             group?.leave()
             break
@@ -607,7 +606,7 @@ class BreweryDBClient {
                         completion!(false, "Failed Request")
                         return
                     }
-                    // If style not present adds new styles into MainContext
+                    // When style not present adds new style into MainContext
                     Style(id: localId!, name: localName! as! String, context: (self.coreDataStack?.mainContext)!)
                 }
             }
@@ -846,7 +845,7 @@ class BreweryDBClient {
         //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
         //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
         //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-        //print("\nBrewerydb \(#line) next line will block for beers \(thisContext)")
+        print("\nBrewerydb \(#line) next line will non block for beer save \(thisContext)")
         thisContext?.perform() {
             self.saveBackground()
 //            print("BreweryDB \(#line) In blocking for beer save ")
@@ -856,7 +855,7 @@ class BreweryDBClient {
 //            } catch {
 //                fatalError()
 //            }
-            print("BreweryDb \(#line) Exiting blocking for beers\n")
+            print("BreweryDb \(#line) Exiting non blocking for beersave\n")
         }
         //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
         //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
@@ -890,8 +889,17 @@ class BreweryDBClient {
         // Remember to change all the references to this context below
         // There are two more entries on the last parameter
         // And in the do catch block
-        print("\nBreweryDb \(#line) Blocking for create brewery in backgroundContext ")
         var brewer : Brewery!
+        print("\nBreweryDb \(#line) Brewery non Blocking for create brewery in backgroundContext\n\(breweryDict["name"])")
+        // Why did I make this perform instead of performandWait
+        // Changed back to performAndWait because map was boing populated with nothing
+        // because this function returned before creating breweries
+        // I may have used perform because it stalls the UI but this is in background context why would it stall the ui.
+        /*
+         I use perform because i get deadlocked with performandwait,
+         The solution is to use perform and allow MapViewController to dynamically watch for changes to the beers..
+         I use performAndWait because completion get called before breweries are created.
+         */
         coreDataStack?.backgroundContext.perform {
             brewer = Brewery(inName: breweryDict["name"] as! String,
                                  latitude: locDict["latitude"]?.description,
@@ -917,7 +925,7 @@ class BreweryDBClient {
 //                print("BreweryDb \(#line) You are in the a background context ")
 //            } catch {
 //            }
-            print("BreweryDB \(#line) Exiting Brewery blocking\n")
+            print("BreweryDB \(#line) Exiting Brewery non blocking\n\(breweryDict["name"])")
             completion(brewer)
         }
         // This following line blocksandwait is being called in a block and wait so it
@@ -997,11 +1005,11 @@ class BreweryDBClient {
         //print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
         // TODO Breaking BreweryList and MapView Style selection, MapView Brewery selection will be unharmed.
         // End Upgraded code
-        print("BreweryDB \(#line) Async DownloadBeerImage in background context\(forBeer.beerName)")
+        print("BreweryDB \(#line) Async DownloadBeerImage in background context:\(forBeer.beerName!)")
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
-            print("BreweryDB \(#line) Returned from Async DownloadBeerImage")
+            print("BreweryDB \(#line) Returned from Async DownloadBeerImage:\(forBeer.beerName!)")
             if error == nil {
                 if data == nil {
                     return
