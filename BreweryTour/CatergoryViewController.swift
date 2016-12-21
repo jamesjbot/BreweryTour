@@ -249,6 +249,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         styleList.registerObserver(view: self)
         breweryList.registerObserver(view: self)
         allBreweryList.registerObserver(view: self)
+        
+        // Make second segmented control title fit
+        (segmentedControl.subviews[1].subviews.first as! UILabel).adjustsFontSizeToFitWidth = true
     }
     
     
@@ -343,7 +346,7 @@ extension CategoryViewController : UITableViewDelegate {
                                     print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
                                     self.activityIndicator.stopAnimating()
                                     if !sucesss {
-                                        self.displayAlertWindow(title: "Error", msg: msg!)
+                                        self.displayAlertWindow(title: "Error with Query", msg: msg!)
                                     }
                                     // TODO Temporarily relaxed requirements on callback.
                                     if (msg?.contains("All Pages Processed"))! {
