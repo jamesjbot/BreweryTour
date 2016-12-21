@@ -343,7 +343,7 @@ extension CategoryViewController : UITableViewDelegate {
                                     print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
                                     self.activityIndicator.stopAnimating()
                                     if !sucesss {
-                                        self.displayAlertWindow(title: "Error with Internet", msg: "Sorry there was an error online,\nplease try again later")
+                                        self.displayAlertWindow(title: "Error", msg: msg!)
                                     }
                                     // TODO Temporarily relaxed requirements on callback.
                                     if (msg?.contains("All Pages Processed"))! {
