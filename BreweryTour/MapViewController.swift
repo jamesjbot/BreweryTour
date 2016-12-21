@@ -38,7 +38,7 @@ import CoreLocation
 import CoreData
 
 
-class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
+class MapViewController : UIViewController {
     
     // MARK: Debugging
     
@@ -61,8 +61,8 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
     // The query that goes against the database to pull in the brewery location information
     // This runs on persistent
     private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
-    
-    
+    private var beerFRC : NSFetchedResultsController<Beer>?
+    fileprivate var lastSelectedManagedObject : NSManagedObject?
     // MARK: IBOutlet
     
     @IBOutlet weak var tutorialView: UIView!
@@ -93,7 +93,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         coreDataStack?.persistingContext.performAndWait {
             do {
                 results = try (self.coreDataStack?.persistingContext.fetch(request))! as [Beer]
-                print("Here are the results\n\(results)")
+                print("MapViewController \(#line) Here are the results\n\(results) ")
             } catch {
                 self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
                 return
@@ -111,11 +111,19 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         var results : [Beer]!
         // Presave the mainContext maybe that's why I cant see any results.
         let thisContext = coreDataStack?.mainContext
+        
+        beerFRC = NSFetchedResultsController(fetchRequest: request ,
+                                             managedObjectContext: thisContext!,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
+        beerFRC?.delegate = self
         // This must block because the mapView must be populated before it displays.
         thisContext?.performAndWait {
             do {
-                results = try (thisContext!.fetch(request)) as [Beer]
-                print("The results are zero \(results.count)")
+                try self.beerFRC?.performFetch()
+                results = (self.beerFRC?.fetchedObjects)! as [Beer]
+                //results = try (thisContext!.fetch(request)) as [Beer]
+                print("MapViewController \(#line) The results are zero \(results.count) ")
             } catch {
                 self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
                 return
@@ -143,6 +151,36 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             // The map must be populated when the fetchRequest completes
             self.populateMapWithAnnotations()
         }
+    }
+    
+    
+    func appendAnnotations() {
+        
+    }
+    
+    func createAnnotations() {
+        let results = (self.beerFRC?.fetchedObjects)! as [Beer]
+        // Now that we have Beers with that style, what breweries are associated with these beers
+        // Reset array to hold breweries
+        self.mappableBreweries = [Brewery]()
+        print("MapView \(#line) were there any beers that matched style\n")
+        //print("MapView \(#line) \(results)")
+        let thisContext = coreDataStack?.mainContext
+        for beer in results {
+            let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
+            breweryRequest.sortDescriptors = []
+            breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
+            do {
+                let brewery = try (thisContext!.fetch(breweryRequest)) as [Brewery]
+                if !self.mappableBreweries.contains(brewery[0]) {
+                    self.mappableBreweries.append(brewery[0])
+                }
+            } catch {
+                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+                return
+            }
+        }
+        self.populateMapWithAnnotations()
     }
     
     // Tutoral Function to plot a circular path for the pointer
@@ -180,6 +218,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.requestLocation()
         }
+        frc.delegate = self
     }
     
     
@@ -190,6 +229,7 @@ class MapViewController : UIViewController, NSFetchedResultsControllerDelegate {
         let mapViewData = Mediator.sharedInstance().getMapData()
         
         // Map brewery or breweries by style
+        lastSelectedManagedObject = mapViewData
         if mapViewData is Style {
             print("MapView \(#line) this is a style")
             initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
@@ -463,6 +503,21 @@ extension MapViewController: CLLocationManagerDelegate {
         return
     }
     
+}
+
+
+extension MapViewController : NSFetchedResultsControllerDelegate {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("MapViewController \(#line) Detected new changes.")
+        // This should only be called when this is a style, because single breweries
+        // are immediately displayed
+        if lastSelectedManagedObject == Mediator.sharedInstance().getMapData() {
+            appendAnnotations()
+        } else { // new style replace.
+            createAnnotations()
+        }
+
+    }
 }
 
 
