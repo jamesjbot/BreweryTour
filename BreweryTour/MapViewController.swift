@@ -352,8 +352,10 @@ extension MapViewController : MKMapViewDelegate {
         pinView?.canShowCallout = true
         
         // Find the brewery in the proper context
+        let thisContext: NSManagedObjectContext = (coreDataStack?.mainContext)!
         let breweryObjectID : NSManagedObjectID! = findBreweryinMainContext(by: annotation)!
-        let foundBrewery = coreDataStack?.persistingContext.object(with: breweryObjectID!) as! Brewery
+        //fatalError("This may be the wrong context to look for the brewery in")
+        let foundBrewery = thisContext.object(with: breweryObjectID!) as! Brewery
         
         // Set the favorite icon on pin
         let localButton = UIButton(type: .contactAdd)
@@ -433,15 +435,16 @@ extension MapViewController : MKMapViewDelegate {
             
         // Favorite or unfavorite a brewery
         case view.leftCalloutAccessoryView!:
-            
+            print("MapViewController \(#line) Favorite toggle called ")
             guard (view.annotation?.title)! != "My Locations" else {
                 // Do not respond to taps on the user's location callout
                 return
             }
+            let favoritingContext = coreDataStack?.mainContext
             // Find the brewery object that belongs to this location
             let tempObjectID = findBreweryinMainContext(by: view.annotation!)
             // Fetch object from context
-            let favBrewery = coreDataStack?.persistingContext.object(with: tempObjectID!) as! Brewery
+            let favBrewery = favoritingContext?.object(with: tempObjectID!) as! Brewery
             // Flip favorite state in the database and in the ui
             print("favortie before: \(favBrewery.favorite)")
             favBrewery.favorite = !(favBrewery.favorite)
@@ -462,8 +465,9 @@ extension MapViewController : MKMapViewDelegate {
             // Save favorite status and update map
             DispatchQueue.main.async {
                 do {
-                    try self.coreDataStack?.persistingContext.save()
-                } catch let _ {
+                    try self.coreDataStack?.saveMainContext()
+                } catch let error {
+                    print("Error saving in context \(error)")
                     self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite brewery, \nplease try again")
                     return
                 }
