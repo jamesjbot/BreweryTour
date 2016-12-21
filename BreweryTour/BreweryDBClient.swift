@@ -789,7 +789,7 @@ class BreweryDBClient {
     // Creates beer objects in the mainContext.
     func createBeerObject(beer : [String:AnyObject],
                           brewery: Brewery? = nil,
-                          brewerID: String? = nil ) -> Beer {
+                          brewerID: String? = nil ) {
         func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer) {
             if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
                 let medium = images["medium"] as! String?  {
@@ -865,7 +865,7 @@ class BreweryDBClient {
         //_ = saveMain()
         saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
         print("BreweryDb \(#line) Returning the beer we created.")
-        return thisBeer
+        //return thisBeer
     }
     
     
