@@ -209,6 +209,7 @@ extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
         // TODO We're preloading breweries do I still need this notify
+        // Send message to observer regardless of situation. The observer decides if it should act.
         observer.sendNotify(from: self, withMsg: "reload data")
         print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
         print("BreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
