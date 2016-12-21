@@ -803,9 +803,12 @@ class BreweryDBClient {
                 }
             }
         }
+        var thisBeer : Beer!
+
         // Upgrade code
         let thisContext = coreDataStack?.backgroundContext
         // Non optional paramters: beerName, breweryID, id
+
         print("BreweryDB \(#line) Working to create Beer object in backgroundcontext)")
         let id : String? = beer["id"] as? String
         print("BreweryDB \(#line) beername: \(beer["name"])")
@@ -864,7 +867,6 @@ class BreweryDBClient {
         //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
         //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
         //_ = saveMain()
-        saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
         print("BreweryDb \(#line) Returning the beer we created.")
         
         completion(thisBeer)
