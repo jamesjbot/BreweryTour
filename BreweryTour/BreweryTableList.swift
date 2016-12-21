@@ -131,7 +131,6 @@ class BreweryTableList: NSObject, TableList, Subject {
             return []
         }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
-        //print("BreweryTableList \(#line)we updated the filtered contents to \(filteredObjects.count)")
         return filteredObjects
     }
     
