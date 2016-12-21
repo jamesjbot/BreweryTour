@@ -67,7 +67,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     private var explainedTable : Bool = false
     private var explainedSegmented : Bool = false
-    
+    private var styleSelection : IndexPath?
+    private var styleAtBrewerySelection : IndexPath?
+    private var allBreweriesSelection : IndexPath?
     
     @IBInspectable var fillColor: UIColor = UIColor.green
     
