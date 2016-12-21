@@ -262,7 +262,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         // Always reload the table data. Incase new breweries were pulled in
         styleTable.reloadData()
         // Change the Navigator name
-        navigationController?.navigationBar.topItem?.title = "Brewery Tour"
+        navigationController?.navigationBar.topItem?.title = "Select"
     }
     
     // Why is it taking me along time because the coordinates are changing when I apply them
@@ -283,7 +283,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // Changes the navigation bar to show user they can go back to categories screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        navigationController?.navigationBar.topItem?.title = "Style/Brewery"
+        navigationController?.navigationBar.topItem?.title = "Select"
     }
     
 //    func enumerateSubview(view: UIView, allowFull: UIView) {
