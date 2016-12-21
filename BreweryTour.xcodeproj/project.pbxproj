@@ -56,6 +56,7 @@
 		A7DDC3F71DCC24080077F34A /* BeersTabbaricon2.png in Resources */ = {isa = PBXBuildFile; fileRef = A7DDC3F61DCC24080077F34A /* BeersTabbaricon2.png */; };
 		A7DDC3F91DCC3A770077F34A /* BreweryDBClientConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DDC3F81DCC3A770077F34A /* BreweryDBClientConstants.swift */; };
 		A7E01CAD1DFEE0C300CA6FE9 /* DesignNotes in Resources */ = {isa = PBXBuildFile; fileRef = A7E01CAC1DFEE0C300CA6FE9 /* DesignNotes */; };
+		A7E932521E0A42F600E07F53 /* AllBreweriesTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E932511E0A42F500E07F53 /* AllBreweriesTableList.swift */; };
 		A7FF1A051DB0E2E200AD0BB3 /* heart_icon.svg in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A041DB0E2E200AD0BB3 /* heart_icon.svg */; };
 		A7FF1A071DB0E67E00AD0BB3 /* heart_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */; };
 		A7FF1A091DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */; };
@@ -135,6 +136,7 @@
 		A7DDC3F61DCC24080077F34A /* BeersTabbaricon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeersTabbaricon2.png; sourceTree = "<group>"; };
 		A7DDC3F81DCC3A770077F34A /* BreweryDBClientConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClientConstants.swift; sourceTree = "<group>"; };
 		A7E01CAC1DFEE0C300CA6FE9 /* DesignNotes */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = DesignNotes; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = "<none>"; };
+		A7E932511E0A42F500E07F53 /* AllBreweriesTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllBreweriesTableList.swift; sourceTree = "<group>"; };
 		A7FF1A041DB0E2E200AD0BB3 /* heart_icon.svg */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = heart_icon.svg; sourceTree = "<group>"; };
 		A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon.png; sourceTree = "<group>"; };
 		A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon_black_white_line_art.png; sourceTree = "<group>"; };
@@ -214,6 +216,7 @@
 				A74350671DB91454007AE08C /* NSManagedObjectDisplayable.swift */,
 				A74350611DB7B0F6007AE08C /* StylesTableList.swift */,
 				A74350631DB7D6D2007AE08C /* BreweryTableList.swift */,
+				A7E932511E0A42F500E07F53 /* AllBreweriesTableList.swift */,
 				A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */,
 				A709D3F01DAE459C00F11452 /* Beer+CoreDataClass.swift */,
 				A709D3F21DAE459C00F11452 /* Brewery+CoreDataClass.swift */,
@@ -527,6 +530,7 @@
 				A752344D1DAEA666008EF071 /* SelectedBeersViewController.swift in Sources */,
 				A77E0C031DF9ECBF0007E55F /* GlobalConstants.swift in Sources */,
 				A701E0481DEEACFC00CDBD2F /* CircleView.swift in Sources */,
+				A7E932521E0A42F600E07F53 /* AllBreweriesTableList.swift in Sources */,
 				A748FAD41DF6E960005637BD /* MyTabBarController.swift in Sources */,
 				A74350641DB7D6D2007AE08C /* BreweryTableList.swift in Sources */,
 				A752344F1DAEDB59008EF071 /* BeerDetailViewController.swift in Sources */,
