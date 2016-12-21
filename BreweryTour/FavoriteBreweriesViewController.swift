@@ -113,6 +113,8 @@ class FavoriteBreweriesViewController: UIViewController {
         }
         // Populate cell from the NSManagedObject instance
         cell.textLabel?.text = selectedObject.name!
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        cell.detailTextLabel?.text = ""
         if let data : NSData = (selectedObject.image) {
             let im = UIImage(data: data as Data)
             cell.imageView?.image = im
@@ -191,6 +193,7 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     
     // When we select a favorite brewery lets zoom to that brewery on the map
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("FavoriteBrewery \(#line) didSelectRowAt called. ")
         // Send the brewery to the mediator, then switch to the map tab
         Mediator.sharedInstance().selected(thisItem: frc.object(at: indexPath)) {
             (success, msg) -> Void in
