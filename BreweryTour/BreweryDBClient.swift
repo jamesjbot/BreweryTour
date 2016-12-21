@@ -938,10 +938,10 @@ class BreweryDBClient {
 //            }
             print("BreweryDB \(#line) Exiting Brewery non blocking\n\(breweryDict["name"])")
             completion(brewer)
+            saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
         }
         // This following line blocksandwait is being called in a block and wait so it
         // gets trapped.
-        saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
         // We are falling thru to this line because of the perfrom async
         // We should never get here
         //fatalError()
