@@ -206,6 +206,10 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(from: AnyObject, withMsg msg: String) {
+        //Do not process notify if we are not in visisble
+        guard (isViewLoaded && view.window != nil ) else {
+            return
+        }
         // This will update the contents of the table if needed
         print("CategoryViewController \(#line) Received msg:\(msg)\n from:\(from) ")
         // TODO We're going to need to upgrade this function to accomodate all message.
