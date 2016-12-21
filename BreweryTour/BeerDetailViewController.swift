@@ -47,10 +47,10 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         if isBeerFavorited! {
             image = UIImage(named: "heart_icon.png")
             sender.setImage(image, for: .normal)
-            saveToBeerInCoreData(makeFavorite: true)
+            saveToBeerInCoreDataToBackgroundContext(makeFavorite: true)
         } else {
             image = UIImage(named: "heart_icon_black_white_line_art.png")
-            saveToBeerInCoreData(makeFavorite: false)
+            saveToBeerInCoreDataToBackgroundContext(makeFavorite: false)
         }
         sender.setImage(image, for: .normal)
     }
@@ -74,7 +74,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         tasting.delegate = self
         
         // See if this has already been favorited, if so use the favorite information
-        if let BeerInThisCoreDataContext : Beer = searchForBeerInCoreData() {
+        if let BeerInThisCoreDataContext : Beer = searchForBeerInCoreData(context: (coreDataStack?.backgroundContext)!) {
             beer = BeerInThisCoreDataContext
         }
         
@@ -123,16 +123,15 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     }
     
     
-    private func searchForBeerInCoreData() -> Beer? {
+    private func searchForBeerInCoreData(context: NSManagedObjectContext) -> Beer? {
         // Check to make sure the Beer isn't already in the database
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
         do {
-            // TODO Remove 2nd persistingContext because I'm testing
-            let results = try coreDataStack?.persistingContext.fetch(request)
-            if (results?.count)! > 0 {
-                return results?[0]
+            let results = try context.fetch(request)
+            if (results.count) > 0 {
+                return results[0]
             }
         } catch {
             fatalError("Error adding a beer")
@@ -147,11 +146,12 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     
     // All beers are in the database we just mark their favorite status and tasting notes
-    private func saveToBeerInCoreData(makeFavorite: Bool) {
+    private func saveToBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
+        
         do {
             beer.favorite = makeFavorite
             beer.tastingNotes = tasting.text
-            try coreDataStack?.savePersistingContext()
+            try coreDataStack?.saveBackgroundContext()
         } catch {
             displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
         }
@@ -170,7 +170,7 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     // Every time the user finshes editing their tasting notes save the notes
     func textViewDidEndEditing(_ textView: UITextView) {
-        saveToBeerInCoreData(makeFavorite: beer.favorite)
+        saveToBeerInCoreDataToBackgroundContext(makeFavorite: beer.favorite)
     }
 }
 
