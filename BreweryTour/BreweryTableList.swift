@@ -30,10 +30,6 @@ class BreweryTableList: NSObject, TableList, Subject {
     
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     
-    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
-    
-    let backgroundContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.backgroundContext
-    
     override init(){
         super.init()
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
@@ -127,11 +123,6 @@ class BreweryTableList: NSObject, TableList, Subject {
         // the main context and so there are none.
         // Debugging code because breweries with a nil name are leaking thru
         // assert((frc.fetchedObjects?.count)! > 0)
-        //print("BreweryTableList \(#line)\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
-//        for i in frc.fetchedObjects! {
-//            //print("BreweryTableList \(#line)Filtering content Brewery name: \(i.name) \(i.id)")
-//            assert(i.name != nil)
-//        }
         // Only filter object if there are objects to filter.
         guard frc.fetchedObjects != nil else {
             return []
