@@ -852,7 +852,7 @@ class BreweryDBClient {
         //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
         //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
         print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
-        thisContext?.perform() {
+
             self.saveBackground()
 //            print("BreweryDB \(#line) In blocking for beer save ")
 //            do {
@@ -862,7 +862,6 @@ class BreweryDBClient {
 //                fatalError()
 //            }
             print("BreweryDb \(#line) Exiting non blocking for beersave\n")
-        }
         //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
         //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
         //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
