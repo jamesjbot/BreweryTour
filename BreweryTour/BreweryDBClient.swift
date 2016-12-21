@@ -755,8 +755,8 @@ class BreweryDBClient {
             
         case .BeersByBreweryID:
             // Since were ware querying by brewery ID we can be guaranteed that the brewery exists.
-            print("BreweryDB \(#line)Capturing Beers By Brewery")
-            
+            print("BreweryDB \(#line) Capturing Beers By BreweryID")
+            print("BreweryDB \(#line) Response: \(response) ")
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 // Failed to extract data
                 completion!(false, "There are no beers listed for this brewer.")
