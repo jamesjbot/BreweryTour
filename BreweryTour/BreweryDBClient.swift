@@ -562,12 +562,15 @@ class BreweryDBClient {
                                 completion!(false, "Error saving data")
                                 return
                             }
-                            let thisBeer = self.createBeerObject(beer: beer, brewery: dbBrewery)
+                            self.createBeerObject(beer: beer, brewery: dbBrewery) {
+                                (Beer) -> Void in
+                            }
                             //self.setBeerBrewerData(beer: thisBeer, breweryID: dbBrewery.id!, completion: completion!)
                         }
                     } else { // Brewery already in Coredata
                         print("BreweryDB \(#line) Brewery already  in Coredata: \(dbBrewery.name)")
-                        let thisBeer = self.createBeerObject(beer: beer, brewery: dbBrewery)
+                        self.createBeerObject(beer: beer, brewery: dbBrewery, completion: {
+                            (beer)-> Void in })
                     }
                 }
             } // end of beer loop
@@ -738,7 +741,9 @@ class BreweryDBClient {
                         }
                     }
                     
-                    let thisBeer = createBeerObject(beer: beer, brewery: newBrewery)
+                    createBeerObject(beer: beer,
+                                                    brewery: newBrewery,
+                                                    completion: { (beer) -> Void in})
                     // Future Improvement.
                     // Currently datamodel cannot accomodate multple brewery locations for a beer
                     break
@@ -772,7 +777,9 @@ class BreweryDBClient {
                 }
                 // Get the brewery based on objectID
                 let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: (coreDataStack?.backgroundContext)!)
-                let thisBeer = createBeerObject(beer: beer, brewery: dbBrewery)
+                createBeerObject(beer: beer,
+                                                brewery: dbBrewery,
+                                                completion: { (beer) -> Void in})
             }
             break
         }
@@ -782,8 +789,9 @@ class BreweryDBClient {
     // Creates beer objects in the mainContext.
     func createBeerObject(beer : [String:AnyObject],
                           brewery: Brewery? = nil,
-                          brewerID: String? = nil ) {
-        func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer) {
+                          brewerID: String? = nil,
+                          completion: @escaping (_ out : Beer) -> ()) {
+        func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
             if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
                 let medium = images["medium"] as! String?  {
                 beer.imageUrl = medium
@@ -858,7 +866,13 @@ class BreweryDBClient {
         //_ = saveMain()
         saveBeerImageIfPossible(beerDict: beer as AnyObject, beer: thisBeer)
         print("BreweryDb \(#line) Returning the beer we created.")
-        //return thisBeer
+        
+        completion(thisBeer)
+            //print(beer)
+            //print(thisBeer)
+        saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
+        }
+
     }
     
     
