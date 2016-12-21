@@ -36,6 +36,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     private let styleList : StylesTableList! = Mediator.sharedInstance().getStyleList()
     private let breweryList : BreweryTableList! = Mediator.sharedInstance().getBreweryList()
+    private let allBreweryList : AllBreweriesTableList = Mediator.sharedInstance().getAllBreweryList()
     
     private let med : Mediator = Mediator.sharedInstance()
     
@@ -186,6 +187,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             activeTableList = breweryList
             styleTable.reloadData()
+        case 2:
+            activeTableList = allBreweryList
+            styleTable.reloadData()
         default:
             break
         }
@@ -236,11 +240,15 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         super.viewDidLoad()
         // Here we start initializer for style and brewery querying
         activeTableList = styleList
-        styleList.mediator = med
-        breweryList.mediator = med
+        
+        // TODO are these lines needed I'm getting these from the mediator
+        //styleList.mediator = med
+        //breweryList.mediator = med
+        
         
         styleList.registerObserver(view: self)
         breweryList.registerObserver(view: self)
+        allBreweryList.registerObserver(view: self)
     }
     
     

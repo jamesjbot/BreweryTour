@@ -40,7 +40,7 @@ class BreweryTableList: NSObject, TableList, Subject {
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         request.fetchLimit = 10000
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: persistentContext!,
+                                         managedObjectContext: (coreDataStack?.mainContext!)!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         frc.delegate = self

@@ -20,6 +20,7 @@ class Mediator : NSManagedObjectDisplayable {
     private let styleList : StylesTableList = StylesTableList()
     private let breweryList : BreweryTableList = BreweryTableList()
     private let selectedBeersList : SelectedBeersTableList = SelectedBeersTableList()
+    private let allBreweryList : AllBreweriesTableList = AllBreweriesTableList()
     //private let mapModel : MapViewModel = MapViewModel()
     
     
@@ -37,6 +38,10 @@ class Mediator : NSManagedObjectDisplayable {
         return selectedBeersList
     }
     
+    internal func getAllBreweryList() -> AllBreweriesTableList {
+        return allBreweryList
+    }
+    
     internal func getMapData() -> NSManagedObject? {
         return passingItem
     }
@@ -51,10 +56,12 @@ class Mediator : NSManagedObjectDisplayable {
     // MARK: Functions
     
     // Singleton Implementation
+    // TODO this looks like a bad way to register the mediator.
     private init(){
         // Setup to receive message from the lists
         styleList.mediator = self
         breweryList.mediator = self
+        allBreweryList.mediator = self
     }
     
     internal class func sharedInstance() -> Mediator {
