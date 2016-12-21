@@ -560,7 +560,7 @@ class BreweryDBClient {
                         continue breweryLoop
                     }
                     // Check to make sure the brewery is not already in the database
-                    var dbBrewery : Brewery! = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
+                    var dbBrewery : Brewery! = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.backgroundContext)!)
                     if dbBrewery == nil { // Create a brewery object when none.
                         createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
                             (Brewery) -> Void in
@@ -660,7 +660,7 @@ class BreweryDBClient {
                 }
                 
                 // Don't repeat breweries in the database
-                var thisbrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
+                var thisbrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.backgroundContext)!)
                 guard thisbrewery == nil else {
                     rejectedBreweries += 1
                     continue
@@ -702,7 +702,7 @@ class BreweryDBClient {
                 print("BreweryDB \(#line)---------------------NextBeer---------------------")
                 // Creating beer
                 // Check to see if this beer is in the database already
-                var thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.persistingContext)!)
+                var thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.backgroundContext)!)
                 // If the beer is in the coredata skip adding it
                 guard thisBeer == nil else {
                     continue beerLoop
@@ -736,7 +736,7 @@ class BreweryDBClient {
                     
                     // Check to make sure the brewery is not already in the database
                     var newBrewery : Brewery!
-                    newBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.persistingContext)!)
+                    newBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.backgroundContext)!)
                     
                     if newBrewery == nil { // Create a brewery object
                         createBreweryObject(breweryDict: breweryDict,
@@ -765,20 +765,20 @@ class BreweryDBClient {
                 return
             }
             
-            print("BreweryDB \(#line)\(#line) why is this called twice. This many beers at this brewery: \(beerArray.count)")
+            print("BreweryDB \(#line) why is this called twice. This many beers at this brewery: \(beerArray.count)")
             
             for beer in beerArray {
                 print("BreweryDB \(#line)---------------------NextBeer---------------------")
                 // Create the coredata object for each beer
                 // Test to see if beer is already in context
                 let id : String? = beer["id"] as? String
-                let dbBeer = getBeerByID(id: id!, context: (coreDataStack?.persistingContext)!)
+                let dbBeer = getBeerByID(id: id!, context: (coreDataStack?.backgroundContext)!)
                 guard dbBeer == nil else {
                     print("BreweryDB \(#line)Encountered a beer of this type already skipping creation")
                     continue
                 }
                 // Get the brewery based on objectID
-                let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: (coreDataStack?.persistingContext)!)
+                let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: (coreDataStack?.backgroundContext)!)
                 let thisBeer = createBeerObject(beer: beer, brewery: dbBrewery)
             }
             break
@@ -787,7 +787,9 @@ class BreweryDBClient {
 
     
     // Creates beer objects in the mainContext.
-    func createBeerObject(beer : [String:AnyObject], brewery: Brewery? = nil, brewerID: String? = nil ) -> Beer {
+    func createBeerObject(beer : [String:AnyObject],
+                          brewery: Brewery? = nil,
+                          brewerID: String? = nil ) -> Beer {
         func saveBeerImageIfPossible(beerDict: AnyObject , beer: Beer) {
             if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
                 let medium = images["medium"] as! String?  {
@@ -803,7 +805,7 @@ class BreweryDBClient {
         // Upgrade code
         let thisContext = coreDataStack?.backgroundContext
         // Non optional paramters: beerName, breweryID, id
-        print("BreweryDB \(#line) Working to create Beer object in \(thisContext?.name)")
+        print("BreweryDB \(#line) Working to create Beer object in backgroundcontext)")
         let id : String? = beer["id"] as? String
         print("BreweryDB \(#line) beername: \(beer["name"])")
         let name : String? = beer["name"] as? String ?? ""
@@ -845,7 +847,7 @@ class BreweryDBClient {
         //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
         //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
         //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-        print("\nBrewerydb \(#line) next line will non block for beer save \(thisContext)")
+        print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
         thisContext?.perform() {
             self.saveBackground()
 //            print("BreweryDB \(#line) In blocking for beer save ")
@@ -1060,7 +1062,7 @@ class BreweryDBClient {
                     return
                 }
                 // Upgraded code change to thisContext, and remove the perfromandwait?
-                print("\nBreweryDB \(#line) preceeding to block brewery image update in \(thisContext)")
+                print("\nBreweryDB \(#line) preceeding to block brewery image update in backgroundcontext")
                 thisContext.perform(){
                     print("BreweryDB \(#line) blocking on brewery image update ")
                     let breweryForUpdate = thisContext.object(with: updateManagedObjectID) as! Brewery
