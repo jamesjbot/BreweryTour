@@ -826,7 +826,8 @@ class BreweryDBClient {
         // change coreDataStack?.mainContext!)! to thisContext
         // Within the maincontext the brewery must have already been created.
         //
-        let thisBeer = Beer(id: id!, name: name!,
+        thisContext?.perform() {
+        thisBeer = Beer(id: id!, name: name!,
                             beerDescription: description!,
                             availability: available!,
                             context: thisContext!)
