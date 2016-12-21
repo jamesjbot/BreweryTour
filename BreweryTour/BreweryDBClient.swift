@@ -759,7 +759,7 @@ class BreweryDBClient {
             
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 // Failed to extract data
-                completion!(false, "Failed Request \(#line) \(#function)")
+                completion!(false, "There are no beers listed for this brewer.")
                 return
             }
             
