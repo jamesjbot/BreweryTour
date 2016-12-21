@@ -341,8 +341,6 @@ extension CategoryViewController : UITableViewDelegate {
                                             self.performSegue(withIdentifier: "Go", sender: nil)
                                         }
                                     }
-
-                                    
         }
     }
 }
