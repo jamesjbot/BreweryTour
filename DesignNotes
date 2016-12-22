@@ -1,29 +1,49 @@
-Main Context Observers
-SelectedBeersTableList frc observers the mainContext
-
 Persistent Context Observers
-BreweryTable
-CategoryView
-FavoriteBeers
-FavoriteBreweries
-MapView
-StylesTable
+StylesTableList
 
+Persitent Context Fetchers
+BeerDetailViewController gets style name from Persistent Context
+BreweryDBClient Checks Styles in the Persistent Context prior to adding new style in the MainContext
+BreweryDBClient gets style names from Persistent context in getStyleName(byID)
+
+Main Context Observers
+SelectedBeersTableList frc observer the mainContext
+BreweryTableList frc observes the mainContext
+AllBreweriesTableList frc observes the mainContext
+MapViewController initial frc for styles is in mainContext
+MapViewController find brewery is in mainContext
+MapViewController find favoritebrewery in mainContext
+FavoriteBeersViewcontroller reads mainContext
+
+Background Context Observers
+There should be none as this is used for scratch updating
+BeerDetailViewController searchForBeerInCoreData uses background context.
+BreweryDBClient getBeerByID use supplied context looks like background only
+BreweryDBClient getBreweryByID use supplied context looks like background only
+
+----------------------------
 Persitent Context Updaters
-FavoritingBrewery Function
-Beerdetail favorting and tasting note
-(Deletable) Eventually Brewery parsing will save in persistent
-downloadImageToCoreDataForBrewery
 
 Main Context Updaters
-Styles creation
-createBeerObject
-downloadImagetoCoreData
+BrewryDBClient Styles creation
+MapViewController save favoriteBrewery in mainContext
+FavoriteBeersViewController Deleting function is in mainContext is really just unfavoriting
+FavoriteBreweriesViewController Deleting function is in mainContextreally just unfavoriting
+
 
 Background Context Updates
-createBreweryObject
+BreweryDBClient createBreweryObject
+BreweryDBClient createBeerObject
+BreweryDBClient downloadImageToCoreDataForBrewery
+BreweryDBClient downloadBeerImagetoCoreData
+BreweryDBClient saveBackround
+BeerDetailViewController favorting and tasting note
 
 
+
+
+
+(Deletable) Eventually Brewery parsing will save in persistent
 NO CONTEXT
 (Has no context adopts its calling function)settingBeerBrewerData
 (Delegate to downloadImageToCoreData)saveBeerImage
