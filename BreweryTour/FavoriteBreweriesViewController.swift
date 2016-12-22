@@ -173,20 +173,20 @@ extension FavoriteBreweriesViewController: UITableViewDataSource {
 extension FavoriteBreweriesViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        
+        // TODO This is in the main context now and I'm saving in the persistent context this could be wrong
+        // Change this to be saving maincontext
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
             let object = self.frc.object(at: indexPath) as Brewery
             object.favorite = false
             do {
-                try self.coreDataStack?.persistingContext.save()
+                try self.coreDataStack?.saveMainContext()
             } catch {
                 self.displayAlertWindow(title: "Error Removing", msg: "Error removing item\nplease try again")
             }
             tableView.reloadData()
         }
         deleteAction.backgroundColor = UIColor.green
-        
         return [deleteAction]
     }
     
