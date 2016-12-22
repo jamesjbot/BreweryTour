@@ -12,11 +12,11 @@
 import UIKit
 import CoreData
 
-class BeerDetailViewController: UIViewController, UITextViewDelegate{
+class BeerDetailViewController: UIViewController {
     
     // MARK: IBOutlets
     
-    @IBOutlet weak var tasting: UITextView!
+    @IBOutlet weak fileprivate var tasting: UITextView!
     
     @IBOutlet weak var breweryName: UILabel!
     
@@ -105,6 +105,9 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         organicLabel.text = "Organic: " + (beer.isOrganic == true ? "Yes" : "No")
         abv.text = "ABV: " + (beer.abv ?? "")
         ibu.text = "IBU: " + (beer.ibu ?? "")
+        
+        // Raise keyboard when typing in UITextView
+        subscribeToKeyboardShowNotifications()
     }
 
     
@@ -146,17 +149,22 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
     
     
     // All beers are in the database we just mark their favorite status and tasting notes
-    private func saveToBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
+    fileprivate func saveToBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
         
         do {
             beer.favorite = makeFavorite
             beer.tastingNotes = tasting.text
             try coreDataStack?.saveBackgroundContext()
-        } catch {
+        } catch let error{
+            print("Error saving \(error)")
             displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
         }
     }
     
+}
+
+extension BeerDetailViewController : UITextViewDelegate {
+
     
     // This clears the textView when the user begins editting the text view
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
@@ -166,12 +174,23 @@ class BeerDetailViewController: UIViewController, UITextViewDelegate{
         }
         return true
     }
-    
+
     
     // Every time the user finshes editing their tasting notes save the notes
     func textViewDidEndEditing(_ textView: UITextView) {
         saveToBeerInCoreDataToBackgroundContext(makeFavorite: beer.favorite)
     }
+
+    
+    func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        if text == "\n" {
+            textView.resignFirstResponder()
+            return false
+        } else {
+            return true
+        }
+    }
+
 }
 
 
