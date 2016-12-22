@@ -45,52 +45,323 @@ class BreweryDBClient {
     }
     
     
-    
     // MARK: Functions
     
-    // Downloads Beer Styles
-    internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void ) {
-        let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject]
-        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.Styles,
-                                                        querySpecificID: nil,
-                                                        parameters: methodParameter)
-        Alamofire.request(outputURL.absoluteString!).responseJSON(){
-            response in
-            // Note: Styles Request does not return number of results.
-            guard response.result.isSuccess else {
-                completionHandler(false,"Failed Request \(#line) \(#function)")
-                return
+    // Creates beer objects in the mainContext.
+    private func createBeerObject(beer : [String:AnyObject],
+                                  brewery: Brewery? = nil,
+                                  brewerID: String? = nil,
+                                  completion: @escaping (_ out : Beer) -> ()) {
+        func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
+            if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
+                let medium = images["medium"] as! String?  {
+                beer.imageUrl = medium
+                let queue = DispatchQueue(label: "Images")
+                print("BreweryDB \(#line) Prior to getting Beer image")
+                queue.async(qos: .utility) {
+                    print("BreweryDB \(#line) In queue Async Getting Beer image in background")
+                    self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
+                }
             }
-            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completionHandler(false, "Failed Request \(#line) \(#function)")
-                return
-            }
-
-            // All the beer styles currently fit on one page.
-            self.parse(response: responseJSON as NSDictionary,
-                       querySpecificID:  nil,
-                       outputType: APIQueryOutputTypes.Styles,
-                       completion: completionHandler)
-            return
         }
+        var thisBeer : Beer!
+        
+        // Upgrade code
+        let thisContext = coreDataStack?.backgroundContext
+        // Non optional paramters: beerName, breweryID, id
+        
+        print("BreweryDB \(#line) Working to create Beer object in backgroundcontext)")
+        let id : String? = beer["id"] as? String
+        print("BreweryDB \(#line) beername: \(beer["name"])")
+        let name : String? = beer["name"] as? String ?? ""
+        let description : String? = (beer["description"] as? String) ?? ""
+        var available : String? = nil
+        let beerabv : String? = beer["abv"] as? String
+        let beeribu : String? = beer["ibu"] as? String
+        if let interimAvail = beer["available"] {
+            available = interimAvail["description"] as? String ?? "No Information Provided"
+        } else {
+            available = "No Information Provided"
+        }
+        // Upgraded code
+        // change coreDataStack?.mainContext!)! to thisContext
+        // Within the maincontext the brewery must have already been created.
+        //
+        thisContext?.perform() {
+            thisBeer = Beer(id: id!, name: name!,
+                            beerDescription: description!,
+                            availability: available!,
+                            context: thisContext!)
+            // TODO Bug accomodate nil brewery, when selecting brewery
+            assert(brewery != nil || brewerID != nil)
+            // I must use one of these
+            
+            thisBeer.brewer = thisContext?.object(with: (brewery?.objectID)!) as! Brewery?
+            
+            thisBeer.breweryID = thisBeer.brewer?.id
+            
+            //print("BreweryDB \(#line) Is Beer Organic:\(beer["isOrganic"]!)")
+            thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
+            //print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
+            if beer["styleId"] != nil {
+                thisBeer.styleID = (beer["styleId"] as! NSNumber).description
+            }
+            thisBeer.abv = beerabv ?? "Information N/A"
+            thisBeer.ibu = beeribu ?? "Information N/A"
+            // Saving this beer from Main to PersistentContext
+            // Begin Upgraded Code
+            //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
+            //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
+            //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
+            print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
+            
+            self.saveBackground()
+            //            print("BreweryDB \(#line) In blocking for beer save ")
+            //            do {
+            //                try thisContext?.save()
+            //                print("BreweryDB \(#line) Beer created and saved in this context \(thisContext) ")
+            //            } catch {
+            //                fatalError()
+            //            }
+            print("BreweryDb \(#line) Exiting non blocking for beersave\n")
+            //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
+            //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
+            //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
+            //_ = saveMain()
+            print("BreweryDb \(#line) Returning the beer we created.")
+            
+            completion(thisBeer)
+            //print(beer)
+            //print(thisBeer)
+            saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
+        }
+        
     }
     
-    // Debugging function to list the number of results for a style.
-    internal func downloadStylesCount(styleID : String,
-                                      completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-        let methodParameters  = [
+    
+    // TODO Phase 1 introduce completion handler
+    // The breweries are created sent back but they are not showing up in the table.
+    // Phase 2 call in backgroundContext
+    // This will save background, main and persistent context
+    private func createBreweryObject(breweryDict: [String:AnyObject],
+                                     locationDict locDict:[String:AnyObject],
+                                     completion: @escaping (_ out : Brewery) -> () ) {
+        func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
+            if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
+                let imageURL : String = imagesDict["icon"] as! String?,
+                let targetBrewery = inputBrewery {
+                let queue = DispatchQueue(label: "Images")
+                print("BreweryDB \(#line) Prior to getting Brewery image")
+                queue.async(qos: .utility) {
+                    print("BreweryDB \(#line) Getting Brewery image in background")
+                    self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
+                }
+            }
+        }
+        // Remember to change all the references to this context below
+        // There are two more entries on the last parameter
+        // And in the do catch block
+        var brewer : Brewery!
+        print("\nBreweryDb \(#line) Brewery non Blocking for create brewery in backgroundContext\n\(breweryDict["name"])")
+        // Why did I make this perform instead of performandWait
+        // Changed back to performAndWait because map was boing populated with nothing
+        // because this function returned before creating breweries
+        // I may have used perform because it stalls the UI but this is in background context why would it stall the ui.
+        /*
+         I use perform because i get deadlocked with performandwait,
+         The solution is to use perform and allow MapViewController to dynamically watch for changes to the beers..
+         I use performAndWait because completion get called before breweries are created.
+         */
+        coreDataStack?.backgroundContext.perform {
+            brewer = Brewery(inName: breweryDict["name"] as! String,
+                             latitude: locDict["latitude"]?.description,
+                             longitude: locDict["longitude"]?.description,
+                             url: locDict["website"] as! String?,
+                             open: (locDict["openToPublic"] as! String == "Y") ? true : false,
+                             id: locDict["id"]?.description,
+                             context: (self.coreDataStack?.backgroundContext)!)
+            self.saveBackground()
+            //            do {
+            //                print("BreweryDB \(#line) Commiting from createBreweryObject into BackgroundContext")
+            //                try self.coreDataStack?.saveBackgroundContext()
+            //                print("BreweryDB \(#line) Committed from createBreweryObject into BackgroundContext")
+            //                // Begin Upgradedcode
+            //                //try self.coreDataStack?.saveMainContext()
+            //                //try self.coreDataStack?.savePersistingContext()
+            //                // End UpgradedCode
+            //                //try self.coreDataStack?.saveMainContext()
+            //                //try self.coreDataStack?.savePersistingContext()
+            //                print("BreweryDB \(#line) Save Brewery save in background context moving Brewery into Main Context, Who is oberserving the maincontext? Last time it was SelectedBeersTableList. BreweryTable is looking at PersistentContext so I don't think it will see this.")
+            //                self.d_timestopass += 1
+            //                print("BreweryDB \(#line) \(self.d_timestopass) Sending back the brewery object we created, to the parse function.")
+            //                print("BreweryDb \(#line) You are in the a background context ")
+            //            } catch {
+            //            }
+            print("BreweryDB \(#line) Exiting Brewery non blocking\n\(breweryDict["name"])")
+            completion(brewer)
+            saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
+        }
+        // This following line blocksandwait is being called in a block and wait so it
+        // gets trapped.
+        // We are falling thru to this line because of the perfrom async
+        // We should never get here
+        //fatalError()
+        //return nil
+    }
+    
+    
+    private func createURLFromParameters(queryType: APIQueryOutputTypes,
+                                         querySpecificID: String?,
+                                         parameters: [String:AnyObject]) -> NSURL {
+        // The url currently takes the form of
+        // "http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
+        
+        let components = NSURLComponents()
+        components.scheme = Constants.BreweryDB.APIScheme
+        components.host = Constants.BreweryDB.APIHost
+        
+        switch queryType {
+        case .BeersByName:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
+            break
+        case .BeersByStyleID:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
+            break
+        case .Styles:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Styles
+            break
+        case .Breweries:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Breweries
+            break
+        case .BeersByBreweryID:
+            // GET: /brewery/:breweryId/beers
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery + "/" +
+                querySpecificID! + "/" + Constants.BreweryDB.Methods.Beers
+        }
+        
+        components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
+        
+        // Build the other parameters
+        for (key, value) in parameters {
+            //print("BreweryDB \(#line)key,value")
+            let queryItem = NSURLQueryItem(name: key, value: "\(value)")
+            components.queryItems?.append(queryItem as URLQueryItem)
+        }
+        
+        // Finally Add the API Key - QueryItem
+        let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
+        components.queryItems?.append(queryItem)
+        
+        print("BreweryDB \(#line) \(components.url!)")
+        return components.url! as NSURL
+    }
+    
+    
+    // Query for all breweries
+    // TODO not completing
+    internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+        let theOutputType = APIQueryOutputTypes.Breweries
+        var methodParameters  = [
+            Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+            Constants.BreweryParameterKeys.Page : "1" as AnyObject
+        ]
+        let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
+                                                        querySpecificID: nil,
+                                                        parameters: methodParameters)
+        Alamofire.request(outputURL.absoluteString!)
+            .responseJSON {
+                response in
+                guard response.result.isSuccess else {
+                    completion(false, "Failed Request \(#line) \(#function)")
+                    return
+                }
+                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                    completion(false, "Failed Request \(#line) \(#function)")
+                    return
+                }
+                
+                guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
+                    completion(false, "No results")
+                    return
+                }
+                
+                // Process subsequent records
+                self.parse(response: responseJSON as NSDictionary,
+                           querySpecificID:  nil,
+                           outputType: theOutputType,
+                           completion: completion)
+                // The following block of code downloads all subsequesnt pages
+                guard numberOfPages > 1 else {
+                    completion(true, "All Pages Processed downloadAllBreweries")
+                    return
+                }
+                
+                print("BreweryDB \(#line)Total pages \(numberOfPages)")
+                
+                // Asynchronous page processing
+                let queue : DispatchQueue = DispatchQueue.global()
+                let group : DispatchGroup = DispatchGroup()
+                
+                print("BreweryDB \(#line)Total pages \(numberOfPages)")
+                for i in 2...numberOfPages {
+                    //TODO for i in 2...numberOfPages {
+                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
+                    let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
+                                                                         querySpecificID: nil,
+                                                                         parameters: methodParameters)
+                    group.enter()
+                    queue.async(group: group) {
+                        Alamofire.request(outputURL.absoluteString!)
+                            .responseJSON {
+                                response in
+                                guard response.result.isSuccess else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    return
+                                }
+                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    return
+                                }
+                                self.parse(response: responseJSON as NSDictionary,
+                                           querySpecificID:  nil,
+                                           outputType: theOutputType,
+                                           completion: completion,
+                                           group: group)
+                                print("BreweryDB \(#line)page# \(i)")
+                                print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.updatedObjects.count)")
+                                print("BreweryDB \(#line)Prior to saving hasChanges: \(self.coreDataStack?.mainContext.hasChanges)")
+                                print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
+                                print("BreweryDB \(#line)After saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
+                                group.leave()
+                        }
+                    }
+                }
+                group.notify(queue: queue) {
+                    completion(true, "All Pages Processed downloadAllBreweries")
+                }
+        }
+        return
+    }
+    
+    
+    // Query for breweries that offer a certain style.
+    internal func downloadBeersAndBreweriesBy(styleID : String, isOrganic : Bool ,
+                                              completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+        var methodParameters  = [
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+            Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,
             Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
             Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
             Constants.BreweryParameterKeys.Page : "1" as AnyObject
         ]
-        let outputURL : NSURL =
-            createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
-                                    querySpecificID: nil,
-                                    parameters: methodParameters)
+        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                                                        querySpecificID: nil,
+                                                        parameters: methodParameters)
         
         // Initial Alamofire Request to determine Results and Pages of Results we have to process
         var numberOfPages: Int!
+        
         Alamofire.request(outputURL.absoluteString!).responseJSON {
             response in
             guard response.result.isSuccess else {
@@ -113,8 +384,45 @@ class BreweryDBClient {
             print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
             
             print("BreweryDB \(#line) Total pages \(numberOfPages)")
-            completion(true, "\(numberOfResults)")
+            
+            // Asynchronous page processing
+            let queue : DispatchQueue = DispatchQueue.global()
+            let group : DispatchGroup = DispatchGroup()
+            
+            for p in 1...numberOfPages {
+                methodParameters[Constants.BreweryParameterKeys.Page] = p as AnyObject
+                let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                                                                     querySpecificID: nil,
+                                                                     parameters: methodParameters)
+                group.enter()
+                queue.async(group: group) {
+                    Alamofire.request(outputURL.absoluteString!)
+                        .responseJSON {
+                            response in
+                            guard response.result.isSuccess else {
+                                completion(false, "Failed Request \(#line) \(#function)")
+                                return
+                            }
+                            guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                                completion(false, "Failed Request \(#line) \(#function)")
+                                return
+                            }
+                            
+                            self.parse(response: responseJSON as NSDictionary,
+                                       querySpecificID:  styleID,
+                                       outputType: APIQueryOutputTypes.BeersByStyleID,
+                                       completion: completion,
+                                       group: group)
+                            print("BreweryDB \(#line) launched parsing on page# \(p)")
+                    } //Outside alamo but inside async
+                } //Outside queue.async
+            }  // Outside for loop
+            
+            group.notify(queue: queue) {
+                completion(true, "All Pages Processed DownloadBeerAndBreweriesByStyleID")
+            }
         }
+        return
     }
     
     
@@ -242,174 +550,82 @@ class BreweryDBClient {
                 }
         }
     }
+
     
-    
-    // Query for breweries that offer a certain style.
-    internal func downloadBeersAndBreweriesBy(styleID : String, isOrganic : Bool ,
-                                              completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-        var methodParameters  = [
-            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
-            Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,
-            Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
-            Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
-            Constants.BreweryParameterKeys.Page : "1" as AnyObject
-        ]
-        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
-                                                        querySpecificID: nil,
-                                                        parameters: methodParameters)
-        
-        // Initial Alamofire Request to determine Results and Pages of Results we have to process
-        var numberOfPages: Int!
-        
-        Alamofire.request(outputURL.absoluteString!).responseJSON {
-            response in
-            guard response.result.isSuccess else {
-                completion(false, "Failed Request \(#line) \(#function)")
-                return
-            }
-            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completion(false, "Failed Request \(#line) \(#function)")
-                return
-            }
-            guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
-                completion(false, "No results")
-                return
-            }
-            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
-                completion(false, "No results")
-                return
-            }
-            numberOfPages = numberOfPagesInt
-            print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
-            
-            print("BreweryDB \(#line) Total pages \(numberOfPages)")
-            
-            // Asynchronous page processing
-            let queue : DispatchQueue = DispatchQueue.global()
-            let group : DispatchGroup = DispatchGroup()
-            
-            for p in 1...numberOfPages {
-                methodParameters[Constants.BreweryParameterKeys.Page] = p as AnyObject
-                let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
-                                                                     querySpecificID: nil,
-                                                                     parameters: methodParameters)
-                group.enter()
-                queue.async(group: group) {
-                    Alamofire.request(outputURL.absoluteString!)
-                        .responseJSON {
-                            response in
-                            guard response.result.isSuccess else {
-                                completion(false, "Failed Request \(#line) \(#function)")
-                                return
-                            }
-                            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                completion(false, "Failed Request \(#line) \(#function)")
-                                return
-                            }
-                            
-                            self.parse(response: responseJSON as NSDictionary,
-                                       querySpecificID:  styleID,
-                                       outputType: APIQueryOutputTypes.BeersByStyleID,
-                                       completion: completion,
-                                       group: group)
-                            print("BreweryDB \(#line) launched parsing on page# \(p)")
-                    } //Outside alamo but inside async
-                } //Outside queue.async
-            }  // Outside for loop
-            
-            group.notify(queue: queue) {
-                completion(true, "All Pages Processed DownloadBeerAndBreweriesByStyleID")
+    // Download images in the background then update Coredata when complete
+    // Beer images are currently being grabbed and saved in the main context
+    // This help with updateing selected beers screen I guess.
+    internal func downloadBeerImageToCoreData( aturl: NSURL,
+                                               forBeer: Beer,
+                                               updateManagedObjectID: NSManagedObjectID) {
+        // Begin Upgraded code
+        //print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
+        // TODO Breaking BreweryList and MapView Style selection, MapView Brewery selection will be unharmed.
+        // End Upgraded code
+        print("BreweryDB \(#line) Async DownloadBeerImage in background context:\(forBeer.beerName!)")
+        let session = URLSession.shared
+        let task = session.dataTask(with: aturl as URL){
+            (data, response, error) -> Void in
+            print("BreweryDB \(#line) Returned from Async DownloadBeerImage:\(forBeer.beerName!)")
+            if error == nil {
+                if data == nil {
+                    return
+                }
+                // Upgraded code
+                let thisContext = self.coreDataStack?.backgroundContext
+                //print("\nBrewerydb \(#line) Preceding to Blocking for beerImage update in \(thisContext)")
+                thisContext?.perform(){
+                    print("Brewerydb \(#line) Blocking on beerimage update ")
+                    //self.coreDataStack!.mainContext.performAndWait(){
+                    // Upgraded code
+                    let beerForUpdate = thisContext?.object(with: updateManagedObjectID) as! Beer
+                    //let beerForUpdate = self.coreDataStack?.mainContext.object(with: updateManagedObjectID) as! Beer
+                    let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
+                    beerForUpdate.image = outputData
+                    self.saveBackground()
+                    //                    do {
+                    //                        // Upgraded code
+                    //                        try thisContext?.save()
+                    //                        //try self.coreDataStack?.mainContext.save()
+                    //                        print("BreweryDB \(#line) Beer Imaged saved in \(thisContext) for beer \(forBeer.beerName)")
+                    //                    }
+                    //                    catch {
+                    //                        return
+                    //                    }
+                    print("BreweryDb \(#line) Completed blocking on beer image update\n")
+                }
             }
         }
-        return
+        task.resume()
     }
     
     
-    // Query for all breweries
-    // TODO not completing
-    internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-        let theOutputType = APIQueryOutputTypes.Breweries
-        var methodParameters  = [
-            Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
-            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
-            Constants.BreweryParameterKeys.Page : "1" as AnyObject
-        ]
-        let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
+    
+    // Downloads Beer Styles
+    internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void ) {
+        let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject]
+        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.Styles,
                                                         querySpecificID: nil,
-                                                        parameters: methodParameters)
-        Alamofire.request(outputURL.absoluteString!)
-            .responseJSON {
-                response in
-                guard response.result.isSuccess else {
-                    completion(false, "Failed Request \(#line) \(#function)")
-                    return
-                }
-                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request \(#line) \(#function)")
-                    return
-                }
-                
-                guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
-                    completion(false, "No results")
-                    return
-                }
-                
-                // Process subsequent records
-                self.parse(response: responseJSON as NSDictionary,
-                           querySpecificID:  nil,
-                           outputType: theOutputType,
-                           completion: completion)
-                // The following block of code downloads all subsequesnt pages
-                guard numberOfPages > 1 else {
-                    completion(true, "All Pages Processed downloadAllBreweries")
-                    return
-                }
-                
-                print("BreweryDB \(#line)Total pages \(numberOfPages)")
-                
-                // Asynchronous page processing
-                let queue : DispatchQueue = DispatchQueue.global()
-                let group : DispatchGroup = DispatchGroup()
-                
-                print("BreweryDB \(#line)Total pages \(numberOfPages)")
-                for i in 2...numberOfPages {
-                    //TODO for i in 2...numberOfPages {
-                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
-                    let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
-                                                                         querySpecificID: nil,
-                                                                         parameters: methodParameters)
-                    group.enter()
-                    queue.async(group: group) {
-                        Alamofire.request(outputURL.absoluteString!)
-                            .responseJSON {
-                                response in
-                                guard response.result.isSuccess else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
-                                    return
-                                }
-                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
-                                    return
-                                }
-                                self.parse(response: responseJSON as NSDictionary,
-                                           querySpecificID:  nil,
-                                           outputType: theOutputType,
-                                           completion: completion,
-                                           group: group)
-                                print("BreweryDB \(#line)page# \(i)")
-                                print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.updatedObjects.count)")
-                                print("BreweryDB \(#line)Prior to saving hasChanges: \(self.coreDataStack?.mainContext.hasChanges)")
-                                print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
-                                print("BreweryDB \(#line)After saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
-                                group.leave()
-                        }
-                    }
-                }
-                group.notify(queue: queue) {
-                    completion(true, "All Pages Processed downloadAllBreweries")
-                }
+                                                        parameters: methodParameter)
+        Alamofire.request(outputURL.absoluteString!).responseJSON(){
+            response in
+            // Note: Styles Request does not return number of results.
+            guard response.result.isSuccess else {
+                completionHandler(false,"Failed Request \(#line) \(#function)")
+                return
+            }
+            guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                completionHandler(false, "Failed Request \(#line) \(#function)")
+                return
+            }
+
+            // All the beer styles currently fit on one page.
+            self.parse(response: responseJSON as NSDictionary,
+                       querySpecificID:  nil,
+                       outputType: APIQueryOutputTypes.Styles,
+                       completion: completionHandler)
+            return
         }
-        return
     }
     
     
@@ -442,12 +658,12 @@ class BreweryDBClient {
                     return
                 }
                 
-//                guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
-//                    completion(false, "No results")
-//                    return
-//                }
-//                
-//                print("BreweryDB \(#line)We have this many results for that query \(numberOfResults)")
+                //                guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+                //                    completion(false, "No results")
+                //                    return
+                //                }
+                //
+                //                print("BreweryDB \(#line)We have this many results for that query \(numberOfResults)")
                 
                 // Process subsequent records
                 self.parse(response: responseJSON as NSDictionary,
@@ -506,6 +722,127 @@ class BreweryDBClient {
     }
     
     
+    // Download images in the background for a brewery
+    internal func downloadImageToCoreDataForBrewery( aturl: NSURL,
+                                                     forBrewery: Brewery,
+                                                     updateManagedObjectID: NSManagedObjectID) {
+        // Upgraded code.
+        let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
+        print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext \(forBrewery.name)")
+        
+        let session = URLSession.shared
+        let task = session.dataTask(with: aturl as URL){
+            (data, response, error) -> Void in
+            print("BreweryDB \(#line) Returned from Async DownloadBreweryImage ")
+            if error == nil {
+                if data == nil {
+                    return
+                }
+                // Upgraded code change to thisContext, and remove the perfromandwait?
+                print("\nBreweryDB \(#line) preceeding to block brewery image update in backgroundcontext")
+                thisContext.perform(){
+                    print("BreweryDB \(#line) blocking on brewery image update ")
+                    let breweryForUpdate = thisContext.object(with: updateManagedObjectID) as! Brewery
+                    let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
+                    breweryForUpdate.image = outputData
+                    // Upgraded code change this to thisContext.
+                    self.saveBackground()
+                    //                    do {
+                    //                        try thisContext.save()
+                    //                        print("BreweryDB \(#line) Attention Brewery Imaged saved in \(thisContext.name) for brewery \(forBrewery.name)")
+                    //                    }
+                    //                    catch let error {
+                    //                        fatalError("Error \(error)")
+                    //                    }
+                    print("BreweryDB \(#line) Complete blocking on brewery image update\n ")
+                }
+            }
+        }
+        task.resume()
+    }
+    
+    
+    // Debugging function to list the number of results for a style.
+    internal func downloadStylesCount(styleID : String,
+                                      completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+        let methodParameters  = [
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+            Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
+            Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
+            Constants.BreweryParameterKeys.Page : "1" as AnyObject
+        ]
+        let outputURL : NSURL =
+            createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                                    querySpecificID: nil,
+                                    parameters: methodParameters)
+        
+        // Initial Alamofire Request to determine Results and Pages of Results we have to process
+        var numberOfPages: Int!
+        Alamofire.request(outputURL.absoluteString!).responseJSON {
+            response in
+            guard response.result.isSuccess else {
+                completion(false, "Failed Request \(#line) \(#function)")
+                return
+            }
+            guard let responseJSON = response.result.value as? [String:AnyObject] else {
+                completion(false, "Failed Request \(#line) \(#function)")
+                return
+            }
+            guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
+                completion(false, "No results")
+                return
+            }
+            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+                completion(false, "No results")
+                return
+            }
+            numberOfPages = numberOfPagesInt
+            print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
+            
+            print("BreweryDB \(#line) Total pages \(numberOfPages)")
+            completion(true, "\(numberOfResults)")
+        }
+    }
+    
+    
+    private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
+        //print("BreweryDB \(#line)Attempting to get beer \(id)")
+        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
+        
+        do {
+            if let beer : [Beer] = try context.fetch(request) {
+                //This type is in the database
+                guard beer.count > 0 else {
+                    return nil}
+                return beer[0]
+            }
+        } catch {
+            return nil
+        }
+        return nil
+    }
+    
+    
+    private func getBreweryByID(id : String, context : NSManagedObjectContext) -> Brewery? {
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
+        do {
+            if let brewery : [Brewery] = try context.fetch(request){
+                //This type is in the database
+                guard brewery.count > 0 else {
+                    return nil}
+                return brewery[0]
+            }
+        } catch {
+            return nil
+        }
+        return nil
+    }
+    
+    
     // Parse results into objects
     private func parse(response : NSDictionary,
                        querySpecificID : String?,
@@ -540,7 +877,7 @@ class BreweryDBClient {
                     guard let locationInfo = breweryDict?["locations"] as? NSArray else {
                         continue createBeerLoop
                     }
-                    // We can't visit a brewery if it's not open to the public 
+                    // We can't visit a brewery if it's not open to the public
                     // or we don't have coordinates
                     guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
                         locDic["openToPublic"] as! String == "Y" &&
@@ -742,8 +1079,8 @@ class BreweryDBClient {
                     }
                     
                     createBeerObject(beer: beer,
-                                                    brewery: newBrewery,
-                                                    completion: { (beer) -> Void in})
+                                     brewery: newBrewery,
+                                     completion: { (beer) -> Void in})
                     // Future Improvement.
                     // Currently datamodel cannot accomodate multple brewery locations for a beer
                     break
@@ -778,212 +1115,23 @@ class BreweryDBClient {
                 // Get the brewery based on objectID
                 let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: (coreDataStack?.backgroundContext)!)
                 createBeerObject(beer: beer,
-                                                brewery: dbBrewery,
-                                                completion: { (beer) -> Void in})
+                                 brewery: dbBrewery,
+                                 completion: { (beer) -> Void in})
             }
             break
         }
     }
-
     
-    // Creates beer objects in the mainContext.
-    func createBeerObject(beer : [String:AnyObject],
-                          brewery: Brewery? = nil,
-                          brewerID: String? = nil,
-                          completion: @escaping (_ out : Beer) -> ()) {
-        func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
-            if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
-                let medium = images["medium"] as! String?  {
-                beer.imageUrl = medium
-                let queue = DispatchQueue(label: "Images")
-                print("BreweryDB \(#line) Prior to getting Beer image")
-                queue.async(qos: .utility) {
-                    print("BreweryDB \(#line) In queue Async Getting Beer image in background")
-                    self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
-                }
+    
+    private func saveBackground() {
+        coreDataStack?.backgroundContext.performAndWait {
+            do {
+                try self.coreDataStack?.backgroundContext.save()
+            } catch let error {
+                fatalError("error:\n\(error)")
             }
         }
-        var thisBeer : Beer!
-
-        // Upgrade code
-        let thisContext = coreDataStack?.backgroundContext
-        // Non optional paramters: beerName, breweryID, id
-
-        print("BreweryDB \(#line) Working to create Beer object in backgroundcontext)")
-        let id : String? = beer["id"] as? String
-        print("BreweryDB \(#line) beername: \(beer["name"])")
-        let name : String? = beer["name"] as? String ?? ""
-        let description : String? = (beer["description"] as? String) ?? ""
-        var available : String? = nil
-        let beerabv : String? = beer["abv"] as? String
-        let beeribu : String? = beer["ibu"] as? String
-        if let interimAvail = beer["available"] {
-            available = interimAvail["description"] as? String ?? "No Information Provided"
-        } else {
-            available = "No Information Provided"
-        }
-        // Upgraded code
-        // change coreDataStack?.mainContext!)! to thisContext
-        // Within the maincontext the brewery must have already been created.
-        //
-        thisContext?.perform() {
-        thisBeer = Beer(id: id!, name: name!,
-                            beerDescription: description!,
-                            availability: available!,
-                            context: thisContext!)
-        // TODO Bug accomodate nil brewery, when selecting brewery
-        assert(brewery != nil || brewerID != nil)
-        // I must use one of these
         
-        thisBeer.brewer = thisContext?.object(with: (brewery?.objectID)!) as! Brewery?
-        
-        thisBeer.breweryID = thisBeer.brewer?.id
-        
-        //print("BreweryDB \(#line) Is Beer Organic:\(beer["isOrganic"]!)")
-        thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
-        //print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
-        if beer["styleId"] != nil {
-            thisBeer.styleID = (beer["styleId"] as! NSNumber).description
-        }
-        thisBeer.abv = beerabv ?? "Information N/A"
-        thisBeer.ibu = beeribu ?? "Information N/A"
-        // Saving this beer from Main to PersistentContext
-        // Begin Upgraded Code
-        //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
-        //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
-        //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-        print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
-
-            self.saveBackground()
-//            print("BreweryDB \(#line) In blocking for beer save ")
-//            do {
-//                try thisContext?.save()
-//                print("BreweryDB \(#line) Beer created and saved in this context \(thisContext) ")
-//            } catch {
-//                fatalError()
-//            }
-            print("BreweryDb \(#line) Exiting non blocking for beersave\n")
-        //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
-        //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
-        //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-        //_ = saveMain()
-        print("BreweryDb \(#line) Returning the beer we created.")
-        
-        completion(thisBeer)
-            //print(beer)
-            //print(thisBeer)
-        saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
-        }
-
-    }
-    
-    
-    // TODO Phase 1 introduce completion handler
-    // The breweries are created sent back but they are not showing up in the table.
-    // Phase 2 call in backgroundContext
-    // This will save background, main and persistent context
-    private func createBreweryObject(breweryDict: [String:AnyObject],
-                                     locationDict locDict:[String:AnyObject],
-                                     completion: @escaping (_ out : Brewery) -> () ) {
-        func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
-            if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
-                let imageURL : String = imagesDict["icon"] as! String?,
-                let targetBrewery = inputBrewery {
-                let queue = DispatchQueue(label: "Images")
-                print("BreweryDB \(#line) Prior to getting Brewery image")
-                queue.async(qos: .utility) {
-                    print("BreweryDB \(#line) Getting Brewery image in background")
-                    self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
-                }
-            }
-        }
-        // Remember to change all the references to this context below
-        // There are two more entries on the last parameter
-        // And in the do catch block
-        var brewer : Brewery!
-        print("\nBreweryDb \(#line) Brewery non Blocking for create brewery in backgroundContext\n\(breweryDict["name"])")
-        // Why did I make this perform instead of performandWait
-        // Changed back to performAndWait because map was boing populated with nothing
-        // because this function returned before creating breweries
-        // I may have used perform because it stalls the UI but this is in background context why would it stall the ui.
-        /*
-         I use perform because i get deadlocked with performandwait,
-         The solution is to use perform and allow MapViewController to dynamically watch for changes to the beers..
-         I use performAndWait because completion get called before breweries are created.
-         */
-        coreDataStack?.backgroundContext.perform {
-            brewer = Brewery(inName: breweryDict["name"] as! String,
-                                 latitude: locDict["latitude"]?.description,
-                                 longitude: locDict["longitude"]?.description,
-                                 url: locDict["website"] as! String?,
-                                 open: (locDict["openToPublic"] as! String == "Y") ? true : false,
-                                 id: locDict["id"]?.description,
-                                 context: (self.coreDataStack?.backgroundContext)!)
-            self.saveBackground()
-            //            do {
-//                print("BreweryDB \(#line) Commiting from createBreweryObject into BackgroundContext")
-//                try self.coreDataStack?.saveBackgroundContext()
-//                print("BreweryDB \(#line) Committed from createBreweryObject into BackgroundContext")
-//                // Begin Upgradedcode
-//                //try self.coreDataStack?.saveMainContext()
-//                //try self.coreDataStack?.savePersistingContext()
-//                // End UpgradedCode
-//                //try self.coreDataStack?.saveMainContext()
-//                //try self.coreDataStack?.savePersistingContext()
-//                print("BreweryDB \(#line) Save Brewery save in background context moving Brewery into Main Context, Who is oberserving the maincontext? Last time it was SelectedBeersTableList. BreweryTable is looking at PersistentContext so I don't think it will see this.")
-//                self.d_timestopass += 1
-//                print("BreweryDB \(#line) \(self.d_timestopass) Sending back the brewery object we created, to the parse function.")
-//                print("BreweryDb \(#line) You are in the a background context ")
-//            } catch {
-//            }
-            print("BreweryDB \(#line) Exiting Brewery non blocking\n\(breweryDict["name"])")
-            completion(brewer)
-            saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
-        }
-        // This following line blocksandwait is being called in a block and wait so it
-        // gets trapped.
-        // We are falling thru to this line because of the perfrom async
-        // We should never get here
-        //fatalError()
-        //return nil
-    }
-
-        
-    private func getBreweryByID(id : String, context : NSManagedObjectContext) -> Brewery? {
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
-        do {
-            if let brewery : [Brewery] = try context.fetch(request){
-                //This type is in the database
-                guard brewery.count > 0 else {
-                    return nil}
-                return brewery[0]
-            }
-        } catch {
-            return nil
-        }
-        return nil
-    }
-    
-    
-    private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
-        //print("BreweryDB \(#line)Attempting to get beer \(id)")
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
-        
-        do {
-            if let beer : [Beer] = try context.fetch(request) {
-                //This type is in the database
-                guard beer.count > 0 else {
-                    return nil}
-                return beer[0]
-            }
-        } catch {
-            return nil
-        }
-        return nil
     }
     
     
@@ -1006,92 +1154,7 @@ class BreweryDBClient {
     //    }
     
     
-    // Download images in the background then update Coredata when complete
-    // Beer images are currently being grabbed and saved in the main context
-    // This help with updateing selected beers screen I guess.
-    internal func downloadBeerImageToCoreData( aturl: NSURL,
-                                           forBeer: Beer,
-                                           updateManagedObjectID: NSManagedObjectID) {
-        // Begin Upgraded code
-        //print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
-        // TODO Breaking BreweryList and MapView Style selection, MapView Brewery selection will be unharmed.
-        // End Upgraded code
-        print("BreweryDB \(#line) Async DownloadBeerImage in background context:\(forBeer.beerName!)")
-        let session = URLSession.shared
-        let task = session.dataTask(with: aturl as URL){
-            (data, response, error) -> Void in
-            print("BreweryDB \(#line) Returned from Async DownloadBeerImage:\(forBeer.beerName!)")
-            if error == nil {
-                if data == nil {
-                    return
-                }
-                // Upgraded code
-                let thisContext = self.coreDataStack?.backgroundContext
-                //print("\nBrewerydb \(#line) Preceding to Blocking for beerImage update in \(thisContext)")
-                thisContext?.perform(){
-                    print("Brewerydb \(#line) Blocking on beerimage update ")
-                //self.coreDataStack!.mainContext.performAndWait(){
-                    // Upgraded code
-                    let beerForUpdate = thisContext?.object(with: updateManagedObjectID) as! Beer
-                    //let beerForUpdate = self.coreDataStack?.mainContext.object(with: updateManagedObjectID) as! Beer
-                    let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
-                    beerForUpdate.image = outputData
-                    self.saveBackground()
-//                    do {
-//                        // Upgraded code
-//                        try thisContext?.save()
-//                        //try self.coreDataStack?.mainContext.save()
-//                        print("BreweryDB \(#line) Beer Imaged saved in \(thisContext) for beer \(forBeer.beerName)")
-//                    }
-//                    catch {
-//                        return
-//                    }
-                    print("BreweryDb \(#line) Completed blocking on beer image update\n")
-                }
-            }
-        }
-        task.resume()
-    }
-    
-    
-    // Download images in the background for a brewery
-    internal func downloadImageToCoreDataForBrewery( aturl: NSURL,
-                                                     forBrewery: Brewery,
-                                                     updateManagedObjectID: NSManagedObjectID) {
-        // Upgraded code.
-        let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
-        print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext \(forBrewery.name)")
 
-        let session = URLSession.shared
-        let task = session.dataTask(with: aturl as URL){
-            (data, response, error) -> Void in
-            print("BreweryDB \(#line) Returned from Async DownloadBreweryImage ")
-            if error == nil {
-                if data == nil {
-                    return
-                }
-                // Upgraded code change to thisContext, and remove the perfromandwait?
-                print("\nBreweryDB \(#line) preceeding to block brewery image update in backgroundcontext")
-                thisContext.perform(){
-                    print("BreweryDB \(#line) blocking on brewery image update ")
-                    let breweryForUpdate = thisContext.object(with: updateManagedObjectID) as! Brewery
-                    let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
-                    breweryForUpdate.image = outputData
-                    // Upgraded code change this to thisContext.
-                    self.saveBackground()
-//                    do {
-//                        try thisContext.save()
-//                        print("BreweryDB \(#line) Attention Brewery Imaged saved in \(thisContext.name) for brewery \(forBrewery.name)")
-//                    }
-//                    catch let error {
-//                        fatalError("Error \(error)")
-//                    }
-                    print("BreweryDB \(#line) Complete blocking on brewery image update\n ")
-                }
-            }
-        }
-        task.resume()
-    }
     
 //    private func saveMain() {
 //        print("BreweryDB \(#line) Saving MainContext called ")
@@ -1111,16 +1174,7 @@ class BreweryDBClient {
 //            }
 //        }
 //    }
-        private func saveBackground() {
-            coreDataStack?.backgroundContext.performAndWait {
-                do {
-                    try self.coreDataStack?.backgroundContext.save()
-                } catch let error {
-                    fatalError("error:\n\(error)")
-                }
-            }
 
-        }
 //    private func savePersitent() -> Bool {
 //        do {
 //            try coreDataStack?.persistingContext.save()
@@ -1130,51 +1184,7 @@ class BreweryDBClient {
 //        }
 //    }
     
-    private func createURLFromParameters(queryType: APIQueryOutputTypes,
-                                         querySpecificID: String?,
-                                         parameters: [String:AnyObject]) -> NSURL {
-        // The url currently takes the form of
-        // "http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
-        
-        let components = NSURLComponents()
-        components.scheme = Constants.BreweryDB.APIScheme
-        components.host = Constants.BreweryDB.APIHost
-        
-        switch queryType {
-        case .BeersByName:
-            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
-            break
-        case .BeersByStyleID:
-            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
-            break
-        case .Styles:
-            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Styles
-            break
-        case .Breweries:
-            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Breweries
-            break
-        case .BeersByBreweryID:
-            // GET: /brewery/:breweryId/beers
-            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery + "/" +
-                querySpecificID! + "/" + Constants.BreweryDB.Methods.Beers
-        }
-        
-        components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
-        
-        // Build the other parameters
-        for (key, value) in parameters {
-            //print("BreweryDB \(#line)key,value")
-            let queryItem = NSURLQueryItem(name: key, value: "\(value)")
-            components.queryItems?.append(queryItem as URLQueryItem)
-        }
-        
-        // Finally Add the API Key - QueryItem
-        let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
-        components.queryItems?.append(queryItem)
-        
-        print("BreweryDB \(#line) \(components.url!)")
-        return components.url! as NSURL
-    }
+
 }
 
 
