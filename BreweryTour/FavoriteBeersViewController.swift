@@ -88,7 +88,7 @@ class FavoriteBeersViewController: UIViewController {
         request.sortDescriptors = []
         request.predicate = NSPredicate( format: "favorite == YES")
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: (coreDataStack?.persistingContext)!,
+                                         managedObjectContext: (coreDataStack?.mainContext)!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         super.init(coder: aDecoder)
@@ -139,6 +139,7 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
         case .move:
             break
         case .update:
+            // TODO there is an error when in FavoriteBeers, select a beer and change tasting notes. It crashes.
             configureCell(cell: tableView.cellForRow(at: indexPath!)!, indexPath: indexPath! as NSIndexPath)
             break
         }
@@ -178,7 +179,7 @@ extension FavoriteBeersViewController : UITableViewDelegate {
             let object = self.frc.object(at: indexPath) as Beer
             object.favorite = false
             do {
-                try self.coreDataStack?.persistingContext.save()
+                try self.coreDataStack?.saveMainContext()
             } catch {
                 self.displayAlertWindow(title: "Remove Error", msg: "Error removing item,\nplease try agains")            }
             tableView.reloadData()
