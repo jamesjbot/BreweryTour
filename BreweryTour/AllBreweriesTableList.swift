@@ -11,7 +11,7 @@ import Foundation
 import UIKit
 import CoreData
 
-class AllBreweriesTableList: NSObject, TableList, Subject {
+class AllBreweriesTableList: NSObject, Subject {
     
     var observer : Observer!
     
@@ -154,6 +154,9 @@ class AllBreweriesTableList: NSObject, TableList, Subject {
         return cell
     }
     
+}
+
+extension AllBreweriesTableList : TableList {
     
     func selected(elementAt: IndexPath,
                   searchText: String,

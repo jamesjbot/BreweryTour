@@ -13,7 +13,7 @@
 import UIKit
 import CoreData
 
-class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
+class SelectedBeersTableList : NSObject , NSFetchedResultsControllerDelegate, Subject {
 
     // MARK: Constants
     let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
@@ -29,7 +29,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     // This currently runs off of mainContext
     internal var frc : NSFetchedResultsController<Beer>!
 
-    private var observer : Observer!
+    fileprivate var observer : Observer!
     
     // MARK: Functions
     
@@ -185,15 +185,7 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     }
     
     
-    internal func selected(elementAt: IndexPath,
-                           searchText: String,
-                           completion:  @escaping (Bool, String?) -> Void) -> AnyObject? {
-        if searchText != "" {
-            return filteredObjects[elementAt.row]
-        } else {
-            return frc.fetchedObjects?[elementAt.row]
-        }
-    }
+
     
     
 //    internal func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -215,6 +207,18 @@ class SelectedBeersTableList : NSObject, TableList , NSFetchedResultsControllerD
     internal func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
         return filteredObjects
+    }
+}
+extension SelectedBeersTableList : TableList {
+    
+    internal func selected(elementAt: IndexPath,
+                           searchText: String,
+                           completion:  @escaping (Bool, String?) -> Void) -> AnyObject? {
+        if searchText != "" {
+            return filteredObjects[elementAt.row]
+        } else {
+            return frc.fetchedObjects?[elementAt.row]
+        }
     }
     
     

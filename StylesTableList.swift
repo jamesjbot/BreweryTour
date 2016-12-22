@@ -13,7 +13,7 @@ import UIKit
 import CoreData
 import Foundation
 
-class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate, Subject {
+class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
     
     // TODO Remove Debug code
     var firstRun : Bool = true
@@ -50,10 +50,7 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
     }
     
     
-    func searchForUserEntered(searchTerm: String, completion: ( (Bool, String?) -> (Void))?) {
-        // Styles are automatically downloaded on start up so searching again will not yield anything new
-        completion!(false,"There are no more new styles")
-    }
+
     
     
     override init(){
@@ -133,7 +130,10 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         return cell
     }
     
-    
+}
+
+extension StylesTableList : TableList {
+
     internal func selected(elementAt: IndexPath,
                            searchText: String,
                            completion:  @escaping (Bool, String?) -> Void ) -> AnyObject? {
@@ -156,4 +156,10 @@ class StylesTableList: NSObject, TableList , NSFetchedResultsControllerDelegate,
         mediator.selected(thisItem: aStyle, completion: completion)
         return nil
     }
+    
+    func searchForUserEntered(searchTerm: String, completion: ( (Bool, String?) -> (Void))?) {
+        // Styles are automatically downloaded on start up so searching again will not yield anything new
+        completion!(false,"There are no more new styles")
+    }
+    
 }
