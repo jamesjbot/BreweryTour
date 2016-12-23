@@ -1,5 +1,4 @@
 Persistent Context Observers
-StylesTableList
 
 Persitent Context Fetchers
 BeerDetailViewController gets style name from Persistent Context
@@ -7,6 +6,7 @@ BreweryDBClient Checks Styles in the Persistent Context prior to adding new styl
 BreweryDBClient gets style names from Persistent context in getStyleName(byID)
 
 Main Context Observers
+StylesTableList
 SelectedBeersTableList frc observer the mainContext
 BreweryTableList frc observes the mainContext
 AllBreweriesTableList frc observes the mainContext
