@@ -52,7 +52,10 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     private let pointerDuration : CGFloat = 1.0
     
     // MARK: Variables
-    
+    // TODO 
+    /*
+     Add variables for saving the current indexpath when switching segmented controller
+     */
     private var tutorialModeOn : Bool = false {
         didSet {
             tutorialView.isHidden = !tutorialModeOn
@@ -179,15 +182,15 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
         switch sender.selectedSegmentIndex{
-        case 0:
+        case 0: // Styles
             print("CategoryViewController \(#line) Switching to StylesTableList and reloading ")
             activeTableList = styleList
             styleTable.reloadData()
-        case 1:
+        case 1: // Breweries with selected style
             print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             activeTableList = breweryList
             styleTable.reloadData()
-        case 2:
+        case 2: // All breweries
             activeTableList = allBreweryList
             styleTable.reloadData()
         default:
@@ -246,6 +249,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         activeTableList = styleList
         
         // TODO are these lines needed I'm getting these from the mediator
+        // Check mediator I think these are being create and set there.
         //styleList.mediator = med
         //breweryList.mediator = med
         
