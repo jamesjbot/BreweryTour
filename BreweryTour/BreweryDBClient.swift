@@ -918,6 +918,7 @@ class BreweryDBClient {
         case .Styles:
             // Styles are saved on the persistingContext because they don't change often.
             // We must have data to process
+            // Save the multiple styles from the server
             guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else {
                 completion!(false, "No styles data" )
                 return
@@ -936,24 +937,27 @@ class BreweryDBClient {
                             continue
                         }
                     } catch {
-                        completion!(false, "Failed Request")
+                        completion!(false, "Failed Reading Styles from database")
                         return
                     }
                     // When style not present adds new style into MainContext
                     Style(id: localId!, name: localName! as! String, context: (self.coreDataStack?.mainContext)!)
                 }
+                
             }
-            
+            // TODO experiment moving this block of code up one bracket
+            // and end with a return, this will save all the styles after we are done.
+            // This line of code will run immediately because the above is a perform
             // Save beer styles in main and persistent.
             do {
                 print("BreweryDB \(#line) Styles download now saving in MainContext ")
                 // TODO Reinstate this change
                 //try coreDataStack?.mainContext.save()
                 try coreDataStack?.saveMainContext()
-                completion!(true, "Success")
+                completion!(true, "Success saving all new styles.")
                 return
             } catch {
-                completion!(false, "Failed Request")
+                completion!(false, "Failed saving new styles")
                 return
             }
             return
