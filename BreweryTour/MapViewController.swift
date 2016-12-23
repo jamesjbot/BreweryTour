@@ -84,22 +84,22 @@ class MapViewController : UIViewController {
     
     // MARK: Functions
     // Debug function please remove
-    func d_showAllBeers() {
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-        request.sortDescriptors = []
-        //request.predicate = []
-        //request.predicate = NSPredicate(format: "styleID = %@", style.id!)
-        var results : [Beer]!
-        coreDataStack?.persistingContext.performAndWait {
-            do {
-                results = try (self.coreDataStack?.persistingContext.fetch(request))! as [Beer]
-                print("MapViewController \(#line) Here are the results\n\(results) ")
-            } catch {
-                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
-                return
-            }
-        }
-    }
+//    func d_showAllBeers() {
+//        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+//        request.sortDescriptors = []
+//        //request.predicate = []
+//        //request.predicate = NSPredicate(format: "styleID = %@", style.id!)
+//        var results : [Beer]!
+//        coreDataStack?.persistingContext.performAndWait {
+//            do {
+//                results = try (self.coreDataStack?.persistingContext.fetch(request))! as [Beer]
+//                print("MapViewController \(#line) Here are the results\n\(results) ")
+//            } catch {
+//                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
+//                return
+//            }
+//        }
+//    }
     
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
