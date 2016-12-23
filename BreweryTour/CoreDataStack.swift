@@ -58,6 +58,7 @@ class CoreDataStack: NSObject {
         // Set persistingContext as parent.
         mainContext.parent = persistingContext
         mainContext.name = "MainContext"
+        
         // Load a background context
         backgroundContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
         backgroundContext.parent = mainContext
@@ -126,7 +127,8 @@ extension CoreDataStack {
     
     // Delete beers and Brewers with a batchrequest
     internal func deleteBeersAndBreweries() -> Bool {
-        var success = deleteFromCoreData(entity: "Beer", context: persistingContext)
+        var success : Bool?
+        success = deleteFromCoreData(entity: "Beer", context: persistingContext)
         guard success == true else {
             return false
         }
