@@ -62,7 +62,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         }
     }
     
-    private var tutorialState : CategoryTutorialStage = .InitialScreen
+    private var tutorialState: CategoryTutorialStage = .InitialScreen
     
     //TODO delete this when it's verified it's unneeded.
     //fileprivate var frc : NSFetchedResultsController<NSManagedObject>!
@@ -186,6 +186,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             print("CategoryViewController \(#line) Switching to StylesTableList and reloading ")
             activeTableList = styleList
             styleTable.reloadData()
+            //styleTable.selectRow(at: <#T##IndexPath?#>, animated: <#T##Bool#>, scrollPosition: <#T##UITableViewScrollPosition#>)
         case 1: // Breweries with selected style
             print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             activeTableList = breweryList
@@ -265,12 +266,15 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        // Deselect whatever was selected on screen
-        guard styleTable.indexPathForSelectedRow == nil else {
-            styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
-            return
-        }
+        // Do I really want to deselect.
+        // TODO Deselect whatever was selected on screen
+//        guard styleTable.indexPathForSelectedRow == nil else {
+//            styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
+//            return
+//        }
         // Always reload the table data. Incase new breweries were pulled in
+        // TODO Only for styles tables do we not want to reload But this only applies if the Breweries w/ styles or breweries screen
+        // is shown
         styleTable.reloadData()
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
