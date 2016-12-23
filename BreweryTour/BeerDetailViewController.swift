@@ -117,6 +117,7 @@ class BeerDetailViewController: UIViewController {
         request.predicate = NSPredicate(format : "id = %@", id )
         do {
             // TODO Remove 2nd persistingContext because I'm trying to test.
+            // Where should you get style data.
             let result = try coreDataStack?.persistingContext.fetch(request)
             return result![0].displayName!
         } catch {
