@@ -193,6 +193,14 @@ class MapViewController : UIViewController {
         var results : [Beer]!
         // Presave the mainContext maybe that's why I cant see any results.
         //let thisContext = coreDataStack?.mainContext
+        // TODO do you still want to use querygenrations
+        print("MapView \(#line) \(readOnlyContext?.queryGenerationToken) ")
+        print("MapView \(#line) \(NSQueryGenerationToken.current) ")
+        do {
+            try readOnlyContext?.setQueryGenerationFrom(NSQueryGenerationToken.current)
+        } catch {
+            // Default is unpinned mode which is still fine.
+        }
         beerFRC = NSFetchedResultsController(fetchRequest: request ,
                                              managedObjectContext: readOnlyContext!,
                                              sectionNameKeyPath: nil,
@@ -309,7 +317,7 @@ class MapViewController : UIViewController {
         // Get new selections
         let mapViewData = Mediator.sharedInstance().getMapData()
         
-        // Map brewery or breweries by style
+        // Decision making to display Breweries Style or Brewery
         lastSelectedManagedObject = mapViewData
         if mapViewData is Style {
             print("MapView \(#line) this is a style")
