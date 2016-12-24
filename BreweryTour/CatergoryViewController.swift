@@ -336,7 +336,6 @@ extension CategoryViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         print("CategoryViewController \(#line) numberOfRowsInsection called ")
-        print("CategoryViewController \(#line) numberOfRowsInsection exited ")
         return activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
 
     }
