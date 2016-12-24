@@ -102,6 +102,87 @@ class MapViewController : UIViewController {
 //        }
 //    }
     
+    
+    // Tutoral Function to plot a circular path for the pointer
+    private func addCircularPathToPointer() {
+        let systemVersion = UIDevice.current.model
+        // Circular path
+        var point = CGPoint(x: view.frame.midX, y: view.frame.midY)
+        var rotationRadius = view.frame.width/4
+        if systemVersion == "iPhone" {
+            point = CGPoint(x: view.frame.midX, y: view.frame.midY*0.5)
+            rotationRadius = view.frame.width/8
+        }
+        let circlePath = UIBezierPath(arcCenter: point,
+                                      radius: rotationRadius,
+                                      startAngle: 0,
+                                      endAngle:CGFloat(M_PI)*2,
+                                      clockwise: true)
+        let circularAnimation = CAKeyframeAnimation(keyPath: "position")
+        circularAnimation.duration = 5
+        circularAnimation.repeatCount = MAXFLOAT
+        circularAnimation.path = circlePath.cgPath
+        pointer.layer.add(circularAnimation, forKey: nil)
+        pointer.isHidden = false
+    }
+    
+    
+    // Find breweries
+    fileprivate func findBreweryIDinMainContext(by: MKAnnotation) -> NSManagedObjectID? {
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        let frc = NSFetchedResultsController(fetchRequest: request,
+                                             managedObjectContext: readOnlyContext!,
+                                             sectionNameKeyPath: nil, cacheName: nil)
+        do {
+            try frc.performFetch()
+        } catch {
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+        }
+        // Match Brewery name by Title
+        for i in frc.fetchedObjects! as [Brewery] {
+            if i.name! == by.title! {
+                return i.objectID
+            }
+        }
+        return nil
+    }
+    
+    
+    
+    fileprivate func frcUpdateAppendMapBreweries(newStyle: Bool) {
+        // The lastSelectedStyle is the currentSelectedStyle
+        // Work thru all the beerResults
+        let results = (self.beerFRC?.fetchedObjects)! as [Beer]
+        // Now that we have Beers with that style, what breweries are associated with these beers
+        // Reset array to hold breweries
+        if newStyle {
+            self.mappableBreweries = [Brewery]()
+        }
+        // Mappable breweries will only containg the new breweries
+        print("MapView \(#line) were there any beers that matched style\n")
+        //print("MapView \(#line) \(results)")
+        var newBreweries = [Brewery]()
+        //let thisContext = coreDataStack?.mainContext
+        for beer in results {
+            let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
+            breweryRequest.sortDescriptors = []
+            breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
+            do {
+                let brewery = try (readOnlyContext?.fetch(breweryRequest))! as [Brewery]
+                if !self.mappableBreweries.contains(brewery.first!) {
+                    self.mappableBreweries.append(brewery.first!)
+                    newBreweries.append(brewery.first!)
+                }
+            } catch {
+                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+                return
+            }
+        }
+        populateMapWithAnnotations(fromBreweries: newBreweries, removeDisplayedAnnotations: false)
+    }
+    
+    
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
     private func initializeFetchAndFetchBreweriesSetIncomingLocations(byStyle : Style){
@@ -164,29 +245,44 @@ class MapViewController : UIViewController {
     }
     
 
-    // Tutoral Function to plot a circular path for the pointer
-    private func addCircularPathToPointer() {
-        let systemVersion = UIDevice.current.model
-        // Circular path
-        var point = CGPoint(x: view.frame.midX, y: view.frame.midY)
-        var rotationRadius = view.frame.width/4
-        if systemVersion == "iPhone" {
-            point = CGPoint(x: view.frame.midX, y: view.frame.midY*0.5)
-            rotationRadius = view.frame.width/8
+    // Puts all the Brewery entries on to the map
+    // All breweries in the mappableBreweries array will be added to the screen
+    private func populateMapWithAnnotations(fromBreweries: [Brewery],
+                                            removeDisplayedAnnotations: Bool){
+        print("MapView \(#line) populateMapWithAnnotations called")
+        print("MapView \(#line) ploting \(fromBreweries.count) annotations ")
+        print("Adding these breweries \(fromBreweries)")
+        // Remove all the old annotation
+        if removeDisplayedAnnotations {
+            mapView.removeAnnotations(mapView.annotations)
         }
-        let circlePath = UIBezierPath(arcCenter: point,
-                                      radius: rotationRadius,
-                                      startAngle: 0,
-                                      endAngle:CGFloat(M_PI)*2,
-                                      clockwise: true)
-        let circularAnimation = CAKeyframeAnimation(keyPath: "position")
-        circularAnimation.duration = 5
-        circularAnimation.repeatCount = MAXFLOAT
-        circularAnimation.path = circlePath.cgPath
-        pointer.layer.add(circularAnimation, forKey: nil)
-        pointer.isHidden = false
+        // Create new array of annotations
+        var annotations = [MKAnnotation]()
+        for i in fromBreweries {
+            // Sometimes the breweries don't have a location
+            guard i.latitude != nil && i.longitude != nil else {
+                continue
+            }
+            
+            let aPin = MKPointAnnotation()
+            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
+            aPin.title = i.name
+            aPin.subtitle = i.url
+            annotations.append(aPin)
+        }
+        
+        mapView.addAnnotations(annotations)
+        // Add the user's location
+        mapView.showsUserLocation = true
+        mapView.showsScale = true
+        //mapView.showAnnotations(mapView.annotations, animated: true)
+        DispatchQueue.main.async {
+            self.mapView.setNeedsDisplay()
+        }
     }
     
+    
+    // MARK: View functions
     
     // Ask user for access to their location
     override func viewDidLoad(){
@@ -245,99 +341,6 @@ class MapViewController : UIViewController {
             tutorialView.isHidden = true
         }
     }
-    
-    
-    fileprivate func frcUpdateAppendMapBreweries(newStyle: Bool) {
-        // The lastSelectedStyle is the currentSelectedStyle
-        // Work thru all the beerResults
-        let results = (self.beerFRC?.fetchedObjects)! as [Beer]
-        // Now that we have Beers with that style, what breweries are associated with these beers
-        // Reset array to hold breweries
-        if newStyle {
-            self.mappableBreweries = [Brewery]()
-        }
-        // Mappable breweries will only containg the new breweries
-        print("MapView \(#line) were there any beers that matched style\n")
-        //print("MapView \(#line) \(results)")
-        var newBreweries = [Brewery]()
-        //let thisContext = coreDataStack?.mainContext
-        for beer in results {
-            let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
-            breweryRequest.sortDescriptors = []
-            breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
-            do {
-                let brewery = try (readOnlyContext?.fetch(breweryRequest))! as [Brewery]
-                if !self.mappableBreweries.contains(brewery.first!) {
-                    self.mappableBreweries.append(brewery.first!)
-                    newBreweries.append(brewery.first!)
-                }
-            } catch {
-                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
-                return
-            }
-        }
-        populateMapWithAnnotations(fromBreweries: newBreweries, removeDisplayedAnnotations: false)
-    }
-    
-    
-    // Puts all the Brewery entries on to the map
-    // All breweries in the mappableBreweries array will be added to the screen
-    private func populateMapWithAnnotations(fromBreweries: [Brewery],
-                                            removeDisplayedAnnotations: Bool){
-        print("MapView \(#line) populateMapWithAnnotations called")
-        print("MapView \(#line) ploting \(fromBreweries.count) annotations ")
-        print("Adding these breweries \(fromBreweries)")
-        // Remove all the old annotation
-        if removeDisplayedAnnotations {
-            mapView.removeAnnotations(mapView.annotations)
-        }
-        // Create new array of annotations
-        var annotations = [MKAnnotation]()
-        for i in fromBreweries {
-            // Sometimes the breweries don't have a location
-            guard i.latitude != nil && i.longitude != nil else {
-                continue
-            }
-            
-            let aPin = MKPointAnnotation()
-            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
-            aPin.title = i.name
-            aPin.subtitle = i.url
-            annotations.append(aPin)
-        }
-        
-        mapView.addAnnotations(annotations)
-        // Add the user's location
-        mapView.showsUserLocation = true
-        mapView.showsScale = true
-        //mapView.showAnnotations(mapView.annotations, animated: true)
-        DispatchQueue.main.async {
-            self.mapView.setNeedsDisplay()
-        }
-    }
-    
-    
-    // Find breweries
-    fileprivate func findBreweryIDinMainContext(by: MKAnnotation) -> NSManagedObjectID? {
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        let frc = NSFetchedResultsController(fetchRequest: request,
-                                             managedObjectContext: readOnlyContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
-        do {
-            try frc.performFetch()
-        } catch {
-            displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
-        }
-        // Match Brewery name by Title
-        for i in frc.fetchedObjects! as [Brewery] {
-            if i.name! == by.title! {
-                return i.objectID
-            }
-        }
-        return nil
-    }
-    
 }
 
 
