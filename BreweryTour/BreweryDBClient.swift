@@ -115,12 +115,13 @@ class BreweryDBClient {
                 //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
                 //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
                 print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
+                context.mergePolicy = NSMergePolicy.overwrite
                 do {
                     try context.save()
                     completion(thisBeer)
                     saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
                 } catch let error {
-                    fatalError("Failed to save beer because of error:\n\(error)")
+                    fatalError("Failed to save beer because of error:\n\(error)\n")
                 }
                 //            print("BreweryDB \(#line) In blocking for beer save ")
                 //            do {
@@ -130,10 +131,6 @@ class BreweryDBClient {
                 //                fatalError()
                 //            }
                 print("BreweryDb \(#line) Exiting non blocking for beersave\n")
-                //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
-                //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
-                //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-                //_ = saveMain()
                 print("BreweryDb \(#line) Returning the beer we created.")
                 
                 //print(beer)
@@ -184,10 +181,11 @@ class BreweryDBClient {
                              context: context)
                 do {
                     try context.save()
-                    print("BreweryDB \(#line) Exiting Brewery non blocking\n\(breweryDict["name"])")
-                } catch let error {
+                    print("BreweryDB \(#line) Exiting Brewery non blocking creationandsave\n\(breweryDict["name"])")
                     completion(brewer)
                     saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
+                } catch let error {
+                    fatalError(error.localizedDescription)
                 }
             //self.saveBackground()
             //            do {
@@ -565,14 +563,14 @@ class BreweryDBClient {
                                                forBeer: Beer,
                                                updateManagedObjectID: NSManagedObjectID) {
         // Begin Upgraded code
-        //print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
+        // print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
         // TODO Breaking BreweryList and MapView Style selection, MapView Brewery selection will be unharmed.
         // End Upgraded code
         print("BreweryDB \(#line) Async DownloadBeerImage in background context:\(forBeer.beerName!)")
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
-            print("BreweryDB \(#line) Returned from Async DownloadBeerImage:\(forBeer.beerName!)")
+            //print("BreweryDB \(#line) Returned from Async DownloadBeerImage:\(forBeer.beerName!)")
             if error == nil {
                 if data == nil {
                     return
