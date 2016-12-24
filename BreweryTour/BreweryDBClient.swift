@@ -580,6 +580,7 @@ class BreweryDBClient {
                 //print("\nBrewerydb \(#line) Preceding to Blocking for beerImage update in \(thisContext)")
                 self.container?.performBackgroundTask({
                     (context) in
+                    context.mergePolicy = NSMergePolicy.overwrite
                     context.perform(){
                         print("Brewerydb \(#line) Blocking on beerimage update ")
                         //self.coreDataStack!.mainContext.performAndWait(){
@@ -753,6 +754,7 @@ class BreweryDBClient {
                 print("\nBreweryDB \(#line) preceeding to block brewery image update in backgroundcontext")
                 self.container?.performBackgroundTask({
                     (context) in
+                    context.mergePolicy = NSMergePolicy.overwrite
                     context.perform() {
                         print("BreweryDB \(#line) blocking on brewery image update ")
                         let breweryForUpdate = context.object(with: updateManagedObjectID) as! Brewery
