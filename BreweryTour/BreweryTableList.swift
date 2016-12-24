@@ -6,7 +6,7 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /* 
- This is the view model backing the brewery table on the main category view
+ This is the view model backing the breweries with specified styles table on the main category view
  controller
  */
 
@@ -17,44 +17,46 @@ import CoreData
 
 class BreweryTableList: NSObject, Subject {
 
+    // MARK: Variables
     var observer : Observer!
 
-    func registerObserver(view: Observer) {
-        observer = view
-    }
-    
+    var displayableBreweries = [Brewery]()
+    var newBeers = [Beer]()
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Brewery] = [Brewery]()
     
     // Currently watches the persistentContext
-    internal var frc : NSFetchedResultsController<Brewery>!
+    //internal var frc : NSFetchedResultsController<Brewery>!
+    internal var beerFRC: NSFetchedResultsController<Beer>!
     
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     
+    // MARK: - Functions
+    
     override init(){
         super.init()
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-        request.fetchLimit = 10000
-        frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: readOnlyContext!,
-                                         sectionNameKeyPath: nil,
-                                         cacheName: nil)
-        frc.delegate = self
-        
-        do {
-            try frc.performFetch()
-        } catch {
-            observer.sendNotify(from: self, withMsg: "Error fetching data")
-        }
-        
-        guard frc.fetchedObjects?.count == 0 else {
-            // We have brewery entries go ahead and display them viewcontroller
-            // TODO remove this temporary code to detect if there are breweries here already
-            //fatalError()
-            return
-        }
+//        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+//        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
+//        request.fetchLimit = 10000
+//        frc = NSFetchedResultsController(fetchRequest: request,
+//                                         managedObjectContext: readOnlyContext!,
+//                                         sectionNameKeyPath: nil,
+//                                         cacheName: nil)
+//        frc.delegate = self
+//        
+//        do {
+//            try frc.performFetch()
+//        } catch {
+//            observer.sendNotify(from: self, withMsg: "Error fetching data")
+//        }
+//        
+//        guard frc.fetchedObjects?.count == 0 else {
+//            // We have brewery entries go ahead and display them viewcontroller
+//            // TODO remove this temporary code to detect if there are breweries here already
+//            //fatalError()
+//            return
+//        }
         
         // Since we didn't exit trying to find  the breweries above
         // Fetch all the breweries from the internet.
@@ -76,49 +78,90 @@ class BreweryTableList: NSObject, Subject {
     }
     
     
+    // Fetch breweries based on style selected.
+    // Get the Brewery entries from the database
+    internal func displayBreweriesWith(style : Style){
+        print("BreweryTable \(#line) Requesting style: \(style.id!) ")
+        let request : NSFetchRequest<Beer> = Beer.fetchRequest()
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "styleID = %@", style.id!)
+        var results : [Beer]!
+        // Presave the mainContext maybe that's why I cant see any results.
+        beerFRC = NSFetchedResultsController(fetchRequest: request ,
+                                             managedObjectContext: readOnlyContext!,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
+        beerFRC.delegate = self
+        /*
+         TODO When you select styles and favorite a brewery, go to favorites breweries and pick a style
+         This frc will totally overwrite because it will detect changes in the breweries from favoriting
+         forcing a reload on the mapviewcontroller.
+         */
+        // This must block because the mapView must be populated before it displays.
+        //        container?.performBackgroundTask({
+        //            (context) -> Void in
+        readOnlyContext?.perform() {
+            do {
+                try self.beerFRC?.performFetch()
+                results = (self.beerFRC?.fetchedObjects)! as [Beer]
+                //results = try (thisContext!.fetch(request)) as [Beer]
+                print("BreweryTableList \(#line) Are the results are zero? \(results.count) ")
+            } catch {
+            }
+            // Now that we have Beers with that style, what breweries are associated with these beers
+            // Array to hold breweries
+            self.displayableBreweries.removeAll()
+            print("BreweryTableList \(#line) were there any beers that matched style\n")
+            for beer in results {
+                guard beer.brewer != nil else {
+                    fatalError()
+                }
+                if !self.displayableBreweries.contains(beer.brewer!) {
+                    self.displayableBreweries.append(beer.brewer!)
+                }
+//                let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
+//                breweryRequest.sortDescriptors = []
+//                breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
+//                do {
+//                    let brewery = try (self.readOnlyContext?.fetch(breweryRequest))! as [Brewery]
+//                    if !self.displayableBreweries.contains(brewery.first) {
+//                        self.displayableBreweries.append(brewery.first)
+//                    }
+//                } catch {
+//                    self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+//                    return
+//                }
+            }
+        }
+    }
+    func registerObserver(view: Observer) {
+        observer = view
+    }
     
+}
 
-    
-    
-    func temporaryFetchData(){
-        do {
-            try frc.performFetch()
-            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
-        } catch {
-            fatalError()
+extension BreweryTableList: TableList {
+
+    internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
+        DispatchQueue.main.async {
+            print("BreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
+            guard let searchText = searchText else {
+                return
+            }
+            guard searchText.isEmpty ? indexPath.row < self.displayableBreweries.count :
+                indexPath.row < self.filteredObjects.count else {
+                return
+            }
+            if searchText.isEmpty {
+                cell.textLabel?.text = (self.displayableBreweries[indexPath.row]).name
+            } else {
+                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name
+            }
+            cell.setNeedsDisplay()
         }
-        do {
-            try frc.performFetch()
-            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
-        } catch {
-            fatalError()
-        }
-        do {
-            try frc.performFetch()
-            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
-        } catch {
-            fatalError()
-        }
-        do {
-            try frc.performFetch()
-            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
-        } catch {
-            fatalError()
-        }
+        return cell
     }
     
-    
-    func getNumberOfRowsInSection(searchText: String?) -> Int {
-        // If we batch delete in the background frc will not retrieve delete results. 
-        // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
-        //er crektemporaryFetchData()
-        guard searchText == "" else {
-            print("BreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
-            return filteredObjects.count
-        }
-        print("BreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)\nfrc:\(frc.fetchedObjects?.first)")
-        return frc.fetchedObjects!.count
-    }
     
     func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
         // BreweryTableList Observes the persistent Context and I only saved them
@@ -126,40 +169,35 @@ class BreweryTableList: NSObject, Subject {
         // Debugging code because breweries with a nil name are leaking thru
         // assert((frc.fetchedObjects?.count)! > 0)
         // Only filter object if there are objects to filter.
-        guard frc.fetchedObjects != nil else {
+        guard displayableBreweries.count > 0 else {
             return []
         }
-        guard (frc.fetchedObjects?.count)! > 0 else {
-            return []
-        }
-        filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
+        filteredObjects = (displayableBreweries.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))
         return filteredObjects
     }
     
-    func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        DispatchQueue.main.async {
-            print("BreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
-            if searchText != "" {
-                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name
-            } else {
-                cell.textLabel?.text = (self.frc.fetchedObjects![indexPath.row]).name
-            }
-            cell.setNeedsDisplay()
+    
+    func getNumberOfRowsInSection(searchText: String?) -> Int {
+        // If we batch delete in the background frc will not retrieve delete results.
+        // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
+        //er crektemporaryFetchData()
+        // First thing called on a reload from category screen
+        guard searchText == "" else {
+            print("BreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
+            return filteredObjects.count
         }
-        return cell
+        return displayableBreweries.count
     }
-}
-
-extension BreweryTableList: TableList {
-
-    func selected(elementAt: IndexPath,
+    
+    
+    internal func selected(elementAt: IndexPath,
                   searchText: String,
                   completion: @escaping (_ success : Bool, _ msg : String?) -> Void ) -> AnyObject? {
         // We are only selecting one brewery to display, so we need to remove
         // all the breweries that are currently displayed. And then turn on the selected brewery
         var savedBreweryForDisplay : Brewery!
         if searchText == "" {
-            savedBreweryForDisplay = (frc.object(at:elementAt)) as Brewery
+            savedBreweryForDisplay = (displayableBreweries[elementAt.row]) as Brewery
         } else {
             savedBreweryForDisplay = (filteredObjects[elementAt.row]) as Brewery
         }
@@ -169,41 +207,61 @@ extension BreweryTableList: TableList {
         return nil
     }
     
+    
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
         print("BreweryTableList \(#line)searchForuserEntered beer called")
-        BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
-            (success, msg) -> Void in
-            print("BreweryTableList \(#line)BreweryTableList Returned from BreweryDBClient")
-            guard success == true else {
-                completion!(success,msg)
-                return
-            }
-            // If the query succeeded repopulate this view model and notify view to update itself.
-            do {
-                try self.frc.performFetch()
-                print("BreweryTableList \(#line)BreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
-                completion!(true, "Success")
-            } catch {
-                completion!(false, "Failed Request")
-            }
-        }
+        completion!(false,"This screen only show breweries with the selected style, try brewery search on the All Breweries button.")
+//        BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
+//            (success, msg) -> Void in
+//            print("BreweryTableList \(#line)BreweryTableList Returned from BreweryDBClient")
+//            guard success == true else {
+//                completion!(success,msg)
+//                return
+//            }
+//            // If the query succeeded repopulate this view model and notify view to update itself.
+//            do {
+//                try self.frc.performFetch()
+//                print("BreweryTableList \(#line)BreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+//                completion!(true, "Success")
+//            } catch {
+//                completion!(false, "Failed Request")
+//            }
+//        }
     }
-    
+
 }
 
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("BreweryTableList \(#line) BreweryTableList willchange")
+        newBeers = [Beer]()
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("BreweryTableList \(#line) BreweryTableList changed object")
+        switch (type){
+        case .insert:
+            newBeers.append(anObject as! Beer)
+            break
+        case .delete:
+            break
+        case .move:
+            break
+        case .update:
+            break
+        }
     }
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // Process new beers
+        for beer in newBeers {
+            if !self.displayableBreweries.contains(beer.brewer!) {
+                self.displayableBreweries.append(beer.brewer!)
+            }
+        }
         print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
         // TODO We're preloading breweries do I still need this notify
         observer.sendNotify(from: self, withMsg: "reload data")
