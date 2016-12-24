@@ -56,9 +56,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     /*
      Add variables for saving the current indexpath when switching segmented controller
      */
-    fileprivate var styleSelectionIndex: Int = 0
-    fileprivate var stylesBrewerySelectionIndex: Int = 0
-    fileprivate var brewerySelectionIndex: Int = 0
+    fileprivate var styleSelectionIndex: IndexPath?
+    fileprivate var stylesBrewerySelectionIndex: IndexPath?
+    fileprivate var brewerySelectionIndex: IndexPath?
     
     private var tutorialModeOn : Bool = false {
         didSet {
@@ -190,20 +190,23 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             print("CategoryViewController \(#line) Switching to StylesTableList and reloading ")
             activeTableList = styleList
             styleTable.reloadData()
-            //styleTable.selectRow(at: <#T##IndexPath?#>, animated: <#T##Bool#>, scrollPosition: <#T##UITableViewScrollPosition#>)
+            styleTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
+            )
         case 1: // Breweries with selected style
             print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             // TODO
             // If the selected index on the styels table exists
             // tell brewerytablelist to select style
             if styleSelectionIndex != nil {
-                breweryList.displayBreweriesWith(style: styleList.frc.object(at: IndexPath(row: styleSelectionIndex, section: 0)))
+                breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!))
             }
             activeTableList = breweryList
             styleTable.reloadData()
+            styleTable.selectRow(at: stylesBrewerySelectionIndex, animated: true, scrollPosition: .middle)
         case 2: // All breweries
             activeTableList = allBreweryList
             styleTable.reloadData()
+            styleTable.selectRow(at: brewerySelectionIndex, animated: true, scrollPosition: .middle)
         default:
             break
         }
@@ -288,6 +291,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         styleTable.reloadData()
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
+        segmentedControlClicked(segmentedControl, forEvent: UIEvent())
     }
     
     // Why is it taking me along time because the coordinates are changing when I apply them
@@ -304,6 +308,23 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             tutorialView.isHidden = true
         }
     }
+    
+    
+    func whichRowShouldBeSelected() -> IndexPath? {
+        // Depends on what segmented index we are on
+        switch segmentedControl.selectedSegmentIndex {
+        case 0: // Styles
+            return styleSelectionIndex
+        case 1: // Breweries with selected style
+            return stylesBrewerySelectionIndex
+        case 2: // All breweries
+            return brewerySelectionIndex
+        default:
+            return nil
+            break
+        }
+    }
+    
     
     
     // Changes the navigation bar to show user they can go back to categories screen
@@ -364,11 +385,17 @@ extension CategoryViewController : UITableViewDelegate {
         // Save the selecion to appropriate index
         switch segmentedControl.selectedSegmentIndex {
         case 0: // Styles
-            styleSelectionIndex = indexPath.row
+            styleSelectionIndex = indexPath
+            stylesBrewerySelectionIndex = nil
+            brewerySelectionIndex = nil
         case 1: // Breweries with selected style
-            stylesBrewerySelectionIndex = indexPath.row
+            styleSelectionIndex = nil
+            stylesBrewerySelectionIndex = indexPath
+            brewerySelectionIndex = nil
         case 2: // All breweries
-            brewerySelectionIndex = indexPath.row
+            styleSelectionIndex = nil
+            stylesBrewerySelectionIndex = nil
+            brewerySelectionIndex = indexPath
         default:
             break
         }
