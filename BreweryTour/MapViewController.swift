@@ -251,7 +251,7 @@ class MapViewController : UIViewController {
                                             removeDisplayedAnnotations: Bool){
         print("MapView \(#line) populateMapWithAnnotations called")
         print("MapView \(#line) ploting \(fromBreweries.count) annotations ")
-        print("Adding these breweries \(fromBreweries)")
+        print("MapView \(#line) Adding these breweries \(fromBreweries)")
         // Remove all the old annotation
         if removeDisplayedAnnotations {
             mapView.removeAnnotations(mapView.annotations)
@@ -288,6 +288,7 @@ class MapViewController : UIViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
         print("MapView \(#line) ViewDidLoad called ")
+        
         // CoreLocation initialization, ask permission to utilize user location
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
