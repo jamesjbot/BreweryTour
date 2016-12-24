@@ -87,7 +87,7 @@ class Mediator : NSManagedObjectDisplayable {
     }
     
     
-    // When an element on categoryScreen is selected process on BreweryDBClient
+    // When an element on categoryScreen is selected, process it on BreweryDBClient
     func selected(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passingItem = thisItem
         print("Mediator \(#line) setting selectedBeersList prior to call: \(passingItem)")
