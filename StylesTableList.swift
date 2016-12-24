@@ -13,7 +13,7 @@ import UIKit
 import CoreData
 import Foundation
 
-class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
+class StylesTableList: NSObject {
     
     // TODO Remove Debug code
     var firstRun : Bool = true
@@ -33,8 +33,8 @@ class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
     var observer : Observer!
     
     // MARK: Functions
-    
-    func downloadBeerStyles() {
+
+    private func downloadBeerStyles() {
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
             (success, msg) -> Void in
             if success {
@@ -46,15 +46,7 @@ class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
     }
     
     
-    func registerObserver(view: Observer) {
-        observer = view
-    }
-    
-    
-
-    
-    
-    override init(){
+    internal override init(){
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
         request.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
@@ -71,7 +63,19 @@ class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
         frc.delegate = self
         downloadBeerStyles()
     }
+}
+
+
+extension StylesTableList: Subject {
     
+    internal func registerObserver(view: Observer) {
+        observer = view
+    }
+}
+
+
+
+extension StylesTableList: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     }
@@ -79,26 +83,16 @@ class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
     }
-    
+
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         observer.sendNotify(from: self, withMsg: "reload data")
     }
-    
-    
-    func getNumberOfRowsInSection(searchText: String?) -> Int {
-        guard searchText == "" else {
-            return filteredObjects.count
-        }
-        return frc.fetchedObjects!.count
-    }
-    
-    
-    func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
-        filteredObjects = (frc.fetchedObjects?.filter({ ( ( $0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
-        return filteredObjects
-    }
-    
+}
+
+
+extension StylesTableList : TableList {
+
     /*
      * 2 Adambier
      * 34 Aged beer
@@ -115,26 +109,37 @@ class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
      * 1353 American style imperial stout
      * 5519 American style india pale ale
      */
-    func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
+    internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // Move this UI update to main queue.
-            print("StylesTablesList \(#line) I'm updating UITableView cell on main ")
-            if searchText != "" {
-                cell.textLabel?.text = (filteredObjects[indexPath.row]).displayName!
-            } else {
-                frc.managedObjectContext.performAndWait {
-                    cell.textLabel?.text = (self.frc.object(at: indexPath )).displayName!
-                }
+        print("StylesTablesList \(#line) I'm updating UITableView cell on main ")
+        if searchText != "" {
+            cell.textLabel?.text = (filteredObjects[indexPath.row]).displayName!
+        } else {
+            frc.managedObjectContext.performAndWait {
+                cell.textLabel?.text = (self.frc.object(at: indexPath )).displayName!
             }
+        }
         DispatchQueue.main.async {
             cell.setNeedsDisplay()
         }
         return cell
     }
     
-}
-
-extension StylesTableList : TableList {
-
+    
+    internal func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
+        filteredObjects = (frc.fetchedObjects?.filter({ ( ( $0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
+        return filteredObjects
+    }
+    
+    
+    internal func getNumberOfRowsInSection(searchText: String?) -> Int {
+        guard searchText == "" else {
+            return filteredObjects.count
+        }
+        return frc.fetchedObjects!.count
+    }
+    
+    
     internal func selected(elementAt: IndexPath,
                            searchText: String,
                            completion:  @escaping (Bool, String?) -> Void ) -> AnyObject? {
@@ -157,6 +162,7 @@ extension StylesTableList : TableList {
         mediator.selected(thisItem: aStyle, completion: completion)
         return nil
     }
+    
     
     func searchForUserEntered(searchTerm: String, completion: ( (Bool, String?) -> (Void))?) {
         // Styles are automatically downloaded on start up so searching again will not yield anything new
