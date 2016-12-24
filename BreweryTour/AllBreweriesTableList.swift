@@ -186,7 +186,7 @@ extension AllBreweriesTableList : TableList {
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
                 try self.frc.performFetch()
-                print("BreweryTableList \(#line)BreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
+                print("AllBreweryTableList \(#line) AllBreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
                 completion!(true, "Success")
             } catch {
                 completion!(false, "Failed Request")
@@ -199,22 +199,22 @@ extension AllBreweriesTableList : TableList {
 extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList \(#line) BreweryTableList willchange")
+        print("AllBreweryTableList \(#line) AllBreweriesTableList willchange")
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("BreweryTableList \(#line) BreweryTableList changed object")
+        print("AllBreweryTableList \(#line) AllBreweryTableList changed object")
     }
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
+        print("AllBreweryTableList \(#line) AllBreweryTableList controllerdidChangeContent notify observer")
         // TODO We're preloading breweries do I still need this notify
         // Send message to observer regardless of situation. The observer decides if it should act.
         observer.sendNotify(from: self, withMsg: "reload data")
-        print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
-        print("BreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
+        print("AllBreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
+        print("AllBreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
         //Datata = frc.fetchedObjects!
     }
 }
