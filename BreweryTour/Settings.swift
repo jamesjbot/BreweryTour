@@ -11,7 +11,7 @@ import Foundation
 import CoreData
 
 class Settings: UIViewController {
-
+    
     // MARK: Constants
     let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
@@ -20,9 +20,11 @@ class Settings: UIViewController {
     @IBOutlet weak var activityIndic: UIActivityIndicatorView!
     
     @IBAction func deleteBeersBrewery(_ sender: AnyObject) {
-    // Prompt user should we delete all the beers and breweries
-    // Create action for prompt
+        // Prompt user should we delete all the beers and breweries
+        // Create action for prompt
+
         func deleteAll(_ action: UIAlertAction) {
+            self.startIndicator()
             container?.performBackgroundTask({ (context) in
                 var success: Bool = true
                 let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
@@ -49,15 +51,24 @@ class Settings: UIViewController {
                     self.displayAlertWindow(title: "Error", msg: "Error deleting Brewery data \(error)")
                     success = false
                 }
-                self.activityIndic.stopAnimating()
-                if success == true {
-                    self.displayAlertWindow(title: "Delete Data", msg: "Successful")
+                self.stopIndicator()
+                do {
+                    try context.save()
+                } catch let error {
+                    self.displayAlertWindow(title: "Error", msg: "Successfully deleted but unable to save?")
                 }
-                DispatchQueue.main.async {
-                    self.activityIndic.stopAnimating()
-                    self.activityIndic.isHidden = true
-                    self.activityIndic.setNeedsDisplay()
+                do {
+                    let beerCount =  try context.fetch(beerFetch).count
+                    let styleCount = try context.fetch(styleFetch).count
+                    let breweryCount = try context.fetch(breweryFetch).count
+                    if success == true {
+                        self.displayAlertWindow(title: "Delete Data", msg: "Successful\nStyles:\(styleCount)\nBeers\(beerCount)\nBreweries:\(breweryCount)")
+                    }
+                } catch let error {
+                    self.displayAlertWindow(title: "Error", msg: "Please try again.")
                 }
+                
+
             })
         }
         let action = UIAlertAction(title: "Delete",
@@ -66,7 +77,25 @@ class Settings: UIViewController {
         displayAlertWindow(title: "Delete All Data",
                            msg: "Are you sure you want to delete all data, this includes tasting notes and favorites?",
                            actions: [action])
-        activityIndic.startAnimating()
-        activityIndic.isHidden = false
+        //activityIndic.isHidden = false
+    }
+    
+    
+    // MARK: - Functions
+    
+    func startIndicator() {
+        DispatchQueue.main.async {
+            self.activityIndic.startAnimating()
+            self.activityIndic.setNeedsDisplay()
+        }
+    }
+    
+    
+    func stopIndicator() {
+        DispatchQueue.main.async {
+            self.activityIndic.stopAnimating()
+            self.activityIndic.isHidden = true
+            self.activityIndic.setNeedsDisplay()
+        }
     }
 }
