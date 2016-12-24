@@ -170,8 +170,9 @@ class BreweryDBClient {
          The solution is to use perform and allow MapViewController to dynamically watch for changes to the beers..
          I use performAndWait because completion get called before breweries are created.
          */
-        container?.performBackgroundTask({
+        container?.performBackgroundTask() {
             (context) -> Void in
+            context.perform {
             brewer = Brewery(inName: breweryDict["name"] as! String,
                              latitude: locDict["latitude"]?.description,
                              longitude: locDict["longitude"]?.description,
@@ -204,7 +205,9 @@ class BreweryDBClient {
             //                print("BreweryDb \(#line) You are in the a background context ")
             //            } catch {
             //            }
-        })
+            }
+        }
+        
         // This following line blocksandwait is being called in a block and wait so it
         // gets trapped.
         // We are falling thru to this line because of the perfrom async
