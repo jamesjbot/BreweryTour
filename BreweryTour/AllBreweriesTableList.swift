@@ -27,7 +27,8 @@ class AllBreweriesTableList: NSObject, Subject {
     
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     
-    let backgroundContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.backgroundContext
+    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+    //let backgroundContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.backgroundContext
     
     override init(){
         super.init()
@@ -35,7 +36,7 @@ class AllBreweriesTableList: NSObject, Subject {
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         request.fetchLimit = 10000
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: (coreDataStack?.mainContext!)!,
+                                         managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         frc.delegate = self

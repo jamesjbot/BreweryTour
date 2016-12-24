@@ -16,8 +16,9 @@ import CoreData
 class SelectedBeersTableList : NSObject , NSFetchedResultsControllerDelegate, Subject {
 
     // MARK: Constants
-    let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    let mainContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.mainContext
+    // let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+    //let mainContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.mainContext
 
     // MARK: Variables
     private var organic : Bool = false
@@ -36,11 +37,13 @@ class SelectedBeersTableList : NSObject , NSFetchedResultsControllerDelegate, Su
     // Initialization to create a an NSFetchRequest we can use later.
     // The default query is for all beers sorted by beer name
     internal override init(){
+        super.init()
+        readOnlyContext?.automaticallyMergesChangesFromParent = true
         print("SelectedBeersTable \(#line) initializer called ")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: mainContext!,
+                                         managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         do {
@@ -119,7 +122,7 @@ class SelectedBeersTableList : NSObject , NSFetchedResultsControllerDelegate, Su
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subPredicates)
         // Create a new fetchedresultscontroller
         frc = NSFetchedResultsController(fetchRequest : request,
-                                         managedObjectContext: mainContext!,
+                                         managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         do {

@@ -20,7 +20,9 @@ class FavoriteBeersViewController: UIViewController {
     
     let paddingForPoint : CGFloat = 20
     fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    
+    fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+    fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+
     // MARK: Variables
     // Currently this frc works on persistent
     fileprivate var frc : NSFetchedResultsController<Beer>
@@ -88,7 +90,7 @@ class FavoriteBeersViewController: UIViewController {
         request.sortDescriptors = []
         request.predicate = NSPredicate( format: "favorite == YES")
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: (coreDataStack?.mainContext)!,
+                                         managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         super.init(coder: aDecoder)
@@ -176,16 +178,19 @@ extension FavoriteBeersViewController : UITableViewDelegate {
         
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
-            let object = self.frc.object(at: indexPath) as Beer
-            object.favorite = false
-            do {
-                try self.coreDataStack?.saveMainContext()
-            } catch {
-                self.displayAlertWindow(title: "Remove Error", msg: "Error removing item,\nplease try agains")            }
-            tableView.reloadData()
+            self.container?.performBackgroundTask({
+                (context) -> Void in
+                let object = self.frc.object(at: indexPath) as Beer
+                object.favorite = false
+                do {
+                    try context.save()
+                } catch {
+                    self.displayAlertWindow(title: "Remove Error", msg: "Error removing item,\nplease try agains")
+                }
+                tableView.reloadData()
+            })
         }
         deleteAction.backgroundColor = UIColor.green
-        
         return [deleteAction]
     }
     

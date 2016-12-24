@@ -51,8 +51,9 @@ class MapViewController : UIViewController {
     // Location manager allows us access to the user's location
     private let locationManager = CLLocationManager()
     
-    fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    
+    //fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+    fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
     
     // MARK: Variables
     
@@ -103,22 +104,28 @@ class MapViewController : UIViewController {
     
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
-    private func initializeFetchAndFetchBreweriesSetIncomingLocations(style : Style){
-        print("MapView \(#line) Requesting style: \(style.id!) ")
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+    private func initializeFetchAndFetchBreweriesSetIncomingLocations(byStyle : Style){
+        print("MapView \(#line) Requesting style: \(byStyle.id!) ")
+        let request : NSFetchRequest<Beer> = Beer.fetchRequest()
         request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "styleID = %@", style.id!)
+        request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
         var results : [Beer]!
         // Presave the mainContext maybe that's why I cant see any results.
-        let thisContext = coreDataStack?.mainContext
-        
+        //let thisContext = coreDataStack?.mainContext
         beerFRC = NSFetchedResultsController(fetchRequest: request ,
-                                             managedObjectContext: thisContext!,
+                                             managedObjectContext: readOnlyContext!,
                                              sectionNameKeyPath: nil,
                                              cacheName: nil)
         beerFRC?.delegate = self
+        /*
+         TODO When you select styles and favorite a brewery, go to favorites breweries and pick a style
+         This frc will totally overwrite because it will detect changes in the breweries from favoriting 
+         forcing a reload on the mapviewcontroller.
+         */
         // This must block because the mapView must be populated before it displays.
-        thisContext?.performAndWait {
+//        container?.performBackgroundTask({
+//            (context) -> Void in
+        readOnlyContext?.performAndWait {
             do {
                 try self.beerFRC?.performFetch()
                 results = (self.beerFRC?.fetchedObjects)! as [Beer]
@@ -138,7 +145,7 @@ class MapViewController : UIViewController {
                 breweryRequest.sortDescriptors = []
                 breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
                 do {
-                    let brewery = try (thisContext!.fetch(breweryRequest)) as [Brewery]
+                    let brewery = try (self.readOnlyContext?.fetch(breweryRequest))! as [Brewery]
                     if !self.mappableBreweries.contains(brewery[0]) {
                         self.mappableBreweries.append(brewery[0])
                     }
@@ -151,6 +158,9 @@ class MapViewController : UIViewController {
             // The map must be populated when the fetchRequest completes
             self.populateMapWithAnnotations(fromBreweries: self.mappableBreweries, removeDisplayedAnnotations: true)
         }
+        //})
+//        thisContext?.performAndWait {
+//        }
     }
     
 
@@ -189,6 +199,9 @@ class MapViewController : UIViewController {
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.requestLocation()
         }
+        
+        readOnlyContext?.automaticallyMergesChangesFromParent = true
+        
         frc.delegate = self
     }
     
@@ -203,7 +216,7 @@ class MapViewController : UIViewController {
         lastSelectedManagedObject = mapViewData
         if mapViewData is Style {
             print("MapView \(#line) this is a style")
-            initializeFetchAndFetchBreweriesSetIncomingLocations(style: mapViewData as! Style)
+            initializeFetchAndFetchBreweriesSetIncomingLocations(byStyle: mapViewData as! Style)
         } else if mapViewData is Brewery {
             // Remove all traces of previous breweries
             print("MapView \(#line) this is a brewery")
@@ -247,13 +260,13 @@ class MapViewController : UIViewController {
         print("MapView \(#line) were there any beers that matched style\n")
         //print("MapView \(#line) \(results)")
         var newBreweries = [Brewery]()
-        let thisContext = coreDataStack?.mainContext
+        //let thisContext = coreDataStack?.mainContext
         for beer in results {
             let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
             breweryRequest.sortDescriptors = []
             breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
             do {
-                let brewery = try (thisContext!.fetch(breweryRequest)) as [Brewery]
+                let brewery = try (readOnlyContext?.fetch(breweryRequest))! as [Brewery]
                 if !self.mappableBreweries.contains(brewery.first!) {
                     self.mappableBreweries.append(brewery.first!)
                     newBreweries.append(brewery.first!)
@@ -305,11 +318,11 @@ class MapViewController : UIViewController {
     
     
     // Find breweries
-    fileprivate func findBreweryinMainContext(by: MKAnnotation) -> NSManagedObjectID? {
+    fileprivate func findBreweryIDinMainContext(by: MKAnnotation) -> NSManagedObjectID? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         let frc = NSFetchedResultsController(fetchRequest: request,
-                                             managedObjectContext: (coreDataStack?.mainContext)!,
+                                             managedObjectContext: readOnlyContext!,
                                              sectionNameKeyPath: nil, cacheName: nil)
         do {
             try frc.performFetch()
@@ -352,10 +365,10 @@ extension MapViewController : MKMapViewDelegate {
         pinView?.canShowCallout = true
         
         // Find the brewery in the proper context
-        let thisContext: NSManagedObjectContext = (coreDataStack?.mainContext)!
-        let breweryObjectID : NSManagedObjectID! = findBreweryinMainContext(by: annotation)!
+        //let thisContext: NSManagedObjectContext = (coreDataStack?.mainContext)!
+        let breweryObjectID : NSManagedObjectID! = findBreweryIDinMainContext(by: annotation)!
         //fatalError("This may be the wrong context to look for the brewery in")
-        let foundBrewery = thisContext.object(with: breweryObjectID!) as! Brewery
+        let foundBrewery = readOnlyContext?.object(with: breweryObjectID!) as! Brewery
         
         // Set the favorite icon on pin
         let localButton = UIButton(type: .contactAdd)
@@ -440,11 +453,11 @@ extension MapViewController : MKMapViewDelegate {
                 // Do not respond to taps on the user's location callout
                 return
             }
-            let favoritingContext = coreDataStack?.mainContext
+            // let favoritingContext = coreDataStack?.mainContext
             // Find the brewery object that belongs to this location
-            let tempObjectID = findBreweryinMainContext(by: view.annotation!)
+            let tempObjectID = findBreweryIDinMainContext(by: view.annotation!)
             // Fetch object from context
-            let favBrewery = favoritingContext?.object(with: tempObjectID!) as! Brewery
+            let favBrewery = readOnlyContext?.object(with: tempObjectID!) as! Brewery
             // Flip favorite state in the database and in the ui
             print("favortie before: \(favBrewery.favorite)")
             favBrewery.favorite = !(favBrewery.favorite)
@@ -463,18 +476,17 @@ extension MapViewController : MKMapViewDelegate {
                 view.setNeedsDisplay()
             }
             // Save favorite status and update map
-            DispatchQueue.main.async {
+            container?.performBackgroundTask(){
+                (context) -> Void in
+                (context.object(with: tempObjectID!) as! Brewery).favorite = favBrewery.favorite
                 do {
-                    try self.coreDataStack?.saveMainContext()
+                    try context.save()
                 } catch let error {
                     print("Error saving in context \(error)")
                     self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite brewery, \nplease try again")
-                    return
                 }
             }
-            
-            
-            return
+            break
             
         // Goto Webpage Information
         case view.rightCalloutAccessoryView!:
@@ -485,6 +497,7 @@ extension MapViewController : MKMapViewDelegate {
                     UIApplication.shared.open(url, options: [:], completionHandler: nil)
                 }
             }
+            break
             
         default:
             break

@@ -18,11 +18,11 @@ class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
     // TODO Remove Debug code
     var firstRun : Bool = true
     
-    
     // MARK: Constants
-    let mainContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.mainContext
+    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+    //let mainContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.mainContext
 
-    let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
+    //let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
     
     // MARK: Variables
     
@@ -58,7 +58,7 @@ class StylesTableList: NSObject, NSFetchedResultsControllerDelegate, Subject {
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
         request.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: mainContext!,
+                                         managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         do {

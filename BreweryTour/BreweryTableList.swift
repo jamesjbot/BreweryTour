@@ -30,6 +30,7 @@ class BreweryTableList: NSObject, Subject {
     internal var frc : NSFetchedResultsController<Brewery>!
     
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
+    private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     
     override init(){
         super.init()
@@ -37,7 +38,7 @@ class BreweryTableList: NSObject, Subject {
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         request.fetchLimit = 10000
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: (coreDataStack?.mainContext!)!,
+                                         managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         frc.delegate = self

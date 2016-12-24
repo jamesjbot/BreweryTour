@@ -30,7 +30,8 @@ class BreweryDBClient {
     
     // MARK: Variables
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
-    
+    private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
+    private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     // TODO Remove debugging variable
     public var rejectedBreweries : Int = 0
     
@@ -58,16 +59,14 @@ class BreweryDBClient {
                 beer.imageUrl = medium
                 let queue = DispatchQueue(label: "Images")
                 print("BreweryDB \(#line) Prior to getting Beer image")
-                queue.async(qos: .utility) {
-                    print("BreweryDB \(#line) In queue Async Getting Beer image in background")
-                    self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
-                }
+                print("BreweryDB \(#line) In queue Async Getting Beer image in background")
+                self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
             }
         }
         var thisBeer : Beer!
         
         // Upgrade code
-        let thisContext = coreDataStack?.backgroundContext
+        //let thisContext = coreDataStack?.backgroundContext
         // Non optional paramters: beerName, breweryID, id
         
         print("BreweryDB \(#line) Working to create Beer object in backgroundcontext)")
@@ -87,55 +86,60 @@ class BreweryDBClient {
         // change coreDataStack?.mainContext!)! to thisContext
         // Within the maincontext the brewery must have already been created.
         //
-        thisContext?.perform() {
-            thisBeer = Beer(id: id!, name: name!,
-                            beerDescription: description!,
-                            availability: available!,
-                            context: thisContext!)
-            // TODO Bug accomodate nil brewery, when selecting brewery
-            assert(brewery != nil || brewerID != nil)
-            // I must use one of these
-            
-            thisBeer.brewer = thisContext?.object(with: (brewery?.objectID)!) as! Brewery?
-            
-            thisBeer.breweryID = thisBeer.brewer?.id
-            
-            //print("BreweryDB \(#line) Is Beer Organic:\(beer["isOrganic"]!)")
-            thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
-            //print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
-            if beer["styleId"] != nil {
-                thisBeer.styleID = (beer["styleId"] as! NSNumber).description
+        container?.performBackgroundTask(){
+            (context) -> Void in
+            context.perform {
+                thisBeer = Beer(id: id!, name: name!,
+                                beerDescription: description!,
+                                availability: available!,
+                                context: context)
+                // TODO Bug accomodate nil brewery, when selecting brewery
+                assert(brewery != nil || brewerID != nil)
+                // I must use one of these
+                
+                thisBeer.brewer = context.object(with: (brewery?.objectID)!) as! Brewery
+                
+                thisBeer.breweryID = thisBeer.brewer?.id
+                
+                //print("BreweryDB \(#line) Is Beer Organic:\(beer["isOrganic"]!)")
+                thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
+                //print("BreweryDB \(#line) What is Beer Style:\(beer["styleId"]!)")
+                if beer["styleId"] != nil {
+                    thisBeer.styleID = (beer["styleId"] as! NSNumber).description
+                }
+                thisBeer.abv = beerabv ?? "Information N/A"
+                thisBeer.ibu = beeribu ?? "Information N/A"
+                // Saving this beer from Main to PersistentContext
+                // Begin Upgraded Code
+                //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
+                //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
+                //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
+                print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
+                do {
+                    try context.save()
+                    completion(thisBeer)
+                    saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
+                } catch let error {
+                    fatalError("Failed to save beer because of error:\n\(error)")
+                }
+                //            print("BreweryDB \(#line) In blocking for beer save ")
+                //            do {
+                //                try thisContext?.save()
+                //                print("BreweryDB \(#line) Beer created and saved in this context \(thisContext) ")
+                //            } catch {
+                //                fatalError()
+                //            }
+                print("BreweryDb \(#line) Exiting non blocking for beersave\n")
+                //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
+                //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
+                //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
+                //_ = saveMain()
+                print("BreweryDb \(#line) Returning the beer we created.")
+                
+                //print(beer)
+                //print(thisBeer)
             }
-            thisBeer.abv = beerabv ?? "Information N/A"
-            thisBeer.ibu = beeribu ?? "Information N/A"
-            // Saving this beer from Main to PersistentContext
-            // Begin Upgraded Code
-            //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
-            //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
-            //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-            print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
-            
-            self.saveBackground()
-            //            print("BreweryDB \(#line) In blocking for beer save ")
-            //            do {
-            //                try thisContext?.save()
-            //                print("BreweryDB \(#line) Beer created and saved in this context \(thisContext) ")
-            //            } catch {
-            //                fatalError()
-            //            }
-            print("BreweryDb \(#line) Exiting non blocking for beersave\n")
-            //print("BreweryDB \(#line) Inserted objects\(coreDataStack?.mainContext.insertedObjects) ")
-            //print("BreweryDB \(#line) Updated objects\(coreDataStack?.mainContext.updatedObjects) ")
-            //print("BreweryDB \(#line) Deleted objects\(coreDataStack?.mainContext.deletedObjects) ")
-            //_ = saveMain()
-            print("BreweryDb \(#line) Returning the beer we created.")
-            
-            completion(thisBeer)
-            //print(beer)
-            //print(thisBeer)
-            saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
         }
-        
     }
     
     
@@ -150,12 +154,9 @@ class BreweryDBClient {
             if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
                 let imageURL : String = imagesDict["icon"] as! String?,
                 let targetBrewery = inputBrewery {
-                let queue = DispatchQueue(label: "Images")
                 print("BreweryDB \(#line) Prior to getting Brewery image")
-                queue.async(qos: .utility) {
-                    print("BreweryDB \(#line) Getting Brewery image in background")
-                    self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
-                }
+                print("BreweryDB \(#line) Getting Brewery image in background")
+                self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
             }
         }
         // Remember to change all the references to this context below
@@ -172,15 +173,23 @@ class BreweryDBClient {
          The solution is to use perform and allow MapViewController to dynamically watch for changes to the beers..
          I use performAndWait because completion get called before breweries are created.
          */
-        coreDataStack?.backgroundContext.perform {
+        container?.performBackgroundTask({
+            (context) -> Void in
             brewer = Brewery(inName: breweryDict["name"] as! String,
                              latitude: locDict["latitude"]?.description,
                              longitude: locDict["longitude"]?.description,
                              url: locDict["website"] as! String?,
                              open: (locDict["openToPublic"] as! String == "Y") ? true : false,
                              id: locDict["id"]?.description,
-                             context: (self.coreDataStack?.backgroundContext)!)
-            self.saveBackground()
+                             context: context)
+                do {
+                    try context.save()
+                    print("BreweryDB \(#line) Exiting Brewery non blocking\n\(breweryDict["name"])")
+                } catch let error {
+                    completion(brewer)
+                    saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
+                }
+            //self.saveBackground()
             //            do {
             //                print("BreweryDB \(#line) Commiting from createBreweryObject into BackgroundContext")
             //                try self.coreDataStack?.saveBackgroundContext()
@@ -197,10 +206,7 @@ class BreweryDBClient {
             //                print("BreweryDb \(#line) You are in the a background context ")
             //            } catch {
             //            }
-            print("BreweryDB \(#line) Exiting Brewery non blocking\n\(breweryDict["name"])")
-            completion(brewer)
-            saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
-        }
+        })
         // This following line blocksandwait is being called in a block and wait so it
         // gets trapped.
         // We are falling thru to this line because of the perfrom async
@@ -329,10 +335,10 @@ class BreweryDBClient {
                                            completion: completion,
                                            group: group)
                                 print("BreweryDB \(#line)page# \(i)")
-                                print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.updatedObjects.count)")
-                                print("BreweryDB \(#line)Prior to saving hasChanges: \(self.coreDataStack?.mainContext.hasChanges)")
-                                print("BreweryDB \(#line)Prior to saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
-                                print("BreweryDB \(#line)After saving \(self.coreDataStack?.mainContext.insertedObjects.count)")
+                                print("BreweryDB \(#line)Prior to saving \(self.readOnlyContext?.updatedObjects.count)")
+                                print("BreweryDB \(#line)Prior to saving hasChanges: \(self.readOnlyContext?.hasChanges)")
+                                print("BreweryDB \(#line)Prior to saving \(self.readOnlyContext?.insertedObjects.count)")
+                                print("BreweryDB \(#line)After saving \(self.readOnlyContext?.insertedObjects.count)")
                                 group.leave()
                         }
                     }
@@ -572,28 +578,35 @@ class BreweryDBClient {
                     return
                 }
                 // Upgraded code
-                let thisContext = self.coreDataStack?.backgroundContext
+                //let thisContext = self.coreDataStack?.backgroundContext
                 //print("\nBrewerydb \(#line) Preceding to Blocking for beerImage update in \(thisContext)")
-                thisContext?.perform(){
-                    print("Brewerydb \(#line) Blocking on beerimage update ")
-                    //self.coreDataStack!.mainContext.performAndWait(){
-                    // Upgraded code
-                    let beerForUpdate = thisContext?.object(with: updateManagedObjectID) as! Beer
-                    //let beerForUpdate = self.coreDataStack?.mainContext.object(with: updateManagedObjectID) as! Beer
-                    let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
-                    beerForUpdate.image = outputData
-                    self.saveBackground()
-                    //                    do {
-                    //                        // Upgraded code
-                    //                        try thisContext?.save()
-                    //                        //try self.coreDataStack?.mainContext.save()
-                    //                        print("BreweryDB \(#line) Beer Imaged saved in \(thisContext) for beer \(forBeer.beerName)")
-                    //                    }
-                    //                    catch {
-                    //                        return
-                    //                    }
-                    print("BreweryDb \(#line) Completed blocking on beer image update\n")
-                }
+                self.container?.performBackgroundTask({
+                    (context) in
+                    context.perform(){
+                        print("Brewerydb \(#line) Blocking on beerimage update ")
+                        //self.coreDataStack!.mainContext.performAndWait(){
+                        // Upgraded code
+                        let beerForUpdate = context.object(with: updateManagedObjectID) as! Beer
+                        //let beerForUpdate = self.coreDataStack?.mainContext.object(with: updateManagedObjectID) as! Beer
+                        let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
+                        beerForUpdate.image = outputData
+                        do {
+                            try context.save()
+                        } catch let error {
+                            fatalError("error:\n\(error)")
+                        }
+                        //                    do {
+                        //                        // Upgraded code
+                        //                        try thisContext?.save()
+                        //                        //try self.coreDataStack?.mainContext.save()
+                        //                        print("BreweryDB \(#line) Beer Imaged saved in \(thisContext) for beer \(forBeer.beerName)")
+                        //                    }
+                        //                    catch {
+                        //                        return
+                        //                    }
+                        print("BreweryDb \(#line) Completed blocking on beer image update\n")
+                    }
+                })
             }
         }
         task.resume()
@@ -727,7 +740,7 @@ class BreweryDBClient {
                                                      forBrewery: Brewery,
                                                      updateManagedObjectID: NSManagedObjectID) {
         // Upgraded code.
-        let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
+        //let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
         print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext \(forBrewery.name)")
         
         let session = URLSession.shared
@@ -740,22 +753,30 @@ class BreweryDBClient {
                 }
                 // Upgraded code change to thisContext, and remove the perfromandwait?
                 print("\nBreweryDB \(#line) preceeding to block brewery image update in backgroundcontext")
-                thisContext.perform(){
-                    print("BreweryDB \(#line) blocking on brewery image update ")
-                    let breweryForUpdate = thisContext.object(with: updateManagedObjectID) as! Brewery
-                    let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
-                    breweryForUpdate.image = outputData
-                    // Upgraded code change this to thisContext.
-                    self.saveBackground()
-                    //                    do {
-                    //                        try thisContext.save()
-                    //                        print("BreweryDB \(#line) Attention Brewery Imaged saved in \(thisContext.name) for brewery \(forBrewery.name)")
-                    //                    }
-                    //                    catch let error {
-                    //                        fatalError("Error \(error)")
-                    //                    }
-                    print("BreweryDB \(#line) Complete blocking on brewery image update\n ")
-                }
+                self.container?.performBackgroundTask({
+                    (context) in
+                    context.perform() {
+                        print("BreweryDB \(#line) blocking on brewery image update ")
+                        let breweryForUpdate = context.object(with: updateManagedObjectID) as! Brewery
+                        let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
+                        breweryForUpdate.image = outputData
+                        // Upgraded code change this to thisContext.
+                        do {
+                            try context.save()
+                        } catch let error {
+                            fatalError("Error:\n\(error)")
+                        }
+                        //self.saveBackground()
+                        //                    do {
+                        //                        try thisContext.save()
+                        //                        print("BreweryDB \(#line) Attention Brewery Imaged saved in \(thisContext.name) for brewery \(forBrewery.name)")
+                        //                    }
+                        //                    catch let error {
+                        //                        fatalError("Error \(error)")
+                        //                    }
+                        print("BreweryDB \(#line) Complete blocking on brewery image update\n ")
+                    }
+                })
             }
         }
         task.resume()
@@ -864,7 +885,7 @@ class BreweryDBClient {
             createBeerLoop: for beer in beerArray {
                 print("Brewerydb \(#line) In beer loop ")
                 // Check to see if this beer is in the database already, and skip if so
-                guard getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.backgroundContext)!) == nil else {
+                guard getBeerByID(id: beer["id"] as! String, context: readOnlyContext!) == nil else {
                     continue createBeerLoop
                 }
                 // This beer has no brewery information, continue with the next beer
@@ -890,7 +911,7 @@ class BreweryDBClient {
                         continue breweryLoop
                     }
                     // Check to make sure the brewery is not already in the database
-                    var dbBrewery : Brewery! = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.backgroundContext)!)
+                    var dbBrewery : Brewery! = getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!)
                     if dbBrewery == nil { // Create a brewery object when none.
                         createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
                             (Brewery) -> Void in
@@ -926,13 +947,13 @@ class BreweryDBClient {
             // Check to see if the style is already in coredata then skip, else add
             let request = NSFetchRequest<Style>(entityName: "Style")
             request.sortDescriptors = []
-            coreDataStack?.persistingContext.perform {
+            readOnlyContext?.perform {
                 for aStyle in styleArrayOfDict {
                     let localId = aStyle["id"]?.stringValue
                     let localName = aStyle["name"]
                     do {
                         request.predicate = NSPredicate(format: "id = %@", localId!)
-                        let results = try self.coreDataStack?.persistingContext.fetch(request)
+                        let results = try self.readOnlyContext?.fetch(request)
                         if (results?.count)! > 0 {
                             continue
                         }
@@ -941,25 +962,32 @@ class BreweryDBClient {
                         return
                     }
                     // When style not present adds new style into MainContext
-                    Style(id: localId!, name: localName! as! String, context: (self.coreDataStack?.mainContext)!)
+                    self.container?.performBackgroundTask({
+                        (context) in
+                        Style(id: localId!, name: localName! as! String, context: context)
+                        do {
+                            try context.save()
+                        } catch let error {
+                            fatalError("Error saving style\n\(error)")
+                        }
+                    })
                 }
-                
             }
             // TODO experiment moving this block of code up one bracket
             // and end with a return, this will save all the styles after we are done.
             // This line of code will run immediately because the above is a perform
             // Save beer styles in main and persistent.
-            do {
-                print("BreweryDB \(#line) Styles download now saving in MainContext ")
-                // TODO Reinstate this change
-                //try coreDataStack?.mainContext.save()
-                try coreDataStack?.saveMainContext()
-                completion!(true, "Success saving all new styles.")
-                return
-            } catch {
-                completion!(false, "Failed saving new styles")
-                return
-            }
+//            do {
+//                print("BreweryDB \(#line) Styles download now saving in MainContext ")
+//                // TODO Reinstate this change
+//                //try coreDataStack?.mainContext.save()
+//                try coreDataStack?.saveMainContext()
+//                completion!(true, "Success saving all new styles.")
+//                return
+//            } catch {
+//                completion!(false, "Failed saving new styles")
+//                return
+//            }
             return
             break
             
@@ -997,7 +1025,7 @@ class BreweryDBClient {
                 }
                 
                 // Don't repeat breweries in the database
-                var thisbrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.backgroundContext)!)
+                var thisbrewery = getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!)
                 guard thisbrewery == nil else {
                     rejectedBreweries += 1
                     continue
@@ -1010,16 +1038,16 @@ class BreweryDBClient {
             // TODO Contemplate deleting this block of code.
             //Go back to the breweryArray and save another brewery
             //Save all the Breweries in background context to disk
-            do {
-                print("BreweryDB \(#line) Saving from .Breweries switch case of parse function ")
-                try coreDataStack?.persistingContext.save()
-                print("BreweryDB \(#line) Brewery Saved to Persisting context")
-                completion!(true, "Success")
-                return
-            } catch {
-                completion!(false, "Failed Request \(#line) \(#function)")
-                return
-            }
+//            do {
+//                print("BreweryDB \(#line) Saving from .Breweries switch case of parse function ")
+//                try coreDataStack?.persistingContext.save()
+//                print("BreweryDB \(#line) Brewery Saved to Persisting context")
+//                completion!(true, "Success")
+//                return
+//            } catch {
+//                completion!(false, "Failed Request \(#line) \(#function)")
+//                return
+//            }
             completion!(true, "Success")
             break
             
@@ -1039,7 +1067,7 @@ class BreweryDBClient {
                 print("BreweryDB \(#line)---------------------NextBeer---------------------")
                 // Creating beer
                 // Check to see if this beer is in the database already
-                var thisBeer = getBeerByID(id: beer["id"] as! String, context: (coreDataStack?.backgroundContext)!)
+                var thisBeer = getBeerByID(id: beer["id"] as! String, context: readOnlyContext!)
                 // If the beer is in the coredata skip adding it
                 guard thisBeer == nil else {
                     continue beerLoop
@@ -1073,7 +1101,7 @@ class BreweryDBClient {
                     
                     // Check to make sure the brewery is not already in the database
                     var newBrewery : Brewery!
-                    newBrewery = getBreweryByID(id: locDic["id"] as! String, context: (coreDataStack?.backgroundContext)!)
+                    newBrewery = getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!)
                     
                     if newBrewery == nil { // Create a brewery object
                         createBreweryObject(breweryDict: breweryDict,
@@ -1111,13 +1139,13 @@ class BreweryDBClient {
                 // Create the coredata object for each beer
                 // Test to see if beer is already in context
                 let id : String? = beer["id"] as? String
-                let dbBeer = getBeerByID(id: id!, context: (coreDataStack?.backgroundContext)!)
+                let dbBeer = getBeerByID(id: id!, context: readOnlyContext!)
                 guard dbBeer == nil else {
                     print("BreweryDB \(#line)Encountered a beer of this type already skipping creation")
                     continue
                 }
                 // Get the brewery based on objectID
-                let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: (coreDataStack?.backgroundContext)!)
+                let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: readOnlyContext!)
                 createBeerObject(beer: beer,
                                  brewery: dbBrewery,
                                  completion: { (beer) -> Void in})
@@ -1126,17 +1154,17 @@ class BreweryDBClient {
         }
     }
     
-    
-    private func saveBackground() {
-        coreDataStack?.backgroundContext.performAndWait {
-            do {
-                try self.coreDataStack?.backgroundContext.save()
-            } catch let error {
-                fatalError("error:\n\(error)")
-            }
-        }
-        
-    }
+// TODO did I remove all of these.
+//    private func saveBackground() {
+//        coreDataStack?.backgroundContext.performAndWait {
+//            do {
+//                try self.coreDataStack?.backgroundContext.save()
+//            } catch let error {
+//                fatalError("error:\n\(error)")
+//            }
+//        }
+//        
+//    }
     
     
     

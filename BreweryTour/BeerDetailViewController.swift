@@ -64,6 +64,8 @@ class BeerDetailViewController: UIViewController {
     // rather than addressing it directly
     //private let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
+    private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
     
     // MARK: Functions
     
@@ -74,7 +76,7 @@ class BeerDetailViewController: UIViewController {
         tasting.delegate = self
         
         // See if this has already been favorited, if so use the favorite information
-        if let BeerInThisCoreDataContext : Beer = searchForBeerInCoreData(context: (coreDataStack?.backgroundContext)!) {
+        if let BeerInThisCoreDataContext: Beer = searchForBeerInCoreData(context: readOnlyContext!) {
             beer = BeerInThisCoreDataContext
         }
         
@@ -115,10 +117,11 @@ class BeerDetailViewController: UIViewController {
         let request = NSFetchRequest<Style>(entityName: "Style")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format : "id = %@", id )
+        // TODO does this need to be in a container.performBackgroundTask
         do {
             // TODO Remove 2nd persistingContext because I'm trying to test.
             // Where should you get style data.
-            let result = try coreDataStack?.persistingContext.fetch(request)
+            let result = try readOnlyContext?.fetch(request)
             return result![0].displayName!
         } catch {
             // StyleID not in database.
@@ -151,18 +154,21 @@ class BeerDetailViewController: UIViewController {
     
     // All beers are in the database we just mark their favorite status and tasting notes
     fileprivate func saveToBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
-        
-        do {
-            beer.favorite = makeFavorite
-            beer.tastingNotes = tasting.text
-            try coreDataStack?.saveBackgroundContext()
-        } catch let error{
-            print("Error saving \(error)")
-            displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
+        container?.performBackgroundTask() {
+            (context) -> Void in
+            let updatableBeer = context.object(with: self.beer.objectID) as! Beer
+            updatableBeer.favorite = makeFavorite
+            updatableBeer.tastingNotes = self.tasting.text
+            do {
+                try context.save()
+            } catch let error {
+                print("Error saving \(error)")
+                self.displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
+            }
         }
     }
-    
 }
+
 
 extension BeerDetailViewController : UITextViewDelegate {
 

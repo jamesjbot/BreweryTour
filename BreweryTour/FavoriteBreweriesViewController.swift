@@ -19,7 +19,9 @@ class FavoriteBreweriesViewController: UIViewController {
     // MARK: Constants
     
     let paddingForPoint : CGFloat = 20
-    fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    //fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+    fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
     
     // MARK: Variables
     // Currently this runs on persistent
@@ -44,6 +46,7 @@ class FavoriteBreweriesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        readOnlyContext?.automaticallyMergesChangesFromParent = true
         frc.delegate = self
         // Do any additional setup after loading the view.
         performFetchOnResultsController()
@@ -89,12 +92,12 @@ class FavoriteBreweriesViewController: UIViewController {
     
     
     fileprivate func performFetchOnResultsController(){
-        let theContext : NSManagedObjectContext = (coreDataStack?.mainContext)!
+        //let theContext : NSManagedObjectContext = (coreDataStack?.mainContext)!
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "favorite = 1")
         frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: (theContext),
+                                         managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         // Create a request for Brewery objects and fetch the request from Coredata
@@ -177,14 +180,21 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
         // Change this to be saving maincontext
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
-            let object = self.frc.object(at: indexPath) as Brewery
-            object.favorite = false
-            do {
-                try self.coreDataStack?.saveMainContext()
-            } catch {
-                self.displayAlertWindow(title: "Error Removing", msg: "Error removing item\nplease try again")
-            }
-            tableView.reloadData()
+            let object = self.frc.object(at: indexPath)
+            self.container?.performBackgroundTask({
+                (context) -> Void in
+                var brewery = context.object(with: object.objectID) as! Brewery
+                brewery.favorite = false
+                do {
+                    try context.save()
+                } catch {
+                    self.displayAlertWindow(title: "Error Removing", msg: "Error removing item\nplease try again")
+                }
+                // TODO will you need to update the screen or will NSFetchedResultsControllerDelegate catch this
+//                DispatchQueue.main.async {
+//                    tableView.reloadData()
+//                }
+            })
         }
         deleteAction.backgroundColor = UIColor.green
         return [deleteAction]
