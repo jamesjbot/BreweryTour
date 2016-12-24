@@ -56,6 +56,10 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     /*
      Add variables for saving the current indexpath when switching segmented controller
      */
+    fileprivate var styleSelectionIndex: Int = 0
+    fileprivate var stylesBrewerySelectionIndex: Int = 0
+    fileprivate var brewerySelectionIndex: Int = 0
+    
     private var tutorialModeOn : Bool = false {
         didSet {
             tutorialView.isHidden = !tutorialModeOn
@@ -189,6 +193,12 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             //styleTable.selectRow(at: <#T##IndexPath?#>, animated: <#T##Bool#>, scrollPosition: <#T##UITableViewScrollPosition#>)
         case 1: // Breweries with selected style
             print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
+            // TODO
+            // If the selected index on the styels table exists
+            // tell brewerytablelist to select style
+            if styleSelectionIndex != nil {
+                breweryList.displayBreweriesWith(style: styleList.frc.object(at: IndexPath(row: styleSelectionIndex, section: 0)))
+            }
             activeTableList = breweryList
             styleTable.reloadData()
         case 2: // All breweries
@@ -350,6 +360,19 @@ extension CategoryViewController : UITableViewDelegate {
     // selection is and then proceed to the map on success
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("CategoryViewControler \(#line) tableView didSelectRowAt clled ")
+        
+        // Save the selecion to appropriate index
+        switch segmentedControl.selectedSegmentIndex {
+        case 0: // Styles
+            styleSelectionIndex = indexPath.row
+        case 1: // Breweries with selected style
+            stylesBrewerySelectionIndex = indexPath.row
+        case 2: // All breweries
+            brewerySelectionIndex = indexPath.row
+        default:
+            break
+        }
+    
         activityIndicator.startAnimating()
         activeTableList.selected(elementAt: indexPath,
                                  searchText: newSearchBar.text!){
@@ -377,6 +400,7 @@ extension CategoryViewController: UISearchBarDelegate {
     // A filter out selections not conforming to the searchbar text
     func searchBar(_: UISearchBar, textDidChange: String){
         // User entered searchtext filter data
+        print("CategoryViewController \(#line) searchBar textDidChange called ")
         activeTableList.filterContentForSearchText(searchText: textDidChange)
         styleTable.reloadData()
     }
