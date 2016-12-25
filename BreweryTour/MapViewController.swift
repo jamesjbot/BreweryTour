@@ -457,7 +457,8 @@ extension MapViewController : MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         // Did the user favorite or ask for more information on the brewery
         switch control as UIView {
-            
+        // UIControl is subclass of UIView
+        // Testing if UIControl is one of the MKAnnotationView's subviews
         // Favorite or unfavorite a brewery
         case view.leftCalloutAccessoryView!:
             print("MapViewController \(#line) Favorite toggle called ")
