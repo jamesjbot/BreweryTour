@@ -80,8 +80,8 @@ class BreweryTableList: NSObject, Subject {
     
     // Fetch breweries based on style selected.
     // Get the Brewery entries from the database
-    internal func displayBreweriesWith(style : Style){
-        print("BreweryTable \(#line) Requesting style: \(style.id!) ")
+    internal func displayBreweriesWith(style : Style, completion: (_ success: Bool) -> Void){
+        print("BreweryTableLISt \(#line) Requesting style: \(style.id!) ")
         let request : NSFetchRequest<Beer> = Beer.fetchRequest()
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "styleID = %@", style.id!)
@@ -91,6 +91,7 @@ class BreweryTableList: NSObject, Subject {
                                              managedObjectContext: readOnlyContext!,
                                              sectionNameKeyPath: nil,
                                              cacheName: nil)
+        print("BreweryTableList \(#line) beerfrc delegate assigned ")
         beerFRC.delegate = self
         /*
          TODO When you select styles and favorite a brewery, go to favorites breweries and pick a style
@@ -100,6 +101,7 @@ class BreweryTableList: NSObject, Subject {
         // This must block because the mapView must be populated before it displays.
         //        container?.performBackgroundTask({
         //            (context) -> Void in
+        print("BreweryTable \(#line) Context Perform is next ")
         readOnlyContext?.perform() {
             do {
                 try self.beerFRC?.performFetch()
@@ -119,21 +121,16 @@ class BreweryTableList: NSObject, Subject {
                 if !self.displayableBreweries.contains(beer.brewer!) {
                     self.displayableBreweries.append(beer.brewer!)
                 }
-//                let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
-//                breweryRequest.sortDescriptors = []
-//                breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
-//                do {
-//                    let brewery = try (self.readOnlyContext?.fetch(breweryRequest))! as [Brewery]
-//                    if !self.displayableBreweries.contains(brewery.first) {
-//                        self.displayableBreweries.append(brewery.first)
-//                    }
-//                } catch {
-//                    self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
-//                    return
-//                }
             }
+            print("end of context perform")
+            print("displayable breweries is available for table reload")
+            // This would be an asynchronous notify.
+            //self.observer.sendNotify(from: self, withMsg: "reload data")
         }
+        print("BreweryTable \(#line) Context Perform just jump over all the code an will run later. ")
     }
+
+
     func registerObserver(view: Observer) {
         observer = view
     }
