@@ -195,10 +195,14 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         case 1: // Breweries with selected style
             print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             // TODO
-            // If the selected index on the styels table exists
+            // If the selected index on the styles table exists
             // tell brewerytablelist to select style
             if styleSelectionIndex != nil {
-                breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!))
+                breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!)){
+                    (success) -> Void in
+                    styleTable.reloadData()
+                    return
+                }
                 // Make this a completion handler and I can replace it later?
             }
             activeTableList = breweryList
@@ -414,7 +418,8 @@ extension CategoryViewController : UITableViewDelegate {
                                     // TODO Temporarily relaxed requirements on callback.
                                     if (msg?.contains("All Pages Processed"))! {
                                         DispatchQueue.main.async {
-                                            self.performSegue(withIdentifier: "Go", sender: nil)
+                                            //TODO Disable automatic map seguea
+                                            //self.performSegue(withIdentifier: "Go", sender: nil)
                                         }
                                     }
         }
