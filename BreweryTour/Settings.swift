@@ -20,8 +20,12 @@ class Settings: UIViewController {
     let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
 
     // MARK: IBOutlet
+    @IBOutlet weak var automaticMapSwitch: UISwitch!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var activityIndic: UIActivityIndicatorView!
+    
+    @IBAction func toggleAutomaticMap(_ sender: UISwitch) {
+    }
     
     @IBAction func deleteBeersBrewery(_ sender: AnyObject) {
         // Prompt user should we delete all the beers and breweries
