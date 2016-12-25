@@ -199,6 +199,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             // tell brewerytablelist to select style
             if styleSelectionIndex != nil {
                 breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!))
+                // Make this a completion handler and I can replace it later?
             }
             activeTableList = breweryList
             styleTable.reloadData()
@@ -214,7 +215,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     
     @IBAction func mapButtonClicked(_ sender: AnyObject) {
-        resignFirstResponder()
+        // Sometimes the simulator clicks the button twice
+        _ = sender.resignFirstResponder()
         performSegue(withIdentifier:"Go", sender: sender)
     }
     
@@ -428,7 +430,9 @@ extension CategoryViewController: UISearchBarDelegate {
     func searchBar(_: UISearchBar, textDidChange: String){
         // User entered searchtext filter data
         print("CategoryViewController \(#line) searchBar textDidChange called ")
-        activeTableList.filterContentForSearchText(searchText: textDidChange)
+        if !textDidChange.isEmpty {
+            activeTableList.filterContentForSearchText(searchText: textDidChange)
+        }
         styleTable.reloadData()
     }
     
@@ -446,12 +450,17 @@ extension CategoryViewController: UISearchBarDelegate {
     // Querying BreweryDB for style/brewery not currently downloaded.
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
-        
+
+        // Only the all breweries list can searchonline for breweries
+        guard segmentedControl.selectedSegmentIndex == 2 else {
+            return
+        }
+
         // Do nothing, because nothing entered in search bar
         guard !(searchBar.text?.isEmpty)! else {
             return
         }
-        
+
         // Prompt user should we go search online for the Brewery or style
         // Create action for prompt
         func searchOnline(_ action: UIAlertAction){
@@ -466,7 +475,7 @@ extension CategoryViewController: UISearchBarDelegate {
                 }
             }
         }
-        let action = UIAlertAction(title: "Search Online?",
+        let action = UIAlertAction(title: "Search Online",
                                    style: .default,
                                    handler: searchOnline)
         displayAlertWindow(title: "Search Online",
