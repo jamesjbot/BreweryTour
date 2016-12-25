@@ -828,7 +828,7 @@ class BreweryDBClient {
         }
     }
     
-    
+    // TODO make this return by completion handler
     private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
         //print("BreweryDB \(#line)Attempting to get beer \(id)")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
@@ -848,7 +848,7 @@ class BreweryDBClient {
         return nil
     }
     
-    
+    // TODO Make this return by completion handlers
     private func getBreweryByID(id : String, context : NSManagedObjectContext) -> Brewery? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
