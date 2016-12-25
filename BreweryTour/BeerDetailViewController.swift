@@ -72,7 +72,7 @@ class BeerDetailViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Attach delegate to tasting notes in viewcontroller
+        // Attach delegate to tasting notes so we can save on finshed editing
         tasting.delegate = self
         
         // See if this has already been favorited, if so use the favorite information
@@ -103,29 +103,30 @@ class BeerDetailViewController: UIViewController {
             favoriteIcon = UIImage(named: "heart_icon_black_white_line_art.png")
         }
         favoriteButton.setImage(favoriteIcon, for: .normal)
-        style.text = "Style: " + getStyleName(id: beer.styleID!)
         organicLabel.text = "Organic: " + (beer.isOrganic == true ? "Yes" : "No")
         abv.text = "ABV: " + (beer.abv ?? "")
         ibu.text = "IBU: " + (beer.ibu ?? "")
-        
+        getStyleName(id: beer.styleID!){
+            (name) -> Void in
+            self.style.text = "Style: " + name
+        }
         // Raise keyboard when typing in UITextView
-        subscribeToKeyboardShowNotifications()
-    }
+        subscribeToKeyboardShowNotifications()    }
 
-    
-    private func getStyleName(id : String) -> String {
+
+    private func getStyleName(id : String,
+                              completion: @escaping (_ name: String ) -> Void ) {
         let request = NSFetchRequest<Style>(entityName: "Style")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format : "id = %@", id )
-        // TODO does this need to be in a container.performBackgroundTask
-        do {
-            // TODO Remove 2nd persistingContext because I'm trying to test.
-            // Where should you get style data.
-            let result = try readOnlyContext?.fetch(request)
-            return result![0].displayName!
-        } catch {
-            // StyleID not in database.
-            return ""
+        readOnlyContext?.perform {
+            do {
+                let result = try self.readOnlyContext?.fetch(request)
+                completion(result?.first?.displayName as String? ?? "")
+            } catch {
+                // StyleID not in database.
+                completion("")
+            }
         }
     }
     
