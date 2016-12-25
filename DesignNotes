@@ -47,6 +47,7 @@ What are the problems
 1. When favoriting a brewery from the map, I'm told that the action failed
 but its completion is 50/50 (This may have been solved with fix 5.)
 2. When deleting all beers and breweries, I'm confronted with the same warning. (This may have been solved with fix 5.)
+7. Lets get everything that downloads beers and styles to work on completion handlers.
 --------------------------------------------------------------------------------
 
 What are you working on now?

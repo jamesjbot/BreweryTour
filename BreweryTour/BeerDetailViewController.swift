@@ -191,6 +191,7 @@ extension BeerDetailViewController : UITextViewDelegate {
 
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
+        // When the done key is pressed don't change text.
         if text == "\n" {
             textView.resignFirstResponder()
             return false
@@ -198,7 +199,6 @@ extension BeerDetailViewController : UITextViewDelegate {
             return true
         }
     }
-
 }
 
 
