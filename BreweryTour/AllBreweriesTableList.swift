@@ -74,38 +74,6 @@ class AllBreweriesTableList: NSObject, Subject {
     }
     
     
-    
-    
-    
-    
-    func temporaryFetchData(){
-        do {
-            try frc.performFetch()
-            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
-        } catch {
-            fatalError()
-        }
-        do {
-            try frc.performFetch()
-            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
-        } catch {
-            fatalError()
-        }
-        do {
-            try frc.performFetch()
-            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
-        } catch {
-            fatalError()
-        }
-        do {
-            try frc.performFetch()
-            print("BreweryTableList \(#line) Temporary data fetch Retrieved this many Breweries \(frc.fetchedObjects?.count)")
-        } catch {
-            fatalError()
-        }
-    }
-    
-    
     func getNumberOfRowsInSection(searchText: String?) -> Int {
         // If we batch delete in the background frc will not retrieve delete results.
         // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
