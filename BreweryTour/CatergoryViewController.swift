@@ -187,13 +187,13 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
         switch sender.selectedSegmentIndex{
         case 0: // Styles
-            print("CategoryViewController \(#line) Switching to StylesTableList and reloading ")
+            //print("CategoryViewController \(#line) Switching to StylesTableList and reloading ")
             activeTableList = styleList
             styleTable.reloadData()
             styleTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
             )
         case 1: // Breweries with selected style
-            print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
+            //print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             // TODO
             // If the selected index on the styles table exists
             // tell brewerytablelist to select style
@@ -285,6 +285,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        print("Categor \(#line) Viewwillappearcalled ")
         // Do I really want to deselect.
         // TODO Deselect whatever was selected on screen
 //        guard styleTable.indexPathForSelectedRow == nil else {
@@ -294,6 +295,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         // Always reload the table data. Incase new breweries were pulled in
         // TODO Only for styles tables do we not want to reload But this only applies if the Breweries w/ styles or breweries screen
         // is shown
+        activeTableList.filterContentForSearchText(searchText: newSearchBar.text!)
         styleTable.reloadData()
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
@@ -343,18 +345,18 @@ extension CategoryViewController : UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("CategoryViewController \(#line) cellForRowAt called ")
+        //print("CategoryViewController \(#line) cellForRowAt called ")
         var cell = styleTable.dequeueReusableCell(withIdentifier: cellIdentifier)
         cell = activeTableList.cellForRowAt(indexPath: indexPath,
                                          cell: cell!,
                                          searchText: newSearchBar.text)
-        print("CategoryViewController \(#line) cellForRowAt exited ")
+        //print("CategoryViewController \(#line) cellForRowAt exited ")
         return cell!
     }
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("CategoryViewController \(#line) numberOfRowsInsection called ")
+        //print("CategoryViewController \(#line) numberOfRowsInsection called ")
         return activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
 
     }
@@ -368,7 +370,7 @@ extension CategoryViewController : UITableViewDelegate {
     // Capture user selections, communicate with the mediator on what the
     // selection is and then proceed to the map on success
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("CategoryViewControler \(#line) tableView didSelectRowAt clled ")
+        //print("CategoryViewControler \(#line) tableView didSelectRowAt clled ")
         
         // Save the selecion to appropriate index
         switch segmentedControl.selectedSegmentIndex {
@@ -392,7 +394,7 @@ extension CategoryViewController : UITableViewDelegate {
         activeTableList.selected(elementAt: indexPath,
                                  searchText: newSearchBar.text!){
                                     (sucesss,msg) -> Void in
-                                    print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
+                                    //print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
                                     self.activityIndicator.stopAnimating()
                                     if !sucesss {
                                         self.displayAlertWindow(title: "Error with Query", msg: msg!)
@@ -466,7 +468,7 @@ extension CategoryViewController: UISearchBarDelegate {
                                    style: .default,
                                    handler: searchOnline)
         displayAlertWindow(title: "Search Online",
-                           msg: "Dismiss to review the search results so far or press Search Online to search for more.",
+                           msg: "Dismiss to review the search results\nor press Search Online\nto search for more.",
                            actions: [action])
     }
     

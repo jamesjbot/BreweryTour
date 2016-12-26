@@ -21,7 +21,7 @@ class SelectedBeersTableList : NSObject , NSFetchedResultsControllerDelegate, Su
     //let mainContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.mainContext
 
     // MARK: Variables
-    private var organic : Bool = false
+    fileprivate var organic : Bool = false
     private var allBeersMode : Bool = false
     //internal var selectedItemID : NSManagedObjectID = NSManagedObjectID()
     internal var selectedObject : NSManagedObject! = nil
@@ -95,7 +95,7 @@ class SelectedBeersTableList : NSObject , NSFetchedResultsControllerDelegate, Su
     // After fetch is completed the user interface
     // needs to be notified of changes with observer.notify(msg:"")
     // Who is a good test brewery for organic beers
-    private func performFetchRequestFor(organic : Bool, observerNeedsNotification: Bool){
+    fileprivate func performFetchRequestFor(organic : Bool, observerNeedsNotification: Bool){
         print("SelectedBeersTable \(#line) performFetchRequest called on MainContext ")
         // Add a selector for organic beers only.
         var subPredicates = [NSPredicate]()
@@ -143,27 +143,31 @@ class SelectedBeersTableList : NSObject , NSFetchedResultsControllerDelegate, Su
     }
   
     
-    // TableView function
-    internal func getNumberOfRowsInSection(searchText: String?) -> Int {
-        print("SelectedBeersTableList \(#line) getNumberofRowsInSection fetch called")
-        // Since the query is dynamic we need to refresh the data incase something changed.
-        performFetchRequestFor(organic : organic, observerNeedsNotification: false )
-        print("SelectedBeersTableList \(#line) selectedbeerstablelist getnumberof rows called")
-        /* 
-         On SelectedBeers ViewController we have two selections
-         The segmentedControl is serviced by the IBAction attached to the 
-         segmentedcontrol. While here we send back filtered or unfilterd 
-         results, based on user having search text in the search bar.
-         */
-        if searchText != "" {
-            print("SelectedBeersTableList \(#line) searched filtered beers \(filteredObjects.count)")
-            return filteredObjects.count
-        } else {
-            print("SelectedBeersTableList \(#line) searched all beers \(frc.fetchedObjects?.count)")
-            return (frc.fetchedObjects?.count)!
-        }
-    }
+
     
+    
+
+    
+    
+//    internal func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+//        print("SelectedBeersTableList \(#line)SelectedBeersTableList willchange")
+//    }
+//    
+//    
+//    internal func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+//        print("SelectedBeersTableList \(#line)SelctedBeersTableList changed object")
+//    }
+    
+    
+    internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // Tell what ever view controller that is registerd to refresh itself from me
+        observer.sendNotify(from: self, withMsg: "You were updated")
+    }
+
+    
+
+}
+extension SelectedBeersTableList : TableList {
 
     // Configures Tableviewcell for display
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
@@ -186,34 +190,36 @@ class SelectedBeersTableList : NSObject , NSFetchedResultsControllerDelegate, Su
         cell.imageView?.image = im
         return cell
     }
-    
-    
 
-    
-    
-//    internal func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        print("SelectedBeersTableList \(#line)SelectedBeersTableList willchange")
-//    }
-//    
-//    
-//    internal func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        print("SelectedBeersTableList \(#line)SelctedBeersTableList changed object")
-//    }
-    
-    
-    internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        // Tell what ever view controller that is registerd to refresh itself from me
-        observer.sendNotify(from: self, withMsg: "You were updated")
-    }
 
-    
-    internal func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
+    internal func filterContentForSearchText(searchText: String) {// -> [NSManagedObject] {
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
-        return filteredObjects
+        //return filteredObjects
     }
-}
-extension SelectedBeersTableList : TableList {
-    
+
+
+    // TableView function
+    internal func getNumberOfRowsInSection(searchText: String?) -> Int {
+        print("SelectedBeersTableList \(#line) getNumberofRowsInSection fetch called")
+        // Since the query is dynamic we need to refresh the data incase something changed.
+        performFetchRequestFor(organic : organic, observerNeedsNotification: false )
+        print("SelectedBeersTableList \(#line) selectedbeerstablelist getnumberof rows called")
+        /*
+         On SelectedBeers ViewController we have two selections
+         The segmentedControl is serviced by the IBAction attached to the
+         segmentedcontrol. While here we send back filtered or unfilterd
+         results, based on user having search text in the search bar.
+         */
+        if searchText != "" {
+            print("SelectedBeersTableList \(#line) searched filtered beers \(filteredObjects.count)")
+            return filteredObjects.count
+        } else {
+            print("SelectedBeersTableList \(#line) searched all beers \(frc.fetchedObjects?.count)")
+            return (frc.fetchedObjects?.count)!
+        }
+    }
+
+
     internal func selected(elementAt: IndexPath,
                            searchText: String,
                            completion:  @escaping (Bool, String?) -> Void) -> AnyObject? {

@@ -160,17 +160,19 @@ extension BreweryTableList: TableList {
     }
     
     
-    func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
+    func filterContentForSearchText(searchText: String){// -> [NSManagedObject] {
         // BreweryTableList Observes the persistent Context and I only saved them
         // the main context and so there are none.
         // Debugging code because breweries with a nil name are leaking thru
         // assert((frc.fetchedObjects?.count)! > 0)
         // Only filter object if there are objects to filter.
         guard displayableBreweries.count > 0 else {
-            return []
+            //return []
+            filteredObjects.removeAll()
+            return
         }
         filteredObjects = (displayableBreweries.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))
-        return filteredObjects
+        //return filteredObjects
     }
     
     

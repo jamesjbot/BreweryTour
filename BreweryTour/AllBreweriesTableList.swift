@@ -74,19 +74,58 @@ class AllBreweriesTableList: NSObject, Subject {
     }
     
     
+
+
+    func refresh() {
+        readOnlyContext?.refreshAllObjects()
+        print("AllBreweryTabkleList \(#line) refreshed Context")
+        do {
+            try frc.performFetch()
+            print("AllBreweryTableList \(#line) thismanyresults \(frc.fetchedObjects?.count) ")
+        } catch {
+
+        }
+    }
+
+}
+
+extension AllBreweriesTableList : TableList {
+
+    func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
+        DispatchQueue.main.async {
+            print("BreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
+            if searchText != "" {
+                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name! + (self.filteredObjects[indexPath.row]).id!
+                // Debugging line
+                cell.detailTextLabel?.text = "Filetered"+(self.filteredObjects[indexPath.row]).description
+            } else {
+                cell.textLabel?.text = (self.frc.object(at: indexPath)).name! + (self.frc.object(at: indexPath)).id!
+                // Debugging line
+                cell.detailTextLabel?.text = "Unfiltered"+(self.frc.object(at: indexPath)).description
+            }
+            //Debugging line
+            cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
+            cell.setNeedsDisplay()
+        }
+        return cell
+    }
+
+
     func getNumberOfRowsInSection(searchText: String?) -> Int {
         // If we batch delete in the background frc will not retrieve delete results.
         // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
         //er crektemporaryFetchData()
         guard searchText == "" else {
-            print("BreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
+            print("AllBreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
-        print("BreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)\nfrc:\(frc.fetchedObjects?.first)")
+        print("AllBreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)")
+        //print("BreweryTableList \(#line) frc.firstitem:\(frc.fetchedObjects?.first)")")
         return frc.fetchedObjects!.count
     }
-    
-    func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
+
+
+    func filterContentForSearchText(searchText: String) {// -> [NSManagedObject] {
         // BreweryTableList Observes the persistent Context and I only saved them
         // the main context and so there are none.
         // Debugging code because breweries with a nil name are leaking thru
@@ -98,33 +137,22 @@ class AllBreweriesTableList: NSObject, Subject {
         //        }
         // Only filter object if there are objects to filter.
         guard frc.fetchedObjects != nil else {
-            return []
+            filteredObjects.removeAll()
+            //return []
+            return
         }
         guard (frc.fetchedObjects?.count)! > 0 else {
-            return []
+            filteredObjects.removeAll()
+            return
+             //return []
         }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
         //print("BreweryTableList \(#line)we updated the filtered contents to \(filteredObjects.count)")
-        return filteredObjects
+        //return filteredObjects
     }
-    
-    func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        DispatchQueue.main.async {
-            print("BreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
-            if searchText != "" {
-                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name
-            } else {
-                cell.textLabel?.text = (self.frc.fetchedObjects![indexPath.row]).name
-            }
-            cell.setNeedsDisplay()
-        }
-        return cell
-    }
-    
-}
 
-extension AllBreweriesTableList : TableList {
-    
+
+
     func selected(elementAt: IndexPath,
                   searchText: String,
                   completion: @escaping (_ success : Bool, _ msg : String?) -> Void ) -> AnyObject? {

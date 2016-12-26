@@ -126,9 +126,9 @@ extension StylesTableList : TableList {
     }
     
     
-    internal func filterContentForSearchText(searchText: String) -> [NSManagedObject] {
+    internal func filterContentForSearchText(searchText: String){// -> [NSManagedObject] {
         filteredObjects = (frc.fetchedObjects?.filter({ ( ( $0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
-        return filteredObjects
+        //return filteredObjects
     }
     
     
