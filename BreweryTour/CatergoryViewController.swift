@@ -330,30 +330,12 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             break
         }
     }
-    
-    
+
     
     // Changes the navigation bar to show user they can go back to categories screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         navigationController?.navigationBar.topItem?.title = "Select"
     }
-    
-//    func enumerateSubview(view: UIView, allowFull: UIView) {
-//        // Everything will be a parent view here
-//        print("Parent View: \(view)")
-//        let coordinates = view.convert(view.frame.origin, to: self.view)
-//        print("Coordinates: \(view.frame) Converted: \(view.convert(view.frame.origin, to: self.view))\n")
-//        if view == allowFull {
-//            print("found the view above\n")
-//print("\(view.convert(allowFull.frame.origin, to: self.view))")
-//            //CGRect(x: coordinates.x, y: coordinates.y, width: view.frame.width, height: view.frame.height)
-//        } else {
-//            for i in view.subviews {
-//                 enumerateSubview(view: i, allowFull: allowFull)
-//            }
-//        }
-//    }
-    
 }
 
 
