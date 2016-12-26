@@ -18,6 +18,7 @@ class Settings: UIViewController {
     let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
     let breweryFetch: NSFetchRequest<Brewery> = Brewery.fetchRequest()
     let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
+    let mediator = Mediator.sharedInstance()
 
     // MARK: IBOutlet
     @IBOutlet weak var automaticMapSwitch: UISwitch!
@@ -67,6 +68,7 @@ class Settings: UIViewController {
                     self.displayAlertWindow(title: "Delete Data", msg: "Successful"+self.statistics())
                 }
             })
+            mediator.allBeersAndBreweriesDeleted()
         }
         let action = UIAlertAction(title: "Delete",
                                    style: .default,

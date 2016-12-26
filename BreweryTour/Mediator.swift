@@ -54,7 +54,12 @@ class Mediator : NSManagedObjectDisplayable {
     private var currentlySelectedManagedObjectType : types?
     
     // MARK: Functions
-    
+
+    internal func allBeersAndBreweriesDeleted() {
+        // TODO add more tablelists
+        allBreweryList.refresh()
+    }
+
     // Singleton Implementation
     // TODO this looks like a bad way to register the mediator.
     private init(){
