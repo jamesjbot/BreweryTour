@@ -229,9 +229,9 @@ class MapViewController : UIViewController {
             self.mappableBreweries = [Brewery]()
             print("MapView \(#line) were there any beers that matched style\n")
             //print("MapView \(#line) \(results)")
+            let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
+            breweryRequest.sortDescriptors = []
             for beer in results {
-                let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
-                breweryRequest.sortDescriptors = []
                 breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
                 do {
                     let brewery = try (self.readOnlyContext?.fetch(breweryRequest))! as [Brewery]
@@ -260,10 +260,11 @@ class MapViewController : UIViewController {
         print("MapView \(#line) populateMapWithAnnotations called")
         print("MapView \(#line) ploting \(fromBreweries.count) annotations ")
         print("MapView \(#line) Adding these breweries \(fromBreweries)")
+        // TODO temporarily remove to debug problems
         // Remove all the old annotation
-        if removeDisplayedAnnotations {
+        //if removeDisplayedAnnotations {
             mapView.removeAnnotations(mapView.annotations)
-        }
+        //}
         // Create new array of annotations
         var annotations = [MKAnnotation]()
         for i in fromBreweries {
