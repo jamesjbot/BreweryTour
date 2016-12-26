@@ -611,6 +611,7 @@ class BreweryDBClient {
     
     // Query for breweries with a specific name
     internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+        print("BreweryDb \(#line) DownloadbrewerybyName []() ")
         let theOutputType = APIQueryOutputTypes.Breweries
         var methodParameters  = [
             "name" : "*\(name)*" as AnyObject,
@@ -637,14 +638,17 @@ class BreweryDBClient {
                     completion(false, "No results")
                     return
                 }
-                
-                //                guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
-                //                    completion(false, "No results")
-                //                    return
-                //                }
-                //
-                //                print("BreweryDB \(#line)We have this many results for that query \(numberOfResults)")
-                
+                // TODO Delete this block
+                if let numberOfResults = responseJSON["totalResults"] as! Int? {
+                    print("BreweryDB \(#line) DownloadBreweryByBreweryName there are this many results \(numberOfResults)")
+                }
+                guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+                    completion(false, "No results")
+                    return
+                }
+
+                print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
+
                 // Process subsequent records
                 self.parse(response: responseJSON as NSDictionary,
                            querySpecificID:  nil,
@@ -851,6 +855,8 @@ class BreweryDBClient {
             
         // Beers query
         case APIQueryOutputTypes.BeersByStyleID:
+            print("BreweryDB \(#line) Parse type .BeersByStyleID ")
+
             // No beer data was returned which can happen
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 completion!(false, "Failed Request \(#line) \(#function)")
@@ -915,6 +921,7 @@ class BreweryDBClient {
             break
             
         case .Styles:
+            print("BreweryDB \(#line) Parse type .Styles ")
             // Styles are saved on the persistingContext because they don't change often.
             // We must have data to process
             // Save the multiple styles from the server
@@ -1037,6 +1044,7 @@ class BreweryDBClient {
             break
             
         case .BeersByName:
+            print("BreweryDB \(#line) Parse type .BeersByName ")
             // The number of pages means we can pull in more breweries
             guard let pagesOfResult = response["numberOfPages"] as? Int else {
                 completion!(false, "No results returned")
@@ -1112,8 +1120,8 @@ class BreweryDBClient {
             break
             
         case .BeersByBreweryID:
-            // Since were ware querying by brewery ID we can be guaranteed that the brewery exists.
-            print("BreweryDB \(#line) Capturing Beers By BreweryID")
+            print("BreweryDB \(#line) Parse type .BeersByBreweryID ")
+            // Since were are querying by brewery ID we can be guaranteed that the brewery exists.
             print("BreweryDB \(#line) Response: \(response) ")
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 // Failed to extract data
