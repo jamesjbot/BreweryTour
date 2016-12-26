@@ -53,6 +53,7 @@ class BreweryDBClient {
                                   brewery: Brewery? = nil,
                                   brewerID: String? = nil,
                                   completion: @escaping (_ out : Beer) -> ()) {
+
         func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
             if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
                 let medium = images["medium"] as! String?  {
@@ -63,48 +64,72 @@ class BreweryDBClient {
                 self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
             }
         }
-        var thisBeer : Beer!
 
+        func setBeerPropertiesAndSave(brewery: Brewery,
+                                      id: String, name: String,
+                                      description: String,
+                                      beerabv: String, beeribu: String,
+                                      available: String) {
+            var thisBeer : Beer!
+            container?.performBackgroundTask(){
+                (context) -> Void in
+                context.perform {
+                    thisBeer = Beer(id: id, name: name,
+                                    beerDescription: description,
+                                    availability: available,
+                                    context: context)
+                    thisBeer.brewer = context.object(with: (brewery.objectID)) as? Brewery
+                    print("Flow 4\(beer["name"])")
+                    thisBeer.breweryID = thisBeer.brewer?.id
+                    thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
+                    if beer["styleId"] != nil {
+                        thisBeer.styleID = (beer["styleId"] as! NSNumber).description
+                    }
+                    thisBeer.abv = beerabv
+                    thisBeer.ibu = beeribu
+                    print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
+                    context.mergePolicy = NSMergePolicy.overwrite
+                    do {
+                        try context.save()
+                        completion(thisBeer)
+                        saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
+                    } catch let error {
+                        fatalError("Failed to save beer because of error:\n\(error)\n")
+                    }
+                    print("BreweryDb \(#line) Exiting Asynchronous block for:\(name)\n")
+                    print("BreweryDb \(#line) Returning the beer we created.")
+                }
+            }
+        }
+
+        // Transform data into strings
         print("BreweryDB \(#line) Working to create Beer object in backgroundcontext)")
-        let id: String? = beer["id"] as? String
+        let id: String = beer["id"] as! String
         print("BreweryDB \(#line) beername: \(beer["name"])")
         let name: String = beer["name"] as? String ?? ""
         let description: String = beer["description"] as? String ?? "No Information Provided"
         let beerabv: String = beer["abv"] as? String ?? "N/A"
         let beeribu: String = beer["ibu"] as? String ?? "N/A"
         let available = beer["available"]?["description"] as? String ?? "No Information Provided"
-        container?.performBackgroundTask(){
-            (context) -> Void in
-            context.perform {
-                thisBeer = Beer(id: id!, name: name,
-                                beerDescription: description,
-                                availability: available,
-                                context: context)
-                // TODO Bug accomodate nil brewery, when selecting brewery
-                assert(brewery != nil || brewerID != nil)
-                // I must use one of these
-                // TODO this might actually be a problem. I need to be
-                // guaranteed of the existence of this stuff.
-                thisBeer.brewer = context.object(with: (brewery?.objectID)!) as! Brewery
-                thisBeer.breweryID = thisBeer.brewer?.id
-                thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
-                if beer["styleId"] != nil {
-                    thisBeer.styleID = (beer["styleId"] as! NSNumber).description
-                }
-                thisBeer.abv = beerabv
-                thisBeer.ibu = beeribu
-                print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
-                context.mergePolicy = NSMergePolicy.overwrite
-                do {
-                    try context.save()
-                    completion(thisBeer)
-                    saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
-                } catch let error {
-                    fatalError("Failed to save beer because of error:\n\(error)\n")
-                }
-                print("BreweryDb \(#line) Exiting non blocking for beersave\n")
-                print("BreweryDb \(#line) Returning the beer we created.")
+        if brewery == nil {
+            self.getBreweryByID(id: brewerID!, context: self.readOnlyContext!){
+                (brewer) -> Void in
+                setBeerPropertiesAndSave(brewery: brewer!,
+                                         id: id,
+                                         name: name,
+                                         description: description,
+                                         beerabv: beerabv,
+                                         beeribu: beeribu,
+                                         available: available)
             }
+        } else {
+            setBeerPropertiesAndSave(brewery: brewery!,
+                                     id: id,
+                                     name: name,
+                                     description: description,
+                                     beerabv: beerabv,
+                                     beeribu: beeribu,
+                                     available: available)
         }
     }
     
@@ -788,22 +813,29 @@ class BreweryDBClient {
         return nil
     }
     
-    // TODO Make this return by completion handlers
-    private func getBreweryByID(id : String, context : NSManagedObjectContext) -> Brewery? {
+
+    private func getBreweryByID(id : String,
+                                context : NSManagedObjectContext,
+                                completion: @escaping (Brewery?) -> Void ) {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
-        do {
-            if let brewery : [Brewery] = try context.fetch(request){
-                //This type is in the database
-                guard brewery.count > 0 else {
-                    return nil}
-                return brewery[0]
+        context.perform {
+            do {
+                if let brewery : [Brewery] = try context.fetch(request){
+                    //This type is in the database
+                    guard brewery.count > 0 else {
+                        completion(nil)
+                        return
+                    }
+                    completion(brewery.first)
+                    return
+                }
+            } catch {
             }
-        } catch {
-            return nil
+            completion(nil)
+            return
         }
-        return nil
     }
     
     
@@ -854,24 +886,27 @@ class BreweryDBClient {
                         continue breweryLoop
                     }
                     // Check to make sure the brewery is not already in the database
-                    var dbBrewery : Brewery! = getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!)
-                    if dbBrewery == nil { // Create a brewery object when none.
-                        createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
-                            (Brewery) -> Void in
-                            dbBrewery = Brewery
-                            guard dbBrewery != nil else {
-                                completion!(false, "Error saving data")
-                                return
+                    var dbBrewery : Brewery!
+                    getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!){
+                        (Brewery) -> Void in
+                        dbBrewery = Brewery
+                        if dbBrewery == nil { // Create a brewery object when none.
+                            self.createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
+                                (Brewery) -> Void in
+                                dbBrewery = Brewery
+                                guard dbBrewery != nil else {
+                                    completion!(false, "Error saving data")
+                                    return
+                                }
+                                self.createBeerObject(beer: beer, brewery: dbBrewery) {
+                                    (Beer) -> Void in
+                                }
                             }
-                            self.createBeerObject(beer: beer, brewery: dbBrewery) {
-                                (Beer) -> Void in
-                            }
-                            //self.setBeerBrewerData(beer: thisBeer, breweryID: dbBrewery.id!, completion: completion!)
+                        } else { // Brewery already in Coredata
+                            print("BreweryDB \(#line) Brewery already  in Coredata: \(dbBrewery.name)")
+                            self.createBeerObject(beer: beer, brewery: dbBrewery, completion: {
+                                (beer)-> Void in })
                         }
-                    } else { // Brewery already in Coredata
-                        print("BreweryDB \(#line) Brewery already  in Coredata: \(dbBrewery.name)")
-                        self.createBeerObject(beer: beer, brewery: dbBrewery, completion: {
-                            (beer)-> Void in })
                     }
                 }
             } // end of beer loop
@@ -948,7 +983,8 @@ class BreweryDBClient {
                 completion!(false, "Network error please try again")
                 return
             }
-            
+
+            // This for loop will asynchronousy launch brewery creation.
             breweryLoop: for breweryDict in breweryArray {
                 // Can't build a brewery location if no location exist
                 guard let locationInfo = breweryDict["locations"] as? NSArray
@@ -968,15 +1004,20 @@ class BreweryDBClient {
                 }
                 
                 // Don't repeat breweries in the database
-                var thisbrewery = getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!)
-                guard thisbrewery == nil else {
-                    rejectedBreweries += 1
-                    continue
+                getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!) {
+                    (Brewery) -> Void in
+                    if Brewery == nil {
+                        self.createBreweryObject(breweryDict: breweryDict,                                                   locationDict: locDic){
+                            (thisbrewery) -> Void in
+                        }
+                    } else { // Consider removing this else clause.
+                        self.rejectedBreweries += 1
+                    }
                 }
-                
-                createBreweryObject(breweryDict: breweryDict,                                                   locationDict: locDic){
-                    (thisbrewery) -> Void in
-                }
+//                guard thisbrewery == nil else {
+//                    rejectedBreweries += 1
+//                    continue
+//                }
             }
             // TODO Contemplate deleting this block of code.
             //Go back to the breweryArray and save another brewery
@@ -991,6 +1032,7 @@ class BreweryDBClient {
 //                completion!(false, "Failed Request \(#line) \(#function)")
 //                return
 //            }
+            // Completed processing this page of breweries
             completion!(true, "Success")
             break
             
@@ -1044,18 +1086,22 @@ class BreweryDBClient {
                     
                     // Check to make sure the brewery is not already in the database
                     var newBrewery : Brewery!
-                    newBrewery = getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!)
-                    
-                    if newBrewery == nil { // Create a brewery object
-                        createBreweryObject(breweryDict: breweryDict,
-                                            locationDict: locDic){
-                                                (newBrewery) -> Void in
+                    getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!){
+                        (brewery) -> Void in
+                        if newBrewery == nil { // Create a brewery object
+                            self.createBreweryObject(breweryDict: breweryDict,
+                                                     locationDict: locDic,
+                                                     completion: { (newBrewery) -> Void in
+                                self.createBeerObject(beer: beer,
+                                                      brewery: newBrewery,
+                                                      completion: { (beer) -> Void in })
+                                                        })
+                        } else { // Just create beer
+                            self.createBeerObject(beer: beer,
+                                                  brewery: newBrewery,
+                                                  completion: { (beer) -> Void in })
                         }
                     }
-                    
-                    createBeerObject(beer: beer,
-                                     brewery: newBrewery,
-                                     completion: { (beer) -> Void in})
                     // Future Improvement.
                     // Currently datamodel cannot accomodate multple brewery locations for a beer
                     break
@@ -1088,10 +1134,12 @@ class BreweryDBClient {
                     continue
                 }
                 // Get the brewery based on objectID
-                let dbBrewery : Brewery! = getBreweryByID(id: querySpecificID!, context: readOnlyContext!)
-                createBeerObject(beer: beer,
-                                 brewery: dbBrewery,
-                                 completion: { (beer) -> Void in})
+                getBreweryByID(id: querySpecificID!, context: readOnlyContext!) {
+                    (dbBrewery) -> Void in
+                    self.createBeerObject(beer: beer,
+                                     brewery: dbBrewery,
+                                     completion: { (beer) -> Void in})
+                }
             }
             break
         }
