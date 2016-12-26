@@ -57,6 +57,7 @@ class Mediator : NSManagedObjectDisplayable {
 
     internal func allBeersAndBreweriesDeleted() {
         // TODO add more tablelists
+        print("Mediator \(#line) AllBeersAndBrewsDeleted ")
         allBreweryList.refresh()
     }
 

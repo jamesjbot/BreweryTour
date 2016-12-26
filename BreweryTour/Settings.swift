@@ -34,7 +34,8 @@ class Settings: UIViewController {
 
         func deleteAll(_ action: UIAlertAction) {
             self.startIndicator()
-            container?.performBackgroundTask({ (context) in
+            container?.performBackgroundTask({
+                (context) in
                 var success: Bool = true
                 var request = NSBatchDeleteRequest(fetchRequest: self.beerFetch as! NSFetchRequest<NSFetchRequestResult>)
                 do {
@@ -67,8 +68,8 @@ class Settings: UIViewController {
                 if success == true {
                     self.displayAlertWindow(title: "Delete Data", msg: "Successful"+self.statistics())
                 }
+                self.mediator.allBeersAndBreweriesDeleted()
             })
-            mediator.allBeersAndBreweriesDeleted()
         }
         let action = UIAlertAction(title: "Delete",
                                    style: .default,
