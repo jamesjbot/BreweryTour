@@ -13,6 +13,7 @@
 import UIKit
 import CoreData
 import CoreGraphics
+import MapKit
 
 class FavoriteBreweriesViewController: UIViewController {
     
@@ -208,8 +209,18 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
         Mediator.sharedInstance().selected(thisItem: frc.object(at: indexPath)) {
             (success, msg) -> Void in
         }
+
+        // Switch to get directions to brewery
+        if let lat = Double(frc.object(at: indexPath).latitude!) ,
+            let long = Double(frc.object(at: indexPath).longitude!) {
+            let location: MKPlacemark =  MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
+            let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+            let mapItem = MKMapItem(placemark: location)
+            mapItem.name = frc.object(at: indexPath).name
+            mapItem.openInMaps(launchOptions: launchOptions)
+        }
         // Switch to map tab
-        self.tabBarController?.selectedIndex = 0
+        //self.tabBarController?.selectedIndex = 0
     }
 }
 
