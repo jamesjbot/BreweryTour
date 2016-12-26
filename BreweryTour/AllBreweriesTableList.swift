@@ -93,7 +93,7 @@ extension AllBreweriesTableList : TableList {
 
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         DispatchQueue.main.async {
-            print("BreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
+            print("AllBreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
             if searchText != "" {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name! + (self.filteredObjects[indexPath.row]).id!
                 // Debugging line
@@ -171,10 +171,10 @@ extension AllBreweriesTableList : TableList {
     }
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
-        print("BreweryTableList \(#line)searchForuserEntered beer called")
+        print("AllBreweryTableList \(#line)searchForuserEntered beer called")
         BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
             (success, msg) -> Void in
-            print("BreweryTableList \(#line)BreweryTableList Returned from BreweryDBClient")
+            print("AllBreweryTableList \(#line)AllBreweryTableList Returned from BreweryDBClient")
             guard success == true else {
                 completion!(success,msg)
                 return
