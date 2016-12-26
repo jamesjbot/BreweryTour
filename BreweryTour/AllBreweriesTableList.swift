@@ -76,14 +76,10 @@ class AllBreweriesTableList: NSObject, Subject {
     
 
 
-    func refresh() {
-        readOnlyContext?.refreshAllObjects()
-        print("AllBreweryTabkleList \(#line) refreshed Context")
+    internal func refreshFetchedResultsController() {
         do {
             try frc.performFetch()
-            print("AllBreweryTableList \(#line) thismanyresults \(frc.fetchedObjects?.count) ")
         } catch {
-
         }
     }
 
@@ -172,21 +168,14 @@ extension AllBreweriesTableList : TableList {
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
         print("AllBreweryTableList \(#line)searchForuserEntered beer called")
+        // Calling this will invoke the downloadBreweryByBreweryName process
+        // The process will immediately call back say the process started.
         BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
             (success, msg) -> Void in
             print("AllBreweryTableList \(#line)AllBreweryTableList Returned from BreweryDBClient")
-            guard success == true else {
-                completion!(success,msg)
-                return
-            }
-            // If the query succeeded repopulate this view model and notify view to update itself.
-            do {
-                try self.frc.performFetch()
-                print("AllBreweryTableList \(#line) AllBreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
-                completion!(true, "Success")
-            } catch {
-                completion!(false, "Failed Request")
-            }
+            // Send a completion regardless.
+            // if there are update later NSFetchedResultsControllerDelegate will inform the viewcontroller.
+            completion!(success,msg)
         }
     }
     
@@ -201,15 +190,30 @@ extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("AllBreweryTableList \(#line) AllBreweryTableList changed object")
+        switch (type){
+        case .insert:
+            print("AllBreweryTable \(#line) inserting\n\(anObject)")
+            break
+        case .delete:
+            print("AllBreweryTable \(#line) delete")
+            break
+        case .move:
+            print("AllBreweryTable \(#line) move ")
+            break
+        case .update:
+            print("AllBreweryTable \(#line) update ")
+            break
+        }
     }
-    
+
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("AllBreweryTableList \(#line) AllBreweryTableList controllerdidChangeContent notify observer")
         // TODO We're preloading breweries do I still need this notify
         // Send message to observer regardless of situation. The observer decides if it should act.
         observer.sendNotify(from: self, withMsg: "reload data")
-        print("AllBreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
+        print("AllBreweryTableList \(#line) According to \(controller)\n There are now this many breweries \(controller.fetchedObjects?.count)")
+            print("AllBreweryTableList \(#line) According to \(frc)\n There are now this many breweries \(frc.fetchedObjects?.count)")
         print("AllBreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
         //Datata = frc.fetchedObjects!
     }
