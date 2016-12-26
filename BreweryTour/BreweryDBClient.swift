@@ -58,7 +58,7 @@ class BreweryDBClient {
             if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
                 let medium = images["medium"] as! String?  {
                 beer.imageUrl = medium
-                let queue = DispatchQueue(label: "Images")
+                //let queue = DispatchQueue(label: "Images")
                 print("BreweryDB \(#line) Prior to getting Beer image")
                 print("BreweryDB \(#line) In queue Async Getting Beer image in background")
                 self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
