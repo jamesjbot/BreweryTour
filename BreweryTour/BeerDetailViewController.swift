@@ -60,15 +60,17 @@ class BeerDetailViewController: UIViewController {
     private var isBeerFavorited : Bool!
     
     internal var beer : Beer!
-    // TODO Temporary remove to use coreDataStack function to save persistent
-    // rather than addressing it directly
-    //private let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
     
     // MARK: Functions
-    
+
+    // Make description scroll to the top.
+    override func viewDidLayoutSubviews() {
+        self.beerDescriptionTextView.setContentOffset(CGPoint.zero, animated: false)
+    }
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -79,18 +81,28 @@ class BeerDetailViewController: UIViewController {
         if let BeerInThisCoreDataContext: Beer = searchForBeerInCoreData(context: readOnlyContext!) {
             beer = BeerInThisCoreDataContext
         }
-        
+
+
         // Set the on screen properties
         beerNameLabel.text = beer.beerName
-        breweryName.text = beer.brewer?.name
-        availableText.text = "Availability: " + beer.availability!
+        beerNameLabel.adjustsFontSizeToFitWidth = true
+
+        breweryName.text = "By: " + (beer.brewer?.name ?? "Not Available")
+        breweryName.adjustsFontSizeToFitWidth = true
+
+        availableText.text = "Availability: " + (beer.availability ?? "Not Provided")
+        availableText.adjustsFontSizeToFitWidth = true
         
         // Populate beer image if it is in the database
         if let data : NSData = (beer.image) {
             let im = UIImage(data: data as Data)
             beerImage.image = im
         }
-        beerDescriptionTextView.text = beer.beerDescription
+
+        // Beer description
+        beerDescriptionTextView.text = "Description: " + (beer.beerDescription ?? "")
+
+        // Tasting notes
         tasting.text = beer.tastingNotes ?? "Your tasting notes"
 
         // Change this to beer's favorite status
