@@ -285,7 +285,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        print("Categor \(#line) Viewwillappearcalled ")
+        print("CategoryViewController \(#line) Viewwillappearcalled ")
         // Do I really want to deselect.
         // TODO Deselect whatever was selected on screen
 //        guard styleTable.indexPathForSelectedRow == nil else {
@@ -296,9 +296,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         // TODO Only for styles tables do we not want to reload But this only applies if the Breweries w/ styles or breweries screen
         // is shown
         activeTableList.filterContentForSearchText(searchText: newSearchBar.text!)
-        styleTable.reloadData()
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
+        // segmentedControlClicked will reload the table.
         segmentedControlClicked(segmentedControl, forEvent: UIEvent())
     }
     
@@ -456,7 +456,9 @@ extension CategoryViewController: UISearchBarDelegate {
             activityIndicator.startAnimating()
             activeTableList.searchForUserEntered(searchTerm: searchBar.text!) {
                 (success, msg) -> Void in
-                self.activityIndicator.stopAnimating()
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
                 if success {
                     self.styleTable.reloadData()
                 } else {
