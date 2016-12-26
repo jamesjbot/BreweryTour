@@ -210,22 +210,6 @@ extension BreweryTableList: TableList {
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
         print("BreweryTableList \(#line)searchForuserEntered beer called")
         completion!(false,"This screen only show breweries with the selected style, try brewery search on the All Breweries button.")
-//        BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
-//            (success, msg) -> Void in
-//            print("BreweryTableList \(#line)BreweryTableList Returned from BreweryDBClient")
-//            guard success == true else {
-//                completion!(success,msg)
-//                return
-//            }
-//            // If the query succeeded repopulate this view model and notify view to update itself.
-//            do {
-//                try self.frc.performFetch()
-//                print("BreweryTableList \(#line)BreweryTableList Saved this many breweries in model \(self.frc.fetchedObjects?.count)")
-//                completion!(true, "Success")
-//            } catch {
-//                completion!(false, "Failed Request")
-//            }
-//        }
     }
 
 }
