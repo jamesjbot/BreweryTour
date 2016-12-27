@@ -39,11 +39,11 @@ class CategoryViewController: UIViewController,
     NSFetchedResultsControllerDelegate, Observer {
 
     // MARK: Constant
-    let segmentedControlPaddding : CGFloat = 8
-    let paddingForPoint : CGFloat = 20
-    let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let segmentedControlPaddding : CGFloat = 8
+    private let paddingForPoint : CGFloat = 20
+    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
         
-    let cellIdentifier = "genericTypeCell"
+    fileprivate let cellIdentifier = "genericTypeCell"
     
     private let styleList : StylesTableList! = Mediator.sharedInstance().getStyleList()
     private let breweryList : BreweryTableList! = Mediator.sharedInstance().getBreweryList()
@@ -51,7 +51,7 @@ class CategoryViewController: UIViewController,
     
     private let med : Mediator = Mediator.sharedInstance()
     
-    enum CategoryTutorialStage {
+    private enum CategoryTutorialStage {
         case SegementedControl
         case Table
         case BreweryTable
@@ -60,7 +60,7 @@ class CategoryViewController: UIViewController,
         case RefreshDB
     }
 
-    enum SegmentedControllerMode: Int {
+    fileprivate enum SegmentedControllerMode: Int {
         case Style = 0
         case BreweriesWithStyle = 1
         case AllBreweries = 2
@@ -101,6 +101,7 @@ class CategoryViewController: UIViewController,
     @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var pointer: UIView!
     @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var selection: UITextField!
     
     // Normal UI outlets
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
@@ -111,7 +112,7 @@ class CategoryViewController: UIViewController,
 
     // MARK: IBActions
 
-    @IBAction func tutorialButton(_ sender: UIBarButtonItem) {
+    @IBAction func helpButton(_ sender: UIBarButtonItem) {
         tutorialModeOn = true
     }
 
@@ -272,24 +273,10 @@ class CategoryViewController: UIViewController,
     }
     
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        //navigationItem.title.
-
         // Here we start initializer for style and brewery querying
         activeTableList = styleList
-        
-        // TODO are these lines needed I'm getting these from the mediator
-        // Check mediator I think these are being create and set there.
-        //styleList.mediator = med
-        //breweryList.mediator = med
-        
         
         styleList.registerObserver(view: self)
         breweryList.registerObserver(view: self)
@@ -386,7 +373,9 @@ extension CategoryViewController : UITableViewDelegate {
             brewerySelectionIndex = indexPath
         }
 
-        //navigationItem.title = tableView.cellForRow(at: indexPath)?.textLabel?.text
+        // Set the Textfield to the name of the selected item so the user 
+        // know what they selected.
+        selection.text = tableView.cellForRow(at: indexPath)?.textLabel?.text
 
         activityIndicator.startAnimating()
 
