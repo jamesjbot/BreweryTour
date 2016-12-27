@@ -113,14 +113,17 @@ class SelectedBeersViewController: UIViewController, Observer {
     
     // MARK: Functions
 
-    // All notification to SelectedBeersViewController will reload the table.
-    internal func sendNotify(from: AnyObject, withMsg msg: String) {
-        tableView.reloadData()
-        // Prompts the tableView to refilter search listings.
-        searchBar(searchBar, textDidChange: searchBar.text!)
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        searchBar.delegate = self
+        selectedBeersTableList.registerObserver(view: self)
+        // Set allbeers as the first index.
+        segmentedControl.selectedSegmentIndex = 1 // AllBeers
+        // Tell view model to load allbeers
+        segmentedClicked(segmentedControl)
     }
-    
-    
+
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         // When switching from another viewcontroller the background data might
@@ -129,15 +132,8 @@ class SelectedBeersViewController: UIViewController, Observer {
         // Set navigationbar title
         tabBarController?.title = "Click For Details"
     }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        searchBar.delegate = self
-        selectedBeersTableList.registerObserver(view: self)
-    }
-    
-    
+
+
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Always prime the tutorial
@@ -150,6 +146,14 @@ class SelectedBeersViewController: UIViewController, Observer {
         } else {
             tutorialView.isHidden = true
         }
+    }
+
+
+    // All notification to SelectedBeersViewController will reload the table.
+    internal func sendNotify(from: AnyObject, withMsg msg: String) {
+        // Prompts the tableView to refilter search listings.
+        // TableReload will be handled by the searchBar function.
+        searchBar(searchBar, textDidChange: searchBar.text!)
     }
 }
 
