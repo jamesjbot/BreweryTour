@@ -183,7 +183,10 @@ extension SelectedBeersViewController : UITableViewDelegate {
         
         // Push beer information to Detail View Controller
         destinationViewcontroller.beer = beer as! Beer
-        
+
+        // Change the name of the back button
+        tabBarController?.title = "Back"
+
         // Segue to view controller
         self.navigationController?.pushViewController(destinationViewcontroller, animated: true)
     }

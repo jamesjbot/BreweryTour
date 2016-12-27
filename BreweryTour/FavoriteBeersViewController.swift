@@ -202,11 +202,17 @@ extension FavoriteBeersViewController : UITableViewDelegate {
         let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
         
         // Push beer information to Detail View Controller
+        // TODO what is this here for why would this ever fail?
         if tableView.cellForRow(at: indexPath)?.textLabel?.text != frc.object(at: indexPath).beerName {
             displayAlertWindow(title: "Data access", msg: "Sorry there was a problem accessing data please try again")
         }
+
+        // Pass the beer to next view controller via injection
         destinationViewcontroller.beer = frc.object(at: indexPath)
-        
+
+        // Change the name of the back button
+        tabBarController?.title = "Back"
+
         // Segue to view controller
         navigationController?.pushViewController(destinationViewcontroller, animated: true)
     }
