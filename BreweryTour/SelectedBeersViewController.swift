@@ -120,6 +120,7 @@ class SelectedBeersViewController: UIViewController, Observer {
         // When switching from another viewcontroller the background data might
         // have changed
         tableView.reloadData()
+        tabBarController?.title = "Click For Details"
     }
     
     
@@ -127,7 +128,6 @@ class SelectedBeersViewController: UIViewController, Observer {
         super.viewDidLoad()
         searchBar.delegate = self
         selectedBeersTableList.registerObserver(view: self)
-        tabBarController?.title = "Click For Details"
     }
     
     

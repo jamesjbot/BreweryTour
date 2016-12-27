@@ -310,13 +310,12 @@ class MapViewController : UIViewController {
         
         frc.delegate = self
 
-        tabBarController?.title = "Go To Website"
     }
     
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+        tabBarController?.title = "Go To Website"
         // Get new selections
         let mapViewData = Mediator.sharedInstance().getMapData()
         
@@ -338,8 +337,9 @@ class MapViewController : UIViewController {
         }
         
         //populateMapWithAnnotations()
+
     }
-    
+
     
     override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)

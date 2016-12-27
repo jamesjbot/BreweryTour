@@ -47,7 +47,6 @@ class FavoriteBeersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         frc.delegate = self
-        tabBarController?.title = "Click For Details"
     }
     
     
@@ -55,8 +54,9 @@ class FavoriteBeersViewController: UIViewController {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
         tableView.reloadData()
+        tabBarController?.title = "Click For Details"
     }
-    
+
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
