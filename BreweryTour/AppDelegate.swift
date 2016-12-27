@@ -13,7 +13,8 @@ import CoreData
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-    let coreDataStack = CoreDataStack.init(modelName: "BreweryTour")
+
+    internal let coreDataStack = CoreDataStack.init(modelName: "BreweryTour")
     
     func checkIfFirstLaunched() {
         if UserDefaults.standard.bool(forKey: g_constants.FirstLaunched) {
@@ -52,6 +53,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
         // Save user preferences
         UserDefaults.standard.synchronize()
+        // Save coredata
         coreDataStack?.saveToFile()
     }
 
