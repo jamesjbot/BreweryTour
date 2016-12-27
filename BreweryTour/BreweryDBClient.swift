@@ -851,6 +851,8 @@ class BreweryDBClient {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
+        // TODO downloaded searching beers crashed here, the error in core data is unknow
+        // most likely a fault, it says more codes needs to be written.
         context.perform {
             do {
                 if let brewery : [Brewery] = try context.fetch(request){
