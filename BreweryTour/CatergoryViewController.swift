@@ -86,7 +86,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     private var allBreweriesSelection : IndexPath?
     
     @IBInspectable var fillColor: UIColor = UIColor.green
-    
+
+
     // MARK: IBOutlets
 
     // Tutorial outlets
@@ -97,15 +98,13 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // Normal UI outlets
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    //@IBOutlet weak var refreshDatabase: UIBarButtonItem!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var newSearchBar: UISearchBar!
-    @IBOutlet weak var organicSwitch: UISwitch!
-    @IBOutlet weak var styleTable: UITableView!
+    @IBOutlet weak var genericTable: UITableView!
     
 
-    
     // MARK: IBActions
+
     @IBAction func tutorialButton(_ sender: UIBarButtonItem) {
         tutorialModeOn = true
     }
@@ -152,22 +151,22 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             break
         case .Table:
             tutorialText.text = "Select a style or a brewery from list, and you will be instantly taken to the map to show its locations"
-            let tablePoint = CGPoint(x: styleTable.frame.origin.x + paddingForPoint , y: styleTable.frame.origin.y)
+            let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: 0.5,
                                     delay: 0.0,
                                     options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
+                                    animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                     completion: nil)
             break
         case .BreweryTable:
             tutorialText.text = "Don't see any breweries in Brewery Mode that is because there are alot of breweries. Go back and choose a style of beer you'd like to explore."
-            let tablePoint = CGPoint(x: styleTable.frame.origin.x + paddingForPoint , y: styleTable.frame.origin.y)
+            let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: 0.5,
                                     delay: 0.0,
                                     options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.y += self.styleTable.frame.height - self.paddingForPoint },
+                                    animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                     completion: nil)
         
         case .Map:
@@ -182,12 +181,6 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             pointer.setNeedsDisplay()
         }
     }
-
-    
-    @IBAction func organicClicked(_ sender: AnyObject) {
-        //setTopTitleBarName()
-        med.organic = organicSwitch.isOn
-    }
     
     
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
@@ -195,8 +188,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         switch segmentedMode {
         case .Style:
             activeTableList = styleList
-            styleTable.reloadData()
-            styleTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
+            genericTable.reloadData()
+            genericTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
             )
         case .BreweriesWithStyle:
             //print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
@@ -206,18 +199,18 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             if styleSelectionIndex != nil {
                 breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!)){
                     (success) -> Void in
-                    styleTable.reloadData()
+                    genericTable.reloadData()
                     return
                 }
                 // Make this a completion handler and I can replace it later?
             }
             activeTableList = breweryList
-            styleTable.reloadData()
-            styleTable.selectRow(at: stylesBrewerySelectionIndex, animated: true, scrollPosition: .middle)
+            genericTable.reloadData()
+            genericTable.selectRow(at: stylesBrewerySelectionIndex, animated: true, scrollPosition: .middle)
         case .AllBreweries:
             activeTableList = allBreweryList
-            styleTable.reloadData()
-            styleTable.selectRow(at: brewerySelectionIndex, animated: true, scrollPosition: .middle)
+            genericTable.reloadData()
+            genericTable.selectRow(at: brewerySelectionIndex, animated: true, scrollPosition: .middle)
             /* 
              Tell the user they have selected all breweries
              This is what will show on the map.
@@ -252,7 +245,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             // Only the active table should respond to a table reload command
             if (activeTableList as AnyObject) === from {
                 print("CategoryViewController \(#line) Reloading data")
-                styleTable.reloadData()
+                genericTable.reloadData()
                 searchBar(newSearchBar, textDidChange: newSearchBar.text!)
             } else {
                 print("CategoryViewController \(#line) Ignoring reload as you are not active")
@@ -302,8 +295,8 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         print("CategoryViewController \(#line) Viewwillappearcalled ")
         // Do I really want to deselect.
         // TODO Deselect whatever was selected on screen
-//        guard styleTable.indexPathForSelectedRow == nil else {
-//            styleTable.deselectRow(at: styleTable.indexPathForSelectedRow!, animated: true)
+//        guard genericTable.indexPathForSelectedRow == nil else {
+//            genericTable.deselectRow(at: genericTable.indexPathForSelectedRow!, animated: true)
 //            return
 //        }
         // Always reload the table data. Incase new breweries were pulled in
@@ -332,18 +325,14 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     }
     
     
-    func whichRowShouldBeSelected() -> IndexPath? {
+    private func whichRowShouldBeSelected() -> IndexPath? {
         // Depends on what segmented index we are on
-        switch segmentedControl.selectedSegmentIndex {
-        case 0: // Styles
-            return styleSelectionIndex
-        case 1: // Breweries with selected style
+        switch SegmentedControllerMode.init(rawValue: segmentedControl.selectedSegmentIndex)! {
+        case .Style:             return styleSelectionIndex
+        case .BreweriesWithStyle:
             return stylesBrewerySelectionIndex
-        case 2: // All breweries
+        case .AllBreweries:
             return brewerySelectionIndex
-        default:
-            return nil
-            break
         }
     }
 
@@ -360,7 +349,7 @@ extension CategoryViewController : UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //print("CategoryViewController \(#line) cellForRowAt called ")
-        var cell = styleTable.dequeueReusableCell(withIdentifier: cellIdentifier)
+        var cell = genericTable.dequeueReusableCell(withIdentifier: cellIdentifier)
         cell = activeTableList.cellForRowAt(indexPath: indexPath,
                                          cell: cell!,
                                          searchText: newSearchBar.text)
@@ -387,23 +376,19 @@ extension CategoryViewController : UITableViewDelegate {
         //print("CategoryViewControler \(#line) tableView didSelectRowAt clled ")
 
         // Save the selection as title of the ViewController
-
-        // Save the selecion to appropriate index
-        switch segmentedControl.selectedSegmentIndex {
-        case 0: // Styles
+        switch SegmentedControllerMode(rawValue: segmentedControl.selectedSegmentIndex)! {
+        case .Style:
             styleSelectionIndex = indexPath
             stylesBrewerySelectionIndex = nil
             brewerySelectionIndex = nil
-        case 1: // Breweries with selected style
+        case .BreweriesWithStyle:
             styleSelectionIndex = nil
             stylesBrewerySelectionIndex = indexPath
             brewerySelectionIndex = nil
-        case 2: // All breweries
+        case .AllBreweries:
             styleSelectionIndex = nil
             stylesBrewerySelectionIndex = nil
             brewerySelectionIndex = indexPath
-        default:
-            break
         }
 
         //navigationItem.title = tableView.cellForRow(at: indexPath)?.textLabel?.text
@@ -435,12 +420,13 @@ extension CategoryViewController: UISearchBarDelegate {
     
     // A filter out selections not conforming to the searchbar text
     func searchBar(_: UISearchBar, textDidChange: String){
-        /* User entered searchtext filter data
-         If there is text filter tableview
+        /* 
+         User entered searchtext, filter data
+         if there is text
          */
         if !textDidChange.isEmpty {
             activeTableList.filterContentForSearchText(searchText: textDidChange)
-            styleTable.reloadData()
+            genericTable.reloadData()
         }
     }
     
@@ -453,7 +439,7 @@ extension CategoryViewController: UISearchBarDelegate {
          */
         newSearchBar.text = ""
         newSearchBar.resignFirstResponder()
-        styleTable.reloadData()
+        genericTable.reloadData()
     }
     
     
@@ -465,22 +451,23 @@ extension CategoryViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
 
         /* 
-         Only the AllBreweries mode can searchonline for breweries
+         Only allow the AllBreweries mode to searchonline for breweries
          this is because when in the styles mode the downloaded brewery 
-         may not have that styles and as suck will not show up in the list
+         may not have that style and as such will not show up in the list
          making for a confusing experience.
+         Same confusing experience goes for searching for styles. I've downloaded all the
+         styles everytime we start up there are no more styles to search for.
          */
-        guard segmentedControl.selectedSegmentIndex == 2 else {
+        guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBreweries.rawValue else {
             return
         }
 
-        // Do nothing, because nothing entered in search bar
+        // Do nothing, because nothing entered in search bar, just return
         guard !(searchBar.text?.isEmpty)! else {
             return
         }
 
-        // Prompt user should we go search online for the Brewery or style
-        // Create action for prompt
+        // Definition of the function to be used in AlertWindow.
         func searchOnline(_ action: UIAlertAction){
             activityIndicator.startAnimating()
             activeTableList.searchForUserEntered(searchTerm: searchBar.text!) {
@@ -489,12 +476,13 @@ extension CategoryViewController: UISearchBarDelegate {
                     self.activityIndicator.stopAnimating()
                 }
                 if success {
-                    self.styleTable.reloadData()
+                    self.genericTable.reloadData()
                 } else {
                     self.displayAlertWindow(title: "Search Failed", msg: msg!)
                 }
             }
         }
+        // Set the function to the action button
         let action = UIAlertAction(title: "Search Online",
                                    style: .default,
                                    handler: searchOnline)
@@ -502,7 +490,6 @@ extension CategoryViewController: UISearchBarDelegate {
                            msg: "Dismiss to review the search results\nor press Search Online\nto search for more.",
                            actions: [action])
     }
-    
 }
 
 
