@@ -13,31 +13,34 @@ import UIKit
 import CoreData
 
 class BeerDetailViewController: UIViewController {
-    
+
+    // MARK: Constants
+
+    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
+    private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
+
+    // MARK: Variables
+
+    private var isBeerFavorited : Bool!
+    internal var beer : Beer!
+
+
     // MARK: IBOutlets
     
     @IBOutlet weak fileprivate var tasting: UITextView!
-    
     @IBOutlet weak var breweryName: UILabel!
-    
     @IBOutlet weak var beerNameLabel: UILabel!
-    
     @IBOutlet weak var availableText: UILabel!
-    
     @IBOutlet weak var organicLabel: UILabel!
-    
     @IBOutlet weak var abv: UILabel!
-    
     @IBOutlet weak var style: UILabel!
-    
     @IBOutlet weak var ibu: UILabel!
-    
     @IBOutlet weak var beerDescriptionTextView: UITextView!
-    
     @IBOutlet weak var favoriteButton: UIButton!
-
     @IBOutlet weak var beerImage: UIImageView!
-    
+
+
     // MARK: IBActions
     
     @IBAction func favoriteClicked(_ sender: UIButton) {
@@ -54,19 +57,11 @@ class BeerDetailViewController: UIViewController {
         }
         sender.setImage(image, for: .normal)
     }
-    
-    // MARK: Variables
-    
-    private var isBeerFavorited : Bool!
-    
-    internal var beer : Beer!
-    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
-    private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
+
     
     // MARK: Functions
 
-    // Make description scroll to the top.
+    // Makes the description UITextView scroll to the top.
     override func viewDidLayoutSubviews() {
         self.beerDescriptionTextView.setContentOffset(CGPoint.zero, animated: false)
     }
@@ -81,7 +76,6 @@ class BeerDetailViewController: UIViewController {
         if let BeerInThisCoreDataContext: Beer = searchForBeerInCoreData(context: readOnlyContext!) {
             beer = BeerInThisCoreDataContext
         }
-
 
         // Set the on screen properties
         beerNameLabel.text = beer.beerName
@@ -99,10 +93,10 @@ class BeerDetailViewController: UIViewController {
             beerImage.image = im
         }
 
-        // Beer description
-        beerDescriptionTextView.text = "Description: " + (beer.beerDescription ?? "")
+        // Populate Beer description
+        beerDescriptionTextView.text = "Description: " + (beer.beerDescription ?? "None Provided")
 
-        // Tasting notes
+        // Populate Tasting notes
         tasting.text = beer.tastingNotes ?? "Your tasting notes"
 
         // Change this to beer's favorite status
@@ -123,7 +117,8 @@ class BeerDetailViewController: UIViewController {
             self.style.text = "Style: " + name
         }
         // Raise keyboard when typing in UITextView
-        subscribeToKeyboardShowNotifications()    }
+        subscribeToKeyboardShowNotifications()
+    }
 
 
     private func getStyleName(id : String,
@@ -154,18 +149,15 @@ class BeerDetailViewController: UIViewController {
                 return results[0]
             }
         } catch {
-            fatalError("Error adding a beer")
+            // Should never happen.
+            fatalError("Error retriving a beer")
         }
         return nil
     }
     
     
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-    }
-    
-    
-    // All beers are in the database we just mark their favorite status and tasting notes
+    // All beers are in the database already, we just mark their 
+    // favorite status and update tasting notes
     fileprivate func saveToBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
         container?.performBackgroundTask() {
             (context) -> Void in
@@ -184,7 +176,6 @@ class BeerDetailViewController: UIViewController {
 
 
 extension BeerDetailViewController : UITextViewDelegate {
-
     
     // This clears the textView when the user begins editting the text view
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
@@ -201,7 +192,7 @@ extension BeerDetailViewController : UITextViewDelegate {
         saveToBeerInCoreDataToBackgroundContext(makeFavorite: beer.favorite)
     }
 
-    
+    // Apply textchanges or remove keyboard.
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // When the done key is pressed don't change text.
         if text == "\n" {
