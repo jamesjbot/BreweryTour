@@ -21,6 +21,7 @@ class CoreDataStack: NSObject {
     internal var mainStoreCoordinator: NSPersistentStoreCoordinator!
     private var modelURL: NSURL!
     private var dbURL: NSURL!
+    internal var breweryCreationContext: NSManagedObjectContext?
     //internal var persistingContext: NSManagedObjectContext!
     //public var backgroundContext : NSManagedObjectContext!
     //internal var mainContext: NSManagedObjectContext!
@@ -37,6 +38,7 @@ class CoreDataStack: NSObject {
                 fatalError(error.localizedDescription)
             }
         })
+        breweryCreationContext = container.newBackgroundContext()
 //        
 //        
 //        // This resource is the same name as your xcdatamodeld contained in your project.
