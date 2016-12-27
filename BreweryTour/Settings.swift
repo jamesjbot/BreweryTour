@@ -6,6 +6,10 @@
 //  Created by James Jongsurasithiwat on 12/11/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+/*
+ This screen allows us to delete the Styles, Beers and Breweries currently
+ on the device.
+ */
 import UIKit
 import Foundation
 import CoreData
@@ -13,6 +17,7 @@ import CoreData
 class Settings: UIViewController {
     
     // MARK: Constants
+
     let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
@@ -20,11 +25,16 @@ class Settings: UIViewController {
     let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
     let mediator = Mediator.sharedInstance()
 
+
     // MARK: IBOutlet
+
     @IBOutlet weak var automaticMapSwitch: UISwitch!
     @IBOutlet weak var deleteButton: UIButton!
     @IBOutlet weak var activityIndic: UIActivityIndicatorView!
-    
+
+
+    // MARK: IBAction
+
     @IBAction func toggleAutomaticMap(_ sender: UISwitch) {
     }
     
@@ -58,13 +68,13 @@ class Settings: UIViewController {
                     self.displayAlertWindow(title: "Error", msg: "Error deleting Brewery data \(error)")
                     success = false
                 }
-                self.stopIndicator()
                 do {
                     try context.save()
                 } catch let error {
                     success = false
                     self.displayAlertWindow(title: "Error", msg: "Successfully deleted but unable to save?")
                 }
+                self.stopIndicator()
                 if success == true {
                     self.displayAlertWindow(title: "Delete Data", msg: "Successful"+self.statistics())
                 }
@@ -77,13 +87,12 @@ class Settings: UIViewController {
         displayAlertWindow(title: "Delete All Data",
                            msg: "Are you sure you want to delete all data, this includes\ntasting notes and favorites?"+statistics(),
                            actions: [action])
-        //activityIndic.isHidden = false
     }
     
     
     // MARK: - Functions
     
-    func statistics() -> String {
+    private func statistics() -> String {
         do {
             let beerCount =  try container?.viewContext.fetch(beerFetch).count
             let styleCount = try container?.viewContext.fetch(styleFetch).count
@@ -96,7 +105,7 @@ class Settings: UIViewController {
     }
     
     
-    func startIndicator() {
+    private func startIndicator() {
         DispatchQueue.main.async {
             self.activityIndic.startAnimating()
             self.activityIndic.setNeedsDisplay()
@@ -104,7 +113,7 @@ class Settings: UIViewController {
     }
     
     
-    func stopIndicator() {
+    private func stopIndicator() {
         DispatchQueue.main.async {
             self.activityIndic.stopAnimating()
             self.activityIndic.isHidden = true
