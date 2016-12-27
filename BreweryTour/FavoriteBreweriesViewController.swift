@@ -5,10 +5,12 @@
 //  Created by James Jongsurasithiwat on 10/17/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/** This program show the favorited breweries.
-    You can swipe left to remove the brewery from favorites.
-    You can click on a brewery to show up on the map.
- **/
+/*
+ This program shows the favorited breweries.
+ You can swipe left to remove the brewery from favorites.
+ You can click on a brewery to show directions to the brewery.
+ This is driven by an NSFetchedResultsController observing favoriteStatus's
+ */
 
 import UIKit
 import CoreData
@@ -23,18 +25,23 @@ class FavoriteBreweriesViewController: UIViewController {
     //fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
-    
+
+
     // MARK: Variables
-    // Currently this runs on persistent
+
+    // Currently this runs on main context readOnly
     fileprivate var frc : NSFetchedResultsController<Brewery>! 
-    
+
+
     // MARK: IBOutlets
+
     @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
     
     @IBOutlet weak var tableView: UITableView!
-    
+
+
     // MARK: IBActions
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
@@ -80,12 +87,7 @@ class FavoriteBreweriesViewController: UIViewController {
             tutorialView.isHidden = true
         }
     }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
+
     
     // Favorite Breweries now runs off of MainContext
     required init?(coder aDecoder: NSCoder) {
@@ -95,7 +97,6 @@ class FavoriteBreweriesViewController: UIViewController {
     
     
     fileprivate func performFetchOnResultsController(){
-        //let theContext : NSManagedObjectContext = (coreDataStack?.mainContext)!
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "favorite = 1")
@@ -127,6 +128,7 @@ class FavoriteBreweriesViewController: UIViewController {
         }
     }
 }
+
 
 extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
     
@@ -186,7 +188,7 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
             let object = self.frc.object(at: indexPath)
             self.container?.performBackgroundTask({
                 (context) -> Void in
-                var brewery = context.object(with: object.objectID) as! Brewery
+                let brewery = context.object(with: object.objectID) as! Brewery
                 brewery.favorite = false
                 do {
                     try context.save()
@@ -221,8 +223,6 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
             mapItem.name = frc.object(at: indexPath).name
             mapItem.openInMaps(launchOptions: launchOptions)
         }
-        // Switch to map tab
-        //self.tabBarController?.selectedIndex = 0
     }
 }
 
