@@ -48,6 +48,12 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         case Map
         case RefreshDB
     }
+
+    enum SegmentedControllerMode: Int {
+        case Style = 0
+        case BreweriesWithStyle = 1
+        case AllBreweries = 2
+    }
     
     private let pointerDuration : CGFloat = 1.0
     
@@ -185,14 +191,14 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
-        switch sender.selectedSegmentIndex{
-        case 0: // Styles
-            //print("CategoryViewController \(#line) Switching to StylesTableList and reloading ")
+        let segmentedMode: SegmentedControllerMode = CategoryViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
+        switch segmentedMode {
+        case .Style:
             activeTableList = styleList
             styleTable.reloadData()
             styleTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
             )
-        case 1: // Breweries with selected style
+        case .BreweriesWithStyle:
             //print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             // TODO
             // If the selected index on the styles table exists
@@ -208,10 +214,15 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             activeTableList = breweryList
             styleTable.reloadData()
             styleTable.selectRow(at: stylesBrewerySelectionIndex, animated: true, scrollPosition: .middle)
-        case 2: // All breweries
+        case .AllBreweries:
             activeTableList = allBreweryList
             styleTable.reloadData()
             styleTable.selectRow(at: brewerySelectionIndex, animated: true, scrollPosition: .middle)
+            /* 
+             Tell the user they have selected all breweries
+             This is what will show on the map.
+             */
+            navigationItem.title = "All Breweries"
         default:
             break
         }
@@ -265,6 +276,9 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        //navigationItem.title.
+
         // Here we start initializer for style and brewery querying
         activeTableList = styleList
         
@@ -371,7 +385,9 @@ extension CategoryViewController : UITableViewDelegate {
     // selection is and then proceed to the map on success
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print("CategoryViewControler \(#line) tableView didSelectRowAt clled ")
-        
+
+        // Save the selection as title of the ViewController
+
         // Save the selecion to appropriate index
         switch segmentedControl.selectedSegmentIndex {
         case 0: // Styles
@@ -389,7 +405,9 @@ extension CategoryViewController : UITableViewDelegate {
         default:
             break
         }
-    
+
+        //navigationItem.title = tableView.cellForRow(at: indexPath)?.textLabel?.text
+
         activityIndicator.startAnimating()
         activeTableList.selected(elementAt: indexPath,
                                  searchText: newSearchBar.text!){
@@ -417,8 +435,9 @@ extension CategoryViewController: UISearchBarDelegate {
     
     // A filter out selections not conforming to the searchbar text
     func searchBar(_: UISearchBar, textDidChange: String){
-        // User entered searchtext filter data
-        // If no text was entered there is no need to reload the tablewrrr
+        /* User entered searchtext filter data
+         If there is text filter tableview
+         */
         if !textDidChange.isEmpty {
             activeTableList.filterContentForSearchText(searchText: textDidChange)
             styleTable.reloadData()
@@ -427,20 +446,30 @@ extension CategoryViewController: UISearchBarDelegate {
     
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        // Remove searchbar text so we stop searching
-        // Put searchbar back into unselected state
-        // Repopulate the table
+        /*
+         Remove searchbar text so we stop searching
+         Put searchbar back into unselected state
+         Repopulate the table
+         */
         newSearchBar.text = ""
         newSearchBar.resignFirstResponder()
         styleTable.reloadData()
     }
     
     
-    // Querying BreweryDB for style/brewery not currently downloaded.
+    /*
+     This method allows the user to put out a query to BreweryDB for 
+     breweries with the searchtext in their name
+     */
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
 
-        // Only the all breweries list can searchonline for breweries
+        /* 
+         Only the AllBreweries mode can searchonline for breweries
+         this is because when in the styles mode the downloaded brewery 
+         may not have that styles and as suck will not show up in the list
+         making for a confusing experience.
+         */
         guard segmentedControl.selectedSegmentIndex == 2 else {
             return
         }
