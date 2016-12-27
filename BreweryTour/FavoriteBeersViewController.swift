@@ -5,10 +5,11 @@
 //  Created by James Jongsurasithiwat on 10/15/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/** This program show all the favorited beers in the database.
-    Clicking on any beer will show you the detail.
-    You can also swipe left to remove the beer from favorites
- **/
+/*
+ This program shows all the favorited beers in the database.
+ Clicking on any beer will show you the detail.
+ You can also swipe left to remove the beer from favorites
+ */
 
 
 import UIKit
@@ -24,9 +25,11 @@ class FavoriteBeersViewController: UIViewController {
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
     // MARK: Variables
+
     // Currently this frc works on persistent
     fileprivate var frc : NSFetchedResultsController<Beer>
-    
+
+
     // MARK: IBOutlets
     @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
@@ -34,14 +37,16 @@ class FavoriteBeersViewController: UIViewController {
     
     @IBOutlet weak var tableView: UITableView!
 
-    // MARK: IBACtion
+
+    // MARK: IBAction
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
         UserDefaults.standard.set(false, forKey: g_constants.FavoriteBeersTutorial)
         UserDefaults.standard.synchronize()
     }
-    
+
+
     // MARK: Function
     
     override func viewDidLoad() {
@@ -54,6 +59,7 @@ class FavoriteBeersViewController: UIViewController {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
         tableView.reloadData()
+        // Navigation bar title
         tabBarController?.title = "Click For Details"
     }
 
@@ -77,12 +83,6 @@ class FavoriteBeersViewController: UIViewController {
             tutorialView.isHidden = true
         }
     
-    }
-    
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     
@@ -187,7 +187,7 @@ extension FavoriteBeersViewController : UITableViewDelegate {
                 do {
                     try context.save()
                 } catch {
-                    self.displayAlertWindow(title: "Remove Error", msg: "Error removing item,\nplease try agains")
+                    self.displayAlertWindow(title: "Remove Error", msg: "Error removing item,\nplease try again")
                 }
                 tableView.reloadData()
             })
