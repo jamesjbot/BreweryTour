@@ -12,10 +12,6 @@ import CoreData
 class Mediator : NSManagedObjectDisplayable {
 
     // MARK: Constants
-    private enum types {
-        case Style
-        case Brewery
-    }
 
     // Initialize the classes that need to send and receive data from the mediator
     private let styleList : StylesTableList = StylesTableList()
@@ -26,15 +22,6 @@ class Mediator : NSManagedObjectDisplayable {
 
     // MARK: Variables
 
-//    private var categoryViewer : CategoryViewController!
-//    private var mapViewer : Observer!
-//    private var beersViewer : Observer! // Should this be the Obsever or should it be the beerslist
-    private var currentlySelectedManagedObjectType : types?
-    // Currently I'm sharing the selection.
-    // If I was to isolate it the two Views that need to know about this would be
-    // the mapview and the selected beer view
-    // for the SelectedBeersList I'm sending this item in set selected
-    // for the mapView it's getting it itself
     private var passedItem : NSManagedObject?
 
 
@@ -71,7 +58,6 @@ class Mediator : NSManagedObjectDisplayable {
     }
 
     // Singleton Implementation
-    // TODO this looks like a bad way to register the mediator.
     private init(){
         // Setup to receive message from the lists
         styleList.mediator = self
