@@ -5,28 +5,39 @@
 //  Created by James Jongsurasithiwat on 10/7/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/** This is the main screen where users can choose to explore Beers by style.
-    Once a style have been selected, the program will go get beers names and
-    breweryies that posses that style of beer.
-    The user will then be automatically brought to the map screen showing all
-    breweries that were retried.
-    The user can come back to the screen with the back button and select a
-    brewery instead.
-    If the user does this the user will be brought to the map showing only the 
-    brewery they choose.
-    The user can search through available styles and available breweries to see 
-    if they have the one they are looking for.
-    Finally we can select if we want to show only organic beers.
-**/
+/*
+ This is the main screen where users can choose to explore Breweries by the 
+ beer styles they produce.
+
+ Once a style has been selected, the program will go get beer names and
+ breweries that possess that style of beer.
+
+ The user can view the breweries with that style by clicking the segmented
+ control 'Breweries with style'
+
+ If the user presses 'Map' the app will bring them to the map screen of all the
+ breweries that were displayed in the 'Breweries with style' screen.
+
+ Optional* The user can turn on automatic map display in settings. 
+ This will then automatically bring the user to the map screen showing all
+ breweries that were retrieved.
+ 
+ Alternately the user can just select the name of a brewery in either 
+ 'Brewery with style' or 'All Breweries' this will bring the user to the map
+ screen but only show them their selected brewery.
+
+ The user can also search through available styles and available breweries to see
+ by name, just by entering the name in the searchbar.
+ */
 
 
 import UIKit
 import CoreData
 import SwiftyWalkthrough
 
-class CategoryViewController: UIViewController, NSFetchedResultsControllerDelegate ,
-    Observer
-    {
+class CategoryViewController: UIViewController,
+    NSFetchedResultsControllerDelegate, Observer {
+
     // MARK: Constant
     let segmentedControlPaddding : CGFloat = 8
     let paddingForPoint : CGFloat = 20
@@ -56,11 +67,13 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     }
     
     private let pointerDuration : CGFloat = 1.0
-    
+
+
     // MARK: Variables
-    // TODO 
+
     /*
-     Add variables for saving the current indexpath when switching segmented controller
+     variables for saving the current indexpath
+     when switching segmented controller
      */
     fileprivate var styleSelectionIndex: IndexPath?
     fileprivate var stylesBrewerySelectionIndex: IndexPath?
@@ -74,18 +87,11 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     private var tutorialState: CategoryTutorialStage = .InitialScreen
     
-    //TODO delete this when it's verified it's unneeded.
-    //fileprivate var frc : NSFetchedResultsController<NSManagedObject>!
-    
     fileprivate var activeTableList : TableList!
-    
-    private var explainedTable : Bool = false
-    private var explainedSegmented : Bool = false
+
     private var styleSelection : IndexPath?
     private var styleAtBrewerySelection : IndexPath?
     private var allBreweriesSelection : IndexPath?
-    
-    @IBInspectable var fillColor: UIColor = UIColor.green
 
 
     // MARK: IBOutlets
@@ -109,12 +115,14 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         tutorialModeOn = true
     }
 
+    
     @IBAction func dissMissTutorial(_ sender: UIButton) {
         tutorialModeOn = false
         UserDefaults.standard.set(false, forKey: g_constants.CategoryViewTutorial)
         UserDefaults.standard.synchronize()
     }
-    
+
+
     @IBAction func nextCommandPressed(_ sender: AnyObject) {
         // Advance the tutorial state
         switch tutorialState {
@@ -181,7 +189,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             pointer.setNeedsDisplay()
         }
     }
-    
+
     
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
         let segmentedMode: SegmentedControllerMode = CategoryViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
@@ -191,6 +199,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             genericTable.reloadData()
             genericTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
             )
+
         case .BreweriesWithStyle:
             //print("CategoryViewController \(#line) Switching to BreweryTableList and reloading ")
             // TODO
@@ -207,6 +216,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             activeTableList = breweryList
             genericTable.reloadData()
             genericTable.selectRow(at: stylesBrewerySelectionIndex, animated: true, scrollPosition: .middle)
+
         case .AllBreweries:
             activeTableList = allBreweryList
             genericTable.reloadData()
@@ -233,7 +243,7 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(from: AnyObject, withMsg msg: String) {
-        //Do not process notify if we are not in visisble
+        // Do not process notify if the sender is not in visisble
         guard (isViewLoaded && view.window != nil ) else {
             return
         }
@@ -293,29 +303,26 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         print("CategoryViewController \(#line) Viewwillappearcalled ")
-        // Do I really want to deselect.
-        // TODO Deselect whatever was selected on screen
-//        guard genericTable.indexPathForSelectedRow == nil else {
-//            genericTable.deselectRow(at: genericTable.indexPathForSelectedRow!, animated: true)
-//            return
-//        }
-        // Always reload the table data. Incase new breweries were pulled in
-        // TODO Only for styles tables do we not want to reload But this only applies if the Breweries w/ styles or breweries screen
-        // is shown
+
         activeTableList.filterContentForSearchText(searchText: newSearchBar.text!)
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
         // segmentedControlClicked will reload the table.
         segmentedControlClicked(segmentedControl, forEvent: UIEvent())
     }
-    
+
+
     // Why is it taking me along time because the coordinates are changing when I apply them
     // to the tutorial text.
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
 
+        // TODO why do i have to prime the tutorial it starts in the correct state
+        // Because that is what i said in hte initialization step
         // Always prime the tutorial
-        nextCommandPressed(self)
+        // This line maynot be needed anymore
+        //nextCommandPressed(self)
+
         // Show tutorial
         if UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) {
             // Do nothing because the tutorial will show automatically.
@@ -324,20 +331,21 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
         }
     }
 
-    
+
+    // TODO this is already set in viewDidAppear don't think doing it again help
     // Changes the navigation bar to show user they can go back to categories screen
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        navigationController?.navigationBar.topItem?.title = "Select"
+        //navigationController?.navigationBar.topItem?.title = "Select"
     }
 }
 
 
 extension CategoryViewController : UITableViewDataSource {
-    
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         //print("CategoryViewController \(#line) cellForRowAt called ")
         var cell = genericTable.dequeueReusableCell(withIdentifier: cellIdentifier)
+        // Ask the viewmodel for the cell.
         cell = activeTableList.cellForRowAt(indexPath: indexPath,
                                          cell: cell!,
                                          searchText: newSearchBar.text)
@@ -361,7 +369,6 @@ extension CategoryViewController : UITableViewDelegate {
     // Capture user selections, communicate with the mediator on what the
     // selection is and then proceed to the map on success
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //print("CategoryViewControler \(#line) tableView didSelectRowAt clled ")
 
         // Save the selection as title of the ViewController
         switch SegmentedControllerMode(rawValue: segmentedControl.selectedSegmentIndex)! {
@@ -382,6 +389,9 @@ extension CategoryViewController : UITableViewDelegate {
         //navigationItem.title = tableView.cellForRow(at: indexPath)?.textLabel?.text
 
         activityIndicator.startAnimating()
+
+        // Tell the view model something was selected.
+        // The view model will go tell the mediator what it needs to download.
         activeTableList.selected(elementAt: indexPath,
                                  searchText: newSearchBar.text!){
                                     (sucesss,msg) -> Void in
