@@ -49,8 +49,6 @@ class AllBreweriesTableList: NSObject, Subject {
         
         guard frc.fetchedObjects?.count == 0 else {
             // We have brewery entries go ahead and display them viewcontroller
-            // TODO remove this temporary code to detect if there are breweries here already
-            //fatalError()
             return
         }
         
@@ -72,11 +70,9 @@ class AllBreweriesTableList: NSObject, Subject {
         //
         //        }
     }
-    
-    
 
 
-    internal func refreshFetchedResultsController() {
+    internal func mediatorRefreshFetchedResultsController() {
         do {
             try frc.performFetch()
         } catch {
@@ -85,23 +81,17 @@ class AllBreweriesTableList: NSObject, Subject {
 
 }
 
+
 extension AllBreweriesTableList : TableList {
 
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         DispatchQueue.main.async {
-            //print("AllBreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             if searchText != "" {
-                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name! + (self.filteredObjects[indexPath.row]).id!
-                // Debugging line
-                cell.detailTextLabel?.text = "Filetered"+(self.filteredObjects[indexPath.row]).description
+                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name!
             } else {
-                cell.textLabel?.text = (self.frc.object(at: indexPath)).name! + (self.frc.object(at: indexPath)).id!
-                // Debugging line
-                cell.detailTextLabel?.text = "Unfiltered"+(self.frc.object(at: indexPath)).description
+                cell.textLabel?.text = (self.frc.object(at: indexPath)).name!                 // Debugging line
             }
-            //Debugging line
-            cell.detailTextLabel?.adjustsFontSizeToFitWidth = true
             cell.setNeedsDisplay()
         }
         return cell
@@ -111,43 +101,27 @@ extension AllBreweriesTableList : TableList {
     func getNumberOfRowsInSection(searchText: String?) -> Int {
         // If we batch delete in the background frc will not retrieve delete results.
         // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
-        //er crektemporaryFetchData()
         guard searchText == "" else {
-            //print("AllBreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
-        //print("AllBreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)")
-        ////print("BreweryTableList \(#line) frc.firstitem:\(frc.fetchedObjects?.first)")")
         return frc.fetchedObjects!.count
     }
 
 
-    func filterContentForSearchText(searchText: String) {// -> [NSManagedObject] {
+    func filterContentForSearchText(searchText: String) {
         // BreweryTableList Observes the persistent Context and I only saved them
         // the main context and so there are none.
-        // Debugging code because breweries with a nil name are leaking thru
-        // assert((frc.fetchedObjects?.count)! > 0)
-        //print("BreweryTableList \(#line)\(#function) fetchedobject count \(frc.fetchedObjects?.count)")
-        //        for i in frc.fetchedObjects! {
-        //            //print("BreweryTableList \(#line)Filtering content Brewery name: \(i.name) \(i.id)")
-        //            assert(i.name != nil)
-        //        }
         // Only filter object if there are objects to filter.
         guard frc.fetchedObjects != nil else {
             filteredObjects.removeAll()
-            //return []
             return
         }
         guard (frc.fetchedObjects?.count)! > 0 else {
             filteredObjects.removeAll()
             return
-             //return []
         }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
-        ////print("BreweryTableList \(#line)we updated the filtered contents to \(filteredObjects.count)")
-        //return filteredObjects
     }
-
 
 
     func selected(elementAt: IndexPath,
@@ -166,21 +140,23 @@ extension AllBreweriesTableList : TableList {
         mediator.selected(thisItem: savedBreweryForDisplay, completion: completion)
         return nil
     }
-    
+
+
+    // When the user has typed out and pressed done in the search bar.
+    // this is the function that gets called
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
-        //print("AllBreweryTableList \(#line)searchForuserEntered beer called")
         // Calling this will invoke the downloadBreweryByBreweryName process
         // The process will immediately call back say the process started.
         BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
             (success, msg) -> Void in
-            //print("AllBreweryTableList \(#line)AllBreweryTableList Returned from BreweryDBClient")
             // Send a completion regardless.
-            // if there are update later NSFetchedResultsControllerDelegate will inform the viewcontroller.
+            // if there are updates later NSFetchedResultsControllerDelegate will inform the viewcontroller.
             completion!(success,msg)
         }
     }
     
 }
+
 
 extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     

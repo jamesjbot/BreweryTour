@@ -58,7 +58,7 @@ class Mediator : NSManagedObjectDisplayable {
     internal func allBeersAndBreweriesDeleted() {
         // TODO add more tablelists
         print("Mediator \(#line) AllBeersAndBrewsDeleted telling tableList to refresh")
-        allBreweryList.refreshFetchedResultsController()
+        allBreweryList.mediatorRefreshFetchedResultsController()
     }
 
     // Singleton Implementation
