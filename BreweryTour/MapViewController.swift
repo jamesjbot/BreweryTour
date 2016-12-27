@@ -124,20 +124,27 @@ class MapViewController : UIViewController {
     fileprivate func findBreweryIDinMainContext(by: MKAnnotation) -> NSManagedObjectID? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
-        let frc = NSFetchedResultsController(fetchRequest: request,
-                                             managedObjectContext: readOnlyContext!,
-                                             sectionNameKeyPath: nil, cacheName: nil)
+        request.predicate = NSPredicate(format: "name = %@", by.title!!)
+        //let frc = NSFetchedResultsController(fetchRequest: request,
+        //                                     managedObjectContext: readOnlyContext!,
+        //                                     sectionNameKeyPath: nil, cacheName: nil)
+
         do {
-            try frc.performFetch()
+            let breweries = try readOnlyContext?.fetch(request)
+            if let brewery = breweries?.first {
+                return brewery.objectID
+            } else {
+                return nil
+            }
         } catch {
             displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
         }
-        // Match Brewery name by Title
-        for i in frc.fetchedObjects! as [Brewery] {
-            if i.name! == by.title! {
-                return i.objectID
-            }
-        }
+//        // Match Brewery name by Title
+//        for i in frc.fetchedObjects! as [Brewery] {
+//            if i.name! == by.title! {
+//                return i.objectID
+//            }
+//        }
         return nil
     }
     
@@ -296,8 +303,6 @@ class MapViewController : UIViewController {
         }
         
         readOnlyContext?.automaticallyMergesChangesFromParent = true
-        
-        frc.delegate = self
 
     }
     
