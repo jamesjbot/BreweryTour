@@ -10,19 +10,28 @@ import Foundation
 import CoreData
 
 class Mediator : NSManagedObjectDisplayable {
-    
-    private var categoryViewer : CategoryViewController!
-    private var mapViewer : Observer!
-    private var beersViewer : Observer! // Should this be the Obsever or should it be the beerslist
-    
-    internal var passingItem : NSManagedObject?
-    internal var organic : Bool?
+
+    // MARK: Constants
+    private enum types {
+        case Style
+        case Brewery
+    }
     private let styleList : StylesTableList = StylesTableList()
     private let breweryList : BreweryTableList = BreweryTableList()
     private let selectedBeersList : SelectedBeersTableList = SelectedBeersTableList()
     private let allBreweryList : AllBreweriesTableList = AllBreweriesTableList()
-    //private let mapModel : MapViewModel = MapViewModel()
-    
+
+
+    // MARK: Variables
+
+//    private var categoryViewer : CategoryViewController!
+//    private var mapViewer : Observer!
+//    private var beersViewer : Observer! // Should this be the Obsever or should it be the beerslist
+    private var currentlySelectedManagedObjectType : types?
+    internal var passingItem : NSManagedObject?
+
+
+    // MARK: Functions
     
     internal func getStyleList() -> StylesTableList {
         return styleList
@@ -37,24 +46,18 @@ class Mediator : NSManagedObjectDisplayable {
     internal func getSelectedBeersList() -> SelectedBeersTableList {
         return selectedBeersList
     }
-    
+
+
     internal func getAllBreweryList() -> AllBreweriesTableList {
         return allBreweryList
     }
-    
+
+
     internal func getMapData() -> NSManagedObject? {
         return passingItem
     }
-    
-    enum types {
-        case Style
-        case Brewery
-    }
-    
-    private var currentlySelectedManagedObjectType : types?
-    
-    // MARK: Functions
 
+    
     internal func allBeersAndBreweriesDeleted() {
         // TODO add more tablelists
         print("Mediator \(#line) AllBeersAndBrewsDeleted telling tableList to refresh")
@@ -78,20 +81,20 @@ class Mediator : NSManagedObjectDisplayable {
     }
     
     
-    func registerAsBeersViewer(view: Observer) {
-        beersViewer = view
-    }
-    
-    
-    func registerAsCategoryView(view: CategoryViewController) {
-        categoryViewer = view
-    }
-    
-    
-    func registerAsMapView(view : Observer){
-        mapViewer = view
-    }
-    
+//    func registerAsBeersViewer(view: Observer) {
+//        beersViewer = view
+//    }
+//    
+//    
+//    func registerAsCategoryView(view: CategoryViewController) {
+//        categoryViewer = view
+//    }
+//    
+//    
+//    func registerAsMapView(view : Observer){
+//        mapViewer = view
+//    }
+
     
     // When an element on categoryScreen is selected, process it on BreweryDBClient
     func selected(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
