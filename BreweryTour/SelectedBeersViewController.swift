@@ -127,6 +127,7 @@ class SelectedBeersViewController: UIViewController, Observer {
         super.viewDidLoad()
         searchBar.delegate = self
         selectedBeersTableList.registerObserver(view: self)
+        tabBarController?.title = "Click For Details"
     }
     
     

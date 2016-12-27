@@ -47,6 +47,7 @@ class FavoriteBeersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         frc.delegate = self
+        tabBarController?.title = "Click For Details"
     }
     
     

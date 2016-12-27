@@ -6,6 +6,11 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 
+/*
+ This is the TabBarController that we will embed in the navigation controller.
+ It allows us to setup a the help button in a single location.
+ */
+
 import UIKit
 
 class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
@@ -18,16 +23,20 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        self.navigationItem.title = "Brewery Tour"
-        
+        // Capture the selected ViewController so it can operate with the tutorial protocol.
         let dismissable = selectedViewController as! DismissableTutorial
-        let helpButton = UIBarButtonItem(title: "Help?", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
-        self.navigationItem.setRightBarButton(helpButton, animated: false)
+        setHelpButton(tutorial: dismissable)
     }
 
     internal func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let dismissable = viewController as! DismissableTutorial
-        let helpButton = UIBarButtonItem(title: "Help?", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
-        self.navigationItem.rightBarButtonItem = helpButton
+        setHelpButton(tutorial: dismissable)
     }
+
+
+    private func setHelpButton(tutorial dismissable: DismissableTutorial) {
+        let helpButton = UIBarButtonItem(title: "Help?", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
+        self.navigationItem.setRightBarButton(helpButton, animated: false)
+    }
+
 }

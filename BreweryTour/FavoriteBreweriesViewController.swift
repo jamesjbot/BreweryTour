@@ -51,6 +51,8 @@ class FavoriteBreweriesViewController: UIViewController {
         frc.delegate = self
         // Do any additional setup after loading the view.
         performFetchOnResultsController()
+
+        tabBarController?.title = "Click For Directions"
     }
     
     override func viewWillAppear(_ animated: Bool) {

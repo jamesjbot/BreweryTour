@@ -309,6 +309,8 @@ class MapViewController : UIViewController {
         readOnlyContext?.automaticallyMergesChangesFromParent = true
         
         frc.delegate = self
+
+        tabBarController?.title = "Go To Website"
     }
     
     
