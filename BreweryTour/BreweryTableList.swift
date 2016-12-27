@@ -6,8 +6,8 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /* 
- This is the view model backing the breweries with specified styles table on the main category view
- controller
+ This is the view model backing the breweries with specified styles table on the
+ main category viewcontroller
  */
 
 
@@ -17,29 +17,35 @@ import CoreData
 
 class BreweryTableList: NSObject, Subject {
 
+    // MARK: Constants
+
+    private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
+
+
     // MARK: Variables
+
     var observer : Observer!
 
+    // variables for selecting breweries with a style
     var displayableBreweries = [Brewery]()
     var newBeers = [Beer]()
+
     internal var mediator: NSManagedObjectDisplayable!
+
+    // variable for search filtering
     internal var filteredObjects: [Brewery] = [Brewery]()
     
-    // Currently watches the persistentContext
-    //internal var frc : NSFetchedResultsController<Brewery>!
+    // Currently watches the main context (readOnlyContext)
     internal var coreDataBeerFRCObserver: NSFetchedResultsController<Beer>!
     
-    private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
-    private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
-    
+
     // MARK: - Functions
 
-
-    // I removed the delegate so frc does not fire
-    // We must tell the CategoryViewController when 
-    // We have displayable things.
-    // When new beers are created in coredata
     //
+    /*
+     On start up we don't have a style selected so this ViewController will be
+     blank
+     */
     override init(){
         super.init()
 //        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
@@ -84,15 +90,22 @@ class BreweryTableList: NSObject, Subject {
     }
     
     
-    // Fetch breweries based on style selected.
-    // Get the Brewery entries from the database
+    /* 
+     Fetch breweries based on style selected.
+     The CategoryViewController will fire this method
+     to get the brewery entries from the database
+     */
     internal func displayBreweriesWith(style : Style, completion: (_ success: Bool) -> Void){
+        /* 
+         First look for all the beers with a style
+         Then set all the breweries related to those beers
+         into displayableBreweries
+         */
         print("BreweryTableLISt \(#line) Requesting style: \(style.id!) ")
         let request : NSFetchRequest<Beer> = Beer.fetchRequest()
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "styleID = %@", style.id!)
         var results : [Beer]!
-        // Presave the mainContext maybe that's why I cant see any results.
         coreDataBeerFRCObserver = NSFetchedResultsController(fetchRequest: request ,
                                              managedObjectContext: readOnlyContext!,
                                              sectionNameKeyPath: nil,
@@ -143,12 +156,13 @@ class BreweryTableList: NSObject, Subject {
         print("BreweryTable \(#line) Context Perform just jump over all the code an will run later. ")
     }
 
-
+    // Allow CategoryViewController to register for updates.
     func registerObserver(view: Observer) {
         observer = view
     }
     
 }
+
 
 extension BreweryTableList: TableList {
 
