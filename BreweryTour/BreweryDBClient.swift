@@ -148,8 +148,26 @@ class BreweryDBClient {
                 self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
             }
         }
+//        if locDict["id"]?.description == "H9vPzA" {
+//            print("<---CreateBrewery------Alert American Brewery------------------->")
+//        }
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "id = %@", argumentArray: [locDict["id"]!.description])
+        do {
+            let newBrewery = try coreDataStack?.breweryCreationContext?.fetch(request)
+            guard newBrewery?.count == 0 else {
+                completion((newBrewery?.first!)!)
+                return
+            }
+            print("Brewery results:\(newBrewery?.count)")
+        } catch {
+            fatalError()
+            print("SHOULD NEVER HAPPEN EMERGENCY ----------------------------------------*************************************************************************************************************************")
+            // Just continue
+        }
         var brewer : Brewery!
-        print("\nBreweryDb \(#line) Brewery non Blocking for create brewery in backgroundContext\n\(breweryDict["name"])")
+        print("\nBreweryDb \(#line) createBreweryObject called non Blocking for create brewery in backgroundContext\n\(breweryDict["name"])")
         // Why did I make this perform instead of performandWait
         // Changed back to performAndWait because map was boing populated with nothing
         // because this function returned before creating breweries
@@ -159,9 +177,13 @@ class BreweryDBClient {
          The solution is to use perform and allow MapViewController to dynamically watch for changes to the beers..
          I use performAndWait because completion get called before breweries are created.
          */
-        container?.performBackgroundTask() {
-            (context) -> Void in
-            context.perform {
+
+        let context = coreDataStack!.breweryCreationContext!
+        context.performAndWait {
+            if locDict["id"]?.description == "H9vPzA" {
+                print("<----------------------Alert American Brewery------------------->")
+                print("In just before creation of brewery")
+            }
             brewer = Brewery(inName: breweryDict["name"] as! String,
                              latitude: locDict["latitude"]?.description,
                              longitude: locDict["longitude"]?.description,
@@ -169,16 +191,21 @@ class BreweryDBClient {
                              open: (locDict["openToPublic"] as! String == "Y") ? true : false,
                              id: locDict["id"]?.description,
                              context: context)
+                print("BreweryDB \(#line) Just created in createBrewery non blocking creationandsave\n\(breweryDict["name"])")
                 do {
+                    print("Just before do save")
                     try context.save()
                     print("BreweryDB \(#line) Exiting Brewery non blocking creationandsave\n\(breweryDict["name"])")
+                    if locDict["id"]?.description == "H9vPzA" {
+                        print("<-------------------- American Brewery Created Forever------------------->")
+                        print("In just before creation of brewery")
+                    }
                     completion(brewer)
                     saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
                 } catch let error {
                     fatalError(error.localizedDescription)
                 }
             }
-        }
     }
     
     
@@ -385,7 +412,7 @@ class BreweryDBClient {
                                        outputType: APIQueryOutputTypes.BeersByStyleID,
                                        completion: completion,
                                        group: group)
-                            print("BreweryDB \(#line) launched parsing on page# \(p)")
+                            print("BreweryDB \(#line) breweryByStyle Finished launching another asynchrnous parsing on page# \(p)")
                     } //Outside alamo but inside async
                 } //Outside queue.async
             }  // Outside for loop
@@ -867,8 +894,10 @@ class BreweryDBClient {
                 print("Brewerydb \(#line) In beer loop ")
                 // Check to see if this beer is in the database already, and skip if so
                 guard getBeerByID(id: beer["id"] as! String, context: readOnlyContext!) == nil else {
+                    print("BreweryDB \(#line) This beer has already been created ")
                     continue createBeerLoop
                 }
+                print("BreweryDB \(#line) Complete getting a beer id above ")
                 // This beer has no brewery information, continue with the next beer
                 guard let breweriesArray = beer["breweries"]  else {
                     continue createBeerLoop
@@ -893,8 +922,13 @@ class BreweryDBClient {
                     }
                     // Check to make sure the brewery is not already in the database
                     var dbBrewery : Brewery!
+                    print("BreweryDB \(#line) before getting breweryID ")
+                    if locDic["id"]?.description == "H9vPzA" {
+                        print("<----------------------Alert Great American Brewery------------------->")
+                    }
                     getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!){
                         (Brewery) -> Void in
+                        print("BreweryDB \(#line) returned from getting breweryID ")
                         dbBrewery = Brewery
                         if dbBrewery == nil { // Create a brewery object when none.
                             self.createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
@@ -914,6 +948,8 @@ class BreweryDBClient {
                                 (beer)-> Void in })
                         }
                     }
+                    print("BreweryDB \(#line) after getting breweryID ")
+
                 }
             } // end of beer loop
             // This page of results has processed signal GCD that it's complete.
