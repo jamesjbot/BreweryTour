@@ -222,13 +222,6 @@ class CategoryViewController: UIViewController,
             activeTableList = allBreweryList
             genericTable.reloadData()
             genericTable.selectRow(at: brewerySelectionIndex, animated: true, scrollPosition: .middle)
-            /* 
-             Tell the user they have selected all breweries
-             This is what will show on the map.
-             */
-            navigationItem.title = "All Breweries"
-        default:
-            break
         }
     }
     
