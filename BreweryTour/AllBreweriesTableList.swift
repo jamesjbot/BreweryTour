@@ -89,7 +89,8 @@ extension AllBreweriesTableList : TableList {
 
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         DispatchQueue.main.async {
-            print("AllBreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
+            //print("AllBreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
             if searchText != "" {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name! + (self.filteredObjects[indexPath.row]).id!
                 // Debugging line
@@ -112,11 +113,11 @@ extension AllBreweriesTableList : TableList {
         // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
         //er crektemporaryFetchData()
         guard searchText == "" else {
-            print("AllBreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
+            //print("AllBreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
-        print("AllBreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)")
-        //print("BreweryTableList \(#line) frc.firstitem:\(frc.fetchedObjects?.first)")")
+        //print("AllBreweryTableList \(#line) \(#function) fetched objects count \(frc.fetchedObjects?.count)")
+        ////print("BreweryTableList \(#line) frc.firstitem:\(frc.fetchedObjects?.first)")")
         return frc.fetchedObjects!.count
     }
 
@@ -143,7 +144,7 @@ extension AllBreweriesTableList : TableList {
              //return []
         }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
-        //print("BreweryTableList \(#line)we updated the filtered contents to \(filteredObjects.count)")
+        ////print("BreweryTableList \(#line)we updated the filtered contents to \(filteredObjects.count)")
         //return filteredObjects
     }
 
@@ -167,12 +168,12 @@ extension AllBreweriesTableList : TableList {
     }
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
-        print("AllBreweryTableList \(#line)searchForuserEntered beer called")
+        //print("AllBreweryTableList \(#line)searchForuserEntered beer called")
         // Calling this will invoke the downloadBreweryByBreweryName process
         // The process will immediately call back say the process started.
         BreweryDBClient.sharedInstance().downloadBreweryBy(name: searchTerm) {
             (success, msg) -> Void in
-            print("AllBreweryTableList \(#line)AllBreweryTableList Returned from BreweryDBClient")
+            //print("AllBreweryTableList \(#line)AllBreweryTableList Returned from BreweryDBClient")
             // Send a completion regardless.
             // if there are update later NSFetchedResultsControllerDelegate will inform the viewcontroller.
             completion!(success,msg)
@@ -184,37 +185,37 @@ extension AllBreweriesTableList : TableList {
 extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("AllBreweryTableList \(#line) AllBreweriesTableList willchange")
+        //print("AllBreweryTableList \(#line) AllBreweriesTableList willchange")
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("AllBreweryTableList \(#line) AllBreweryTableList changed object")
+        //print("AllBreweryTableList \(#line) AllBreweryTableList changed object")
         switch (type){
         case .insert:
-            print("AllBreweryTable \(#line) inserting\n\(anObject)")
+            //print("AllBreweryTable \(#line) inserting\n\(anObject)")
             break
         case .delete:
-            print("AllBreweryTable \(#line) delete")
+            //print("AllBreweryTable \(#line) delete")
             break
         case .move:
-            print("AllBreweryTable \(#line) move ")
+            //print("AllBreweryTable \(#line) move ")
             break
         case .update:
-            print("AllBreweryTable \(#line) update ")
+            //print("AllBreweryTable \(#line) update ")
             break
         }
     }
 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("AllBreweryTableList \(#line) AllBreweryTableList controllerdidChangeContent notify observer")
+        //print("AllBreweryTableList \(#line) AllBreweryTableList controllerdidChangeContent notify observer")
         // TODO We're preloading breweries do I still need this notify
         // Send message to observer regardless of situation. The observer decides if it should act.
         observer.sendNotify(from: self, withMsg: "reload data")
-        print("AllBreweryTableList \(#line) According to \(controller)\n There are now this many breweries \(controller.fetchedObjects?.count)")
-            print("AllBreweryTableList \(#line) According to \(frc)\n There are now this many breweries \(frc.fetchedObjects?.count)")
-        print("AllBreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
+        //print("AllBreweryTableList \(#line) According to \(controller)\n There are now this many breweries \(controller.fetchedObjects?.count)")
+            //print("AllBreweryTableList \(#line) According to \(frc)\n There are now this many breweries \(frc.fetchedObjects?.count)")
+        //print("AllBreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
         //Datata = frc.fetchedObjects!
     }
 }
