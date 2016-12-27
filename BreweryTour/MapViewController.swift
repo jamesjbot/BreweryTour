@@ -5,7 +5,7 @@
 //  Created by James Jongsurasithiwat on 10/8/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/**
+/*
  This program displays the breweries selected by the user.
  It gets the selection from the mediator and display a red pin for breweries
  and a blue pin for the user's location
@@ -28,7 +28,7 @@
  The mediator will provide the brewery object, we will map it according to its
  location.
  
- **/
+ */
 
 
 import UIKit
@@ -40,18 +40,11 @@ import CoreData
 
 class MapViewController : UIViewController {
     
-    // MARK: Debugging
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        return
-    }
-    
     // MARK: Constants
     
     // Location manager allows us access to the user's location
     private let locationManager = CLLocationManager()
     
-    //fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
     
@@ -59,8 +52,8 @@ class MapViewController : UIViewController {
     
     // Used to hold the locations we are going to display, loaded from a database query
     private var mappableBreweries = [Brewery]()
+
     // The query that goes against the database to pull in the brewery location information
-    // This runs on persistent
     private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
     private var beerFRC : NSFetchedResultsController<Beer>?
     fileprivate var lastSelectedManagedObject : NSManagedObject?
@@ -147,7 +140,6 @@ class MapViewController : UIViewController {
         }
         return nil
     }
-    
     
     
     fileprivate func frcUpdateAppendMapBreweries(newStyle: Bool) {
@@ -247,9 +239,6 @@ class MapViewController : UIViewController {
             // The map must be populated when the fetchRequest completes
             self.populateMapWithAnnotations(fromBreweries: self.mappableBreweries, removeDisplayedAnnotations: true)
         }
-        //})
-//        thisContext?.performAndWait {
-//        }
     }
     
 
