@@ -311,7 +311,7 @@ class MapViewController : UIViewController {
         super.viewWillAppear(animated)
         tabBarController?.title = "Go To Website"
         // Get new selections
-        let mapViewData = Mediator.sharedInstance().getMapData()
+        let mapViewData = Mediator.sharedInstance().getPassedItem()
         
         // Decision making to display Breweries Style or Brewery
         lastSelectedManagedObject = mapViewData
@@ -549,7 +549,7 @@ extension MapViewController : NSFetchedResultsControllerDelegate {
         print("MapViewController \(#line) Detected new changes.")
         // This should only be called when this is a style, because single breweries
         // are immediately displayed
-        if lastSelectedManagedObject == Mediator.sharedInstance().getMapData() {
+        if lastSelectedManagedObject == Mediator.sharedInstance().getPassedItem() {
             frcUpdateAppendMapBreweries(newStyle: false)
         } else { // new style replace.
             frcUpdateAppendMapBreweries(newStyle: true)
