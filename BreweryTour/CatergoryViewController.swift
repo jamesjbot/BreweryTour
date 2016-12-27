@@ -323,18 +323,6 @@ class CategoryViewController: UIViewController, NSFetchedResultsControllerDelega
             tutorialView.isHidden = true
         }
     }
-    
-    
-    private func whichRowShouldBeSelected() -> IndexPath? {
-        // Depends on what segmented index we are on
-        switch SegmentedControllerMode.init(rawValue: segmentedControl.selectedSegmentIndex)! {
-        case .Style:             return styleSelectionIndex
-        case .BreweriesWithStyle:
-            return stylesBrewerySelectionIndex
-        case .AllBreweries:
-            return brewerySelectionIndex
-        }
-    }
 
     
     // Changes the navigation bar to show user they can go back to categories screen
