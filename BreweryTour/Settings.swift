@@ -18,12 +18,12 @@ class Settings: UIViewController {
     
     // MARK: Constants
 
-    let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
-    let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
-    let breweryFetch: NSFetchRequest<Brewery> = Brewery.fetchRequest()
-    let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
-    let mediator = Mediator.sharedInstance()
+    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+    private let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
+    private let breweryFetch: NSFetchRequest<Brewery> = Brewery.fetchRequest()
+    private let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
+    private let mediator = Mediator.sharedInstance()
 
 
     // MARK: IBOutlet
