@@ -113,6 +113,7 @@ class FavoriteBeersViewController: UIViewController {
             return
         }
         // Populate cell from the NSManagedObject instance
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
         cell.textLabel?.text = selectedObject.beerName
         cell.detailTextLabel?.text = selectedObject.brewer?.name
         if let data : NSData = (selectedObject.image) {

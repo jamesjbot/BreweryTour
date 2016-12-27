@@ -174,20 +174,23 @@ extension SelectedBeersTableList : TableList {
         // Set a default image
         // Depending on what data is shown populate image and text data.
         var im =  UIImage(named: "Nophoto.png")
-        if searchText != "" { // If there is something in searchText use filteredObject
-            if let data : NSData = (filteredObjects[indexPath.row]).image {
-                im = UIImage(data: data as Data)
+        DispatchQueue.main.async {
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            if searchText != "" { // If there is something in searchText use filteredObject
+                if let data : NSData = (self.filteredObjects[indexPath.row]).image {
+                    im = UIImage(data: data as Data)
+                }
+                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).beerName
+                cell.detailTextLabel?.text = (self.filteredObjects[indexPath.row]).brewer?.name
+            } else { // Use unfilteredObjects
+                if let data : NSData = (self.frc.object(at: indexPath).image) {
+                    im = UIImage(data: data as Data)
+                }
+                cell.textLabel?.text = self.frc.object(at: indexPath).beerName
+                cell.detailTextLabel?.text = self.frc.object(at: indexPath).brewer?.name
             }
-            cell.textLabel?.text = (filteredObjects[indexPath.row]).beerName
-            cell.detailTextLabel?.text = (filteredObjects[indexPath.row]).brewer?.name
-        } else { // Use unfilteredObjects
-            if let data : NSData = (self.frc.object(at: indexPath).image) {
-                im = UIImage(data: data as Data)
-            }
-            cell.textLabel?.text = self.frc.object(at: indexPath).beerName
-            cell.detailTextLabel?.text = self.frc.object(at: indexPath).brewer?.name
+            cell.imageView?.image = im
         }
-        cell.imageView?.image = im
         return cell
     }
 

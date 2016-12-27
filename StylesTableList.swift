@@ -111,15 +111,16 @@ extension StylesTableList : TableList {
      */
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // Move this UI update to main queue.
-        print("StylesTablesList \(#line) I'm updating UITableView cell on main ")
-        assert(indexPath.row < (frc.fetchedObjects?.count)!)
-        if searchText != "" {
-            cell.textLabel?.text = (filteredObjects[indexPath.row]).displayName ?? "Error"
-        } else {
-            // TODO it's reading nil here for some reason.
-            cell.textLabel?.text = (frc.object(at: indexPath )).displayName ?? "Error"
-        }
         DispatchQueue.main.async {
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            print("StylesTablesList \(#line) I'm updating UITableView cell on main ")
+            assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
+            if searchText != "" {
+                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
+            } else {
+                // TODO it's reading nil here for some reason.
+                cell.textLabel?.text = (self.frc.object(at: indexPath )).displayName ?? "Error"
+            }
             cell.setNeedsDisplay()
         }
         return cell
