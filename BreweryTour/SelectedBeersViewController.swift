@@ -5,8 +5,9 @@
 //  Created by James Jongsurasithiwat on 10/12/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/** Shows all the beers or just the selected beers from styles or breweries.
- **/
+/*
+ Shows all the beers or just the selected beers from styles and/or breweries.
+ */
 
 import UIKit
 import CoreData
@@ -14,14 +15,14 @@ import CoreData
 class SelectedBeersViewController: UIViewController, Observer {
     
     // MARK: Constants
-    enum SelectedBeersTutorialStage {
+    private enum SelectedBeersTutorialStage {
         case Table
         case SegementedControl
         case SearchBar
     }
     
-    let segmentedControlPaddding : CGFloat = 8
-    let paddingForPoint : CGFloat = 20
+    private let segmentedControlPaddding : CGFloat = 8
+    private let paddingForPoint : CGFloat = 20
 
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     fileprivate let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
@@ -32,6 +33,7 @@ class SelectedBeersViewController: UIViewController, Observer {
     private var tutorialState : SelectedBeersTutorialStage = .Table
     
     // MARK: IBOutlets
+
     @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
@@ -43,16 +45,19 @@ class SelectedBeersViewController: UIViewController, Observer {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     
     // MARK: IBActions
+
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
         UserDefaults.standard.set(false, forKey: g_constants.SelectedBeersTutorial)
         UserDefaults.standard.synchronize()
     }
-    
+
+
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
         selectedBeersTableList.toggleAllBeersMode(control: sender)
     }
-    
+
+
     @IBAction func nextLesson(_ sender: UIButton) {
         // Advance the tutorial state
         switch tutorialState {
@@ -107,8 +112,9 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     
     // MARK: Functions
+
     // All notification to SelectedBeersViewController will reload the table.
-    func sendNotify(from: AnyObject, withMsg msg: String) {
+    internal func sendNotify(from: AnyObject, withMsg msg: String) {
         tableView.reloadData()
         // Prompts the tableView to refilter search listings.
         searchBar(searchBar, textDidChange: searchBar.text!)
@@ -120,6 +126,7 @@ class SelectedBeersViewController: UIViewController, Observer {
         // When switching from another viewcontroller the background data might
         // have changed
         tableView.reloadData()
+        // Set navigationbar title
         tabBarController?.title = "Click For Details"
     }
     
@@ -149,12 +156,12 @@ class SelectedBeersViewController: UIViewController, Observer {
 
 extension SelectedBeersViewController: UITableViewDataSource {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return selectedBeersTableList.getNumberOfRowsInSection(searchText: searchBar.text)
     }
     
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         print("SelectedBeers \(#line) cellForRowAt ")
         // Get a cell from the tableview and populate with name, brewery and image if available
         var cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
@@ -172,7 +179,7 @@ extension SelectedBeersViewController: UITableViewDataSource {
 
 extension SelectedBeersViewController : UITableViewDelegate {
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Open the beer detail view screen.
         let beer = selectedBeersTableList.selected(elementAt: indexPath,
                                                    searchText: searchBar.text!) {
@@ -184,7 +191,7 @@ extension SelectedBeersViewController : UITableViewDelegate {
         // Push beer information to Detail View Controller
         destinationViewcontroller.beer = beer as! Beer
 
-        // Change the name of the back button
+        // Change the name of the back button on destinationViewController
         tabBarController?.title = "Back"
 
         // Segue to view controller
@@ -195,14 +202,15 @@ extension SelectedBeersViewController : UITableViewDelegate {
 
 
 extension SelectedBeersViewController : UISearchBarDelegate {
-    func searchBar(_: UISearchBar, textDidChange: String){
-        // User entered searchtext filter data
+
+    internal func searchBar(_: UISearchBar, textDidChange: String){
+        // User entered searchtext, now filter data
         selectedBeersTableList.filterContentForSearchText(searchText: textDidChange)
         tableView.reloadData()
     }
     
     
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    internal func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         // Remove searchbar text so we stop searching
         // Put searchbar back into unselected state
         // Repopulate the table
@@ -213,7 +221,7 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     
     
     // Search for beer on line.
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+    internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
         // Do nothing, because nothing was entered in search bar
@@ -221,8 +229,7 @@ extension SelectedBeersViewController : UISearchBarDelegate {
             return
         }
         
-        // Prompt user to search online for beer
-        // Create action for prompt
+        // Function to attach to alert button
         func searchOnline(_ action: UIAlertAction) {
             activityIndicator.startAnimating()
             activityIndicator.isHidden = false
@@ -234,7 +241,7 @@ extension SelectedBeersViewController : UISearchBarDelegate {
                 if success {
                     self.tableView.reloadData()
                 } else {
-                    self.displayAlertWindow(title: "Search Failed", msg: msg!)
+                    self.displayAlertWindow(title: "Search Failed", msg: "Please close the app\nandtry again.")
                 }
             }
         }
