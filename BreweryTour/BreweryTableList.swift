@@ -27,13 +27,19 @@ class BreweryTableList: NSObject, Subject {
     
     // Currently watches the persistentContext
     //internal var frc : NSFetchedResultsController<Brewery>!
-    internal var beerFRC: NSFetchedResultsController<Beer>!
+    internal var coreDataBeerFRCObserver: NSFetchedResultsController<Beer>!
     
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     
     // MARK: - Functions
-    
+
+
+    // I removed the delegate so frc does not fire
+    // We must tell the CategoryViewController when 
+    // We have displayable things.
+    // When new beers are created in coredata
+    //
     override init(){
         super.init()
 //        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
@@ -87,12 +93,12 @@ class BreweryTableList: NSObject, Subject {
         request.predicate = NSPredicate(format: "styleID = %@", style.id!)
         var results : [Beer]!
         // Presave the mainContext maybe that's why I cant see any results.
-        beerFRC = NSFetchedResultsController(fetchRequest: request ,
+        coreDataBeerFRCObserver = NSFetchedResultsController(fetchRequest: request ,
                                              managedObjectContext: readOnlyContext!,
                                              sectionNameKeyPath: nil,
                                              cacheName: nil)
         print("BreweryTableList \(#line) beerfrc delegate assigned ")
-        beerFRC.delegate = self
+        coreDataBeerFRCObserver.delegate = self
         /*
          TODO When you select styles and favorite a brewery, go to favorites breweries and pick a style
          This frc will totally overwrite because it will detect changes in the breweries from favoriting
@@ -101,19 +107,23 @@ class BreweryTableList: NSObject, Subject {
         // This must block because the mapView must be populated before it displays.
         //        container?.performBackgroundTask({
         //            (context) -> Void in
+        self.displayableBreweries.removeAll()
+
+        // Prime the fetch beer fetched results controller
         print("BreweryTable \(#line) Context Perform is next ")
+
         readOnlyContext?.perform() {
             do {
-                try self.beerFRC?.performFetch()
-                results = (self.beerFRC?.fetchedObjects)! as [Beer]
+                try self.coreDataBeerFRCObserver?.performFetch()
+                results = (self.coreDataBeerFRCObserver.fetchedObjects)! as [Beer]
                 //results = try (thisContext!.fetch(request)) as [Beer]
                 print("BreweryTableList \(#line) Are the results are zero? \(results.count) ")
             } catch {
             }
             // Now that we have Beers with that style, what breweries are associated with these beers
             // Array to hold breweries
-            self.displayableBreweries.removeAll()
-            print("BreweryTableList \(#line) were there any beers that matched style\n")
+            //self.displayableBreweries.removeAll() // Move to outside the perform block
+            print("BreweryTableList \(#line) Determining is brewery link to beer has already been displayed\n")
             for beer in results {
                 guard beer.brewer != nil else {
                     fatalError()
@@ -122,10 +132,13 @@ class BreweryTableList: NSObject, Subject {
                     self.displayableBreweries.append(beer.brewer!)
                 }
             }
-            print("end of context perform")
-            print("displayable breweries is available for table reload")
+            print("BrweryTableList \(#line) end of context perform")
+            print("BrweryTableList \(#line) displayable breweries is available for table reload")
             // This would be an asynchronous notify.
-            //self.observer.sendNotify(from: self, withMsg: "reload data")
+            // or shoudl i refresh the context
+            //readOnlyContext?.refreshAllObjects()
+            print("BrweryTableList \(#line) Notify viewcontroller from inital frc priming")
+            self.observer.sendNotify(from: self, withMsg: "reload data")
         }
         print("BreweryTable \(#line) Context Perform just jump over all the code an will run later. ")
     }
@@ -141,6 +154,7 @@ extension BreweryTableList: TableList {
 
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         DispatchQueue.main.async {
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
             print("BreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
             guard let searchText = searchText else {
                 return
@@ -247,6 +261,7 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
         }
         print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
         // TODO We're preloading breweries do I still need this notify
+        print("BrweryTableList \(#line) Notify viewcontroller on controllerDidChangeContent delegate.")
         observer.sendNotify(from: self, withMsg: "reload data")
         print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
         print("BreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
