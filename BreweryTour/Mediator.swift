@@ -85,21 +85,6 @@ class Mediator : NSManagedObjectDisplayable {
         }
         return Singleton.sharedInstance
     }
-    
-    
-//    func registerAsBeersViewer(view: Observer) {
-//        beersViewer = view
-//    }
-//    
-//    
-//    func registerAsCategoryView(view: CategoryViewController) {
-//        categoryViewer = view
-//    }
-//    
-//    
-//    func registerAsMapView(view : Observer){
-//        mapViewer = view
-//    }
 
     
     // When an element on categoryScreen is selected, process it on BreweryDBClient
