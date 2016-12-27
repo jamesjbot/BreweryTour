@@ -56,7 +56,7 @@
                                             <outlet property="delegate" destination="RKC-MN-s1K" id="1dR-s0-Mir"/>
                                         </connections>
                                     </searchBar>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="300" verticalCompressionResistancePriority="759" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="300" verticalCompressionResistancePriority="759" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx" userLabel="Generic Table">
                                         <rect key="frame" x="0.0" y="0.0" width="368" height="595"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
@@ -209,11 +209,11 @@
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="bpZ-cN-Rf5" id="1I4-bF-cS4"/>
+                        <outlet property="genericTable" destination="OSH-8A-abx" id="AUc-v3-xzb"/>
                         <outlet property="mapButton" destination="fyC-Ho-f67" id="4jp-ky-liF"/>
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="pointer" destination="jRB-Sa-1bJ" id="cRy-a1-03F"/>
                         <outlet property="segmentedControl" destination="mmN-dq-rb5" id="1vF-MM-mRn"/>
-                        <outlet property="styleTable" destination="OSH-8A-abx" id="y1X-oH-hTs"/>
                         <outlet property="tutorialText" destination="chy-Gf-XC8" id="HRg-12-ZWA"/>
                         <outlet property="tutorialView" destination="447-tn-FIf" id="mv0-Km-cSq"/>
                         <segue destination="aS9-dG-afv" kind="show" identifier="Go" id="ETW-U3-xph"/>
