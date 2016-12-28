@@ -57,6 +57,7 @@ class Mediator : NSManagedObjectDisplayable {
         allBreweryList.mediatorRefreshFetchedResultsController()
     }
 
+    
     // Singleton Implementation
     private init(){
         // Setup to receive message from the lists
