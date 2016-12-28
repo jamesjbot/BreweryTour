@@ -40,10 +40,13 @@ BreweryDBClient saveBackround
 BeerDetailViewController favorting and tasting note
 
 
-
-
-
 What are the problems
+Left off at brewerytablelist trying to optimize
+ui
+
+Double brewery being created, solved used a perform and wait.
+I want to see how this is possible why isn't one being created before the next one goes'
+
 1. When favoriting a brewery from the map, I'm told that the action failed
 but its completion is 50/50 (This may have been solved with fix 5.)
 2. When deleting all beers and breweries, I'm confronted with the same warning. (This may have been solved with fix 5.)
