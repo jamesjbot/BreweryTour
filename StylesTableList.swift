@@ -110,7 +110,6 @@ extension StylesTableList : TableList {
         // Move this UI update to main queue.
         DispatchQueue.main.async {
             cell.textLabel?.adjustsFontSizeToFitWidth = true
-            print("StylesTablesList \(#line) I'm updating UITableView cell on main ")
             assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
             if searchText != "" {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
