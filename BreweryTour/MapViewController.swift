@@ -94,32 +94,7 @@ class MapViewController : UIViewController {
 //            }
 //        }
 //    }
-    
-    
-    // Tutoral Function to plot a circular path for the pointer
-    private func addCircularPathToPointer() {
-        let systemVersion = UIDevice.current.model
-        // Circular path
-        var point = CGPoint(x: view.frame.midX, y: view.frame.midY)
-        var rotationRadius = view.frame.width/4
-        if systemVersion == "iPhone" {
-            point = CGPoint(x: view.frame.midX, y: view.frame.midY*0.5)
-            rotationRadius = view.frame.width/8
-        }
-        let circlePath = UIBezierPath(arcCenter: point,
-                                      radius: rotationRadius,
-                                      startAngle: 0,
-                                      endAngle:CGFloat(M_PI)*2,
-                                      clockwise: true)
-        let circularAnimation = CAKeyframeAnimation(keyPath: "position")
-        circularAnimation.duration = 5
-        circularAnimation.repeatCount = MAXFLOAT
-        circularAnimation.path = circlePath.cgPath
-        pointer.layer.add(circularAnimation, forKey: nil)
-        pointer.isHidden = false
-    }
-    
-    
+
     // Find breweries
     fileprivate func findBreweryIDinMainContext(by: MKAnnotation) -> NSManagedObjectID? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
@@ -561,6 +536,30 @@ extension MapViewController : NSFetchedResultsControllerDelegate {
 
 // Tutorial code.
 extension MapViewController : DismissableTutorial {
+
+    // Tutoral Function to plot a circular path for the pointer
+    fileprivate func addCircularPathToPointer() {
+        let systemVersion = UIDevice.current.model
+        // Circular path
+        var point = CGPoint(x: view.frame.midX, y: view.frame.midY)
+        var rotationRadius = view.frame.width/4
+        if systemVersion == "iPhone" {
+            point = CGPoint(x: view.frame.midX, y: view.frame.midY*0.5)
+            rotationRadius = view.frame.width/8
+        }
+        let circlePath = UIBezierPath(arcCenter: point,
+                                      radius: rotationRadius,
+                                      startAngle: 0,
+                                      endAngle:CGFloat(M_PI)*2,
+                                      clockwise: true)
+        let circularAnimation = CAKeyframeAnimation(keyPath: "position")
+        circularAnimation.duration = 5
+        circularAnimation.repeatCount = MAXFLOAT
+        circularAnimation.path = circlePath.cgPath
+        pointer.layer.add(circularAnimation, forKey: nil)
+        pointer.isHidden = false
+    }
+
 
     internal func enableTutorial() {
         tutorialView.isHidden = false
