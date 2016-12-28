@@ -7,7 +7,8 @@
 //
 /* 
  This is the view model backing the breweries with specified styles table on the
- main category viewcontroller
+ main category viewcontroller.
+ It initially shows nothing, waiting for a style to be select.
  */
 
 
@@ -48,45 +49,6 @@ class BreweryTableList: NSObject, Subject {
      */
     override init(){
         super.init()
-//        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-//        request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
-//        request.fetchLimit = 10000
-//        frc = NSFetchedResultsController(fetchRequest: request,
-//                                         managedObjectContext: readOnlyContext!,
-//                                         sectionNameKeyPath: nil,
-//                                         cacheName: nil)
-//        frc.delegate = self
-//        
-//        do {
-//            try frc.performFetch()
-//        } catch {
-//            observer.sendNotify(from: self, withMsg: "Error fetching data")
-//        }
-//        
-//        guard frc.fetchedObjects?.count == 0 else {
-//            // We have brewery entries go ahead and display them viewcontroller
-//            // TODO remove this temporary code to detect if there are breweries here already
-//            //fatalError()
-//            return
-//        }
-        
-        // Since we didn't exit trying to find  the breweries above
-        // Fetch all the breweries from the internet.
-//        BreweryDBClient.sharedInstance().downloadAllBreweries() {
-//            (success, msg) -> Void in
-//            if msg == "All Pages Processed" {
-//                print("BreweryTableList \(#line) init() msg:\(msg) dbbrewery client sent back completion handlers saying success:\(success))")
-//                print("BreweryTableList \(#line) Sending CategoryView a notification to reload breweryTablelist ")
-//                self.observer.sendNotify(from: self, withMsg: "reload data")
-////                do {
-////                    print("BreweryTableList \(#line)BreweryTableList \(#line)Is this fetch needed?")
-////                    try self.frc.performFetch()
-////                } catch {
-////                    fatalError()
-////                }
-//            }
-//
-//        }
     }
     
     
@@ -120,23 +82,16 @@ class BreweryTableList: NSObject, Subject {
         // This must block because the mapView must be populated before it displays.
         //        container?.performBackgroundTask({
         //            (context) -> Void in
-        self.displayableBreweries.removeAll()
 
-        // Prime the fetch beer fetched results controller
-        print("BreweryTable \(#line) Context Perform is next ")
+        // remove the breweries we have for display
+        self.displayableBreweries.removeAll()
 
         readOnlyContext?.perform() {
             do {
                 try self.coreDataBeerFRCObserver?.performFetch()
                 results = (self.coreDataBeerFRCObserver.fetchedObjects)! as [Beer]
-                //results = try (thisContext!.fetch(request)) as [Beer]
-                print("BreweryTableList \(#line) Are the results are zero? \(results.count) ")
             } catch {
             }
-            // Now that we have Beers with that style, what breweries are associated with these beers
-            // Array to hold breweries
-            //self.displayableBreweries.removeAll() // Move to outside the perform block
-            print("BreweryTableList \(#line) Determining is brewery link to beer has already been displayed\n")
             for beer in results {
                 guard beer.brewer != nil else {
                     fatalError()
@@ -145,16 +100,10 @@ class BreweryTableList: NSObject, Subject {
                     self.displayableBreweries.append(beer.brewer!)
                 }
             }
-            print("BrweryTableList \(#line) end of context perform")
-            print("BrweryTableList \(#line) displayable breweries is available for table reload")
-            // This would be an asynchronous notify.
-            // or shoudl i refresh the context
-            //readOnlyContext?.refreshAllObjects()
-            print("BrweryTableList \(#line) Notify viewcontroller from inital frc priming")
             self.observer.sendNotify(from: self, withMsg: "reload data")
         }
-        print("BreweryTable \(#line) Context Perform just jump over all the code an will run later. ")
     }
+
 
     // Allow CategoryViewController to register for updates.
     func registerObserver(view: Observer) {
@@ -169,7 +118,6 @@ extension BreweryTableList: TableList {
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         DispatchQueue.main.async {
             cell.textLabel?.adjustsFontSizeToFitWidth = true
-            print("BreweryTableList \(#line) On the UITableViewCell u sent me I'm putting text on it. ")
             guard let searchText = searchText else {
                 return
             }
@@ -200,7 +148,6 @@ extension BreweryTableList: TableList {
             return
         }
         filteredObjects = (displayableBreweries.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))
-        //return filteredObjects
     }
     
     
