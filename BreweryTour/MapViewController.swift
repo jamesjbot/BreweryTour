@@ -170,11 +170,11 @@ class MapViewController : UIViewController {
         // TODO do you still want to use querygenrations
         print("MapView \(#line) \(readOnlyContext?.queryGenerationToken) ")
         print("MapView \(#line) \(NSQueryGenerationToken.current) ")
-        do {
-            try readOnlyContext?.setQueryGenerationFrom(NSQueryGenerationToken.current)
-        } catch {
-            // Default is unpinned mode which is still fine.
-        }
+//        do {
+//            try readOnlyContext?.setQueryGenerationFrom(NSQueryGenerationToken.current)
+//        } catch {
+//            // Default is unpinned mode which is still fine.
+//        }
         beerFRC = NSFetchedResultsController(fetchRequest: request ,
                                              managedObjectContext: readOnlyContext!,
                                              sectionNameKeyPath: nil,
@@ -278,10 +278,15 @@ class MapViewController : UIViewController {
         }
         
         readOnlyContext?.automaticallyMergesChangesFromParent = true
+        do {
+            try readOnlyContext?.setQueryGenerationFrom(NSQueryGenerationToken.current)
+        } catch {
+            // Default is unpinned mode which is still fine.
+        }
 
     }
-    
-    
+
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.title = "Go To Website"
