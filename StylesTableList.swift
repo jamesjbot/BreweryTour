@@ -14,24 +14,21 @@ import CoreData
 import Foundation
 
 class StylesTableList: NSObject {
-    
-    // TODO Remove Debug code
-    var firstRun : Bool = true
+
     
     // MARK: Constants
-    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
-    //let mainContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.mainContext
 
-    //let persistentContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.persistingContext
-    
+    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+
+
     // MARK: Variables
     
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Style] = [Style]()
-    // Runs off of persistentContext
     internal var frc : NSFetchedResultsController<Style>!
     var observer : Observer!
-    
+
+
     // MARK: Functions
 
     private func downloadBeerStyles() {
@@ -119,6 +116,7 @@ extension StylesTableList : TableList {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
             } else {
                 // TODO it's reading nil here for some reason.
+                // How do i replicate
                 cell.textLabel?.text = (self.frc.object(at: indexPath )).displayName ?? "Error"
             }
             cell.setNeedsDisplay()
@@ -129,7 +127,6 @@ extension StylesTableList : TableList {
     
     internal func filterContentForSearchText(searchText: String){// -> [NSManagedObject] {
         filteredObjects = (frc.fetchedObjects?.filter({ ( ( $0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
-        //return filteredObjects
     }
     
     
@@ -144,14 +141,6 @@ extension StylesTableList : TableList {
     internal func selected(elementAt: IndexPath,
                            searchText: String,
                            completion:  @escaping (Bool, String?) -> Void ) -> AnyObject? {
-        // With the style in hand go look for them with the BREWERYDB client and have the client mark them as must display
-        //        var style : String
-        //        if searchText == "" {
-        //            style = frc.object(at: elementAt).id!
-        //        } else {
-        //            style = filteredObjects[elementAt.row].id!
-        //        }
-        
         // Tell mediator this is the style I want to display
         // Then mediator will tell selectedBeersList what to display.
         var aStyle : Style
@@ -167,7 +156,7 @@ extension StylesTableList : TableList {
     
     func searchForUserEntered(searchTerm: String, completion: ( (Bool, String?) -> (Void))?) {
         // Styles are automatically downloaded on start up so searching again will not yield anything new
-        completion!(false,"There are no more new styles")
+        completion!(false,"There are no more new styles to download")
     }
     
 }
