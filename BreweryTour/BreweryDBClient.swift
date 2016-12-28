@@ -851,8 +851,10 @@ class BreweryDBClient {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "id = %@", id)
-        context.perform {
+        context.performAndWait {
             do {
+                // TODO there is a crash here, when I try to access a long running style 
+                // and then switch to the mapview.
                 if let brewery : [Brewery] = try context.fetch(request){
                     //This type is in the database
                     guard brewery.count > 0 else {
