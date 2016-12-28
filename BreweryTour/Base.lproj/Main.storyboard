@@ -25,46 +25,43 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi" userLabel="CompleteHorizontal">
-                                <rect key="frame" x="2" y="72" width="368" height="595"/>
+                            <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi" userLabel="CompleteHorizontal">
+                                <rect key="frame" x="2" y="66" width="368" height="601"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" alignment="firstBaseline" translatesAutoresizingMaskIntoConstraints="NO" id="1R7-fH-Aau" userLabel="SegmentedStackView">
-                                        <rect key="frame" x="0.0" y="0.0" width="368" height="0.0"/>
-                                        <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" distribution="fillProportionally" alignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="x2f-9h-2Hz">
-                                                <rect key="frame" x="0.0" y="0.0" width="368" height="0.0"/>
-                                                <subviews>
-                                                    <segmentedControl opaque="NO" contentMode="scaleToFill" layoutMarginsFollowReadableWidth="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mmN-dq-rb5">
-                                                        <rect key="frame" x="0.0" y="0.0" width="368" height="1"/>
-                                                        <segments>
-                                                            <segment title="Style"/>
-                                                            <segment title="Breweries with Style"/>
-                                                            <segment title="All Breweries"/>
-                                                        </segments>
-                                                        <connections>
-                                                            <action selector="segmentedControlClicked:forEvent:" destination="RKC-MN-s1K" eventType="valueChanged" id="1HX-2h-8LA"/>
-                                                        </connections>
-                                                    </segmentedControl>
-                                                </subviews>
-                                            </stackView>
-                                        </subviews>
-                                    </stackView>
-                                    <searchBar contentMode="redraw" verticalHuggingPriority="240" searchBarStyle="minimal" placeholder="Select Style Below / Search here" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
-                                        <rect key="frame" x="0.0" y="0.0" width="368" height="0.0"/>
+                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Current Selection:" textAlignment="center" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0f8-gZ-M3j">
+                                        <rect key="frame" x="0.0" y="0.0" width="368" height="21"/>
+                                        <nil key="textColor"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mmN-dq-rb5">
+                                        <rect key="frame" x="0.0" y="22" width="368" height="29"/>
+                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                        <segments>
+                                            <segment title="Style"/>
+                                            <segment title="Breweries with Style"/>
+                                            <segment title="All Breweries"/>
+                                        </segments>
+                                        <connections>
+                                            <action selector="segmentedControlClicked:forEvent:" destination="RKC-MN-s1K" eventType="valueChanged" id="1HX-2h-8LA"/>
+                                        </connections>
+                                    </segmentedControl>
+                                    <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Select Style Below / Search here" showsCancelButton="YES" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
+                                        <rect key="frame" x="0.0" y="51" width="368" height="44"/>
                                         <textInputTraits key="textInputTraits" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
                                             <outlet property="delegate" destination="RKC-MN-s1K" id="1dR-s0-Mir"/>
                                         </connections>
                                     </searchBar>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalHuggingPriority="300" verticalCompressionResistancePriority="759" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx" userLabel="Generic Table">
-                                        <rect key="frame" x="0.0" y="0.0" width="368" height="595"/>
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx" userLabel="Generic Table">
+                                        <rect key="frame" x="0.0" y="96" width="368" height="505"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="genericTypeCell" id="kaU-Em-b0H">
                                                 <rect key="frame" x="0.0" y="28" width="368" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="368" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="368" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </tableViewCellContentView>
                                             </tableViewCell>
@@ -169,23 +166,31 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bpZ-cN-Rf5">
-                                <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
+                                <rect key="frame" x="178" y="324" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="FTn-Tc-4mi" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" constant="2" id="1Ju-Oo-ZhH"/>
                             <constraint firstItem="447-tn-FIf" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" id="6lT-LP-g9L"/>
                             <constraint firstAttribute="trailing" secondItem="FTn-Tc-4mi" secondAttribute="trailing" constant="5" id="A3i-ph-YMo"/>
                             <constraint firstItem="wrT-1x-h0f" firstAttribute="top" secondItem="447-tn-FIf" secondAttribute="bottom" id="GMi-Me-47B"/>
                             <constraint firstItem="chy-Gf-XC8" firstAttribute="width" secondItem="ans-at-Olx" secondAttribute="width" multiplier="0.75" id="OA3-o7-1GF"/>
                             <constraint firstItem="bpZ-cN-Rf5" firstAttribute="centerX" secondItem="ans-at-Olx" secondAttribute="centerX" id="OKb-ey-Ejd"/>
                             <constraint firstAttribute="trailing" secondItem="447-tn-FIf" secondAttribute="trailing" id="bjq-ZM-qOs"/>
-                            <constraint firstItem="FTn-Tc-4mi" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" constant="8" id="c9X-cx-1HR"/>
                             <constraint firstItem="FTn-Tc-4mi" firstAttribute="leading" secondItem="ans-at-Olx" secondAttribute="leadingMargin" constant="-14" id="gEc-6i-2Wy"/>
                             <constraint firstItem="wrT-1x-h0f" firstAttribute="top" secondItem="FTn-Tc-4mi" secondAttribute="bottom" id="r6E-e3-8Fi"/>
                             <constraint firstItem="bpZ-cN-Rf5" firstAttribute="centerY" secondItem="ans-at-Olx" secondAttribute="centerY" id="xgj-v9-aDD"/>
                             <constraint firstItem="447-tn-FIf" firstAttribute="leading" secondItem="ans-at-Olx" secondAttribute="leading" id="zhT-oy-7YS"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="subviews">
+                                <exclude reference="447-tn-FIf"/>
+                            </mask>
+                            <mask key="constraints">
+                                <exclude reference="OA3-o7-1GF"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="OFD-1P-5O8">
                         <barButtonItem key="leftBarButtonItem" image="Settings" id="WU6-mQ-wHx">
@@ -202,7 +207,7 @@
                             </barButtonItem>
                             <barButtonItem title="Help?" id="TjJ-dl-rXy">
                                 <connections>
-                                    <action selector="tutorialButton:" destination="RKC-MN-s1K" id="Xly-1G-AdI"/>
+                                    <action selector="helpButton:" destination="RKC-MN-s1K" id="5rB-ac-qbq"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -214,6 +219,7 @@
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="pointer" destination="jRB-Sa-1bJ" id="cRy-a1-03F"/>
                         <outlet property="segmentedControl" destination="mmN-dq-rb5" id="1vF-MM-mRn"/>
+                        <outlet property="selection" destination="0f8-gZ-M3j" id="SSd-mu-AyL"/>
                         <outlet property="tutorialText" destination="chy-Gf-XC8" id="HRg-12-ZWA"/>
                         <outlet property="tutorialView" destination="447-tn-FIf" id="mv0-Km-cSq"/>
                         <segue destination="aS9-dG-afv" kind="show" identifier="Go" id="ETW-U3-xph"/>
@@ -221,7 +227,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vff-Wg-WtP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="858" y="-59"/>
+            <point key="canvasLocation" x="856.79999999999995" y="-59.820089955022496"/>
         </scene>
         <!--Map-->
         <scene sceneID="xjh-Lw-ZkF">
@@ -419,25 +425,25 @@ Click on information to bring up brewery website.</string>
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tcx-Kc-hK0" id="AcN-pE-EtA">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="F2c-bs-Vb5">
-                                                            <rect key="frame" x="73" y="4" width="34" height="21"/>
+                                                            <rect key="frame" x="74" y="5" width="33.5" height="20.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="A3i-fU-GAB">
-                                                            <rect key="frame" x="73" y="25" width="44" height="15"/>
+                                                            <rect key="frame" x="74" y="25.5" width="44" height="14.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Nophoto.png" id="Co2-DY-qqn">
-                                                            <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                            <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </imageView>
                                                     </subviews>
@@ -825,25 +831,25 @@ Click on information to bring up brewery website.</string>
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="65G-I2-bt1">
-                                                    <rect key="frame" x="73" y="4" width="34" height="21"/>
+                                                    <rect key="frame" x="74" y="5" width="33.5" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4eR-fy-GSw">
-                                                    <rect key="frame" x="73" y="25" width="44" height="15"/>
+                                                    <rect key="frame" x="74" y="25.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="Nophoto.png" id="gVx-aZ-Y5e">
-                                                    <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </imageView>
                                             </subviews>
@@ -985,25 +991,25 @@ Click on information to bring up brewery website.</string>
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EPN-e6-10X" id="Q1S-to-2h3">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="L0G-7N-7Tr">
-                                                    <rect key="frame" x="73" y="4" width="34" height="21"/>
+                                                    <rect key="frame" x="74" y="5" width="33.5" height="20.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tyv-eG-Ufw">
-                                                    <rect key="frame" x="73" y="25" width="44" height="15"/>
+                                                    <rect key="frame" x="74" y="25.5" width="44" height="14.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Nophoto.png" id="Isa-JK-NWA">
-                                                    <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </imageView>
                                             </subviews>
