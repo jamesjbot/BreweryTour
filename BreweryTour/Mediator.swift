@@ -53,7 +53,7 @@ class Mediator : NSManagedObjectDisplayable {
 
     internal func allBeersAndBreweriesDeleted() {
         // TODO add more tablelists
-        print("Mediator \(#line) AllBeersAndBrewsDeleted telling tableList to refresh")
+        //print("Mediator \(#line) AllBeersAndBrewsDeleted telling tableList to refresh")
         allBreweryList.mediatorRefreshFetchedResultsController()
     }
 
@@ -77,10 +77,10 @@ class Mediator : NSManagedObjectDisplayable {
     // When an element on categoryScreen is selected, process it on BreweryDBClient
     func selected(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passedItem = thisItem
-        print("Mediator \(#line) setting selectedBeersList prior to call: \(passedItem)")
+        //print("Mediator \(#line) setting selectedBeersList prior to call: \(passedItem)")
         selectedBeersList.setSelectedItem(toNSObject: passedItem!)
         if thisItem is Brewery {
-            print("Mediator\(#line) Calling mediator to downloadbeers by brewery")
+            //print("Mediator\(#line) Calling mediator to downloadbeers by brewery")
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
                                                              completionHandler : completion)
         } else if thisItem is Style {
