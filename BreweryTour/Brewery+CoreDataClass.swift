@@ -28,7 +28,17 @@ public class Brewery: NSManagedObject {
         self.openToThePublic = open ?? false
         self.name = (inName != "" ? inName : "No Brewery Name Listed")
     }
-    
+
+    convenience init(data: BreweryData, context: NSManagedObjectContext) {
+        self.init(entity: Brewery.entity(), insertInto: context)
+        self.latitude = data.latitude
+        self.longitude = data.longitude
+        self.url = data.url
+        self.id = data.id
+        self.openToThePublic = data.openToThePublic
+        self.name = data.name
+    }
+
     convenience init(inBrewery: Brewery,
                      context: NSManagedObjectContext){
         // Insert new Brewery in database

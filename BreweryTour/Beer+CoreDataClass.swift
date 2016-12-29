@@ -20,6 +20,20 @@ public class Beer: NSManagedObject {
         self.id = id
     }
     
+    convenience init(data: BeerData, context: NSManagedObjectContext) {
+        self.init(entity: Beer.entity(), insertInto: context)
+        availability = data.availability
+        beerDescription = data.beerDescription
+        beerName = data.beerName
+        breweryID = data.breweryID
+        id = data.id
+        imageUrl = data.imageUrl
+        isOrganic = data.isOrganic
+        styleID = data.styleID
+        abv = data.abv
+        ibu = data.ibu
+    }
+
     convenience init(name : String?,
                      brewer : Brewery?,
                      availability : String?,
