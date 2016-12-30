@@ -7,7 +7,10 @@
 //
 
 import UIKit
+
+
 @IBDesignable
+// This class creates a circular UIView with a white center.
 class CircleView: UIView {
     
         var multiplier : CGFloat = 1
