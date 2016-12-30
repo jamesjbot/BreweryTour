@@ -42,20 +42,6 @@ internal struct BreweryData {
         imageUrl = nil
         //completion: ((Brewery) -> Void)?
     }
-    // TODO delete this initializer not used.
-    internal init() {
-        favorite = false
-        id = nil
-        imageUrl = nil
-        latitude = nil
-        longitude = nil
-        name = nil
-        openToThePublic = false
-        url = nil
-        brewedbeer = nil
-        completion = nil
-    }
-
 }
 
 
