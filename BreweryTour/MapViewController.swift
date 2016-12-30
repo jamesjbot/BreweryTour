@@ -62,6 +62,7 @@ class MapViewController : UIViewController {
             activityIndicator.startAnimating()
             // Put the next 50 breweries on the map
             if breweriesToBeProcessed.count >= maxBreweryBuffer {
+
                 populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
                 breweriesToBeProcessed.removeAll()
                 disableTimer()
@@ -119,7 +120,7 @@ class MapViewController : UIViewController {
     }
 
 
-    // Find brewery by name of annotation
+    // Find brewery by name in annotation
     fileprivate func convertAnnotationToObjectID(by: MKAnnotation) -> NSManagedObjectID? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
@@ -137,42 +138,6 @@ class MapViewController : UIViewController {
     }
     
 
-    // The method is called by the Frc Delegate it adds new annotations
-    // to the map currently I've disabled this from the the delegate
-//    fileprivate func frcUpdateAppendMapBreweries(newStyle: Bool) {
-//        print("MapView \(#line) frcUPdateAndAppend isThisANewStyle:\(newStyle) ")
-//        // The lastSelectedStyle is the currentSelectedStyle
-//        // Work thru all the beerResults
-//        let results = (self.beerFRC?.fetchedObjects)! as [Beer]
-//        // Now that we have Beers with that style, what breweries are associated with these beers
-//        // Reset array to hold breweries
-//        if newStyle {
-//            self.mappableBreweries = [Brewery]()
-//        }
-//        // Mappable breweries will only containg the new breweries
-//        //print("MapView \(#line) were there any beers that matched style\n")
-//        ////print("MapView \(#line) \(results)")
-//        var newBreweries = [Brewery]()
-//        //let thisContext = coreDataStack?.mainContext
-//        for beer in results {
-//            let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
-//            breweryRequest.sortDescriptors = []
-//            breweryRequest.predicate = NSPredicate(format: "id = %@", beer.breweryID!)
-//            do {
-//                let brewery = try (readOnlyContext?.fetch(breweryRequest))! as [Brewery]
-//                if !self.mappableBreweries.contains(brewery.first!) {
-//                    self.mappableBreweries.append(brewery.first!)
-//                    newBreweries.append(brewery.first!)
-//                }
-//            } catch {
-//                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
-//                return
-//            }
-//        }
-//        populateMapWithAnnotations(fromBreweries: newBreweries, removeDisplayedAnnotations: false)
-//    }
-
-    
     /*
      This function is only called on viewWillAppear
      It fetches breweries based on style selected.
@@ -315,11 +280,13 @@ class MapViewController : UIViewController {
 
         // Decision making to display Breweries Style or Brewery
         if mapViewData is Style {
+
             initializeFetchAndFetchBreweriesSetIncomingLocations(
                 byStyle: mapViewData as! Style)
             activityIndicator.stopAnimating()
 
         } else if mapViewData is Brewery {
+
             // Remove all traces of previous breweries
             removeRouteOnMap()
             breweriesToBeProcessed.removeAll()
@@ -345,6 +312,7 @@ class MapViewController : UIViewController {
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
             // Do nothing because the tutorial will show automatically.
             tutorialView.isHidden = false
+
         } else {
             tutorialView.isHidden = true
         }
@@ -366,6 +334,7 @@ extension MapViewController : MKMapViewDelegate {
             // User's location has doesn't need the other decorations
             pinView!.pinTintColor = UIColor.blue
             return pinView
+
         } else { // breweries
             pinView?.pinTintColor = UIColor.orange
         }
@@ -379,11 +348,14 @@ extension MapViewController : MKMapViewDelegate {
         // Set the favorite icon on pin
         let localButton = UIButton(type: .contactAdd)
         var tempImage : UIImage!
+
         if foundBrewery.favorite == true {
             tempImage = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
+
         } else {
             tempImage = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
         }
+
         localButton.setImage(tempImage, for: .normal)
         pinView?.leftCalloutAccessoryView = localButton
 
@@ -471,7 +443,9 @@ extension MapViewController : MKMapViewDelegate {
             favBrewery.favorite = !(favBrewery.favorite)
             let image : UIImage!
             if favBrewery.favorite == false {
+
                 image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
+
             } else {
                 image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
             }
@@ -548,7 +522,7 @@ extension MapViewController : NSFetchedResultsControllerDelegate {
         guard let brewer = (anObject as? Beer)?.brewer else {
             return
         }
-        // Only newly inserted breweries
+        // Only newly inserted breweries will be processed
         if type == NSFetchedResultsChangeType.insert  {
             breweriesToBeProcessed.append(brewer)
         }
@@ -570,6 +544,7 @@ extension MapViewController : DismissableTutorial {
             point = CGPoint(x: view.frame.midX, y: view.frame.midY*0.5)
             rotationRadius = view.frame.width/8
         }
+
         let circlePath = UIBezierPath(arcCenter: point,
                                       radius: rotationRadius,
                                       startAngle: 0,
