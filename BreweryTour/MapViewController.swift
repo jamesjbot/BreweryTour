@@ -41,6 +41,7 @@ class MapViewController : UIViewController {
     // MARK: Constants
     let reuseId = "pin"
     let maxBreweryBuffer = 50
+    let timerDelay = 5
 
     // Location manager allows us access to the user's location
     private let locationManager = CLLocationManager()
@@ -67,9 +68,13 @@ class MapViewController : UIViewController {
                 // TODO Stop indicator
             } else {
                 // less than 50 breweries exist in the queue comeback and map them
-                // if after 5 seconds they have not clear out.
+                // if after 5 seconds they have not cleared out.
                 disableTimer()
-                checkUpTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(timerProcessQueue), userInfo: nil, repeats: true)
+                checkUpTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timerDelay),
+                                                    target: self,
+                                                    selector: #selector(timerProcessUnfullQueue),
+                                                    userInfo: nil,
+                                                    repeats: true)
             }
         }
     }
@@ -101,9 +106,8 @@ class MapViewController : UIViewController {
         }
     }
 
-    // The timer action to process last unfull set on the breweriesToBeProcessed 
-    // queue.
-    @objc private func timerProcessQueue() {
+    // Process the last unfull set on the breweriesToBeProcessed queue.
+    @objc private func timerProcessUnfullQueue() {
         if breweriesToBeProcessed.count > 0 {
             populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
             breweriesToBeProcessed.removeAll()
