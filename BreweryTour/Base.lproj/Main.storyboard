@@ -233,6 +233,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ZU7-BT-73c">
+                                <rect key="frame" x="177" y="323" width="20" height="20"/>
+                            </activityIndicatorView>
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" pitchEnabled="NO" showsPointsOfInterest="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="idd-zP-hy0">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <connections>
@@ -336,17 +339,20 @@ Click on information to bring up brewery website.</string>
                             <constraint firstItem="Mkt-qc-S4V" firstAttribute="top" secondItem="idd-zP-hy0" secondAttribute="bottom" id="KTq-hN-8vc"/>
                             <constraint firstItem="6HM-s5-dg9" firstAttribute="top" secondItem="ebl-Op-6EE" secondAttribute="bottom" id="N6Y-We-wnq"/>
                             <constraint firstItem="Mkt-qc-S4V" firstAttribute="top" secondItem="2Wr-de-AeO" secondAttribute="bottom" id="NAG-dt-6Rs"/>
+                            <constraint firstItem="ZU7-BT-73c" firstAttribute="centerX" secondItem="bSb-va-KkV" secondAttribute="centerX" id="SA6-pO-mtK"/>
                             <constraint firstAttribute="trailing" secondItem="idd-zP-hy0" secondAttribute="trailing" id="TLQ-nN-vGp"/>
                             <constraint firstItem="Pci-Qx-EEF" firstAttribute="width" secondItem="bSb-va-KkV" secondAttribute="width" multiplier="0.75" id="VSb-qy-ENe"/>
                             <constraint firstItem="2Wr-de-AeO" firstAttribute="top" secondItem="ebl-Op-6EE" secondAttribute="bottom" id="XF3-Ib-koR"/>
                             <constraint firstAttribute="trailing" secondItem="2Wr-de-AeO" secondAttribute="trailing" id="hlr-2X-UNL"/>
                             <constraint firstAttribute="leading" secondItem="idd-zP-hy0" secondAttribute="leading" id="nc7-Xs-ra4"/>
+                            <constraint firstItem="ZU7-BT-73c" firstAttribute="centerY" secondItem="bSb-va-KkV" secondAttribute="centerY" id="uIH-6G-ol6"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Map" image="map" id="wBm-jW-G7A">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <connections>
+                        <outlet property="activityIndicator" destination="ZU7-BT-73c" id="Ua6-o1-w7d"/>
                         <outlet property="mapView" destination="idd-zP-hy0" id="hTM-gR-Klp"/>
                         <outlet property="pointer" destination="DB0-f6-MiY" id="DJk-9Q-Vxb"/>
                         <outlet property="tutorialText" destination="Pci-Qx-EEF" id="YLM-XF-4kJ"/>

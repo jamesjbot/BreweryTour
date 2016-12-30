@@ -59,13 +59,14 @@ class MapViewController : UIViewController {
 
     fileprivate var breweriesToBeProcessed: [Brewery] = [Brewery]() {
         didSet {
-            // TODO Start activity indicator
+            activityIndicator.startAnimating()
             // Put the next 50 breweries on the map
             if breweriesToBeProcessed.count >= maxBreweryBuffer {
                 populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
                 breweriesToBeProcessed.removeAll()
                 disableTimer()
-                // TODO Stop indicator
+                activityIndicator.stopAnimating()
+
             } else {
                 // less than 50 breweries exist in the queue comeback and map them
                 // if after 5 seconds they have not cleared out.
@@ -82,6 +83,7 @@ class MapViewController : UIViewController {
 
     // MARK: IBOutlet
 
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
@@ -112,8 +114,7 @@ class MapViewController : UIViewController {
             populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
             breweriesToBeProcessed.removeAll()
             disableTimer()
-            //TODO stop activity timer
-
+            activityIndicator.stopAnimating()
         }
     }
 
@@ -310,17 +311,20 @@ class MapViewController : UIViewController {
         // Get new selection
         let mapViewData = Mediator.sharedInstance().getPassedItem()
 
-        //TODO Start activity indicator
+        activityIndicator.startAnimating()
 
         // Decision making to display Breweries Style or Brewery
         if mapViewData is Style {
             initializeFetchAndFetchBreweriesSetIncomingLocations(
                 byStyle: mapViewData as! Style)
+            activityIndicator.stopAnimating()
+
         } else if mapViewData is Brewery {
             // Remove all traces of previous breweries
             removeRouteOnMap()
             breweriesToBeProcessed.removeAll()
             populateMapWithAnnotations( fromBreweries: [mapViewData as! Brewery], removeDisplayedAnnotations: true)
+            activityIndicator.stopAnimating()
         }
 
         // Capture last selection, so we can compare when an update is requested
