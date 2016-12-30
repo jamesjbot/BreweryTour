@@ -6,8 +6,6 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 
-import Foundation
-
 protocol Observer {
     func sendNotify(from: AnyObject, withMsg msg: String )
 }

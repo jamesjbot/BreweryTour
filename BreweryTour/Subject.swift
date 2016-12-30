@@ -6,9 +6,6 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 
-import Foundation
-import UIKit
-
 protocol Subject {
     func registerObserver(view: Observer)
 }
