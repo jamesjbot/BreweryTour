@@ -54,6 +54,7 @@ class SelectedBeersViewController: UIViewController, Observer {
 
 
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
+        // Currently if the segmented control 1 (all beers mode selected send true)
         selectedBeersTableList.setAllBeersModeON(sender.state.rawValue == 1 ? true :false)
     }
 
@@ -116,6 +117,7 @@ class SelectedBeersViewController: UIViewController, Observer {
     override func viewDidLoad() {
         super.viewDidLoad()
         searchBar.delegate = self
+        // Register with update from the view model.
         selectedBeersTableList.registerObserver(view: self)
     }
 
@@ -127,7 +129,7 @@ class SelectedBeersViewController: UIViewController, Observer {
         tableView.reloadData()
         // Set navigationbar title
         tabBarController?.title = "Click For Details"
-        // Set allbeers as the first index.
+        // Set Selected Beers as the first screen
         segmentedControl.selectedSegmentIndex = 0 // Selected Beers mode
         // Tell view model to load SelectedBeers
         segmentedClicked(segmentedControl)
@@ -136,7 +138,7 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // Always prime the tutorial
+        // TODO Do I need to do thisAlways prime the tutorial
         // Prime the state
         tutorialState = .SearchBar
         // Display the tutorial
@@ -149,10 +151,11 @@ class SelectedBeersViewController: UIViewController, Observer {
     }
 
 
-    // All notification to SelectedBeersViewController will reload the table.
+    // Method to receive notifications from outside this object.
     internal func sendNotify(from: AnyObject, withMsg msg: String) {
         // Prompts the tableView to refilter search listings.
         // TableReload will be handled by the searchBar function.
+        // Therefore all notifications to SelectedBeersViewController will reload the table.
         searchBar(searchBar, textDidChange: searchBar.text!)
     }
 }
@@ -166,7 +169,6 @@ extension SelectedBeersViewController: UITableViewDataSource {
     
     
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("SelectedBeers \(#line) cellForRowAt ")
         // Get a cell from the tableview and populate with name, brewery and image if available
         var cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
         cell.imageView?.image = nil
@@ -188,11 +190,12 @@ extension SelectedBeersViewController : UITableViewDelegate {
         let beer = selectedBeersTableList.selected(elementAt: indexPath,
                                                    searchText: searchBar.text!) {
             (success,msg) -> Void in
+            // We don't need to process anything in the compeltion hanlder
         }
         // Create target viewcontroller
         let destinationViewcontroller = self.storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
         
-        // Push beer information to Detail View Controller
+        // Inject beer information into Detail View Controller
         destinationViewcontroller.beer = beer as! Beer
 
         // Change the name of the back button on destinationViewController
@@ -224,12 +227,12 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     }
     
     
-    // Search for beer on line.
+    // Search for beer online at BreweryDB.
     internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         
-        // Do nothing, because nothing was entered in search bar
         guard !(searchBar.text?.isEmpty)! else {
+            // Escape because nothing was entered in search bar
             return
         }
         
@@ -253,10 +256,11 @@ extension SelectedBeersViewController : UISearchBarDelegate {
                                    style: .default,
                                    handler: searchOnline)
         displayAlertWindow(title: "Search Online",
-                           msg: "Cannot find match on device,\nsearch online?",
+                           msg: "Cannot find match on device,\ncan we search online?",
                            actions: [action])
     }
 }
+
 
 extension SelectedBeersViewController : DismissableTutorial {
     internal func enableTutorial() {
