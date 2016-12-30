@@ -136,6 +136,8 @@ class BreweryAndBeerQueue: NSObject {
             print("Processing breweries: we have \(runningBreweryQueue.count) breweries")
             print("Processing beers: we have \(runningBeerQueue.count) beers")
             guard !runningBreweryQueue.isEmpty || !runningBeerQueue.isEmpty else {
+                workTimer.invalidate()
+                workTimer = nil
                 return
             }
             var maxSave = 325
@@ -193,19 +195,31 @@ class BreweryAndBeerQueue: NSObject {
             }
         }
     }
-    
+
+    private func startWorkTimer() {
+        if workTimer == nil {
+            workTimer = Timer.scheduledTimer(timeInterval: secondsRepeatInterval,
+                                             target: self,
+                                             selector: #selector(self.processQueue),
+                                             userInfo: nil,
+                                             repeats: true)
+        }
+    }
+
 
     // Queues up breweries to be saved
-    public func queueBrewery(_ b: BreweryData?) {
+    internal func queueBrewery(_ b: BreweryData?) {
         if let brewer = b {
+            startWorkTimer()
             runningBreweryQueue.append(brewer)
         }
     }
     
 
     // Queues up beers to be saved
-    public func queueBeer(_ b: BeerData?) {
+    internal func queueBeer(_ b: BeerData?) {
         if let beer = b {
+            startWorkTimer()
             runningBeerQueue.append(beer)
         }
     }
