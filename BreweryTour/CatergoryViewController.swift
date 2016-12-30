@@ -374,7 +374,7 @@ extension CategoryViewController : UITableViewDelegate {
 
         // Tell the view model something was selected.
         // The view model will go tell the mediator what it needs to download.
-        activeTableList.selected(elementAt: indexPath,
+        _ = activeTableList.selected(elementAt: indexPath,
                                  searchText: newSearchBar.text!){
                                     (sucesss,msg) -> Void in
                                     //print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
