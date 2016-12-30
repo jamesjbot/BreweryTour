@@ -19,8 +19,8 @@ class FavoriteBeersViewController: UIViewController {
     
     // MARK: Constants
 
-    let reuseID = "FavoriteCell"
-    let paddingForPoint : CGFloat = 20
+    fileprivate let reuseID = "FavoriteCell"
+    private let paddingForPoint : CGFloat = 20
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
@@ -108,7 +108,7 @@ class FavoriteBeersViewController: UIViewController {
     }
     
     
-    func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
+    fileprivate func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
         guard let selectedObject = frc.object(at: indexPath as IndexPath) as Beer? else {
             displayAlertWindow(title: "Data Access", msg: "Sorry there was an error accessing data please try again")
             return
