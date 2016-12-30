@@ -2,12 +2,13 @@
 //  Brewery+CoreDataProperties.swift
 //  
 //
-//  Created by James Jongsurasithiwat on 10/20/16.
+//  Created by James Jongsurasithiwat on 12/29/16.
 //
 //
 
 import Foundation
-import CoreData 
+import CoreData
+
 
 extension Brewery {
 
@@ -24,7 +25,6 @@ extension Brewery {
     @NSManaged public var name: String?
     @NSManaged public var openToThePublic: Bool
     @NSManaged public var url: String?
-    @NSManaged public var mustDraw: Bool
     @NSManaged public var brewedbeer: NSSet?
 
 }
