@@ -188,7 +188,7 @@ extension CoreDataStack {
         var success: Bool?
         context.performAndWait {
             do {
-                try context.execute(genericBatchDelete) as! NSBatchDeleteResult
+                _ = try context.execute(genericBatchDelete) as! NSBatchDeleteResult
                 try context.save()
                 success = true
             } catch {
