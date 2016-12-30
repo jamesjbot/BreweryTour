@@ -12,6 +12,8 @@ extension UIViewController {
 
 
     // MARK: Specialized alert displays for UIViewControllers
+    // This create a generic display with a dismiss embedded.
+    // It can be expanded by adding more UIAlertActions.
     func displayAlertWindow(title: String, msg: String, actions: [UIAlertAction]? = nil){
         DispatchQueue.main.async {
             () -> Void in
