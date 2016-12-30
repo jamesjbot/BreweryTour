@@ -30,7 +30,7 @@ class BreweryDBClient {
         // Called when you select a brewery on the category view controller.
     }
     
-    fileprivate let breweryAndBeerCreator = BreweryAndBeerQueue()
+    fileprivate let breweryAndBeerCreator = BreweryAndBeerCreationQueue()
 
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
