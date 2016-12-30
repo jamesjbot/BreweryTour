@@ -22,7 +22,6 @@
 		A74350641DB7D6D2007AE08C /* BreweryTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350631DB7D6D2007AE08C /* BreweryTableList.swift */; };
 		A74350661DB8FBA1007AE08C /* Mediator.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350651DB8FBA1007AE08C /* Mediator.swift */; };
 		A74350681DB91454007AE08C /* NSManagedObjectDisplayable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350671DB91454007AE08C /* NSManagedObjectDisplayable.swift */; };
-		A743506A1DB941BF007AE08C /* APINotifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350691DB941BF007AE08C /* APINotifiable.swift */; };
 		A74350721DBA7971007AE08C /* SelectedBeersTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350711DBA7971007AE08C /* SelectedBeersTableList.swift */; };
 		A74350741DBAA17F007AE08C /* Observer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350731DBAA17F007AE08C /* Observer.swift */; };
 		A74350761DBAA1AA007AE08C /* Subject.swift in Sources */ = {isa = PBXBuildFile; fileRef = A74350751DBAA1AA007AE08C /* Subject.swift */; };
@@ -98,7 +97,6 @@
 		A74350631DB7D6D2007AE08C /* BreweryTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryTableList.swift; sourceTree = "<group>"; };
 		A74350651DB8FBA1007AE08C /* Mediator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Mediator.swift; sourceTree = "<group>"; };
 		A74350671DB91454007AE08C /* NSManagedObjectDisplayable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NSManagedObjectDisplayable.swift; sourceTree = "<group>"; };
-		A74350691DB941BF007AE08C /* APINotifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = APINotifiable.swift; sourceTree = "<group>"; };
 		A74350711DBA7971007AE08C /* SelectedBeersTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SelectedBeersTableList.swift; path = ../SelectedBeersTableList.swift; sourceTree = "<group>"; };
 		A74350731DBAA17F007AE08C /* Observer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Observer.swift; sourceTree = "<group>"; };
 		A74350751DBAA1AA007AE08C /* Subject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Subject.swift; sourceTree = "<group>"; };
@@ -210,28 +208,35 @@
 		A727D1461DA918E90063F2B3 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				A741BF491E16FD93003958A4 /* XcodegeneratedFiles */,
 				A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */,
-				A70F267C1DBCE47800A33564 /* Brewery+CoreDataProperties.swift */,
 				A74350731DBAA17F007AE08C /* Observer.swift */,
-				A78020871DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift */,
 				A74350751DBAA1AA007AE08C /* Subject.swift */,
 				A74350711DBA7971007AE08C /* SelectedBeersTableList.swift */,
 				A74350651DB8FBA1007AE08C /* Mediator.swift */,
-				A74350691DB941BF007AE08C /* APINotifiable.swift */,
 				A74350671DB91454007AE08C /* NSManagedObjectDisplayable.swift */,
 				A74350611DB7B0F6007AE08C /* StylesTableList.swift */,
 				A74350631DB7D6D2007AE08C /* BreweryTableList.swift */,
 				A7E932511E0A42F500E07F53 /* AllBreweriesTableList.swift */,
 				A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */,
-				A709D3F01DAE459C00F11452 /* Beer+CoreDataClass.swift */,
-				A709D3F21DAE459C00F11452 /* Brewery+CoreDataClass.swift */,
-				A709D3F41DAE459C00F11452 /* Style+CoreDataClass.swift */,
-				A709D3F51DAE459C00F11452 /* Style+CoreDataProperties.swift */,
 				A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */,
 				A7DDC3F81DCC3A770077F34A /* BreweryDBClientConstants.swift */,
 				A743501A1DB78615007AE08C /* TableListProtocol.swift */,
 			);
 			name = Model;
+			sourceTree = "<group>";
+		};
+		A741BF491E16FD93003958A4 /* XcodegeneratedFiles */ = {
+			isa = PBXGroup;
+			children = (
+				A709D3F41DAE459C00F11452 /* Style+CoreDataClass.swift */,
+				A709D3F51DAE459C00F11452 /* Style+CoreDataProperties.swift */,
+				A709D3F21DAE459C00F11452 /* Brewery+CoreDataClass.swift */,
+				A709D3F01DAE459C00F11452 /* Beer+CoreDataClass.swift */,
+				A78020871DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift */,
+				A70F267C1DBCE47800A33564 /* Brewery+CoreDataProperties.swift */,
+			);
+			name = XcodegeneratedFiles;
 			sourceTree = "<group>";
 		};
 		A7B2AAD21DA791A300EE844C = {
@@ -531,7 +536,6 @@
 				A70F267D1DBCE47800A33564 /* Brewery+CoreDataProperties.swift in Sources */,
 				A709D3F81DAE459C00F11452 /* Brewery+CoreDataClass.swift in Sources */,
 				A7D2272D1DB5620300360A3B /* FavoriteBreweriesViewController.swift in Sources */,
-				A743506A1DB941BF007AE08C /* APINotifiable.swift in Sources */,
 				A7B7524E1DA8CE7B00117ED0 /* MapViewController.swift in Sources */,
 				A709D3FB1DAE459C00F11452 /* Style+CoreDataProperties.swift in Sources */,
 				A752344D1DAEA666008EF071 /* SelectedBeersViewController.swift in Sources */,

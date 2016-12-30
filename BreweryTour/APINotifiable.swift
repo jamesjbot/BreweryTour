@@ -7,7 +7,7 @@
 //
 
 import Foundation
-
-protocol  APINotifiable {
-    func notify()
-}
+//
+//protocol  APINotifiable {
+//    func notify()
+//}
