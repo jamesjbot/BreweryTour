@@ -29,7 +29,6 @@
         <attribute name="image" optional="YES" attributeType="Binary" allowsExternalBinaryDataStorage="YES" syncable="YES"/>
         <attribute name="latitude" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="longitude" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="mustDraw" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="name" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="openToThePublic" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
@@ -47,7 +46,7 @@
     </entity>
     <elements>
         <element name="Beer" positionX="-54" positionY="27" width="128" height="255"/>
-        <element name="Brewery" positionX="-54" positionY="9" width="128" height="210"/>
+        <element name="Brewery" positionX="-54" positionY="9" width="128" height="195"/>
         <element name="Style" positionX="-63" positionY="-18" width="128" height="75"/>
     </elements>
 </model>
