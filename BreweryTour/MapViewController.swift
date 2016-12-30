@@ -41,24 +41,51 @@ import CoreData
 class MapViewController : UIViewController {
     
     // MARK: Constants
-    
+    let maxBreweryBuffer = 50
+
     // Location manager allows us access to the user's location
     private let locationManager = CLLocationManager()
     
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
-    
+
     // MARK: Variables
-    
+
+
+    // The query that goes against the database to pull in the brewery location information
+    //private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
+    private var beerFRC : NSFetchedResultsController<Beer>?
+    fileprivate var lastSelectedManagedObject : NSManagedObject?
+
     // Used to hold the locations we are going to display, loaded from a database query
     private var mappableBreweries = [Brewery]()
 
-    // The query that goes against the database to pull in the brewery location information
-    private var frc : NSFetchedResultsController<Brewery> = NSFetchedResultsController()
-    private var beerFRC : NSFetchedResultsController<Beer>?
-    fileprivate var lastSelectedManagedObject : NSManagedObject?
+    // Timer to make sure allBreweries are processed and put on the map
+    private var checkUpTimer: Timer? = nil
+
+
+
+
+    fileprivate var breweriesToBeProcessed: [Brewery] = [Brewery]() {
+        didSet {
+            // Put the next 50 breweries on the map
+            if breweriesToBeProcessed.count >= maxBreweryBuffer {
+                print("More than 50 breweries mapping them now.")
+                populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
+                breweriesToBeProcessed.removeAll()
+                disableTimer()
+            } else {
+                // less than 50 breweries exist in the queue comeback and map them
+                // if after 5 seconds they have not clear out.
+                disableTimer()
+                checkUpTimer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(timerFlushQueue), userInfo: nil, repeats: true)
+            }
+        }
+    }
+
+
     // MARK: IBOutlet
-    
+
     @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
@@ -77,23 +104,23 @@ class MapViewController : UIViewController {
     
     
     // MARK: Functions
-    // Debug function please remove
-//    func d_showAllBeers() {
-//        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-//        request.sortDescriptors = []
-//        //request.predicate = []
-//        //request.predicate = NSPredicate(format: "styleID = %@", style.id!)
-//        var results : [Beer]!
-//        coreDataStack?.persistingContext.performAndWait {
-//            do {
-//                results = try (self.coreDataStack?.persistingContext.fetch(request))! as [Beer]
-//                print("MapViewController \(#line) Here are the results\n\(results) ")
-//            } catch {
-//                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
-//                return
-//            }
-//        }
-//    }
+
+    // Turns off the breweriesToBeProcessed timer
+    private func disableTimer() {
+        if checkUpTimer != nil {
+            checkUpTimer?.invalidate()
+        }
+    }
+
+    // The timer action to flush the breweriesToBeProcessed queue.
+    @objc private func timerFlushQueue() {
+        if breweriesToBeProcessed.count > 0 {
+            populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
+            breweriesToBeProcessed.removeAll()
+            disableTimer()
+        }
+    }
+
 
     // Find breweries
     fileprivate func findBreweryIDinMainContext(by: MKAnnotation) -> NSManagedObjectID? {
@@ -123,8 +150,11 @@ class MapViewController : UIViewController {
         return nil
     }
     
-    
+
+    // The method is called by the Frc Delegate it adds new annotations
+    // to the map currently I've disabled this from the the delegate
     fileprivate func frcUpdateAppendMapBreweries(newStyle: Bool) {
+        print("MapView \(#line) frcUPdateAndAppend isThisANewStyle:\(newStyle) ")
         // The lastSelectedStyle is the currentSelectedStyle
         // Work thru all the beerResults
         let results = (self.beerFRC?.fetchedObjects)! as [Beer]
@@ -134,8 +164,8 @@ class MapViewController : UIViewController {
             self.mappableBreweries = [Brewery]()
         }
         // Mappable breweries will only containg the new breweries
-        print("MapView \(#line) were there any beers that matched style\n")
-        //print("MapView \(#line) \(results)")
+        //print("MapView \(#line) were there any beers that matched style\n")
+        ////print("MapView \(#line) \(results)")
         var newBreweries = [Brewery]()
         //let thisContext = coreDataStack?.mainContext
         for beer in results {
@@ -157,10 +187,73 @@ class MapViewController : UIViewController {
     }
     
     
-    // Fetch breweries based on style selected.
-    // Get the Brewery entries from the database
+    /*
+     This function is only called on viewWillAppear
+     Fetches breweries based on style selected.
+     Get the Brewery entries from the database
+     */
     private func initializeFetchAndFetchBreweriesSetIncomingLocations(byStyle : Style){
-        print("MapView \(#line) Requesting style: \(byStyle.id!) ")
+        print("MapView \(#line) initializeFetchAndFetchBreweries called Requesting style: \(byStyle.id!) ")
+        // Fetch all the breweries currently available
+        // Append beers to be processed
+        // Go thru each beer if the brewery is there map it
+        // If not put the beer in beersToBeProcessed.
+        // Fetch all the beers with style
+        let request : NSFetchRequest<Beer> = Beer.fetchRequest()
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
+        var results : [Beer]!
+        beerFRC = NSFetchedResultsController(fetchRequest: request ,
+                                             managedObjectContext: readOnlyContext!,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
+        // Sign up for updates
+        beerFRC?.delegate = self
+        /*
+         TODO When you select styles and favorite a brewery, go to favorites breweries and pick a style
+         This frc will totally overwrite because it will detect changes in the breweries from favoriting
+         forcing a superfluous reload on the mapviewcontroller.
+         */
+        // This must block because the mapView must be populated before it displays.
+        //        container?.performBackgroundTask({
+        //            (context) -> Void in
+        do {
+            _ = try beerFRC?.performFetch()
+            //print("MapView \(#line) the replyis:\(reply) ")
+            results = (beerFRC?.fetchedObjects!)! as [Beer]
+            //results = try (thisContext!.fetch(request)) as [Beer]
+            //print("MapViewController \(#line) The results are zero \(results.count) ")
+        } catch {
+            self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
+            return
+        }
+        //Now that we have Beers with that style, what breweries are associated with these beers
+        //Array to hold breweries
+        mappableBreweries = [Brewery]()
+        //print("MapView \(#line) were there any beers that matched style\n")
+        ////print("MapView \(#line) \(results)")
+//        let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
+//        breweryRequest.sortDescriptors = []
+//        var allCurrentBreweries = [Brewery]()
+//        do {
+//            allCurrentBreweries = try breweryRequest.execute()
+//        } catch {
+//
+//        }
+        for beer in results {
+            if beer.brewer != nil {
+                if !mappableBreweries.contains(beer.brewer!) {
+                    mappableBreweries.append(beer.brewer!)
+                }
+            }
+        }
+        //print("MapView \(#line) PerformFetch completed ")
+        // The map must be populated when the fetchRequest completes
+        populateMapWithAnnotations(fromBreweries: mappableBreweries, removeDisplayedAnnotations: true)
+
+    }
+    private func oldinitializeFetchAndFetchBreweriesSetIncomingLocations(byStyle : Style){
+        //print("MapView \(#line) Requesting style: \(byStyle.id!) ")
         let request : NSFetchRequest<Beer> = Beer.fetchRequest()
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
@@ -168,8 +261,8 @@ class MapViewController : UIViewController {
         // Presave the mainContext maybe that's why I cant see any results.
         //let thisContext = coreDataStack?.mainContext
         // TODO do you still want to use querygenrations
-        print("MapView \(#line) \(readOnlyContext?.queryGenerationToken) ")
-        print("MapView \(#line) \(NSQueryGenerationToken.current) ")
+        //print("MapView \(#line) \(readOnlyContext?.queryGenerationToken) ")
+        //print("MapView \(#line) \(NSQueryGenerationToken.current) ")
 //        do {
 //            try readOnlyContext?.setQueryGenerationFrom(NSQueryGenerationToken.current)
 //        } catch {
@@ -193,7 +286,7 @@ class MapViewController : UIViewController {
                 try self.beerFRC?.performFetch()
                 results = (self.beerFRC?.fetchedObjects)! as [Beer]
                 //results = try (thisContext!.fetch(request)) as [Beer]
-                print("MapViewController \(#line) The results are zero \(results.count) ")
+                //print("MapViewController \(#line) The results are zero \(results.count) ")
             } catch {
                 self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
                 return
@@ -201,8 +294,8 @@ class MapViewController : UIViewController {
             //Now that we have Beers with that style, what breweries are associated with these beers
             //Array to hold breweries
             self.mappableBreweries = [Brewery]()
-            print("MapView \(#line) were there any beers that matched style\n")
-            //print("MapView \(#line) \(results)")
+            //print("MapView \(#line) were there any beers that matched style\n")
+            ////print("MapView \(#line) \(results)")
             let breweryRequest = NSFetchRequest<Brewery>(entityName: "Brewery")
             breweryRequest.sortDescriptors = []
             for beer in results {
@@ -217,7 +310,7 @@ class MapViewController : UIViewController {
                     return
                 }
             }
-            print("MapView \(#line) PerformFetch completed ")
+            //print("MapView \(#line) PerformFetch completed ")
             // The map must be populated when the fetchRequest completes
             self.populateMapWithAnnotations(fromBreweries: self.mappableBreweries, removeDisplayedAnnotations: true)
         }
@@ -226,48 +319,62 @@ class MapViewController : UIViewController {
 
     // Puts all the Brewery entries on to the map
     // All breweries in the mappableBreweries array will be added to the screen
-    private func populateMapWithAnnotations(fromBreweries: [Brewery],
+    fileprivate func populateMapWithAnnotations(fromBreweries: [Brewery],
                                             removeDisplayedAnnotations: Bool){
-        print("MapView \(#line) populateMapWithAnnotations called")
-        print("MapView \(#line) ploting \(fromBreweries.count) annotations ")
-        print("MapView \(#line) Adding these breweries \(fromBreweries)")
+        print("MapView \(#line) populateMapWithAnnotations called brewerycount:\(fromBreweries.count) removeoldannotation:\(removeDisplayedAnnotations)")
+        //print("MapView \(#line) ploting \(fromBreweries.count) annotations ")
+        //print("MapView \(#line) Adding these breweries \(fromBreweries)")
         // TODO temporarily remove to debug problems
         // Remove all the old annotation
-        //if removeDisplayedAnnotations {
+        if removeDisplayedAnnotations {
+        //print("MapView \(#line) populateMap removeing old annotation regardless ")
             mapView.removeAnnotations(mapView.annotations)
-        //}
+        }
         // Create new array of annotations
         var annotations = [MKAnnotation]()
-        for i in fromBreweries {
-            // Sometimes the breweries don't have a location
-            guard i.latitude != nil && i.longitude != nil else {
-                continue
+        //let dq = DispatchQueue.global(qos: .background)
+        //print("MapView \(#line) Processing this many points:\(fromBreweries.count) ")
+        //print("MapView \(#line) Has this many annotations:\(mapView.annotations.count)")
+        //dq.async {
+            for i in fromBreweries {
+                // Sometimes the breweries don't have a location
+                guard i.latitude != nil && i.longitude != nil else {
+                    continue
+                }
+
+                let aPin = MKPointAnnotation()
+                aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
+                aPin.title = i.name
+                aPin.subtitle = i.url
+                annotations.append(aPin)
             }
-            
-            let aPin = MKPointAnnotation()
-            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
-            aPin.title = i.name
-            aPin.subtitle = i.url
-            annotations.append(aPin)
-        }
-        
-        mapView.addAnnotations(annotations)
-        // Add the user's location
-        mapView.showsUserLocation = true
-        mapView.showsScale = true
-        //mapView.showAnnotations(mapView.annotations, animated: true)
-        DispatchQueue.main.async {
-            self.mapView.setNeedsDisplay()
-        }
+            // Clean out the pending brewer
+        print("Adding new breweries in one block")
+            self.mapView.addAnnotations(annotations)
+            // Add the user's location
+            //self.mapView.showsUserLocation = true
+            //self.mapView.showsScale = true
+            //mapView.showAnnotations(mapView.annotations, animated: true)
+        print("Telling dispatchqueue main to launch after 1 seconds.")
+        let dt = DispatchTime(uptimeNanoseconds: 1000)
+            DispatchQueue.main.asyncAfter(deadline: dt) {
+                print("MapView Dispatchqueu main set needs display called")
+                self.mapView.setNeedsDisplay()
+                self.breweriesToBeProcessed.removeAll()
+            }
+        //}
     }
     
-    
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+
     // MARK: View functions
     
     // Ask user for access to their location
     override func viewDidLoad(){
         super.viewDidLoad()
-        print("MapView \(#line) ViewDidLoad called ")
+        //print("MapView \(#line) ViewDidLoad called ")
         
         // CoreLocation initialization, ask permission to utilize user location
         locationManager.delegate = self
@@ -278,11 +385,11 @@ class MapViewController : UIViewController {
         }
         
         readOnlyContext?.automaticallyMergesChangesFromParent = true
-        do {
-            try readOnlyContext?.setQueryGenerationFrom(NSQueryGenerationToken.current)
-        } catch {
-            // Default is unpinned mode which is still fine.
-        }
+//        do {
+//            try readOnlyContext?.setQueryGenerationFrom(NSQueryGenerationToken.current)
+//        } catch {
+//            // Default is unpinned mode which is still fine.
+//        }
 
     }
 
@@ -290,27 +397,28 @@ class MapViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.title = "Go To Website"
+        // No need to update the viewcontroller if the data has not changed
+        guard lastSelectedManagedObject != Mediator.sharedInstance().getPassedItem() else {
+            return
+        }
         // Get new selections
+
         let mapViewData = Mediator.sharedInstance().getPassedItem()
         
         // Decision making to display Breweries Style or Brewery
-        lastSelectedManagedObject = mapViewData
         if mapViewData is Style {
-            print("MapView \(#line) this is a style")
+            print("MapView \(#line) this is a style calling initialize")
             initializeFetchAndFetchBreweriesSetIncomingLocations(byStyle: mapViewData as! Style)
         } else if mapViewData is Brewery {
             // Remove all traces of previous breweries
-            print("MapView \(#line) this is a brewery")
+            //print("MapView \(#line) this is a brewery")
             removeRouteOnMap()
             mappableBreweries.removeAll()
             mappableBreweries.append(mapViewData as! Brewery)
             populateMapWithAnnotations( fromBreweries: mappableBreweries, removeDisplayedAnnotations: true)
-        } else {
-            //TODO remove this return and else
-            return
         }
-        
-        //populateMapWithAnnotations()
+        // Cature last selected item so I can compare when an update is request
+        lastSelectedManagedObject = mapViewData
 
     }
 
@@ -319,9 +427,9 @@ class MapViewController : UIViewController {
         super.viewDidAppear(animated)
         
         // Display tutorial view.
-        addCircularPathToPointer()
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
             // Do nothing because the tutorial will show automatically.
+            addCircularPathToPointer()
             tutorialView.isHidden = false
         } else {
             tutorialView.isHidden = true
@@ -334,8 +442,8 @@ extension MapViewController : MKMapViewDelegate {
     
     // This formats the pins and calloutAccessory views on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        print("MapView \(#line) This many annotations \(mapView.annotations.count)")
-        //print("Pin formatting occuring")
+        //print("MapView \(#line) This many annotations \(mapView.annotations.count)")
+        ////print("Pin formatting occuring")
         let reuseId = "pin"
         var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
         //if pinView == nil {
@@ -438,7 +546,7 @@ extension MapViewController : MKMapViewDelegate {
         // Testing if UIControl is one of the MKAnnotationView's subviews
         // Favorite or unfavorite a brewery
         case view.leftCalloutAccessoryView!:
-            print("MapViewController \(#line) Favorite toggle called ")
+            //print("MapViewController \(#line) Favorite toggle called ")
             guard (view.annotation?.title)! != "My Locations" else {
                 // Do not respond to taps on the user's location callout
                 return
@@ -449,15 +557,15 @@ extension MapViewController : MKMapViewDelegate {
             // Fetch object from context
             let favBrewery = readOnlyContext?.object(with: tempObjectID!) as! Brewery
             // Flip favorite state in the database and in the ui
-            print("favortie before: \(favBrewery.favorite)")
+            //print("favortie before: \(favBrewery.favorite)")
             favBrewery.favorite = !(favBrewery.favorite)
-            print("favortie after: \(favBrewery.favorite)")
+            //print("favortie after: \(favBrewery.favorite)")
             let image : UIImage!
             if favBrewery.favorite == false {
-                print("false run")
+                //print("false run")
                 image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
             } else {
-                print("true run")
+                //print("true run")
                 image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
             }
             // Update favorite icon in accessory callout
@@ -471,8 +579,7 @@ extension MapViewController : MKMapViewDelegate {
                 (context.object(with: tempObjectID!) as! Brewery).favorite = favBrewery.favorite
                 do {
                     try context.save()
-                } catch let error {
-                    print("Error saving in context \(error)")
+                } catch _ {
                     self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite brewery, \nplease try again")
                 }
             }
@@ -525,15 +632,36 @@ extension MapViewController: CLLocationManagerDelegate {
 
 
 extension MapViewController : NSFetchedResultsControllerDelegate {
+
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("MapViewController \(#line) FRC Delegate called object changed:\((anObject as! Beer).beerName) beer added")
+        guard let brewer = (anObject as? Beer)?.brewer else {
+            return
+        }
+        print("\(#line) didChange object prior to append b2bprocessed \(breweriesToBeProcessed.count)")
+        self.breweriesToBeProcessed.append(brewer)
+        print("\(#line) didChange object after append a b2bprocessed \(breweriesToBeProcessed.count)")
+        if type == NSFetchedResultsChangeType.insert ||
+            type == NSFetchedResultsChangeType.update {
+            //self.breweriesToBeProcessed.append(brewer)
+//            if breweriesToBeProcessed.count > 100 {
+//                            //populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
+//            }
+        }
+
+    }
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("MapViewController \(#line) Detected new changes.")
+        // This is the delegate connected to Fetched Results Controller on BEERS
+        print("MapViewController \(#line) --------FINISHED Detected new changes.")
         // This should only be called when this is a style, because single breweries
         // are immediately displayed
-        if lastSelectedManagedObject == Mediator.sharedInstance().getPassedItem() {
-            frcUpdateAppendMapBreweries(newStyle: false)
-        } else { // new style replace.
-            frcUpdateAppendMapBreweries(newStyle: true)
-        }
+//        if lastSelectedManagedObject == Mediator.sharedInstance().getPassedItem() {
+//            frcUpdateAppendMapBreweries(newStyle: false)
+//        } else { // new style replace.
+//            frcUpdateAppendMapBreweries(newStyle: true)
+//        }
 
     }
 }
