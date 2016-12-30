@@ -201,7 +201,7 @@ extension FavoriteBeersViewController : UITableViewDelegate {
         let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
         
         // Push beer information to Detail View Controller
-        // TODO what is this here for why would this ever fail?
+        // If there is a data mismatch show error screen
         if tableView.cellForRow(at: indexPath)?.textLabel?.text != frc.object(at: indexPath).beerName {
             displayAlertWindow(title: "Data access", msg: "Sorry there was a problem accessing data please try again")
         }
