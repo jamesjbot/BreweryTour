@@ -131,12 +131,11 @@ class BreweryAndBeerQueue: NSObject {
         // an inserted brewer otherwise strange errors occur.
         // The only way to merge MO with unique constraints is to save them 
         // one at time. Batch saving generates conflict errors.
-        //print("Processing breweries: we have \(runningBreweryQueue.count) breweries")
         let dq = DispatchQueue.global(qos: .background)
         dq.sync {
+            print("Processing breweries: we have \(runningBreweryQueue.count) breweries")
             print("Processing beers: we have \(runningBeerQueue.count) beers")
             guard !runningBreweryQueue.isEmpty || !runningBeerQueue.isEmpty else {
-                //setSlowTimer()
                 return
             }
             var maxSave = 325
