@@ -12,7 +12,9 @@ import UIKit
 extension BeerDetailViewController {
     /*
      
-     Keyboard elevating functions
+     Keyboard elevating functions, will move the view up the same distance as 
+     the height of the keyboard so that the keyboard doesn't block the bottom
+     most views.
      
      */
     // MARK: - Keyboard elevating functions
