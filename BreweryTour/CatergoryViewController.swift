@@ -56,7 +56,8 @@ class CategoryViewController: UIViewController,
     private enum CategoryTutorialStage {
         case SegementedControl
         case Table
-        case BreweryTable
+        case BreweriesWithStyleTable
+        case AllBreweries
         case InitialScreen
         case Map
         case RefreshDB
@@ -129,7 +130,7 @@ class CategoryViewController: UIViewController,
     }
 
 
-    @IBAction func nextCommandPressed(_ sender: AnyObject) {
+    @IBAction func nextTutorialScreen(_ sender: AnyObject) {
         // Advance the tutorial state
         switch tutorialState {
         case .InitialScreen:
@@ -137,13 +138,16 @@ class CategoryViewController: UIViewController,
         case .SegementedControl:
             tutorialState = .Table
         case .Table:
-            tutorialState = .BreweryTable
-        case .BreweryTable:
+            tutorialState = .BreweriesWithStyleTable
+        case .BreweriesWithStyleTable:
+            tutorialState = .AllBreweries
+        case .AllBreweries:
             tutorialState = .Map
         case .Map:
             tutorialState = .RefreshDB
         case .RefreshDB:
             tutorialState = .InitialScreen
+
         }
 
         // Show tutorial content
@@ -156,8 +160,8 @@ class CategoryViewController: UIViewController,
         case .SegementedControl:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Select 'Style' to show all breweries with that style on map, or\nSelect 'Breweries with Style' breweries that make the selected style. Select 'All Breweries' to see all the breweries currently downoaded."
-            let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.center.y + segmentedControlPaddding)
+            tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles, or\nSelect 'Breweries with Style' to show breweries that make the selected style. Select 'All Breweries' to see all the breweries currently downoaded."
+            let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.frame.midY)
             pointer.center = segmentPoint
             UIView.animateKeyframes(withDuration: 0.5,
                                     delay: 0.0,
@@ -184,7 +188,19 @@ class CategoryViewController: UIViewController,
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                     completion: nil)
-        
+
+        case .AllBreweries:
+            tutorialText.text = "When 'All Breweries' is selected, you can search for a specific brewery from the internet by entering their name in the search bar"
+            pointer.isHidden = false
+            pointer.setNeedsDisplay()
+            let tablePoint = CGPoint(x: newSearchBar.frame.origin.x + paddingForPoint , y: newSearchBar.frame.midY)
+            pointer.center = tablePoint
+            UIView.animateKeyframes(withDuration: 0.5,
+                                    delay: 0.0,
+                                    options: [ .autoreverse, .repeat ],
+                                    animations: { self.pointer.center.x += self.newSearchBar.frame.maxX - (2*self.paddingForPoint) },
+                                    completion: nil)
+
         case .Map:
             tutorialText.text = "Click on 'Map' to proceed to the map, to view your last selection."
             pointer.isHidden = true
@@ -252,8 +268,6 @@ class CategoryViewController: UIViewController,
             if (activeTableList as AnyObject) === from {
                 genericTable.reloadData()
                 searchBar(newSearchBar, textDidChange: newSearchBar.text!)
-            } else {
-                print("CategoryViewController \(#line) Ignoring reload as you are not active")
             }
             break
         case "We have styles":
@@ -279,8 +293,15 @@ class CategoryViewController: UIViewController,
         
         // Make Breweries with style segmented control title fit
         (segmentedControl.subviews[1].subviews.first as! UILabel).adjustsFontSizeToFitWidth = true
+
+        // set tutorial to the last screen, and advance into the first one
+        // This is here because I want it to always shows the initial screen 
+        // on a clean start. If user goes to another view and comes back they can 
+        // resume their tutorial state
+        tutorialState = .RefreshDB
+        nextTutorialScreen(self)//Dummy to load data into the tutorial
     }
-    
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -357,20 +378,19 @@ extension CategoryViewController : UITableViewDelegate {
         // Tell the view model something was selected.
         // The view model will go tell the mediator what it needs to download.
         _ = activeTableList.selected(elementAt: indexPath,
-                                 searchText: newSearchBar.text!){
-                                    (sucesss,msg) -> Void in
-                                    //print("CategoryViewController didSelectRowAt completionHandler \(#line) \(msg!)")
-                                    self.activityIndicator.stopAnimating()
-                                    if !sucesss {
-                                        self.displayAlertWindow(title: "Error with Query", msg: msg!)
-                                    }
-                                    // TODO Temporarily relaxed requirements on callback.
-                                    if (msg?.contains("All Pages Processed"))! {
-                                        DispatchQueue.main.async {
-                                            //TODO Disable automatic map seguea
-                                            //self.performSegue(withIdentifier: "Go", sender: nil)
+                                     searchText: newSearchBar.text!){
+                                        (sucesss,msg) -> Void in
+                                        // TODO remember to tell every view model to
+                                        // send back a completion handler.
+                                        self.activityIndicator.stopAnimating()
+                                        if !sucesss {
+                                            self.displayAlertWindow(title: "Error with Query", msg: msg!)
                                         }
-                                    }
+                                        if self.automaticallySegueToMap {
+                                            DispatchQueue.main.async {
+                                                self.performSegue(withIdentifier: "Go", sender: nil)
+                                            }
+                                        }
         }
     }
 }
