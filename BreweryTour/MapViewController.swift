@@ -208,16 +208,24 @@ class MapViewController : UIViewController {
         var duplicateFree = fromBreweries
         if removeDisplayedAnnotations {
             mapView.removeAnnotations(mapView.annotations)
+
         } else { // Remove duplicates
+            var duplicateIndices = [Int]()
             new: for (i, element) in duplicateFree.enumerated() {
                 for j in mapView.annotations {
                     if element.latitude == j.coordinate.latitude.description &&
                         element.longitude == j.coordinate.longitude.description {
-                        duplicateFree.remove(at: i)
+                        duplicateIndices.append(i)
                         continue new
                     }
                 }
             }
+            duplicateIndices.sort()
+            duplicateIndices.reverse()
+            for i in duplicateIndices {
+                duplicateFree.remove(at: i)
+            }
+
         }
         // Create new array of annotations
         var annotations = [MKAnnotation]()
