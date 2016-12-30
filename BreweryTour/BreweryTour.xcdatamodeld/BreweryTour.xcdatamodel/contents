@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11232" systemVersion="15G1108" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="11759" systemVersion="15G1212" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="Beer" representedClassName=".Beer" syncable="YES">
         <attribute name="abv" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="availability" optional="YES" attributeType="String" syncable="YES"/>
@@ -15,6 +15,12 @@
         <attribute name="styleID" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="tastingNotes" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="brewer" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Brewery" inverseName="brewedbeer" inverseEntity="Brewery" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="beerName"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="Brewery" representedClassName=".Brewery" syncable="YES">
         <attribute name="favorite" optional="YES" attributeType="Boolean" usesScalarValueType="YES" syncable="YES"/>
@@ -28,6 +34,12 @@
         <attribute name="openToThePublic" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="url" optional="YES" attributeType="String" syncable="YES"/>
         <relationship name="brewedbeer" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Beer" inverseName="brewer" inverseEntity="Beer" syncable="YES"/>
+        <uniquenessConstraints>
+            <uniquenessConstraint>
+                <constraint value="id"/>
+                <constraint value="name"/>
+            </uniquenessConstraint>
+        </uniquenessConstraints>
     </entity>
     <entity name="Style" representedClassName=".Style" syncable="YES">
         <attribute name="displayName" optional="YES" attributeType="String" syncable="YES"/>
