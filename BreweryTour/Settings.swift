@@ -70,7 +70,7 @@ class Settings: UIViewController {
                 }
                 do {
                     try context.save()
-                } catch let error {
+                } catch _ {
                     success = false
                     self.displayAlertWindow(title: "Error", msg: "Successfully deleted but unable to save?")
                 }
@@ -98,7 +98,7 @@ class Settings: UIViewController {
             let styleCount = try container?.viewContext.fetch(styleFetch).count
             let breweryCount = try container?.viewContext.fetch(breweryFetch).count
             return "\nStyles:\(styleCount!)\nBeers\(beerCount!)\nBreweries:\(breweryCount!)"
-        } catch let error {
+        } catch _ {
             self.displayAlertWindow(title: "Error", msg: "Please try again.")
             return ""
         }
