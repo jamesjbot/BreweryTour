@@ -366,10 +366,7 @@ extension MapViewController : MKMapViewDelegate {
         pinView?.tintColor = UIColor.red
 
         // Find the brewery in the proper context
-        //let thisContext: NSManagedObjectContext = (coreDataStack?.mainContext)!
-        let breweryObjectID : NSManagedObjectID! = findBreweryIDinMainContext(by: annotation)!
-        //fatalError("This may be the wrong context to look for the brewery in")
-        let foundBrewery = readOnlyContext?.object(with: breweryObjectID!) as! Brewery
+        let foundBrewery = readOnlyContext?.object(with: convertAnnotationToObjectID(by: annotation)!) as! Brewery
         
         // Set the favorite icon on pin
         let localButton = UIButton(type: .contactAdd)
