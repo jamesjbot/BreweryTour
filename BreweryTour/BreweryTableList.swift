@@ -225,7 +225,6 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
         print("BrweryTableList \(#line) Notify viewcontroller on controllerDidChangeContent delegate.")
         observer.sendNotify(from: self, withMsg: "reload data")
         print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
-        print("BreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
         //Datata = frc.fetchedObjects!
     }
 }
