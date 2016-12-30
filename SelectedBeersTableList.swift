@@ -73,14 +73,11 @@ class SelectedBeersTableList : NSObject, Subject {
      We are already on the viewcontroller to be able to toggle this, so we need
      to performFetch now.
      */
-    internal func toggleAllBeersMode(control : UISegmentedControl) {
-        switch control.selectedSegmentIndex {
-        case 0: // Selected Beers
-            allBeersMode = false
-        case 1: // All Beers
+    internal func setAllBeersModeON(_ control : Bool) {
+        if control {
             allBeersMode = true
-        default:
-            break
+        } else {
+            allBeersMode = false
         }
         performFetchRequestFor(observerNeedsNotification: true)
     }

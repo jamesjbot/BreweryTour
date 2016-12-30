@@ -54,7 +54,7 @@ class SelectedBeersViewController: UIViewController, Observer {
 
 
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
-        selectedBeersTableList.toggleAllBeersMode(control: sender)
+        selectedBeersTableList.setAllBeersModeON(sender.state.rawValue == 1 ? true :false)
     }
 
 
@@ -117,10 +117,6 @@ class SelectedBeersViewController: UIViewController, Observer {
         super.viewDidLoad()
         searchBar.delegate = self
         selectedBeersTableList.registerObserver(view: self)
-        // Set allbeers as the first index.
-        segmentedControl.selectedSegmentIndex = 1 // AllBeers
-        // Tell view model to load allbeers
-        segmentedClicked(segmentedControl)
     }
 
 
@@ -131,6 +127,10 @@ class SelectedBeersViewController: UIViewController, Observer {
         tableView.reloadData()
         // Set navigationbar title
         tabBarController?.title = "Click For Details"
+        // Set allbeers as the first index.
+        segmentedControl.selectedSegmentIndex = 0 // Selected Beers mode
+        // Tell view model to load SelectedBeers
+        segmentedClicked(segmentedControl)
     }
 
 
