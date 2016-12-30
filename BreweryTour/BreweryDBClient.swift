@@ -19,22 +19,28 @@ class BreweryDBClient {
     
     // MARK: Enumerations
     
-    internal enum APIQueryOutputTypes {
-        case BeersByName
-        case BeersByStyleID
+    internal enum APIQueryResponseProcessingTypes {
+        case BeersFollowedByBreweries
+        // Called from the category style view controller
         case Styles
+        // Initial called when the app starts up
         case Breweries
+        // Calle when you search for a brewery on the category view controller
         case BeersByBreweryID
+        // Called when you select a brewery on the category view controller.
     }
     
-    
-    // MARK: Variables
+    fileprivate let breweryAndBeerCreator = BreweryAndBeerQueue()
+
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
-    // TODO Remove debugging variable
-    public var rejectedBreweries : Int = 0
-    
+    private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
+
+    // MARK: Variables
+
+    private var breweryDictionary = [String:Brewery]()
+
     // MARK: Singleton Implementation
     
     private init(){}
@@ -47,169 +53,74 @@ class BreweryDBClient {
     
     
     // MARK: Functions
-    
+
+    func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
+        if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
+            let medium = images["medium"] as! String?  {
+            beer.imageUrl = medium
+            //let queue = DispatchQueue(label: "Images")
+            print("BreweryDB \(#line) Prior to getting Beer image")
+            print("BreweryDB \(#line) In queue Async Getting Beer image in background")
+            self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
+        }
+    }
+    //                        saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
+
+
     // Creates beer objects in the mainContext.
     private func createBeerObject(beer : [String:AnyObject],
                                   brewery: Brewery? = nil,
-                                  brewerID: String? = nil,
+                                  brewerID: String,
                                   completion: @escaping (_ out : Beer) -> ()) {
 
-        func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
-            if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
-                let medium = images["medium"] as! String?  {
-                beer.imageUrl = medium
-                //let queue = DispatchQueue(label: "Images")
-                print("BreweryDB \(#line) Prior to getting Beer image")
-                print("BreweryDB \(#line) In queue Async Getting Beer image in background")
-                self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
-            }
-        }
+        let beer = BeerData(inputAvailability: beer["available"]?["description"] as? String ?? "No Information Provided",
+                            inDescription: beer["description"] as? String ?? "No Information Provided",
+                            inName: beer["name"] as? String ?? "",
+                            inBrewerId: brewerID,
+                            inId: beer["id"] as! String,
+                            inImageURL: beer["labels"]?["medium"] as? String ?? "",
+                            inIsOrganic: beer["isOrganic"] as? String == "Y" ? true : false,
+                            inStyle: (beer["styleId"] as! NSNumber).description,
+                            inAbv: beer["abv"] as? String ?? "N/A",
+                            inIbu: beer["ibu"] as? String ?? "N/A")
 
-        func setBeerPropertiesAndSave(brewery: Brewery,
-                                      id: String, name: String,
-                                      description: String,
-                                      beerabv: String, beeribu: String,
-                                      available: String) {
-            var thisBeer : Beer!
-            container?.performBackgroundTask(){
-                (context) -> Void in
-                context.perform {
-                    thisBeer = Beer(id: id, name: name,
-                                    beerDescription: description,
-                                    availability: available,
-                                    context: context)
-                    thisBeer.brewer = context.object(with: (brewery.objectID)) as? Brewery
-                    print("Flow 4\(beer["name"])")
-                    thisBeer.breweryID = thisBeer.brewer?.id
-                    thisBeer.isOrganic = beer["isOrganic"] as? String == "Y" ? true : false
-                    if beer["styleId"] != nil {
-                        thisBeer.styleID = (beer["styleId"] as! NSNumber).description
-                    }
-                    thisBeer.abv = beerabv
-                    thisBeer.ibu = beeribu
-                    print("\nBrewerydb \(#line) next line will non block for beer save backgroundcontext")
-                    context.mergePolicy = NSMergePolicy.overwrite
-                    do {
-                        try context.save()
-                        completion(thisBeer)
-                        saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
-                    } catch let error {
-                        fatalError("Failed to save beer because of error:\n\(error)\n")
-                    }
-                    print("BreweryDb \(#line) Exiting Asynchronous block for:\(name)\n")
-                    print("BreweryDb \(#line) Returning the beer we created.")
-                }
-            }
-        }
-
-        // Transform data into strings
-        print("BreweryDB \(#line) Working to create Beer object in backgroundcontext)")
-        let id: String = beer["id"] as! String
-        print("BreweryDB \(#line) beername: \(beer["name"])")
-        let name: String = beer["name"] as? String ?? ""
-        let description: String = beer["description"] as? String ?? "No Information Provided"
-        let beerabv: String = beer["abv"] as? String ?? "N/A"
-        let beeribu: String = beer["ibu"] as? String ?? "N/A"
-        let available = beer["available"]?["description"] as? String ?? "No Information Provided"
-        if brewery == nil {
-            self.getBreweryByID(id: brewerID!, context: self.readOnlyContext!){
-                (brewer) -> Void in
-                setBeerPropertiesAndSave(brewery: brewer!,
-                                         id: id,
-                                         name: name,
-                                         description: description,
-                                         beerabv: beerabv,
-                                         beeribu: beeribu,
-                                         available: available)
-            }
-        } else {
-            setBeerPropertiesAndSave(brewery: brewery!,
-                                     id: id,
-                                     name: name,
-                                     description: description,
-                                     beerabv: beerabv,
-                                     beeribu: beeribu,
-                                     available: available)
-        }
+        breweryAndBeerCreator.queueBeer(beer)
     }
-    
+
     
     // The breweries are created sent back but they are not showing up in the table.
     // This will save background, main and persistent context
     private func createBreweryObject(breweryDict: [String:AnyObject],
                                      locationDict locDict:[String:AnyObject],
                                      completion: @escaping (_ out : Brewery) -> () ) {
-        func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
-            if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
-                let imageURL : String = imagesDict["icon"] as! String?,
-                let targetBrewery = inputBrewery {
-                print("BreweryDB \(#line) Prior to getting Brewery image")
-                print("BreweryDB \(#line) Getting Brewery image in background")
-                self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
-            }
-        }
-//        if locDict["id"]?.description == "H9vPzA" {
-//            print("<---CreateBrewery------Alert American Brewery------------------->")
-//        }
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@", argumentArray: [locDict["id"]!.description])
-        do {
-            let newBrewery = try coreDataStack?.breweryCreationContext?.fetch(request)
-            guard newBrewery?.count == 0 else {
-                completion((newBrewery?.first!)!)
-                return
-            }
-            print("Brewery results:\(newBrewery?.count)")
-        } catch {
-            fatalError()
-            print("SHOULD NEVER HAPPEN EMERGENCY ----------------------------------------*************************************************************************************************************************")
-            // Just continue
-        }
-        var brewer : Brewery!
-        print("\nBreweryDb \(#line) createBreweryObject called non Blocking for create brewery in backgroundContext\n\(breweryDict["name"])")
-        // Why did I make this perform instead of performandWait
-        // Changed back to performAndWait because map was boing populated with nothing
-        // because this function returned before creating breweries
-        // I may have used perform because it stalls the UI but this is in background context why would it stall the ui.
-        /*
-         I use perform because i get deadlocked with performandwait,
-         The solution is to use perform and allow MapViewController to dynamically watch for changes to the beers..
-         I use performAndWait because completion get called before breweries are created.
-         */
+        let breweryData = BreweryData(
+            inName: breweryDict["name"] as! String,
+            inLatitude: (locDict["latitude"]?.description)!,
+            inLongitude: (locDict["longitude"]?.description)!,
+            inUrl: (locDict["website"] as! String? ?? ""),
+            open: (locDict["openToPublic"] as! String == "Y") ? true : false,
+            inId: (locDict["id"]?.description)!,
+            context: (coreDataStack?.breweryCreationContext)!)
 
-        let context = coreDataStack!.breweryCreationContext!
-        context.performAndWait {
-            if locDict["id"]?.description == "H9vPzA" {
-                print("<----------------------Alert American Brewery------------------->")
-                print("In just before creation of brewery")
-            }
-            brewer = Brewery(inName: breweryDict["name"] as! String,
-                             latitude: locDict["latitude"]?.description,
-                             longitude: locDict["longitude"]?.description,
-                             url: locDict["website"] as! String?,
-                             open: (locDict["openToPublic"] as! String == "Y") ? true : false,
-                             id: locDict["id"]?.description,
-                             context: context)
-                print("BreweryDB \(#line) Just created in createBrewery non blocking creationandsave\n\(breweryDict["name"])")
-                do {
-                    print("Just before do save")
-                    try context.save()
-                    print("BreweryDB \(#line) Exiting Brewery non blocking creationandsave\n\(breweryDict["name"])")
-                    if locDict["id"]?.description == "H9vPzA" {
-                        print("<-------------------- American Brewery Created Forever------------------->")
-                        print("In just before creation of brewery")
-                    }
-                    completion(brewer)
-                    saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
-                } catch let error {
-                    fatalError(error.localizedDescription)
-                }
-            }
+        breweryAndBeerCreator.queueBrewery(breweryData)
     }
+
+
+    func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
+        if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
+            let imageURL : String = imagesDict["icon"] as! String?,
+            let targetBrewery = inputBrewery {
+            //print("BreweryDB \(#line) Prior to getting Brewery image")
+            //print("BreweryDB \(#line) Getting Brewery image in background")
+            self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
+        }
+    }
+    //saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
+
+
+        
     
-    
-    private func createURLFromParameters(queryType: APIQueryOutputTypes,
+    private func createURLFromParameters(queryType: APIQueryResponseProcessingTypes,
                                          querySpecificID: String?,
                                          parameters: [String:AnyObject]) -> NSURL {
         // The url currently takes the form of
@@ -220,10 +131,7 @@ class BreweryDBClient {
         components.host = Constants.BreweryDB.APIHost
         
         switch queryType {
-        case .BeersByName:
-            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
-            break
-        case .BeersByStyleID:
+        case .BeersFollowedByBreweries:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
             break
         case .Styles:
@@ -259,7 +167,7 @@ class BreweryDBClient {
     // Query for all breweries
     // TODO not completing
     internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-        let theOutputType = APIQueryOutputTypes.Breweries
+        let theOutputType = APIQueryResponseProcessingTypes.Breweries
         var methodParameters  = [
             Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
@@ -296,13 +204,13 @@ class BreweryDBClient {
                     return
                 }
                 
-                print("BreweryDB \(#line)Total pages \(numberOfPages)")
+                //print("BreweryDB \(#line)Total pages \(numberOfPages)")
                 
                 // Asynchronous page processing
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
                 
-                print("BreweryDB \(#line)Total pages \(numberOfPages)")
+                //print("BreweryDB \(#line)Total pages \(numberOfPages)")
                 for i in 2...numberOfPages {
                     //TODO for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
@@ -327,11 +235,11 @@ class BreweryDBClient {
                                            outputType: theOutputType,
                                            completion: completion,
                                            group: group)
-                                print("BreweryDB \(#line)page# \(i)")
-                                print("BreweryDB \(#line)Prior to saving \(self.readOnlyContext?.updatedObjects.count)")
-                                print("BreweryDB \(#line)Prior to saving hasChanges: \(self.readOnlyContext?.hasChanges)")
-                                print("BreweryDB \(#line)Prior to saving \(self.readOnlyContext?.insertedObjects.count)")
-                                print("BreweryDB \(#line)After saving \(self.readOnlyContext?.insertedObjects.count)")
+                                //print("BreweryDB \(#line)page# \(i)")
+                                //print("BreweryDB \(#line)Prior to saving \(self.readOnlyContext?.updatedObjects.count)")
+                                //print("BreweryDB \(#line)Prior to saving hasChanges: \(self.readOnlyContext?.hasChanges)")
+                                //print("BreweryDB \(#line)Prior to saving \(self.readOnlyContext?.insertedObjects.count)")
+                                //print("BreweryDB \(#line)After saving \(self.readOnlyContext?.insertedObjects.count)")
                                 group.leave()
                         }
                     }
@@ -354,7 +262,7 @@ class BreweryDBClient {
             Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
             Constants.BreweryParameterKeys.Page : "1" as AnyObject
         ]
-        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                         querySpecificID: nil,
                                                         parameters: methodParameters)
         
@@ -380,22 +288,22 @@ class BreweryDBClient {
                 return
             }
             numberOfPages = numberOfPagesInt
-            print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
+            //print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
             
-            print("BreweryDB \(#line) Total pages \(numberOfPages)")
+            //print("BreweryDB \(#line) Total pages \(numberOfPages)")
             
             // Asynchronous page processing
-            let queue : DispatchQueue = DispatchQueue.global()
+            let queue : DispatchQueue = DispatchQueue.global(qos: .utility)
             let group : DispatchGroup = DispatchGroup()
-            
             for p in 1...numberOfPages {
                 methodParameters[Constants.BreweryParameterKeys.Page] = p as AnyObject
-                let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                                      querySpecificID: nil,
                                                                      parameters: methodParameters)
                 group.enter()
                 queue.async(group: group) {
-                    Alamofire.request(outputURL.absoluteString!)
+                //queue.sync() {
+                Alamofire.request(outputURL.absoluteString!)
                         .responseJSON {
                             response in
                             guard response.result.isSuccess else {
@@ -409,10 +317,9 @@ class BreweryDBClient {
                             
                             self.parse(response: responseJSON as NSDictionary,
                                        querySpecificID:  styleID,
-                                       outputType: APIQueryOutputTypes.BeersByStyleID,
+                                       outputType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                        completion: completion,
                                        group: group)
-                            print("BreweryDB \(#line) breweryByStyle Finished launching another asynchrnous parsing on page# \(p)")
                     } //Outside alamo but inside async
                 } //Outside queue.async
             }  // Outside for loop
@@ -429,7 +336,7 @@ class BreweryDBClient {
     // GET: /brewery/:breweryId/beers
     internal func downloadBeersBy(brewery: Brewery,
                                   completionHandler: @escaping ( _ success: Bool, _ msg: String? ) -> Void ) {
-        let consistentOutput = APIQueryOutputTypes.BeersByBreweryID
+        let consistentOutput = APIQueryResponseProcessingTypes.BeersByBreweryID
         let methodParameter : [String:AnyObject] =
             [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
              ]
@@ -460,7 +367,7 @@ class BreweryDBClient {
                        outputType: consistentOutput,
                        completion: completionHandler)
         }
-        print("BreweryDB \(#line) downloadBeersByBrewery completing with All Pages processed")
+        //print("BreweryDB \(#line) downloadBeersByBrewery completing with All Pages processed")
         completionHandler(true, "All Pages Processed downloadBeersByBrewery")
         return
     }
@@ -469,7 +376,7 @@ class BreweryDBClient {
     // Query for beers with a specific name
     internal func downloadBeersBy(name: String,
                                   completion: @escaping (_ success : Bool , _ msg : String? ) -> Void ) {
-        let theOutputType = APIQueryOutputTypes.BeersByName
+        let theOutputType = APIQueryResponseProcessingTypes.BeersFollowedByBreweries
         var methodParameters  = [
             "name" : "*\(name)*" as AnyObject,
             Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
@@ -517,7 +424,7 @@ class BreweryDBClient {
                 
                 for i in 2...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
-                    let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                    let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
                     group.enter()
@@ -535,7 +442,7 @@ class BreweryDBClient {
                                 }
                                 self.parse(response: responseJSON as NSDictionary,
                                            querySpecificID:  nil,
-                                           outputType: APIQueryOutputTypes.BeersByStyleID,
+                                           outputType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                            completion: completion,
                                            group: group)
                                 print("BreweryDB \(#line) downloadBeersByName Firing group leave ")
@@ -544,7 +451,7 @@ class BreweryDBClient {
                     }
                 }
                 group.notify(queue: queue){
-                    print("BreweryDB \(#line) downloadBeersByName Completing with All Pages Processed")
+                    //print("BreweryDB \(#line) downloadBeersByName Completing with All Pages Processed")
                     completion(true, "All Pages Processed downloadBeersByName")
                 }
         }
@@ -572,12 +479,12 @@ class BreweryDBClient {
                 }
                 // Upgraded code
                 //let thisContext = self.coreDataStack?.backgroundContext
-                //print("\nBrewerydb \(#line) Preceding to Blocking for beerImage update in \(thisContext)")
+                ////print("\nBrewerydb \(#line) Preceding to Blocking for beerImage update in \(thisContext)")
                 self.container?.performBackgroundTask({
                     (context) in
-                    context.mergePolicy = NSMergePolicy.overwrite
+                    context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
                     context.perform(){
-                        print("Brewerydb \(#line) Blocking on beerimage update ")
+                        //print("Brewerydb \(#line) Blocking on beerimage update ")
                         //self.coreDataStack!.mainContext.performAndWait(){
                         // Upgraded code
                         let beerForUpdate = context.object(with: updateManagedObjectID) as! Beer
@@ -593,12 +500,12 @@ class BreweryDBClient {
                         //                        // Upgraded code
                         //                        try thisContext?.save()
                         //                        //try self.coreDataStack?.mainContext.save()
-                        //                        print("BreweryDB \(#line) Beer Imaged saved in \(thisContext) for beer \(forBeer.beerName)")
+                        //                        //print("BreweryDB \(#line) Beer Imaged saved in \(thisContext) for beer \(forBeer.beerName)")
                         //                    }
                         //                    catch {
                         //                        return
                         //                    }
-                        print("BreweryDb \(#line) Completed blocking on beer image update\n")
+                        //print("BreweryDb \(#line) Completed blocking on beer image update\n")
                     }
                 })
             }
@@ -611,7 +518,7 @@ class BreweryDBClient {
     // Downloads Beer Styles
     internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void ) {
         let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject]
-        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryOutputTypes.Styles,
+        let outputURL : NSURL = createURLFromParameters(queryType: APIQueryResponseProcessingTypes.Styles,
                                                         querySpecificID: nil,
                                                         parameters: methodParameter)
         Alamofire.request(outputURL.absoluteString!).responseJSON(){
@@ -629,7 +536,7 @@ class BreweryDBClient {
             // All the beer styles currently fit on one page.
             self.parse(response: responseJSON as NSDictionary,
                        querySpecificID:  nil,
-                       outputType: APIQueryOutputTypes.Styles,
+                       outputType: APIQueryResponseProcessingTypes.Styles,
                        completion: completionHandler)
             return
         }
@@ -638,8 +545,8 @@ class BreweryDBClient {
     
     // Query for breweries with a specific name
     internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-        print("BreweryDb \(#line) DownloadbrewerybyName []() ")
-        let theOutputType = APIQueryOutputTypes.Breweries
+        //print("BreweryDb \(#line) DownloadbrewerybyName []() ")
+        let theOutputType = APIQueryResponseProcessingTypes.Breweries
         var methodParameters  = [
             "name" : "*\(name)*" as AnyObject,
             Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
@@ -665,40 +572,36 @@ class BreweryDBClient {
                     completion(false, "No results")
                     return
                 }
-                // TODO Delete this block
-                if let numberOfResults = responseJSON["totalResults"] as! Int? {
-                    print("BreweryDB \(#line) DownloadBreweryByBreweryName there are this many results \(numberOfResults)")
-                }
                 guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
                     completion(false, "No results")
                     return
                 }
 
-                print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
+                //print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
 
                 // Process subsequent records
-                self.parse(response: responseJSON as NSDictionary,
-                           querySpecificID:  nil,
-                           outputType: theOutputType,
-                           completion: completion)
+//                self.parse(response: responseJSON as NSDictionary,
+//                           querySpecificID:  nil,
+//                           outputType: theOutputType,
+//                           completion: completion)
                 // The following block of code downloads all subsequesnt pages
-                guard numberOfPages > 1 else {
-                    completion(true, "All Pages Processed downloadBreweryByName")
-                    return
-                }
-                
-                print("BreweryDB \(#line)Total pages \(numberOfPages)")
+//                guard numberOfPages > 1 else {
+//                    completion(true, "All Pages Processed downloadBreweryByName")
+//                    return
+//                }
+
+                //print("BreweryDB \(#line)Total pages \(numberOfPages)")
                 
                 // Asynchronous page processing
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
                 
-                print("BreweryDB \(#line)Total pages \(numberOfPages)")
+                //print("BreweryDB \(#line)Total pages \(numberOfPages)")
                 
                 // TODO Why does downloading BreweryByNames use BreweryByStyleID
-                for i in 2...numberOfPages {
+                for i in 1...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
-                    let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
+                    let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
                     group.enter()
@@ -717,10 +620,9 @@ class BreweryDBClient {
                                 }
                                 self.parse(response: responseJSON as NSDictionary,
                                            querySpecificID:  nil,
-                                           outputType: APIQueryOutputTypes.BeersByStyleID,
+                                           outputType: theOutputType,
                                            completion: completion,
                                            group: group)
-                                print("BreweryDB \(#line)page# \(i)")
                                 group.leave()
                         }
                     }
@@ -739,23 +641,23 @@ class BreweryDBClient {
                                                      updateManagedObjectID: NSManagedObjectID) {
         // Upgraded code.
         //let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
-        print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext \(forBrewery.name)")
+        //print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext \(forBrewery.name)")
         
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
-            print("BreweryDB \(#line) Returned from Async DownloadBreweryImage ")
+            //print("BreweryDB \(#line) Returned from Async DownloadBreweryImage ")
             if error == nil {
                 if data == nil {
                     return
                 }
                 // Upgraded code change to thisContext, and remove the perfromandwait?
-                print("\nBreweryDB \(#line) preceeding to block brewery image update in backgroundcontext")
+                //print("\nBreweryDB \(#line) preceeding to block brewery image update in backgroundcontext")
                 self.container?.performBackgroundTask({
                     (context) in
                     context.mergePolicy = NSMergePolicy.overwrite
                     context.perform() {
-                        print("BreweryDB \(#line) blocking on brewery image update ")
+                        //print("BreweryDB \(#line) blocking on brewery image update ")
                         let breweryForUpdate = context.object(with: updateManagedObjectID) as! Brewery
                         let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
                         breweryForUpdate.image = outputData
@@ -768,12 +670,12 @@ class BreweryDBClient {
                         //self.saveBackground()
                         //                    do {
                         //                        try thisContext.save()
-                        //                        print("BreweryDB \(#line) Attention Brewery Imaged saved in \(thisContext.name) for brewery \(forBrewery.name)")
+                        //                        //print("BreweryDB \(#line) Attention Brewery Imaged saved in \(thisContext.name) for brewery \(forBrewery.name)")
                         //                    }
                         //                    catch let error {
                         //                        fatalError("Error \(error)")
                         //                    }
-                        print("BreweryDB \(#line) Complete blocking on brewery image update\n ")
+                        //print("BreweryDB \(#line) Complete blocking on brewery image update\n ")
                     }
                 })
             }
@@ -783,99 +685,103 @@ class BreweryDBClient {
     
     
     // Debugging function to list the number of results for a style.
-    internal func downloadStylesCount(styleID : String,
-                                      completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-        let methodParameters  = [
-            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
-            Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
-            Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
-            Constants.BreweryParameterKeys.Page : "1" as AnyObject
-        ]
-        let outputURL : NSURL =
-            createURLFromParameters(queryType: APIQueryOutputTypes.BeersByStyleID,
-                                    querySpecificID: nil,
-                                    parameters: methodParameters)
-        
-        // Initial Alamofire Request to determine Results and Pages of Results we have to process
-        var numberOfPages: Int!
-        Alamofire.request(outputURL.absoluteString!).responseJSON {
-            response in
-            guard response.result.isSuccess else {
-                completion(false, "Failed Request \(#line) \(#function)")
-                return
-            }
-            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completion(false, "Failed Request \(#line) \(#function)")
-                return
-            }
-            guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
-                completion(false, "No results")
-                return
-            }
-            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
-                completion(false, "No results")
-                return
-            }
-            numberOfPages = numberOfPagesInt
-            print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
-            
-            print("BreweryDB \(#line) Total pages \(numberOfPages)")
-            completion(true, "\(numberOfResults)")
-        }
-    }
+//    internal func downloadStylesCount(styleID : String,
+//                                      completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+//        let methodParameters  = [
+//            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+//            Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
+//            Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
+//            Constants.BreweryParameterKeys.Page : "1" as AnyObject
+//        ]
+//        let outputURL : NSURL =
+//            createURLFromParameters(queryType: APIQueryResponseProcessingTypes.Styles,
+//                                    querySpecificID: nil,
+//                                    parameters: methodParameters)
+//        
+//        // Initial Alamofire Request to determine Results and Pages of Results we have to process
+//        var numberOfPages: Int!
+//        Alamofire.request(outputURL.absoluteString!).responseJSON {
+//            response in
+//            guard response.result.isSuccess else {
+//                completion(false, "Failed Request \(#line) \(#function)")
+//                return
+//            }
+//            guard let responseJSON = response.result.value as? [String:AnyObject] else {
+//                completion(false, "Failed Request \(#line) \(#function)")
+//                return
+//            }
+//            guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
+//                completion(false, "No results")
+//                return
+//            }
+//            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+//                completion(false, "No results")
+//                return
+//            }
+//            numberOfPages = numberOfPagesInt
+//            //print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
+//            
+//            //print("BreweryDB \(#line) Total pages \(numberOfPages)")
+//            completion(true, "\(numberOfResults)")
+//        }
+//    }
     
     // TODO make this return by completion handler
-    private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
-        //print("BreweryDB \(#line)Attempting to get beer \(id)")
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
-        
-        do {
-            if let beer : [Beer] = try context.fetch(request) {
-                //This type is in the database
-                guard beer.count > 0 else {
-                    return nil}
-                return beer[0]
-            }
-        } catch {
-            return nil
-        }
-        return nil
-    }
-    
+//    private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
+//        //print("BreweryDB \(#line)Attempting to get beer \(id)")
+//        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+//        request.sortDescriptors = []
+//        request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
+//        do {
+//            if let beer : [Beer] = try container?.newBackgroundContext()
+//.fetch(request) {
+//                //This type is in the database
+//                guard beer.count > 0 else {
+//                    return nil}
+//                return beer[0]
+//            }
+//        } catch {
+//            return nil
+//        }
+//        return nil
+//    }
 
-    private func getBreweryByID(id : String,
-                                context : NSManagedObjectContext,
-                                completion: @escaping (Brewery?) -> Void ) {
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@", id)
-        context.performAndWait {
-            do {
-                // TODO there is a crash here, when I try to access a long running style 
-                // and then switch to the mapview.
-                if let brewery : [Brewery] = try context.fetch(request){
-                    //This type is in the database
-                    guard brewery.count > 0 else {
-                        completion(nil)
-                        return
-                    }
-                    completion(brewery.first)
-                    return
-                }
-            } catch {
-            }
-            completion(nil)
-            return
-        }
-    }
-    
+
+//    private func getBreweryByID(id : String,
+//                                context : NSManagedObjectContext,
+//                                completion: @escaping (Brewery?) -> Void ) {
+//        completion(breweryDictionary[id])
+//        return
+//        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+//        request.sortDescriptors = []
+//        request.predicate = NSPredicate(format: "id = %@", id)
+//        context.performAndWait {
+//            do {
+//                // TODO there is a crash here, when I try to access a long running style 
+//                // and then switch to the mapview.
+//                var breweries : [Brewery] = try context.fetch(request)
+//                if breweries != nil {
+//                    //This type is in the database
+//                    guard breweries.count > 0 else {
+//                        completion(nil)
+//                        return
+//                    }
+//                    completion(breweries.first)
+//                    return
+//                }
+//            } catch let error {
+//                fatalError(error as! String)
+//            }
+//            completion(nil)
+//            return
+//        }
+//    }
+
     
     // Parse results into objects
     private func parse(response : NSDictionary,
                        querySpecificID : String?,
-                       outputType: APIQueryOutputTypes,
+                       outputType: APIQueryResponseProcessingTypes,
                        completion: (( (_ success :  Bool, _ msg: String?) -> Void )?),
                        group: DispatchGroup? = nil){
         
@@ -883,28 +789,29 @@ class BreweryDBClient {
         switch outputType {
             
         // Beers query
-        case APIQueryOutputTypes.BeersByStyleID:
-            print("BreweryDB \(#line) Parse type .BeersByStyleID ")
-
+        case APIQueryResponseProcessingTypes.BeersFollowedByBreweries:
             // No beer data was returned which can happen
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                completion!(false, "Failed Request \(#line) \(#function)")
+                completion!(false, "Failed Request No data was returned")
                 return
             }
-            print("BreweryDB \(#line) Beerloop starts after ")
             createBeerLoop: for beer in beerArray {
-                print("Brewerydb \(#line) In beer loop ")
-                // Check to see if this beer is in the database already, and skip if so
-                guard getBeerByID(id: beer["id"] as! String, context: readOnlyContext!) == nil else {
-                    print("BreweryDB \(#line) This beer has already been created ")
-                    continue createBeerLoop
-                }
-                print("BreweryDB \(#line) Complete getting a beer id above ")
+                /* Assume this beer is not in the database.
+                 Send all beers to creation process unique constraints will
+                 block duplicate entries
+                */
+
                 // This beer has no brewery information, continue with the next beer
                 guard let breweriesArray = beer["breweries"]  else {
                     continue createBeerLoop
                 }
-                breweryLoop: for brewery in breweriesArray as! Array<AnyObject> {
+
+                // This beer has no style id skip it
+                guard beer["styleId"] != nil else {
+                    continue createBeerLoop
+                }
+
+                breweryLoop: for brewery in (breweriesArray as! Array<AnyObject>) {
                     let breweryDict = brewery as? [String : AnyObject]
                     // There is no location info to display on the map.
                     guard let locationInfo = breweryDict?["locations"] as? NSArray else {
@@ -919,45 +826,31 @@ class BreweryDBClient {
                     }
                     // Sometimes the breweries have no name, making it useless
                     guard breweryDict?["name"] != nil else {
-                        // "Missing brewery name \(#line)"
                         continue breweryLoop
                     }
-                    // Check to make sure the brewery is not already in the database
-                    var dbBrewery : Brewery!
-                    print("BreweryDB \(#line) before getting breweryID ")
-                    if locDic["id"]?.description == "H9vPzA" {
-                        print("<----------------------Alert Great American Brewery------------------->")
-                    }
-                    getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!){
-                        (Brewery) -> Void in
-                        print("BreweryDB \(#line) returned from getting breweryID ")
-                        dbBrewery = Brewery
-                        if dbBrewery == nil { // Create a brewery object when none.
-                            self.createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
-                                (Brewery) -> Void in
-                                dbBrewery = Brewery
-                                guard dbBrewery != nil else {
-                                    completion!(false, "Error saving data")
-                                    return
-                                }
-                                self.createBeerObject(beer: beer, brewery: dbBrewery) {
-                                    (Beer) -> Void in
-                                }
-                            }
-                        } else { // Brewery already in Coredata
-                            print("BreweryDB \(#line) Brewery already  in Coredata: \(dbBrewery.name)")
-                            self.createBeerObject(beer: beer, brewery: dbBrewery, completion: {
-                                (beer)-> Void in })
-                        }
-                    }
-                    print("BreweryDB \(#line) after getting breweryID ")
 
-                }
+                    // Cant create this beer if we can't link it to a brewery
+                    guard locDic["id"]?.description != nil else {
+                        continue createBeerLoop
+                    }
+
+                    // Assume brewery not in database.
+                    // Send all brweries to creation process
+                    createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
+                        (Brewery) -> Void in
+                    }
+                    let brewersID = (locDic["id"]?.description)!
+                    createBeerObject(beer: beer, brewerID: brewersID) {
+                        (Beer) -> Void in
+                    }
+                    break breweryLoop
+                } //  of brewery loop
             } // end of beer loop
             // This page of results has processed signal GCD that it's complete.
-            group?.leave()
+            // TODO crash occured on the group.leave.1
+            //group?.leave()
             break
-            
+
         case .Styles:
             print("BreweryDB \(#line) Parse type .Styles ")
             // Styles are saved on the persistingContext because they don't change often.
@@ -996,33 +889,18 @@ class BreweryDBClient {
                     })
                 }
             }
-            // TODO experiment moving this block of code up one bracket
-            // and end with a return, this will save all the styles after we are done.
-            // This line of code will run immediately because the above is a perform
-            // Save beer styles in main and persistent.
-//            do {
-//                print("BreweryDB \(#line) Styles download now saving in MainContext ")
-//                // TODO Reinstate this change
-//                //try coreDataStack?.mainContext.save()
-//                try coreDataStack?.saveMainContext()
-//                completion!(true, "Success saving all new styles.")
-//                return
-//            } catch {
-//                completion!(false, "Failed saving new styles")
-//                return
-//            }
             return
             break
             
             
         case .Breweries:
-            print("BreweryDB \(#line) Parse type .Breweries ")
+            //print("BreweryDB \(#line) Parse type .Breweries ")
             guard let pagesOfResult = response["numberOfPages"] as? Int else {
                 // The number of pages means we cant pull in any breweries
                 completion!(false, "No results returned")
                 return
             }
-            
+
             guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
                 //Unable to parse Brewery Failed to extract data, there was no data component
                 completion!(false, "Network error please try again")
@@ -1034,211 +912,61 @@ class BreweryDBClient {
                 // Can't build a brewery location if no location exist
                 guard let locationInfo = breweryDict["locations"] as? NSArray
                     else {
-                        rejectedBreweries += 1
+                        //rejectedBreweries += 1
                         continue
                 }
-                
+
                 guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
                     let openToPublic = locDic["openToPublic"],
                     openToPublic as! String == "Y",
                     locDic["longitude"] != nil,
                     locDic["latitude"] != nil
                     else {
-                        rejectedBreweries += 1
+                        //rejectedBreweries += 1
                         continue breweryLoop
                 }
-                
+
                 // Don't repeat breweries in the database
-                getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!) {
-                    (Brewery) -> Void in
-                    if Brewery == nil {
-                        self.createBreweryObject(breweryDict: breweryDict,                                                   locationDict: locDic){
-                            (thisbrewery) -> Void in
-                        }
-                    } else { // Consider removing this else clause.
-                        self.rejectedBreweries += 1
-                    }
+                createBreweryObject(breweryDict: breweryDict,
+                                    locationDict: locDic){
+                    (thisbrewery) -> Void in
                 }
-//                guard thisbrewery == nil else {
-//                    rejectedBreweries += 1
-//                    continue
-//                }
             }
-            // TODO Contemplate deleting this block of code.
-            //Go back to the breweryArray and save another brewery
-            //Save all the Breweries in background context to disk
-//            do {
-//                print("BreweryDB \(#line) Saving from .Breweries switch case of parse function ")
-//                try coreDataStack?.persistingContext.save()
-//                print("BreweryDB \(#line) Brewery Saved to Persisting context")
-//                completion!(true, "Success")
-//                return
-//            } catch {
-//                completion!(false, "Failed Request \(#line) \(#function)")
-//                return
-//            }
-            // Completed processing this page of breweries
             completion!(true, "Success")
             break
             
-        case .BeersByName:
-            print("BreweryDB \(#line) Parse type .BeersByName ")
-            // The number of pages means we can pull in more breweries
-            guard let pagesOfResult = response["numberOfPages"] as? Int else {
-                completion!(false, "No results returned")
-                return
-            }
-            guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                // No beers were returned, which can happen
-                completion!(false, "Failed Request \(#line) \(#function)")
-                return
-            }
-            
-            beerLoop: for beer in beerArray {
-                print("BreweryDB \(#line)---------------------NextBeer---------------------")
-                // Creating beer
-                // Check to see if this beer is in the database already
-                var thisBeer = getBeerByID(id: beer["id"] as! String, context: readOnlyContext!)
-                // If the beer is in the coredata skip adding it
-                guard thisBeer == nil else {
-                    continue beerLoop
-                }
-                // This beer has no brewery information, continue with the next beer
-                guard beer["name"] != nil && beer["name"] as! String != "" else {
-                    continue beerLoop
-                }
-                guard let breweriesArray = beer["breweries"]  else {
-                    continue beerLoop
-                }
-                
-                breweryLoop: for brewery in breweriesArray as! Array<AnyObject> {
-                    let breweryDict = brewery as! [String : AnyObject]
-                    
-                    guard let locationInfo = breweryDict["locations"] as? NSArray else {
-                        continue breweryLoop
-                    }
-                    
-                    let locDic = locationInfo[0] as! [String : AnyObject]
-                    // We can't visit a brewery if it's not open to the public or we don't have coordinates
-                    guard locDic["openToPublic"] as! String == "Y" &&
-                        locDic["longitude"] != nil &&
-                        locDic["latitude"] != nil else {
-                            continue breweryLoop
-                    }
-                    
-                    guard breweryDict["name"] != nil else {
-                        continue breweryLoop
-                    }
-                    
-                    // Check to make sure the brewery is not already in the database
-                    var newBrewery : Brewery!
-                    getBreweryByID(id: locDic["id"] as! String, context: readOnlyContext!){
-                        (brewery) -> Void in
-                        if newBrewery == nil { // Create a brewery object
-                            self.createBreweryObject(breweryDict: breweryDict,
-                                                     locationDict: locDic,
-                                                     completion: { (newBrewery) -> Void in
-                                self.createBeerObject(beer: beer,
-                                                      brewery: newBrewery,
-                                                      completion: { (beer) -> Void in })
-                                                        })
-                        } else { // Just create beer
-                            self.createBeerObject(beer: beer,
-                                                  brewery: newBrewery,
-                                                  completion: { (beer) -> Void in })
-                        }
-                    }
-                    // Future Improvement.
-                    // Currently datamodel cannot accomodate multple brewery locations for a beer
-                    break
-                } // End of For Brewery
-                // This will save every beer
-                
-            } // end of beer loop
-            break
-            
         case .BeersByBreweryID:
-            print("BreweryDB \(#line) Parse type .BeersByBreweryID ")
-            // Since were are querying by brewery ID we can be guaranteed that the brewery exists.
-            print("BreweryDB \(#line) Response: \(response) ")
+            // Since were are querying by brewery ID we can be guaranteed that 
+            // the brewery exists and we can use the querySpecificID!.
+            // No beer data was returned which can happen
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 // Failed to extract data
                 completion!(false, "There are no beers listed for this brewer.")
                 return
             }
-            
-            print("BreweryDB \(#line) why is this called twice. This many beers at this brewery: \(beerArray.count)")
-            
             for beer in beerArray {
-                print("BreweryDB \(#line)---------------------NextBeer---------------------")
-                // Create the coredata object for each beer
-                // Test to see if beer is already in context
-                let id : String? = beer["id"] as? String
-                let dbBeer = getBeerByID(id: id!, context: readOnlyContext!)
-                guard dbBeer == nil else {
-                    print("BreweryDB \(#line)Encountered a beer of this type already skipping creation")
-                    continue
-                }
-                // Get the brewery based on objectID
-                getBreweryByID(id: querySpecificID!, context: readOnlyContext!) {
-                    (dbBrewery) -> Void in
-                    self.createBeerObject(beer: beer,
-                                     brewery: dbBrewery,
-                                     completion: { (beer) -> Void in})
+                createBeerObject(beer: beer, brewerID: querySpecificID!) {
+                    (Beer) -> Void in
                 }
             }
             break
         }
     }
-    
-// TODO did I remove all of these.
-//    private func saveBackground() {
-//        coreDataStack?.backgroundContext.performAndWait {
-//            do {
-//                try self.coreDataStack?.backgroundContext.save()
-//            } catch let error {
-//                fatalError("error:\n\(error)")
-//            }
-//        }
-//        
-//    }
-    
-    
-    
-    //    func isElementInDatabase(entityType: String,
-    //                             id: String,
-    //                             context: NSManagedObjectContext ) -> Bool {
-    //        // Check to make sure we are not already in the database
-    //        let request : NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: entityType)
-    //        request.sortDescriptors = []
-    //        request.predicate = NSPredicate(format: "id == \(id)")
-    //        do {
-    //            let types : [NSFetchRequestResult] = try context.fetch(request)
-    //            //This type is in the database
-    //            return types.count > 0
-    //        } catch {
-    //            fatalError()
-    //        }
-    //        return false
-    //    }
-    
-    
 
-    
 //    private func saveMain() {
-//        print("BreweryDB \(#line) Saving MainContext called ")
+//        //print("BreweryDB \(#line) Saving MainContext called ")
 //        coreDataStack?.mainContext.performAndWait {
 //            do {
 //                try self.coreDataStack?.saveMainContext()
 //                //try self.coreDataStack?.savePersistingContext()
 //                //try coreDataStack?.mainContext.save()
-//                print("BreweryDB \(#line) All beers before this have been saved")
-//                //print("BreweryDB \(#line) MainContext objects should be in Persistent Context now <------------------------")
+//                //print("BreweryDB \(#line) All beers before this have been saved")
+//                ////print("BreweryDB \(#line) MainContext objects should be in Persistent Context now <------------------------")
 //                //try coreDataStack?.persistingContext.save()
 //                //true
 //            } catch let error {
-//                print("BreweryDB \(#line) We died on the coredataSave <----- ")
-//                print("The error is \n\(error)")
+//                //print("BreweryDB \(#line) We died on the coredataSave <----- ")
+//                //print("The error is \n\(error)")
 //                fatalError()
 //            }
 //        }
