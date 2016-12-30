@@ -5,10 +5,11 @@
 //  Created by James Jongsurasithiwat on 10/12/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/** This program shows the details of a beer.
-    You can unfavorite / favorite a beer.
-    You can also add tasting notes to the beer that will be saved.
- **/
+/*
+ This program shows the details of a beer.
+ You can unfavorite / favorite a beer.
+ You can also add tasting notes to the beer that will be saved.
+ */
 import UIKit
 import CoreData
 
@@ -51,6 +52,7 @@ class BeerDetailViewController: UIViewController {
             image = UIImage(named: "heart_icon.png")
             sender.setImage(image, for: .normal)
             saveToBeerInCoreDataToBackgroundContext(makeFavorite: true)
+            
         } else {
             image = UIImage(named: "heart_icon_black_white_line_art.png")
             saveToBeerInCoreDataToBackgroundContext(makeFavorite: false)

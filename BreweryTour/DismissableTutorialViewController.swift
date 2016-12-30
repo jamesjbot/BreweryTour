@@ -7,6 +7,7 @@
 //
 
 import UIKit
+
 // This @objc is for the #selector on the help button
 @objc protocol DismissableTutorial {
     func enableTutorial()
