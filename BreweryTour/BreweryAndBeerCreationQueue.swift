@@ -1,5 +1,5 @@
 //
-//  BreweryAndBeerQueue.swift
+//  BreweryAndBeerCreationQueue.swift
 //  BreweryTour
 //
 //  Created by James Jongsurasithiwat on 12/28/16.
@@ -95,7 +95,7 @@ struct BeerData {
 }
 
 
-class BreweryAndBeerQueue: NSObject {
+class BreweryAndBeerCreationQueue: NSObject {
 
     // MARK: Constants
 
@@ -133,8 +133,8 @@ class BreweryAndBeerQueue: NSObject {
         // one at time. Batch saving generates conflict errors.
         let dq = DispatchQueue.global(qos: .background)
         dq.sync {
-            print("Processing breweries: we have \(runningBreweryQueue.count) breweries")
-            print("Processing beers: we have \(runningBeerQueue.count) beers")
+            print("Processing breweries creation: we have \(runningBreweryQueue.count) breweries")
+            print("Processing beers creation: we have \(runningBeerQueue.count) beers")
             guard !runningBreweryQueue.isEmpty || !runningBeerQueue.isEmpty else {
                 workTimer.invalidate()
                 workTimer = nil
