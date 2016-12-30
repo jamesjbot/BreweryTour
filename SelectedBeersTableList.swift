@@ -40,7 +40,6 @@ class SelectedBeersTableList : NSObject, Subject {
     internal override init(){
         super.init()
         readOnlyContext?.automaticallyMergesChangesFromParent = true
-        print("SelectedBeersTable \(#line) initializer called ")
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
@@ -213,17 +212,14 @@ extension SelectedBeersTableList : TableList {
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
         BreweryDBClient.sharedInstance().downloadBeersBy(name: searchTerm) {
             (success, msg) -> Void in
-            print("SelectedBeersTableList \(#line)Returned from getting beers")
             guard success == true else {
                 completion!(success,msg)
                 return
             }
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
-                print("SelectedBeersTableList \(#line)Searchforuserentered performfetchcalled")
                 try self.frc.performFetch()
                 self.observer?.sendNotify(from: self, withMsg: "Reload data")
-                print("SelectedBeersTableList \(#line)Saved this many beers in model \(self.frc.fetchedObjects?.count)")
                 completion!(true, "Success")
             } catch {
                 completion!(false, "Failed Request")
