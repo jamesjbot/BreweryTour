@@ -26,12 +26,14 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     fileprivate let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
-    
+
+
     // MARK: Variables
     
     internal var listOfBreweryIDToDisplay : [String]!
     private var tutorialState : SelectedBeersTutorialStage = .Table
-    
+
+
     // MARK: IBOutlets
 
     @IBOutlet weak var tutorialView: UIView!
@@ -43,7 +45,8 @@ class SelectedBeersViewController: UIViewController, Observer {
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
-    
+
+
     // MARK: IBActions
 
     @IBAction func dismissTutorial(_ sender: UIButton) {
@@ -127,8 +130,10 @@ class SelectedBeersViewController: UIViewController, Observer {
         // When switching from another viewcontroller the background data might
         // have changed
         tableView.reloadData()
+
         // Set navigationbar title
         tabBarController?.title = "Click For Details"
+
         // Set Selected Beers as the first screen
         segmentedControl.selectedSegmentIndex = 0 // Selected Beers mode
         // Tell view model to load SelectedBeers
@@ -138,11 +143,11 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        // TODO Do I need to do thisAlways prime the tutorial
-        // Prime the state
+        // Prime the tutorial state
         tutorialState = .SearchBar
-        // Display the tutorial
         nextLesson(nextLessonButton)
+        // Display the tutorial
+
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
             // Do nothing
         } else {
