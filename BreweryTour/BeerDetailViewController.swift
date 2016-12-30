@@ -51,11 +51,11 @@ class BeerDetailViewController: UIViewController {
         if isBeerFavorited! {
             image = UIImage(named: "heart_icon.png")
             sender.setImage(image, for: .normal)
-            saveToBeerInCoreDataToBackgroundContext(makeFavorite: true)
-            
+            saveBeerInCoreDataToBackgroundContext(makeFavorite: true)
+
         } else {
             image = UIImage(named: "heart_icon_black_white_line_art.png")
-            saveToBeerInCoreDataToBackgroundContext(makeFavorite: false)
+            saveBeerInCoreDataToBackgroundContext(makeFavorite: false)
         }
         sender.setImage(image, for: .normal)
     }
@@ -156,11 +156,11 @@ class BeerDetailViewController: UIViewController {
         }
         return nil
     }
-    
+
     
     // All beers are in the database already, we just mark their 
     // favorite status and update tasting notes
-    fileprivate func saveToBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
+    fileprivate func saveBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
         container?.performBackgroundTask() {
             (context) -> Void in
             let updatableBeer = context.object(with: self.beer.objectID) as! Beer
@@ -169,7 +169,6 @@ class BeerDetailViewController: UIViewController {
             do {
                 try context.save()
             } catch let error {
-                print("Error saving \(error)")
                 self.displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
             }
         }
@@ -191,7 +190,7 @@ extension BeerDetailViewController : UITextViewDelegate {
     
     // Every time the user finshes editing their tasting notes save the notes
     func textViewDidEndEditing(_ textView: UITextView) {
-        saveToBeerInCoreDataToBackgroundContext(makeFavorite: beer.favorite)
+        saveBeerInCoreDataToBackgroundContext(makeFavorite: beer.favorite)
     }
 
     // Apply textchanges or remove keyboard.
