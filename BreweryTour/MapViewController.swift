@@ -536,11 +536,11 @@ extension MapViewController : DismissableTutorial {
 
     // Tutoral Function to plot a circular path for the pointer
     fileprivate func addCircularPathToPointer() {
-        let systemVersion = UIDevice.current.model
         // Circular path
         var point = CGPoint(x: view.frame.midX, y: view.frame.midY)
         var rotationRadius = view.frame.width/4
-        if systemVersion == "iPhone" {
+
+        if UIDevice.current.model == "iPhone" {
             point = CGPoint(x: view.frame.midX, y: view.frame.midY*0.5)
             rotationRadius = view.frame.width/8
         }
