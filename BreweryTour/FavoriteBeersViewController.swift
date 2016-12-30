@@ -18,9 +18,9 @@ import CoreData
 class FavoriteBeersViewController: UIViewController {
     
     // MARK: Constants
-    
+
+    let reuseID = "FavoriteCell"
     let paddingForPoint : CGFloat = 20
-    fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
@@ -103,7 +103,7 @@ class FavoriteBeersViewController: UIViewController {
         do {
             try frc.performFetch()
         } catch {
-            displayAlertWindow(title: "Data access", msg: "Sorry there was an error accessing data try again.")
+            displayAlertWindow(title: "Data access", msg: "Sorry there was an error accessing data please try again.")
         }
     }
     
@@ -143,7 +143,6 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
         case .move:
             break
         case .update:
-            // TODO there is an error when in FavoriteBeers, select a beer and change tasting notes. It crashes.
             configureCell(cell: tableView.cellForRow(at: indexPath!)!, indexPath: indexPath! as NSIndexPath)
             break
         }
@@ -167,7 +166,7 @@ extension FavoriteBeersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name
-        let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: reuseID, for: indexPath)
         configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
     }
