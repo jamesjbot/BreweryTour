@@ -66,7 +66,6 @@ class MapViewController : UIViewController {
                 populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
                 breweriesToBeProcessed.removeAll()
                 disableTimer()
-                activityIndicator.stopAnimating()
 
             } else {
                 // less than 50 breweries exist in the queue comeback and map them
@@ -259,7 +258,10 @@ class MapViewController : UIViewController {
     // Ask user for access to their location
     override func viewDidLoad(){
         super.viewDidLoad()
-
+        DispatchQueue.main.async{
+            self.mapView.showsUserLocation = true
+            self.activityIndicator.startAnimating()
+        }
         // CoreLocation initialization, ask permission to utilize user location
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -284,7 +286,6 @@ class MapViewController : UIViewController {
         // Get new selection
         let mapViewData = Mediator.sharedInstance().getPassedItem()
 
-        activityIndicator.startAnimating()
 
         // Decision making to display Breweries Style or Brewery
         if mapViewData is Style {
@@ -299,7 +300,9 @@ class MapViewController : UIViewController {
             removeRouteOnMap()
             breweriesToBeProcessed.removeAll()
             populateMapWithAnnotations( fromBreweries: [mapViewData as! Brewery], removeDisplayedAnnotations: true)
-            activityIndicator.stopAnimating()
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
         }
 
         // Capture last selection, so we can compare when an update is requested
