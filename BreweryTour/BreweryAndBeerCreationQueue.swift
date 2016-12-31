@@ -86,8 +86,8 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // MARK: Constants
 
-    private let secondsRepeatInterval: Double = 3
-    private let maxSavesPerLoop: Int = 325
+    private let secondsRepeatInterval: Double = 7
+    private let maxSavesPerLoop: Int = 300
 
     private let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
