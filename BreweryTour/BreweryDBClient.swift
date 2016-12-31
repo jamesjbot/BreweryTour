@@ -60,8 +60,8 @@ class BreweryDBClient {
         case Beer
         case Brewery
     }
-    private let timerDelay = 3
-    private let maxSaves = 100
+    private let timerDelay: Double = 3
+    private let maxSaves = 200
 
 
     // MARK: Variables
@@ -71,7 +71,13 @@ class BreweryDBClient {
     fileprivate var imagesToBeAssignedQueue: [String: (ImageDownloadType, NSData)]
         = [String: (ImageDownloadType,NSData)]() {
         didSet{
-            imageProcessTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timerDelay), target: self, selector: #selector(timerProcessImageQueue), userInfo: nil, repeats: true)
+            DispatchQueue.main.async {
+                self.disableTimer()
+                self.imageProcessTimer = Timer.scheduledTimer(timeInterval: self.timerDelay,
+                                                         target: self,
+                                                         selector: #selector(self.timerProcessImageQueue),
+                                                         userInfo: nil, repeats: true)
+            }
         }
     }
 
@@ -98,11 +104,11 @@ class BreweryDBClient {
 
     // Process the last unfull set on the breweriesToBeProcessed queue.
     @objc private func timerProcessImageQueue() {
-        print("timerProcessImageQueue fired")
+        print("timerProcessImageQueue fired \(imagesToBeAssignedQueue.count) images")
         let dq = DispatchQueue.global(qos: .background)
         dq.sync {
             var saves = 0 // Stopping counter
-
+            
             // configure our context
             let context = self.container?.newBackgroundContext()
             context?.automaticallyMergesChangesFromParent = true
@@ -345,7 +351,7 @@ class BreweryDBClient {
                 completion(false, "No results")
                 return
             }
-            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+            guard (responseJSON["totalResults"] as! Int?) != nil else {
                 completion(false, "No results")
                 return
             }
@@ -358,8 +364,8 @@ class BreweryDBClient {
                 let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                                      querySpecificID: nil,
                                                                      parameters: methodParameters)
-                group.enter()
-                queue.async(group: group) {
+                myGroup.enter()
+                queue.async(group: myGroup) {
                 Alamofire.request(outputURL.absoluteString!)
                         .responseJSON {
                             response in
@@ -560,7 +566,7 @@ class BreweryDBClient {
                     completion(false, "No results")
                     return
                 }
-                guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
+                guard (responseJSON["totalResults"] as! Int?) != nil else {
                     completion(false, "No results")
                     return
                 }
@@ -707,7 +713,6 @@ class BreweryDBClient {
             break
 
         case .Styles:
-            print("BreweryDB \(#line) Parse type .Styles ")
             // Styles are saved on the persistingContext because they don't change often.
             // We must have data to process
             // Save the multiple styles from the server
@@ -735,23 +740,21 @@ class BreweryDBClient {
                     // When style not present adds new style into MainContext
                     self.container?.performBackgroundTask({
                         (context) in
-                        Style(id: localId!, name: localName! as! String, context: context)
+                        _ = Style(id: localId!, name: localName! as! String, context: context)
                         do {
                             try context.save()
-                        } catch let error {
-                            fatalError("Error saving style\n\(error)")
+                        } catch _ {
+                            fatalError("Fatal Error Writing to CoreData")
                         }
                     })
                 }
             }
-            return
             break
             
             
         case .Breweries:
-            //print("BreweryDB \(#line) Parse type .Breweries ")
-            guard let pagesOfResult = response["numberOfPages"] as? Int else {
-                // The number of pages means we cant pull in any breweries
+            guard (response["numberOfPages"] as? Int) != nil else {
+                // If there are no pages means there is nothing to process.
                 completion!(false, "No results returned")
                 return
             }
