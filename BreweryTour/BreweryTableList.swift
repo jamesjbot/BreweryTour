@@ -24,7 +24,7 @@ class BreweryTableList: NSObject, Subject {
 
 
     // MARK: Variables
-
+    fileprivate var currentlyObservingStyle: Style?
     var observer : Observer!
 
     // variables for selecting breweries with a style
@@ -51,22 +51,32 @@ class BreweryTableList: NSObject, Subject {
         super.init()
     }
     
-    
+
+    internal func prepareToShowTable() {
+        if let item = Mediator.sharedInstance().getPassedItem() {
+            if item is Style {
+                currentlyObservingStyle = item as? Style
+                displayBreweries(byStyle: item as! Style, completion: nil)
+            }
+        }
+        print("Prepare to show table finished")
+    }
+
     /* 
      Fetch breweries based on style selected.
      The CategoryViewController will fire this method
      to get the brewery entries from the database
      */
-    internal func displayBreweriesWith(style : Style, completion: (_ success: Bool) -> Void){
-        /* 
-         First look for all the beers with a style
-         Then set all the breweries related to those beers
-         into displayableBreweries
-         */
-        print("BreweryTableLISt \(#line) Requesting style: \(style.id!) ")
+    private func displayBreweries(byStyle : Style, completion: ((_ success: Bool) -> Void)?){
+        // Fetch all the beers with style currently available
+        // Go thru each beer if the brewery is on the map skip it
+        // If not put the beer's brewery in breweriesToBeProcessed.
+
+        // Fetch all the beers with style
         let request : NSFetchRequest<Beer> = Beer.fetchRequest()
         request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "styleID = %@", style.id!)
+        request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
+        // A static view of current breweries with styles
         var results : [Beer]!
         coreDataBeerFRCObserver = NSFetchedResultsController(fetchRequest: request ,
                                              managedObjectContext: readOnlyContext!,
@@ -136,14 +146,9 @@ extension BreweryTableList: TableList {
     }
     
     
-    func filterContentForSearchText(searchText: String){// -> [NSManagedObject] {
-        // BreweryTableList Observes the persistent Context and I only saved them
-        // the main context and so there are none.
-        // Debugging code because breweries with a nil name are leaking thru
-        // assert((frc.fetchedObjects?.count)! > 0)
+    func filterContentForSearchText(searchText: String) {
         // Only filter object if there are objects to filter.
         guard displayableBreweries.count > 0 else {
-            //return []
             filteredObjects.removeAll()
             return
         }
@@ -184,48 +189,48 @@ extension BreweryTableList: TableList {
     
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
         print("BreweryTableList \(#line)searchForuserEntered beer called")
-        completion!(false,"This screen only show breweries with the selected style, try brewery search on the All Breweries button.")
+        fatalError()
+        // This should be block at category view controller
     }
 
 }
 
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
+
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+//        print("BreweryTableList \(#line) BreweryTableList changed object")
+//        switch (type){
+//        case .insert:
+//            let beer = anObject as! Beer
+//            if beer.styleID == currentlyObservingStyle?.id,
+//                !displayableBreweries.contains(beer.brewer!) {
+//                displayableBreweries.append(beer.brewer!)
+//            }
+//            break
+//        case .delete:
+//            break
+//        case .move:
+//            break
+//        case .update:
+//            break
+//        }
+//    }
+
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("BreweryTableList \(#line) BreweryTableList willchange")
-        newBeers = [Beer]()
-    }
-    
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("BreweryTableList \(#line) BreweryTableList changed object")
-        switch (type){
-        case .insert:
-            newBeers.append(anObject as! Beer)
-            break
-        case .delete:
-            break
-        case .move:
-            break
-        case .update:
-            break
-        }
-    }
-    
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        // Process new beers
-        for beer in newBeers {
-            if !self.displayableBreweries.contains(beer.brewer!) {
-                self.displayableBreweries.append(beer.brewer!)
-            }
-        }
-        print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
-        // TODO We're preloading breweries do I still need this notify
-        print("BrweryTableList \(#line) Notify viewcontroller on controllerDidChangeContent delegate.")
-        observer.sendNotify(from: self, withMsg: "reload data")
-        print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
-        //Datata = frc.fetchedObjects!
+func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    //prepareToShowTable()
+//        // Process new beers
+//        for beer in newBeers {
+//            if !self.displayableBreweries.contains(beer.brewer!) {
+//                self.displayableBreweries.append(beer.brewer!)
+//            }
+//        }
+//        //print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
+//        // TODO We're preloading breweries do I still need this notify
+//        //print("BrweryTableList \(#line) Notify viewcontroller on controllerDidChangeContent delegate.")
+//        //observer.sendNotify(from: self, withMsg: "reload data")
+//        //print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
+//        //Datata = frc.fetchedObjects!
     }
 }
 
