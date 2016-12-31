@@ -87,10 +87,19 @@ extension AllBreweriesTableList : TableList {
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         DispatchQueue.main.async {
             cell.textLabel?.adjustsFontSizeToFitWidth = true
+            let image = #imageLiteral(resourceName: "Nophoto.png")
+            cell.imageView?.image = image
+            var brewery: Brewery!
             if searchText != "" {
-                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name!
+                brewery = self.filteredObjects[indexPath.row]
             } else {
-                cell.textLabel?.text = (self.frc.object(at: indexPath)).name!                 // Debugging line
+                brewery = self.frc.object(at: indexPath)
+            }
+            // TODO temp
+            cell.detailTextLabel?.text = brewery.id!
+            cell.textLabel?.text = brewery.name!
+            if let data = brewery.image {
+                cell.imageView?.image = UIImage(data: data as Data)
             }
             cell.setNeedsDisplay()
         }
