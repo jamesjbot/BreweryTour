@@ -180,7 +180,7 @@ class CategoryViewController: UIViewController,
                                     completion: nil)
             break
         case .BreweriesWithStyleTable:
-            tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are currently over 9,000 breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore. Or go the 'All Breweries' screen and enter a name in the search bar to search for a brewery online."
+            tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore. Or go the 'All Breweries' screen and enter a name in the search bar to search for a brewery online."
             let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: 0.5,
