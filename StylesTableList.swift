@@ -32,6 +32,9 @@ class StylesTableList: NSObject {
 
     // MARK: Functions
 
+    internal func element(at index: Int) -> Style {
+        return frc.fetchedObjects![index]
+    }
 
     internal override init(){
         super.init()
@@ -113,24 +116,30 @@ extension StylesTableList : TableList {
      */
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // Move this UI update to main queue.
-        DispatchQueue.main.async {
             cell.imageView?.image = nil
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
-            if searchText != "" {
-                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
-            } else {
+            if (searchText?.isEmpty)! {
                 // TODO it's reading nil here for some reason.
                 // How do i replicate
                 cell.textLabel?.text = (self.frc.object(at: indexPath )).displayName ?? "Error"
+            } else {
+                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
             }
-            cell.setNeedsDisplay()
-        }
+            //cell.setNeedsDisplay()
         return cell
     }
     
     
-    internal func filterContentForSearchText(searchText: String){// -> [NSManagedObject] {
+    internal func filterContentForSearchText(searchText: String) {
+        guard frc.fetchedObjects != nil else {
+            filteredObjects.removeAll()
+            return
+        }
+        guard (frc.fetchedObjects?.count)! > 0 else {
+            filteredObjects.removeAll()
+            return
+        }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ( $0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
     }
     

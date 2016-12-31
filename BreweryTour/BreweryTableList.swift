@@ -38,8 +38,16 @@ class BreweryTableList: NSObject, Subject {
     
     // Currently watches the main context (readOnlyContext)
     internal var coreDataBeerFRCObserver: NSFetchedResultsController<Beer>!
-    
 
+    internal var styleFRCObserver: NSFetchedResultsController<Style>!
+
+    fileprivate var copyOfSet:[Brewery] = [] {
+        didSet {
+//            copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
+//                return a.name! < b.name!
+//            })
+        }
+    }
     // MARK: - Functions
 
     //
@@ -52,12 +60,24 @@ class BreweryTableList: NSObject, Subject {
     }
     
 
-    internal func prepareToShowTable() {
-        if let item = Mediator.sharedInstance().getPassedItem() {
-            if item is Style {
-                currentlyObservingStyle = item as? Style
-                displayBreweries(byStyle: item as! Style, completion: nil)
-            }
+    internal func prepareToShowTable(withStyle style: Style) {
+        // Stylefetch
+        currentlyObservingStyle = Mediator.sharedInstance().getPassedItem() as! Style
+        let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
+        styleRequest.sortDescriptors = []
+        styleRequest.predicate = NSPredicate(format: "id == %@", (currentlyObservingStyle?.id!)!)
+        styleFRCObserver = NSFetchedResultsController(fetchRequest: styleRequest,
+                                                      managedObjectContext: readOnlyContext!,
+                                                      sectionNameKeyPath: nil, cacheName: nil)
+        styleFRCObserver.delegate = self
+        do {
+            try self.styleFRCObserver.performFetch()
+            let tempSet = (styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]?)!
+            copyOfSet = tempSet.sorted(by: { (a: Brewery, b: Brewery) -> Bool in
+                return a.name! < b.name!
+            })
+        } catch {
+
         }
         print("Prepare to show table finished")
     }
@@ -119,40 +139,49 @@ class BreweryTableList: NSObject, Subject {
     func registerObserver(view: Observer) {
         observer = view
     }
-    
 }
 
 
 extension BreweryTableList: TableList {
 
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        DispatchQueue.main.async {
-            cell.textLabel?.adjustsFontSizeToFitWidth = true
-            guard let searchText = searchText else {
-                return
-            }
-            guard searchText.isEmpty ? indexPath.row < self.displayableBreweries.count :
-                indexPath.row < self.filteredObjects.count else {
-                return
-            }
-            if searchText.isEmpty {
-                cell.textLabel?.text = (self.displayableBreweries[indexPath.row]).name
-            } else {
-                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).name
-            }
-            cell.setNeedsDisplay()
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        let image = #imageLiteral(resourceName: "Nophoto.png")
+        cell.imageView?.image = image
+        guard (searchText?.isEmpty)! ? (indexPath.row < self.copyOfSet.count) :
+            indexPath.row < self.filteredObjects.count else {
+                return UITableViewCell()
         }
+        var brewery: Brewery?
+        if (searchText?.isEmpty)! {
+            brewery = self.copyOfSet[indexPath.row]
+        } else {
+            brewery = (self.filteredObjects[indexPath.row])
+        }
+        cell.textLabel?.text = brewery?.name
+        if let data = brewery?.image {
+            DispatchQueue.main.async {
+                cell.imageView?.image = UIImage(data: data as Data)
+                cell.imageView?.setNeedsDisplay()
+                print("Brewery tablelist finisehd setneedsdisplay")
+            }
+        }
+        cell.setNeedsDisplay()
         return cell
     }
-    
-    
+
+
     func filterContentForSearchText(searchText: String) {
         // Only filter object if there are objects to filter.
-        guard displayableBreweries.count > 0 else {
+        guard copyOfSet != nil else {
             filteredObjects.removeAll()
             return
         }
-        filteredObjects = (displayableBreweries.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))
+        guard (copyOfSet.count) > 0 else {
+            filteredObjects.removeAll()
+            return
+        }
+        filteredObjects = (copyOfSet.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))
     }
     
     
@@ -165,7 +194,8 @@ extension BreweryTableList: TableList {
             print("BreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
-        return displayableBreweries.count
+        return (copyOfSet.count )
+        //return displayableBreweries.count
     }
     
     
@@ -218,6 +248,7 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
     
 func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    copyOfSet = ((controller.fetchedObjects as! [Style]).first?.brewerywithstyle?.allObjects as! [Brewery]?)!
     //prepareToShowTable()
 //        // Process new beers
 //        for beer in newBeers {

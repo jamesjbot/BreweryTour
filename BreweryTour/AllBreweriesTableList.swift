@@ -85,24 +85,25 @@ class AllBreweriesTableList: NSObject, Subject {
 extension AllBreweriesTableList : TableList {
 
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        DispatchQueue.main.async {
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             let image = #imageLiteral(resourceName: "Nophoto.png")
             cell.imageView?.image = image
             var brewery: Brewery!
-            if searchText != "" {
-                brewery = self.filteredObjects[indexPath.row]
-            } else {
+            if (searchText?.isEmpty)!  {
                 brewery = self.frc.object(at: indexPath)
+            } else {
+                brewery = self.filteredObjects[indexPath.row]
             }
             // TODO temp
             cell.detailTextLabel?.text = brewery.id!
             cell.textLabel?.text = brewery.name!
             if let data = brewery.image {
-                cell.imageView?.image = UIImage(data: data as Data)
+                DispatchQueue.main.async {
+                    cell.imageView?.image = UIImage(data: data as Data)
+                    cell.imageView?.setNeedsDisplay()
+                }
             }
             cell.setNeedsDisplay()
-        }
         return cell
     }
 

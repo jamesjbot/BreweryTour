@@ -229,13 +229,8 @@ class CategoryViewController: UIViewController,
             // show the selected style
             // this is for preloading how about the table gets it itself from the mediator
             // Remove brewerytablelistisgoingtofind it itself
-            breweryList.prepareToShowTable()
             if styleSelectionIndex != nil {
-//                //breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!)){
-//                    (success) -> Void in
-//                    genericTable.reloadData()
-//                    return
-//                }
+                breweryList.prepareToShowTable(withStyle: styleList.element(at: (styleSelectionIndex?.row)!) as Style)
             }
             activeTableList = breweryList
             genericTable.reloadData()
@@ -351,9 +346,12 @@ extension CategoryViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = genericTable.dequeueReusableCell(withIdentifier: cellIdentifier)
         // Ask the viewmodel to populate our UITableViewCell
+        //cell?.textLabel?.text = ""
+        print("Want cell \(indexPath)")
         cell = activeTableList.cellForRowAt(indexPath: indexPath,
                                          cell: cell!,
                                          searchText: newSearchBar.text)
+        print("Returned cell?")
         // Remove subtitle
         cell?.imageView?.contentMode = .scaleToFill
         cell?.detailTextLabel?.text = ""

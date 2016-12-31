@@ -182,12 +182,22 @@ class BreweryAndBeerCreationQueue: NSObject {
                             // Can't find brewery put beer back
                             self.runningBeerQueue.append(beer)
                         } else { // Found a Brewery to attach this beer to
+
                             // TODO Debugging code remove
                             if (brewers?.count)! > 1 {
                                 fatalError()
                             }
+                            // Adds the brewery to the style for easier searching
+                            let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
+                            styleRequest.sortDescriptors = []
+                            styleRequest.predicate = NSPredicate(format: "id == %@", beer.styleID!)
+                            var resultStyle = try abreweryContext?.fetch(styleRequest)
+                            resultStyle?.first?.addToBrewerywithstyle((brewers?.first)!)
+                            print("Added \(brewers?.first?.name) to \(resultStyle?.first?.displayName)")
+
                             let createdBeer = Beer(data: beer, context: abreweryContext!)
                             createdBeer.brewer = brewers?.first
+
                             try abreweryContext?.save()
                             if beer.imageUrl != nil {
                                 // If we have image data download it
