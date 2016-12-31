@@ -109,6 +109,7 @@ extension StylesTableList : TableList {
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // Move this UI update to main queue.
         DispatchQueue.main.async {
+            cell.imageView?.image = nil
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
             if searchText != "" {
