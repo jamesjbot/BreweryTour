@@ -5,9 +5,10 @@
 //  Created by James Jongsurasithiwat on 10/19/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/** This is the view model backing the Styles switch on the main category view
+/*
+ This is the view model backing the Styles switch on the main category view
  controller
- **/
+ */
 
 import UIKit
 import CoreData
@@ -31,19 +32,9 @@ class StylesTableList: NSObject {
 
     // MARK: Functions
 
-    private func downloadBeerStyles() {
-        BreweryDBClient.sharedInstance().downloadBeerStyles(){
-            (success, msg) -> Void in
-            if success {
-                self.observer.sendNotify(from: self, withMsg: "We have styles")
-            } //else {
-            //  self.observer.sendNotify(s: msg!)
-            //}
-        }
-    }
-    
-    
+
     internal override init(){
+        super.init()
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
         request.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
@@ -53,12 +44,26 @@ class StylesTableList: NSObject {
         do {
             try frc.performFetch()
         } catch {
-            // TODO can't send self don't know what to send then.
-            //observer.sendNotify(from: self, withMsg: "Error fetching data")
+            fatalError("Critical coredata read failure")
         }
-        super.init()
         frc.delegate = self
-        downloadBeerStyles()
+
+        // Only download styles when there are no styles in the database
+        if frc.fetchedObjects?.count == 0 {
+            downloadBeerStyles()
+        }
+    }
+
+
+    // This is the inital stles populate on a brand new startup
+    // This is performed in the background on initialization
+    private func downloadBeerStyles() {
+        BreweryDBClient.sharedInstance().downloadBeerStyles(){
+            (success, msg) -> Void in
+            if !success {
+                self.observer.sendNotify(from: self, withMsg: "Failed to download initial styles\ncheck network connection and try again.")
+            }
+        }
     }
 }
 
