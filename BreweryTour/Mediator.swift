@@ -19,13 +19,21 @@ class Mediator : NSManagedObjectDisplayable {
     private let selectedBeersList : SelectedBeersTableList = SelectedBeersTableList()
     private let allBreweryList : AllBreweriesTableList = AllBreweriesTableList()
 
-
     // MARK: Variables
+    private var automaticallySegueValue: Bool = false
 
     private var passedItem : NSManagedObject?
 
 
     // MARK: Functions
+
+    internal func setAutomaticallySegue(to: Bool) {
+        automaticallySegueValue = to
+    }
+
+    internal func automaticallySegue() -> Bool {
+        return automaticallySegueValue
+    }
 
     internal func getPassedItem() -> NSManagedObject? {
         return passedItem

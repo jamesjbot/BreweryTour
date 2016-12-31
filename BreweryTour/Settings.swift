@@ -54,6 +54,7 @@ class Settings: UIViewController {
     }
 
     @IBAction func toggleAutomaticMap(_ sender: UISwitch) {
+        Mediator.sharedInstance().setAutomaticallySegue(to: sender.isOn)
     }
     
     @IBAction func deleteBeersBrewery(_ sender: AnyObject) {
