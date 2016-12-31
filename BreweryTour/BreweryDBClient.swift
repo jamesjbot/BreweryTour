@@ -364,8 +364,9 @@ class BreweryDBClient {
                 let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                                      querySpecificID: nil,
                                                                      parameters: methodParameters)
-                myGroup.enter()
-                queue.async(group: myGroup) {
+                group.enter()
+                queue.async(group: group) {
+                print("Group entered \(p)")
                 Alamofire.request(outputURL.absoluteString!)
                         .responseJSON {
                             response in
@@ -385,13 +386,15 @@ class BreweryDBClient {
                                        group: group)
                             // Relying on the group pushed down to the parse request
                             // doesn't work all the time
-                            group.leave()
                     } //Outside alamo but inside async
+                    print("Let me leave group \(p)")
+                    group.leave()
                 } //Outside queue.async
             }  // Outside for loop
             
             group.notify(queue: queue) {
-                completion(true, "All Pages Processed DownloadBeerAndBreweriesByStyleID")
+                print("Group notify")
+                completion(true, "All Pages Submitted Processed DownloadBeerAndBreweriesByStyleID")
             }
         }
         return
