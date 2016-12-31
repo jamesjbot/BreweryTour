@@ -34,8 +34,7 @@ import CoreData
 
 class BreweryDBClient {
     
-    var d_timestopass: Int = 0
-    
+
     // MARK: Enumerations
 
     internal enum APIQueryResponseProcessingTypes {
@@ -174,19 +173,6 @@ class BreweryDBClient {
     }
 
 
-//    func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
-//        if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
-//            let medium = images["medium"] as! String?  {
-//            beer.imageUrl = medium
-//            //let queue = DispatchQueue(label: "Images")
-//            print("BreweryDB \(#line) Prior to getting Beer image")
-//            print("BreweryDB \(#line) In queue Async Getting Beer image in background")
-//            self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
-//        }
-//    }
-    //                        saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
-
-
     // Creates beer objects in the mainContext.
     private func createBeerObject(beer : [String:AnyObject],
                                   brewery: Brewery? = nil,
@@ -227,11 +213,6 @@ class BreweryDBClient {
     }
 
 
-
-
-
-        
-    
     private func createURLFromParameters(queryType: APIQueryResponseProcessingTypes,
                                          querySpecificID: String?,
                                          parameters: [String:AnyObject]) -> NSURL {
@@ -347,11 +328,6 @@ class BreweryDBClient {
                                            outputType: theOutputType,
                                            completion: completion,
                                            group: group)
-                                //print("BreweryDB \(#line)page# \(i)")
-                                //print("BreweryDB \(#line)Prior to saving \(self.readOnlyContext?.updatedObjects.count)")
-                                //print("BreweryDB \(#line)Prior to saving hasChanges: \(self.readOnlyContext?.hasChanges)")
-                                //print("BreweryDB \(#line)Prior to saving \(self.readOnlyContext?.insertedObjects.count)")
-                                //print("BreweryDB \(#line)After saving \(self.readOnlyContext?.insertedObjects.count)")
                                 group.leave()
                         }
                     }
@@ -400,10 +376,6 @@ class BreweryDBClient {
                 return
             }
             numberOfPages = numberOfPagesInt
-            //print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
-            
-            //print("BreweryDB \(#line) Total pages \(numberOfPages)")
-            
             // Asynchronous page processing
             let queue : DispatchQueue = DispatchQueue.global(qos: .utility)
             let group : DispatchGroup = DispatchGroup()
@@ -467,7 +439,7 @@ class BreweryDBClient {
                 completionHandler(false,"Failed Request \(#line) \(#function)")
                 return
             }
-            // Note: This request does not return "totalResults", so we don't check for it
+            // Note: This request does not return "totalResults", so don't check for it
             // query is brewery/breweryID/beers
             // Returned data is of format
             // "message":"READ ONLY MODE: Request Successful"
@@ -568,8 +540,6 @@ class BreweryDBClient {
                 }
         }
     }
-
-    
 
     
     // Downloads Beer Styles
@@ -754,18 +724,6 @@ class BreweryDBClient {
         }
         task.resume()
     }
-    
-//    func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
-//        if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
-//            let imageURL : String = imagesDict["icon"] as! String?,
-//            let targetBrewery = inputBrewery {
-//            //print("BreweryDB \(#line) Prior to getting Brewery image")
-//            //print("BreweryDB \(#line) Getting Brewery image in background")
-//            //self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
-//        }
-//    }
-    //saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
-
 
 
     // Parse results into objects
@@ -949,8 +907,6 @@ class BreweryDBClient {
             break
         }
     }
-    
-
 }
 
 
