@@ -765,7 +765,7 @@ Click on information to bring up brewery website.</string>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y1J-IR-Mx9">
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="y1J-IR-Mx9">
                                                 <rect key="frame" x="212" y="0.0" width="51" height="31"/>
                                                 <connections>
                                                     <action selector="toggleAutomaticMap:" destination="RxT-d5-hZA" eventType="valueChanged" id="hPs-dK-WPo"/>
