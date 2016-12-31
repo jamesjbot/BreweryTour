@@ -231,11 +231,11 @@ class CategoryViewController: UIViewController,
             // Remove brewerytablelistisgoingtofind it itself
             breweryList.prepareToShowTable()
             if styleSelectionIndex != nil {
-                breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!)){
-                    (success) -> Void in
-                    genericTable.reloadData()
-                    return
-                }
+//                //breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!)){
+//                    (success) -> Void in
+//                    genericTable.reloadData()
+//                    return
+//                }
             }
             activeTableList = breweryList
             genericTable.reloadData()
