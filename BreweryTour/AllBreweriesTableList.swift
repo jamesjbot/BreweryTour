@@ -149,9 +149,11 @@ extension AllBreweriesTableList : TableList {
         // Then mediator will tell selectedBeerList what to display
         mediator.selected(thisItem: savedBreweryForDisplay, completion: completion)
         return nil
-    }
+    }    
+}
 
 
+extension AllBreweriesTableList: OnlineSearchCapable {
     // When the user has typed out and pressed done in the search bar.
     // this is the function that gets called
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
@@ -164,7 +166,6 @@ extension AllBreweriesTableList : TableList {
             completion!(success,msg)
         }
     }
-    
 }
 
 
