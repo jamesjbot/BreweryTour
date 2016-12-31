@@ -5,8 +5,27 @@
 //  Created by James Jongsurasithiwat on 10/7/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
-/** This is the api driver, that makes all the requests to the breweryDB
- **/
+/*
+ This is the api driver, that makes all the requests to the breweryDB
+ 
+ 
+
+ Internals
+ Beer and Brewery creation
+ Only Beer and Brewery data parsing occurs in this program.
+ When the parsing is done, we call the createBeerObject and createBreweryObject 
+ functions which load the objects in a processing queue in 
+ BreweryAndBeerCreationQueue. There Breweries will be created first and 
+ then beers will be created. 
+ 
+ Beer and Brewery images
+ After each brewery/beer is created, BreweryAndBeerCreation will call
+ this class's downloadImageToCoreData function.
+ When the images have been downloaded they will be loaded into this class's
+ imagesToBeAssignedQueue. Here a timer will fire repeatedly and place all images
+ with their respective brewery or beer.
+
+ */
 
 import Foundation
 import Alamofire
@@ -18,7 +37,7 @@ class BreweryDBClient {
     var d_timestopass: Int = 0
     
     // MARK: Enumerations
-    
+
     internal enum APIQueryResponseProcessingTypes {
         case BeersFollowedByBreweries
         // Called from the category style view controller
@@ -37,7 +56,26 @@ class BreweryDBClient {
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
 
+    internal enum ImageDownloadType {
+        case Beer
+        case Brewery
+    }
+
     // MARK: Variables
+    //let maxBreweryBuffer = 50
+    let timerDelay = 3
+    let maxSaves = 100
+    private var imageProcessTimer: Timer!
+
+    fileprivate var imagesToBeAssignedQueue: [String: (ImageDownloadType, NSData)] = [String: (ImageDownloadType,NSData)]() {
+        didSet{
+            //print("You pushed an image on the queue")
+            imageProcessTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timerDelay), target: self, selector: #selector(timerProcessImageQueue), userInfo: nil, repeats: true)
+            //print("Timer started")
+            imageProcessTimer.fire()
+        }
+
+    }
 
     private var breweryDictionary = [String:Brewery]()
 
@@ -51,19 +89,101 @@ class BreweryDBClient {
         return Singleton.sharedInstance
     }
     
-    
+
     // MARK: Functions
 
-    func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
-        if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
-            let medium = images["medium"] as! String?  {
-            beer.imageUrl = medium
-            //let queue = DispatchQueue(label: "Images")
-            print("BreweryDB \(#line) Prior to getting Beer image")
-            print("BreweryDB \(#line) In queue Async Getting Beer image in background")
-            self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
+    // Turns off the breweriesToBeProcessed timer
+    private func disableTimer() {
+        if imageProcessTimer != nil {
+            imageProcessTimer?.invalidate()
         }
     }
+
+    // Process the last unfull set on the breweriesToBeProcessed queue.
+    @objc private func timerProcessImageQueue() {
+        print("timerProcessImageQueue fired")
+        let dq = DispatchQueue.global(qos: .background)
+        dq.sync {
+            var saves = 0
+            for (key,value) in self.imagesToBeAssignedQueue {
+                if key == "nHLlnK" {
+                    print("Sierra nevada brewery in assigning image.")
+                }
+                let (type,data) = value
+                guard data != nil else {
+                    self.imagesToBeAssignedQueue.removeValue(forKey: key)
+                    continue
+                }
+                let request: NSFetchRequest<NSFetchRequestResult>?
+                switch type {
+                case .Beer:
+                    request = Beer.fetchRequest()
+                    break
+                case .Brewery:
+                    request = Brewery.fetchRequest()
+                    break
+                }
+                // is the Object in Coredata yet
+                let context = self.container?.newBackgroundContext()
+                context?.automaticallyMergesChangesFromParent = true
+                context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+                request?.sortDescriptors = []
+                request?.predicate = NSPredicate(format: "id == %@", key)
+                var result: [AnyObject]?
+                do {
+                    result = try context?.fetch(request!)
+
+                    guard result?.count == 1 else  {
+                        // else try next image
+                        if (result?.count)! > 1 {
+                            fatalError("WHy?")
+                        }
+                        continue
+                    }
+
+
+
+                    //print(result?.first)
+                    if type == .Beer {
+                        (result?.first as! Beer).image = data as NSData?
+                    } else {
+                        if ((result?.first as! Brewery).name?.contains("Sierra"))! {//After
+                            print("Seirra! \((result?.first as! Brewery).name!)")// After this line is an error in autolayout
+                        }
+                        (result?.first as! Brewery).image = data as NSData?
+                    }
+
+                    //print(result?.first)
+
+                    try context?.save()
+                    saves += 1
+                    self.imagesToBeAssignedQueue.removeValue(forKey: key)
+                    print("Successfully added image to coredata")
+                } catch {
+                    
+                }
+                guard saves < self.maxSaves else {
+                    return
+                }
+            }
+            if self.imagesToBeAssignedQueue.count == 0 {
+                //print("disabling image timer")
+                self.disableTimer()
+            }
+        }
+    }
+
+
+//    func saveBeerImageIfPossible(beerDict: [String:AnyObject] , beer: Beer) {
+//        if let images : [String:AnyObject] = beerDict["labels"] as? [String:AnyObject],
+//            let medium = images["medium"] as! String?  {
+//            beer.imageUrl = medium
+//            //let queue = DispatchQueue(label: "Images")
+//            print("BreweryDB \(#line) Prior to getting Beer image")
+//            print("BreweryDB \(#line) In queue Async Getting Beer image in background")
+//            self.downloadBeerImageToCoreData(aturl: NSURL(string: beer.imageUrl!)!, forBeer: beer, updateManagedObjectID: beer.objectID)
+//        }
+//    }
     //                        saveBeerImageIfPossible(beerDict: beer, beer: thisBeer)
 
 
@@ -100,22 +220,14 @@ class BreweryDBClient {
             inUrl: (locDict["website"] as! String? ?? ""),
             open: (locDict["openToPublic"] as! String == "Y") ? true : false,
             inId: (locDict["id"]?.description)!,
+            inImageUrl: breweryDict["images"]?["icon"] as? String ?? "",
             context: (coreDataStack?.breweryCreationContext)!)
 
         breweryAndBeerCreator.queueBrewery(breweryData)
     }
 
 
-    func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
-        if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
-            let imageURL : String = imagesDict["icon"] as! String?,
-            let targetBrewery = inputBrewery {
-            //print("BreweryDB \(#line) Prior to getting Brewery image")
-            //print("BreweryDB \(#line) Getting Brewery image in background")
-            self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
-        }
-    }
-    //saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
+
 
 
         
@@ -404,7 +516,7 @@ class BreweryDBClient {
                     return
                 }
                 
-                
+                // TODO remove multipage processing here
                 // Process first page
                 self.parse(response: responseJSON as NSDictionary,
                            querySpecificID:  nil,
@@ -458,62 +570,7 @@ class BreweryDBClient {
     }
 
     
-    // Download images in the background then update Coredata when complete
-    // Beer images are currently being grabbed and saved in the main context
-    // This help with updateing selected beers screen I guess.
-    internal func downloadBeerImageToCoreData( aturl: NSURL,
-                                               forBeer: Beer,
-                                               updateManagedObjectID: NSManagedObjectID) {
-        // Begin Upgraded code
-        // print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
-        // TODO Breaking BreweryList and MapView Style selection, MapView Brewery selection will be unharmed.
-        // End Upgraded code
-        print("BreweryDB \(#line) Async DownloadBeerImage in background context:\(forBeer.beerName!)")
-        let session = URLSession.shared
-        let task = session.dataTask(with: aturl as URL){
-            (data, response, error) -> Void in
-            //print("BreweryDB \(#line) Returned from Async DownloadBeerImage:\(forBeer.beerName!)")
-            if error == nil {
-                if data == nil {
-                    return
-                }
-                // Upgraded code
-                //let thisContext = self.coreDataStack?.backgroundContext
-                ////print("\nBrewerydb \(#line) Preceding to Blocking for beerImage update in \(thisContext)")
-                self.container?.performBackgroundTask({
-                    (context) in
-                    context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-                    context.perform(){
-                        //print("Brewerydb \(#line) Blocking on beerimage update ")
-                        //self.coreDataStack!.mainContext.performAndWait(){
-                        // Upgraded code
-                        let beerForUpdate = context.object(with: updateManagedObjectID) as! Beer
-                        //let beerForUpdate = self.coreDataStack?.mainContext.object(with: updateManagedObjectID) as! Beer
-                        let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
-                        beerForUpdate.image = outputData
-                        do {
-                            try context.save()
-                        } catch let error {
-                            fatalError("error:\n\(error)")
-                        }
-                        //                    do {
-                        //                        // Upgraded code
-                        //                        try thisContext?.save()
-                        //                        //try self.coreDataStack?.mainContext.save()
-                        //                        //print("BreweryDB \(#line) Beer Imaged saved in \(thisContext) for beer \(forBeer.beerName)")
-                        //                    }
-                        //                    catch {
-                        //                        return
-                        //                    }
-                        //print("BreweryDb \(#line) Completed blocking on beer image update\n")
-                    }
-                })
-            }
-        }
-        task.resume()
-    }
-    
-    
+
     
     // Downloads Beer Styles
     internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void ) {
@@ -559,6 +616,7 @@ class BreweryDBClient {
         Alamofire.request(outputURL.absoluteString!)
             .responseJSON {
                 response in
+                print(response)
                 guard response.result.isSuccess else {
                     completion(false, "Failed Request \(#line) \(#function)")
                     return
@@ -577,28 +635,10 @@ class BreweryDBClient {
                     return
                 }
 
-                //print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
-
-                // Process subsequent records
-//                self.parse(response: responseJSON as NSDictionary,
-//                           querySpecificID:  nil,
-//                           outputType: theOutputType,
-//                           completion: completion)
-                // The following block of code downloads all subsequesnt pages
-//                guard numberOfPages > 1 else {
-//                    completion(true, "All Pages Processed downloadBreweryByName")
-//                    return
-//                }
-
-                //print("BreweryDB \(#line)Total pages \(numberOfPages)")
-                
                 // Asynchronous page processing
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
-                
-                //print("BreweryDB \(#line)Total pages \(numberOfPages)")
-                
-                // TODO Why does downloading BreweryByNames use BreweryByStyleID
+
                 for i in 1...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
@@ -636,46 +676,78 @@ class BreweryDBClient {
     
     
     // Download images in the background for a brewery
-    internal func downloadImageToCoreDataForBrewery( aturl: NSURL,
-                                                     forBrewery: Brewery,
-                                                     updateManagedObjectID: NSManagedObjectID) {
-        // Upgraded code.
-        //let thisContext : NSManagedObjectContext = (coreDataStack?.backgroundContext)!
-        //print("BreweryDB \(#line) Async DownloadBreweryImage in backgroundContext \(forBrewery.name)")
-        
+    internal func downloadImageToCoreData( forType: ImageDownloadType,
+                                           aturl: NSURL,
+                                           forID: String) {
+        guard aturl.absoluteString != "" else {
+            print("BreweryDB downloadImageToCoreData emptyurl abandoning")
+            return
+        }
+        var sierranevadaurl: String = "https://s3.amazonaws.com/brewerydbapi/brewery/nHLlnK/upload_IClwuZ-medium.png"
+        if forID == "nHLlnK" {
+            sierranevadaurl = aturl.absoluteString!
+        }
+        print("Downloading from site:\(aturl)")
+
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
-            //print("BreweryDB \(#line) Returned from Async DownloadBreweryImage ")
+            if (response?.description.contains(sierranevadaurl))! {
+                print("Found sierra nevada.")
+            }
+
+            print("Succesfully downloaded image for\(forID)")
+            guard error == nil else {
+                print("There was an error trying to download again")
+                // Keep trying to download the image
+                //self.downloadImageToCoreData(forType: forType, aturl: aturl, forID: forID)
+                return
+            }
+            guard data != nil else {
+                print("Data was damaged")
+                return
+            }
+            print("putting it on imagequeue")
+            let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
+            self.imagesToBeAssignedQueue[forID] = (forType,outputData)
+            print("it's on images queue")
+        }
+        task.resume()
+    }
+
+    // Download images in the background then update Coredata when complete
+    // Beer images are currently being grabbed and saved in the main context
+    // This help with updateing selected beers screen I guess.
+    internal func downloadBeerImageToCoreData( aturl: NSURL,
+                                               forBeer: Beer,
+                                               updateManagedObjectID: NSManagedObjectID) {
+        // Begin Upgraded code
+        // print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
+        // TODO Breaking BreweryList and MapView Style selection, MapView Brewery selection will be unharmed.
+        // End Upgraded code
+        print("BreweryDB \(#line) Async DownloadBeerImage in background context:\(forBeer.beerName!)")
+        let session = URLSession.shared
+        let task = session.dataTask(with: aturl as URL){
+            (data, response, error) -> Void in
+            //print("BreweryDB \(#line) Returned from Async DownloadBeerImage:\(forBeer.beerName!)")
             if error == nil {
                 if data == nil {
                     return
                 }
-                // Upgraded code change to thisContext, and remove the perfromandwait?
-                //print("\nBreweryDB \(#line) preceeding to block brewery image update in backgroundcontext")
+                // Upgraded code
                 self.container?.performBackgroundTask({
                     (context) in
-                    context.mergePolicy = NSMergePolicy.overwrite
-                    context.perform() {
-                        //print("BreweryDB \(#line) blocking on brewery image update ")
-                        let breweryForUpdate = context.object(with: updateManagedObjectID) as! Brewery
+                    context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+                    context.perform(){
+
+                        let beerForUpdate = context.object(with: updateManagedObjectID) as! Beer
                         let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
-                        breweryForUpdate.image = outputData
-                        // Upgraded code change this to thisContext.
+                        beerForUpdate.image = outputData
                         do {
                             try context.save()
                         } catch let error {
-                            fatalError("Error:\n\(error)")
+                            fatalError("error:\n\(error)")
                         }
-                        //self.saveBackground()
-                        //                    do {
-                        //                        try thisContext.save()
-                        //                        //print("BreweryDB \(#line) Attention Brewery Imaged saved in \(thisContext.name) for brewery \(forBrewery.name)")
-                        //                    }
-                        //                    catch let error {
-                        //                        fatalError("Error \(error)")
-                        //                    }
-                        //print("BreweryDB \(#line) Complete blocking on brewery image update\n ")
                     }
                 })
             }
@@ -683,101 +755,19 @@ class BreweryDBClient {
         task.resume()
     }
     
-    
-    // Debugging function to list the number of results for a style.
-//    internal func downloadStylesCount(styleID : String,
-//                                      completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-//        let methodParameters  = [
-//            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
-//            Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
-//            Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
-//            Constants.BreweryParameterKeys.Page : "1" as AnyObject
-//        ]
-//        let outputURL : NSURL =
-//            createURLFromParameters(queryType: APIQueryResponseProcessingTypes.Styles,
-//                                    querySpecificID: nil,
-//                                    parameters: methodParameters)
-//        
-//        // Initial Alamofire Request to determine Results and Pages of Results we have to process
-//        var numberOfPages: Int!
-//        Alamofire.request(outputURL.absoluteString!).responseJSON {
-//            response in
-//            guard response.result.isSuccess else {
-//                completion(false, "Failed Request \(#line) \(#function)")
-//                return
-//            }
-//            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-//                completion(false, "Failed Request \(#line) \(#function)")
-//                return
-//            }
-//            guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
-//                completion(false, "No results")
-//                return
-//            }
-//            guard let numberOfResults = responseJSON["totalResults"] as! Int? else {
-//                completion(false, "No results")
-//                return
-//            }
-//            numberOfPages = numberOfPagesInt
-//            //print("BreweryDB \(#line) We have this many results for that query \(numberOfResults)")
-//            
-//            //print("BreweryDB \(#line) Total pages \(numberOfPages)")
-//            completion(true, "\(numberOfResults)")
+//    func saveBreweryImagesIfPossible(input: AnyObject?, inputBrewery : Brewery?) {
+//        if let imagesDict : [String:AnyObject] = input as? [String:AnyObject],
+//            let imageURL : String = imagesDict["icon"] as! String?,
+//            let targetBrewery = inputBrewery {
+//            //print("BreweryDB \(#line) Prior to getting Brewery image")
+//            //print("BreweryDB \(#line) Getting Brewery image in background")
+//            //self.downloadImageToCoreDataForBrewery(aturl: NSURL(string: imageURL)!, forBrewery: targetBrewery, updateManagedObjectID: targetBrewery.objectID)
 //        }
 //    }
-    
-    // TODO make this return by completion handler
-//    private func getBeerByID(id: String, context: NSManagedObjectContext) -> Beer? {
-//        //print("BreweryDB \(#line)Attempting to get beer \(id)")
-//        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-//        request.sortDescriptors = []
-//        request.predicate = NSPredicate(format: "id = %@", argumentArray: [id])
-//        do {
-//            if let beer : [Beer] = try container?.newBackgroundContext()
-//.fetch(request) {
-//                //This type is in the database
-//                guard beer.count > 0 else {
-//                    return nil}
-//                return beer[0]
-//            }
-//        } catch {
-//            return nil
-//        }
-//        return nil
-//    }
+    //saveBreweryImagesIfPossible(input: breweryDict["images"], inputBrewery: brewer)
 
 
-//    private func getBreweryByID(id : String,
-//                                context : NSManagedObjectContext,
-//                                completion: @escaping (Brewery?) -> Void ) {
-//        completion(breweryDictionary[id])
-//        return
-//        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-//        request.sortDescriptors = []
-//        request.predicate = NSPredicate(format: "id = %@", id)
-//        context.performAndWait {
-//            do {
-//                // TODO there is a crash here, when I try to access a long running style 
-//                // and then switch to the mapview.
-//                var breweries : [Brewery] = try context.fetch(request)
-//                if breweries != nil {
-//                    //This type is in the database
-//                    guard breweries.count > 0 else {
-//                        completion(nil)
-//                        return
-//                    }
-//                    completion(breweries.first)
-//                    return
-//                }
-//            } catch let error {
-//                fatalError(error as! String)
-//            }
-//            completion(nil)
-//            return
-//        }
-//    }
 
-    
     // Parse results into objects
     private func parse(response : NSDictionary,
                        querySpecificID : String?,
@@ -944,7 +934,14 @@ class BreweryDBClient {
                 completion!(false, "There are no beers listed for this brewer.")
                 return
             }
-            for beer in beerArray {
+            createBeerLoop: for beer in beerArray {
+
+                // This beer has no style id skip it
+                guard beer["styleId"] != nil else {
+                    continue createBeerLoop
+                }
+
+
                 createBeerObject(beer: beer, brewerID: querySpecificID!) {
                     (Beer) -> Void in
                 }
@@ -952,34 +949,6 @@ class BreweryDBClient {
             break
         }
     }
-
-//    private func saveMain() {
-//        //print("BreweryDB \(#line) Saving MainContext called ")
-//        coreDataStack?.mainContext.performAndWait {
-//            do {
-//                try self.coreDataStack?.saveMainContext()
-//                //try self.coreDataStack?.savePersistingContext()
-//                //try coreDataStack?.mainContext.save()
-//                //print("BreweryDB \(#line) All beers before this have been saved")
-//                ////print("BreweryDB \(#line) MainContext objects should be in Persistent Context now <------------------------")
-//                //try coreDataStack?.persistingContext.save()
-//                //true
-//            } catch let error {
-//                //print("BreweryDB \(#line) We died on the coredataSave <----- ")
-//                //print("The error is \n\(error)")
-//                fatalError()
-//            }
-//        }
-//    }
-
-//    private func savePersitent() -> Bool {
-//        do {
-//            try coreDataStack?.persistingContext.save()
-//            return true
-//        } catch let error {
-//            return false
-//        }
-//    }
     
 
 }
