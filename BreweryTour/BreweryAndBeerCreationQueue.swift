@@ -29,8 +29,7 @@ internal struct BreweryData {
                   inUrl: String,
                   open: Bool,
                   inId: String,
-                  inImageUrl: String?,
-                  context: NSManagedObjectContext) {
+                  inImageUrl: String?) {
         // Brewery required parameters
         name = inName
         latitude = inLatitude

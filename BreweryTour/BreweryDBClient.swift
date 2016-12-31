@@ -37,20 +37,22 @@ class BreweryDBClient {
 
     // MARK: Enumerations
 
+    // This is the switch that describes the output of the parsing section
     internal enum APIQueryResponseProcessingTypes {
+        // This will produce Beers and Breweries and is called from the Style table
         case BeersFollowedByBreweries
-        // Called from the category style view controller
+        // This will produce styles it is automatically called.
         case Styles
-        // Initial called when the app starts up
+        // This will produce breweries only and is called when you search on 
+        // the All Breweries table
         case Breweries
-        // Calle when you search for a brewery on the category view controller
+        // This will produce beers when and is called when any brewery is selected.
         case BeersByBreweryID
-        // Called when you select a brewery on the category view controller.
     }
-    
+
+    // This is the primary writer in the system to coredata
     fileprivate let breweryAndBeerCreator = BreweryAndBeerCreationQueue()
 
-    private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
@@ -201,8 +203,7 @@ class BreweryDBClient {
             inUrl: (locDict["website"] as! String? ?? ""),
             open: (locDict["openToPublic"] as! String == "Y") ? true : false,
             inId: (locDict["id"]?.description)!,
-            inImageUrl: breweryDict["images"]?["icon"] as? String ?? "",
-            context: (coreDataStack?.breweryCreationContext)!)
+            inImageUrl: breweryDict["images"]?["icon"] as? String ?? "")
 
         breweryAndBeerCreator.queueBrewery(breweryData)
     }
