@@ -732,43 +732,61 @@ Click on information to bring up brewery website.</string>
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ge0-dr-cbJ">
-                                <rect key="frame" x="77.5" y="319.5" width="220" height="28"/>
-                                <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                <state key="normal" title="Delete All Breweries and Beers"/>
-                                <userDefinedRuntimeAttributes>
-                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                        <integer key="value" value="5"/>
-                                    </userDefinedRuntimeAttribute>
-                                </userDefinedRuntimeAttributes>
-                                <connections>
-                                    <action selector="deleteBeersBrewery:" destination="RxT-d5-hZA" eventType="touchUpInside" id="R2K-eh-5hg"/>
-                                </connections>
-                            </button>
+                            <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="lVx-tM-jGt">
+                                <rect key="frame" x="57" y="253" width="261" height="161"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yUC-Ve-7Hk">
+                                        <rect key="frame" x="0.0" y="0.0" width="261" height="30"/>
+                                        <state key="normal" title="Download All Breweries"/>
+                                        <connections>
+                                            <action selector="downloadAllBreweries:" destination="RxT-d5-hZA" eventType="touchUpInside" id="y18-To-Yyq"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ge0-dr-cbJ">
+                                        <rect key="frame" x="0.0" y="66" width="261" height="28"/>
+                                        <color key="backgroundColor" red="1" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <state key="normal" title="Delete All Breweries and Beers"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="deleteBeersBrewery:" destination="RxT-d5-hZA" eventType="touchUpInside" id="R2K-eh-5hg"/>
+                                        </connections>
+                                    </button>
+                                    <stackView opaque="NO" contentMode="scaleToFill" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="1Ym-57-ZS5">
+                                        <rect key="frame" x="0.0" y="130" width="261" height="31"/>
+                                        <subviews>
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Automatically move to map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uVK-dp-LSl">
+                                                <rect key="frame" x="0.0" y="0.0" width="207" height="31"/>
+                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <nil key="textColor"/>
+                                                <nil key="highlightedColor"/>
+                                            </label>
+                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y1J-IR-Mx9">
+                                                <rect key="frame" x="212" y="0.0" width="51" height="31"/>
+                                                <connections>
+                                                    <action selector="toggleAutomaticMap:" destination="RxT-d5-hZA" eventType="valueChanged" id="hPs-dK-WPo"/>
+                                                </connections>
+                                            </switch>
+                                        </subviews>
+                                    </stackView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="yUC-Ve-7Hk" firstAttribute="width" secondItem="Ge0-dr-cbJ" secondAttribute="width" id="cca-jq-MMC"/>
+                                </constraints>
+                            </stackView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="sGk-hC-lDe">
-                                <rect key="frame" x="177.5" y="323.5" width="20" height="20"/>
+                                <rect key="frame" x="178" y="324" width="20" height="20"/>
                             </activityIndicatorView>
-                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="y1J-IR-Mx9">
-                                <rect key="frame" x="249" y="379" width="51" height="31"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <connections>
-                                    <action selector="toggleAutomaticMap:" destination="RxT-d5-hZA" eventType="valueChanged" id="hPs-dK-WPo"/>
-                                </connections>
-                            </switch>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Automatically move to map" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="uVK-dp-LSl">
-                                <rect key="frame" x="29" y="383" width="207" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
                         </subviews>
                         <color key="backgroundColor" red="0.50196081400000003" green="0.50196081400000003" blue="0.50196081400000003" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
                             <constraint firstItem="sGk-hC-lDe" firstAttribute="centerX" secondItem="pKa-uA-FlV" secondAttribute="centerX" id="3hG-yi-MLQ"/>
-                            <constraint firstItem="Ge0-dr-cbJ" firstAttribute="centerY" secondItem="pKa-uA-FlV" secondAttribute="centerY" id="6j5-vC-YFx"/>
-                            <constraint firstItem="Ge0-dr-cbJ" firstAttribute="centerX" secondItem="pKa-uA-FlV" secondAttribute="centerX" id="XDK-rA-9av"/>
+                            <constraint firstItem="lVx-tM-jGt" firstAttribute="centerX" secondItem="pKa-uA-FlV" secondAttribute="centerX" id="Sgf-wq-o25"/>
+                            <constraint firstItem="lVx-tM-jGt" firstAttribute="centerY" secondItem="pKa-uA-FlV" secondAttribute="centerY" id="VYr-bc-pgW"/>
                             <constraint firstItem="sGk-hC-lDe" firstAttribute="centerY" secondItem="pKa-uA-FlV" secondAttribute="centerY" id="kLX-tZ-s8O"/>
                         </constraints>
                     </view>
@@ -780,7 +798,7 @@ Click on information to bring up brewery website.</string>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lT6-7r-ceh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="852" y="-790.25487256371821"/>
+            <point key="canvasLocation" x="1674" y="-766"/>
         </scene>
         <!--Brewery Tour-->
         <scene sceneID="068-UA-gCJ">
