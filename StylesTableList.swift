@@ -25,8 +25,8 @@ class StylesTableList: NSObject {
     // MARK: Variables
     
     internal var mediator: NSManagedObjectDisplayable!
-    internal var filteredObjects: [Style] = [Style]()
-    internal var frc : NSFetchedResultsController<Style>!
+    fileprivate var filteredObjects: [Style] = [Style]()
+    fileprivate var frc : NSFetchedResultsController<Style>!
     var observer : Observer!
 
 
