@@ -22,6 +22,4 @@ protocol TableList {
     func selected(elementAt: IndexPath,
                   searchText: String,
                   completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) -> AnyObject?
-    func searchForUserEntered(searchTerm: String,
-                              completion: ((_ success : Bool, _ msg : String?) -> Void)?)
 }
