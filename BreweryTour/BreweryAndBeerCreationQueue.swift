@@ -29,6 +29,7 @@ internal struct BreweryData {
                   inUrl: String,
                   open: Bool,
                   inId: String,
+                  inImageUrl: String?,
                   context: NSManagedObjectContext) {
         // Brewery required parameters
         name = inName
@@ -39,7 +40,7 @@ internal struct BreweryData {
         id = inId
         // Un required parametesr
         favorite = false
-        imageUrl = nil
+        imageUrl = inImageUrl
         //completion: ((Brewery) -> Void)?
     }
 }
@@ -143,6 +144,11 @@ class BreweryAndBeerCreationQueue: NSObject {
                     } catch let err {
                         print(err.localizedDescription)
                     }
+
+                    if b.imageUrl != nil {
+                        // If we have image data download it
+                        BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Brewery,                                                                               aturl: NSURL(string: b.imageUrl!)!,                                                                             forID: b.id!)
+                    }
                 }
             }
 
@@ -176,6 +182,12 @@ class BreweryAndBeerCreationQueue: NSObject {
                     } catch let error {
                         print(error.localizedDescription)
                         fatalError()
+                    }
+
+                    if b.imageUrl != nil {
+                        print("Beer image")
+                        // If we have image data download it
+                        BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Beer,                                                                               aturl: NSURL(string: b.imageUrl!)!,                                                                             forID: b.id!)
                     }
                 }
             }
