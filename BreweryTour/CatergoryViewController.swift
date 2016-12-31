@@ -227,6 +227,9 @@ class CategoryViewController: UIViewController,
         case .BreweriesWithStyle:
             // Tell the the breweries with style view model to prepare to 
             // show the selected style
+            // this is for preloading how about the table gets it itself from the mediator
+            // Remove brewerytablelistisgoingtofind it itself
+            breweryList.prepareToShowTable()
             if styleSelectionIndex != nil {
                 breweryList.displayBreweriesWith(style: styleList.frc.object(at: styleSelectionIndex!)){
                     (success) -> Void in
@@ -256,13 +259,29 @@ class CategoryViewController: UIViewController,
     
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(from: AnyObject, withMsg msg: String) {
+        if from === (activeTableList as AnyObject) {
+
+        } else {
+            return
+        }
+        print("Received message from \(from) \(msg)")
         guard (isViewLoaded && view.window != nil ) else {
             // Do not process messages when CategoryViewController is not visisble
             return
         }
+
+        if msg.contains("All Pages Processed") {
+            activityIndicator.stopAnimating()
+        }
+
         // This will update the contents of the table if needed
         // TODO We're going to need to upgrade this function to accomodate all message.
         switch msg {
+
+        case "stopIndicator":
+            activityIndicator.stopAnimating()
+            break
+
         case "reload data":
             // Only the active table should respond to a tablelist reload command
             if (activeTableList as AnyObject) === from {
@@ -355,7 +374,7 @@ extension CategoryViewController : UITableViewDataSource {
     // MARK: UITableViewDelegate
 
 extension CategoryViewController : UITableViewDelegate {
-    
+
     // Capture user selections, communicate with the mediator on what the
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
@@ -375,7 +394,7 @@ extension CategoryViewController : UITableViewDelegate {
             allBreweriesSelectionIndex = indexPath
         }
 
-        // Set the Textfield to the name of the selected item so the user 
+        // Set the Textfield to the name of the selected item so the user
         // knows what they selected.
         selection.text = tableView.cellForRow(at: indexPath)?.textLabel?.text
 
@@ -386,15 +405,20 @@ extension CategoryViewController : UITableViewDelegate {
         _ = activeTableList.selected(elementAt: indexPath,
                                      searchText: newSearchBar.text!){
                                         (sucesss,msg) -> Void in
+
+                                        // Every tablelist completion handler witll come back here
                                         // TODO remember to tell every view model to
                                         // send back a completion handler.
-                                        self.activityIndicator.stopAnimating()
-                                        if !sucesss {
-                                            self.displayAlertWindow(title: "Error with Query", msg: msg!)
+                                        DispatchQueue.main.async {
+                                            self.activityIndicator.stopAnimating()
+                                            self.activityIndicator.setNeedsDisplay()
                                         }
-                                        if self.automaticallySegueToMap {
-                                            DispatchQueue.main.async {
-                                                self.performSegue(withIdentifier: "Go", sender: nil)
+                                        if sucesss {
+                                            self.displayAlertWindow(title: "Request sent", msg: "You request was sent to the online service you selection will load in the background" )
+                                            if Mediator.sharedInstance().automaticallySegue() {
+                                                DispatchQueue.main.async {
+                                                    self.performSegue(withIdentifier: "Go", sender: nil)
+                                                }
                                             }
                                         }
         }
