@@ -87,6 +87,7 @@ class BreweryAndBeerCreationQueue: NSObject {
     // MARK: Constants
 
     private let secondsRepeatInterval: Double = 3
+    private let maxSavesPerLoop: Int = 325
 
     private let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
@@ -127,7 +128,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 workTimer = nil
                 return
             }
-            var maxSave = 325
+            var maxSave = maxSavesPerLoop
             if runningBreweryQueue.count < maxSave {
                 maxSave = runningBreweryQueue.count
             }
@@ -162,7 +163,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 return
             }
             // Reset the maximum records to process
-            maxSave = 325
+            maxSave = maxSavesPerLoop
             if runningBeerQueue.count < maxSave {
                 maxSave = runningBeerQueue.count
             }
@@ -189,7 +190,6 @@ class BreweryAndBeerCreationQueue: NSObject {
                             createdBeer.brewer = brewers?.first
                             try abreweryContext?.save()
                             if beer.imageUrl != nil {
-                                print("Beer image")
                                 // If we have image data download it
                                 BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Beer,                                                                               aturl: NSURL(string: beer.imageUrl!)!,                                                                             forID: beer.id!)
                             }
