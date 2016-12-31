@@ -116,7 +116,7 @@ class BreweryAndBeerCreationQueue: NSObject {
         // This function will save all breweries before saving beers.
         // This is here because the beer's brewer attribute needs to be set from
         // an inserted brewer otherwise strange errors occur.
-        // The only way to merge MO with unique constraints is to save them 
+        // The only way to merge MO with unique constraints is to save them
         // one at time. Batch saving generates conflict errors.
         let dq = DispatchQueue.global(qos: .background)
         dq.sync {
@@ -168,27 +168,38 @@ class BreweryAndBeerCreationQueue: NSObject {
             }
 
             for _ in 1...maxSave {
-                let b = runningBeerQueue.removeFirst()
+                let beer = runningBeerQueue.removeFirst()
 
                 let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
                 request.sortDescriptors = []
-                request.predicate = NSPredicate(format: "id == %@", b.breweryID!)
+                request.predicate = NSPredicate(format: "id == %@", beer.breweryID!)
                 abreweryContext?.performAndWait {
                     do {
-                        let results = try request.execute()
-                        let outputBeer = Beer(data: b, context: abreweryContext!)
-                        outputBeer.brewer = results.first
-                        try abreweryContext?.save()
+                        let brewers = try abreweryContext?.fetch(request)
+
+                        if (brewers?.count)! < 1 {
+                            // Can't find brewery put beer back
+                            self.runningBeerQueue.append(beer)
+                        } else { // Found a Brewery to attach this beer to
+                            // TODO Debugging code remove
+                            if (brewers?.count)! > 1 {
+                                fatalError()
+                            }
+                            let createdBeer = Beer(data: beer, context: abreweryContext!)
+                            createdBeer.brewer = brewers?.first
+                            try abreweryContext?.save()
+                            if beer.imageUrl != nil {
+                                print("Beer image")
+                                // If we have image data download it
+                                BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Beer,                                                                               aturl: NSURL(string: beer.imageUrl!)!,                                                                             forID: beer.id!)
+                            }
+                        }
                     } catch let error {
                         print(error.localizedDescription)
                         fatalError()
                     }
 
-                    if b.imageUrl != nil {
-                        print("Beer image")
-                        // If we have image data download it
-                        BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Beer,                                                                               aturl: NSURL(string: b.imageUrl!)!,                                                                             forID: b.id!)
-                    }
+
                 }
             }
         }
