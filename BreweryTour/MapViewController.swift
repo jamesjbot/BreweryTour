@@ -69,7 +69,7 @@ class MapViewController : UIViewController {
 
             } else {
                 // less than 50 breweries exist in the queue comeback and map them
-                // if after 5 seconds they have not cleared out.
+                // The last flush out will always be timerDelay seconds after the last insert
                 disableTimer()
                 checkUpTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timerDelay),
                                                     target: self,
