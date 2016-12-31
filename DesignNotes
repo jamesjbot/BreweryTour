@@ -20,7 +20,33 @@ There should be none as this is used for scratch updating
 BeerDetailViewController searchForBeerInCoreData uses background context.
 BreweryDBClient getBeerByID use supplied context looks like background only
 BreweryDBClient getBreweryByID use supplied context looks like background only
-
+____________________________
+Looking for brewery Optional("xe0M8s")
+Looking for brewery Optional("5zetyE")
+Looking for brewery Optional("djUw9d")
+Looking for brewery Optional("t6klTR")
+Looking for brewery Optional("tOsvyj")
+Looking for brewery Optional("1VymQC")
+Looking for brewery Optional("DPLTAJ")
+Looking for brewery Optional("tOsvyj")
+Looking for brewery Optional("ZePAkY")
+Looking for brewery Optional("5zetyE")
+Looking for brewery Optional("EA5y03")
+Looking for brewery Optional("2EpPvi")
+Looking for brewery Optional("VipzfD")
+Looking for brewery Optional("k5p3Fy")
+Looking for brewery Optional("ncLN8G")
+Looking for brewery Optional("2EpPvi")
+Looking for brewery Optional("kWJGj9")
+Looking for brewery Optional("DPLTAJ")
+Looking for brewery Optional("qjZIZq")
+Looking for brewery Optional("74vDOC")
+Looking for brewery Optional("2EpPvi")
+Looking for brewery Optional("fpVo3M")
+Looking for brewery Optional("ObHayQ")
+Looking for brewery Optional("hP5LHZ")
+Looking for brewery Optional("aAMifM")
+Looking for brewery Optional("EA5y03")
 ----------------------------
 Persitent Context Updaters
 
@@ -41,6 +67,9 @@ BeerDetailViewController favorting and tasting note
 
 
 What are the problems
+Set up tutorial on remaining screes
+Put back image downloading code.
+
 Left off at brewerytablelist trying to optimize
 ui
 

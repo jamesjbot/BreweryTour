@@ -41,12 +41,31 @@ class BreweryTableList: NSObject, Subject {
 
     internal var styleFRCObserver: NSFetchedResultsController<Style>!
 
+//    fileprivate var trueCopyOfSet: NSSet? {
+//        // This will auto delete duplicate and sort the set of breweries
+//        set {
+//            print("Setting trueCopyOfSEt")
+//            trueCopyOfSet = newValue
+//            let sortdes = NSSortDescriptor(key: "name", ascending: true)
+//            copyOfSet = trueCopyOfSet?.sortedArray(using: [sortdes]) as! [Brewery]
+//        }
+//        get {
+//            print("getting truecopyofset")
+//            return nil
+//        }
+//    }
     fileprivate var copyOfSet:[Brewery] = [] {
         didSet {
-//            copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
-//                return a.name! < b.name!
-//            })
+            copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
+                return a.name! < b.name!
+            })
         }
+//        set {
+//            // Do nothing this is just putting in single entries
+//        }
+//        get {
+//            return
+//        }
     }
     // MARK: - Functions
 
@@ -60,7 +79,7 @@ class BreweryTableList: NSObject, Subject {
     }
     
 
-    internal func prepareToShowTable(withStyle style: Style) {
+    internal func prepareToShowTable(withStyle TODODELETEstyle: Style) {
         // Stylefetch
         currentlyObservingStyle = Mediator.sharedInstance().getPassedItem() as! Style
         let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
@@ -72,10 +91,11 @@ class BreweryTableList: NSObject, Subject {
         styleFRCObserver.delegate = self
         do {
             try self.styleFRCObserver.performFetch()
-            let tempSet = (styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]?)!
-            copyOfSet = tempSet.sorted(by: { (a: Brewery, b: Brewery) -> Bool in
-                return a.name! < b.name!
-            })
+            //trueCopyOfSet = styleFRCObserver.fetchedObjects?.first?.brewerywithstyle
+            copyOfSet = (styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]?)!
+            //copyOfSet = tempSet.sorted(by: { (a: Brewery, b: Brewery) -> Bool in
+            //    return a.name! < b.name!
+            //})
         } catch {
 
         }
@@ -206,7 +226,7 @@ extension BreweryTableList: TableList {
         // all the breweries that are currently displayed. And then turn on the selected brewery
         var savedBreweryForDisplay : Brewery!
         if searchText == "" {
-            savedBreweryForDisplay = (displayableBreweries[elementAt.row]) as Brewery
+            savedBreweryForDisplay = (copyOfSet[elementAt.row]) as Brewery
         } else {
             savedBreweryForDisplay = (filteredObjects[elementAt.row]) as Brewery
         }
@@ -227,24 +247,27 @@ extension BreweryTableList: TableList {
 
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        print("BreweryTableList \(#line) BreweryTableList changed object")
-//        switch (type){
-//        case .insert:
-//            let beer = anObject as! Beer
-//            if beer.styleID == currentlyObservingStyle?.id,
-//                !displayableBreweries.contains(beer.brewer!) {
-//                displayableBreweries.append(beer.brewer!)
-//            }
-//            break
-//        case .delete:
-//            break
-//        case .move:
-//            break
-//        case .update:
-//            break
-//        }
-//    }
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("BreweryTableList \(#line) BreweryTableList changed object")
+        switch (type){
+        case .insert:
+            let style = anObject as! Style
+            if style.id == currentlyObservingStyle?.id {
+                copyOfSet = style.brewerywithstyle?.allObjects as! [Brewery]
+            }
+            break
+        case .delete:
+            break
+        case .move:
+            break
+        case .update:
+            let style = anObject as! Style
+            if style.id == currentlyObservingStyle?.id {
+                copyOfSet = style.brewerywithstyle?.allObjects as! [Brewery]
+            }
+            break
+        }
+    }
 
     
 func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
