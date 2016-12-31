@@ -335,6 +335,12 @@ extension CategoryViewController : UITableViewDataSource {
         cell = activeTableList.cellForRowAt(indexPath: indexPath,
                                          cell: cell!,
                                          searchText: newSearchBar.text)
+        // Remove subtitle
+        cell?.imageView?.contentMode = .scaleToFill
+        cell?.detailTextLabel?.text = ""
+        DispatchQueue.main.async {
+            cell?.setNeedsDisplay()
+        }
         return cell!
     }
     
