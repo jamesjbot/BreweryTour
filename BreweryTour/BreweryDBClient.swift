@@ -261,11 +261,11 @@ class BreweryDBClient {
             .responseJSON {
                 response in
                 guard response.result.isSuccess else {
-                    completion(false, "Failed Request Please close the app and try again")
+                    completion(false, "Failed Request Please try again")
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request Please close the app and try again")
+                    completion(false, "Failed Request Please try again")
                     return
                 }
                 
@@ -273,31 +273,20 @@ class BreweryDBClient {
                     completion(false, "No results")
                     return
                 }
-                
-                // Process subsequent records
-                self.parse(response: responseJSON as NSDictionary,
-                           querySpecificID:  nil,
-                           outputType: theOutputType,
-                           completion: completion)
-                // The following block of code downloads all subsequesnt pages
-                guard numberOfPages > 1 else {
-                    completion(true, "All Pages Processed downloadAllBreweries")
-                    return
-                }
-                
-                //print("BreweryDB \(#line)Total pages \(numberOfPages)")
-                
+
                 // Asynchronous page processing
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
                 
-                //print("BreweryDB \(#line)Total pages \(numberOfPages)")
-                for i in 2...numberOfPages {
-                    //TODO for i in 2...numberOfPages {
+                for i in 1...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
+                    // When all dispatch groups leave their processing
+                    // We will get notified with the group.notify.
+                    // Currently this means after we get results for every page 
+                    // from BreweryDb
                     group.enter()
                     queue.async(group: group) {
                         Alamofire.request(outputURL.absoluteString!)
@@ -321,7 +310,7 @@ class BreweryDBClient {
                     }
                 }
                 group.notify(queue: queue) {
-                    completion(true, "All Pages Processed downloadAllBreweries")
+                    completion(true, "downloadAllBreweries All Pages Submitted To BreweryDB for processing All Pages Processed")
                 }
         }
         return
@@ -341,18 +330,15 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                         querySpecificID: nil,
                                                         parameters: methodParameters)
-        
-        // Initial Alamofire Request to determine Results and Pages of Results we have to process
-        var numberOfPages: Int!
-        
+
         Alamofire.request(outputURL.absoluteString!).responseJSON {
             response in
             guard response.result.isSuccess else {
-                completion(false, "Failed Request \(#line) \(#function)")
+                completion(false, "Failed Request Please try again")
                 return
             }
             guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completion(false, "Failed Request \(#line) \(#function)")
+                completion(false, "Failed Request Please try again")
                 return
             }
             guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
@@ -363,18 +349,17 @@ class BreweryDBClient {
                 completion(false, "No results")
                 return
             }
-            numberOfPages = numberOfPagesInt
+
             // Asynchronous page processing
             let queue : DispatchQueue = DispatchQueue.global(qos: .utility)
             let group : DispatchGroup = DispatchGroup()
-            for p in 1...numberOfPages {
+            for p in 1...numberOfPagesInt {
                 methodParameters[Constants.BreweryParameterKeys.Page] = p as AnyObject
                 let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                                      querySpecificID: nil,
                                                                      parameters: methodParameters)
                 group.enter()
                 queue.async(group: group) {
-                //queue.sync() {
                 Alamofire.request(outputURL.absoluteString!)
                         .responseJSON {
                             response in
@@ -392,6 +377,9 @@ class BreweryDBClient {
                                        outputType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                        completion: completion,
                                        group: group)
+                            // Relying on the group pushed down to the parse request
+                            // doesn't work all the time
+                            group.leave()
                     } //Outside alamo but inside async
                 } //Outside queue.async
             }  // Outside for loop
@@ -420,26 +408,26 @@ class BreweryDBClient {
         Alamofire.request(outputURL.absoluteString!).responseJSON(){
             response in
             guard response.result.isSuccess else {
-                completionHandler(false, "Failed Request \(#line) \(#function)")
+                completionHandler(false, "Failed Request Please try again")
                 return
             }
             guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completionHandler(false,"Failed Request \(#line) \(#function)")
+                completionHandler(false,"Failed Request Please try again")
                 return
             }
-            // Note: This request does not return "totalResults", so don't check for it
+            // Note: This request does not return "totalResults" or 
+            // "numberOfPages", so don't check for it
             // query is brewery/breweryID/beers
             // Returned data is of format
             // "message":"READ ONLY MODE: Request Successful"
             // "data":[...]
             // "status":"success"
-            
+
             self.parse(response: responseJSON as NSDictionary,
                        querySpecificID : brewery.id,
                        outputType: consistentOutput,
                        completion: completionHandler)
         }
-        //print("BreweryDB \(#line) downloadBeersByBrewery completing with All Pages processed")
         completionHandler(true, "All Pages Processed downloadBeersByBrewery")
         return
     }
@@ -476,25 +464,11 @@ class BreweryDBClient {
                     return
                 }
                 
-                // TODO remove multipage processing here
-                // Process first page
-                self.parse(response: responseJSON as NSDictionary,
-                           querySpecificID:  nil,
-                           outputType: theOutputType,
-                           completion: completion)
-                
-                // The follow block of code downloads all subsequesnt pages
-                guard numberOfPages > 1 else {
-                    print("BreweryDb \(#line) downloadBeerByName returning completion Allpagesprocessed ")
-                    completion(true, "All Pages Processed downloadBeersByName")
-                    return
-                }
-                
                 // Processing Pages
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group = DispatchGroup()
                 
-                for i in 2...numberOfPages {
+                for i in 1...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                                          querySpecificID: nil,
@@ -505,11 +479,11 @@ class BreweryDBClient {
                             .responseJSON {
                                 response in
                                 guard response.result.isSuccess else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    completion(false, "Failed Request Please try again")
                                     return
                                 }
                                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    completion(false, "Failed Request Please try again")
                                     return
                                 }
                                 self.parse(response: responseJSON as NSDictionary,
@@ -517,13 +491,11 @@ class BreweryDBClient {
                                            outputType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                            completion: completion,
                                            group: group)
-                                print("BreweryDB \(#line) downloadBeersByName Firing group leave ")
                                 group.leave()
                         }
                     }
                 }
                 group.notify(queue: queue){
-                    //print("BreweryDB \(#line) downloadBeersByName Completing with All Pages Processed")
                     completion(true, "All Pages Processed downloadBeersByName")
                 }
         }
@@ -560,7 +532,7 @@ class BreweryDBClient {
     
     // Query for breweries with a specific name
     internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
-        //print("BreweryDb \(#line) DownloadbrewerybyName []() ")
+
         let theOutputType = APIQueryResponseProcessingTypes.Breweries
         var methodParameters  = [
             "name" : "*\(name)*" as AnyObject,
@@ -576,11 +548,11 @@ class BreweryDBClient {
                 response in
                 print(response)
                 guard response.result.isSuccess else {
-                    completion(false, "Failed Request \(#line) \(#function)")
+                    completion(false, "Failed Request Please try again")
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request \(#line) \(#function)")
+                    completion(false, "Failed Request Please try again")
                     return
                 }
                 
@@ -608,12 +580,11 @@ class BreweryDBClient {
                             .responseJSON {
                                 response in
                                 guard response.result.isSuccess else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
-                                    
+                                    completion(false, "Failed Request Please try again")
                                     return
                                 }
                                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
+                                    completion(false, "Failed Request Please try again")
                                     return
                                 }
                                 self.parse(response: responseJSON as NSDictionary,
@@ -638,77 +609,25 @@ class BreweryDBClient {
                                            aturl: NSURL,
                                            forID: String) {
         guard aturl.absoluteString != "" else {
-            print("BreweryDB downloadImageToCoreData emptyurl abandoning")
+            // There must be a url
             return
         }
-        var sierranevadaurl: String = "https://s3.amazonaws.com/brewerydbapi/brewery/nHLlnK/upload_IClwuZ-medium.png"
-        if forID == "nHLlnK" {
-            sierranevadaurl = aturl.absoluteString!
-        }
-        print("Downloading from site:\(aturl)")
-
         let session = URLSession.shared
         let task = session.dataTask(with: aturl as URL){
             (data, response, error) -> Void in
-            if (response?.description.contains(sierranevadaurl))! {
-                print("Found sierra nevada.")
-            }
-
-            print("Succesfully downloaded image for\(forID)")
             guard error == nil else {
-                print("There was an error trying to download again")
-                // Keep trying to download the image
-                //self.downloadImageToCoreData(forType: forType, aturl: aturl, forID: forID)
+                // Keep trying to download the image on a failure.
+                self.downloadImageToCoreData(forType: forType, aturl: aturl, forID: forID)
                 return
             }
             guard data != nil else {
-                print("Data was damaged")
+                // Data not there
                 return
             }
-            print("putting it on imagequeue")
+
+            // Package the data and queue it up for linking
             let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
             self.imagesToBeAssignedQueue[forID] = (forType,outputData)
-            print("it's on images queue")
-        }
-        task.resume()
-    }
-
-    // Download images in the background then update Coredata when complete
-    // Beer images are currently being grabbed and saved in the main context
-    // This help with updateing selected beers screen I guess.
-    internal func downloadBeerImageToCoreData( aturl: NSURL,
-                                               forBeer: Beer,
-                                               updateManagedObjectID: NSManagedObjectID) {
-        // Begin Upgraded code
-        // print("BreweryDB \(#line) Async DownloadBeerImage in backgroundContext\(forBeer.beerName)")
-        // TODO Breaking BreweryList and MapView Style selection, MapView Brewery selection will be unharmed.
-        // End Upgraded code
-        print("BreweryDB \(#line) Async DownloadBeerImage in background context:\(forBeer.beerName!)")
-        let session = URLSession.shared
-        let task = session.dataTask(with: aturl as URL){
-            (data, response, error) -> Void in
-            //print("BreweryDB \(#line) Returned from Async DownloadBeerImage:\(forBeer.beerName!)")
-            if error == nil {
-                if data == nil {
-                    return
-                }
-                // Upgraded code
-                self.container?.performBackgroundTask({
-                    (context) in
-                    context.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-                    context.perform(){
-
-                        let beerForUpdate = context.object(with: updateManagedObjectID) as! Beer
-                        let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
-                        beerForUpdate.image = outputData
-                        do {
-                            try context.save()
-                        } catch let error {
-                            fatalError("error:\n\(error)")
-                        }
-                    }
-                })
-            }
         }
         task.resume()
     }
