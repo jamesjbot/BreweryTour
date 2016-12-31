@@ -55,28 +55,25 @@ class BreweryDBClient {
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
 
+    // Image processing constants
     internal enum ImageDownloadType {
         case Beer
         case Brewery
     }
+    private let timerDelay = 3
+    private let maxSaves = 100
+
 
     // MARK: Variables
-    //let maxBreweryBuffer = 50
-    let timerDelay = 3
-    let maxSaves = 100
+
+    // Image processing
     private var imageProcessTimer: Timer!
-
-    fileprivate var imagesToBeAssignedQueue: [String: (ImageDownloadType, NSData)] = [String: (ImageDownloadType,NSData)]() {
+    fileprivate var imagesToBeAssignedQueue: [String: (ImageDownloadType, NSData)]
+        = [String: (ImageDownloadType,NSData)]() {
         didSet{
-            //print("You pushed an image on the queue")
             imageProcessTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timerDelay), target: self, selector: #selector(timerProcessImageQueue), userInfo: nil, repeats: true)
-            //print("Timer started")
-            imageProcessTimer.fire()
         }
-
     }
-
-    private var breweryDictionary = [String:Brewery]()
 
     // MARK: Singleton Implementation
     
@@ -91,6 +88,7 @@ class BreweryDBClient {
 
     // MARK: Functions
 
+    // Image processing timer functions
     // Turns off the breweriesToBeProcessed timer
     private func disableTimer() {
         if imageProcessTimer != nil {
@@ -103,13 +101,15 @@ class BreweryDBClient {
         print("timerProcessImageQueue fired")
         let dq = DispatchQueue.global(qos: .background)
         dq.sync {
-            var saves = 0
+            var saves = 0 // Stopping counter
+
+            // configure our context
+            let context = self.container?.newBackgroundContext()
+            context?.automaticallyMergesChangesFromParent = true
+            context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
             for (key,value) in self.imagesToBeAssignedQueue {
-                if key == "nHLlnK" {
-                    print("Sierra nevada brewery in assigning image.")
-                }
                 let (type,data) = value
-                guard data != nil else {
+                guard data != nil else { // There is no image remove image request
                     self.imagesToBeAssignedQueue.removeValue(forKey: key)
                     continue
                 }
@@ -123,9 +123,6 @@ class BreweryDBClient {
                     break
                 }
                 // is the Object in Coredata yet
-                let context = self.container?.newBackgroundContext()
-                context?.automaticallyMergesChangesFromParent = true
-                context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
                 request?.sortDescriptors = []
                 request?.predicate = NSPredicate(format: "id == %@", key)
                 var result: [AnyObject]?
@@ -134,46 +131,39 @@ class BreweryDBClient {
 
                     guard result?.count == 1 else  {
                         // else try next image
+                        // TODO remove test code
                         if (result?.count)! > 1 {
                             fatalError("WHy?")
                         }
                         continue
                     }
-
-
-
-                    //print(result?.first)
-                    if type == .Beer {
+                    switch type {
+                    case .Beer:
                         (result?.first as! Beer).image = data as NSData?
-                    } else {
-                        if ((result?.first as! Brewery).name?.contains("Sierra"))! {//After
-                            print("Seirra! \((result?.first as! Brewery).name!)")// After this line is an error in autolayout
-                        }
+                        break
+                    case .Brewery:
                         (result?.first as! Brewery).image = data as NSData?
+                        break
                     }
-
-                    //print(result?.first)
-
                     try context?.save()
                     saves += 1
                     self.imagesToBeAssignedQueue.removeValue(forKey: key)
-                    print("Successfully added image to coredata")
                 } catch {
-                    
+                    fatalError("Critical coredata read problems")
                 }
                 guard saves < self.maxSaves else {
-                    return
+                    break
                 }
             }
             if self.imagesToBeAssignedQueue.count == 0 {
-                //print("disabling image timer")
+                // If we finished processing all pending things; stop timer.
                 self.disableTimer()
             }
         }
     }
 
 
-    // Creates beer objects in the mainContext.
+    // Parse beer data and send to creation queue.
     private func createBeerObject(beer : [String:AnyObject],
                                   brewery: Brewery? = nil,
                                   brewerID: String,
@@ -194,8 +184,7 @@ class BreweryDBClient {
     }
 
     
-    // The breweries are created sent back but they are not showing up in the table.
-    // This will save background, main and persistent context
+    // Parse brewery data and send to creation queue.
     private func createBreweryObject(breweryDict: [String:AnyObject],
                                      locationDict locDict:[String:AnyObject],
                                      completion: @escaping (_ out : Brewery) -> () ) {
@@ -216,9 +205,9 @@ class BreweryDBClient {
     private func createURLFromParameters(queryType: APIQueryResponseProcessingTypes,
                                          querySpecificID: String?,
                                          parameters: [String:AnyObject]) -> NSURL {
-        // The url currently takes the form of
-        // "http://api.brewerydb.com/v2/beers?key=\(Constants.BreweryParameterValues.APIKey)&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
-        
+        /* The url currently takes the form of
+         "http://api.brewerydb.com/v2/beers?p=1&format=json&isOrganic=N&withBreweries=Y&styleId=159&key=8e63b90f589c3b3f2001c5e396f5d300key=&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
+        */
         let components = NSURLComponents()
         components.scheme = Constants.BreweryDB.APIScheme
         components.host = Constants.BreweryDB.APIHost
@@ -251,8 +240,7 @@ class BreweryDBClient {
         // Finally Add the API Key - QueryItem
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
-        
-        print("BreweryDB \(#line) \(components.url!)")
+
         return components.url! as NSURL
     }
     
@@ -273,11 +261,11 @@ class BreweryDBClient {
             .responseJSON {
                 response in
                 guard response.result.isSuccess else {
-                    completion(false, "Failed Request \(#line) \(#function)")
+                    completion(false, "Failed Request Please close the app and try again")
                     return
                 }
                 guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request \(#line) \(#function)")
+                    completion(false, "Failed Request Please close the app and try again")
                     return
                 }
                 
@@ -898,7 +886,6 @@ class BreweryDBClient {
                 guard beer["styleId"] != nil else {
                     continue createBeerLoop
                 }
-
 
                 createBeerObject(beer: beer, brewerID: querySpecificID!) {
                     (Beer) -> Void in
