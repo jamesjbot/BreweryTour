@@ -168,7 +168,7 @@ class BeerDetailViewController: UIViewController {
             updatableBeer.tastingNotes = self.tasting.text
             do {
                 try context.save()
-            } catch let error {
+            } catch let _ {
                 self.displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
             }
         }
