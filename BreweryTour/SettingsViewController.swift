@@ -14,7 +14,7 @@ import UIKit
 import Foundation
 import CoreData
 
-class Settings: UIViewController {
+class SettingsViewController: UIViewController {
     
     // MARK: Constants
 

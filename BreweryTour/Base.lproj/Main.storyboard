@@ -720,10 +720,10 @@ Click on information to bring up brewery website.</string>
             </objects>
             <point key="canvasLocation" x="3383" y="681"/>
         </scene>
-        <!--Settings-->
+        <!--Settings View Controller-->
         <scene sceneID="jS1-XL-H9X">
             <objects>
-                <viewController id="RxT-d5-hZA" customClass="Settings" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="RxT-d5-hZA" customClass="SettingsViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="oB0-OH-5mh"/>
                         <viewControllerLayoutGuide type="bottom" id="bf2-bC-tom"/>
