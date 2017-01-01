@@ -92,9 +92,9 @@ class Mediator : NSManagedObjectDisplayable {
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
                                                              completionHandler : completion)
         } else if thisItem is Style {
-            BreweryDBClient.sharedInstance().downloadBeersAndBreweriesBy(styleID: (thisItem as! Style).id!,
-                                                                         isOrganic: false,
-                                                                         completion: completion)
+            BreweryDBClient.sharedInstance().downloadBeersAndBreweriesBy(
+                styleID: (thisItem as! Style).id!,
+                completion: completion)
         }
     }
 }

@@ -159,7 +159,6 @@ class BreweryDBClient {
     
     
     // Query for all breweries
-    // TODO not completing
     internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
         let theOutputType = APIQueryResponseProcessingTypes.Breweries
         var methodParameters  = [
@@ -231,11 +230,10 @@ class BreweryDBClient {
     
     
     // Query for breweries that offer a certain style.
-    internal func downloadBeersAndBreweriesBy(styleID : String, isOrganic : Bool ,
+    internal func downloadBeersAndBreweriesBy(styleID : String,
                                               completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
         var methodParameters  = [
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
-            Constants.BreweryParameterKeys.Organic : (isOrganic ? "Y" : "N") as AnyObject,
             Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
             Constants.BreweryParameterKeys.WithBreweries : "Y" as AnyObject,
             Constants.BreweryParameterKeys.Page : "1" as AnyObject
