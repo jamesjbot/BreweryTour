@@ -52,6 +52,7 @@ class FavoriteBeersViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        assert(frc != nil)
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         frc.delegate = self

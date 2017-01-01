@@ -259,6 +259,7 @@ class MapViewController : UIViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
 
+        assert(beerFRC != nil)
         // Register with mediator for contextUpdates
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
         
