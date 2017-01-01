@@ -8,6 +8,14 @@
 /*
  This is the view model backing the Styles switch on the main category view
  controller
+ 
+ 
+ Initialization Path
+ CategoryViewController will initialize this
+ 
+ 
+ 
+
  */
 
 import UIKit
@@ -61,14 +69,25 @@ class StylesTableList: NSObject {
         }
     }
 
+     
+    private func refetchData() {
+        do {
+            try frc.performFetch()
+        } catch {
+            fatalError("Critical coredata read failure")
+        }
+    }
 
     // This is the inital styles populate on a brand new startup
     // This is performed in the background on initialization
-    private func downloadBeerStyles() {
+    fileprivate func downloadBeerStyles() {
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
             (success, msg) -> Void in
             if !success {
                 self.observer.sendNotify(from: self, withMsg: "Failed to download initial styles\ncheck network connection and try again.")
+            } else {
+                self.refetchData()
+                self.observer.sendNotify(from: self, withMsg: "reload data")
             }
         }
     }
@@ -179,7 +198,7 @@ extension StylesTableList : TableList {
         } else {
             aStyle = filteredObjects[elementAt.row]
         }
-        mediator.selected(thisItem: aStyle, completion: completion)
+        Mediator.sharedInstance().selected(thisItem: aStyle, completion: completion)
         return nil
     }
     
