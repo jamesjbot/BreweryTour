@@ -39,7 +39,6 @@ class StylesTableList: NSObject {
     internal override init(){
         super.init()
 
-        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
         request.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
@@ -53,6 +52,8 @@ class StylesTableList: NSObject {
             fatalError("Critical coredata read failure")
         }
         frc.delegate = self
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         // Only download styles when there are no styles in the database
         if frc.fetchedObjects?.count == 0 {
@@ -78,7 +79,9 @@ extension StylesTableList: UpdateManagedObjectContext {
 
     internal func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
-        observer.sendNotify(from: self, withMsg: "reload data")
+        // Always keep this view populated with data
+        downloadBeerStyles()
+
     }
 
 }

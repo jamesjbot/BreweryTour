@@ -33,7 +33,6 @@ class AllBreweriesTableList: NSObject, Subject {
     override init(){
         super.init()
 
-        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
@@ -43,7 +42,10 @@ class AllBreweriesTableList: NSObject, Subject {
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         frc.delegate = self
-        
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
+
         do {
             try frc.performFetch()
         } catch {

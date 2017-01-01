@@ -56,19 +56,31 @@ class BreweryTableList: NSObject, Subject {
     override init(){
         super.init()
         // Register for context updates with Mediator
-        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
-    }
-    
 
-    internal func prepareToShowTable(withStyle TODODELETEstyle: Style) {
-        // Stylefetch
-        currentlyObservingStyle = Mediator.sharedInstance().getPassedItem() as! Style
+        styleFRCObserver = createFetchedResultsController(withStyleID: nil)
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
+    }
+
+
+    private func createFetchedResultsController(withStyleID: String?) -> NSFetchedResultsController<Style> {
         let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
         styleRequest.sortDescriptors = []
-        styleRequest.predicate = NSPredicate(format: "id == %@", (currentlyObservingStyle?.id!)!)
-        styleFRCObserver = NSFetchedResultsController(fetchRequest: styleRequest,
+        styleRequest.predicate = NSPredicate(format: "id == %@",
+                                             (withStyleID ?? "") )
+        let tempFRC = NSFetchedResultsController(fetchRequest: styleRequest,
                                                       managedObjectContext: readOnlyContext!,
                                                       sectionNameKeyPath: nil, cacheName: nil)
+        return tempFRC
+    }
+
+
+
+    internal func prepareToShowTable() {
+        // Stylefetch
+        currentlyObservingStyle = Mediator.sharedInstance().getPassedItem() as? Style
+        styleFRCObserver = createFetchedResultsController(withStyleID: currentlyObservingStyle?.id)
         styleFRCObserver.delegate = self
         do {
             try self.styleFRCObserver.performFetch()

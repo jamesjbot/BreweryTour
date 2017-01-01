@@ -41,15 +41,17 @@ class SelectedBeersTableList : NSObject, Subject {
         super.init()
         readOnlyContext?.automaticallyMergesChangesFromParent = true
 
-        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
-
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
                                          managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
-        // No need to fetch or set delegate 
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
+
+        // No need to fetch or set delegate
         // this will happen when SelectedBeerViewController launches
         // it will call toggleBeersMode() whichCalls performFetch()
     }
