@@ -7,7 +7,7 @@
 //
 /*
  This is the api driver, that makes all the requests to the breweryDB
- 
+ This will download and parse all the data for the system.
  
 
  Internals
@@ -53,35 +53,13 @@ class BreweryDBClient {
     // This is the primary writer in the system to coredata
     fileprivate let breweryAndBeerCreator = BreweryAndBeerCreationQueue()
 
-    private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
+    fileprivate let imageLinker = ManagedObjectImageLinker()
+
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
 
-    // Image processing constants
-    internal enum ImageDownloadType {
-        case Beer
-        case Brewery
-    }
-    private let timerDelay: Double = 3
-    private let maxSaves = 200
-
-
     // MARK: Variables
 
-    // Image processing
-    private var imageProcessTimer: Timer!
-    fileprivate var imagesToBeAssignedQueue: [String: (ImageDownloadType, NSData)]
-        = [String: (ImageDownloadType,NSData)]() {
-        didSet{
-            DispatchQueue.main.async {
-                self.disableTimer()
-                self.imageProcessTimer = Timer.scheduledTimer(timeInterval: self.timerDelay,
-                                                         target: self,
-                                                         selector: #selector(self.timerProcessImageQueue),
-                                                         userInfo: nil, repeats: true)
-            }
-        }
-    }
 
     // MARK: Singleton Implementation
     
@@ -96,79 +74,7 @@ class BreweryDBClient {
 
     // MARK: Functions
 
-    // Image processing timer functions
-    // Turns off the breweriesToBeProcessed timer
-    private func disableTimer() {
-        if imageProcessTimer != nil {
-            imageProcessTimer?.invalidate()
-        }
-    }
 
-    // Process the last unfull set on the breweriesToBeProcessed queue.
-    @objc private func timerProcessImageQueue() {
-        print("timerProcessImageQueue fired \(imagesToBeAssignedQueue.count) images")
-        let dq = DispatchQueue.global(qos: .background)
-        dq.sync {
-            var saves = 0 // Stopping counter
-            
-            // configure our context
-            let context = self.container?.newBackgroundContext()
-            context?.automaticallyMergesChangesFromParent = true
-            context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-            for (key,value) in self.imagesToBeAssignedQueue {
-                let (type,data) = value
-                guard data != nil else { // There is no image remove image request
-                    self.imagesToBeAssignedQueue.removeValue(forKey: key)
-                    continue
-                }
-                let request: NSFetchRequest<NSFetchRequestResult>?
-                switch type {
-                case .Beer:
-                    request = Beer.fetchRequest()
-                    break
-                case .Brewery:
-                    request = Brewery.fetchRequest()
-                    break
-                }
-                // is the Object in Coredata yet
-                request?.sortDescriptors = []
-                request?.predicate = NSPredicate(format: "id == %@", key)
-                var result: [AnyObject]?
-                do {
-                    result = try context?.fetch(request!)
-
-                    guard result?.count == 1 else  {
-                        // else try next image
-                        // TODO remove test code
-                        if (result?.count)! > 1 {
-                            fatalError("WHy?")
-                        }
-                        continue
-                    }
-                    switch type {
-                    case .Beer:
-                        (result?.first as! Beer).image = data as NSData?
-                        break
-                    case .Brewery:
-                        (result?.first as! Brewery).image = data as NSData?
-                        break
-                    }
-                    try context?.save()
-                    saves += 1
-                    self.imagesToBeAssignedQueue.removeValue(forKey: key)
-                } catch {
-                    fatalError("Critical coredata read problems")
-                }
-                guard saves < self.maxSaves else {
-                    break
-                }
-            }
-            if self.imagesToBeAssignedQueue.count == 0 {
-                // If we finished processing all pending things; stop timer.
-                self.disableTimer()
-            }
-        }
-    }
 
 
     // Parse beer data and send to creation queue.
@@ -637,7 +543,9 @@ class BreweryDBClient {
 
             // Package the data and queue it up for linking
             let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
-            self.imagesToBeAssignedQueue[forID] = (forType,outputData)
+
+            // Send linking job out for processing.
+            self.imageLinker.queueLinkJob(moID: forID, moType: forType, data: outputData)
         }
         task.resume()
     }
@@ -717,9 +625,8 @@ class BreweryDBClient {
             break
 
         case .Styles:
-            // Styles are saved on the persistingContext because they don't change often.
-            // We must have data to process
             // Save the multiple styles from the server
+            // We must have data to process else escape
             guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else {
                 completion!(false, "No styles data" )
                 return
@@ -734,6 +641,8 @@ class BreweryDBClient {
                     do {
                         request.predicate = NSPredicate(format: "id = %@", localId!)
                         let results = try self.readOnlyContext?.fetch(request)
+
+                        // if the style is already in coredata skip it
                         if (results?.count)! > 0 {
                             continue
                         }
@@ -741,40 +650,39 @@ class BreweryDBClient {
                         completion!(false, "Failed Reading Styles from database")
                         return
                     }
-                    // When style not present adds new style into MainContext
-                    self.container?.performBackgroundTask({
-                        (context) in
-                        _ = Style(id: localId!, name: localName! as! String, context: context)
+
+                    // When a New Style, creates new style into Background
+                    self.backContext?.perform {
+                        _ = Style(id: localId!, name: localName! as! String, context: self.backContext!)
                         do {
-                            try context.save()
+                            try self.backContext?.save()
                         } catch _ {
                             fatalError("Fatal Error Writing to CoreData")
                         }
-                    })
+                    }
                 }
             }
             break
             
             
         case .Breweries:
+            // If there are no pages means there is nothing to process.
             guard (response["numberOfPages"] as? Int) != nil else {
-                // If there are no pages means there is nothing to process.
                 completion!(false, "No results returned")
                 return
             }
 
+            //Unable to parse Brewery Failed to extract data
             guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
-                //Unable to parse Brewery Failed to extract data, there was no data component
                 completion!(false, "Network error please try again")
                 return
             }
 
             // This for loop will asynchronousy launch brewery creation.
             breweryLoop: for breweryDict in breweryArray {
-                // Can't build a brewery location if no location exist
+                // Can't build a brewery location if no location exist skip brewery
                 guard let locationInfo = breweryDict["locations"] as? NSArray
                     else {
-                        //rejectedBreweries += 1
                         continue
                 }
 
@@ -784,7 +692,6 @@ class BreweryDBClient {
                     locDic["longitude"] != nil,
                     locDic["latitude"] != nil
                     else {
-                        //rejectedBreweries += 1
                         continue breweryLoop
                 }
 
