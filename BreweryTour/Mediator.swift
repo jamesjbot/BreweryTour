@@ -9,11 +9,6 @@
 import Foundation
 import CoreData
 
-protocol UpdateFetchedController {
-    func contextsHaveBeenBatchDeleted()
-}
-
-
 /*
  This class managed states changes across the app
  If a selection is made on the selection screen then we can 
@@ -25,12 +20,14 @@ class Mediator : NSManagedObjectDisplayable {
     // MARK: Constants
 
     // Initialize the classes that need to send and receive data from the mediator
-    private let styleList : StylesTableList = StylesTableList()
-    private let breweryWithStyleList : BreweryTableList = BreweryTableList()
-    private let selectedBeersList : SelectedBeersTableList = SelectedBeersTableList()
-    private let allBreweryList : AllBreweriesTableList = AllBreweriesTableList()
+    //private let styleList : StylesTableList!// = StylesTableList()
+    //private let breweryWithStyleList : BreweryTableList!// = BreweryTableList()
+    //private let selectedBeersList : SelectedBeersTableList!// = SelectedBeersTableList()
+    //private let allBreweryList : AllBreweriesTableList!// = AllBreweriesTableList()
 
     // MARK: Variables
+
+    fileprivate var contextObservers: [UpdateManagedObjectContext] = [UpdateManagedObjectContext]()
 
     private var automaticallySegueValue: Bool = false
 
@@ -50,39 +47,9 @@ class Mediator : NSManagedObjectDisplayable {
     internal func getPassedItem() -> NSManagedObject? {
         return passedItem
     }
-
-    internal func getStyleList() -> StylesTableList {
-        return styleList
-    }
-    
-    internal func getBreweryList() -> BreweryTableList {
-        return breweryWithStyleList
-    }
-    
-    
-    internal func getSelectedBeersList() -> SelectedBeersTableList {
-        return selectedBeersList
-    }
-
-
-    internal func getAllBreweryList() -> AllBreweriesTableList {
-        return allBreweryList
-    }
-
-    internal func allBeersAndBreweriesDeleted() {
-        // TODO add more tablelists
-        styleList
-        allBreweryList.contextsHaveBeenBatchDeleted()
-
-    }
-
     
     // Singleton Implementation
     private init(){
-        // Setup to receive message from the lists
-        styleList.mediator = self
-        breweryWithStyleList.mediator = self
-        allBreweryList.mediator = self
     }
     
     internal class func sharedInstance() -> Mediator {
@@ -97,7 +64,8 @@ class Mediator : NSManagedObjectDisplayable {
     func selected(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passedItem = thisItem
         //print("Mediator \(#line) setting selectedBeersList prior to call: \(passedItem)")
-        selectedBeersList.setSelectedItem(toNSObject: passedItem!)
+        // TODO Notify everyone who want to know what the selcted item is
+        //selectedBeersList.setSelectedItem(toNSObject: passedItem!)
         if thisItem is Brewery {
             //print("Mediator\(#line) Calling mediator to downloadbeers by brewery")
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
@@ -109,3 +77,24 @@ class Mediator : NSManagedObjectDisplayable {
         }
     }
 }
+
+
+extension Mediator: NotifyFRCToUpdate {
+
+    internal func registerManagedObjectContextRefresh(_ a: UpdateManagedObjectContext) {
+        // Add a new observer
+        contextObservers.append(a)
+    }
+
+    internal func allBeersAndBreweriesDeleted() {
+
+        for i in contextObservers {
+            print("There are \(contextObservers.count) to update")
+            i.contextsRefreshAllObjects()
+        }
+
+    }
+
+}
+
+
