@@ -9,17 +9,24 @@
 import Foundation
 import CoreData
 
+/*
+ This class managed states changes across the app
+ If a selection is made on the selection screen then we can 
+ notify the other Views That will need to update because of that change.
+ */
+
 class Mediator : NSManagedObjectDisplayable {
 
     // MARK: Constants
 
     // Initialize the classes that need to send and receive data from the mediator
     private let styleList : StylesTableList = StylesTableList()
-    private let breweryList : BreweryTableList = BreweryTableList()
+    private let breweryWithStyleList : BreweryTableList = BreweryTableList()
     private let selectedBeersList : SelectedBeersTableList = SelectedBeersTableList()
     private let allBreweryList : AllBreweriesTableList = AllBreweriesTableList()
 
     // MARK: Variables
+
     private var automaticallySegueValue: Bool = false
 
     private var passedItem : NSManagedObject?
@@ -31,7 +38,7 @@ class Mediator : NSManagedObjectDisplayable {
         automaticallySegueValue = to
     }
 
-    internal func automaticallySegue() -> Bool {
+    internal func isAutomaticallySeguing() -> Bool {
         return automaticallySegueValue
     }
 
@@ -45,7 +52,7 @@ class Mediator : NSManagedObjectDisplayable {
     
     
     internal func getBreweryList() -> BreweryTableList {
-        return breweryList
+        return breweryWithStyleList
     }
     
     
@@ -70,7 +77,7 @@ class Mediator : NSManagedObjectDisplayable {
     private init(){
         // Setup to receive message from the lists
         styleList.mediator = self
-        breweryList.mediator = self
+        breweryWithStyleList.mediator = self
         allBreweryList.mediator = self
     }
     
