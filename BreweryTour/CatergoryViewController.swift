@@ -398,28 +398,30 @@ extension CategoryViewController : UITableViewDelegate {
 
         activityIndicator.startAnimating()
 
+
+        let activeTableListSelectedCompletionHandler = {
+            (success: Bool ,msg: String?) -> Void in
+            // Every tablelist completion handler will come back here
+            // TODO remember to tell every view model to
+            // send back a completion handler.
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+                self.activityIndicator.setNeedsDisplay()
+            }
+            if success {
+                self.displayAlertWindow(title: "Request sent", msg: "Your request was sent to the online service, your selection will load in the background" )
+                if Mediator.sharedInstance().automaticallySegue() {
+                    DispatchQueue.main.async {
+                        self.performSegue(withIdentifier: "Go", sender: nil)
+                    }
+                }
+            }
+        }
         // Tell the view model something was selected.
         // The view model will go tell the mediator what it needs to download.
         _ = activeTableList.selected(elementAt: indexPath,
-                                     searchText: newSearchBar.text!){
-                                        (sucesss,msg) -> Void in
-
-                                        // Every tablelist completion handler witll come back here
-                                        // TODO remember to tell every view model to
-                                        // send back a completion handler.
-                                        DispatchQueue.main.async {
-                                            self.activityIndicator.stopAnimating()
-                                            self.activityIndicator.setNeedsDisplay()
-                                        }
-                                        if sucesss {
-                                            self.displayAlertWindow(title: "Request sent", msg: "You request was sent to the online service you selection will load in the background" )
-                                            if Mediator.sharedInstance().automaticallySegue() {
-                                                DispatchQueue.main.async {
-                                                    self.performSegue(withIdentifier: "Go", sender: nil)
-                                                }
-                                            }
-                                        }
-        }
+                                     searchText: newSearchBar.text!,
+                                     completion: activeTableListSelectedCompletionHandler)
     }
 }
 
@@ -479,18 +481,21 @@ extension CategoryViewController: UISearchBarDelegate {
 
         // Definition of the function to be used in AlertWindow.
         func searchOnline(_ action: UIAlertAction){
-            activityIndicator.startAnimating()
-            activeTableList.searchForUserEntered(searchTerm: searchBar.text!) {
-                (success, msg) -> Void in
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
+            if activeTableList is OnlineSearchCapable {
+                (activeTableList as! OnlineSearchCapable).searchForUserEntered(searchTerm: searchBar.text!) {
+                    (success, msg) -> Void in
+                    DispatchQueue.main.async {
+                        self.activityIndicator.stopAnimating()
+                    }
+                    if success {
+                        self.genericTable.reloadData()
+                    } else {
+                        self.displayAlertWindow(title: "Search Failed", msg: msg!)
+                    }
                 }
-                if success {
-                    self.genericTable.reloadData()
-                } else {
-                    self.displayAlertWindow(title: "Search Failed", msg: msg!)
-                }
+                activityIndicator.startAnimating()
             }
+
         }
         // Set the function to the action button
         let action = UIAlertAction(title: "Search Online",
