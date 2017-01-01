@@ -40,6 +40,9 @@ class SelectedBeersTableList : NSObject, Subject {
     internal override init(){
         super.init()
         readOnlyContext?.automaticallyMergesChangesFromParent = true
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
@@ -134,8 +137,8 @@ class SelectedBeersTableList : NSObject, Subject {
     }
 }
 
-extension SelectedBeersTableList: UpdateFetchedController {
-    internal func contextsHaveBeenBatchDeleted() {
+extension SelectedBeersTableList: UpdateManagedObjectContext {
+    internal func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
     }
 }

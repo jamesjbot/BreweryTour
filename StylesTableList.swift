@@ -24,7 +24,7 @@ class StylesTableList: NSObject {
 
     // MARK: Variables
     
-    internal var mediator: NSManagedObjectDisplayable!
+    //internal var mediator: NSManagedObjectDisplayable!
     fileprivate var filteredObjects: [Style] = [Style]()
     fileprivate var frc : NSFetchedResultsController<Style>!
     var observer : Observer!
@@ -38,6 +38,9 @@ class StylesTableList: NSObject {
 
     internal override init(){
         super.init()
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
         request.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
         frc = NSFetchedResultsController(fetchRequest: request,
@@ -58,7 +61,7 @@ class StylesTableList: NSObject {
     }
 
 
-    // This is the inital stles populate on a brand new startup
+    // This is the inital styles populate on a brand new startup
     // This is performed in the background on initialization
     private func downloadBeerStyles() {
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
@@ -70,10 +73,14 @@ class StylesTableList: NSObject {
     }
 }
 
-extension StylesTableList: UpdateFetchedController {
-    internal func contextsHaveBeenBatchDeleted() {
+
+extension StylesTableList: UpdateManagedObjectContext {
+
+    internal func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
+        observer.sendNotify(from: self, withMsg: "reload data")
     }
+
 }
 
 

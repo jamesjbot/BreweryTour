@@ -32,6 +32,9 @@ class AllBreweriesTableList: NSObject, Subject {
     
     override init(){
         super.init()
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         request.fetchLimit = 10000
@@ -70,19 +73,13 @@ class AllBreweriesTableList: NSObject, Subject {
         //
         //        }
     }
-
-
-
-
 }
 
 
-extension AllBreweriesTableList: UpdateFetchedController {
-    internal func contextsHaveBeenBatchDeleted() {
-        do {
-            try frc.managedObjectContext.refreshAllObjects()
-        } catch {
-        }
+extension AllBreweriesTableList: UpdateManagedObjectContext {
+
+    internal func contextsRefreshAllObjects() {
+         frc.managedObjectContext.refreshAllObjects()
     }
 }
 

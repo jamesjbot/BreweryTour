@@ -51,6 +51,9 @@ class FavoriteBeersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
         frc.delegate = self
     }
     
@@ -218,12 +221,15 @@ extension FavoriteBeersViewController : UITableViewDelegate {
 }
 
 
-extension FavoriteBeersViewController: UpdateFetchedController {
-    func contextsHaveBeenBatchDeleted() {
+// MARK: - FavoriteBeersViewController: UpdateManagedObjectContext
+
+extension FavoriteBeersViewController: UpdateManagedObjectContext {
+    func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
     }
 }
 
+// MARK: - FavoriteBeersViewController : DismissableTutorial
 
 extension FavoriteBeersViewController : DismissableTutorial {
     func enableTutorial() {

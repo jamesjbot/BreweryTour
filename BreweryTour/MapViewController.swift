@@ -258,6 +258,10 @@ class MapViewController : UIViewController {
     // Ask user for access to their location
     override func viewDidLoad(){
         super.viewDidLoad()
+
+        // Register with mediator for contextUpdates
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+        
         DispatchQueue.main.async{
             self.mapView.showsUserLocation = true
             self.activityIndicator.startAnimating()
@@ -331,10 +335,10 @@ class MapViewController : UIViewController {
 }
 
 
-// MARK: - MapViewController: UpdateFetchedController
+// MARK: - MapViewController: UpdateManagedObjectContext
 
-extension MapViewController: UpdateFetchedController {
-    internal func contextsHaveBeenBatchDeleted() {
+extension MapViewController: UpdateManagedObjectContext {
+    internal func contextsRefreshAllObjects() {
         beerFRC?.managedObjectContext.refreshAllObjects()
     }
 }

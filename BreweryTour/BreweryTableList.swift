@@ -55,6 +55,8 @@ class BreweryTableList: NSObject, Subject {
      */
     override init(){
         super.init()
+        // Register for context updates with Mediator
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
     }
     
 
@@ -167,8 +169,8 @@ extension BreweryTableList: TableList {
 
 }
 
-extension BreweryTableList: UpdateFetchedController {
-    internal func contextsHaveBeenBatchDeleted() {
+extension BreweryTableList: UpdateManagedObjectContext {
+    internal func contextsRefreshAllObjects() {
         styleFRCObserver.managedObjectContext.refreshAllObjects()
     }
 }

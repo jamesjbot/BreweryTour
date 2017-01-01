@@ -54,6 +54,9 @@ class FavoriteBreweriesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
         readOnlyContext?.automaticallyMergesChangesFromParent = true
         frc.delegate = self
         // Do any additional setup after loading the view.
@@ -130,9 +133,12 @@ class FavoriteBreweriesViewController: UIViewController {
 }
 
 
-extension FavoriteBreweriesViewController: UpdateFetchedController {
-    internal func contextsHaveBeenBatchDeleted() {
-        frc.managedObjectContext.refreshAllObjects()
+extension FavoriteBreweriesViewController: UpdateManagedObjectContext {
+
+
+    internal func contextsRefreshAllObjects() {
+        print("code from extension internal to the class")
+        frcForBrewery.managedObjectContext.refreshAllObjects()
     }
 }
 
