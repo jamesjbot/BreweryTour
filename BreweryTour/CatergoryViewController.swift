@@ -324,7 +324,7 @@ class CategoryViewController: UIViewController,
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
 
-        // segmentedControlClicked will reload the table.
+        // SegmentedControlClicked will reload the table.
         segmentedControlClicked(segmentedControl, forEvent: UIEvent())//Dummy event
     }
 
