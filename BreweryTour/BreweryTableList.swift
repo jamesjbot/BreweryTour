@@ -35,37 +35,16 @@ class BreweryTableList: NSObject, Subject {
 
     // variable for search filtering
     internal var filteredObjects: [Brewery] = [Brewery]()
-    
-    // Currently watches the main context (readOnlyContext)
-    internal var coreDataBeerFRCObserver: NSFetchedResultsController<Beer>!
 
     internal var styleFRCObserver: NSFetchedResultsController<Style>!
 
-//    fileprivate var trueCopyOfSet: NSSet? {
-//        // This will auto delete duplicate and sort the set of breweries
-//        set {
-//            print("Setting trueCopyOfSEt")
-//            trueCopyOfSet = newValue
-//            let sortdes = NSSortDescriptor(key: "name", ascending: true)
-//            copyOfSet = trueCopyOfSet?.sortedArray(using: [sortdes]) as! [Brewery]
-//        }
-//        get {
-//            print("getting truecopyofset")
-//            return nil
-//        }
-//    }
     fileprivate var copyOfSet:[Brewery] = [] {
         didSet {
+            // Automatically sort this set
             copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
                 return a.name! < b.name!
             })
         }
-//        set {
-//            // Do nothing this is just putting in single entries
-//        }
-//        get {
-//            return
-//        }
     }
     // MARK: - Functions
 
@@ -91,67 +70,10 @@ class BreweryTableList: NSObject, Subject {
         styleFRCObserver.delegate = self
         do {
             try self.styleFRCObserver.performFetch()
-            //trueCopyOfSet = styleFRCObserver.fetchedObjects?.first?.brewerywithstyle
             copyOfSet = (styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]?)!
-            //copyOfSet = tempSet.sorted(by: { (a: Brewery, b: Brewery) -> Bool in
-            //    return a.name! < b.name!
-            //})
         } catch {
-
         }
         print("Prepare to show table finished")
-    }
-
-    /* 
-     Fetch breweries based on style selected.
-     The CategoryViewController will fire this method
-     to get the brewery entries from the database
-     */
-    private func displayBreweries(byStyle : Style, completion: ((_ success: Bool) -> Void)?){
-        // Fetch all the beers with style currently available
-        // Go thru each beer if the brewery is on the map skip it
-        // If not put the beer's brewery in breweriesToBeProcessed.
-
-        // Fetch all the beers with style
-        let request : NSFetchRequest<Beer> = Beer.fetchRequest()
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
-        // A static view of current breweries with styles
-        var results : [Beer]!
-        coreDataBeerFRCObserver = NSFetchedResultsController(fetchRequest: request ,
-                                             managedObjectContext: readOnlyContext!,
-                                             sectionNameKeyPath: nil,
-                                             cacheName: nil)
-        print("BreweryTableList \(#line) beerfrc delegate assigned ")
-        coreDataBeerFRCObserver.delegate = self
-        /*
-         TODO When you select styles and favorite a brewery, go to favorites breweries and pick a style
-         This frc will totally overwrite because it will detect changes in the breweries from favoriting
-         forcing a reload on the mapviewcontroller.
-         */
-        // This must block because the mapView must be populated before it displays.
-        //        container?.performBackgroundTask({
-        //            (context) -> Void in
-
-        // remove the breweries we have for display
-        self.displayableBreweries.removeAll()
-
-        readOnlyContext?.perform() {
-            do {
-                try self.coreDataBeerFRCObserver?.performFetch()
-                results = (self.coreDataBeerFRCObserver.fetchedObjects)! as [Beer]
-            } catch {
-            }
-            for beer in results {
-                guard beer.brewer != nil else {
-                    fatalError()
-                }
-                if !self.displayableBreweries.contains(beer.brewer!) {
-                    self.displayableBreweries.append(beer.brewer!)
-                }
-            }
-            self.observer.sendNotify(from: self, withMsg: "reload data")
-        }
     }
 
 
@@ -249,42 +171,32 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("BreweryTableList \(#line) BreweryTableList changed object")
-        switch (type){
-        case .insert:
+        func updateStyleSet() {
             let style = anObject as! Style
             if style.id == currentlyObservingStyle?.id {
                 copyOfSet = style.brewerywithstyle?.allObjects as! [Brewery]
             }
+        }
+        switch (type){
+        case .insert:
+            updateStyleSet()
             break
         case .delete:
+            updateStyleSet()
             break
         case .move:
             break
         case .update:
-            let style = anObject as! Style
-            if style.id == currentlyObservingStyle?.id {
-                copyOfSet = style.brewerywithstyle?.allObjects as! [Brewery]
-            }
+            updateStyleSet()
             break
         }
     }
 
     
 func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    copyOfSet = ((controller.fetchedObjects as! [Style]).first?.brewerywithstyle?.allObjects as! [Brewery]?)!
-    //prepareToShowTable()
-//        // Process new beers
-//        for beer in newBeers {
-//            if !self.displayableBreweries.contains(beer.brewer!) {
-//                self.displayableBreweries.append(beer.brewer!)
-//            }
-//        }
-//        //print("BreweryTableList \(#line) BreweryTableList controllerdidChangeContent notify observer")
-//        // TODO We're preloading breweries do I still need this notify
-//        //print("BrweryTableList \(#line) Notify viewcontroller on controllerDidChangeContent delegate.")
-//        //observer.sendNotify(from: self, withMsg: "reload data")
-//        //print("BreweryTableList \(#line) There are now this many breweries \(controller.fetchedObjects?.count)")
-//        //Datata = frc.fetchedObjects!
+    print("BreweryTableList completed changes")
+    // Is this needed as I'm atomically doing it
+    //copyOfSet = ((controller.fetchedObjects as! [Style]).first?.brewerywithstyle?.allObjects as! [Brewery]?)!
     }
 }
 
