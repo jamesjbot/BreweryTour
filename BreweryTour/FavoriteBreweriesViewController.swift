@@ -30,8 +30,14 @@ class FavoriteBreweriesViewController: UIViewController {
     // MARK: Variables
 
     // Currently this runs on main context readOnly
-    fileprivate var frc : NSFetchedResultsController<Brewery>! 
+    fileprivate var frcForBrewery : NSFetchedResultsController<Brewery>!
 
+    private var frc: NSFetchedResultsController<Brewery>? {
+        get {
+            print("accesing variable internal to the class")
+            return NSFetchedResultsController()
+        }
+    }
 
     // MARK: IBOutlets
 
@@ -55,10 +61,11 @@ class FavoriteBreweriesViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
+        assert(frc != nil)
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         readOnlyContext?.automaticallyMergesChangesFromParent = true
-        frc.delegate = self
+        frcForBrewery.delegate = self
         // Do any additional setup after loading the view.
         performFetchOnResultsController()
     }
@@ -103,13 +110,13 @@ class FavoriteBreweriesViewController: UIViewController {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "favorite = 1")
-        frc = NSFetchedResultsController(fetchRequest: request,
+        frcForBrewery = NSFetchedResultsController(fetchRequest: request,
                                          managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         // Create a request for Brewery objects and fetch the request from Coredata
         do {
-            try frc.performFetch()
+            try frcForBrewery.performFetch()
         } catch {
             displayAlertWindow(title: "Read Coredata", msg: "Sorry there was an error, \nplease try again.")
         }
@@ -117,7 +124,7 @@ class FavoriteBreweriesViewController: UIViewController {
     
     
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Brewery? else {
+        guard let selectedObject = frcForBrewery.object(at: indexPath as IndexPath) as Brewery? else {
             displayAlertWindow(title: "Error", msg: "Sorry there was an error formating page, \nplease try again.")
             return
         }
@@ -178,7 +185,7 @@ extension FavoriteBreweriesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         performFetchOnResultsController()
-        return (frc.fetchedObjects?.count)!
+        return (frcForBrewery.fetchedObjects?.count)!
     }
     
     
@@ -198,7 +205,7 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
         // Change this to be saving maincontext
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
-            let object = self.frc.object(at: indexPath)
+            let object = self.frcForBrewery.object(at: indexPath)
             self.container?.performBackgroundTask({
                 (context) -> Void in
                 let brewery = context.object(with: object.objectID) as! Brewery
@@ -223,17 +230,17 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("FavoriteBrewery \(#line) didSelectRowAt called. ")
         // Send the brewery to the mediator, then switch to the map tab
-        Mediator.sharedInstance().selected(thisItem: frc.object(at: indexPath)) {
+        Mediator.sharedInstance().selected(thisItem: frcForBrewery.object(at: indexPath)) {
             (success, msg) -> Void in
         }
 
         // Switch to get directions to brewery
-        if let lat = Double(frc.object(at: indexPath).latitude!) ,
-            let long = Double(frc.object(at: indexPath).longitude!) {
+        if let lat = Double(frcForBrewery.object(at: indexPath).latitude!) ,
+            let long = Double(frcForBrewery.object(at: indexPath).longitude!) {
             let location: MKPlacemark =  MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
             let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
             let mapItem = MKMapItem(placemark: location)
-            mapItem.name = frc.object(at: indexPath).name
+            mapItem.name = frcForBrewery.object(at: indexPath).name
             mapItem.openInMaps(launchOptions: launchOptions)
         }
     }
