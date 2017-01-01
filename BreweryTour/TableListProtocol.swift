@@ -13,7 +13,6 @@ import CoreData
 import UIKit
 
 protocol TableList {
-    var mediator : NSManagedObjectDisplayable! { get set }
     func getNumberOfRowsInSection(searchText : String?) -> Int
     func filterContentForSearchText(searchText: String) -> Void// [NSManagedObject]
     func cellForRowAt(indexPath : IndexPath,
