@@ -134,6 +134,11 @@ class SelectedBeersTableList : NSObject, Subject {
     }
 }
 
+extension SelectedBeersTableList: UpdateFetchedController {
+    internal func contextsHaveBeenBatchDeleted() {
+        frc.managedObjectContext.refreshAllObjects()
+    }
+}
 
 extension SelectedBeersTableList: NSFetchedResultsControllerDelegate {
     

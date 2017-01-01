@@ -217,6 +217,14 @@ extension FavoriteBeersViewController : UITableViewDelegate {
     }
 }
 
+
+extension FavoriteBeersViewController: UpdateFetchedController {
+    func contextsHaveBeenBatchDeleted() {
+        frc.managedObjectContext.refreshAllObjects()
+    }
+}
+
+
 extension FavoriteBeersViewController : DismissableTutorial {
     func enableTutorial() {
         tutorialView.isHidden = false

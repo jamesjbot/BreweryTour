@@ -70,6 +70,12 @@ class StylesTableList: NSObject {
     }
 }
 
+extension StylesTableList: UpdateFetchedController {
+    internal func contextsHaveBeenBatchDeleted() {
+        frc.managedObjectContext.refreshAllObjects()
+    }
+}
+
 
 extension StylesTableList: Subject {
     
@@ -165,12 +171,6 @@ extension StylesTableList : TableList {
         }
         mediator.selected(thisItem: aStyle, completion: completion)
         return nil
-    }
-    
-    
-    func searchForUserEntered(searchTerm: String, completion: ( (Bool, String?) -> (Void))?) {
-        // Styles are automatically downloaded on start up so searching again will not yield anything new
-        completion!(false,"There are no more new styles to download")
     }
     
 }

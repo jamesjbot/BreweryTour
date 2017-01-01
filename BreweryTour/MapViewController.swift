@@ -51,7 +51,7 @@ class MapViewController : UIViewController {
 
     // MARK: Variables
 
-    private var beerFRC : NSFetchedResultsController<Beer>?
+    fileprivate var beerFRC : NSFetchedResultsController<Beer>?
     fileprivate var lastSelectedManagedObject : NSManagedObject?
 
     // Timer to make sure allBreweries are processed and put on the map
@@ -331,6 +331,17 @@ class MapViewController : UIViewController {
 }
 
 
+// MARK: - MapViewController: UpdateFetchedController
+
+extension MapViewController: UpdateFetchedController {
+    internal func contextsHaveBeenBatchDeleted() {
+        beerFRC?.managedObjectContext.refreshAllObjects()
+    }
+}
+
+
+// MARK: - MapViewController : MKMapViewDelegate
+
 extension MapViewController : MKMapViewDelegate {
     
     // This formats the pins and calloutAccessory views on the map
@@ -508,6 +519,7 @@ extension MapViewController : MKMapViewDelegate {
 }
 
 
+// MARK: - MapViewController: CLLocationManagerDelegate
 /*
  Places the placemark for User's current location
  All code needed for the CLLocationManager to work
@@ -527,6 +539,8 @@ extension MapViewController : MKMapViewDelegate {
 }
 
 
+// MARK: - MapViewController : NSFetchedResultsControllerDelegate
+
 extension MapViewController : NSFetchedResultsControllerDelegate {
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -541,7 +555,7 @@ extension MapViewController : NSFetchedResultsControllerDelegate {
     }
 }
 
-
+// MARK: - MapViewController : DismissableTutorial
 // Tutorial code.
 extension MapViewController : DismissableTutorial {
 

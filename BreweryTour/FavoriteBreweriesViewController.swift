@@ -130,6 +130,13 @@ class FavoriteBreweriesViewController: UIViewController {
 }
 
 
+extension FavoriteBreweriesViewController: UpdateFetchedController {
+    internal func contextsHaveBeenBatchDeleted() {
+        frc.managedObjectContext.refreshAllObjects()
+    }
+}
+
+
 extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {

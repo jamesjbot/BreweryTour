@@ -158,7 +158,7 @@ extension BreweryTableList: TableList {
         return nil
     }
     
-    
+
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
         print("BreweryTableList \(#line)searchForuserEntered beer called")
         fatalError()
@@ -166,6 +166,13 @@ extension BreweryTableList: TableList {
     }
 
 }
+
+extension BreweryTableList: UpdateFetchedController {
+    internal func contextsHaveBeenBatchDeleted() {
+        styleFRCObserver.managedObjectContext.refreshAllObjects()
+    }
+}
+
 
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
 

@@ -72,15 +72,19 @@ class AllBreweriesTableList: NSObject, Subject {
     }
 
 
-    internal func mediatorRefreshFetchedResultsController() {
-        do {
-            try frc.performFetch()
-        } catch {
-        }
-    }
+
 
 }
 
+
+extension AllBreweriesTableList: UpdateFetchedController {
+    internal func contextsHaveBeenBatchDeleted() {
+        do {
+            try frc.managedObjectContext.refreshAllObjects()
+        } catch {
+        }
+    }
+}
 
 extension AllBreweriesTableList : TableList {
 

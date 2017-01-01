@@ -9,6 +9,11 @@
 import Foundation
 import CoreData
 
+protocol UpdateFetchedController {
+    func contextsHaveBeenBatchDeleted()
+}
+
+
 /*
  This class managed states changes across the app
  If a selection is made on the selection screen then we can 
@@ -50,7 +55,6 @@ class Mediator : NSManagedObjectDisplayable {
         return styleList
     }
     
-    
     internal func getBreweryList() -> BreweryTableList {
         return breweryWithStyleList
     }
@@ -65,11 +69,11 @@ class Mediator : NSManagedObjectDisplayable {
         return allBreweryList
     }
 
-
     internal func allBeersAndBreweriesDeleted() {
         // TODO add more tablelists
-        //print("Mediator \(#line) AllBeersAndBrewsDeleted telling tableList to refresh")
-        allBreweryList.mediatorRefreshFetchedResultsController()
+        styleList
+        allBreweryList.contextsHaveBeenBatchDeleted()
+
     }
 
     
