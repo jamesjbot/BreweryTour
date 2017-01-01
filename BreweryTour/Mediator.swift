@@ -38,7 +38,7 @@ class Mediator : NSManagedObjectDisplayable {
         automaticallySegueValue = to
     }
 
-    internal func isAutomaticallySeguing() -> Bool {
+    internal func isAutomaticallySegueing() -> Bool {
         return automaticallySegueValue
     }
 
