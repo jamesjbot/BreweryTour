@@ -632,8 +632,12 @@ class BreweryDBClient {
             // Check to see if the style is already in coredata then skip, else add
             let request = NSFetchRequest<Style>(entityName: "Style")
             request.sortDescriptors = []
+
             readOnlyContext?.perform {
+                // Creating these in the readOnlyContext because they 
+                // Are critically needed in the UI
                 for aStyle in styleArrayOfDict {
+                    print("there are this many styles:\(styleArrayOfDict.count)")
                     let localId = aStyle["id"]?.stringValue
                     let localName = aStyle["name"]
                     do {
@@ -643,22 +647,26 @@ class BreweryDBClient {
                         // if the style is already in coredata skip it
                         if (results?.count)! > 0 {
                             continue
+                        } else {
+                            print ("No style found")
                         }
                     } catch {
                         completion!(false, "Failed Reading Styles from database")
                         return
                     }
 
-                    // When a New Style, creates new style into Background
-                    self.backContext?.perform {
-                        _ = Style(id: localId!, name: localName! as! String, context: self.backContext!)
-                        do {
-                            try self.backContext?.save()
-                        } catch _ {
-                            fatalError("Fatal Error Writing to CoreData")
-                        }
+                    // When a New Style, creates a new style
+                    _ = Style(id: localId!,
+                              name: localName! as! String,
+                              context: self.readOnlyContext!)
+                    do {
+                        try self.readOnlyContext?.save()
+                    } catch _ {
+                        fatalError("Fatal Error Writing to CoreData")
                     }
                 }
+                completion!(true,"Completed processing styles")
+                return
             }
             break
             
