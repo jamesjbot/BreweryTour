@@ -230,7 +230,7 @@ class CategoryViewController: UIViewController,
             // this is for preloading how about the table gets it itself from the mediator
             // Remove brewerytablelistisgoingtofind it itself
             if styleSelectionIndex != nil {
-                breweryList.prepareToShowTable(withStyle: styleList.element(at: (styleSelectionIndex?.row)!) as Style)
+                breweryList.prepareToShowTable()
             }
             activeTableList = breweryList
             genericTable.reloadData()
@@ -260,8 +260,9 @@ class CategoryViewController: UIViewController,
             return
         }
         print("Received message from \(from) \(msg)")
-        guard (isViewLoaded && view.window != nil ) else {
-            // Do not process messages when CategoryViewController is not visisble
+        print("Category \(#line) Do i still need this? ")
+        guard (isViewLoaded && view.window != nil ) && (from !== (activeTableList as AnyObject)) else {
+            // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
             return
         }
 
