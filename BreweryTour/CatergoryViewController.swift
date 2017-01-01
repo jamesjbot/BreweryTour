@@ -45,9 +45,9 @@ class CategoryViewController: UIViewController,
         
     fileprivate let cellIdentifier = "genericTypeCell"
     
-    private let styleList : StylesTableList! = Mediator.sharedInstance().getStyleList()
-    private let breweryList : BreweryTableList! = Mediator.sharedInstance().getBreweryList()
-    private let allBreweryList : AllBreweriesTableList = Mediator.sharedInstance().getAllBreweryList()
+    private let styleList : StylesTableList! = StylesTableList()
+    private let breweryList : BreweryTableList! = BreweryTableList()
+    private let allBreweryList : AllBreweriesTableList = AllBreweriesTableList()
 
     // The communicator between objects.
     private let med : Mediator = Mediator.sharedInstance()

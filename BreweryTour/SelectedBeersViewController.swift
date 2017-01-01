@@ -25,7 +25,7 @@ class SelectedBeersViewController: UIViewController, Observer {
     private let paddingForPoint : CGFloat = 20
 
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    fileprivate let selectedBeersTableList : SelectedBeersTableList = Mediator.sharedInstance().getSelectedBeersList()
+    fileprivate let selectedBeersTableList : SelectedBeersTableList = SelectedBeersTableList()
 
 
     // MARK: Variables
