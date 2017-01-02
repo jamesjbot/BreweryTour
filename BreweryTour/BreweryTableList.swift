@@ -55,8 +55,10 @@ class BreweryTableList: NSObject, Subject {
      */
     override init(){
         super.init()
-        // Register for context updates with Mediator
+        //Accept changes from backgroundContexts
+        readOnlyContext?.automaticallyMergesChangesFromParent = true
 
+        // Register for context updates with Mediator
         styleFRCObserver = createFetchedResultsController(withStyleID: nil)
 
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
@@ -192,12 +194,14 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
         print("BreweryTableList \(#line) BreweryTableList changed object")
+
         func updateStyleSet() {
             let style = anObject as! Style
             if style.id == currentlyObservingStyle?.id {
                 copyOfSet = style.brewerywithstyle?.allObjects as! [Brewery]
             }
         }
+
         switch (type){
         case .insert:
             updateStyleSet()
@@ -216,6 +220,7 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
     
 func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     print("BreweryTableList completed changes")
+    observer.sendNotify(from: self, withMsg: "reload data")
     // Is this needed as I'm atomically doing it
     //copyOfSet = ((controller.fetchedObjects as! [Style]).first?.brewerywithstyle?.allObjects as! [Brewery]?)!
     }

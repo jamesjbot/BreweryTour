@@ -60,11 +60,12 @@ class FavoriteBreweriesViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //Accept changes from backgroundContexts
+        readOnlyContext?.automaticallyMergesChangesFromParent = true
 
         assert(frc != nil)
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
-        readOnlyContext?.automaticallyMergesChangesFromParent = true
         frcForBrewery.delegate = self
         // Do any additional setup after loading the view.
         performFetchOnResultsController()

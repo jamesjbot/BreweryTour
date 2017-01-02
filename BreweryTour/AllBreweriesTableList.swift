@@ -12,7 +12,11 @@ import UIKit
 import CoreData
 
 class AllBreweriesTableList: NSObject, Subject {
-    
+
+    // MARK: Constants
+
+    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+
     var observer : Observer!
     
     func registerObserver(view: Observer) {
@@ -26,12 +30,12 @@ class AllBreweriesTableList: NSObject, Subject {
     
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
     
-    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
     //let backgroundContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.backgroundContext
     
     override init(){
         super.init()
-
+        //Accept changes from backgroundContexts
+        readOnlyContext?.automaticallyMergesChangesFromParent = true
 
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]

@@ -39,6 +39,7 @@ class SelectedBeersTableList : NSObject, Subject {
     // The default query is for ALLBEERS sorted by beer name
     internal override init(){
         super.init()
+        //Accept changes from backgroundContexts
         readOnlyContext?.automaticallyMergesChangesFromParent = true
 
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")

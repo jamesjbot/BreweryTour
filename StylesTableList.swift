@@ -46,7 +46,8 @@ class StylesTableList: NSObject {
 
     internal override init(){
         super.init()
-
+        //Accept changes from backgroundContexts
+        readOnlyContext?.automaticallyMergesChangesFromParent = true
 
         let request : NSFetchRequest<Style> = NSFetchRequest(entityName: "Style")
         request.sortDescriptors = [NSSortDescriptor(key: "displayName", ascending: true)]
@@ -159,7 +160,7 @@ extension StylesTableList : TableList {
             if (searchText?.isEmpty)! {
                 // TODO it's reading nil here for some reason.
                 // How do i replicate
-                cell.textLabel?.text = (self.frc.object(at: indexPath )).displayName ?? "Error"
+                cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! + " " + ((self.frc.object(at: indexPath)).brewerywithstyle?.count.description)! ) ?? "Error"
             } else {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
             }
