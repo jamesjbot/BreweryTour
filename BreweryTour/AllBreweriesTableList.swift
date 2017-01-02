@@ -68,6 +68,13 @@ extension AllBreweriesTableList: UpdateManagedObjectContext {
 
     internal func contextsRefreshAllObjects() {
          frc.managedObjectContext.refreshAllObjects()
+        // We must performFetch after refreshing context, otherwise we will retain
+        // Old information is retained.
+        do {
+            try frc.performFetch()
+        } catch {
+
+        }
     }
 }
 
@@ -161,12 +168,12 @@ extension AllBreweriesTableList: OnlineSearchCapable {
 extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("AllBreweryTableList \(#line) AllBreweriesTableList willchange")
+        print("AllBreweryTableList \(#line) AllBreweriesTableList willchange")
     }
     
     
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        //print("AllBreweryTableList \(#line) AllBreweryTableList changed object")
+        print("AllBreweryTableList \(#line) AllBreweryTableList changed object")
         switch (type){
         case .insert:
             //print("AllBreweryTable \(#line) inserting\n\(anObject)")
@@ -185,7 +192,7 @@ extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("AllBreweryTableList \(#line) AllBreweryTableList controllerdidChangeContent notify observer")
+        print("AllBreweryTableList \(#line) AllBreweryTableList controllerdidChangeContent notify observer")
         // TODO We're preloading breweries do I still need this notify
         // Send message to observer regardless of situation. The observer decides if it should act.
         observer.sendNotify(from: self, withMsg: "reload data")

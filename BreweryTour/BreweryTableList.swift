@@ -42,6 +42,7 @@ class BreweryTableList: NSObject, Subject {
         didSet {
             // Automatically sort this set
             copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
+                // TODO These were names were nil that should notbe
                 return a.name! < b.name!
             })
         }
@@ -186,6 +187,13 @@ extension BreweryTableList: TableList {
 extension BreweryTableList: UpdateManagedObjectContext {
     internal func contextsRefreshAllObjects() {
         styleFRCObserver.managedObjectContext.refreshAllObjects()
+        // We must performFetch after refreshing context, otherwise we will retain
+        // Old information is retained.
+        do {
+            try styleFRCObserver.performFetch()
+        } catch {
+
+        }
     }
 }
 

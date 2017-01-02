@@ -348,6 +348,13 @@ class MapViewController : UIViewController {
 extension MapViewController: UpdateManagedObjectContext {
     internal func contextsRefreshAllObjects() {
         beerFRC?.managedObjectContext.refreshAllObjects()
+        // We must performFetch after refreshing context, otherwise we will retain
+        // Old information is retained.
+        do {
+            try beerFRC?.performFetch()
+        } catch {
+
+        }
     }
 }
 

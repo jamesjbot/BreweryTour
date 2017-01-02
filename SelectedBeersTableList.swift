@@ -148,6 +148,13 @@ class SelectedBeersTableList : NSObject, Subject {
 extension SelectedBeersTableList: UpdateManagedObjectContext {
     internal func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
+        // We must performFetch after refreshing context, otherwise we will retain
+        // Old information is retained.
+        do {
+            try frc.performFetch()
+        } catch {
+
+        }
     }
 }
 
