@@ -55,24 +55,7 @@ class AllBreweriesTableList: NSObject, Subject {
             // We have brewery entries go ahead and display them viewcontroller
             return
         }
-        
-        // Since we didn't exit trying to find  the breweries above
-        // Fetch all the breweries from the internet.
-        //        BreweryDBClient.sharedInstance().downloadAllBreweries() {
-        //            (success, msg) -> Void in
-        //            if msg == "All Pages Processed" {
-        //                print("BreweryTableList \(#line) init() msg:\(msg) dbbrewery client sent back completion handlers saying success:\(success))")
-        //                print("BreweryTableList \(#line) Sending CategoryView a notification to reload breweryTablelist ")
-        //                self.observer.sendNotify(from: self, withMsg: "reload data")
-        ////                do {
-        ////                    print("BreweryTableList \(#line)BreweryTableList \(#line)Is this fetch needed?")
-        ////                    try self.frc.performFetch()
-        ////                } catch {
-        ////                    fatalError()
-        ////                }
-        //            }
-        //
-        //        }
+
     }
 }
 
