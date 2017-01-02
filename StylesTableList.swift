@@ -86,6 +86,8 @@ class StylesTableList: NSObject {
             if !success {
                 self.observer.sendNotify(from: self, withMsg: "Failed to download initial styles\ncheck network connection and try again.")
             } else {
+                // Added performFetch otherwise dat would not reload when there is a
+                // refreshAllObjects in the context.
                 self.refetchData()
                 self.observer.sendNotify(from: self, withMsg: "reload data")
             }
