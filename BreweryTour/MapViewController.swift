@@ -51,7 +51,7 @@ class MapViewController : UIViewController {
 
     // MARK: Variables
 
-    fileprivate var beerFRC : NSFetchedResultsController<Beer>?
+    fileprivate var beerFRC : NSFetchedResultsController<Beer>? = NSFetchedResultsController<Beer>()
     fileprivate var lastSelectedManagedObject : NSManagedObject?
 
     // Timer to make sure allBreweries are processed and put on the map
@@ -305,6 +305,10 @@ class MapViewController : UIViewController {
             removeRouteOnMap()
             breweriesToBeProcessed.removeAll()
             populateMapWithAnnotations( fromBreweries: [mapViewData as! Brewery], removeDisplayedAnnotations: true)
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
+        } else { // No Selection what so ever
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
             }
