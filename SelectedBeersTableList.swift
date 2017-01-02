@@ -29,7 +29,7 @@ class SelectedBeersTableList : NSObject, Subject {
     internal var selectedObject : NSManagedObject! = nil
     internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Beer] = [Beer]()
-    internal var frc : NSFetchedResultsController<Beer>!
+    internal var frc : NSFetchedResultsController<Beer>! = NSFetchedResultsController()
     fileprivate var observer : Observer?
 
 
@@ -117,6 +117,11 @@ class SelectedBeersTableList : NSObject, Subject {
             break
         }
 
+        guard subPredicates.count > 0 else {
+            // Therefore there was no selection don't search for anything.
+            return
+        }
+
         // Set the predicates
         request.predicate = NSCompoundPredicate(andPredicateWithSubpredicates: subPredicates)
 
@@ -200,7 +205,7 @@ extension SelectedBeersTableList : TableList {
         if searchText != "" {
             return filteredObjects.count
         } else {
-            return (frc.fetchedObjects?.count)!
+            return (frc.fetchedObjects?.count ?? 0)
         }
     }
 
