@@ -285,6 +285,7 @@ class MapViewController : UIViewController {
 
         guard lastSelectedManagedObject != Mediator.sharedInstance().getPassedItem() else {
             // No need to update the viewcontroller if the data has not changed
+            activityIndicator.stopAnimating()
             return
         }
 
