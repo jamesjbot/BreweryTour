@@ -216,11 +216,16 @@ class CategoryViewController: UIViewController,
 
     
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
+
+        //Capture the new screen mode
         let segmentedMode: SegmentedControllerMode = CategoryViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
+
         switch segmentedMode {
+
         case .Style:
             activeTableList = styleList
             genericTable.reloadData()
+            // Set the last selection
             genericTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
             )
 
@@ -234,11 +239,13 @@ class CategoryViewController: UIViewController,
             }
             activeTableList = breweryList
             genericTable.reloadData()
+            // Set the last selection
             genericTable.selectRow(at: breweriesWithStyleSelectionIndex, animated: true, scrollPosition: .middle)
 
         case .AllBreweries:
             activeTableList = allBreweryList
             genericTable.reloadData()
+            // Set the last selection
             genericTable.selectRow(at: allBreweriesSelectionIndex, animated: true, scrollPosition: .middle)
         }
     }
