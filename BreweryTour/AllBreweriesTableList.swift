@@ -19,7 +19,6 @@ class AllBreweriesTableList: NSObject, Subject {
         observer = view
     }
     
-    internal var mediator: NSManagedObjectDisplayable!
     internal var filteredObjects: [Brewery] = [Brewery]()
     
     // Currently watches the persistentContext
@@ -150,7 +149,7 @@ extension AllBreweriesTableList : TableList {
         }
         // Tell mediator about the brewery I want to display
         // Then mediator will tell selectedBeerList what to display
-        mediator.selected(thisItem: savedBreweryForDisplay, completion: completion)
+        Mediator.sharedInstance().selected(thisItem: savedBreweryForDisplay, completion: completion)
         return nil
     }    
 }
