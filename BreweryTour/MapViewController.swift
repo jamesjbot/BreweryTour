@@ -282,10 +282,15 @@ class MapViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.title = "Go To Website"
+        mapView.showsUserLocation = true
+        mapView.showsScale = true
+        mapView.showsCompass = true
 
         guard lastSelectedManagedObject != Mediator.sharedInstance().getPassedItem() else {
             // No need to update the viewcontroller if the data has not changed
-            activityIndicator.stopAnimating()
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
             return
         }
 
@@ -318,9 +323,6 @@ class MapViewController : UIViewController {
         // Capture last selection, so we can compare when an update is requested
         lastSelectedManagedObject = mapViewData
 
-        mapView.showsUserLocation = true
-        mapView.showsScale = true
-        mapView.showsCompass = true
     }
 
 
