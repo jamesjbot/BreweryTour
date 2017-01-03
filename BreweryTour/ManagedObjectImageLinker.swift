@@ -116,12 +116,16 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                     fatalError("Critical coredata read problems")
                 }
                 guard saves < self.maxSaves else {
+                    // Block of images updated
+                    Mediator.sharedInstance().broadcastToBreweryImageObservers()
                     break
                 }
             }
             if self.imagesToBeAssignedQueue.count == 0 {
                 // If we finished processing all pending things; stop timer.
                 self.disableTimer()
+                // We finished tell people who are interesting in images to reload
+                Mediator.sharedInstance().broadcastToBreweryImageObservers()
             }
         }
     }
