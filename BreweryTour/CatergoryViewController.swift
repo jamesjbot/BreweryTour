@@ -261,6 +261,7 @@ class CategoryViewController: UIViewController,
     
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(from: AnyObject, withMsg msg: String) {
+        // Only receive messages form the active tablelist
         if from === (activeTableList as AnyObject) {
 
         } else {
@@ -268,10 +269,13 @@ class CategoryViewController: UIViewController,
         }
         print("Received message from \(from) \(msg)")
         print("Category \(#line) Do i still need this? ")
-        guard (isViewLoaded && view.window != nil ) && (from !== (activeTableList as AnyObject)) else {
+        guard (isViewLoaded && view.window != nil ),
+            (from === (activeTableList as AnyObject)) else {
             // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
             return
         }
+
+        print("Processing message from \(from) \(msg)")
 
         if msg.contains("All Pages Processed") {
             activityIndicator.stopAnimating()
@@ -417,7 +421,7 @@ extension CategoryViewController : UITableViewDelegate {
                 self.activityIndicator.setNeedsDisplay()
             }
             if success {
-                self.displayAlertWindow(title: "Request sent", msg: "Your request was sent to the online service, your selection will load in the background" )
+                self.displayAlertWindow(title: "Request sent", msg: "Your request was sent to the online service, your selection will load,\nin the background" )
                 if Mediator.sharedInstance().isAutomaticallySegueing() {
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "Go", sender: nil)
