@@ -45,7 +45,7 @@ internal struct BreweryData {
 }
 
 
-struct BeerData {
+internal struct BeerData {
     var availability: String?
     var beerDescription: String?
     var beerName: String?
