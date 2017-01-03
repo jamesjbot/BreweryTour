@@ -31,6 +31,28 @@ import Foundation
 import Alamofire
 import CoreData
 
+protocol BreweryDBClientProtocol {
+    func isBreweryAndBeerCreationRunning() -> Bool 
+    func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) 
+    // Query for breweries that offer a certain style.
+    func downloadBeersAndBreweriesBy(styleID : String,
+                                              completion: @escaping (_ success: Bool, _ msg: String?) -> Void )
+    // Download all beers from a Brewery
+    // GET: /brewery/:breweryId/beers
+    func downloadBeersBy(brewery: Brewery,
+                                  completionHandler: @escaping ( _ success: Bool, _ msg: String? ) -> Void )
+    // Query for beers with a specific name
+    func downloadBeersBy(name: String,
+                         completion: @escaping (_ success : Bool , _ msg : String? ) -> Void )
+    // Downloads Beer Styles
+    func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void )
+    // Query for breweries with a specific name
+    func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void )
+    // Download images in the background for a brewery
+    func downloadImageToCoreData( forType: ImageDownloadType,
+                                  aturl: NSURL,
+                                  forID: String)
+}
 
 class BreweryDBClient {
 
@@ -547,6 +569,10 @@ class BreweryDBClient {
         task.resume()
     }
 
+    // Check is Brewery and Beer creation is still processing things in their queue.
+    func isBreweryAndBeerCreationRunning() -> Bool {
+        return breweryAndBeerCreator.isBreweryAndBeerCreationRunning()
+    }
 
     // Parse results into objects
     private func parse(response : NSDictionary,
