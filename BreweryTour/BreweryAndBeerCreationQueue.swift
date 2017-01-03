@@ -106,6 +106,13 @@ class BreweryAndBeerCreationQueue: NSObject {
     fileprivate var runningBreweryQueue = [BreweryData]()
     fileprivate var runningBeerQueue = [(BeerData,Int)]()
 
+    private var abreweryContext: NSManagedObjectContext? {
+        didSet {
+            abreweryContext?.automaticallyMergesChangesFromParent = true
+        }
+    }
+
+
     // MARK: Functions
 
     required override init() {
@@ -115,6 +122,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                                          selector: #selector(self.processQueue),
                                          userInfo: nil,
                                          repeats: true)
+        abreweryContext = container?.newBackgroundContext()
     }
 
 
@@ -124,6 +132,10 @@ class BreweryAndBeerCreationQueue: NSObject {
         // This is here because the beer's brewer attribute needs to be set from
         // an inserted brewer otherwise strange errors occur.
         // The only way to merge MO with unique constraints is to save them
+        // Had to move the merge policy assignment closer to the
+        // invocation of save because it was not taking.
+        abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
+
         // one at time. Batch saving generates conflict errors.
         let dq = DispatchQueue.global(qos: .background)
         dq.sync {
@@ -138,9 +150,6 @@ class BreweryAndBeerCreationQueue: NSObject {
             if runningBreweryQueue.count < maxSave {
                 maxSave = runningBreweryQueue.count
             }
-
-            let abreweryContext = container?.newBackgroundContext()
-            abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
 
             if !runningBreweryQueue.isEmpty {
                 for _ in 1...maxSave {
@@ -184,7 +193,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 request.predicate = NSPredicate(format: "id == %@", beer.breweryID!)
                 abreweryContext?.performAndWait {
                     do {
-                        let brewers = try abreweryContext?.fetch(request)
+                        let brewers = try self.abreweryContext?.fetch(request)
                         // Request did not find breweries
                         if (brewers?.count)! < 1 {
                             // Can't find brewery put beer back
@@ -199,14 +208,17 @@ class BreweryAndBeerCreationQueue: NSObject {
                             let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
                             styleRequest.sortDescriptors = []
                             styleRequest.predicate = NSPredicate(format: "id == %@", beer.styleID!)
-                            var resultStyle = try abreweryContext?.fetch(styleRequest)
+                            var resultStyle = try self.abreweryContext?.fetch(styleRequest)
+
+                            assert(resultStyle?.count == 1)
+
                             resultStyle?.first?.addToBrewerywithstyle((brewers?.first)!)
                             print("Added \(brewers?.first?.name) to \(resultStyle?.first?.displayName)")
-
-                            let createdBeer = Beer(data: beer, context: abreweryContext!)
+                            print("this style now has \(resultStyle?.first?.brewerywithstyle?.count) breweries ")
+                            let createdBeer = Beer(data: beer, context: self.abreweryContext!)
                             createdBeer.brewer = brewers?.first
 
-                            try abreweryContext?.save()
+                            try self.abreweryContext?.save()
                             print("Style and changes saved")
                             if beer.imageUrl != nil {
                                 // If we have image data download it
