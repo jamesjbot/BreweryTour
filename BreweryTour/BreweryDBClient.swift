@@ -121,7 +121,8 @@ class BreweryDBClient {
 
     // Parse brewery data and send to creation queue.
     private func createBreweryObject(breweryDict: [String:AnyObject],
-                                     locationDict locDict:[String:AnyObject],
+                                     locationDict locDict: [String:AnyObject],
+                                     brewersID: String,
                                      completion: @escaping (_ out : Brewery) -> () ) {
         let breweryData = BreweryData(
             inName: breweryDict["name"] as! String,
@@ -129,7 +130,7 @@ class BreweryDBClient {
             inLongitude: (locDict["longitude"]?.description)!,
             inUrl: (locDict["website"] as! String? ?? ""),
             open: (locDict["openToPublic"] as! String == "Y") ? true : false,
-            inId: (locDict["id"]?.description)!,
+            inId: brewersID,
             inImageUrl: breweryDict["images"]?["icon"] as? String ?? "")
 
         breweryAndBeerCreator.queueBrewery(breweryData)
@@ -632,10 +633,13 @@ class BreweryDBClient {
 
                     // Assume brewery not in database.
                     // Send all brweries to creation process
-                    createBreweryObject(breweryDict: breweryDict!, locationDict: locDic) {
+
+                    // Make one brewersID
+                    let brewersID = (locDic["id"]?.description)!
+
+                    createBreweryObject(breweryDict: breweryDict!, locationDict: locDic, brewersID: brewersID) {
                         (Brewery) -> Void in
                     }
-                    let brewersID = (locDic["id"]?.description)!
                     createBeerObject(beer: beer, brewerID: brewersID) {
                         (Beer) -> Void in
                     }
@@ -727,8 +731,13 @@ class BreweryDBClient {
                 }
 
                 // Don't repeat breweries in the database
+
+                // Make one brewers id
+                let brewersID = (locDic["id"]?.description)!
+
                 createBreweryObject(breweryDict: breweryDict,
-                                    locationDict: locDic){
+                                    locationDict: locDic,
+                                    brewersID: brewersID ) {
                     (thisbrewery) -> Void in
                 }
             }
