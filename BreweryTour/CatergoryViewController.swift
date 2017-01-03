@@ -228,12 +228,14 @@ class CategoryViewController: UIViewController,
             // Set the last selection
             genericTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
             )
+            newSearchBar.placeholder = "Select Style Below/Search here"
 
         case .BreweriesWithStyle:
-            // Tell the the breweries with style view model to prepare to 
-            // show the selected style
-            // this is for preloading how about the table gets it itself from the mediator
-            // Remove brewerytablelistisgoingtofind it itself
+
+            // Tell the the 'breweries with style' view model to prepare to
+            // Show the selected style
+            // If no style was selected then it will show the last style group 
+            // That was selected.
             if styleSelectionIndex != nil {
                 breweryList.prepareToShowTable()
             }
@@ -241,12 +243,15 @@ class CategoryViewController: UIViewController,
             genericTable.reloadData()
             // Set the last selection
             genericTable.selectRow(at: breweriesWithStyleSelectionIndex, animated: true, scrollPosition: .middle)
+            newSearchBar.placeholder = "Select a brewery/Search here"
+
 
         case .AllBreweries:
             activeTableList = allBreweryList
             genericTable.reloadData()
             // Set the last selection
             genericTable.selectRow(at: allBreweriesSelectionIndex, animated: true, scrollPosition: .middle)
+            newSearchBar.placeholder = "Select a brewery/Search here"
         }
     }
     
