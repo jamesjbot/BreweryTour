@@ -33,6 +33,7 @@ class Mediator : NSManagedObjectDisplayable {
 
     private var passedItem : NSManagedObject?
 
+    fileprivate var observersOfBreweryImages: [BreweryAndBeerImageNotifiable] = [BreweryAndBeerImageNotifiable]()
 
     // MARK: Functions
 
@@ -93,6 +94,23 @@ extension Mediator: NotifyFRCToUpdate {
             i.contextsRefreshAllObjects()
         }
 
+    }
+
+}
+
+extension Mediator: BreweryAndBeerImageNotifier {
+
+    func broadcastToBreweryImageObservers() {
+        guard (observersOfBreweryImages.count) > 0 else {
+            return
+        }
+        for i in observersOfBreweryImages {
+            i.tellImagesUpdate()
+        }
+    }
+
+    func registerAsBrewryImageObserver(t: BreweryAndBeerImageNotifiable) {
+        observersOfBreweryImages.append(t)
     }
 
 }
