@@ -139,6 +139,8 @@ class BreweryAndBeerCreationQueue: NSObject {
                 for _ in 1...maxSave {
                     let b = runningBreweryQueue.removeFirst()
                     _ = Brewery(data: b, context: abreweryContext!)
+
+                    // We must save everyupdate individually or Unique constraints on the class will not be presever
                     do {
                         try abreweryContext?.save()
                     } catch let err {
@@ -176,7 +178,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 abreweryContext?.performAndWait {
                     do {
                         let brewers = try abreweryContext?.fetch(request)
-
+                        // Request did not find breweries
                         if (brewers?.count)! < 1 {
                             // Can't find brewery put beer back
                             self.runningBeerQueue.append(beer)
@@ -198,6 +200,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                             createdBeer.brewer = brewers?.first
 
                             try abreweryContext?.save()
+                            print("Style and changes saved")
                             if beer.imageUrl != nil {
                                 // If we have image data download it
                                 BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Beer,                                                                               aturl: NSURL(string: beer.imageUrl!)!,                                                                             forID: beer.id!)
@@ -232,7 +235,7 @@ class BreweryAndBeerCreationQueue: NSObject {
             runningBreweryQueue.append(brewer)
         }
     }
-    
+
 
     // Queues up beers to be saved
     internal func queueBeer(_ b: BeerData?) {
