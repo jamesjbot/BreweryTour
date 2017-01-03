@@ -110,7 +110,9 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                         break
                     }
                     try context?.save()
+
                     saves += 1
+
                     self.imagesToBeAssignedQueue.removeValue(forKey: key)
                 } catch {
                     fatalError("Critical coredata read problems")
