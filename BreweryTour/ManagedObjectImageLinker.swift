@@ -72,8 +72,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
             let context = backContext
             context?.automaticallyMergesChangesFromParent = true
             context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
-            for (key,value) in self.imagesToBeAssignedQueue {
-                let (type,data) = value
+            for (key, (type, data ) ) in self.imagesToBeAssignedQueue {
                 guard data != nil else { // There is no image remove image request
                     self.imagesToBeAssignedQueue.removeValue(forKey: key)
                     continue
