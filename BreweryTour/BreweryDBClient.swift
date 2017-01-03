@@ -33,7 +33,6 @@ import CoreData
 
 
 class BreweryDBClient {
-    
 
     // MARK: Enumerations
 
@@ -43,7 +42,7 @@ class BreweryDBClient {
         case BeersFollowedByBreweries
         // This will produce styles it is automatically called.
         case Styles
-        // This will produce breweries only and is called when you search on 
+        // This will produce breweries only and is called when you search on
         // the All Breweries table
         case Breweries
         // This will produce beers when and is called when any brewery is selected.
@@ -62,7 +61,7 @@ class BreweryDBClient {
 
 
     // MARK: Singleton Implementation
-    
+
     private init(){}
     internal class func sharedInstance() -> BreweryDBClient {
         struct Singleton {
@@ -70,7 +69,7 @@ class BreweryDBClient {
         }
         return Singleton.sharedInstance
     }
-    
+
 
     // MARK: Functions
 
@@ -97,7 +96,7 @@ class BreweryDBClient {
         breweryAndBeerCreator.queueBeer(beer)
     }
 
-    
+
     // Parse brewery data and send to creation queue.
     private func createBreweryObject(breweryDict: [String:AnyObject],
                                      locationDict locDict:[String:AnyObject],
@@ -124,7 +123,7 @@ class BreweryDBClient {
         let components = NSURLComponents()
         components.scheme = Constants.BreweryDB.APIScheme
         components.host = Constants.BreweryDB.APIHost
-        
+
         switch queryType {
         case .BeersFollowedByBreweries:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
@@ -140,24 +139,24 @@ class BreweryDBClient {
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery + "/" +
                 querySpecificID! + "/" + Constants.BreweryDB.Methods.Beers
         }
-        
+
         components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
-        
+
         // Build the other parameters
         for (key, value) in parameters {
             //print("BreweryDB \(#line)key,value")
             let queryItem = NSURLQueryItem(name: key, value: "\(value)")
             components.queryItems?.append(queryItem as URLQueryItem)
         }
-        
+
         // Finally Add the API Key - QueryItem
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
 
         return components.url! as NSURL
     }
-    
-    
+
+
     // Query for all breweries
     internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
         let theOutputType = APIQueryResponseProcessingTypes.Breweries
