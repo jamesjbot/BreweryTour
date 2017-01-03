@@ -80,6 +80,13 @@ struct BeerData {
     }
 }
 
+internal protocol BreweryAndBeerCreation {
+
+    func isBreweryAndBeerCreationRunning() -> Bool
+    func queueBrewery(_ b: BreweryData?)
+    func queueBeer(_ b: BeerData?)
+}
+
 
 class BreweryAndBeerCreationQueue: NSObject {
 
@@ -96,8 +103,8 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     private var breweryQueue: DispatchQueue = DispatchQueue.global(qos: .background)
 
-    private var runningBreweryQueue = [BreweryData]()
-    private var runningBeerQueue = [BeerData]()
+    fileprivate var runningBreweryQueue = [BreweryData]()
+    fileprivate var runningBeerQueue = [(BeerData,Int)]()
 
     // MARK: Functions
 
@@ -217,7 +224,23 @@ class BreweryAndBeerCreationQueue: NSObject {
         }
     }
 
-    private func startWorkTimer() {
+//    private func testingVerify(beer: BeerData,c: NSManagedObjectContext) {
+//        do {
+//            // Adds the brewery to the style for easier searching
+//            let dContext = c
+//            let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
+//            styleRequest.sortDescriptors = []
+//            styleRequest.predicate = NSPredicate(format: "id == %@", beer.styleID!)
+//            let resultStyle = try dContext.fetch(styleRequest)
+//            assert(resultStyle.count == 1)
+//            print("Verifying on different context this style now has \(resultStyle.first?.brewerywithstyle?.count)! breweries ")
+//        } catch {
+//
+//        }
+//
+//    }
+
+    fileprivate func startWorkTimer() {
         if workTimer == nil {
             workTimer = Timer.scheduledTimer(timeInterval: secondsRepeatInterval,
                                              target: self,
@@ -226,7 +249,17 @@ class BreweryAndBeerCreationQueue: NSObject {
                                              repeats: true)
         }
     }
+}
 
+extension BreweryAndBeerCreationQueue: BreweryAndBeerCreation {
+
+
+    internal func isBreweryAndBeerCreationRunning() -> Bool {
+        if runningBreweryQueue.isEmpty && runningBeerQueue.isEmpty {
+            return false
+        }
+        return true
+    }
 
     // Queues up breweries to be saved
     internal func queueBrewery(_ b: BreweryData?) {
@@ -241,7 +274,8 @@ class BreweryAndBeerCreationQueue: NSObject {
     internal func queueBeer(_ b: BeerData?) {
         if let beer = b {
             startWorkTimer()
-            runningBeerQueue.append(beer)
+            let attempt = 0
+            runningBeerQueue.append( (beer,attempt) )
         }
     }
 }
