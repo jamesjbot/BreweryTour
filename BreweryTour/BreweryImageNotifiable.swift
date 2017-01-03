@@ -14,5 +14,5 @@ protocol BreweryAndBeerImageNotifiable {
 
 protocol BreweryAndBeerImageNotifier {
     func broadcastToBreweryImageObservers()
-    func registerAsBrewryImageObserver(t: BreweryImageNotifiable)
+    func registerAsBrewryImageObserver(t: BreweryAndBeerImageNotifiable)
 }
