@@ -58,7 +58,7 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
         // Currently if the segmented control 1 (all beers mode selected send true)
-        selectedBeersTableList.setAllBeersModeON(sender.state.rawValue == 1 ? true :false)
+        selectedBeersTableList.setAllBeersModeONThenperformFetch(sender.state.rawValue == 1 ? true :false)
     }
 
 

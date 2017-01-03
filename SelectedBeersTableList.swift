@@ -79,7 +79,7 @@ class SelectedBeersTableList : NSObject, Subject {
      We are already on the viewcontroller to be able to toggle this, so we need
      to performFetch now.
      */
-    internal func setAllBeersModeON(_ control : Bool) {
+    internal func setAllBeersModeONThenperformFetch(_ control : Bool) {
         if control {
             allBeersMode = true
         } else {
