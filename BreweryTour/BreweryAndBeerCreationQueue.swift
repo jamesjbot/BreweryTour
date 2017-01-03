@@ -92,8 +92,8 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // MARK: Constants
 
-    private let secondsRepeatInterval: Double = 7
-    private let maxSavesPerLoop: Int = 300
+    private let secondsRepeatInterval: Double = 2
+    private let maxSavesPerLoop: Int = 100
 
     private let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
@@ -151,6 +151,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 maxSave = runningBreweryQueue.count
             }
 
+            //Processing Breweries
             if !runningBreweryQueue.isEmpty {
                 for _ in 1...maxSave {
                     let b = runningBreweryQueue.removeFirst()
@@ -185,8 +186,10 @@ class BreweryAndBeerCreationQueue: NSObject {
                 maxSave = runningBeerQueue.count
             }
 
+
+            // Processing Beers
             for _ in 1...maxSave {
-                let beer = runningBeerQueue.removeFirst()
+                var (beer,attempt) = runningBeerQueue.removeFirst()
 
                 let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
                 request.sortDescriptors = []
@@ -196,14 +199,20 @@ class BreweryAndBeerCreationQueue: NSObject {
                         let brewers = try self.abreweryContext?.fetch(request)
                         // Request did not find breweries
                         if (brewers?.count)! < 1 {
-                            // Can't find brewery put beer back
-                            self.runningBeerQueue.append(beer)
+                            print("This beer can't find brewer \(beer.beerName)")
+                            // If we have breweries still running then put beer back
+                            if !self.runningBreweryQueue.isEmpty {
+                                self.runningBeerQueue.append( (beer,attempt) )
+                            } else { // Out of breweries. Try again 8 times then give up
+                                if attempt < 8 {
+                                    attempt += 1
+                                    self.runningBeerQueue.append( (beer,attempt) )
+                                }
+                            }
+
+
                         } else { // Found a Brewery to attach this beer to
 
-                            // TODO Debugging code remove
-                            if (brewers?.count)! > 1 {
-                                fatalError()
-                            }
                             // Adds the brewery to the style for easier searching
                             let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
                             styleRequest.sortDescriptors = []
