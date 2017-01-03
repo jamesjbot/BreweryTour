@@ -47,6 +47,8 @@ class BreweryTableList: NSObject, Subject {
             })
         }
     }
+
+
     // MARK: - Functions
 
     //
@@ -63,6 +65,8 @@ class BreweryTableList: NSObject, Subject {
         styleFRCObserver = createFetchedResultsController(withStyleID: nil)
 
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
+        Mediator.sharedInstance().registerAsBrewryImageObserver(t: self)
 
     }
 
@@ -107,6 +111,9 @@ extension BreweryTableList: TableList {
         cell.textLabel?.adjustsFontSizeToFitWidth = true
         let image = #imageLiteral(resourceName: "Nophoto.png")
         cell.imageView?.image = image
+
+        // When searchText if empty check to make sure indexpath is within set bounds
+        // When searchText if full check to make sure indexpath is within set bounds
         guard (searchText?.isEmpty)! ? (indexPath.row < self.copyOfSet.count) :
             indexPath.row < self.filteredObjects.count else {
                 return UITableViewCell()
@@ -184,6 +191,7 @@ extension BreweryTableList: TableList {
 
 }
 
+
 extension BreweryTableList: UpdateManagedObjectContext {
     internal func contextsRefreshAllObjects() {
         styleFRCObserver.managedObjectContext.refreshAllObjects()
@@ -226,11 +234,26 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
     }
 
     
-func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
     print("BreweryTableList completed changes")
     observer.sendNotify(from: self, withMsg: "reload data")
     // Is this needed as I'm atomically doing it
     //copyOfSet = ((controller.fetchedObjects as! [Style]).first?.brewerywithstyle?.allObjects as! [Brewery]?)!
     }
 }
+
+
+extension BreweryTableList: BreweryAndBeerImageNotifiable {
+
+    func tellImagesUpdate() {
+        observer.sendNotify(from: self, withMsg: "reload data")
+    }
+}
+
+
+
+
+
+
+
 
