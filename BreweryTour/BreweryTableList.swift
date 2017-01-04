@@ -31,7 +31,7 @@ class BreweryTableList: NSObject, Subject {
     var displayableBreweries = [Brewery]()
     var newBeers = [Beer]()
 
-    internal var mediator: NSManagedObjectDisplayable!
+    //internal var mediator: NSManagedObjectDisplayable!
 
     // variable for search filtering
     internal var filteredObjects: [Brewery] = [Brewery]()
@@ -61,9 +61,11 @@ class BreweryTableList: NSObject, Subject {
         //Accept changes from backgroundContexts
         readOnlyContext?.automaticallyMergesChangesFromParent = true
 
-        // Register for context updates with Mediator
+        // Create a Style fetched results controller that will get updates from coredata.
+        // The fetched style has the breweries embedded in brewerywithstyle NSSet
         styleFRCObserver = createFetchedResultsController(withStyleID: nil)
 
+        // Register for context updates with Mediator
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         Mediator.sharedInstance().registerAsBrewryImageObserver(t: self)
@@ -85,7 +87,9 @@ class BreweryTableList: NSObject, Subject {
 
 
     internal func prepareToShowTable() {
-        // Stylefetch
+        // Get the currently selected style form the mediator
+        // If the selection is a brewery then the CategoryViewController would have intercepted that selection
+        // and stopped this program from preparing to showTable()
         currentlyObservingStyle = Mediator.sharedInstance().getPassedItem() as? Style
         styleFRCObserver = createFetchedResultsController(withStyleID: currentlyObservingStyle?.id)
         styleFRCObserver.delegate = self
@@ -116,6 +120,8 @@ extension BreweryTableList: TableList {
         // When searchText if full check to make sure indexpath is within set bounds
         guard (searchText?.isEmpty)! ? (indexPath.row < self.copyOfSet.count) :
             indexPath.row < self.filteredObjects.count else {
+                // TODO Trying to catch an error here.
+                fatalError()
                 return UITableViewCell()
         }
         var brewery: Brewery?
@@ -210,7 +216,7 @@ extension BreweryTableList: UpdateManagedObjectContext {
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("BreweryTableList \(#line) BreweryTableList changed object")
+        //print("BreweryTableList \(#line) BreweryTableList changed object")
 
         func updateStyleSet() {
             let style = anObject as! Style
@@ -236,7 +242,7 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    print("BreweryTableList completed changes")
+    //print("BreweryTableList completed changes")
     observer.sendNotify(from: self, withMsg: "reload data")
     // Is this needed as I'm atomically doing it
     //copyOfSet = ((controller.fetchedObjects as! [Style]).first?.brewerywithstyle?.allObjects as! [Brewery]?)!
