@@ -16,6 +16,14 @@
 import UIKit
 import CoreData
 
+
+protocol SelectedBeersViewModel {
+
+    func registerObserver(view: Observer)
+    func setAllBeersModeONThenperformFetch(_ control : Bool)
+
+}
+
 class SelectedBeersTableList : NSObject, Subject {
 
     // MARK: Constants
@@ -24,13 +32,18 @@ class SelectedBeersTableList : NSObject, Subject {
 
 
     // MARK: Variables
+    // TODO add MediatorBroadcast registration code.
+    private var mediator:  MediatorBroadcastSetSelected = Mediator.sharedInstance()
 
-    private var allBeersMode : Bool = false
-    internal var selectedObject : NSManagedObject! = nil
-    internal var mediator: NSManagedObjectDisplayable!
-    internal var filteredObjects: [Beer] = [Beer]()
-    internal var frc : NSFetchedResultsController<Beer>! = NSFetchedResultsController()
+    fileprivate var allBeersMode : Bool = false
+
+    fileprivate var filteredObjects: [Beer] = [Beer]()
+
+    fileprivate var frc : NSFetchedResultsController<Beer>! = NSFetchedResultsController()
+
     fileprivate var observer : Observer?
+
+    fileprivate var selectedObject : NSManagedObject! = nil
 
 
     // MARK: Functions
@@ -51,16 +64,15 @@ class SelectedBeersTableList : NSObject, Subject {
 
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
-
+        // Since the SelectedBeersViewController creates this object
+        // The mediator will never be able to tell SelectedBeersTableList
+        // what the selected object is.
+        // therefore we must go get the selected item from the mediator
+        // and set our class variable to it.
+        selectedObject = Mediator.sharedInstance().getPassedItem()
         // No need to fetch or set delegate
-        // this will happen when SelectedBeerViewController launches
-        // it will call toggleBeersMode() whichCalls performFetch()
-    }
-
-    
-    // Register the ViewController that will display this data
-    internal func registerObserver(view: Observer) {
-        observer = view
+        // this will happen when SelectedBeersViewController launches
+        // it will call setAllBeersModeOnThenperformFetch()
     }
     
     
@@ -73,21 +85,6 @@ class SelectedBeersTableList : NSObject, Subject {
         performFetchRequestFor(observerNeedsNotification: false)
     }
 
-
-    /*
-     Toggles between showing all beers or just selected beers based on brewery or style.
-     We are already on the viewcontroller to be able to toggle this, so we need
-     to performFetch now.
-     */
-    internal func setAllBeersModeONThenperformFetch(_ control : Bool) {
-        if control {
-            allBeersMode = true
-        } else {
-            allBeersMode = false
-        }
-        performFetchRequestFor(observerNeedsNotification: true)
-    }
-    
 
     // Function to perform fetch on dynamic request.
     // After fetch is completed the user interface
@@ -144,6 +141,30 @@ class SelectedBeersTableList : NSObject, Subject {
         }
     }
 }
+
+extension SelectedBeersTableList: SelectedBeersViewModel {
+
+    // Register the ViewController that will display this data
+    internal func registerObserver(view: Observer) {
+        observer = view
+    }
+
+
+    /*
+     Toggles between showing all beers or just selected beers based on brewery or style.
+     We are already on the viewcontroller to be able to toggle this, so we need
+     to performFetch now.
+     */
+    internal func setAllBeersModeONThenperformFetch(_ control : Bool) {
+        if control {
+            allBeersMode = true
+        } else {
+            allBeersMode = false
+        }
+        performFetchRequestFor(observerNeedsNotification: true)
+    }
+}
+
 
 extension SelectedBeersTableList: UpdateManagedObjectContext {
     internal func contextsRefreshAllObjects() {
