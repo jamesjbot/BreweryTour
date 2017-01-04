@@ -394,6 +394,7 @@ extension CategoryViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         // Save the selection index
+        // Only one selected item can exist at all times
         switch SegmentedControllerMode(rawValue: segmentedControl.selectedSegmentIndex)! {
         case .Style:
             styleSelectionIndex = indexPath
