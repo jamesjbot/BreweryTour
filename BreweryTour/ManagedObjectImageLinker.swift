@@ -64,7 +64,12 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
     // Process the last unfull set on the breweriesToBeProcessed queue.
     @objc private func timerProcessImageQueue() {
         print("timerProcessImageQueue fired \(imagesToBeAssignedQueue.count) images")
-        let dq = DispatchQueue.global(qos: .background)
+        // TODO try this logic again later maybe we can aggresively pull in new images.
+        // The images are not ready till the beer queue is finished
+//        guard !BreweryDBClient.sharedInstance().isBreweryAndBeerCreationRunning() else {
+//            return
+//        }
+        let dq = DispatchQueue.global(qos: .userInitiated)
         dq.sync {
             var saves = 0 // Stopping counter
 
@@ -97,7 +102,12 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                         // else try next image
                         // TODO remove test code
                         if (result?.count)! > 1 {
-                            fatalError("WHy?")
+                            fatalError("Why?")
+                        }
+                        
+                        // TODO Reconsider this data purge. No brewery/beers matches and queue is done, purge the data.
+                        if result?.count == 0                         {
+                                self.imagesToBeAssignedQueue.removeValue(forKey: key)
                         }
                         continue
                     }
