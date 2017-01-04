@@ -15,7 +15,7 @@ import CoreData
  notify the other Views That will need to update because of that change.
  */
 
-class Mediator : NSManagedObjectDisplayable {
+class Mediator {
 
     // MARK: Constants
 
@@ -31,7 +31,7 @@ class Mediator : NSManagedObjectDisplayable {
 
     private var automaticallySegueValue: Bool = false
 
-    private var passedItem : NSManagedObject?
+    fileprivate var passedItem : NSManagedObject?
 
     fileprivate var observersOfBreweryImages: [BreweryAndBeerImageNotifiable] = [BreweryAndBeerImageNotifiable]()
 
@@ -61,8 +61,15 @@ class Mediator : NSManagedObjectDisplayable {
     }
 
     
+
+}
+
+
+extension Mediator: MediatorBroadcastSetSelected {
+
+
     // When an element on categoryScreen is selected, process it on BreweryDBClient
-    func selected(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
+    internal func select(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passedItem = thisItem
         //print("Mediator \(#line) setting selectedBeersList prior to call: \(passedItem)")
         // TODO Notify everyone who want to know what the selcted item is
@@ -77,8 +84,12 @@ class Mediator : NSManagedObjectDisplayable {
                 completion: completion)
         }
     }
-}
 
+    internal func registerForObjectUpdate(observer: ReceiveBroadcastSetSelected) {
+        // TODO
+    }
+
+}
 
 extension Mediator: NotifyFRCToUpdate {
 

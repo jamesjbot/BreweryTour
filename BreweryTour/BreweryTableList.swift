@@ -178,7 +178,8 @@ extension BreweryTableList: TableList {
         }
         // Tell mediator about the brewery I want to display
         // Then mediator will tell selectedBeerList what to display
-        Mediator.sharedInstance().selected(thisItem: savedBreweryForDisplay, completion: completion)
+        // TODO temporarily call as protocol
+        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: savedBreweryForDisplay, completion: completion)
         return nil
     }
     

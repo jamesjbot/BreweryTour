@@ -201,7 +201,8 @@ extension StylesTableList : TableList {
         } else {
             aStyle = filteredObjects[elementAt.row]
         }
-        Mediator.sharedInstance().selected(thisItem: aStyle, completion: completion)
+        // Temporarily set Mediator thru its protocol
+        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: aStyle, completion: completion)
         return nil
     }
     

@@ -238,7 +238,8 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("FavoriteBrewery \(#line) didSelectRowAt called. ")
         // Send the brewery to the mediator, then switch to the map tab
-        Mediator.sharedInstance().selected(thisItem: frcForBrewery.object(at: indexPath)) {
+        // TODO check on usage of mediator thru protocol
+        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: frcForBrewery.object(at: indexPath)) {
             (success, msg) -> Void in
         }
 
