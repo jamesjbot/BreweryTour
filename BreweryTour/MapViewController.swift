@@ -135,7 +135,20 @@ class MapViewController : UIViewController {
         }
         return nil
     }
-    
+
+
+    private func newInitialFetchBreweries(byStyle: Style) {
+        // Fetch all the Breweries with style
+        let request : NSFetchRequest<Style> = Style.fetchRequest()
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
+        // A static view of current breweries with styles
+        let styleFRC = NSFetchedResultsController(fetchRequest: request ,
+                                             managedObjectContext: readOnlyContext!,
+                                             sectionNameKeyPath: nil,
+                                             cacheName: nil)
+        styleFRC.delegate = self 
+    }
 
     /*
      This function is only called on viewWillAppear
