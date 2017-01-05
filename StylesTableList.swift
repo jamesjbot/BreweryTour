@@ -160,7 +160,7 @@ extension StylesTableList : TableList {
             if (searchText?.isEmpty)! {
                 // TODO it's reading nil here for some reason.
                 // How do i replicate
-                cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! + " " + ((self.frc.object(at: indexPath)).brewerywithstyle?.count.description)! ) ?? "Error"
+                cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! + " " + ((self.frc.object(at: indexPath)).brewerywithstyle?.count.description)! + " Breweries")  ?? "Error"
             } else {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
             }
