@@ -42,10 +42,14 @@ class MapViewController : UIViewController {
     let reuseId = "pin"
     let maxBreweryBuffer = 50
     let timerDelay = 5
+    let maximumClosestBreweries = 100
 
     // Location manager allows us access to the user's location
     private let locationManager = CLLocationManager()
-    
+
+    private var debouncedFunction: (()->())? = nil
+
+    // Coredata
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
@@ -53,6 +57,142 @@ class MapViewController : UIViewController {
 
     fileprivate var beerFRC : NSFetchedResultsController<Beer>? = NSFetchedResultsController<Beer>()
     fileprivate var lastSelectedManagedObject : NSManagedObject?
+
+    fileprivate var styleFRC: NSFetchedResultsController<Style> = NSFetchedResultsController<Style>()
+
+    // New breweries with styles variable
+    fileprivate var breweriesForDisplay: [Brewery] = [] {
+        didSet {
+            debouncedFunction!()
+            // What is it we are trying to do.
+            // I'm trying to make this more responsive.
+            // MapView is getting both bogged down by the number of pins to display
+            // And by waiting for the processing to finish
+
+            // Requirements that I've made up to help with this
+            // 1. Load only the closest breweries
+            // 2. Load only maximumClosestbreweries which is 100 right now
+            // 3. The wait for loading things is too slow is there a way I can accelerate getting styles in loaded with some beers faster.
+
+
+            // TODO Your going to have to fix when user presses another styles and the old style is still loading.
+            // TODO When ever you just load breweries not styles. The styles will not be linked to these breweries.
+            // TODO When you go to create the beers by selcting the above breweries will styles also be populated?
+
+//            let dq = DispatchQueue.global(qos: .userInitiated)
+//            dq.async {
+//                DispatchQueue.main.async {
+//                    self.activityIndicator.startAnimating()
+//                }
+//                //self.mapSemaphore.wait()
+////                if mapLock == true {
+////                    print("Sorry map is locked")
+////                    return
+////                }
+////                print("Locking map")
+////                mapLock = true
+//                // If there is a userLocation sort the breweries?
+//
+
+        }
+    }
+
+
+    private func sortBreweriesByDistanceAndDisplay() {
+        // If we have a user location we can sort first
+        if self.mapView.userLocation.location != nil {
+            breweriesForDisplay.sort(by:
+                { (brewery1, brewery2) -> Bool in
+                    let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
+                    let location2: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery2.latitude!)!), longitude: CLLocationDegrees(Double(brewery2.longitude!)!))
+                    return ((self.mapView.userLocation.location?.distance(from: location1))! as Double) < ((self.mapView.userLocation.location?.distance(from: location2))! as Double)
+            })
+        }
+
+        print("Setting this many points:\(self.breweriesForDisplay.count)")
+        var annotations = [MKAnnotation]()
+        // Show only the first 500 points otherwise UI Slows down too much.
+        var maxDisplayed: Int = self.breweriesForDisplay.count
+        if self.breweriesForDisplay.count > self.maximumClosestBreweries {
+            maxDisplayed = self.maximumClosestBreweries
+        }
+        for (number,i) in self.breweriesForDisplay.enumerated() {
+            guard number < maxDisplayed else {
+                break
+            }
+            // Sometimes the breweries don't have a location
+            guard i.latitude != nil && i.longitude != nil else {
+                continue
+            }
+
+            let aPin = MKPointAnnotation()
+            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
+            aPin.title = i.name
+            aPin.subtitle = i.url
+            annotations.append(aPin)
+        }
+        DispatchQueue.main.async {
+            self.mapView.removeAnnotations(self.mapView.annotations)
+            self.mapView.addAnnotations(annotations)
+            // Set the center of the map
+            // Set the view region
+            // Calculated form point slope formula where 90degrees with 1 point to .07 degrees with 1000+points
+            // Using the below formula to calculate region. where x is number of points y is the dimension size.
+            //y = − 0.09002002 x + 90.09002002
+            let degrees = -0.99 * Double(self.breweriesForDisplay.count) + 1000000
+            //let region = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: degrees, longitudeDelta: degrees))
+            self.centerMapOnLocation(location: self.mapView.userLocation.location, radius: degrees)
+            //mapView.setCenter(mapView.userLocation.coordinate, animated: true)
+            //mapView.
+            print("mapview \(#line) has count ")
+            print(self.mapView.annotations.count)
+            self.mapView.setNeedsDisplay()
+            self.activityIndicator.stopAnimating()
+            print("Releasing map")
+            //self.mapSemaphore.signal()
+            //self.mapLock = false
+        }
+    }
+
+
+    // This function will drop the excessive calls to redisplay the map
+    // Borrowed from
+    // http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call/33794262#33794262
+    func debounce(delay:Int, queue:DispatchQueue, action: @escaping (()->())) -> ()->() {
+        var lastFireTime = DispatchTime.now()
+        let dispatchDelay = DispatchTimeInterval.milliseconds(delay)
+
+        return {
+            let dispatchTime: DispatchTime = lastFireTime + dispatchDelay
+            queue.asyncAfter(deadline: dispatchTime, execute: {
+                let when: DispatchTime = lastFireTime + dispatchDelay
+                let now = DispatchTime.now()
+                if now.rawValue >= when.rawValue {
+                    lastFireTime = DispatchTime.now()
+                    action()
+                }
+            })
+        }
+    }
+
+
+    func centerMapOnLocation(location: CLLocation?, radius regionRadius: CLLocationDistance) {
+        DispatchQueue.main.async {
+        guard location != nil else {
+            // Center of the U.S.
+            let centerCoord = CLLocationCoordinate2D(latitude: 39.5, longitude: -98.35)
+            let span = MKCoordinateSpanMake(63 , 63)
+            let region = MKCoordinateRegion(center: centerCoord , span: span)
+            self.mapView.setRegion(region, animated: true)
+            return
+        }
+        print("Setting Region centered on user location to \(regionRadius) meters")
+        let coordinateRegion = MKCoordinateRegionMakeWithDistance((location?.coordinate)!,
+                                                                  regionRadius * 2.0, regionRadius * 2.0)
+        self.mapView.setRegion(coordinateRegion, animated: true)
+        }
+    }
+
 
     // Timer to make sure allBreweries are processed and put on the map
     private var checkUpTimer: Timer? = nil
@@ -332,8 +472,9 @@ class MapViewController : UIViewController {
         // Decision making to display Breweries Style or Brewery
         if mapViewData is Style {
 
-            initializeFetchAndFetchBreweriesSetIncomingLocations(
-                byStyle: mapViewData as! Style)
+            newInitialFetchBreweries(byStyle: mapViewData as! Style)
+            //initializeFetchAndFetchBreweriesSetIncomingLocations(
+                //byStyle: mapViewData as! Style)
             activityIndicator.stopAnimating()
 
         } else if mapViewData is Brewery {
