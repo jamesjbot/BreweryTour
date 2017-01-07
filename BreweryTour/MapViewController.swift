@@ -141,14 +141,32 @@ class MapViewController : UIViewController {
         // Fetch all the Breweries with style
         let request : NSFetchRequest<Style> = Style.fetchRequest()
         request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
+        request.predicate = NSPredicate(format: "id = %@", byStyle.id!)
         // A static view of current breweries with styles
-        let styleFRC = NSFetchedResultsController(fetchRequest: request ,
+        styleFRC = NSFetchedResultsController(fetchRequest: request ,
                                              managedObjectContext: readOnlyContext!,
                                              sectionNameKeyPath: nil,
                                              cacheName: nil)
-        styleFRC.delegate = self 
+        do {
+            try styleFRC.performFetch()
+            //print("Found style \(styleFRC.fetchedObjects?.first?.brewerywithstyle)")
+            breweriesForDisplay = styleFRC.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]
+        } catch {
+            
+        }
+        styleFRC.delegate = self
     }
+
+
+    fileprivate func fetchAndDisplay() {
+        do {
+            try styleFRC.performFetch()
+            //print("Found style \(styleFRC.fetchedObjects?.first?.brewerywithstyle)")
+            breweriesForDisplay = styleFRC.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]
+        } catch {
+        }
+    }
+
 
     /*
      This function is only called on viewWillAppear
@@ -579,16 +597,41 @@ extension MapViewController : MKMapViewDelegate {
 
 extension MapViewController : NSFetchedResultsControllerDelegate {
 
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        guard let brewer = (anObject as? Beer)?.brewer else {
-            return
-        }
-        // Only newly inserted breweries will be processed
-        if type == NSFetchedResultsChangeType.insert  {
-            breweriesToBeProcessed.append(brewer)
-        }
-
+    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("MapView Controller will change content")
     }
+
+    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+        print("MapView \(#line) controller did change anobject called.")
+        switch (type){
+        case .insert:
+            print("MapView \(#line) insert ")
+            break
+        case .delete:
+            print("mapview \(#line) delete ")
+            break
+        case .move:
+            break
+        case .update:
+            print("mapview \(#line) update ")
+            break
+        }
+    }
+    internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("mapview \(#line) finishedchanging ")
+        breweriesForDisplay = (controller.fetchedObjects?.first as! Style).brewerywithstyle?.allObjects as! [Brewery]
+    }
+
+//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
+//        guard let brewer = (anObject as? Beer)?.brewer else {
+//            return
+//        }
+//        // Only newly inserted breweries will be processed
+//        if type == NSFetchedResultsChangeType.insert  {
+//            breweriesToBeProcessed.append(brewer)
+//        }
+//
+//    }
 }
 
 // MARK: - MapViewController : DismissableTutorial
