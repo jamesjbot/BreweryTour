@@ -429,6 +429,9 @@ class MapViewController : UIViewController {
     // Ask user for access to their location
     override func viewDidLoad(){
         super.viewDidLoad()
+        debouncedFunction = debounce(delay: 3000, queue: DispatchQueue.main, action: {
+                self.sortBreweriesByDistanceAndDisplay()
+        })
 
         assert(beerFRC != nil)
         // Register with mediator for contextUpdates
