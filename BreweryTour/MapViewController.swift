@@ -386,9 +386,11 @@ extension MapViewController : MKMapViewDelegate {
 
         pinView!.canShowCallout = true
 
-        if (pinView?.annotation?.title)! == mapView.userLocation.title {
+        // If incoming annotation is user location.
+        if mapView.userLocation.coordinate.latitude == annotation.coordinate.latitude ,
+            mapView.userLocation.coordinate.longitude == annotation.coordinate.longitude {
             // User's location has doesn't need the other decorations
-            pinView!.pinTintColor = UIColor.blue
+            pinView!.pinTintColor = UIColor.black
             return pinView
 
         } else { // breweries
