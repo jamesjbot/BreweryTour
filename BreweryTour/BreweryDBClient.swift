@@ -123,6 +123,7 @@ class BreweryDBClient {
     private func createBreweryObject(breweryDict: [String:AnyObject],
                                      locationDict locDict: [String:AnyObject],
                                      brewersID: String,
+                                     style: String?,
                                      completion: @escaping (_ out : Brewery) -> () ) {
         let breweryData = BreweryData(
             inName: breweryDict["name"] as! String,
@@ -131,7 +132,8 @@ class BreweryDBClient {
             inUrl: (locDict["website"] as! String? ?? ""),
             open: (locDict["openToPublic"] as! String == "Y") ? true : false,
             inId: brewersID,
-            inImageUrl: breweryDict["images"]?["icon"] as? String ?? "")
+            inImageUrl: breweryDict["images"]?["icon"] as? String ?? "",
+            inStyleID: style)
 
         breweryAndBeerCreator.queueBrewery(breweryData)
     }
@@ -637,7 +639,10 @@ class BreweryDBClient {
                     // Make one brewersID
                     let brewersID = (locDic["id"]?.description)!
 
-                    createBreweryObject(breweryDict: breweryDict!, locationDict: locDic, brewersID: brewersID) {
+                    createBreweryObject(breweryDict: breweryDict!,
+                                        locationDict: locDic,
+                                        brewersID: brewersID,
+                                        style: (beer["styleId"] as! NSNumber).description) {
                         (Brewery) -> Void in
                     }
                     createBeerObject(beer: beer, brewerID: brewersID) {
@@ -737,7 +742,8 @@ class BreweryDBClient {
 
                 createBreweryObject(breweryDict: breweryDict,
                                     locationDict: locDic,
-                                    brewersID: brewersID ) {
+                                    brewersID: brewersID,
+                                    style: nil) { // There is no style to pull in when looking for breweries only.
                     (thisbrewery) -> Void in
                 }
             }
