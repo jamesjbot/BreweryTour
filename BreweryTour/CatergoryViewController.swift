@@ -427,7 +427,8 @@ extension CategoryViewController : UITableViewDelegate {
                 self.activityIndicator.setNeedsDisplay()
             }
             if success {
-                self.displayAlertWindow(title: "Request sent", msg: "Your request was sent to the online service, your selection will load,\nin the background" )
+                //TODO temp remove so I can develop faster.
+                //self.displayAlertWindow(title: "Request sent", msg: "Your request was sent to the online service, your selection will load,\nin the background" )
                 if Mediator.sharedInstance().isAutomaticallySegueing() {
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "Go", sender: nil)
