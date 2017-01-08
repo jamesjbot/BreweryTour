@@ -111,11 +111,22 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                         }
                         continue
                     }
+
+
+                    // Currently may ask to replace same image due to unique problem in coredata.
                     switch type {
                     case .Beer:
+                        guard (result?.first as! Beer).image == nil else {
+                            print("Skipping imagee loading")
+                            continue
+                        }
                         (result?.first as! Beer).image = data as NSData?
                         break
                     case .Brewery:
+                        guard (result?.first as! Brewery).image == nil else {
+                            print("Skipping imagee loading")
+                            continue
+                        }
                         (result?.first as! Brewery).image = data as NSData?
                         break
                     }
