@@ -15,6 +15,29 @@ import CoreData
  notify the other Views That will need to update because of that change.
  */
 
+protocol MapUpdateable {
+    func updateMap()
+}
+
+protocol ObserverMapChanges {
+    func registerMapObservers(m: MapUpdateable)
+    func broadcastMapChanges()
+
+}
+
+
+extension Mediator: ObserverMapChanges {
+    func registerMapObservers(m: MapUpdateable) {
+        mapObservers.append(m)
+    }
+
+    func broadcastMapChanges() {
+        for i in mapObservers {
+            i.updateMap()
+        }
+    }
+}
+
 class Mediator {
 
     // MARK: Constants
@@ -26,6 +49,7 @@ class Mediator {
     //private let allBreweryList : AllBreweriesTableList!// = AllBreweriesTableList()
 
     // MARK: Variables
+    fileprivate var mapObservers: [MapUpdateable] = []
 
     fileprivate var contextObservers: [UpdateManagedObjectContext] = [UpdateManagedObjectContext]()
 
