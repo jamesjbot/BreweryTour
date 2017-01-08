@@ -364,11 +364,11 @@ extension CategoryViewController : UITableViewDataSource {
         var cell = genericTable.dequeueReusableCell(withIdentifier: cellIdentifier)
         // Ask the viewmodel to populate our UITableViewCell
         //cell?.textLabel?.text = ""
-        print("Want cell \(indexPath)")
+        //print("Want cell \(indexPath)")
         cell = activeTableList.cellForRowAt(indexPath: indexPath,
                                          cell: cell!,
                                          searchText: newSearchBar.text)
-        print("Returned cell?")
+        //print("Returned cell?")
         // Remove subtitle
         cell?.imageView?.contentMode = .scaleToFill
         cell?.detailTextLabel?.text = ""
