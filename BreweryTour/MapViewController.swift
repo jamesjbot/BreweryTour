@@ -468,7 +468,10 @@ class MapViewController : UIViewController {
         assert(beerFRC != nil)
         // Register with mediator for contextUpdates
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
-        
+
+        // Register for map updates to style
+        //(Mediator.sharedInstance() as ObserverMapChanges).registerMapObservers(m: self)
+
         DispatchQueue.main.async{
             self.mapView.showsUserLocation = true
             self.activityIndicator.startAnimating()
@@ -482,6 +485,10 @@ class MapViewController : UIViewController {
         }
         // Allow other contexts to push data to ours.
         readOnlyContext?.automaticallyMergesChangesFromParent = true
+
+        // Move the map to user location.
+//        print("InViewdid load \(mapView.userLocation.coordinate)")
+//        mapView.setCenter(mapView.userLocation.coordinate, animated: true)
     }
 
 
@@ -503,6 +510,11 @@ class MapViewController : UIViewController {
         // Get new selection
         let mapViewData = Mediator.sharedInstance().getPassedItem()
 
+        // Zoom to users location first if we have it.
+        if mapView.userLocation != nil {
+            mapView.setCenter(mapView.userLocation.coordinate, animated: false)
+
+        }
 
         // Decision making to display Breweries Style or Brewery
         if mapViewData is Style {
