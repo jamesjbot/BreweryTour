@@ -594,11 +594,22 @@ class BreweryDBClient {
                 completion!(false, "Failed Request No data was returned")
                 return
             }
+
+            //            // Pin the context
+            //            do {
+            //                try backContext?.setQueryGenerationFrom(backContext?.queryGenerationToken)
+            //            } catch {
+            //
+            //            }
+            //
+            //            let dq = DispatchQueue.global(qos: .background)
+            //            dq.async {
+
             createBeerLoop: for beer in beerArray {
                 /* Assume this beer is not in the database.
                  Send all beers to creation process unique constraints will
                  block duplicate entries
-                */
+                 */
 
                 // This beer has no brewery information, continue with the next beer
                 guard let breweriesArray = beer["breweries"]  else {
@@ -639,18 +650,39 @@ class BreweryDBClient {
                     // Make one brewersID
                     let brewersID = (locDic["id"]?.description)!
 
-                    createBreweryObject(breweryDict: breweryDict!,
-                                        locationDict: locDic,
-                                        brewersID: brewersID,
-                                        style: (beer["styleId"] as! NSNumber).description) {
-                        (Brewery) -> Void in
+                    // Check to see if brewery in database.
+                    // Code to see if i can speed up the process
+                    // TODO Put this whole brewery loop in an async concurrent queue
+                    // It has to be the whole loop because I don't want concurrent writes to the
+                    // Brewery and Beer queue
+                    let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
+                    request.sortDescriptors = []
+                    request.predicate = NSPredicate(format: "id== %@", brewersID)
+                    var b: [Brewery]?
+                    do {
+                        b = try self.backContext?.fetch(request)
+                    } catch {
+
                     }
-                    createBeerObject(beer: beer, brewerID: brewersID) {
+                    if b?.count == 0 || b == nil {
+                        self.createBreweryObject(breweryDict: breweryDict!,
+                                                 locationDict: locDic,
+                                                 brewersID: brewersID,
+                                                 style: (beer["styleId"] as! NSNumber).description) {
+                                                    (Brewery) -> Void in
+                        }
+                    } else {
+                        print("Skipping brewery creation")
+                    }
+
+                    self.createBeerObject(beer: beer, brewerID: brewersID) {
                         (Beer) -> Void in
                     }
                     break breweryLoop
                 } //  of brewery loop
-            } // end of beer loop
+                //} end of async
+                print("BrewerDB \(#line) Async last line ")
+            }// end of beer loop
             // This page of results has processed signal GCD that it's complete.
             // TODO crash occured on the group.leave.1
             //group?.leave()
