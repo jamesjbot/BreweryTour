@@ -118,6 +118,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                     case .Beer:
                         guard (result?.first as! Beer).image == nil else {
                             print("Skipping imagee loading")
+                            self.imagesToBeAssignedQueue.removeValue(forKey: key)
                             continue
                         }
                         (result?.first as! Beer).image = data as NSData?
@@ -125,6 +126,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                     case .Brewery:
                         guard (result?.first as! Brewery).image == nil else {
                             print("Skipping imagee loading")
+                            self.imagesToBeAssignedQueue.removeValue(forKey: key)
                             continue
                         }
                         (result?.first as! Brewery).image = data as NSData?
