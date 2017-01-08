@@ -35,6 +35,37 @@ import MapKit
 import CoreLocation
 import CoreData
 
+protocol BreweryMapper {
+    func map(thisbrewery: Brewery)
+}
+
+
+extension MapViewController: BreweryMapper {
+    internal func map(thisbrewery i: Brewery) {
+        let aPin = MKPointAnnotation()
+        aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
+        aPin.title = i.name
+        aPin.subtitle = i.url
+        let differentPosition = mapView.annotations.contains(where: {
+            (annotation) -> Bool in
+            if annotation.coordinate.latitude != aPin.coordinate.latitude ||
+                annotation.coordinate.longitude != aPin.coordinate.longitude {
+                return true
+            }
+            return false
+        })
+        if differentPosition {
+            mapView.addAnnotation(aPin)
+            DispatchQueue.main.async {
+                let degrees = -0.09002002 * Double(self.mapView.annotations.count) + 90.09002002
+                let region = MKCoordinateRegion(center: self.mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: degrees, longitudeDelta: degrees))
+                self.mapView.setRegion( region, animated: true)
+                self.mapView.setNeedsDisplay()
+            }
+        }
+
+    }
+}
 
 class MapViewController : UIViewController {
     
@@ -377,7 +408,8 @@ class MapViewController : UIViewController {
         // Remove all the old annotations or remove new duplicates
         var duplicateFree = fromBreweries
         if removeDisplayedAnnotations {
-            mapView.removeAnnotations(mapView.annotations)
+            // TODO Removed for testing new additions.
+            //mapView.removeAnnotations(mapView.annotations)
 
         } else { // Remove duplicates
             var duplicateIndices = [Int]()
@@ -811,4 +843,15 @@ extension MapViewController : DismissableTutorial {
         tutorialView.isHidden = false
     }
 }
+
+// MARK: MapViewController: MapUpdateable
+
+extension MapViewController: MapUpdateable {
+    func updateMap() {
+        fetchAndDisplay()
+    }
+}
+
+
+
 
