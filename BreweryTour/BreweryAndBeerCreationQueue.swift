@@ -5,6 +5,14 @@
 //  Created by James Jongsurasithiwat on 12/28/16.
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
+
+/*
+ This program creates Brewery, Beers, and links styles Breweries to styles.
+ 
+ Internal notes.
+ Initially, whenever we just load breweries not styles, the styles will not be linked to these breweries. But when beer creation process continues. These linked will be created
+ */
+
 import Foundation
 import UIKit
 import CoreData
