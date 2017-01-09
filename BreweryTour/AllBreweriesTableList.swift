@@ -143,10 +143,9 @@ extension AllBreweriesTableList : TableList {
         }
         // Tell mediator about the brewery I want to display
         // Then mediator will tell selectedBeerList what to display
-        // TODO temporarily call as protocol.
-        Mediator.sharedInstance().select(thisItem: savedBreweryForDisplay, completion: completion)
+        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: savedBreweryForDisplay, completion: completion)
         return nil
-    }    
+    }
 }
 
 
