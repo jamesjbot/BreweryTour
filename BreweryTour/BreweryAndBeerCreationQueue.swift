@@ -98,7 +98,7 @@ class BreweryAndBeerCreationQueue: NSObject {
     private let secondsRepeatInterval: Double = 2
     private let maxSavesPerLoop: Int = 100
 
-    private let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+    fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
     // MARK: Variables
 
@@ -139,8 +139,8 @@ class BreweryAndBeerCreationQueue: NSObject {
         // invocation of save because it was not taking.
         abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
 
-        // one at time. Batch saving generates conflict errors.
-        let dq = DispatchQueue.global(qos: .background)
+        // Save breweries one at time. Batch saving generates conflict errors.
+        let dq = DispatchQueue(label: "SerialQueue")
         dq.sync {
             print("Processing breweries creation: we have \(runningBreweryQueue.count) breweries")
             print("Processing beers creation: we have \(runningBeerQueue.count) beers")
@@ -457,8 +457,8 @@ class BreweryAndBeerCreationQueue: NSObject {
 
 }
 
-extension BreweryAndBeerCreationQueue: BreweryAndBeerCreation {
 
+extension BreweryAndBeerCreationQueue: BreweryAndBeerCreation {
 
     internal func isBreweryAndBeerCreationRunning() -> Bool {
         if runningBreweryQueue.isEmpty && runningBeerQueue.isEmpty {
@@ -469,15 +469,46 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreation {
 
     // Queues up breweries to be saved
     internal func queueBrewery(_ b: BreweryData?) {
-        if let brewer = b {
-            startWorkTimer()
-            runningBreweryQueue.append(brewer)
+        // Check to see if brewery exists
+        let context = container?.newBackgroundContext()
+        let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "id== %@", (b?.id)!)
+        var brewer: [Brewery]?
+        do {
+            brewer = try context?.fetch(request)
+        } catch {
+
         }
+        guard brewer?.first == nil else {
+            // Skip brewery creation when we already have the brewery
+            return
+        }
+            if let localBrewer = b {
+                print("B&BQueue \(#line) brewery queued ")
+                startWorkTimer()
+                runningBreweryQueue.append(localBrewer)
+            }
     }
 
 
     // Queues up beers to be saved
     internal func queueBeer(_ b: BeerData?) {
+        // Check to see if beer exists
+        let context = container?.newBackgroundContext()
+        let request: NSFetchRequest<Beer> = Beer.fetchRequest()
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "id == %@", (b?.id)!)
+        var beers: [Beer]?
+        do {
+            beers = try context?.fetch(request)
+        } catch {
+
+        }
+        guard beers?.first == nil else {
+            // Skip beer creation when we already have the beer
+            return
+        }
         if let beer = b {
             startWorkTimer()
             let attempt = 0

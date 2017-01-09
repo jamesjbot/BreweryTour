@@ -650,29 +650,11 @@ class BreweryDBClient {
                     // Make one brewersID
                     let brewersID = (locDic["id"]?.description)!
 
-                    // Check to see if brewery in database.
-                    // Code to see if i can speed up the process
-                    // TODO Put this whole brewery loop in an async concurrent queue
-                    // It has to be the whole loop because I don't want concurrent writes to the
-                    // Brewery and Beer queue
-                    let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
-                    request.sortDescriptors = []
-                    request.predicate = NSPredicate(format: "id== %@", brewersID)
-                    var b: [Brewery]?
-                    do {
-                        b = try self.backContext?.fetch(request)
-                    } catch {
-
-                    }
-                    if b?.count == 0 || b == nil {
-                        self.createBreweryObject(breweryDict: breweryDict!,
-                                                 locationDict: locDic,
-                                                 brewersID: brewersID,
-                                                 style: (beer["styleId"] as! NSNumber).description) {
-                                                    (Brewery) -> Void in
-                        }
-                    } else {
-                        print("Skipping brewery creation")
+                    self.createBreweryObject(breweryDict: breweryDict!,
+                                             locationDict: locDic,
+                                             brewersID: brewersID,
+                                             style: (beer["styleId"] as! NSNumber).description) {
+                                                (Brewery) -> Void in
                     }
 
                     self.createBeerObject(beer: beer, brewerID: brewersID) {
