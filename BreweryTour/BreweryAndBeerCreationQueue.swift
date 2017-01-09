@@ -175,6 +175,8 @@ class BreweryAndBeerCreationQueue: NSObject {
                         }
 
                     }
+
+                    // Save brewery and style data.
                     do {
                         try abreweryContext?.save()
                     } catch let err {
@@ -243,12 +245,13 @@ class BreweryAndBeerCreationQueue: NSObject {
 
                             assert(resultStyle?.count == 1)
 
+                            // Checks to see if we already have this brewer attached with style
                             let found = resultStyle?.first?.brewerywithstyle?.contains(brewers?.first as Any)
                             //print("Breweryandbeer \(#line) did we find the brewer in the set \(found)")
                             if !found! {
                                 resultStyle?.first?.addToBrewerywithstyle((brewers?.first)!)
-                                print("Added \(brewers?.first?.name) to \(resultStyle?.first?.displayName)")
-                                print("this style now has \(resultStyle?.first?.brewerywithstyle?.count) breweries ")
+                                //print("Added \(brewers?.first?.name) to \(resultStyle?.first?.displayName)")
+                                //print("this style now has \(resultStyle?.first?.brewerywithstyle?.count) breweries ")
                             }
 
                             let createdBeer = Beer(data: beer, context: self.abreweryContext!)
