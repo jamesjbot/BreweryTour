@@ -153,13 +153,11 @@ extension StylesTableList : TableList {
      * 5519 American style india pale ale
      */
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        // Move this UI update to main queue.
+        // The UITableView cell is given to us by the CategoryViewController.
             cell.imageView?.image = nil
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
             if (searchText?.isEmpty)! {
-                // TODO it's reading nil here for some reason.
-                // How do i replicate
                 cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! + " " + ((self.frc.object(at: indexPath)).brewerywithstyle?.count.description)! + " Breweries")  ?? "Error"
             } else {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
