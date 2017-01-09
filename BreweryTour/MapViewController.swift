@@ -61,9 +61,11 @@ class MapViewController : UIViewController {
     fileprivate var styleFRC: NSFetchedResultsController<Style> = NSFetchedResultsController<Style>()
 
     // New breweries with styles variable
+    fileprivate var sortedBreweries: [Brewery] = []
     fileprivate var breweriesForDisplay: [Brewery] = [] {
         didSet {
             debouncedFunction!()
+
             // What is it we are trying to do.
             // I'm trying to make this more responsive.
             // MapView is getting both bogged down by the number of pins to display
