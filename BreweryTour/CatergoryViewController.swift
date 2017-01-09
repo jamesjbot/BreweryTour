@@ -272,8 +272,8 @@ class CategoryViewController: UIViewController,
         } else {
             return
         }
-        print("Received message from \(from) \(msg)")
-        print("Category \(#line) Do i still need this? ")
+        //print("Received message from \(from) \(msg)")
+        //print("Category \(#line) Do i still need this? ")
         guard (isViewLoaded && view.window != nil ),
             (from === (activeTableList as AnyObject)) else {
             // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
