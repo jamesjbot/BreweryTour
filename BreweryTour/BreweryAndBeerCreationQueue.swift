@@ -225,7 +225,8 @@ class BreweryAndBeerCreationQueue: NSObject {
                 let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
                 request.sortDescriptors = []
                 request.predicate = NSPredicate(format: "id == %@", beer.breweryID!)
-                // TODO trying with just perform
+
+                // Using peform instead of performandwait to increase performance.
                 abreweryContext?.perform {
                     do {
                         let brewers = try self.abreweryContext?.fetch(request)
@@ -283,8 +284,6 @@ class BreweryAndBeerCreationQueue: NSObject {
 
                 }
             }
-            // TODO Removed for now as this generates to many updates.
-            //(Mediator.sharedInstance() as ObserverMapChanges).broadcastMapChanges()
         }
     }
 
