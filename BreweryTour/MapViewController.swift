@@ -35,37 +35,6 @@ import MapKit
 import CoreLocation
 import CoreData
 
-protocol BreweryMapper {
-    func map(thisbrewery: Brewery)
-}
-
-
-extension MapViewController: BreweryMapper {
-    internal func map(thisbrewery i: Brewery) {
-        let aPin = MKPointAnnotation()
-        aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
-        aPin.title = i.name
-        aPin.subtitle = i.url
-        let differentPosition = mapView.annotations.contains(where: {
-            (annotation) -> Bool in
-            if annotation.coordinate.latitude != aPin.coordinate.latitude ||
-                annotation.coordinate.longitude != aPin.coordinate.longitude {
-                return true
-            }
-            return false
-        })
-        if differentPosition {
-            mapView.addAnnotation(aPin)
-            DispatchQueue.main.async {
-                let degrees = -0.09002002 * Double(self.mapView.annotations.count) + 90.09002002
-                let region = MKCoordinateRegion(center: self.mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: degrees, longitudeDelta: degrees))
-                self.mapView.setRegion( region, animated: true)
-                self.mapView.setNeedsDisplay()
-            }
-        }
-
-    }
-}
 
 class MapViewController : UIViewController {
     
@@ -107,32 +76,18 @@ class MapViewController : UIViewController {
 
 
             // TODO Your going to have to fix when user presses another styles and the old style is still loading.
-            // TODO When ever you just load breweries not styles. The styles will not be linked to these breweries.
-            // TODO When you go to create the beers by selcting the above breweries will styles also be populated?
 
-//            let dq = DispatchQueue.global(qos: .userInitiated)
-//            dq.async {
-//                DispatchQueue.main.async {
-//                    self.activityIndicator.startAnimating()
-//                }
-//                //self.mapSemaphore.wait()
-////                if mapLock == true {
-////                    print("Sorry map is locked")
-////                    return
-////                }
-////                print("Locking map")
-////                mapLock = true
-//                // If there is a userLocation sort the breweries?
-//
+            // TODO When you go to create the beers by selcting the above breweries will styles also be populated?
 
         }
     }
 
 
     private func sortBreweriesByDistanceAndDisplay() {
+        //print("mapview \(#line) sortBreweriesByDisntanceAndDisplay ")
         // If we have a user location we can sort first
         if self.mapView.userLocation.location != nil {
-            breweriesForDisplay.sort(by:
+            sortedBreweries = breweriesForDisplay.sorted(by:
                 { (brewery1, brewery2) -> Bool in
                     let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
                     let location2: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery2.latitude!)!), longitude: CLLocationDegrees(Double(brewery2.longitude!)!))
@@ -142,15 +97,20 @@ class MapViewController : UIViewController {
 
         print("Setting this many points:\(self.breweriesForDisplay.count)")
         var annotations = [MKAnnotation]()
-        // Show only the first 500 points otherwise UI Slows down too much.
+
+        // Show only the first maximumClosestBreweries points otherwise UI Slows down too much.
         var maxDisplayed: Int = self.breweriesForDisplay.count
         if self.breweriesForDisplay.count > self.maximumClosestBreweries {
             maxDisplayed = self.maximumClosestBreweries
         }
-        for (number,i) in self.breweriesForDisplay.enumerated() {
+
+        // Format the first maximumClosestBreweries for display.
+        for (number,i) in self.sortedBreweries.enumerated() {
+
             guard number < maxDisplayed else {
                 break
             }
+
             // Sometimes the breweries don't have a location
             guard i.latitude != nil && i.longitude != nil else {
                 continue
@@ -162,26 +122,20 @@ class MapViewController : UIViewController {
             aPin.subtitle = i.url
             annotations.append(aPin)
         }
+
+        // Draw the annotations on the map
         DispatchQueue.main.async {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(annotations)
             // Set the center of the map
-            // Set the view region
             // Calculated form point slope formula where 90degrees with 1 point to .07 degrees with 1000+points
             // Using the below formula to calculate region. where x is number of points y is the dimension size.
             //y = − 0.09002002 x + 90.09002002
             let degrees = -0.99 * Double(self.breweriesForDisplay.count) + 1000000
-            //let region = MKCoordinateRegion(center: mapView.userLocation.coordinate, span: MKCoordinateSpan(latitudeDelta: degrees, longitudeDelta: degrees))
             self.centerMapOnLocation(location: self.mapView.userLocation.location, radius: degrees)
-            //mapView.setCenter(mapView.userLocation.coordinate, animated: true)
-            //mapView.
-            print("mapview \(#line) has count ")
-            print(self.mapView.annotations.count)
-            self.mapView.setNeedsDisplay()
+            //print("------->mapview \(#line) has \(self.mapView.annotations.count) annotations")
             self.activityIndicator.stopAnimating()
-            print("Releasing map")
-            //self.mapSemaphore.signal()
-            //self.mapLock = false
+            //print("------->mapview \(#line) exiting sortanddisplay ")
         }
     }
 
@@ -189,7 +143,7 @@ class MapViewController : UIViewController {
     // This function will drop the excessive calls to redisplay the map
     // Borrowed from
     // http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call/33794262#33794262
-    func debounce(delay:Int, queue:DispatchQueue, action: @escaping (()->())) -> ()->() {
+    private func debounce(delay:Int, queue:DispatchQueue, action: @escaping (()->())) -> ()->() {
         var lastFireTime = DispatchTime.now()
         let dispatchDelay = DispatchTimeInterval.milliseconds(delay)
 
@@ -217,10 +171,12 @@ class MapViewController : UIViewController {
             self.mapView.setRegion(region, animated: true)
             return
         }
-        print("Setting Region centered on user location to \(regionRadius) meters")
+        // Set the view region
+        //print("Setting Region centered on user location to \(regionRadius) meters")
         let coordinateRegion = MKCoordinateRegionMakeWithDistance((location?.coordinate)!,
                                                                   regionRadius * 2.0, regionRadius * 2.0)
         self.mapView.setRegion(coordinateRegion, animated: true)
+        self.mapView.setNeedsDisplay()
         }
     }
 
@@ -566,11 +522,15 @@ class MapViewController : UIViewController {
 
 extension MapViewController: UpdateManagedObjectContext {
     internal func contextsRefreshAllObjects() {
-        beerFRC?.managedObjectContext.refreshAllObjects()
+        //beerFRC?.managedObjectContext.refreshAllObjects()
+
+        styleFRC.managedObjectContext.refreshAllObjects()
         // We must performFetch after refreshing context, otherwise we will retain
         // Old information is retained.
         do {
-            try beerFRC?.performFetch()
+            //try beerFRC?.performFetch()
+
+            try styleFRC.performFetch()
         } catch {
 
         }
@@ -607,8 +567,8 @@ extension MapViewController : MKMapViewDelegate {
         pinView?.tintColor = UIColor.red
 
         // Find the brewery in the proper context
-        let foundBrewery = readOnlyContext?.object(with: convertAnnotationToObjectID(by: annotation)!) as! Brewery
-        
+        let foundBrewery = readOnlyContext?.object(with: (convertAnnotationToObjectID(by: annotation))!) as! Brewery
+
         // Set the favorite icon on pin
         let localButton = UIButton(type: .contactAdd)
         var tempImage : UIImage!
@@ -786,27 +746,27 @@ extension MapViewController : MKMapViewDelegate {
 extension MapViewController : NSFetchedResultsControllerDelegate {
 
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("MapView Controller will change content")
+        //print("\n------->MapView \(#line) Controller will change content")
     }
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        print("MapView \(#line) controller did change anobject called.")
+        //print("------->MapView \(#line) controller did change anobject called.")
         switch (type){
         case .insert:
-            print("MapView \(#line) insert ")
+            //print("------->MapView \(#line) insert ")
             break
         case .delete:
-            print("mapview \(#line) delete ")
+            //print("------->mapview \(#line) delete ")
             break
         case .move:
             break
         case .update:
-            print("mapview \(#line) update ")
+            //print("------->mapview \(#line) update ")
             break
         }
     }
     internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("mapview \(#line) finishedchanging ")
+        //print("------->Run \(styleUpdateCounter) mapview \(#line) finishedchanging\n")
         breweriesForDisplay = (controller.fetchedObjects?.first as! Style).brewerywithstyle?.allObjects as! [Brewery]
     }
 
