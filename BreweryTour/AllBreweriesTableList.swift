@@ -90,8 +90,6 @@ extension AllBreweriesTableList : TableList {
             } else {
                 brewery = self.filteredObjects[indexPath.row]
             }
-            // TODO temp
-            cell.detailTextLabel?.text = brewery.id!
             cell.textLabel?.text = brewery.name!
             if let data = brewery.image {
                 DispatchQueue.main.async {
@@ -193,7 +191,6 @@ extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         //print("AllBreweryTableList \(#line) AllBreweryTableList controllerdidChangeContent notify observer")
-        // TODO We're preloading breweries do I still need this notify
         // Send message to observer regardless of situation. The observer decides if it should act.
         observer.sendNotify(from: self, withMsg: "reload data")
         //print("AllBreweryTableList \(#line) According to \(controller)\n There are now this many breweries \(controller.fetchedObjects?.count)")
