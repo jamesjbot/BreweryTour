@@ -316,11 +316,11 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreation {
             // Skip brewery creation when we already have the brewery
             return
         }
-            if let localBrewer = b {
-                print("B&BQueue \(#line) brewery queued ")
-                startWorkTimer()
-                runningBreweryQueue.append(localBrewer)
-            }
+        if let localBrewer = b {
+            print("B&BQueue \(#line) brewery queued ")
+            startWorkTimer()
+            runningBreweryQueue.append(localBrewer)
+        }
     }
 
 
