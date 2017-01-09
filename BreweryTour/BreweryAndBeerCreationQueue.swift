@@ -157,8 +157,6 @@ class BreweryAndBeerCreationQueue: NSObject {
             //Processing Breweries
             if !runningBreweryQueue.isEmpty {
                 for _ in 1...maxSave {
-                    // Maybe putting this back in will speed up the saves?
-                    //abreweryContext?.reset() // Try resetting the internal objects
 
                     let b = runningBreweryQueue.removeFirst()
                     let newBrewery = Brewery(data: b, context: abreweryContext!)
@@ -208,12 +206,17 @@ class BreweryAndBeerCreationQueue: NSObject {
 
             // Processing Beers
             for _ in 1...maxSave {
+
+                // If we select a brewery, then only beers will be generated.
+                // Therefore we must attach the styles to the breweries at a beer by beer level.
+
                 var (beer,attempt) = runningBeerQueue.removeFirst()
 
                 let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
                 request.sortDescriptors = []
                 request.predicate = NSPredicate(format: "id == %@", beer.breweryID!)
-                abreweryContext?.performAndWait {
+                // TODO trying with just perform
+                abreweryContext?.perform {
                     do {
                         let brewers = try self.abreweryContext?.fetch(request)
                         // Request did not find breweries
