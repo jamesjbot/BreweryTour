@@ -243,17 +243,25 @@ class BreweryAndBeerCreationQueue: NSObject {
 
                             assert(resultStyle?.count == 1)
 
-                            resultStyle?.first?.addToBrewerywithstyle((brewers?.first)!)
-                            print("Added \(brewers?.first?.name) to \(resultStyle?.first?.displayName)")
-                            print("this style now has \(resultStyle?.first?.brewerywithstyle?.count) breweries ")
+                            let found = resultStyle?.first?.brewerywithstyle?.contains(brewers?.first as Any)
+                            //print("Breweryandbeer \(#line) did we find the brewer in the set \(found)")
+                            if !found! {
+                                resultStyle?.first?.addToBrewerywithstyle((brewers?.first)!)
+                                print("Added \(brewers?.first?.name) to \(resultStyle?.first?.displayName)")
+                                print("this style now has \(resultStyle?.first?.brewerywithstyle?.count) breweries ")
+                            }
+
                             let createdBeer = Beer(data: beer, context: self.abreweryContext!)
                             createdBeer.brewer = brewers?.first
 
                             try self.abreweryContext?.save()
-                            print("Style and changes saved")
+                            //print("Style and changes saved")
                             if beer.imageUrl != nil {
                                 // If we have image data download it
-                                BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Beer,                                                                               aturl: NSURL(string: beer.imageUrl!)!,                                                                             forID: beer.id!)
+                                DispatchQueue.global(qos: .utility).async {
+                                    BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Beer,                                                                               aturl: NSURL(string: beer.imageUrl!)!,                                                                             forID: beer.id!)
+                                }
+
                             }
                         }
                     } catch let error {
