@@ -32,7 +32,6 @@ class SelectedBeersTableList : NSObject, Subject {
 
 
     // MARK: Variables
-    // TODO add MediatorBroadcast registration code.
     fileprivate var mediator:  MediatorBroadcastSetSelected = Mediator.sharedInstance()
 
     fileprivate var allBeersMode : Bool = false
@@ -52,7 +51,7 @@ class SelectedBeersTableList : NSObject, Subject {
     // The default query is for ALLBEERS sorted by beer name
     internal override init(){
         super.init()
-        //Accept changes from backgroundContexts
+        //Accept changes from other managed object contexts
         readOnlyContext?.automaticallyMergesChangesFromParent = true
 
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
@@ -79,7 +78,8 @@ class SelectedBeersTableList : NSObject, Subject {
     
     
     // Mediator Selector
-    // The mediator tells the SelectedBeersTable what object was selected.
+    // After this object has been created the mediator tells the 
+    // SelectedBeersTable what object was selected.
     internal func setSelectedItem(toNSObject : NSManagedObject) {
         selectedObject = toNSObject
         // Start retrieving entries in the background but dont update as view 
@@ -183,6 +183,7 @@ extension SelectedBeersTableList: SelectedBeersViewModel {
 }
 
 
+// When all coredata is delete this is called by the mediator to refresh the context
 extension SelectedBeersTableList: UpdateManagedObjectContext {
     internal func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
@@ -196,10 +197,10 @@ extension SelectedBeersTableList: UpdateManagedObjectContext {
     }
 }
 
-extension SelectedBeersTableList: NSFetchedResultsControllerDelegate {
-    
 
-    // Delegate changes recorded notify observer to reload itself
+extension SelectedBeersTableList: NSFetchedResultsControllerDelegate {
+
+    // Delegate changes occured now notify observer to reload itself
     internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Tell what ever view controller that is registerd to refresh itself from me
         observer?.sendNotify(from: self, withMsg: "You were updated")
@@ -207,6 +208,7 @@ extension SelectedBeersTableList: NSFetchedResultsControllerDelegate {
 }
 
 
+// All the methods that allow this object to function as a view model.
 extension SelectedBeersTableList : TableList {
 
     // Configures Tableviewcell for display
@@ -233,7 +235,7 @@ extension SelectedBeersTableList : TableList {
     }
 
 
-    internal func filterContentForSearchText(searchText: String) {// -> [NSManagedObject] {
+    internal func filterContentForSearchText(searchText: String) {
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
     }
 
@@ -256,6 +258,7 @@ extension SelectedBeersTableList : TableList {
     }
 
 
+    // When the user selects an item, return that item
     internal func selected(elementAt: IndexPath,
                            searchText: String,
                            completion:  @escaping (Bool, String?) -> Void) -> AnyObject? {
@@ -266,7 +269,8 @@ extension SelectedBeersTableList : TableList {
         }
     }
     
-    
+
+    // When the user enters the name of a beer and it is not presend.
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
         BreweryDBClient.sharedInstance().downloadBeersBy(name: searchTerm) {
             (success, msg) -> Void in
