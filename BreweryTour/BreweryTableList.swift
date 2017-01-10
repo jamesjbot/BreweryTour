@@ -42,7 +42,6 @@ class BreweryTableList: NSObject, Subject {
         didSet {
             // Automatically sort this set
             copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
-                // TODO These were names were nil that should notbe
                 return a.name! < b.name!
             })
         }
@@ -97,8 +96,8 @@ class BreweryTableList: NSObject, Subject {
             try self.styleFRCObserver.performFetch()
             copyOfSet = (styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]?)!
         } catch {
+            fatalError("Critical error reading from coredata")
         }
-        print("Prepare to show table finished")
     }
 
 
@@ -116,12 +115,10 @@ extension BreweryTableList: TableList {
         let image = #imageLiteral(resourceName: "Nophoto.png")
         cell.imageView?.image = image
 
-        // When searchText if empty check to make sure indexpath is within set bounds
-        // When searchText if full check to make sure indexpath is within set bounds
+        // When searchText is empty check to make sure indexpath is within set bounds
+        // When searchText is full check to make sure indexpath is within set bounds
         guard (searchText?.isEmpty)! ? (indexPath.row < self.copyOfSet.count) :
             indexPath.row < self.filteredObjects.count else {
-                // TODO Trying to catch an error here.
-                fatalError()
                 return UITableViewCell()
         }
         var brewery: Brewery?
@@ -184,15 +181,12 @@ extension BreweryTableList: TableList {
         }
         // Tell mediator about the brewery I want to display
         // Then mediator will tell selectedBeerList what to display
-        // TODO temporarily call as protocol
         (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: savedBreweryForDisplay, completion: completion)
         return nil
     }
     
 
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
-        print("BreweryTableList \(#line)searchForuserEntered beer called")
-        fatalError()
         // This should be block at category view controller
     }
 
