@@ -416,19 +416,17 @@ extension CategoryViewController : UITableViewDelegate {
 
         activityIndicator.startAnimating()
 
-
+        // Create a completion handler for ViewModel to take.
         let activeTableListSelectedCompletionHandler = {
             (success: Bool ,msg: String?) -> Void in
             // Every tablelist completion handler will come back here
-            // TODO remember to tell every view model to
-            // send back a completion handler.
+            // All the completion handlers will be passed to the mediator,
+            // then to the BreweryDB for processing.
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
                 self.activityIndicator.setNeedsDisplay()
             }
             if success {
-                //TODO temp remove so I can develop faster.
-                //self.displayAlertWindow(title: "Request sent", msg: "Your request was sent to the online service, your selection will load,\nin the background" )
                 if Mediator.sharedInstance().isAutomaticallySegueing() {
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "Go", sender: nil)
