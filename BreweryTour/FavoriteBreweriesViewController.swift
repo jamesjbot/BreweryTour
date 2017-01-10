@@ -66,9 +66,10 @@ class FavoriteBreweriesViewController: UIViewController {
         assert(frc != nil)
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
-        frcForBrewery.delegate = self
         // Do any additional setup after loading the view.
         performFetchOnResultsController()
+        frcForBrewery.delegate = self
+
     }
 
     
@@ -183,6 +184,7 @@ extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        print("end updates")
         tableView.endUpdates()
         tableView.reloadData()
     }
@@ -209,13 +211,12 @@ extension FavoriteBreweriesViewController: UITableViewDataSource {
 extension FavoriteBreweriesViewController : UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
-        // TODO This is in the main context now and I'm saving in the persistent context this could be wrong
-        // Change this to be saving maincontext
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
             let object = self.frcForBrewery.object(at: indexPath)
             self.container?.performBackgroundTask({
                 (context) -> Void in
+                context.automaticallyMergesChangesFromParent = true
                 let brewery = context.object(with: object.objectID) as! Brewery
                 brewery.favorite = false
                 do {
@@ -223,10 +224,10 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
                 } catch {
                     self.displayAlertWindow(title: "Error Removing", msg: "Error removing item\nplease try again")
                 }
-                // TODO will you need to update the screen or will NSFetchedResultsControllerDelegate catch this
-//                DispatchQueue.main.async {
-//                    tableView.reloadData()
-//                }
+
+                DispatchQueue.main.async {
+                    tableView.reloadData()
+                }
             })
         }
         deleteAction.backgroundColor = UIColor.green
