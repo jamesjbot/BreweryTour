@@ -158,7 +158,7 @@ extension StylesTableList : TableList {
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
             if (searchText?.isEmpty)! {
-                cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! + " " + ((self.frc.object(at: indexPath)).brewerywithstyle?.count.description)! + " Breweries")  ?? "Error"
+                cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! )  
             } else {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
             }
@@ -199,7 +199,7 @@ extension StylesTableList : TableList {
         } else {
             aStyle = filteredObjects[elementAt.row]
         }
-        // Temporarily set Mediator thru its protocol
+        // Set Selected Mediator thru its protocol
         (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: aStyle, completion: completion)
         return nil
     }
