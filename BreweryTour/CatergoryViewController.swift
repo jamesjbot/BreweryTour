@@ -39,6 +39,10 @@ class CategoryViewController: UIViewController,
     NSFetchedResultsControllerDelegate, Observer {
 
     // MARK: Constant
+    struct Message {
+        static let Reload = "reload data"
+    }
+
     private let segmentedControlPaddding : CGFloat = 8
     private let paddingForPoint : CGFloat = 20
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
@@ -294,7 +298,7 @@ class CategoryViewController: UIViewController,
             activityIndicator.stopAnimating()
             break
 
-        case "reload data":
+        case Message.Reload:
             // Only the active table should respond to a tablelist reload command
             if (activeTableList as AnyObject) === from {
                 genericTable.reloadData()

@@ -129,7 +129,7 @@ extension StylesTableList: NSFetchedResultsControllerDelegate {
 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        observer.sendNotify(from: self, withMsg: "reload data")
+        observer.sendNotify(from: self, withMsg: CategoryViewController.Message.Reload)
     }
 }
 
