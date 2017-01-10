@@ -103,8 +103,11 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // MARK: Constants
 
-    private let secondsRepeatInterval: Double = 2
-    private let maxSavesPerLoop: Int = 100
+    // Initial responsive load
+    private let responsiveMaxSavesPerLoop: Int = 10
+    private var secondsRepeatInterval: Double = 5
+    private var maxSavesPerLoop: Int = 70
+    private var firstProcessLoopSinceTimerStarted = true
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
@@ -140,9 +143,11 @@ class BreweryAndBeerCreationQueue: NSObject {
     // Periodic method to save breweries and beers
     @objc private func processQueue() {
         // This function will save all breweries before saving beers.
-        // This is here because the beer's brewer attribute needs to be set from
+
+        // This next statement is here because the beer's brewer attribute needs to be set from
         // an inserted brewer otherwise strange errors occur.
-        // The only way to merge MO with unique constraints is to save them
+        // The only way to merge Managed Objects with unique constraints is to
+        // save them individually, batch does not seem to work.
         // Had to move the merge policy assignment closer to the
         // invocation of save because it was not taking.
         abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
@@ -153,11 +158,20 @@ class BreweryAndBeerCreationQueue: NSObject {
             print("Processing breweries creation: we have \(runningBreweryQueue.count) breweries")
             print("Processing beers creation: we have \(runningBeerQueue.count) beers")
             guard !runningBreweryQueue.isEmpty || !runningBeerQueue.isEmpty else {
+                // Both queues are empty stop timer
                 workTimer.invalidate()
                 workTimer = nil
                 return
             }
-            var maxSave = maxSavesPerLoop
+
+            var maxSave: Int!
+            if firstProcessLoopSinceTimerStarted {
+                maxSave = responsiveMaxSavesPerLoop
+                firstProcessLoopSinceTimerStarted = false
+            } else {
+                maxSave = maxSavesPerLoop
+            }
+
             if runningBreweryQueue.count < maxSave {
                 maxSave = runningBreweryQueue.count
             }
@@ -200,6 +214,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 
             // Process beers only if breweries are done.
             guard runningBreweryQueue.isEmpty else {
+                // Wait for timer to fire again and process some more beers
                 return
             }
 
@@ -289,6 +304,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     fileprivate func startWorkTimer() {
         if workTimer == nil {
+            firstProcessLoopSinceTimerStarted = true
             workTimer = Timer.scheduledTimer(timeInterval: secondsRepeatInterval,
                                              target: self,
                                              selector: #selector(self.processQueue),
