@@ -156,9 +156,8 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
     
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        performFetchOnResultsController()
-        tableView.reloadData()
         tableView.endUpdates()
+        tableView.reloadData()
     }
 }
 
