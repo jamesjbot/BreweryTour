@@ -661,13 +661,8 @@ class BreweryDBClient {
                         (Beer) -> Void in
                     }
                     break breweryLoop
-                } //  of brewery loop
-                //} end of async
-                //print("BrewerDB \(#line) Async last line ")
+                } //  end of brewery loop
             }// end of beer loop
-            // This page of results has processed signal GCD that it's complete.
-            // TODO crash occured on the group.leave.1
-            //group?.leave()
             break
 
         case .Styles:
