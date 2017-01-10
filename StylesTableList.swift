@@ -154,15 +154,17 @@ extension StylesTableList : TableList {
      */
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // The UITableView cell is given to us by the CategoryViewController.
+        DispatchQueue.main.async {
             cell.imageView?.image = nil
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
             if (searchText?.isEmpty)! {
-                cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! )  
+                cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! )
             } else {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
             }
-            //cell.setNeedsDisplay()
+            cell.setNeedsDisplay()
+        }
         return cell
     }
     
