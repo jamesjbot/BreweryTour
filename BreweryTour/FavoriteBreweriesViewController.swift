@@ -9,6 +9,8 @@
  This program shows the favorited breweries.
  You can swipe left to remove the brewery from favorites.
  You can click on a brewery to show directions to the brewery.
+ After selecting a brewery you can go back to selected beers and see this 
+ brewery's beers.
  This is driven by an NSFetchedResultsController observing favoriteStatus's
  */
 
@@ -237,9 +239,8 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     
     // When we select a favorite brewery lets zoom to that brewery on the map
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("FavoriteBrewery \(#line) didSelectRowAt called. ")
-        // Send the brewery to the mediator, then switch to the map tab
-        // TODO check on usage of mediator thru protocol
+
+        // Send the brewery to the mediator so that selected beers will update with the selection
         (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: frcForBrewery.object(at: indexPath)) {
             (success, msg) -> Void in
         }
