@@ -49,6 +49,8 @@ class Mediator {
     //private let allBreweryList : AllBreweriesTableList!// = AllBreweriesTableList()
 
     // MARK: Variables
+    fileprivate var objectObserver: [ReceiveBroadcastSetSelected] = []
+
     fileprivate var mapObservers: [MapUpdateable] = []
 
     fileprivate var contextObservers: [UpdateManagedObjectContext] = [UpdateManagedObjectContext]()
@@ -95,9 +97,11 @@ extension Mediator: MediatorBroadcastSetSelected {
     // When an element on categoryScreen is selected, process it on BreweryDBClient
     internal func select(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passedItem = thisItem
-        //print("Mediator \(#line) setting selectedBeersList prior to call: \(passedItem)")
-        // TODO Notify everyone who want to know what the selcted item is
-        //selectedBeersList.setSelectedItem(toNSObject: passedItem!)
+        //Notify everyone who wants to know what the selcted item is
+        for i in objectObserver {
+            i.updateObserversSelected(item: thisItem)
+        }
+
         if thisItem is Brewery {
             //print("Mediator\(#line) Calling mediator to downloadbeers by brewery")
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
@@ -110,7 +114,7 @@ extension Mediator: MediatorBroadcastSetSelected {
     }
 
     internal func registerForObjectUpdate(observer: ReceiveBroadcastSetSelected) {
-        // TODO
+        objectObserver.append(observer)
     }
 
 }

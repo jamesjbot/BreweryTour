@@ -136,6 +136,7 @@ class SelectedBeersViewController: UIViewController, Observer {
 
         // Set Selected Beers as the first screen
         segmentedControl.selectedSegmentIndex = 0 // Selected Beers mode
+
         // Tell view model to load SelectedBeers
         segmentedClicked(segmentedControl)
     }

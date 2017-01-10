@@ -33,7 +33,7 @@ class SelectedBeersTableList : NSObject, Subject {
 
     // MARK: Variables
     // TODO add MediatorBroadcast registration code.
-    private var mediator:  MediatorBroadcastSetSelected = Mediator.sharedInstance()
+    fileprivate var mediator:  MediatorBroadcastSetSelected = Mediator.sharedInstance()
 
     fileprivate var allBeersMode : Bool = false
 
@@ -64,6 +64,8 @@ class SelectedBeersTableList : NSObject, Subject {
 
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
+        registerAsSelectedObjectObserver()
+
         // Since the SelectedBeersViewController creates this object
         // The mediator will never be able to tell SelectedBeersTableList
         // what the selected object is.
@@ -82,7 +84,7 @@ class SelectedBeersTableList : NSObject, Subject {
         selectedObject = toNSObject
         // Start retrieving entries in the background but dont update as view 
         // is not onscreen.
-        performFetchRequestFor(observerNeedsNotification: false)
+        //performFetchRequestFor(observerNeedsNotification: false)
     }
 
 
@@ -139,6 +141,21 @@ class SelectedBeersTableList : NSObject, Subject {
         } catch {
             observer?.sendNotify(from: self, withMsg: "Error fetching data")
         }
+    }
+}
+
+
+extension SelectedBeersTableList: ReceiveBroadcastSetSelected {
+
+    func updateObserversSelected(item: NSManagedObject) {
+        selectedObject = item
+        // Start retrieving entries in the background but dont update as view
+        // is not onscreen.
+        performFetchRequestFor(observerNeedsNotification: false)
+    }
+
+    fileprivate func registerAsSelectedObjectObserver() {
+        mediator.registerForObjectUpdate(observer: self)
     }
 }
 
