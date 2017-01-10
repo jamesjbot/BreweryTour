@@ -56,6 +56,7 @@ class MapViewController : UIViewController {
     // MARK: Variables
 
     fileprivate var beerFRC : NSFetchedResultsController<Beer>? = NSFetchedResultsController<Beer>()
+
     fileprivate var lastSelectedManagedObject : NSManagedObject?
 
     fileprivate var styleFRC: NSFetchedResultsController<Style> = NSFetchedResultsController<Style>()
@@ -87,6 +88,7 @@ class MapViewController : UIViewController {
 
     private func sortBreweriesByDistanceAndDisplay() {
         //print("mapview \(#line) sortBreweriesByDisntanceAndDisplay ")
+
         // If we have a user location we can sort first
         if self.mapView.userLocation.location != nil {
             sortedBreweries = breweriesForDisplay.sorted(by:
