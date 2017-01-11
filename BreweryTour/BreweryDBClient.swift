@@ -688,11 +688,10 @@ class BreweryDBClient {
                         let results = try self.readOnlyContext?.fetch(request)
 
                         // if the style is already in coredata skip it
-                        if (results?.count)! > 0 {
+                        guard (results?.count)! == 0 else {
                             continue
-                        } else {
-                            print ("No style found")
                         }
+
                     } catch {
                         completion!(false, "Failed Reading Styles from database")
                         return
