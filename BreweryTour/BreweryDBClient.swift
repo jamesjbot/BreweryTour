@@ -589,25 +589,17 @@ class BreweryDBClient {
             
         // Beers query
         case APIQueryResponseProcessingTypes.BeersFollowedByBreweries:
+
             // No beer data was returned which can happen
             guard let beerArray = response["data"] as? [[String:AnyObject]] else {
                 completion!(false, "Failed Request No data was returned")
                 return
             }
 
-            //            // Pin the context
-            //            do {
-            //                try backContext?.setQueryGenerationFrom(backContext?.queryGenerationToken)
-            //            } catch {
-            //
-            //            }
-            //
-            //            let dq = DispatchQueue.global(qos: .background)
-            //            dq.async {
-
             createBeerLoop: for beer in beerArray {
-                /* Assume this beer is not in the database.
-                 Send all beers to creation process unique constraints will
+                /* 
+                 Assume this beer is not in the database.
+                 Send all beers and breweries to creation process unique constraints will
                  block duplicate entries
                  */
 
@@ -616,14 +608,16 @@ class BreweryDBClient {
                     continue createBeerLoop
                 }
 
-                // This beer has no style id skip it
+                // This beer has no style id skip beer
                 guard beer["styleId"] != nil else {
                     continue createBeerLoop
                 }
 
                 breweryLoop: for brewery in (breweriesArray as! Array<AnyObject>) {
+
                     let breweryDict = brewery as? [String : AnyObject]
-                    // There is no location info to display on the map.
+
+                    // Can't build a brewery location if no location exist skip brewery
                     guard let locationInfo = breweryDict?["locations"] as? NSArray else {
                         continue createBeerLoop
                     }
@@ -635,6 +629,7 @@ class BreweryDBClient {
                         locDic["latitude"] != nil else {
                                 continue createBeerLoop
                     }
+
                     // Sometimes the breweries have no name, making it useless
                     guard breweryDict?["name"] != nil else {
                         continue breweryLoop
@@ -645,12 +640,10 @@ class BreweryDBClient {
                         continue createBeerLoop
                     }
 
-                    // Assume brewery not in database.
-                    // Send all brweries to creation process
-
-                    // Make one brewersID
+                    // Make one brewersID for both beer and brewery
                     let brewersID = (locDic["id"]?.description)!
 
+                    // Send to brewery creation process
                     self.createBreweryObject(breweryDict: breweryDict!,
                                              locationDict: locDic,
                                              brewersID: brewersID,
@@ -658,21 +651,26 @@ class BreweryDBClient {
                                                 (Brewery) -> Void in
                     }
 
+                    // Send to beer creation process
                     self.createBeerObject(beer: beer, brewerID: brewersID) {
                         (Beer) -> Void in
                     }
+
+                    // Process only one brewery per beer
                     break breweryLoop
                 } //  end of brewery loop
             }// end of beer loop
             break
 
         case .Styles:
+
             // Save the multiple styles from the server
             // We must have data to process else escape
             guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else {
                 completion!(false, "No styles data" )
                 return
             }
+
             // Check to see if the style is already in coredata then skip, else add
             let request = NSFetchRequest<Style>(entityName: "Style")
             request.sortDescriptors = []
@@ -715,13 +713,14 @@ class BreweryDBClient {
             
             
         case .Breweries:
+
             // If there are no pages means there is nothing to process.
             guard (response["numberOfPages"] as? Int) != nil else {
                 completion!(false, "No results returned")
                 return
             }
 
-            //Unable to parse Brewery Failed to extract data
+            // Unable to parse Brewery Failed to extract data
             guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
                 completion!(false, "Network error please try again")
                 return
@@ -729,6 +728,7 @@ class BreweryDBClient {
 
             // This for loop will asynchronousy launch brewery creation.
             breweryLoop: for breweryDict in breweryArray {
+
                 // Can't build a brewery location if no location exist skip brewery
                 guard let locationInfo = breweryDict["locations"] as? NSArray
                     else {
