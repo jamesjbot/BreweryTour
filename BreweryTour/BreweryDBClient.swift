@@ -630,8 +630,9 @@ class BreweryDBClient {
                     // We can't visit a brewery if it's not open to the public
                     // or we don't have coordinates
                     guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
-                        locDic["openToPublic"] as! String == "Y" &&
-                            locDic["longitude"] != nil && locDic["latitude"] != nil else {
+                        locDic["openToPublic"] as! String == "Y",
+                            locDic["longitude"] != nil,
+                        locDic["latitude"] != nil else {
                                 continue createBeerLoop
                     }
                     // Sometimes the breweries have no name, making it useless
@@ -743,7 +744,10 @@ class BreweryDBClient {
                         continue breweryLoop
                 }
 
-                // Don't repeat breweries in the database
+                // Sometimes the breweries have no name, making it useless
+                guard breweryDict["name"] != nil else {
+                    continue breweryLoop
+                }
 
                 // Make one brewers id
                 let brewersID = (locDic["id"]?.description)!
