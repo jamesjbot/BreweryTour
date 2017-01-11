@@ -32,22 +32,28 @@ import Alamofire
 import CoreData
 
 protocol BreweryDBClientProtocol {
-    func isBreweryAndBeerCreationRunning() -> Bool 
+
+    func isBreweryAndBeerCreationRunning() -> Bool
+
     func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) 
+
     // Query for breweries that offer a certain style.
     func downloadBeersAndBreweriesBy(styleID : String,
                                               completion: @escaping (_ success: Bool, _ msg: String?) -> Void )
     // Download all beers from a Brewery
-    // GET: /brewery/:breweryId/beers
     func downloadBeersBy(brewery: Brewery,
                                   completionHandler: @escaping ( _ success: Bool, _ msg: String? ) -> Void )
+
     // Query for beers with a specific name
     func downloadBeersBy(name: String,
                          completion: @escaping (_ success : Bool , _ msg : String? ) -> Void )
+
     // Downloads Beer Styles
     func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void )
     // Query for breweries with a specific name
+
     func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void )
+
     // Download images in the background for a brewery
     func downloadImageToCoreData( forType: ImageDownloadType,
                                   aturl: NSURL,
@@ -74,10 +80,13 @@ class BreweryDBClient {
     // This is the primary writer in the system to coredata
     fileprivate let breweryAndBeerCreator = BreweryAndBeerCreationQueue()
 
+    // This object links beers and breweries to their images.
     fileprivate let imageLinker = ManagedObjectImageLinker()
 
+    // This managed object context is fetching information.
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
+
 
     // MARK: Variables
 
@@ -94,9 +103,6 @@ class BreweryDBClient {
 
 
     // MARK: Functions
-
-
-
 
     // Parse beer data and send to creation queue.
     private func createBeerObject(beer : [String:AnyObject],
@@ -142,8 +148,9 @@ class BreweryDBClient {
     private func createURLFromParameters(queryType: APIQueryResponseProcessingTypes,
                                          querySpecificID: String?,
                                          parameters: [String:AnyObject]) -> NSURL {
-        /* The url currently takes the form of
-         "http://api.brewerydb.com/v2/beers?p=1&format=json&isOrganic=N&withBreweries=Y&styleId=159&key=8e63b90f589c3b3f2001c5e396f5d300key=&format=json&isOrganic=Y&styleId=1&withBreweries=Y")
+        /* 
+         The url currently takes the form of
+         "http://api.brewerydb.com/v2/beers?p=1&format=json&withBreweries=Y&styleId=159&key=8e63b90f589c3b3f2001c5e396f5d300key=&format=json&isOrganic=Y&styleId=1&withBreweries=Y"
         */
         let components = NSURLComponents()
         components.scheme = Constants.BreweryDB.APIScheme
