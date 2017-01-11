@@ -154,6 +154,11 @@ extension StylesTableList : TableList {
      */
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         // The UITableView cell is given to us by the CategoryViewController.
+        configureCell(cell: cell, indexPath: indexPath, searchText: searchText)
+        return cell
+    }
+
+    private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
         DispatchQueue.main.async {
             cell.imageView?.image = nil
             cell.textLabel?.adjustsFontSizeToFitWidth = true
@@ -165,10 +170,8 @@ extension StylesTableList : TableList {
             }
             cell.setNeedsDisplay()
         }
-        return cell
     }
-    
-    
+
     internal func filterContentForSearchText(searchText: String) {
         guard frc.fetchedObjects != nil else {
             filteredObjects.removeAll()

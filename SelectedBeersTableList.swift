@@ -213,25 +213,32 @@ extension SelectedBeersTableList : TableList {
 
     // Configures Tableviewcell for display
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        // Set a default image
-        // Depending on what data is shown populate image and text data.
-        var im =  UIImage(named: "Nophoto.png")
-        cell.textLabel?.adjustsFontSizeToFitWidth = true
-        if searchText != "" { // If there is something in searchText use filteredObject
-            if let data : NSData = (filteredObjects[indexPath.row]).image {
-                im = UIImage(data: data as Data)
-            }
-            cell.textLabel?.text = (filteredObjects[indexPath.row]).beerName
-            cell.detailTextLabel?.text = (filteredObjects[indexPath.row]).brewer?.name
-        } else { // Use unfilteredObjects
-            if let data : NSData = (frc.object(at: indexPath).image) {
-                im = UIImage(data: data as Data)
-            }
-            cell.textLabel?.text = frc.object(at: indexPath).beerName
-            cell.detailTextLabel?.text = frc.object(at: indexPath).brewer?.name
-        }
-        cell.imageView?.image = im
+        configureCell(cell: cell, indexPath: indexPath, searchText: searchText)
         return cell
+    }
+
+
+    private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
+        DispatchQueue.main.async {
+            // Set a default image
+            // Depending on what data is shown populate image and text data.
+            var im =  UIImage(named: "Nophoto.png")
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            if searchText != "" { // If there is something in searchText use filteredObject
+                if let data : NSData = (self.filteredObjects[indexPath.row]).image {
+                    im = UIImage(data: data as Data)
+                }
+                cell.textLabel?.text = (self.filteredObjects[indexPath.row]).beerName
+                cell.detailTextLabel?.text = (self.filteredObjects[indexPath.row]).brewer?.name
+            } else { // Use unfilteredObjects
+                if let data : NSData = (self.frc.object(at: indexPath).image) {
+                    im = UIImage(data: data as Data)
+                }
+                cell.textLabel?.text = self.frc.object(at: indexPath).beerName
+                cell.detailTextLabel?.text = self.frc.object(at: indexPath).brewer?.name
+            }
+            cell.imageView?.image = im
+        }
     }
 
 

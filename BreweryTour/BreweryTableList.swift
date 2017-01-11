@@ -111,32 +111,38 @@ class BreweryTableList: NSObject, Subject {
 extension BreweryTableList: TableList {
 
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        cell.textLabel?.adjustsFontSizeToFitWidth = true
-        let image = #imageLiteral(resourceName: "Nophoto.png")
-        cell.imageView?.image = image
-
-        // When searchText is empty check to make sure indexpath is within set bounds
-        // When searchText is full check to make sure indexpath is within set bounds
-        guard (searchText?.isEmpty)! ? (indexPath.row < copyOfSet.count) :
-            indexPath.row < filteredObjects.count else {
-                return UITableViewCell()
-        }
-        var brewery: Brewery?
-        if (searchText?.isEmpty)! {
-            brewery = copyOfSet[indexPath.row]
-        } else {
-            brewery = (filteredObjects[indexPath.row])
-        }
-        cell.textLabel?.text = brewery?.name
-        if let data = brewery?.image {
-            DispatchQueue.main.async {
-                cell.imageView?.image = UIImage(data: data as Data)
-                cell.imageView?.setNeedsDisplay()
-                print("Brewery tablelist finisehd setneedsdisplay")
-            }
-        }
-        cell.setNeedsDisplay()
+        configureCell(cell: cell, indexPath: indexPath, searchText: searchText)
         return cell
+    }
+
+    private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
+        DispatchQueue.main.async {
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            let image = #imageLiteral(resourceName: "Nophoto.png")
+            cell.imageView?.image = image
+
+            // When searchText is empty check to make sure indexpath is within set bounds
+            // When searchText is full check to make sure indexpath is within set bounds
+//            guard (searchText?.isEmpty)! ? (indexPath.row < copyOfSet.count) :
+//                indexPath.row < filteredObjects.count else {
+//                    return UITableViewCell()
+//            }
+            var brewery: Brewery?
+            if (searchText?.isEmpty)! {
+                brewery = self.copyOfSet[indexPath.row]
+            } else {
+                brewery = (self.filteredObjects[indexPath.row])
+            }
+            cell.textLabel?.text = brewery?.name
+            if let data = brewery?.image {
+                DispatchQueue.main.async {
+                    cell.imageView?.image = UIImage(data: data as Data)
+                    cell.imageView?.setNeedsDisplay()
+                    print("Brewery tablelist finisehd setneedsdisplay")
+                }
+            }
+            cell.setNeedsDisplay()
+        }
     }
 
 

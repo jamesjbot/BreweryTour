@@ -81,6 +81,12 @@ extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 extension AllBreweriesTableList : TableList {
 
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
+        configureCell(cell: cell, indexPath: indexPath, searchText: searchText)
+        return cell
+    }
+
+    private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
+        DispatchQueue.main.async {
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             let image = #imageLiteral(resourceName: "Nophoto.png")
             cell.imageView?.image = image
@@ -98,7 +104,7 @@ extension AllBreweriesTableList : TableList {
                 }
             }
             cell.setNeedsDisplay()
-        return cell
+        }
     }
 
 
