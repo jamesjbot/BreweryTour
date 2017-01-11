@@ -13,7 +13,7 @@ class MyPinAnnotationView: MKPinAnnotationView {
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.frame.size.width = self.frame.size.width * 2
+        frame.size.width = frame.size.width * 2
     }
 
     init(annot: MKAnnotation, reuse: String!) {

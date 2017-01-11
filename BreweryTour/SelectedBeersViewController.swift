@@ -199,7 +199,7 @@ extension SelectedBeersViewController : UITableViewDelegate {
             // We don't need to process anything in the compeltion hanlder
         }
         // Create target viewcontroller
-        let destinationViewcontroller = self.storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
+        let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
         
         // Inject beer information into Detail View Controller
         destinationViewcontroller.beer = beer as! Beer
@@ -208,7 +208,7 @@ extension SelectedBeersViewController : UITableViewDelegate {
         tabBarController?.title = "Back"
 
         // Segue to view controller
-        self.navigationController?.pushViewController(destinationViewcontroller, animated: true)
+        navigationController?.pushViewController(destinationViewcontroller, animated: true)
     }
 
 }

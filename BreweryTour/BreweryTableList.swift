@@ -93,7 +93,7 @@ class BreweryTableList: NSObject, Subject {
         styleFRCObserver = createFetchedResultsController(withStyleID: currentlyObservingStyle?.id)
         styleFRCObserver.delegate = self
         do {
-            try self.styleFRCObserver.performFetch()
+            try styleFRCObserver.performFetch()
             copyOfSet = (styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]?)!
         } catch {
             fatalError("Critical error reading from coredata")
@@ -117,15 +117,15 @@ extension BreweryTableList: TableList {
 
         // When searchText is empty check to make sure indexpath is within set bounds
         // When searchText is full check to make sure indexpath is within set bounds
-        guard (searchText?.isEmpty)! ? (indexPath.row < self.copyOfSet.count) :
-            indexPath.row < self.filteredObjects.count else {
+        guard (searchText?.isEmpty)! ? (indexPath.row < copyOfSet.count) :
+            indexPath.row < filteredObjects.count else {
                 return UITableViewCell()
         }
         var brewery: Brewery?
         if (searchText?.isEmpty)! {
-            brewery = self.copyOfSet[indexPath.row]
+            brewery = copyOfSet[indexPath.row]
         } else {
-            brewery = (self.filteredObjects[indexPath.row])
+            brewery = (filteredObjects[indexPath.row])
         }
         cell.textLabel?.text = brewery?.name
         if let data = brewery?.image {
