@@ -193,7 +193,7 @@ extension BreweryTableList: TableList {
 }
 
 
-extension BreweryTableList: UpdateManagedObjectContext {
+extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
     internal func contextsRefreshAllObjects() {
         styleFRCObserver.managedObjectContext.refreshAllObjects()
         // We must performFetch after refreshing context, otherwise we will retain

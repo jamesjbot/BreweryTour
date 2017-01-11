@@ -144,7 +144,7 @@ class FavoriteBreweriesViewController: UIViewController {
 }
 
 
-extension FavoriteBreweriesViewController: UpdateManagedObjectContext {
+extension FavoriteBreweriesViewController: ReceiveBroadcastManagedObjectContextRefresh {
 
 
     internal func contextsRefreshAllObjects() {

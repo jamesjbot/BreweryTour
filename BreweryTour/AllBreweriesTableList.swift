@@ -64,7 +64,7 @@ class AllBreweriesTableList: NSObject, Subject {
 }
 
 
-extension AllBreweriesTableList: UpdateManagedObjectContext {
+extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 
     internal func contextsRefreshAllObjects() {
          frc.managedObjectContext.refreshAllObjects()

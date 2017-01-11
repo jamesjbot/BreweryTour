@@ -99,13 +99,23 @@ internal protocol BreweryAndBeerCreation {
 }
 
 
+extension BreweryAndBeerCreationQueue: ReceiveBroadcastManagedObjectContextRefresh {
+    func contextsRefreshAllObjects() {
+        abandonProcessingQueue = true
+        abreweryContext?.refreshAllObjects()
+    }
+}
+
+
 class BreweryAndBeerCreationQueue: NSObject {
+
+    fileprivate var abandonProcessingQueue: Bool = false
 
     // MARK: Constants
 
     // Initial responsive load
     private let responsiveMaxSavesPerLoop: Int = 10
-    private var secondsRepeatInterval: Double = 5
+    private var secondsRepeatInterval: Double = 20
     private var maxSavesPerLoop: Int = 70
     private var firstProcessLoopSinceTimerStarted = true
 
@@ -120,7 +130,7 @@ class BreweryAndBeerCreationQueue: NSObject {
     fileprivate var runningBreweryQueue = [BreweryData]()
     fileprivate var runningBeerQueue = [(BeerData,Int)]()
 
-    private var abreweryContext: NSManagedObjectContext? {
+    fileprivate var abreweryContext: NSManagedObjectContext? {
         didSet {
             abreweryContext?.automaticallyMergesChangesFromParent = true
         }
@@ -137,6 +147,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                                          userInfo: nil,
                                          repeats: true)
         abreweryContext = container?.newBackgroundContext()
+        (Mediator.sharedInstance() as! BroadcastManagedObjectContextRefresh).registerManagedObjectContextRefresh(self)
     }
 
 
@@ -178,7 +189,11 @@ class BreweryAndBeerCreationQueue: NSObject {
 
             //Processing Breweries
             if !runningBreweryQueue.isEmpty {
-                for _ in 1...maxSave {
+                breweryLoop: for _ in 1...maxSave {
+
+                    guard continueProcessingAfterContextRefresh() else {
+                        break breweryLoop
+                    }
 
                     let b = runningBreweryQueue.removeFirst()
                     let newBrewery = Brewery(data: b, context: abreweryContext!)
@@ -192,8 +207,8 @@ class BreweryAndBeerCreationQueue: NSObject {
                             styleRequest.predicate = NSPredicate(format: "id == %@", b.styleID!)
                             var resultStyle = try self.abreweryContext?.fetch(styleRequest)
                             resultStyle?.first?.addToBrewerywithstyle(newBrewery)
-                        } catch {
-
+                        } catch let error {
+                            print(error.localizedDescription)
                         }
 
                     }
@@ -230,11 +245,14 @@ class BreweryAndBeerCreationQueue: NSObject {
 
 
             // Processing Beers
-            for _ in 1...maxSave {
+            beerLoop: for _ in 1...maxSave {
+
+                guard continueProcessingAfterContextRefresh() else {
+                    break beerLoop
+                }
 
                 // If we select a brewery, then only beers will be generated.
                 // Therefore we must attach the styles to the breweries at a beer by beer level.
-
                 var (beer,attempt) = runningBeerQueue.removeFirst()
 
                 let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
@@ -298,9 +316,22 @@ class BreweryAndBeerCreationQueue: NSObject {
 
 
                 }
-            }
+            } // After beer for loop
         }
     }
+
+
+    private func continueProcessingAfterContextRefresh() -> Bool {
+        // We've been told to abandon Processing because of a core data refresh.
+        if abandonProcessingQueue {
+            runningBeerQueue.removeAll()
+            runningBreweryQueue.removeAll()
+            abandonProcessingQueue = false
+            return false
+        }
+        return true
+    }
+
 
     fileprivate func startWorkTimer() {
         if workTimer == nil {

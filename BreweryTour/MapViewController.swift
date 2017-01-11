@@ -524,11 +524,12 @@ class MapViewController : UIViewController {
 
 // MARK: - MapViewController: UpdateManagedObjectContext
 
-extension MapViewController: UpdateManagedObjectContext {
+extension MapViewController: ReceiveBroadcastManagedObjectContextRefresh {
     internal func contextsRefreshAllObjects() {
-        //beerFRC?.managedObjectContext.refreshAllObjects()
 
+        mapView.removeAnnotations(mapView.annotations)
         styleFRC.managedObjectContext.refreshAllObjects()
+        
         // We must performFetch after refreshing context, otherwise we will retain
         // Old information is retained.
         do {

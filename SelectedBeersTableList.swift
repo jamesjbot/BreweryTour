@@ -184,7 +184,7 @@ extension SelectedBeersTableList: SelectedBeersViewModel {
 
 
 // When all coredata is delete this is called by the mediator to refresh the context
-extension SelectedBeersTableList: UpdateManagedObjectContext {
+extension SelectedBeersTableList: ReceiveBroadcastManagedObjectContextRefresh {
     internal func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
         // We must performFetch after refreshing context, otherwise we will retain

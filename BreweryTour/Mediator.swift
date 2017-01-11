@@ -53,7 +53,7 @@ class Mediator {
 
     fileprivate var mapObservers: [MapUpdateable] = []
 
-    fileprivate var contextObservers: [UpdateManagedObjectContext] = [UpdateManagedObjectContext]()
+    fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
 
     private var automaticallySegueValue: Bool = false
 
@@ -85,9 +85,6 @@ class Mediator {
         }
         return Singleton.sharedInstance
     }
-
-    
-
 }
 
 
@@ -119,9 +116,9 @@ extension Mediator: MediatorBroadcastSetSelected {
 
 }
 
-extension Mediator: NotifyFRCToUpdate {
+extension Mediator: BroadcastManagedObjectContextRefresh {
 
-    internal func registerManagedObjectContextRefresh(_ a: UpdateManagedObjectContext) {
+    internal func registerManagedObjectContextRefresh(_ a: ReceiveBroadcastManagedObjectContextRefresh) {
         // Add a new observer
         contextObservers.append(a)
     }

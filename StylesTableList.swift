@@ -97,7 +97,7 @@ class StylesTableList: NSObject {
 }
 
 
-extension StylesTableList: UpdateManagedObjectContext {
+extension StylesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 
     internal func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()

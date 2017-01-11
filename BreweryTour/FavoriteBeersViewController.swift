@@ -225,7 +225,7 @@ extension FavoriteBeersViewController : UITableViewDelegate {
 
 // MARK: - FavoriteBeersViewController: UpdateManagedObjectContext
 
-extension FavoriteBeersViewController: UpdateManagedObjectContext {
+extension FavoriteBeersViewController: ReceiveBroadcastManagedObjectContextRefresh {
     func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
         // We must performFetch after refreshing context, otherwise we will retain
