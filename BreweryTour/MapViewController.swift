@@ -527,7 +527,11 @@ class MapViewController : UIViewController {
 extension MapViewController: ReceiveBroadcastManagedObjectContextRefresh {
     internal func contextsRefreshAllObjects() {
 
-        mapView.removeAnnotations(mapView.annotations)
+        // Remove from main queue otherwise it is working in the background.
+        DispatchQueue.main.async {
+            self.mapView.removeAnnotations(self.mapView.annotations)
+        }
+
         styleFRC.managedObjectContext.refreshAllObjects()
         
         // We must performFetch after refreshing context, otherwise we will retain
@@ -572,7 +576,10 @@ extension MapViewController : MKMapViewDelegate {
         pinView?.tintColor = UIColor.red
 
         // Find the brewery in the proper context
-        let foundBrewery = readOnlyContext?.object(with: (convertAnnotationToObjectID(by: annotation))!) as! Brewery
+        guard let objectID = convertAnnotationToObjectID(by: annotation),
+            let foundBrewery = readOnlyContext?.object(with: objectID) as? Brewery else {
+            return pinView
+        }
 
         // Set the favorite icon on pin
         let localButton = UIButton(type: .contactAdd)
@@ -750,41 +757,11 @@ extension MapViewController : MKMapViewDelegate {
 
 extension MapViewController : NSFetchedResultsControllerDelegate {
 
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("\n------->MapView \(#line) Controller will change content")
-    }
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        //print("------->MapView \(#line) controller did change anobject called.")
-        switch (type){
-        case .insert:
-            //print("------->MapView \(#line) insert ")
-            break
-        case .delete:
-            //print("------->mapview \(#line) delete ")
-            break
-        case .move:
-            break
-        case .update:
-            //print("------->mapview \(#line) update ")
-            break
-        }
-    }
-    internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("------->Run \(styleUpdateCounter) mapview \(#line) finishedchanging\n")
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
         breweriesForDisplay = (controller.fetchedObjects?.first as! Style).brewerywithstyle?.allObjects as! [Brewery]
     }
 
-//    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-//        guard let brewer = (anObject as? Beer)?.brewer else {
-//            return
-//        }
-//        // Only newly inserted breweries will be processed
-//        if type == NSFetchedResultsChangeType.insert  {
-//            breweriesToBeProcessed.append(brewer)
-//        }
-//
-//    }
 }
 
 // MARK: - MapViewController : DismissableTutorial
