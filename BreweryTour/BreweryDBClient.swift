@@ -11,12 +11,20 @@
  
 
  Internals
+ Processing requests thru the BreweryDBClientProtocol
+ Since multiple pages of data exist for almost every query, we have to call for
+ each page individually. We have put thes in a DispatchGroup so when all
+ requests for pages have been sent to the BreweryDB. We return a call to the UI,
+ that we successfully sent all the requests.
+
  Beer and Brewery creation
  Only Beer and Brewery data parsing occurs in this program.
  When the parsing is done, we call the createBeerObject and createBreweryObject 
  functions which load the objects in a processing queue in 
  BreweryAndBeerCreationQueue. There Breweries will be created first and 
  then beers will be created. 
+ Duplicate beers and breweries will be dealt with in the CreationQueue.
+
  
  Beer and Brewery images
  After each brewery/beer is created, BreweryAndBeerCreation will call
@@ -59,6 +67,7 @@ protocol BreweryDBClientProtocol {
                                   aturl: NSURL,
                                   forID: String)
 }
+
 
 class BreweryDBClient {
 
@@ -188,6 +197,201 @@ class BreweryDBClient {
         return components.url! as NSURL
     }
 
+    // Parse results into objects
+    private func parse(response : NSDictionary,
+                       querySpecificID : String?,
+                       outputType: APIQueryResponseProcessingTypes,
+                       completion: (( (_ success :  Bool, _ msg: String?) -> Void )?),
+                       group: DispatchGroup? = nil){
+
+        // Process every query type accordingly
+        switch outputType {
+
+
+        case APIQueryResponseProcessingTypes.BeersFollowedByBreweries:
+
+            guard let beerArray = response["data"] as? [[String:AnyObject]] else {// No beer data was returned, exit
+                completion!(false, "Failed Request No data was returned")
+                return
+            }
+
+            createBeerLoop: for beer in beerArray {
+
+                guard let breweriesArray = beer["breweries"], // Must have brewery information
+                    beer["styleId"] != nil // Must have a style id
+                    else {
+                        continue createBeerLoop
+                }
+
+                breweryLoop: for brewery in (breweriesArray as! Array<AnyObject>) {
+
+                    guard let breweryDict = brewery as? [String : AnyObject],
+                        let locationInfo = breweryDict["locations"] as? NSArray,
+                        let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary, // Must have information
+                        locDic["openToPublic"] as! String == "Y", // Must be open to the public
+                        locDic["longitude"] != nil, // Must have a location
+                        locDic["latitude"] != nil,
+                        locDic["id"]?.description != nil  // Must have an id to link
+                        else {
+                            continue createBeerLoop
+                    }
+
+                    guard breweryDict["name"] != nil else { // Sometimes the breweries have no name, making it useless
+                        continue breweryLoop
+                    }
+
+                    let brewersID = (locDic["id"]?.description)! // Make one brewersID for both beer and brewery
+
+                    // Send to brewery creation process
+                    self.createBreweryObject(breweryDict: breweryDict,
+                                             locationDict: locDic,
+                                             brewersID: brewersID,
+                                             style: (beer["styleId"] as! NSNumber).description) {
+                                                (Brewery) -> Void in
+                    }
+
+                    // Send to beer creation process
+                    self.createBeerObject(beer: beer, brewerID: brewersID) {
+                        (Beer) -> Void in
+                    }
+
+                    // Process only one brewery per beer
+                    break breweryLoop
+
+                } //  end of brewery loop
+            } // end of beer loop
+            break
+
+
+        case .Styles:
+
+            // Saves the multiple styles from the server
+            guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else { // We must have data to process else escape
+                completion!(false, "No styles data" )
+                return
+            }
+
+            // Check to see if the style is already in coredata then skip, else add
+            let request = NSFetchRequest<Style>(entityName: "Style")
+            request.sortDescriptors = []
+
+            readOnlyContext?.perform {
+
+                // Creating these in the readOnlyContext because they
+                // are critically needed in the UI
+
+                for aStyle in styleArrayOfDict {
+                    let localId = aStyle["id"]?.stringValue
+
+                    do { // Find existing style then skip.
+                        request.predicate = NSPredicate(format: "id = %@", localId!)
+                        let results = try self.readOnlyContext?.fetch(request)
+
+                        // if the style is already in coredata skip it
+                        guard (results?.count)! == 0 else {
+                            continue
+                        }
+
+                    } catch {
+                        completion!(false, "Failed Reading Styles from database")
+                        return
+                    }
+
+                    let localName = aStyle["name"]
+
+                    // Creates a new style
+                    _ = Style(id: localId!,
+                              name: localName! as! String,
+                              context: self.readOnlyContext!)
+                    do {
+                        try self.readOnlyContext?.save()
+                    } catch _ {
+                        fatalError("Fatal Error Writing to CoreData")
+                    }
+                }
+                completion!(true,"Completed processing styles")
+                return
+            }
+            break
+
+
+        case .Breweries:
+
+            // If there are no pages means there is nothing to process.
+            guard (response["numberOfPages"] as? Int) != nil else {
+                completion!(false, "No results returned")
+                return
+            }
+
+            // Unable to parse Brewery Failed to extract data
+            guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
+                completion!(false, "Network error please try again")
+                return
+            }
+
+            breweryLoop: for breweryDict in breweryArray {
+
+                // Can't build a brewery location if no location exist skip brewery
+                guard let locationInfo = breweryDict["locations"] as? NSArray,
+                    let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
+                    let openToPublic = locDic["openToPublic"],
+                    openToPublic as! String == "Y",
+                    locDic["longitude"] != nil,
+                    locDic["latitude"] != nil,
+                    breweryDict["name"] != nil // Without name can't store.
+                    else {
+                        continue breweryLoop
+                }
+
+                // Make one brewers id
+                let brewersID = (locDic["id"]?.description)!
+
+                createBreweryObject(breweryDict: breweryDict,
+                                    locationDict: locDic,
+                                    brewersID: brewersID,
+                                    style: nil) { // There is no style to pull in when looking for breweries only.
+                                        (thisbrewery) -> Void in
+                }
+            } // end of breweryLoop
+            completion!(true, "Success")
+            break
+
+
+        case .BeersByBreweryID:
+            // Since were are querying by brewery ID we can be guaranteed that
+            // the brewery exists and we can use the querySpecificID!.
+            guard let beerArray = response["data"] as? [[String:AnyObject]] else {
+                // Failed to extract data
+                completion!(false, "There are no beers listed for this brewer.")
+                return
+            }
+            createBeerLoop: for beer in beerArray {
+                
+                // This beer has no style id skip it
+                guard beer["styleId"] != nil else {
+                    continue createBeerLoop
+                }
+                
+                createBeerObject(beer: beer, brewerID: querySpecificID!) {
+                    (Beer) -> Void in
+                }
+            }
+            break
+        }
+    }
+
+
+    // MARK: - BreweryDBClientProtocol
+
+    private func genericJSONResponseProcessSuccess(response: DataResponse<Any>) -> Bool {
+        guard response.result.isSuccess else {
+            return false
+        }
+        guard (response.result.value as? [String:AnyObject]) != nil else {
+            return false
+        }
+        return true
+    }
 
     // Query for all breweries
     internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
@@ -203,15 +407,13 @@ class BreweryDBClient {
         Alamofire.request(outputURL.absoluteString!)
             .responseJSON {
                 response in
-                guard response.result.isSuccess else {
-                    completion(false, "Failed Request Please try again")
+
+                guard self.genericJSONResponseProcessSuccess(response: response) else {
+                    completion(false,"Network failure, please try again later")
                     return
                 }
-                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request Please try again")
-                    return
-                }
-                
+                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
                 guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
                     completion(false, "No results")
                     return
@@ -235,14 +437,13 @@ class BreweryDBClient {
                         Alamofire.request(outputURL.absoluteString!)
                             .responseJSON {
                                 response in
-                                guard response.result.isSuccess else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
+
+                                guard self.genericJSONResponseProcessSuccess(response: response) else {
+                                    completion(false,"Network failure, please try again later")
                                     return
                                 }
-                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                    completion(false, "Failed Request \(#line) \(#function)")
-                                    return
-                                }
+                                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
                                 self.parse(response: responseJSON as NSDictionary,
                                            querySpecificID:  nil,
                                            outputType: theOutputType,
@@ -275,14 +476,12 @@ class BreweryDBClient {
 
         Alamofire.request(outputURL.absoluteString!).responseJSON {
             response in
-            guard response.result.isSuccess else {
-                completion(false, "Failed Request Please try again")
+            guard self.genericJSONResponseProcessSuccess(response: response) else {
+                completion(false,"Network failure, please try again later")
                 return
             }
-            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completion(false, "Failed Request Please try again")
-                return
-            }
+            let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
             guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
                 completion(false, "No results")
                 return
@@ -302,34 +501,28 @@ class BreweryDBClient {
                                                                      parameters: methodParameters)
                 group.enter()
                 queue.async(group: group) {
-                print("Group entered \(p)")
                 Alamofire.request(outputURL.absoluteString!)
                         .responseJSON {
                             response in
-                            guard response.result.isSuccess else {
-                                completion(false, "Failed Request \(#line) \(#function)")
+
+                            guard self.genericJSONResponseProcessSuccess(response: response) else {
+                                completion(false,"Network failure, please try again later")
                                 return
                             }
-                            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                completion(false, "Failed Request \(#line) \(#function)")
-                                return
-                            }
+                            let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
                             
                             self.parse(response: responseJSON as NSDictionary,
                                        querySpecificID:  styleID,
                                        outputType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                        completion: completion,
                                        group: group)
-                            // Relying on the group pushed down to the parse request
-                            // doesn't work all the time
+
                     } //Outside alamo but inside async
-                    print("Let me leave group \(p)")
                     group.leave()
                 } //Outside queue.async
             }  // Outside for loop
             
             group.notify(queue: queue) {
-                print("Group notify")
                 completion(true, "All Pages Submitted Processed DownloadBeerAndBreweriesByStyleID")
             }
         }
@@ -352,15 +545,13 @@ class BreweryDBClient {
         // This is an async call
         Alamofire.request(outputURL.absoluteString!).responseJSON(){
             response in
-            guard response.result.isSuccess else {
-                completionHandler(false, "Failed Request Please try again")
+            guard self.genericJSONResponseProcessSuccess(response: response) else {
+                completionHandler(false,"Network failure, please try again later")
                 return
             }
-            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completionHandler(false,"Failed Request Please try again")
-                return
-            }
-            // Note: This request does not return "totalResults" or 
+                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
+            // Note: This request does not return "totalResults" or
             // "numberOfPages", so don't check for it
             // query is brewery/breweryID/beers
             // Returned data is of format
@@ -395,14 +586,12 @@ class BreweryDBClient {
         Alamofire.request(outputURL.absoluteString!)
             .responseJSON {
                 response in
-                guard response.result.isSuccess else {
-                    completion(false, "Failed Request \(#line) \(#function)")
+
+                guard self.genericJSONResponseProcessSuccess(response: response) else {
+                    completion(false,"Network failure, please try again later")
                     return
                 }
-                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request \(#line) \(#function)")
-                    return
-                }
+                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
                 
                 guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
                     completion(false, "No results")
@@ -423,14 +612,13 @@ class BreweryDBClient {
                         Alamofire.request(outputURL.absoluteString!)
                             .responseJSON {
                                 response in
-                                guard response.result.isSuccess else {
-                                    completion(false, "Failed Request Please try again")
+
+                                guard self.genericJSONResponseProcessSuccess(response: response) else {
+                                    completion(false,"Network failure, please try again later")
                                     return
                                 }
-                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                    completion(false, "Failed Request Please try again")
-                                    return
-                                }
+                                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
                                 self.parse(response: responseJSON as NSDictionary,
                                            querySpecificID:  nil,
                                            outputType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
@@ -456,16 +644,14 @@ class BreweryDBClient {
         Alamofire.request(outputURL.absoluteString!).responseJSON(){
             response in
             // Note: Styles Request does not return number of results.
-            guard response.result.isSuccess else {
-                completionHandler(false,"Failed Request \(#line) \(#function)")
-                return
-            }
-            guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                completionHandler(false, "Failed Request \(#line) \(#function)")
-                return
-            }
 
-            // All the beer styles currently fit on one page.
+            guard self.genericJSONResponseProcessSuccess(response: response) else {
+                completionHandler(false,"Network failure, please try again later")
+                return
+            }
+            let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
+            // All the beer styles currently fit on one page may need to change in the future
             self.parse(response: responseJSON as NSDictionary,
                        querySpecificID:  nil,
                        outputType: APIQueryResponseProcessingTypes.Styles,
@@ -491,15 +677,12 @@ class BreweryDBClient {
         Alamofire.request(outputURL.absoluteString!)
             .responseJSON {
                 response in
-                print(response)
-                guard response.result.isSuccess else {
-                    completion(false, "Failed Request Please try again")
+
+                guard self.genericJSONResponseProcessSuccess(response: response) else {
+                    completion(false,"Network failure, please try again later")
                     return
                 }
-                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                    completion(false, "Failed Request Please try again")
-                    return
-                }
+                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
                 
                 guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
                     completion(false, "No results")
@@ -524,14 +707,13 @@ class BreweryDBClient {
                         Alamofire.request(outputURL.absoluteString!)
                             .responseJSON {
                                 response in
-                                guard response.result.isSuccess else {
-                                    completion(false, "Failed Request Please try again")
+
+                                guard self.genericJSONResponseProcessSuccess(response: response) else {
+                                    completion(false,"Network failure, please try again later")
                                     return
                                 }
-                                guard let responseJSON = response.result.value as? [String:AnyObject] else {
-                                    completion(false, "Failed Request Please try again")
-                                    return
-                                }
+                                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
                                 self.parse(response: responseJSON as NSDictionary,
                                            querySpecificID:  nil,
                                            outputType: theOutputType,
@@ -553,8 +735,7 @@ class BreweryDBClient {
     internal func downloadImageToCoreData( forType: ImageDownloadType,
                                            aturl: NSURL,
                                            forID: String) {
-        guard aturl.absoluteString != "" else {
-            // There must be a url
+        guard aturl.absoluteString != "" else { // Must be a url
             return
         }
         let session = URLSession.shared
@@ -571,10 +752,13 @@ class BreweryDBClient {
             }
 
             // Package the data and queue it up for linking
-            let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!)! as NSData
+            if let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!) as NSData? {
 
-            // Send linking job out for processing.
-            self.imageLinker.queueLinkJob(moID: forID, moType: forType, data: outputData)
+                // Send linking job out for processing.
+                self.imageLinker.queueLinkJob(moID: forID, moType: forType, data: outputData)
+            }
+
+
         }
         task.resume()
     }
@@ -584,214 +768,6 @@ class BreweryDBClient {
         return breweryAndBeerCreator.isBreweryAndBeerCreationRunning()
     }
 
-    // Parse results into objects
-    private func parse(response : NSDictionary,
-                       querySpecificID : String?,
-                       outputType: APIQueryResponseProcessingTypes,
-                       completion: (( (_ success :  Bool, _ msg: String?) -> Void )?),
-                       group: DispatchGroup? = nil){
-        
-        // Process every query type accordingly
-        switch outputType {
-            
-        // Beers query
-        case APIQueryResponseProcessingTypes.BeersFollowedByBreweries:
 
-            // No beer data was returned which can happen
-            guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                completion!(false, "Failed Request No data was returned")
-                return
-            }
-
-            createBeerLoop: for beer in beerArray {
-                /* 
-                 Assume this beer is not in the database.
-                 Send all beers and breweries to creation process unique constraints will
-                 block duplicate entries
-                 */
-
-                // This beer has no brewery information, continue with the next beer
-                guard let breweriesArray = beer["breweries"]  else {
-                    continue createBeerLoop
-                }
-
-                // This beer has no style id skip beer
-                guard beer["styleId"] != nil else {
-                    continue createBeerLoop
-                }
-
-                breweryLoop: for brewery in (breweriesArray as! Array<AnyObject>) {
-
-                    let breweryDict = brewery as? [String : AnyObject]
-
-                    // Can't build a brewery location if no location exist skip brewery
-                    guard let locationInfo = breweryDict?["locations"] as? NSArray else {
-                        continue createBeerLoop
-                    }
-                    // We can't visit a brewery if it's not open to the public
-                    // or we don't have coordinates
-                    guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
-                        locDic["openToPublic"] as! String == "Y",
-                            locDic["longitude"] != nil,
-                        locDic["latitude"] != nil else {
-                                continue createBeerLoop
-                    }
-
-                    // Sometimes the breweries have no name, making it useless
-                    guard breweryDict?["name"] != nil else {
-                        continue breweryLoop
-                    }
-
-                    // Cant create this beer if we can't link it to a brewery
-                    guard locDic["id"]?.description != nil else {
-                        continue createBeerLoop
-                    }
-
-                    // Make one brewersID for both beer and brewery
-                    let brewersID = (locDic["id"]?.description)!
-
-                    // Send to brewery creation process
-                    self.createBreweryObject(breweryDict: breweryDict!,
-                                             locationDict: locDic,
-                                             brewersID: brewersID,
-                                             style: (beer["styleId"] as! NSNumber).description) {
-                                                (Brewery) -> Void in
-                    }
-
-                    // Send to beer creation process
-                    self.createBeerObject(beer: beer, brewerID: brewersID) {
-                        (Beer) -> Void in
-                    }
-
-                    // Process only one brewery per beer
-                    break breweryLoop
-                } //  end of brewery loop
-            }// end of beer loop
-            break
-
-        case .Styles:
-
-            // Save the multiple styles from the server
-            // We must have data to process else escape
-            guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else {
-                completion!(false, "No styles data" )
-                return
-            }
-
-            // Check to see if the style is already in coredata then skip, else add
-            let request = NSFetchRequest<Style>(entityName: "Style")
-            request.sortDescriptors = []
-
-            readOnlyContext?.perform {
-                // Creating these in the readOnlyContext because they 
-                // Are critically needed in the UI
-                for aStyle in styleArrayOfDict {
-                    print("there are this many styles:\(styleArrayOfDict.count)")
-                    let localId = aStyle["id"]?.stringValue
-                    let localName = aStyle["name"]
-                    do {
-                        request.predicate = NSPredicate(format: "id = %@", localId!)
-                        let results = try self.readOnlyContext?.fetch(request)
-
-                        // if the style is already in coredata skip it
-                        guard (results?.count)! == 0 else {
-                            continue
-                        }
-
-                    } catch {
-                        completion!(false, "Failed Reading Styles from database")
-                        return
-                    }
-
-                    // When a New Style, creates a new style
-                    _ = Style(id: localId!,
-                              name: localName! as! String,
-                              context: self.readOnlyContext!)
-                    do {
-                        try self.readOnlyContext?.save()
-                    } catch _ {
-                        fatalError("Fatal Error Writing to CoreData")
-                    }
-                }
-                completion!(true,"Completed processing styles")
-                return
-            }
-            break
-            
-            
-        case .Breweries:
-
-            // If there are no pages means there is nothing to process.
-            guard (response["numberOfPages"] as? Int) != nil else {
-                completion!(false, "No results returned")
-                return
-            }
-
-            // Unable to parse Brewery Failed to extract data
-            guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
-                completion!(false, "Network error please try again")
-                return
-            }
-
-            // This for loop will asynchronousy launch brewery creation.
-            breweryLoop: for breweryDict in breweryArray {
-
-                // Can't build a brewery location if no location exist skip brewery
-                guard let locationInfo = breweryDict["locations"] as? NSArray
-                    else {
-                        continue
-                }
-
-                guard let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
-                    let openToPublic = locDic["openToPublic"],
-                    openToPublic as! String == "Y",
-                    locDic["longitude"] != nil,
-                    locDic["latitude"] != nil
-                    else {
-                        continue breweryLoop
-                }
-
-                // Sometimes the breweries have no name, making it useless
-                guard breweryDict["name"] != nil else {
-                    continue breweryLoop
-                }
-
-                // Make one brewers id
-                let brewersID = (locDic["id"]?.description)!
-
-                createBreweryObject(breweryDict: breweryDict,
-                                    locationDict: locDic,
-                                    brewersID: brewersID,
-                                    style: nil) { // There is no style to pull in when looking for breweries only.
-                    (thisbrewery) -> Void in
-                }
-            }
-            completion!(true, "Success")
-            break
-            
-        case .BeersByBreweryID:
-            // Since were are querying by brewery ID we can be guaranteed that 
-            // the brewery exists and we can use the querySpecificID!.
-            // No beer data was returned which can happen
-            guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                // Failed to extract data
-                completion!(false, "There are no beers listed for this brewer.")
-                return
-            }
-            createBeerLoop: for beer in beerArray {
-
-                // This beer has no style id skip it
-                guard beer["styleId"] != nil else {
-                    continue createBeerLoop
-                }
-
-                createBeerObject(beer: beer, brewerID: querySpecificID!) {
-                    (Beer) -> Void in
-                }
-            }
-            break
-        }
-    }
 }
-
 
