@@ -119,8 +119,7 @@ extension AllBreweriesTableList : TableList {
 
 
     func filterContentForSearchText(searchText: String) {
-        // BreweryTableList Observes the persistent Context and I only saved them
-        // the main context and so there are none.
+
         // Only filter object if there are objects to filter.
         guard frc.fetchedObjects != nil else {
             filteredObjects.removeAll()
