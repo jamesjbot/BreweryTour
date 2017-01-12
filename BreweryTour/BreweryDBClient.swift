@@ -7,32 +7,32 @@
 //
 /*
  This is the api driver, that makes all the requests to the breweryDB
- This will download and parse all the data for the system.
- 
+ This will download and send to parsing all the data for the system.
 
  Internals
- Processing requests thru the BreweryDBClientProtocol
- Since multiple pages of data exist for almost every query, we have to call for
- each page individually. We have put thes in a DispatchGroup so when all
- requests for pages have been sent to the BreweryDB. We return a call to the UI,
- that we successfully sent all the requests.
+ This explains the processing of search requests thru the BreweryDBClientProtocol
+ Multiple pages of data exist for almost every query, we have to call for
+ each page individually and asyncrhronously for speed. 
+ We put these requests in a DispatchGroup so when all
+ requests for pages have been sent to the BreweryDB, we return a call to the UI,
+ informing the user that we've successfully sent out all the requests.
+ This messaging is accomplished thru the group.notify.
+ Parsing occurs for every returned request with the appropriate parser.
 
  Beer and Brewery creation
- Only Beer and Brewery data parsing occurs in this program.
- When the parsing is done, we call the createBeerObject and createBreweryObject 
- functions which load the objects in a processing queue in 
- BreweryAndBeerCreationQueue. There Breweries will be created first and 
- then beers will be created. 
+ Only Beer and Brewery download requests are handled in this program.
+ We pass parsing to their respective parser. From there, the parsers will call
+ the beer or brewery Designers to package up the respective data and send it to
+ BreweryAndBeerCreationQueue for processing.
+ There Breweries will be created first and then beers will be created.
  Duplicate beers and breweries will be dealt with in the CreationQueue.
-
  
  Beer and Brewery images
  After each brewery/beer is created, BreweryAndBeerCreation will call
  this class's downloadImageToCoreData function.
- When the images have been downloaded they will be loaded into this class's
- imagesToBeAssignedQueue. Here a timer will fire repeatedly and place all images
+ When the images have been downloaded they will be loaded into the class's
+ ManagedObjectImageLinker class. There a timer will fire repeatedly and place all images
  with their respective brewery or beer.
-
  */
 
 import Foundation
@@ -113,7 +113,7 @@ class BreweryDBClient {
                                          parameters: [String:AnyObject]) -> NSURL {
         /* 
          The url currently takes the form of
-         "http://api.brewerydb.com/v2/beers?p=1&format=json&withBreweries=Y&styleId=159&key=8e63b90f589c3b3f2001c5e396f5d300key=&format=json&isOrganic=Y&styleId=1&withBreweries=Y"
+         "http://api.brewerydb.com/v2/beers?p=1&format=json&withBreweries=Y&styleId=159&key=8e63b90f589c3b3f2001c5e396f5d300key=&format=json&styleId=1&withBreweries=Y"
         */
         let components = NSURLComponents()
         components.scheme = Constants.BreweryDB.APIScheme
