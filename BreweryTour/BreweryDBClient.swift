@@ -41,8 +41,6 @@ import CoreData
 
 protocol BreweryDBClientProtocol {
 
-    func isBreweryAndBeerCreationRunning() -> Bool
-
     func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) 
 
     // Query for breweries that offer a certain style.
@@ -86,9 +84,6 @@ class BreweryDBClient {
         case BeersByBreweryID
     }
 
-    // This is the primary writer in the system to coredata
-    fileprivate let breweryAndBeerCreator = BreweryAndBeerCreationQueue()
-
     // This object links beers and breweries to their images.
     fileprivate let imageLinker = ManagedObjectImageLinker()
 
@@ -112,47 +107,6 @@ class BreweryDBClient {
 
 
     // MARK: Functions
-
-    // Parse beer data and send to creation queue.
-    private func createBeerObject(beer : [String:AnyObject],
-                                  brewery: Brewery? = nil,
-                                  brewerID: String,
-                                  completion: @escaping (_ out : Beer) -> ()) {
-
-        let beer = BeerData(inputAvailability: beer["available"]?["description"] as? String ?? "No Information Provided",
-                            inDescription: beer["description"] as? String ?? "No Information Provided",
-                            inName: beer["name"] as? String ?? "",
-                            inBrewerId: brewerID,
-                            inId: beer["id"] as! String,
-                            inImageURL: beer["labels"]?["medium"] as? String ?? "",
-                            inIsOrganic: beer["isOrganic"] as? String == "Y" ? true : false,
-                            inStyle: (beer["styleId"] as! NSNumber).description,
-                            inAbv: beer["abv"] as? String ?? "N/A",
-                            inIbu: beer["ibu"] as? String ?? "N/A")
-
-        breweryAndBeerCreator.queueBeer(beer)
-    }
-
-
-    // Parse brewery data and send to creation queue.
-    private func createBreweryObject(breweryDict: [String:AnyObject],
-                                     locationDict locDict: [String:AnyObject],
-                                     brewersID: String,
-                                     style: String?,
-                                     completion: @escaping (_ out : Brewery) -> () ) {
-        let breweryData = BreweryData(
-            inName: breweryDict["name"] as! String,
-            inLatitude: (locDict["latitude"]?.description)!,
-            inLongitude: (locDict["longitude"]?.description)!,
-            inUrl: (locDict["website"] as! String? ?? ""),
-            open: (locDict["openToPublic"] as! String == "Y") ? true : false,
-            inId: brewersID,
-            inImageUrl: breweryDict["images"]?["icon"] as? String ?? "",
-            inStyleID: style)
-
-        breweryAndBeerCreator.queueBrewery(breweryData)
-    }
-
 
     private func createURLFromParameters(queryType: APIQueryResponseProcessingTypes,
                                          querySpecificID: String?,
@@ -205,179 +159,8 @@ class BreweryDBClient {
                        group: DispatchGroup? = nil){
 
         // Process every query type accordingly
-        switch outputType {
-
-
-        case APIQueryResponseProcessingTypes.BeersFollowedByBreweries:
-
-            guard let beerArray = response["data"] as? [[String:AnyObject]] else {// No beer data was returned, exit
-                completion!(false, "Failed Request No data was returned")
-                return
-            }
-
-            createBeerLoop: for beer in beerArray {
-
-                guard let breweriesArray = beer["breweries"], // Must have brewery information
-                    beer["styleId"] != nil // Must have a style id
-                    else {
-                        continue createBeerLoop
-                }
-
-                breweryLoop: for brewery in (breweriesArray as! Array<AnyObject>) {
-
-                    guard let breweryDict = brewery as? [String : AnyObject],
-                        let locationInfo = breweryDict["locations"] as? NSArray,
-                        let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary, // Must have information
-                        locDic["openToPublic"] as! String == "Y", // Must be open to the public
-                        locDic["longitude"] != nil, // Must have a location
-                        locDic["latitude"] != nil,
-                        locDic["id"]?.description != nil  // Must have an id to link
-                        else {
-                            continue createBeerLoop
-                    }
-
-                    guard breweryDict["name"] != nil else { // Sometimes the breweries have no name, making it useless
-                        continue breweryLoop
-                    }
-
-                    let brewersID = (locDic["id"]?.description)! // Make one brewersID for both beer and brewery
-
-                    // Send to brewery creation process
-                    self.createBreweryObject(breweryDict: breweryDict,
-                                             locationDict: locDic,
-                                             brewersID: brewersID,
-                                             style: (beer["styleId"] as! NSNumber).description) {
-                                                (Brewery) -> Void in
-                    }
-
-                    // Send to beer creation process
-                    self.createBeerObject(beer: beer, brewerID: brewersID) {
-                        (Beer) -> Void in
-                    }
-
-                    // Process only one brewery per beer
-                    break breweryLoop
-
-                } //  end of brewery loop
-            } // end of beer loop
-            break
-
-
-        case .Styles:
-
-            // Saves the multiple styles from the server
-            guard let styleArrayOfDict = response["data"] as? [[String:AnyObject]] else { // We must have data to process else escape
-                completion!(false, "No styles data" )
-                return
-            }
-
-            // Check to see if the style is already in coredata then skip, else add
-            let request = NSFetchRequest<Style>(entityName: "Style")
-            request.sortDescriptors = []
-
-            readOnlyContext?.perform {
-
-                // Creating these in the readOnlyContext because they
-                // are critically needed in the UI
-
-                for aStyle in styleArrayOfDict {
-                    let localId = aStyle["id"]?.stringValue
-
-                    do { // Find existing style then skip.
-                        request.predicate = NSPredicate(format: "id = %@", localId!)
-                        let results = try self.readOnlyContext?.fetch(request)
-
-                        // if the style is already in coredata skip it
-                        guard (results?.count)! == 0 else {
-                            continue
-                        }
-
-                    } catch {
-                        completion!(false, "Failed Reading Styles from database")
-                        return
-                    }
-
-                    let localName = aStyle["name"]
-
-                    // Creates a new style
-                    _ = Style(id: localId!,
-                              name: localName! as! String,
-                              context: self.readOnlyContext!)
-                    do {
-                        try self.readOnlyContext?.save()
-                    } catch _ {
-                        fatalError("Fatal Error Writing to CoreData")
-                    }
-                }
-                completion!(true,"Completed processing styles")
-                return
-            }
-            break
-
-
-        case .Breweries:
-
-            // If there are no pages means there is nothing to process.
-            guard (response["numberOfPages"] as? Int) != nil else {
-                completion!(false, "No results returned")
-                return
-            }
-
-            // Unable to parse Brewery Failed to extract data
-            guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
-                completion!(false, "Network error please try again")
-                return
-            }
-
-            breweryLoop: for breweryDict in breweryArray {
-
-                // Can't build a brewery location if no location exist skip brewery
-                guard let locationInfo = breweryDict["locations"] as? NSArray,
-                    let locDic : [String:AnyObject] = locationInfo[0] as? Dictionary,
-                    let openToPublic = locDic["openToPublic"],
-                    openToPublic as! String == "Y",
-                    locDic["longitude"] != nil,
-                    locDic["latitude"] != nil,
-                    breweryDict["name"] != nil // Without name can't store.
-                    else {
-                        continue breweryLoop
-                }
-
-                // Make one brewers id
-                let brewersID = (locDic["id"]?.description)!
-
-                createBreweryObject(breweryDict: breweryDict,
-                                    locationDict: locDic,
-                                    brewersID: brewersID,
-                                    style: nil) { // There is no style to pull in when looking for breweries only.
-                                        (thisbrewery) -> Void in
-                }
-            } // end of breweryLoop
-            completion!(true, "Success")
-            break
-
-
-        case .BeersByBreweryID:
-            // Since were are querying by brewery ID we can be guaranteed that
-            // the brewery exists and we can use the querySpecificID!.
-            guard let beerArray = response["data"] as? [[String:AnyObject]] else {
-                // Failed to extract data
-                completion!(false, "There are no beers listed for this brewer.")
-                return
-            }
-            createBeerLoop: for beer in beerArray {
-                
-                // This beer has no style id skip it
-                guard beer["styleId"] != nil else {
-                    continue createBeerLoop
-                }
-                
-                createBeerObject(beer: beer, brewerID: querySpecificID!) {
-                    (Beer) -> Void in
-                }
-            }
-            break
-        }
+        var parser: ParserProtocol = ParserFactory.sharedInstance().createParser(type: outputType)
+        parser.parse(response: response, querySpecificID: querySpecificID, completion: completion)
     }
 
 
@@ -762,12 +545,6 @@ class BreweryDBClient {
         }
         task.resume()
     }
-
-    // Check is Brewery and Beer creation is still processing things in their queue.
-    func isBreweryAndBeerCreationRunning() -> Bool {
-        return breweryAndBeerCreator.isBreweryAndBeerCreationRunning()
-    }
-
 
 }
 
