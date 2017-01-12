@@ -318,7 +318,8 @@ class CategoryViewController: UIViewController,
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Here we start initializer for style and brewery querying
+
+        // Set the initial viewModel
         activeTableList = styleList
 
         // Register for updates from the view models.
@@ -384,8 +385,8 @@ extension CategoryViewController : UITableViewDataSource {
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
 
+        return activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
     }
 }
 
@@ -490,8 +491,8 @@ extension CategoryViewController: UISearchBarDelegate {
          Same confusing experience goes for searching for styles.
          */
 
+        // BLOCK ALL ONLINE SEARCHES, except from AllBreweriesTableList
         guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBreweries.rawValue else {
-            // Block all other modes from search
             return
         }
 
@@ -501,7 +502,7 @@ extension CategoryViewController: UISearchBarDelegate {
         }
 
         // Definition of the function to be used in AlertWindow.
-        func searchOnline(_ action: UIAlertAction){
+        func searchOnline(_ action: UIAlertAction) {
             if activeTableList is OnlineSearchCapable {
                 (activeTableList as! OnlineSearchCapable).searchForUserEntered(searchTerm: searchBar.text!) {
                     (success, msg) -> Void in
@@ -516,7 +517,6 @@ extension CategoryViewController: UISearchBarDelegate {
                 }
                 activityIndicator.startAnimating()
             }
-
         }
         // Set the function to the action button
         let action = UIAlertAction(title: "Search Online",
