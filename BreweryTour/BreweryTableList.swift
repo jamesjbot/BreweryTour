@@ -192,9 +192,9 @@ extension BreweryTableList: TableList {
     }
     
 
-    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
-        // This should be block at category view controller
-    }
+//    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
+//        // This should be block at category view controller
+//    }
 
 }
 
