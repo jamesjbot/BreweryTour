@@ -5,6 +5,10 @@
 //  Created by James Jongsurasithiwat on 1/11/17.
 //  Copyright © 2017 James Jongs. All rights reserved.
 //
+/*
+ The purpose of the is program is be a central point where the beer information
+ is formatted.
+ */
 
 import Foundation
 
@@ -15,6 +19,7 @@ protocol BeerDesignerProtocol {
                           brewerID: String,
                           completion: @escaping (_ out : Beer) -> ())
 }
+
 
 extension BeerDesignerProtocol {
     
@@ -39,6 +44,7 @@ extension BeerDesignerProtocol {
     }
 }
 
+
 class BeerDesigner: BeerDesignerProtocol {
 
     private init() {}
@@ -48,5 +54,4 @@ class BeerDesigner: BeerDesignerProtocol {
         }
         return Singleton.sharedInstance
     }
-
 }

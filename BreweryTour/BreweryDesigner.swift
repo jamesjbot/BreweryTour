@@ -5,6 +5,10 @@
 //  Created by James Jongsurasithiwat on 1/11/17.
 //  Copyright © 2017 James Jongs. All rights reserved.
 //
+/*
+ The purpose of the is program is be a central point where brewery information
+ is formatted.
+ */
 
 import Foundation
 
@@ -16,6 +20,7 @@ protocol BreweryDesignerProtocol {
                              style: String?,
                              completion: @escaping (_ out : Brewery) -> () )
 }
+
 
 extension BreweryDesignerProtocol {
 
@@ -37,6 +42,7 @@ extension BreweryDesignerProtocol {
         BreweryAndBeerCreationQueue.sharedInstance().queueBrewery(breweryData)
     }
 }
+
 
 class BreweryDesigner: BreweryDesignerProtocol {
 
