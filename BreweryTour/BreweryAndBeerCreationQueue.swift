@@ -13,6 +13,7 @@
  Initially, whenever we just load breweries not styles, the styles will not be linked to these breweries. But when beer creation process continues. These linked will be created
  */
 
+
 import Foundation
 import UIKit
 import CoreData
@@ -91,7 +92,7 @@ internal struct BeerData {
     }
 }
 
-internal protocol BreweryAndBeerCreation {
+internal protocol BreweryAndBeerCreationProtocol {
 
     func isBreweryAndBeerCreationRunning() -> Bool
     func queueBrewery(_ b: BreweryData?)
@@ -139,7 +140,14 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // MARK: Functions
 
-    required override init() {
+    internal class func sharedInstance() -> BreweryAndBeerCreationProtocol {
+        struct Singleton {
+            static var sharedInstance = BreweryAndBeerCreationQueue()
+        }
+        return Singleton.sharedInstance
+    }
+
+    private override init() {
         super.init()
         workTimer = Timer.scheduledTimer(timeInterval: secondsRepeatInterval,
                                          target: self,
@@ -347,7 +355,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 }
 
 
-extension BreweryAndBeerCreationQueue: BreweryAndBeerCreation {
+extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
 
     internal func isBreweryAndBeerCreationRunning() -> Bool {
         if runningBreweryQueue.isEmpty && runningBeerQueue.isEmpty {
@@ -399,6 +407,7 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreation {
             return
         }
         if let beer = b {
+            print("B&BQueue \(#line) beer queued ")
             startWorkTimer()
             let attempt = 0
             runningBeerQueue.append( (beer,attempt) )
