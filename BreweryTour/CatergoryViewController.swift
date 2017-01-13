@@ -230,9 +230,8 @@ class CategoryViewController: UIViewController,
             activeTableList = styleList
             genericTable.reloadData()
             // Set the last selection
-            genericTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle
-            )
-            newSearchBar.placeholder = "Select Style Below/Search here"
+            genericTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle)
+            newSearchBar.placeholder = "Select Style Below or Search here"
 
         case .BreweriesWithStyle:
 
@@ -247,7 +246,7 @@ class CategoryViewController: UIViewController,
             genericTable.reloadData()
             // Set the last selection
             genericTable.selectRow(at: breweriesWithStyleSelectionIndex, animated: true, scrollPosition: .middle)
-            newSearchBar.placeholder = "Select a brewery/Search here"
+            newSearchBar.placeholder = "Select a brewery or Search here"
 
 
         case .AllBreweries:
@@ -255,7 +254,7 @@ class CategoryViewController: UIViewController,
             genericTable.reloadData()
             // Set the last selection
             genericTable.selectRow(at: allBreweriesSelectionIndex, animated: true, scrollPosition: .middle)
-            newSearchBar.placeholder = "Select a brewery/Search here"
+            newSearchBar.placeholder = "Select a brewery or Search for a brewery online"
         }
     }
     
@@ -348,6 +347,7 @@ class CategoryViewController: UIViewController,
 
         // SegmentedControlClicked will reload the table.
         segmentedControlClicked(segmentedControl, forEvent: UIEvent())//Dummy event
+
     }
 
 
@@ -359,6 +359,9 @@ class CategoryViewController: UIViewController,
         } else {
             tutorialView.isHidden = true
         }
+
+        // Make Searchbar fit text
+        (newSearchBar.subviews[0].subviews[1].subviews[2] as! UILabel).adjustsFontSizeToFitWidth = true
     }
 }
 
