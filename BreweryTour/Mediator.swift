@@ -126,7 +126,7 @@ extension Mediator: BroadcastManagedObjectContextRefresh {
     internal func allBeersAndBreweriesDeleted() {
 
         for i in contextObservers {
-            print("There are \(contextObservers.count) to update")
+            print("Mediator says there are \(contextObservers.count) contextObservers to update")
             i.contextsRefreshAllObjects()
         }
 
