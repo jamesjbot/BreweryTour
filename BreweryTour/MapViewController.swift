@@ -562,9 +562,9 @@ extension MapViewController : MKMapViewDelegate {
     // This formats the pins and calloutAccessory views on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MKPinAnnotationView
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MyPinAnnotationView
         if pinView == nil {
-            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: reuseId)
+            pinView = MyPinAnnotationView(annot: annotation, reuse: reuseId)
         }
 
         pinView!.canShowCallout = true
@@ -579,34 +579,16 @@ extension MapViewController : MKMapViewDelegate {
         } else { // breweries
             pinView?.pinTintColor = UIColor.orange
         }
-        
-        // Format annotation callouts here
-        pinView?.tintColor = UIColor.red
 
-        // Find the brewery in the proper context
+        // Find the brewery in the proper context,
+        // If not then this is the user location.
+        // No formating needed on user location.
         guard let objectID = convertAnnotationToObjectID(by: annotation),
             let foundBrewery = readOnlyContext?.object(with: objectID) as? Brewery else {
-            return pinView
+                return pinView
         }
 
-        // Set the favorite icon on pin
-        let localButton = UIButton(type: .contactAdd)
-        var tempImage : UIImage!
-
-        if foundBrewery.favorite == true {
-            tempImage = UIImage(named: "small_heart_icon.png")?.withRenderingMode(.alwaysOriginal)
-
-        } else {
-            tempImage = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
-        }
-
-        localButton.setImage(tempImage, for: .normal)
-        pinView?.leftCalloutAccessoryView = localButton
-
-        // Set the information icon on the right button
-        pinView?.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-        pinView?.annotation = annotation
-        return pinView
+        return pinView?.setBrewery(foundBrewery)
     }
 
     
