@@ -7,6 +7,10 @@
 //
 /*
  Shows all the beers or just the selected beers from styles and/or breweries.
+ 
+ Initialization process
+ First Stored TableLists are created selectedBeersTableList and allBeersTableList
+ 
  */
 
 import UIKit
@@ -20,18 +24,27 @@ class SelectedBeersViewController: UIViewController, Observer {
         case SegementedControl
         case SearchBar
     }
-    
+
+    fileprivate enum SegmentedControllerMode: Int {
+        case SelectedBeers = 0
+        case AllBeers = 1
+    }
+
     private let segmentedControlPaddding : CGFloat = 8
     private let paddingForPoint : CGFloat = 20
 
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    fileprivate let selectedBeersTableList : SelectedBeersTableList = SelectedBeersTableList()
+    
+    fileprivate let selectedBeersTableList : SelectedBeersViewModel = SelectedBeersViewModel()
+    fileprivate let allBeersTableList: AllBeersViewModel = AllBeersViewModel()
 
 
     // MARK: Variables
     
     internal var listOfBreweryIDToDisplay : [String]!
     private var tutorialState : SelectedBeersTutorialStage = .Table
+
+    fileprivate var activeViewModel: TableList!
 
 
     // MARK: IBOutlets
@@ -57,8 +70,36 @@ class SelectedBeersViewController: UIViewController, Observer {
 
 
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
+        print("selectedView \(#line) segementClicked ")
         // Currently if the segmented control 1 (all beers mode selected send true)
-        selectedBeersTableList.setAllBeersModeONThenperformFetch(sender.state.rawValue == 1 ? true :false)
+        // selectedBeersTableList.setAllBeersModeONThenperformFetch(sender.state.rawValue == 1 ? true :false)
+        let segmentedMode: Int = sender.selectedSegmentIndex
+
+        switch segmentedMode {
+
+        case 0: // Selected Beers mode
+            selectedBeersTableList.performFetchRequestFor(observerNeedsNotification: false)
+            activeViewModel = selectedBeersTableList
+            tableView.reloadData()
+            //newSearchBar.placeholder = "Select Style Below/Search here"
+
+        case 1: // All Beers mode
+            allBeersTableList.performFetchRequestFor(observerNeedsNotification: false)
+            // Tell the the 'breweries with style' view model to prepare to
+            // Show the selected style
+            // If no style was selected then it will show the last style group
+            // That was selected.
+//            if styleSelectionIndex != nil {
+//                breweryList.prepareToShowTable()
+//            }
+            activeViewModel = allBeersTableList
+            tableView.reloadData()
+            // Set the last selection
+
+        default: // Will never occur
+            break
+        }
+
     }
 
 
@@ -115,17 +156,29 @@ class SelectedBeersViewController: UIViewController, Observer {
     }
 
     
-    // MARK: Functions
+    // MARK: - Functions
 
     override func viewDidLoad() {
+        print("SelectedViewController \(#line) viewDidLoad ")
         super.viewDidLoad()
-        searchBar.delegate = self
-        // Register with update from the view model.
+
+        // Set the initial viewModel
+        activeViewModel = selectedBeersTableList
+
+        //Register for updates from the view model
         selectedBeersTableList.registerObserver(view: self)
+        allBeersTableList.registerObserver(view: self)
+
+        // Register for searchBar updates
+        searchBar.delegate = self
+
+        // Initialize the active
+        print("SelectedViewController \(#line) viewDidLoad exited ")
     }
 
 
     override func viewWillAppear(_ animated: Bool) {
+        print("SelectedViewController \(#line) viewWillAppear ")
         super.viewWillAppear(animated)
         // When switching from another viewcontroller the background data might
         // have changed
@@ -143,6 +196,7 @@ class SelectedBeersViewController: UIViewController, Observer {
 
 
     override func viewDidAppear(_ animated: Bool) {
+        print("SelectedViewController \(#line) viewDidAppear ")
         super.viewDidAppear(animated)
         // Prime the tutorial state
         tutorialState = .SearchBar
@@ -159,6 +213,8 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     // Method to receive notifications from outside this object.
     internal func sendNotify(from: AnyObject, withMsg msg: String) {
+        fatalError()
+        print("SelectedViewController \(#line) sendNotify ")
         // Prompts the tableView to refilter search listings.
         // TableReload will be handled by the searchBar function.
         // All notifications to SelectedBeersViewController will reload the table.
@@ -166,19 +222,22 @@ class SelectedBeersViewController: UIViewController, Observer {
     }
 }
 
+// MARK: - SelectedBeersViewController: UITableViewDataSource
 
 extension SelectedBeersViewController: UITableViewDataSource {
     
     internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return selectedBeersTableList.getNumberOfRowsInSection(searchText: searchBar.text)
+        print("SelectedViewController \(#line) numberOfRowsInSection ")
+        return activeViewModel.getNumberOfRowsInSection(searchText: searchBar.text)
     }
     
     
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        print("SelectedViewController \(#line) cellForRowAt ")
         // Get a cell from the tableview and populate with name, brewery and image if available
         var cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
-        cell.imageView?.image = nil
-        cell = selectedBeersTableList.cellForRowAt(indexPath: indexPath, cell: cell, searchText: searchBar.text)
+        //cell.imageView?.image = nil
+        cell = activeViewModel.cellForRowAt(indexPath: indexPath, cell: cell, searchText: searchBar.text)
         // Set the uitableviewcell to update otherwise the cache version stays in place too long
         DispatchQueue.main.async {
             cell.setNeedsDisplay()
@@ -192,8 +251,9 @@ extension SelectedBeersViewController: UITableViewDataSource {
 extension SelectedBeersViewController : UITableViewDelegate {
     
     internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("SelectedViewController \(#line) didSelectRowAt ")
         // Open the beer detail view screen.
-        let beer = selectedBeersTableList.selected(elementAt: indexPath,
+        let beer = activeViewModel.selected(elementAt: indexPath,
                                                    searchText: searchBar.text!) {
             (success,msg) -> Void in
             // We don't need to process anything in the compeltion hanlder
@@ -217,13 +277,15 @@ extension SelectedBeersViewController : UITableViewDelegate {
 extension SelectedBeersViewController : UISearchBarDelegate {
 
     internal func searchBar(_: UISearchBar, textDidChange: String){
+        print("SelectedViewController \(#line) textDidChange ")
         // User entered searchtext, now filter data
-        selectedBeersTableList.filterContentForSearchText(searchText: textDidChange)
+        activeViewModel.filterContentForSearchText(searchText: textDidChange)
         tableView.reloadData()
     }
     
     
     internal func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print("SelectedViewController \(#line) searchBarCancelButtonClicked ")
         // Remove searchbar text so we stop searching
         // Put searchbar back into unselected state
         // Repopulate the table
@@ -235,26 +297,36 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     
     // Search for beer online at BreweryDB.
     internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        print("SelectedViewController \(#line) searchBarSearchButton ")
         searchBar.resignFirstResponder()
-        
+
+        // BLOCK ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Allow AllBeerTableList to search online
+        guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBeers.rawValue else {
+            return
+        }
+
         guard !(searchBar.text?.isEmpty)! else {
             // Escape because nothing was entered in search bar
             return
         }
-        
+
+
         // Function to attach to alert button
         func searchOnline(_ action: UIAlertAction) {
+            print("SelectedViewController \(#line) searchOnline ")
             activityIndicator.startAnimating()
             activityIndicator.isHidden = false
             activityIndicator.setNeedsDisplay()
-            selectedBeersTableList.searchForUserEntered(searchTerm: searchBar.text!) {
-                (success, msg) -> Void in
-                self.activityIndicator.stopAnimating()
-                self.activityIndicator.isHidden = true
-                if success {
-                    self.tableView.reloadData()
-                } else {
-                    self.displayAlertWindow(title: "Search Failed", msg: "Please close the app\nandtry again.")
+            if activeViewModel is OnlineSearchCapable {
+                (activeViewModel as! OnlineSearchCapable).searchForUserEntered(searchTerm: searchBar.text!) {
+                    (success, msg) -> Void in
+                    self.activityIndicator.stopAnimating()
+                    self.activityIndicator.isHidden = true
+                    if success {
+                        self.tableView.reloadData()
+                    } else {
+                        self.displayAlertWindow(title: "Search Failed", msg: "Please close the app\nandtry again.")
+                    }
                 }
             }
         }
