@@ -172,7 +172,10 @@ extension BeersViewModel: TableList {
 
 
     private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
-        print("beerstable \(#line) configureCell \(indexPath.row)")
+        if searchText != "" {
+            assert(indexPath.row <= filteredObjects.count, "Why is indexpath higher than the filtered objects")
+        }
+        //        print("beerstable \(#line) configureCell \(indexPath.row)")
         DispatchQueue.main.async {
             // Set a default image
             // Depending on what data is shown populate image and text data.
@@ -200,6 +203,16 @@ extension BeersViewModel: TableList {
 
     internal func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil ) {
         print("beerstable \(#line) filterContentForSearchText ")
+        // TODO do the other filterContents need this
+        filteredObjects.removeAll()
+
+        guard frc.fetchedObjects != nil else {
+            return
+        }
+        guard frc.fetchedObjects!.count > 0 else {
+            return
+        }
+
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
         if let completion = completion {
             completion(true)
