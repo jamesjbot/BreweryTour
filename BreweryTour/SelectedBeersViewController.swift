@@ -35,8 +35,8 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     
-    fileprivate let selectedBeersTableList : SelectedBeersViewModel = SelectedBeersViewModel()
-    fileprivate let allBeersTableList: AllBeersViewModel = AllBeersViewModel()
+    fileprivate let selectedBeersViewModel : SelectedBeersViewModel = SelectedBeersViewModel()
+    fileprivate let allBeersViewModel: AllBeersViewModel = AllBeersViewModel()
 
 
     // MARK: Variables
@@ -78,13 +78,14 @@ class SelectedBeersViewController: UIViewController, Observer {
         switch segmentedMode {
 
         case 0: // Selected Beers mode
-            selectedBeersTableList.performFetchRequestFor(observerNeedsNotification: false)
-            activeViewModel = selectedBeersTableList
+            selectedBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
+            //selectedBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
+            activeViewModel = selectedBeersViewModel
             tableView.reloadData()
             //newSearchBar.placeholder = "Select Style Below/Search here"
 
         case 1: // All Beers mode
-            allBeersTableList.performFetchRequestFor(observerNeedsNotification: false)
+            allBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
             // Tell the the 'breweries with style' view model to prepare to
             // Show the selected style
             // If no style was selected then it will show the last style group
@@ -92,7 +93,7 @@ class SelectedBeersViewController: UIViewController, Observer {
 //            if styleSelectionIndex != nil {
 //                breweryList.prepareToShowTable()
 //            }
-            activeViewModel = allBeersTableList
+            activeViewModel = allBeersViewModel
             tableView.reloadData()
             // Set the last selection
 
@@ -163,11 +164,11 @@ class SelectedBeersViewController: UIViewController, Observer {
         super.viewDidLoad()
 
         // Set the initial viewModel
-        activeViewModel = selectedBeersTableList
+        activeViewModel = selectedBeersViewModel
 
         //Register for updates from the view model
-        selectedBeersTableList.registerObserver(view: self)
-        allBeersTableList.registerObserver(view: self)
+        selectedBeersViewModel.registerObserver(view: self)
+        allBeersViewModel.registerObserver(view: self)
 
         // Register for searchBar updates
         searchBar.delegate = self

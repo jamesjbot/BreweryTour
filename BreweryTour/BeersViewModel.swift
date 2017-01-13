@@ -60,7 +60,7 @@ class BeersViewModel: NSObject {
 
         /*
          AllBeersViewModel will use the perform fetch in this class
-         SelectedBeerTableList
+         SelectedBeersViewModel will use it's own performFetch function
          */
     }
 
