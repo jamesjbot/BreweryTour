@@ -76,9 +76,10 @@ class SelectedBeersViewController: UIViewController, Observer {
         let segmentedMode: SegmentedControllerMode = SelectedBeersViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
 
         switch segmentedMode {
-            // Fetch new beers
+            // If needed filter beers
             // Set the backing model
-            // Reload our local data.        
+            // Reload our local data. 
+
         case .SelectedBeers: // Selected Beers mode
             //selectedBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
             // Everytime we switch we have to refilter the otherwise the content won't update
@@ -88,7 +89,7 @@ class SelectedBeersViewController: UIViewController, Observer {
             activeViewModel = selectedBeersViewModel
             tableView.reloadData()
             DispatchQueue.main.async {
-                self.searchBar.placeholder = "Search For Beer"
+                self.searchBar.placeholder = "Search For Beer here"
             }
 
         case .AllBeers: // All Beers mode
