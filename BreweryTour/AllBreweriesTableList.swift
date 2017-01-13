@@ -118,9 +118,10 @@ extension AllBreweriesTableList : TableList {
     }
 
 
-    func filterContentForSearchText(searchText: String) {
+    func filterContentForSearchText(searchText: String, completion: ((_ success: Bool)-> Void)? = nil ) {
 
         // Only filter object if there are objects to filter.
+        // TODO do the other filter contents needs these guards.
         guard frc.fetchedObjects != nil else {
             filteredObjects.removeAll()
             return
@@ -130,6 +131,9 @@ extension AllBreweriesTableList : TableList {
             return
         }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
+        if let completion = completion {
+            completion(true)
+        }
     }
 
 

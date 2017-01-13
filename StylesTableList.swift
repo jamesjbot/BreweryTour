@@ -172,7 +172,7 @@ extension StylesTableList : TableList {
         }
     }
 
-    internal func filterContentForSearchText(searchText: String) {
+    internal func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil) {
         guard frc.fetchedObjects != nil else {
             filteredObjects.removeAll()
             return

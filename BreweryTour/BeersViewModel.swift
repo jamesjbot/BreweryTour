@@ -19,7 +19,9 @@ class BeersViewModel: NSObject {
 
     internal let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
+    
     // MARK: Variables
+
     fileprivate var mediator:  Mediator = Mediator.sharedInstance()
 
     fileprivate var filteredObjects: [Beer] = [Beer]()
@@ -29,6 +31,9 @@ class BeersViewModel: NSObject {
     internal var observer : Observer?
 
     internal var selectedObject : NSManagedObject! = nil
+
+
+    // MARK: - Functions 
 
     internal override init(){
         print("beerstable \(#line) init ")
@@ -160,7 +165,7 @@ extension BeersViewModel: TableList {
 
     // Configures Tableviewcell for display
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        print("beerstable \(#line) cellForRowAt ")
+        //print("beerstable \(#line) cellForRowAt ")
         configureCell(cell: cell, indexPath: indexPath, searchText: searchText)
         return cell
     }
@@ -193,9 +198,12 @@ extension BeersViewModel: TableList {
     }
 
 
-    internal func filterContentForSearchText(searchText: String) {
+    internal func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil ) {
         print("beerstable \(#line) filterContentForSearchText ")
         filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
+        if let completion = completion {
+            completion(true)
+        }
     }
 
 

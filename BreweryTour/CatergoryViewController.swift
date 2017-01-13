@@ -341,7 +341,7 @@ class CategoryViewController: UIViewController,
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        activeTableList.filterContentForSearchText(searchText: newSearchBar.text!)
+        activeTableList.filterContentForSearchText(searchText: newSearchBar.text!, completion: nil)
 
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
@@ -459,7 +459,7 @@ extension CategoryViewController: UISearchBarDelegate {
          if there is text
          */
         if !textDidChange.isEmpty {
-            activeTableList.filterContentForSearchText(searchText: textDidChange)
+            activeTableList.filterContentForSearchText(searchText: textDidChange, completion: nil)
             genericTable.reloadData()
         }
     }

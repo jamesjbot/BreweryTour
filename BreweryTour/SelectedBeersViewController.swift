@@ -73,34 +73,37 @@ class SelectedBeersViewController: UIViewController, Observer {
         print("selectedView \(#line) segementClicked ")
         // Currently if the segmented control 1 (all beers mode selected send true)
         // selectedBeersTableList.setAllBeersModeONThenperformFetch(sender.state.rawValue == 1 ? true :false)
-        let segmentedMode: Int = sender.selectedSegmentIndex
+        let segmentedMode: SegmentedControllerMode = SelectedBeersViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
 
         switch segmentedMode {
-
-        case 0: // Selected Beers mode
-            selectedBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
+            // Fetch new beers
+            // Set the backing model
+            // Reload our local data.        
+        case .SelectedBeers: // Selected Beers mode
             //selectedBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
+            // Everytime we switch we have to refilter the otherwise the content won't update
+            if let text = searchBar?.text {
+                selectedBeersViewModel.filterContentForSearchText(searchText: text)
+            }
             activeViewModel = selectedBeersViewModel
             tableView.reloadData()
-            //newSearchBar.placeholder = "Select Style Below/Search here"
+            DispatchQueue.main.async {
+                self.searchBar.placeholder = "Search For Beer"
+            }
 
-        case 1: // All Beers mode
-            allBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
-            // Tell the the 'breweries with style' view model to prepare to
-            // Show the selected style
-            // If no style was selected then it will show the last style group
-            // That was selected.
-//            if styleSelectionIndex != nil {
-//                breweryList.prepareToShowTable()
-//            }
+        case .AllBeers: // All Beers mode
+            // This next line is useless as tableView.reloadData will call this function eventually in BeersViewModel getNumberOfRowsInSection
+            //allBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
+            // Everytime we switch we have to refilter the otherwise the content won't update
+            if let text = searchBar?.text {
+                allBeersViewModel.filterContentForSearchText(searchText: text)
+            }
             activeViewModel = allBeersViewModel
             tableView.reloadData()
-            // Set the last selection
-
-        default: // Will never occur
-            break
+            DispatchQueue.main.async {
+                self.searchBar.placeholder = "Search For Beer here or online"
+            }
         }
-
     }
 
 
@@ -214,11 +217,11 @@ class SelectedBeersViewController: UIViewController, Observer {
 
     // Method to receive notifications from outside this object.
     internal func sendNotify(from: AnyObject, withMsg msg: String) {
-        fatalError()
         print("SelectedViewController \(#line) sendNotify ")
         // Prompts the tableView to refilter search listings.
         // TableReload will be handled by the searchBar function.
         // All notifications to SelectedBeersViewController will reload the table.
+        // We invoke the search bar command just incase there is search text entered and we need to immediately filter the contents.
         searchBar(searchBar, textDidChange: searchBar.text!)
     }
 }
@@ -234,10 +237,10 @@ extension SelectedBeersViewController: UITableViewDataSource {
     
     
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("SelectedViewController \(#line) cellForRowAt ")
+        print("SelectBeerView \(#line) cellForRowAt ")
         // Get a cell from the tableview and populate with name, brewery and image if available
+        // By sending the cell to the model to populate
         var cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
-        //cell.imageView?.image = nil
         cell = activeViewModel.cellForRowAt(indexPath: indexPath, cell: cell, searchText: searchBar.text)
         // Set the uitableviewcell to update otherwise the cache version stays in place too long
         DispatchQueue.main.async {
@@ -248,6 +251,8 @@ extension SelectedBeersViewController: UITableViewDataSource {
 
 }
 
+
+// MARK: - SelectedBeersViewController : UITableViewDelegate
 
 extension SelectedBeersViewController : UITableViewDelegate {
     
@@ -275,13 +280,20 @@ extension SelectedBeersViewController : UITableViewDelegate {
 }
 
 
+// MARK: - SelectedBeersViewController : UISearchBarDelegate
+
 extension SelectedBeersViewController : UISearchBarDelegate {
 
     internal func searchBar(_: UISearchBar, textDidChange: String){
         print("SelectedViewController \(#line) textDidChange ")
         // User entered searchtext, now filter data
-        activeViewModel.filterContentForSearchText(searchText: textDidChange)
-        tableView.reloadData()
+        activeViewModel.filterContentForSearchText(searchText: textDidChange) {
+            (ok) -> Void in
+            print("SelecteBeerView  \(#line) returned from textDidChange")
+            // TODO THIS MAY BE CALLED TOO OFTEN TO FIX THAT LETS HAVE A COMPLETION HANDLER
+            self.tableView.reloadData()
+        }
+
     }
     
     

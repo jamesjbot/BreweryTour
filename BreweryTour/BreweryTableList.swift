@@ -146,7 +146,7 @@ extension BreweryTableList: TableList {
     }
 
 
-    func filterContentForSearchText(searchText: String) {
+    func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil) {
         // Only filter object if there are objects to filter.
         guard copyOfSet != nil else {
             filteredObjects.removeAll()

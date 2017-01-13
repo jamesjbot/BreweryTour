@@ -17,7 +17,7 @@ protocol TableList {
                       cell : UITableViewCell,
                       searchText : String?) -> UITableViewCell
     func getNumberOfRowsInSection(searchText : String?) -> Int
-    func filterContentForSearchText(searchText: String) -> Void
+    func filterContentForSearchText(searchText: String, completion: ( (_ ok: Bool) -> Void )?) -> Void
     func registerObserver(view: Observer)
     func selected(elementAt: IndexPath,
                   searchText: String,
