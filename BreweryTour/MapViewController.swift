@@ -35,13 +35,17 @@ import MapKit
 import CoreLocation
 import CoreData
 
-
+// TODO For single breweries zoom in to selection
+// TODO For prior saved styles show all the breweries not just the saved ones.
+// TODO Allow position changing.
+// TODO stop map from constantly recentering on user location.
+// TODO initial position is too far out.
 class MapViewController : UIViewController {
     
     // MARK: Constants
     let reuseId = "pin"
     let maxBreweryBuffer = 50
-    let timerDelay = 5
+    let bounceDelay = 5000 // 5 seconds
     let maximumClosestBreweries = 100
 
     // Location manager allows us access to the user's location
@@ -55,7 +59,7 @@ class MapViewController : UIViewController {
 
     // MARK: Variables
 
-    fileprivate var beerFRC : NSFetchedResultsController<Beer>? = NSFetchedResultsController<Beer>()
+    //fileprivate var beerFRC : NSFetchedResultsController<Beer>? = NSFetchedResultsController<Beer>()
 
     fileprivate var lastSelectedManagedObject : NSManagedObject?
 
@@ -86,11 +90,49 @@ class MapViewController : UIViewController {
     }
 
 
+    // MARK: IBOutlet
+
+    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
+    @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var pointer: CircleView!
+    @IBOutlet weak var tutorialText: UITextView!
+    @IBOutlet weak var mapView: MKMapView!
+    
+
+    // MARK: IBAction
+    
+    @IBAction func dismissTutorial(_ sender: UIButton) {
+        tutorialView.isHidden = true
+        UserDefaults.standard.set(false, forKey: g_constants.MapViewTutorial)
+        UserDefaults.standard.synchronize()
+    }
+    
+    
+    // MARK: - Functions
+
+//    // Turns off the breweriesToBeProcessed timer
+//    private func disableTimer() {
+//        if checkUpTimer != nil {
+//            checkUpTimer?.invalidate()
+//        }
+//    }
+//
+//    // Process the last unfull set on the breweriesToBeProcessed queue.
+//    @objc private func timerProcessUnfullQueue() {
+//        if breweriesToBeProcessed.count > 0 {
+//            populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
+//            breweriesToBeProcessed.removeAll()
+//            disableTimer()
+//            activityIndicator.stopAnimating()
+//        }
+//    }
+
+
     private func sortBreweriesByDistanceAndDisplay() {
         //print("mapview \(#line) sortBreweriesByDisntanceAndDisplay ")
 
         // If we have a user location we can sort first
-        if self.mapView.userLocation.location != nil {
+        if mapView.userLocation.location != nil {
             sortedBreweries = breweriesForDisplay.sorted(by:
                 { (brewery1, brewery2) -> Bool in
                     let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
@@ -103,13 +145,13 @@ class MapViewController : UIViewController {
         var annotations = [MKAnnotation]()
 
         // Show only the first maximumClosestBreweries points otherwise UI Slows down too much.
-        var maxDisplayed: Int = self.breweriesForDisplay.count
-        if self.breweriesForDisplay.count > self.maximumClosestBreweries {
-            maxDisplayed = self.maximumClosestBreweries
+        var maxDisplayed: Int = breweriesForDisplay.count
+        if breweriesForDisplay.count > maximumClosestBreweries {
+            maxDisplayed = maximumClosestBreweries
         }
 
         // Format the first maximumClosestBreweries for display.
-        for (number,i) in self.sortedBreweries.enumerated() {
+        for (number,i) in sortedBreweries.enumerated() {
 
             guard number < maxDisplayed else {
                 break
@@ -167,20 +209,20 @@ class MapViewController : UIViewController {
 
     func centerMapOnLocation(location: CLLocation?, radius regionRadius: CLLocationDistance) {
         DispatchQueue.main.async {
-        guard location != nil else {
-            // Center of the U.S.
-            let centerCoord = CLLocationCoordinate2D(latitude: 39.5, longitude: -98.35)
-            let span = MKCoordinateSpanMake(63 , 63)
-            let region = MKCoordinateRegion(center: centerCoord , span: span)
-            self.mapView.setRegion(region, animated: true)
-            return
-        }
-        // Set the view region
-        //print("Setting Region centered on user location to \(regionRadius) meters")
-        let coordinateRegion = MKCoordinateRegionMakeWithDistance((location?.coordinate)!,
-                                                                  regionRadius * 2.0, regionRadius * 2.0)
-        self.mapView.setRegion(coordinateRegion, animated: true)
-        self.mapView.setNeedsDisplay()
+            guard location != nil else {
+                // Center of the U.S.
+                let centerCoord = CLLocationCoordinate2D(latitude: 39.5, longitude: -98.35)
+                let span = MKCoordinateSpanMake(63 , 63)
+                let region = MKCoordinateRegion(center: centerCoord , span: span)
+                self.mapView.setRegion(region, animated: true)
+                return
+            }
+            // Set the view region
+            //print("Setting Region centered on user location to \(regionRadius) meters")
+            let coordinateRegion = MKCoordinateRegionMakeWithDistance((location?.coordinate)!,
+                                                                      regionRadius * 2.0, regionRadius * 2.0)
+            self.mapView.setRegion(coordinateRegion, animated: true)
+            self.mapView.setNeedsDisplay()
         }
     }
 
@@ -194,62 +236,22 @@ class MapViewController : UIViewController {
             // Put the next 50 breweries on the map
             if breweriesToBeProcessed.count >= maxBreweryBuffer {
 
-                populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
+                //populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
                 breweriesToBeProcessed.removeAll()
-                disableTimer()
+                //disableTimer()
 
             } else {
                 // less than 50 breweries exist in the queue comeback and map them
                 // The last flush out will always be timerDelay seconds after the last insert
-                disableTimer()
-                checkUpTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timerDelay),
-                                                    target: self,
-                                                    selector: #selector(timerProcessUnfullQueue),
-                                                    userInfo: nil,
-                                                    repeats: true)
+                //disableTimer()
+                //checkUpTimer = Timer.scheduledTimer(timeInterval: TimeInterval(timerDelay),
+                //                                                    target: self,
+                //                                                    selector: #selector(timerProcessUnfullQueue),
+                //                                                    userInfo: nil,
+                //                                                    repeats: true)
             }
         }
     }
-
-
-    // MARK: IBOutlet
-
-    @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var tutorialView: UIView!
-    @IBOutlet weak var pointer: CircleView!
-    @IBOutlet weak var tutorialText: UITextView!
-    @IBOutlet weak var mapView: MKMapView!
-    
-
-    // MARK: IBAction
-    
-    @IBAction func dismissTutorial(_ sender: UIButton) {
-        tutorialView.isHidden = true
-        UserDefaults.standard.set(false, forKey: g_constants.MapViewTutorial)
-        UserDefaults.standard.synchronize()
-    }
-    
-    
-    // MARK: Functions
-
-    // Turns off the breweriesToBeProcessed timer
-    private func disableTimer() {
-        if checkUpTimer != nil {
-            checkUpTimer?.invalidate()
-        }
-    }
-
-    // Process the last unfull set on the breweriesToBeProcessed queue.
-    @objc private func timerProcessUnfullQueue() {
-        if breweriesToBeProcessed.count > 0 {
-            populateMapWithAnnotations(fromBreweries: breweriesToBeProcessed, removeDisplayedAnnotations: false)
-            breweriesToBeProcessed.removeAll()
-            disableTimer()
-            activityIndicator.stopAnimating()
-        }
-    }
-
-
     // Find brewery by name in annotation
     fileprivate func convertAnnotationToObjectID(by: MKAnnotation) -> NSManagedObjectID? {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
@@ -299,121 +301,121 @@ class MapViewController : UIViewController {
     }
 
 
-    /*
-     This function is only called on viewWillAppear
-     It fetches breweries based on style selected.
-     Get the Brewery entries from the database
-     */
-    private func initializeFetchAndFetchBreweriesSetIncomingLocations(byStyle : Style){
-        print("MapView \(#line) initializeFetchAndFetchBreweries called Requesting style: \(byStyle.id!) ")
-        // Fetch all the beers with style currently available
-        // Go thru each beer if the brewery is on the map skip it
-        // If not put the beer's brewery in breweriesToBeProcessed.
+//    /*
+//     This function is only called on viewWillAppear
+//     It fetches breweries based on style selected.
+//     Get the Brewery entries from the database
+//     */
+//    private func initializeFetchAndFetchBreweriesSetIncomingLocations(byStyle : Style){
+//        print("MapView \(#line) initializeFetchAndFetchBreweries called Requesting style: \(byStyle.id!) ")
+//        // Fetch all the beers with style currently available
+//        // Go thru each beer if the brewery is on the map skip it
+//        // If not put the beer's brewery in breweriesToBeProcessed.
+//
+//        // Fetch all the beers with style
+//        let request : NSFetchRequest<Beer> = Beer.fetchRequest()
+//        request.sortDescriptors = []
+//        request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
+//        // A static view of current breweries with styles
+//        var results : [Beer]!
+//        beerFRC = NSFetchedResultsController(fetchRequest: request ,
+//                                             managedObjectContext: readOnlyContext!,
+//                                             sectionNameKeyPath: nil,
+//                                             cacheName: nil)
+//        // Sign up for updates
+//        beerFRC?.delegate = self
+//
+//        // Prime the fetched results controller
+//        do {
+//            _ = try beerFRC?.performFetch()
+//            results = (beerFRC?.fetchedObjects!)! as [Beer]
+//        } catch {
+//            displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
+//            return
+//        }
+//        // Now that we have Beers with that style, what breweries are associated
+//        // with these beers
+//        var uniqueBreweries = [Brewery]() // Array to hold breweries
+//
+//        // Remove duplicate breweries
+//        for beer in results {
+//            if beer.brewer != nil {
+//                // Only unique breweries are processed
+//                if !uniqueBreweries.contains(beer.brewer!) {
+//                    uniqueBreweries.append(beer.brewer!)
+//                    // Hand breweries off to be processed.
+//                    breweriesToBeProcessed.append(beer.brewer!)
+//                }
+//            }
+//        }
+//        // The map must be populated when the fetchRequest completes
+//        // TODO Adding breweries to tobeprocessed does the same thing as this line
+//        // consider deleting it after testing.
+//        //populateMapWithAnnotations(fromBreweries: mappableBreweries, removeDisplayedAnnotations: true)
+//        print("MapView \(#line) completed adding unique to processed \(uniqueBreweries.count) ")
+//
+//    }
 
-        // Fetch all the beers with style
-        let request : NSFetchRequest<Beer> = Beer.fetchRequest()
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "styleID = %@", byStyle.id!)
-        // A static view of current breweries with styles
-        var results : [Beer]!
-        beerFRC = NSFetchedResultsController(fetchRequest: request ,
-                                             managedObjectContext: readOnlyContext!,
-                                             sectionNameKeyPath: nil,
-                                             cacheName: nil)
-        // Sign up for updates
-        beerFRC?.delegate = self
 
-        // Prime the fetched results controller
-        do {
-            _ = try beerFRC?.performFetch()
-            results = (beerFRC?.fetchedObjects!)! as [Beer]
-        } catch {
-            self.displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again.")
-            return
-        }
-        // Now that we have Beers with that style, what breweries are associated
-        // with these beers
-        var uniqueBreweries = [Brewery]() // Array to hold breweries
+//    private func removeDuplicatesFromNewAnnotations(orignal: [MKAnnotation],
+//                                                    new: [Brewery]) {
+//
+//    }
+//
+//    // Puts all the Brewery entries on to the map
+//    // All breweries in the breweriesToBeProcessed array will be added to the screen
+//    fileprivate func populateMapWithAnnotations(fromBreweries: [Brewery],
+//                                                removeDisplayedAnnotations: Bool){
+//
+//        // Remove all the old annotations or remove new duplicates
+//        var duplicateFree = fromBreweries
+//        if removeDisplayedAnnotations {
+//            // TODO Removed for testing new additions.
+//            //mapView.removeAnnotations(mapView.annotations)
+//
+//        } else { // Remove duplicates
+//            var duplicateIndices = [Int]()
+//            new: for (i, element) in duplicateFree.enumerated() {
+//                for j in mapView.annotations {
+//                    if element.latitude == j.coordinate.latitude.description &&
+//                        element.longitude == j.coordinate.longitude.description {
+//                        duplicateIndices.append(i)
+//                        continue new
+//                    }
+//                }
+//            }
+//            duplicateIndices.sort()
+//            duplicateIndices.reverse()
+//            for i in duplicateIndices {
+//                duplicateFree.remove(at: i)
+//            }
+//
+//        }
+//        // Create new array of annotations
+//        var annotations = [MKAnnotation]()
+//        for i in duplicateFree {
+//            // Sometimes the breweries don't have a location
+//            guard i.latitude != nil && i.longitude != nil else {
+//                continue
+//            }
+//
+//            let aPin = MKPointAnnotation()
+//            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
+//            aPin.title = i.name
+//            aPin.subtitle = i.url
+//            annotations.append(aPin)
+//        }
+//        // Map the annotations
+//        addAnnotationsToMapAndSetNeedsDisplay(annotations: annotations)
+//    }
 
-        // Remove duplicate breweries
-        for beer in results {
-            if beer.brewer != nil {
-                // Only unique breweries are processed
-                if !uniqueBreweries.contains(beer.brewer!) {
-                    uniqueBreweries.append(beer.brewer!)
-                    // Hand breweries off to be processed.
-                    breweriesToBeProcessed.append(beer.brewer!)
-                }
-            }
-        }
-        // The map must be populated when the fetchRequest completes
-        // TODO Adding breweries to tobeprocessed does the same thing as this line
-        // consider deleting it after testing.
-        //populateMapWithAnnotations(fromBreweries: mappableBreweries, removeDisplayedAnnotations: true)
-        print("MapView \(#line) completed adding unique to processed \(uniqueBreweries.count) ")
-
-    }
-
-
-    private func removeDuplicatesFromNewAnnotations(orignal: [MKAnnotation],
-                                                    new: [Brewery]) {
-
-    }
-
-    // Puts all the Brewery entries on to the map
-    // All breweries in the breweriesToBeProcessed array will be added to the screen
-    fileprivate func populateMapWithAnnotations(fromBreweries: [Brewery],
-                                                removeDisplayedAnnotations: Bool){
-
-        // Remove all the old annotations or remove new duplicates
-        var duplicateFree = fromBreweries
-        if removeDisplayedAnnotations {
-            // TODO Removed for testing new additions.
-            //mapView.removeAnnotations(mapView.annotations)
-
-        } else { // Remove duplicates
-            var duplicateIndices = [Int]()
-            new: for (i, element) in duplicateFree.enumerated() {
-                for j in mapView.annotations {
-                    if element.latitude == j.coordinate.latitude.description &&
-                        element.longitude == j.coordinate.longitude.description {
-                        duplicateIndices.append(i)
-                        continue new
-                    }
-                }
-            }
-            duplicateIndices.sort()
-            duplicateIndices.reverse()
-            for i in duplicateIndices {
-                duplicateFree.remove(at: i)
-            }
-
-        }
-        // Create new array of annotations
-        var annotations = [MKAnnotation]()
-        for i in duplicateFree {
-            // Sometimes the breweries don't have a location
-            guard i.latitude != nil && i.longitude != nil else {
-                continue
-            }
-
-            let aPin = MKPointAnnotation()
-            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
-            aPin.title = i.name
-            aPin.subtitle = i.url
-            annotations.append(aPin)
-        }
-        // Map the annotations
-        addAnnotationsToMapAndSetNeedsDisplay(annotations: annotations)
-    }
-
-    private func addAnnotationsToMapAndSetNeedsDisplay(annotations: [MKAnnotation]) {
-        mapView.addAnnotations(annotations)
-        let dt = DispatchTime(uptimeNanoseconds: 1000)
-        DispatchQueue.main.asyncAfter(deadline: dt) {
-            self.mapView.setNeedsDisplay()
-        }
-    }
+//    private func addAnnotationsToMapAndSetNeedsDisplay(annotations: [MKAnnotation]) {
+//        mapView.addAnnotations(annotations)
+//        let dt = DispatchTime(uptimeNanoseconds: 1000)
+//        DispatchQueue.main.asyncAfter(deadline: dt) {
+//            self.mapView.setNeedsDisplay()
+//        }
+//    }
 
 
     // MARK: View functions
@@ -421,11 +423,13 @@ class MapViewController : UIViewController {
     // Ask user for access to their location
     override func viewDidLoad(){
         super.viewDidLoad()
-        debouncedFunction = debounce(delay: 3000, queue: DispatchQueue.main, action: {
+
+        // Initialize debounce function to 500 seconds and associate it with sortanddisplay
+        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
                 self.sortBreweriesByDistanceAndDisplay()
         })
 
-        assert(beerFRC != nil)
+        //assert(beerFRC != nil)
         // Register with mediator for contextUpdates
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
@@ -436,6 +440,7 @@ class MapViewController : UIViewController {
             self.mapView.showsUserLocation = true
             self.activityIndicator.startAnimating()
         }
+
         // CoreLocation initialization, ask permission to utilize user location
         locationManager.delegate = self
         locationManager.requestWhenInUseAuthorization()
@@ -443,6 +448,7 @@ class MapViewController : UIViewController {
             locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
             locationManager.requestLocation()
         }
+
         // Allow other contexts to push data to ours.
         readOnlyContext?.automaticallyMergesChangesFromParent = true
 
@@ -489,7 +495,7 @@ class MapViewController : UIViewController {
             // Remove all traces of previous breweries
             removeRouteOnMap()
             breweriesToBeProcessed.removeAll()
-            populateMapWithAnnotations( fromBreweries: [mapViewData as! Brewery], removeDisplayedAnnotations: true)
+            //populateMapWithAnnotations( fromBreweries: [mapViewData as! Brewery], removeDisplayedAnnotations: true)
             DispatchQueue.main.async {
                 self.activityIndicator.stopAnimating()
             }
