@@ -116,7 +116,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // Initial responsive load
     private let responsiveMaxSavesPerLoop: Int = 10
-    private var secondsRepeatInterval: Double = 20
+    private var secondsRepeatInterval: Double = 5.5
     private var maxSavesPerLoop: Int = 70
     private var firstProcessLoopSinceTimerStarted = true
 
@@ -224,6 +224,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                     // Save brewery and style data.
                     do {
                         try abreweryContext?.save()
+                        print("B&BQueue \(#line) saving from processing breweries")
                     } catch let err {
                         print(err.localizedDescription)
                     }
@@ -308,7 +309,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                             createdBeer.brewer = brewers?.first
 
                             try self.abreweryContext?.save()
-                            //print("Style and changes saved")
+                            print("B&BQueue \(#line) saving Style and changes saved")
                             if beer.imageUrl != nil {
                                 // If we have image data download it
                                 DispatchQueue.global(qos: .utility).async {
