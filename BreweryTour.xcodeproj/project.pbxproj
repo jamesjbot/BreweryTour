@@ -41,7 +41,7 @@
 		A7634E731E2734770066ACEF /* BeersByBreweryIDParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7634E721E2734770066ACEF /* BeersByBreweryIDParser.swift */; };
 		A7634E751E27354B0066ACEF /* BeersFollowedByBreweriesParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7634E741E27354B0066ACEF /* BeersFollowedByBreweriesParser.swift */; };
 		A7634E771E2762410066ACEF /* AllBeersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7634E761E2762410066ACEF /* AllBeersViewModel.swift */; };
-		A7634E791E282D740066ACEF /* BeersTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7634E781E282D740066ACEF /* BeersTableList.swift */; };
+		A7634E791E282D740066ACEF /* BeersViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7634E781E282D740066ACEF /* BeersViewModel.swift */; };
 		A76B3B8B1DB0C03700B0A899 /* Launch Screen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8A1DB0C03700B0A899 /* Launch Screen.storyboard */; };
 		A76B3B8D1DB0C5A200B0A899 /* SAM_5869 (1).png in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8C1DB0C5A200B0A899 /* SAM_5869 (1).png */; };
 		A76B3B901DB0E00D00B0A899 /* heart_icon.pdf in Resources */ = {isa = PBXBuildFile; fileRef = A76B3B8E1DB0E00D00B0A899 /* heart_icon.pdf */; };
@@ -132,7 +132,7 @@
 		A7634E721E2734770066ACEF /* BeersByBreweryIDParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeersByBreweryIDParser.swift; sourceTree = "<group>"; };
 		A7634E741E27354B0066ACEF /* BeersFollowedByBreweriesParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeersFollowedByBreweriesParser.swift; sourceTree = "<group>"; };
 		A7634E761E2762410066ACEF /* AllBeersViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AllBeersViewModel.swift; path = ../AllBeersViewModel.swift; sourceTree = "<group>"; };
-		A7634E781E282D740066ACEF /* BeersTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeersTableList.swift; sourceTree = "<group>"; };
+		A7634E781E282D740066ACEF /* BeersViewModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeersViewModel.swift; sourceTree = "<group>"; };
 		A76B3B8A1DB0C03700B0A899 /* Launch Screen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = "Launch Screen.storyboard"; sourceTree = "<group>"; };
 		A76B3B8C1DB0C5A200B0A899 /* SAM_5869 (1).png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "SAM_5869 (1).png"; sourceTree = "<group>"; };
 		A76B3B8E1DB0E00D00B0A899 /* heart_icon.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; path = heart_icon.pdf; sourceTree = "<group>"; };
@@ -379,7 +379,7 @@
 			isa = PBXGroup;
 			children = (
 				A7634E761E2762410066ACEF /* AllBeersViewModel.swift */,
-				A7634E781E282D740066ACEF /* BeersTableList.swift */,
+				A7634E781E282D740066ACEF /* BeersViewModel.swift */,
 				A74350711DBA7971007AE08C /* SelectedBeersViewModel.swift */,
 			);
 			name = SelectedBeerModelViews;
@@ -639,7 +639,7 @@
 				A74350721DBA7971007AE08C /* SelectedBeersViewModel.swift in Sources */,
 				A7634E771E2762410066ACEF /* AllBeersViewModel.swift in Sources */,
 				A7DDC3F91DCC3A770077F34A /* BreweryDBClientConstants.swift in Sources */,
-				A7634E791E282D740066ACEF /* BeersTableList.swift in Sources */,
+				A7634E791E282D740066ACEF /* BeersViewModel.swift in Sources */,
 				A70F267D1DBCE47800A33564 /* Brewery+CoreDataProperties.swift in Sources */,
 				A77DEEB91E1B4EA80054F95C /* MyPinAnnotationView.swift in Sources */,
 				A7634E641E265F2A0066ACEF /* RequestAndRequestProcessor.swift in Sources */,
