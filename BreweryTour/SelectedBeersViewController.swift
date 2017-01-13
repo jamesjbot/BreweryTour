@@ -10,7 +10,9 @@
  
  Initialization process
  First Stored TableLists are created selectedBeersTableList and allBeersTableList
- 
+ We set the default viewmodel
+ We register with the view models as their observer
+
  */
 
 import UIKit
@@ -203,11 +205,12 @@ class SelectedBeersViewController: UIViewController, Observer {
     override func viewDidAppear(_ animated: Bool) {
         print("SelectedViewController \(#line) viewDidAppear ")
         super.viewDidAppear(animated)
+
         // Prime the tutorial state
         tutorialState = .SearchBar
         nextLesson(nextLessonButton)
-        // Display the tutorial
 
+        // Display the tutorial
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
             // Do nothing
         } else {
@@ -285,13 +288,13 @@ extension SelectedBeersViewController : UITableViewDelegate {
 
 extension SelectedBeersViewController : UISearchBarDelegate {
 
+    // Any text entered in the searchbar triggers this
     internal func searchBar(_: UISearchBar, textDidChange: String){
         print("SelectedViewController \(#line) textDidChange ")
         // User entered searchtext, now filter data
         activeViewModel.filterContentForSearchText(searchText: textDidChange) {
             (ok) -> Void in
             print("SelecteBeerView  \(#line) returned from textDidChange")
-            // TODO THIS MAY BE CALLED TOO OFTEN TO FIX THAT LETS HAVE A COMPLETION HANDLER
             self.tableView.reloadData()
         }
 
@@ -314,7 +317,8 @@ extension SelectedBeersViewController : UISearchBarDelegate {
         print("SelectedViewController \(#line) searchBarSearchButton ")
         searchBar.resignFirstResponder()
 
-        // BLOCK ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Allow AllBeerTableList to search online
+        // BLOCK ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow AllBeerTableList to search online
+        // This is because the selection will not encompass the search results
         guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBeers.rawValue else {
             return
         }

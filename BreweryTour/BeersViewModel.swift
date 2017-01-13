@@ -70,10 +70,8 @@ class BeersViewModel: NSObject {
     }
 
 
-    // Function to perform fetch on dynamic request.
-    // After fetch is completed the user interface
-    // is notified of changes with observer.notify(msg:"")
-    // From then on the delegate takes over and notifies the observer of changes.
+    // This generic fetch will get all the beers in the data base. SelectedBeersViewModel
+    // Override this method and selects based on Brewery or Style
     internal func performFetchRequestFor(observerNeedsNotification: Bool){
         print("beerstable \(#line) performFetchRequestFor called \(observerNeedsNotification) ")
         // Set default query to AllBeers mode
@@ -103,17 +101,19 @@ class BeersViewModel: NSObject {
 
 // MARK: - BeersViewModel: ReceiveBroadcastSetSelected
 
+// When a new style or brewery is selected this method is called
 extension BeersViewModel: ReceiveBroadcastSetSelected {
 
     internal func updateObserversSelected(item: NSManagedObject) {
         print("beerstable \(#line) updateObserversSelected ")
         selectedObject = item
         // Start retrieving entries in the background but dont update as view
-        // is not onscreen.
+        // is not onscreen, because SelectedBeersViewController is mutually exclusive 
+        // to the CategoryViewController.
         performFetchRequestFor(observerNeedsNotification: false)
     }
 
-
+    // This is just a helper function to register with the mediator for updates.
     fileprivate func registerForSelectedObjectObserver(broadcaster: MediatorBroadcastSetSelected) {
         print("beerstable \(#line) registerAsSelectedObjectObserver ")
         broadcaster.registerForObjectUpdate(observer: self)
@@ -124,10 +124,11 @@ extension BeersViewModel: ReceiveBroadcastSetSelected {
 // MARK: - BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh
 
 extension BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh {
-    // When all coredata is delete this is called by the mediator to refresh the context
+    // When all coredata ManagedObjects are deleted this is called by the mediator to refresh the context
     internal func contextsRefreshAllObjects() {
         print("beerstable \(#line) contextRefreshAllObjects ")
         frc.managedObjectContext.refreshAllObjects()
+
         // We must performFetch after refreshing context, otherwise we will retain
         // Old information is retained.
         do {
@@ -137,7 +138,7 @@ extension BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh {
         }
     }
 
-
+    // Helper function to register as an obsever
     fileprivate func registerForManagedObjectContextRefresh(broadcaster: BroadcastManagedObjectContextRefresh) {
         broadcaster.registerManagedObjectContextRefresh(self)
     }
@@ -151,10 +152,9 @@ extension BeersViewModel: NSFetchedResultsControllerDelegate {
     // Delegate changes occured now notify observer to reload itself
     internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         print("beerstable \(#line) controllerDidChangeContent ")
-        // Tell what ever view controller that is registerd to refresh itself from me
+        // Tell the SelectedBeersViewController that is registerd to refresh itself from me
         observer?.sendNotify(from: self, withMsg: "You were updated")
     }
-    
 }
 
 
@@ -172,6 +172,7 @@ extension BeersViewModel: TableList {
 
 
     private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
+        // TODO remove assert when bug no longer appears
         if searchText != "" {
             assert(indexPath.row <= filteredObjects.count, "Why is indexpath higher than the filtered objects")
         }
@@ -203,7 +204,6 @@ extension BeersViewModel: TableList {
 
     internal func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil ) {
         print("beerstable \(#line) filterContentForSearchText ")
-        // TODO do the other filterContents need this
         filteredObjects.removeAll()
 
         guard frc.fetchedObjects != nil else {
@@ -226,9 +226,7 @@ extension BeersViewModel: TableList {
         // Since the query is dynamic we need to refresh the data incase something changed.
         performFetchRequestFor(observerNeedsNotification: false )
         /*
-         On SelectedBeers ViewController we have two selections
-         The segmentedControl is serviced by the IBAction attached to the
-         segmentedcontrol. While here we send back filtered or unfilterd
+         Send back filtered or unfilterd
          results, based on user having search text in the search bar.
          */
         if searchText != "" {
@@ -239,7 +237,7 @@ extension BeersViewModel: TableList {
     }
 
 
-    // Register the ViewController that will display this data
+    // Register the SelectedBeersViewController that will display this data
     internal func registerObserver(view: Observer) {
         print("beerstable \(#line) registerobserver ")
         observer = view
