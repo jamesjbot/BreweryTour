@@ -13,11 +13,12 @@ import CoreData
 import UIKit
 
 protocol TableList {
-    func getNumberOfRowsInSection(searchText : String?) -> Int
-    func filterContentForSearchText(searchText: String) -> Void// [NSManagedObject]
     func cellForRowAt(indexPath : IndexPath,
                       cell : UITableViewCell,
                       searchText : String?) -> UITableViewCell
+    func getNumberOfRowsInSection(searchText : String?) -> Int
+    func filterContentForSearchText(searchText: String) -> Void
+    func registerObserver(view: Observer)
     func selected(elementAt: IndexPath,
                   searchText: String,
                   completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) -> AnyObject?
