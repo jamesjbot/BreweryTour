@@ -438,6 +438,8 @@ class MapViewController : UIViewController {
 
         DispatchQueue.main.async{
             self.mapView.showsUserLocation = true
+            self.mapView.showsScale = true
+            self.mapView.showsCompass = true
             self.activityIndicator.startAnimating()
         }
 
@@ -461,9 +463,7 @@ class MapViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         tabBarController?.title = "Go To Website"
-        mapView.showsUserLocation = true
-        mapView.showsScale = true
-        mapView.showsCompass = true
+
 
         guard lastSelectedManagedObject != Mediator.sharedInstance().getPassedItem() else {
             // No need to update the viewcontroller if the data has not changed
@@ -513,6 +513,8 @@ class MapViewController : UIViewController {
 
     override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)
+
+        // Tutorial layers
         // Adds a circular path to tutorial pointer
         addCircularPathToPointer()
 
