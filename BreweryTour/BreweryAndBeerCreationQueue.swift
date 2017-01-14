@@ -10,7 +10,7 @@
  This program creates Brewery, Beers, and links styles Breweries to styles.
  
  Internal notes.
- Initially, whenever we just load breweries not styles, the styles will not be linked to these breweries. But when beer creation process continues. These linked will be created
+
  */
 
 
@@ -19,78 +19,6 @@ import UIKit
 import CoreData
 import Dispatch
 
-internal struct BreweryData {
-    // Brewery required parameters
-    var name: String?
-    var latitude: String?
-    var longitude: String?
-    var url: String?
-    var openToThePublic: Bool
-    var id: String?
-    // Unrequired parametesr
-    var favorite: Bool
-    var imageUrl: String?
-    var brewedbeer: NSSet?
-    var styleID: String?
-    var completion: ((Brewery) -> Void)?
-    internal init(inName: String,
-                  inLatitude: String,
-                  inLongitude: String,
-                  inUrl: String,
-                  open: Bool,
-                  inId: String,
-                  inImageUrl: String?,
-                  inStyleID: String?) {
-        // Brewery required parameters
-        name = inName
-        latitude = inLatitude
-        longitude = inLongitude
-        url = inUrl
-        openToThePublic = open
-        id = inId
-        // Un required parametesr
-        favorite = false
-        imageUrl = inImageUrl
-        styleID = inStyleID
-        //completion: ((Brewery) -> Void)?
-    }
-}
-
-
-internal struct BeerData {
-    var availability: String?
-    var beerDescription: String?
-    var beerName: String?
-    var breweryID: String?
-    var id: String?
-    var imageUrl: String?
-    var isOrganic: Bool
-    var styleID: String?
-    var abv: String?
-    var ibu: String?
-
-    init(inputAvailability : String?,
-        inDescription : String?,
-        inName : String?,
-        inBrewerId : String,
-        inId : String,
-        inImageURL : String?,
-        inIsOrganic : Bool,
-        inStyle : String?,
-        inAbv : String?,
-        inIbu : String?) {
-        availability = inputAvailability
-        beerDescription = inDescription
-        beerName = inName
-        breweryID = inBrewerId
-        id = inId
-        imageUrl = inImageURL
-        isOrganic = inIsOrganic
-        styleID = inStyle
-        abv = inAbv!
-        ibu = inIbu!
-    }
-}
 
 internal protocol BreweryAndBeerCreationProtocol {
 
@@ -115,12 +43,22 @@ class BreweryAndBeerCreationQueue: NSObject {
     // MARK: Constants
 
     // Initial responsive load
-    private let responsiveMaxSavesPerLoop: Int = 10
-    private var secondsRepeatInterval: Double = 5.5
-    private var maxSavesPerLoop: Int = 70
+    private let initialMaxSavesPerLoop: Int = 10
+    private let initialRepeatInterval: Double = 2
+
+    // Long running loads
+    private let longrunningMaxSavesPerLoop: Int = 1000
+    private let longRunningRepeatInterval: Double = 60
+
+    private var currentMaxSavesPerLoop: Int = 10
+    private var currentRepeatInterval: Double = 2
+
     private var firstProcessLoopSinceTimerStarted = true
+    private var loopCounter: Int = 0
+
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+
 
     // MARK: Variables
 
@@ -147,9 +85,10 @@ class BreweryAndBeerCreationQueue: NSObject {
         return Singleton.sharedInstance
     }
 
+
     private override init() {
         super.init()
-        workTimer = Timer.scheduledTimer(timeInterval: secondsRepeatInterval,
+        workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
                                          target: self,
                                          selector: #selector(self.processQueue),
                                          userInfo: nil,
@@ -159,17 +98,41 @@ class BreweryAndBeerCreationQueue: NSObject {
     }
 
 
+    private func switchToInitialRunningDataLoad() {
+        currentMaxSavesPerLoop = initialMaxSavesPerLoop
+        currentRepeatInterval = initialRepeatInterval
+    }
+
+
+    private func switchToLongRunningDataLoad() {
+        currentMaxSavesPerLoop = longrunningMaxSavesPerLoop
+        currentRepeatInterval = longRunningRepeatInterval
+    }
+
+
+    private func reinitializeLoadParameter() {
+        switchToInitialRunningDataLoad()
+        workTimer.invalidate()
+        workTimer = nil
+    }
+
+    
     // Periodic method to save breweries and beers
     @objc private func processQueue() {
         // This function will save all breweries before saving beers.
 
-        // This next statement is here because the beer's brewer attribute needs to be set from
-        // an inserted brewer otherwise strange errors occur.
-        // The only way to merge Managed Objects with unique constraints is to
+        // Currently, the only way to merge Managed Objects with unique constraints is to
         // save them individually, batch does not seem to work.
         // Had to move the merge policy assignment closer to the
         // invocation of save because it was not taking.
         abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
+
+
+        loopCounter += 1
+        if loopCounter > 30 {
+            switchToLongRunningDataLoad()
+        }
+
 
         // Save breweries one at time. Batch saving generates conflict errors.
         let dq = DispatchQueue(label: "SerialQueue")
@@ -178,19 +141,14 @@ class BreweryAndBeerCreationQueue: NSObject {
             print("Processing beers creation: we have \(runningBeerQueue.count) beers")
             guard !runningBreweryQueue.isEmpty || !runningBeerQueue.isEmpty else {
                 // Both queues are empty stop timer
-                workTimer.invalidate()
-                workTimer = nil
+                reinitializeLoadParameter()
                 return
             }
 
+            // This adjust the maximum amount of processing per data load
+            // Low in the beginning then increasing
             var maxSave: Int!
-            if firstProcessLoopSinceTimerStarted {
-                maxSave = responsiveMaxSavesPerLoop
-                firstProcessLoopSinceTimerStarted = false
-            } else {
-                maxSave = maxSavesPerLoop
-            }
-
+            maxSave = currentMaxSavesPerLoop
             if runningBreweryQueue.count < maxSave {
                 maxSave = runningBreweryQueue.count
             }
@@ -247,7 +205,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 return
             }
             // Reset the maximum records to process
-            maxSave = maxSavesPerLoop
+            maxSave = currentMaxSavesPerLoop
             if runningBeerQueue.count < maxSave {
                 maxSave = runningBeerQueue.count
             }
@@ -322,8 +280,6 @@ class BreweryAndBeerCreationQueue: NSObject {
                         print(error.localizedDescription)
                         fatalError()
                     }
-
-
                 }
             } // After beer for loop
         }
@@ -345,7 +301,7 @@ class BreweryAndBeerCreationQueue: NSObject {
     fileprivate func startWorkTimer() {
         if workTimer == nil {
             firstProcessLoopSinceTimerStarted = true
-            workTimer = Timer.scheduledTimer(timeInterval: secondsRepeatInterval,
+            workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
                                              target: self,
                                              selector: #selector(self.processQueue),
                                              userInfo: nil,
