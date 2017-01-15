@@ -44,18 +44,18 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // Initial responsive load
     private let initialMaxSavesPerLoop: Int = 10
-    private let initialRepeatInterval: Double = 2
+    private let initialRepeatInterval: Double = 2000
 
     // Long running loads
-    private let longrunningMaxSavesPerLoop: Int = 1000
-    private let longRunningRepeatInterval: Double = 60
+    // System looks like it processes 1.2 records / second
+    private let longrunningMaxSavesPerLoop: Int = 500
+    private let longRunningRepeatInterval: Double = 30000
 
-    private var currentMaxSavesPerLoop: Int = 10
-    private var currentRepeatInterval: Double = 2
+    private var currentMaxSavesPerLoop: Int = 0
+    private var currentRepeatInterval: Double = 0
 
-    private var firstProcessLoopSinceTimerStarted = true
     private var loopCounter: Int = 0
-
+    private let maximumSmallRuns = 30
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
@@ -127,9 +127,8 @@ class BreweryAndBeerCreationQueue: NSObject {
         // invocation of save because it was not taking.
         abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
 
-
         loopCounter += 1
-        if loopCounter > 30 {
+        if loopCounter > maximumSmallRuns {
             switchToLongRunningDataLoad()
         }
 
@@ -155,42 +154,47 @@ class BreweryAndBeerCreationQueue: NSObject {
 
             //Processing Breweries
             if !runningBreweryQueue.isEmpty {
-                breweryLoop: for _ in 1...maxSave {
+                
+                autoreleasepool {
 
-                    guard continueProcessingAfterContextRefresh() else {
-                        break breweryLoop
-                    }
-
-                    let b = runningBreweryQueue.removeFirst()
-                    let newBrewery = Brewery(data: b, context: abreweryContext!)
-
-                    // We must save everyupdate individually or Unique constraints on the class will not be preserved
-                    if b.styleID != nil {
-                        do {
-                            // Adds the brewery to the style for easier searching
-                            let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
-                            styleRequest.sortDescriptors = []
-                            styleRequest.predicate = NSPredicate(format: "id == %@", b.styleID!)
-                            var resultStyle = try self.abreweryContext?.fetch(styleRequest)
-                            resultStyle?.first?.addToBrewerywithstyle(newBrewery)
-                        } catch let error {
-                            print(error.localizedDescription)
+                    breweryLoop: for x in 1...maxSave {
+                        print("run \(x)")
+                        guard continueProcessingAfterContextRefresh() else {
+                            break breweryLoop
                         }
 
-                    }
+                        let b = runningBreweryQueue.removeFirst()
+                        let newBrewery = Brewery(data: b, context: abreweryContext!)
 
-                    // Save brewery and style data.
-                    do {
-                        try abreweryContext?.save()
-                        print("B&BQueue \(#line) saving from processing breweries")
-                    } catch let err {
-                        print(err.localizedDescription)
-                    }
+                        // We must save everyupdate individually or Unique constraints on the class will not be preserved
+                        if b.styleID != nil {
+                            do {
+                                // Adds the brewery to the style for easier searching
+                                let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
+                                styleRequest.sortDescriptors = []
+                                styleRequest.predicate = NSPredicate(format: "id == %@", b.styleID!)
+                                var resultStyle = try self.abreweryContext?.fetch(styleRequest)
+                                resultStyle?.first?.addToBrewerywithstyle(newBrewery)
+                                print("This style now has \(resultStyle?.first?.brewerywithstyle?.count)")
+                            } catch let error {
+                                print(error.localizedDescription)
+                            }
 
-                    if b.imageUrl != nil {
-                        // If we have image data download it
-                        BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Brewery,                                                                               aturl: NSURL(string: b.imageUrl!)!,                                                                             forID: b.id!)
+                        }
+
+                        if b.imageUrl != nil {
+                            // If we have image data download it
+                            BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Brewery,                                                                               aturl: NSURL(string: b.imageUrl!)!,                                                                             forID: b.id!)
+                        }
                     }
+                }
+                // Save brewery and style data.
+                do {
+                    print("Brewery queue \(runningBreweryQueue.count)")
+                    try abreweryContext?.save()
+                    print("B&BQueue \(#line) saving from processing breweries")
+                } catch let err {
+                    print(err.localizedDescription)
                 }
             }
 
@@ -210,41 +214,35 @@ class BreweryAndBeerCreationQueue: NSObject {
                 maxSave = runningBeerQueue.count
             }
 
+            // Using peform instead of performandwait to increase performance.
+            abreweryContext?.performAndWait {
 
-            // Processing Beers
-            beerLoop: for _ in 1...maxSave {
+                // Processing Beers
+                autoreleasepool {
 
-                guard continueProcessingAfterContextRefresh() else {
-                    break beerLoop
-                }
+                    beerLoop: for _ in 1...maxSave {
 
-                // If we select a brewery, then only beers will be generated.
-                // Therefore we must attach the styles to the breweries at a beer by beer level.
-                var (beer,attempt) = runningBeerQueue.removeFirst()
+                        guard self.continueProcessingAfterContextRefresh() else {
+                            break beerLoop
+                        }
 
-                let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
-                request.sortDescriptors = []
-                request.predicate = NSPredicate(format: "id == %@", beer.breweryID!)
+                        // If we select a brewery, then only beers will be generated.
+                        // Therefore we must attach the styles to the breweries at a beer by beer level.
+                        var (beer,attempt) = self.runningBeerQueue.removeFirst()
 
-                // Using peform instead of performandwait to increase performance.
-                abreweryContext?.perform {
-                    do {
-                        let brewers = try self.abreweryContext?.fetch(request)
-                        // Request did not find breweries
-                        if (brewers?.count)! < 1 {
-                            print("This beer can't find brewer \(beer.beerName)")
-                            // If we have breweries still running then put beer back
-                            if !self.runningBreweryQueue.isEmpty {
-                                self.runningBeerQueue.append( (beer,attempt) )
-                            } else { // Out of breweries. Try again 8 times then give up
-                                if attempt < 8 {
-                                    attempt += 1
-                                    self.runningBeerQueue.append( (beer,attempt) )
-                                }
+                        let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
+                        request.sortDescriptors = []
+                        request.predicate = NSPredicate(format: "id == %@", beer.breweryID!)
+
+
+                        do {
+                            let brewers = try self.abreweryContext?.fetch(request)
+
+                            // Request did not find breweries
+                            guard brewers?.count == 1 else {
+                                self.reinsertBeer(beer,attempt)
+                                continue
                             }
-
-
-                        } else { // Found a Brewery to attach this beer to
 
                             // Adds the brewery to the style for easier searching
                             let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
@@ -252,22 +250,16 @@ class BreweryAndBeerCreationQueue: NSObject {
                             styleRequest.predicate = NSPredicate(format: "id == %@", beer.styleID!)
                             var resultStyle = try self.abreweryContext?.fetch(styleRequest)
 
-                            assert(resultStyle?.count == 1)
-
                             // Checks to see if we already have this brewer attached with style
                             let found = resultStyle?.first?.brewerywithstyle?.contains(brewers?.first as Any)
-                            //print("Breweryandbeer \(#line) did we find the brewer in the set \(found)")
                             if !found! {
                                 resultStyle?.first?.addToBrewerywithstyle((brewers?.first)!)
-                                //print("Added \(brewers?.first?.name) to \(resultStyle?.first?.displayName)")
-                                //print("this style now has \(resultStyle?.first?.brewerywithstyle?.count) breweries ")
                             }
 
                             let createdBeer = Beer(data: beer, context: self.abreweryContext!)
                             createdBeer.brewer = brewers?.first
 
-                            try self.abreweryContext?.save()
-                            print("B&BQueue \(#line) saving Style and changes saved")
+                            //print("B&BQueue \(#line) saving Style and changes saved")
                             if beer.imageUrl != nil {
                                 // If we have image data download it
                                 DispatchQueue.global(qos: .utility).async {
@@ -275,13 +267,41 @@ class BreweryAndBeerCreationQueue: NSObject {
                                 }
 
                             }
+
+                        } catch let error {
+                            print(error.localizedDescription)
+                            fatalError()
                         }
-                    } catch let error {
-                        print(error.localizedDescription)
-                        fatalError()
                     }
                 }
+                
+                // Help slow saving an memory leak.
+                do {
+                    print("beerqueue has \(self.runningBeerQueue.count)")
+                    try self.abreweryContext?.save()
+                    //Reset to help running out of memory
+                    self.abreweryContext?.reset()
+                } catch let error {
+                    print("There was a memory allocation error I caught it \(error.localizedDescription)")
+                }
             } // After beer for loop
+
+        }
+        print("exited the dispatch queue.")
+        //autoreleasepool(invoking: <#T##() throws -> Result#>)
+    }
+
+    private func reinsertBeer(_ beer: BeerData, _ inAttempt: Int) {
+        print("This beer can't find brewer \(beer.beerName)")
+        // If we have breweries still running then put beer back
+        var attempt = inAttempt
+        if !runningBreweryQueue.isEmpty {
+            runningBeerQueue.append( (beer,attempt) )
+        } else { // Out of breweries. Try again 3 times then give up
+            if attempt < 3 {
+                attempt += 1
+                self.runningBeerQueue.append( (beer,attempt) )
+            }
         }
     }
 
@@ -300,7 +320,6 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     fileprivate func startWorkTimer() {
         if workTimer == nil {
-            firstProcessLoopSinceTimerStarted = true
             workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
                                              target: self,
                                              selector: #selector(self.processQueue),
