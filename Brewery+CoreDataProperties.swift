@@ -2,7 +2,7 @@
 //  Brewery+CoreDataProperties.swift
 //  
 //
-//  Created by James Jongsurasithiwat on 12/31/16.
+//  Created by James Jongsurasithiwat on 1/14/17.
 //
 //
 
@@ -26,6 +26,7 @@ extension Brewery {
     @NSManaged public var openToThePublic: Bool
     @NSManaged public var url: String?
     @NSManaged public var brewedbeer: NSSet?
+    @NSManaged public var hasStyle: NSSet?
 
 }
 
@@ -43,5 +44,22 @@ extension Brewery {
 
     @objc(removeBrewedbeer:)
     @NSManaged public func removeFromBrewedbeer(_ values: NSSet)
+
+}
+
+// MARK: Generated accessors for hasStyle
+extension Brewery {
+
+    @objc(addHasStyleObject:)
+    @NSManaged public func addToHasStyle(_ value: Style)
+
+    @objc(removeHasStyleObject:)
+    @NSManaged public func removeFromHasStyle(_ value: Style)
+
+    @objc(addHasStyle:)
+    @NSManaged public func addToHasStyle(_ values: NSSet)
+
+    @objc(removeHasStyle:)
+    @NSManaged public func removeFromHasStyle(_ values: NSSet)
 
 }
