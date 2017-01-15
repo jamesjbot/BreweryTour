@@ -24,22 +24,14 @@ class FavoriteBreweriesViewController: UIViewController {
     // MARK: Constants
     
     let paddingForPoint : CGFloat = 20
-    //fileprivate let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
 
     // MARK: Variables
 
-    // Currently this runs on main context readOnly
     fileprivate var frcForBrewery : NSFetchedResultsController<Brewery>!
 
-    private var frc: NSFetchedResultsController<Brewery>? {
-        get {
-            print("accesing variable internal to the class")
-            return NSFetchedResultsController()
-        }
-    }
 
     // MARK: IBOutlets
 
@@ -57,6 +49,7 @@ class FavoriteBreweriesViewController: UIViewController {
         UserDefaults.standard.set(false, forKey: g_constants.FavoriteBeersTutorial)
         UserDefaults.standard.synchronize()
     }
+
     
     // MARK: Functions
     
@@ -65,7 +58,6 @@ class FavoriteBreweriesViewController: UIViewController {
         //Accept changes from backgroundContexts
         readOnlyContext?.automaticallyMergesChangesFromParent = true
 
-        assert(frc != nil)
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         // Do any additional setup after loading the view.
@@ -133,13 +125,16 @@ class FavoriteBreweriesViewController: UIViewController {
             return
         }
         // Populate cell from the NSManagedObject instance
-        cell.textLabel?.text = selectedObject.name!
-        cell.textLabel?.adjustsFontSizeToFitWidth = true
-        cell.detailTextLabel?.text = ""
-        if let data : NSData = (selectedObject.image) {
-            let im = UIImage(data: data as Data)
-            cell.imageView?.image = im
+        DispatchQueue.main.async {
+            cell.textLabel?.text = selectedObject.name!
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.detailTextLabel?.text = ""
+            if let data : NSData = (selectedObject.image) {
+                let im = UIImage(data: data as Data)
+                cell.imageView?.image = im
+            }
         }
+
     }
 }
 
