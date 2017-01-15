@@ -13,8 +13,6 @@
  The default screen before injection will show all beers.
  */
 
-// TODO this is broken I can't search online anymore.
-
 import UIKit
 import CoreData
 
@@ -60,10 +58,10 @@ class SelectedBeersViewModel: BeersViewModel, Subject {
         do {
             try frc.performFetch()
             if observerNeedsNotification {
-                observer?.sendNotify(from: self, withMsg: "reload data")
+                observer?.sendNotify(from: self, withMsg: Message.Reload)
             }
         } catch {
-            observer?.sendNotify(from: self, withMsg: "Error fetching data")
+            observer?.sendNotify(from: self, withMsg: Message.FetchError)
         }
     }
 }

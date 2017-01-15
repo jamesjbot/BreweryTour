@@ -28,7 +28,7 @@ extension AllBeersViewModel: OnlineSearchCapable {
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
                 try self.frc.performFetch()
-                super.observer?.sendNotify(from: self, withMsg: "Reload data")
+                super.observer?.sendNotify(from: self, withMsg: Message.Reload)
                 completion!(true, "Success")
             } catch {
                 completion!(false, "Failed Request")

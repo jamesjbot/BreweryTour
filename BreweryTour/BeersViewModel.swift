@@ -90,10 +90,10 @@ class BeersViewModel: NSObject {
         do {
             try frc.performFetch()
             if observerNeedsNotification {
-                observer?.sendNotify(from: self, withMsg: "reload data")
+                observer?.sendNotify(from: self, withMsg: Message.Reload)
             }
         } catch {
-            observer?.sendNotify(from: self, withMsg: "Error fetching data")
+            observer?.sendNotify(from: self, withMsg: Message.FetchError)
         }
     }
 }
@@ -151,9 +151,8 @@ extension BeersViewModel: NSFetchedResultsControllerDelegate {
 
     // Delegate changes occured now notify observer to reload itself
     internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("beerstable \(#line) controllerDidChangeContent ")
         // Tell the SelectedBeersViewController that is registerd to refresh itself from me
-        observer?.sendNotify(from: self, withMsg: "You were updated")
+        observer?.sendNotify(from: self, withMsg: Message.Reload)
     }
 }
 
@@ -172,11 +171,6 @@ extension BeersViewModel: TableList {
 
 
     private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
-        // TODO remove assert when bug no longer appears
-        if searchText != "" {
-            assert(indexPath.row <= filteredObjects.count, "Why is indexpath higher than the filtered objects")
-        }
-        //        print("beerstable \(#line) configureCell \(indexPath.row)")
         DispatchQueue.main.async {
             // Set a default image
             // Depending on what data is shown populate image and text data.
