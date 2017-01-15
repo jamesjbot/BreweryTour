@@ -31,10 +31,11 @@ class FavoriteBeersViewController: UIViewController {
 
 
     // MARK: IBOutlets
+    
     @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
-    
+
     @IBOutlet weak var tableView: UITableView!
 
 
@@ -47,7 +48,7 @@ class FavoriteBeersViewController: UIViewController {
     }
 
 
-    // MARK: Function
+    // MARK: - Functions
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -120,12 +121,14 @@ class FavoriteBeersViewController: UIViewController {
             return
         }
         // Populate cell from the NSManagedObject instance
-        cell.textLabel?.adjustsFontSizeToFitWidth = true
-        cell.textLabel?.text = selectedObject.beerName
-        cell.detailTextLabel?.text = selectedObject.brewer?.name
-        if let data : NSData = (selectedObject.image) {
-            let im = UIImage(data: data as Data)
-            cell.imageView?.image = im
+        DispatchQueue.main.async {
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.textLabel?.text = selectedObject.beerName
+            cell.detailTextLabel?.text = selectedObject.brewer?.name
+            if let data : NSData = (selectedObject.image) {
+                let im = UIImage(data: data as Data)
+                cell.imageView?.image = im
+            }
         }
     }
 }
@@ -177,6 +180,7 @@ extension FavoriteBeersViewController: UITableViewDataSource {
     }
     
 }
+
 
 extension FavoriteBeersViewController : UITableViewDelegate {
     
@@ -237,6 +241,7 @@ extension FavoriteBeersViewController: ReceiveBroadcastManagedObjectContextRefre
         }
     }
 }
+
 
 // MARK: - FavoriteBeersViewController : DismissableTutorial
 
