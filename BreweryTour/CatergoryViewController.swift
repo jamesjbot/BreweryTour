@@ -38,10 +38,7 @@ import SwiftyWalkthrough
 class CategoryViewController: UIViewController,
     NSFetchedResultsControllerDelegate, Observer {
 
-    // MARK: Constant
-    struct Message {
-        static let Reload = "reload data"
-    }
+
 
     private let segmentedControlPaddding : CGFloat = 8
     private let paddingForPoint : CGFloat = 20
@@ -359,9 +356,6 @@ class CategoryViewController: UIViewController,
         } else {
             tutorialView.isHidden = true
         }
-
-        // Make Searchbar fit text
-        (newSearchBar.subviews[0].subviews[1].subviews[2] as! UILabel).adjustsFontSizeToFitWidth = true
     }
 }
 
