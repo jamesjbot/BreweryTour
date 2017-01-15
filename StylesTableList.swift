@@ -90,7 +90,7 @@ class StylesTableList: NSObject {
                 // Added performFetch otherwise dat would not reload when there is a
                 // refreshAllObjects in the context.
                 self.refetchData()
-                self.observer.sendNotify(from: self, withMsg: "reload data")
+                self.observer.sendNotify(from: self, withMsg: Message.Reload)
             }
         }
     }
@@ -129,7 +129,7 @@ extension StylesTableList: NSFetchedResultsControllerDelegate {
 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        observer.sendNotify(from: self, withMsg: CategoryViewController.Message.Reload)
+        observer.sendNotify(from: self, withMsg: Message.Reload)
     }
 }
 
