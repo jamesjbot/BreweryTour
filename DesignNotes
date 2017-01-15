@@ -1,3 +1,17 @@
+Working on adding two methods to all table lists
+isDataEmpty
+refetchData
+
+Category view controller is initializing
+It's calling the static instance of Mediator to get the list(stylelist in particular)
+And that mediator is initializing
+Creating the stylelist ()
+And stylelist tries to register with mediator
+This is looping
+
+
+CategoryViewController needs the three tables list internal it itself so it can switch betwwen them all
+
 Persistent Context Observers
 
 Persitent Context Fetchers

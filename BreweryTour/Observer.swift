@@ -6,6 +6,16 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 
+struct Message {
+    static let Reload = "reload data"
+    static let FetchError = "Error fetching data"
+    static let Retry = "Failed to download initial styles\ncheck network connection and try again."
+}
+
 protocol Observer {
+
+    // MARK: Constant
+
+
     func sendNotify(from: AnyObject, withMsg msg: String )
 }
