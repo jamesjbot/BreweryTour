@@ -18,6 +18,7 @@ class CircleView: UIView {
         var centerOfCirclesView : CGPoint {
             return CGPoint(x: bounds.midX, y: bounds.midY)
         }
+    
         var halfOfViewSize : CGFloat {
             return min(bounds.size.height, bounds.size.width) * multiplier / 2
         }
@@ -25,7 +26,10 @@ class CircleView: UIView {
         var lineWidth : CGFloat = 0.5
         
         var full = CGFloat(M_PI*2)
+
     
+// MARK: - Functions
+
         func drawCirleCenteredAt(center: CGPoint, withRadius radius: CGFloat) -> UIBezierPath {
             let circlePath = UIBezierPath(arcCenter: centerOfCirclesView,
                                           radius: halfOfViewSize,

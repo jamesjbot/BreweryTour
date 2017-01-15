@@ -24,7 +24,8 @@ extension BeerDetailViewController {
         let keyboardSize = (notification as NSNotification).userInfo![UIKeyboardFrameEndUserInfoKey] as! NSValue// of CGRect
         return keyboardSize.cgRectValue.height
     }
-    
+
+
     // Moves the view up prior to presenting keyboard
     func keyboardWillShow(_ notification: Notification){
         
@@ -42,7 +43,8 @@ extension BeerDetailViewController {
         // Begin to respond to keyboard will HIDE notifications
         subscribeToKeyboardHideNotifications()
     }
-    
+
+
     // Moves the view down when the keyboard is dismissed
     func keyboardWillHide(_ notification: Notification){
         // Move the bottomTextFiled UIView down by the keyboard amount
@@ -57,12 +59,14 @@ extension BeerDetailViewController {
         unsubscribeFromKeyboardHideNotifications()
         subscribeToKeyboardShowNotifications()
     }
-    
+
+
     // Subscribes to the notification center for keyboard appearances
     func subscribeToKeyboardShowNotifications(){
         // Notify this view controller when keyboard will show
         NotificationCenter.default.addObserver(self, selector: #selector(BeerDetailViewController.keyboardWillShow(_:)), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
+
     
     // Subscribes to the notification center for keyboard disappearances
     func subscribeToKeyboardHideNotifications(){
