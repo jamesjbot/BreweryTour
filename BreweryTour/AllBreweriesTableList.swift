@@ -52,7 +52,7 @@ class AllBreweriesTableList: NSObject, Subject {
         do {
             try frc.performFetch()
         } catch {
-            observer.sendNotify(from: self, withMsg: "Error fetching data")
+            observer.sendNotify(from: self, withMsg: Message.FetchError)
         }
         
         guard frc.fetchedObjects?.count == 0 else {
@@ -121,7 +121,6 @@ extension AllBreweriesTableList : TableList {
     func filterContentForSearchText(searchText: String, completion: ((_ success: Bool)-> Void)? = nil ) {
 
         // Only filter object if there are objects to filter.
-        // TODO do the other filter contents needs these guards.
         guard frc.fetchedObjects != nil else {
             filteredObjects.removeAll()
             return
@@ -199,13 +198,9 @@ extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("AllBreweryTableList \(#line) AllBreweryTableList controllerdidChangeContent notify observer")
         // Send message to observer regardless of situation. The observer decides if it should act.
-        observer.sendNotify(from: self, withMsg: "reload data")
-        //print("AllBreweryTableList \(#line) According to \(controller)\n There are now this many breweries \(controller.fetchedObjects?.count)")
-            //print("AllBreweryTableList \(#line) According to \(frc)\n There are now this many breweries \(frc.fetchedObjects?.count)")
-        //print("AllBreweryTableList \(#line) Rejected breweries \(BreweryDBClient.sharedInstance().rejectedBreweries)")
-        //Datata = frc.fetchedObjects!
+        observer.sendNotify(from: self, withMsg: Message.Reload)
+
     }
 }
 
