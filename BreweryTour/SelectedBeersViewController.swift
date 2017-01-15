@@ -223,7 +223,7 @@ class SelectedBeersViewController: UIViewController, Observer {
     internal func sendNotify(from: AnyObject, withMsg msg: String) {
         print("SelectedViewController \(#line) sendNotify ")
         // Prompts the tableView to refilter search listings.
-        // TableReload will be handled by the searchBar function.
+        // TableView.reload will be handled by the searchBar function.
         // All notifications to SelectedBeersViewController will reload the table.
         // We invoke the search bar command just incase there is search text entered and we need to immediately filter the contents.
         searchBar(searchBar, textDidChange: searchBar.text!)
