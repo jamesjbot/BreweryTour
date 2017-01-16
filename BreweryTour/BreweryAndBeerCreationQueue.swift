@@ -94,7 +94,9 @@ class BreweryAndBeerCreationQueue: NSObject {
                                          userInfo: nil,
                                          repeats: true)
         abreweryContext = container?.newBackgroundContext()
-        (Mediator.sharedInstance() as! BroadcastManagedObjectContextRefresh).registerManagedObjectContextRefresh(self)
+        (Mediator.sharedInstance() as BroadcastManagedObjectContextRefresh).registerManagedObjectContextRefresh(self)
+
+        switchToInitialRunningDataLoad()
     }
 
 
