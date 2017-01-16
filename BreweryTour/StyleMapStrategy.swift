@@ -6,6 +6,16 @@
 //  Copyright © 2017 James Jongs. All rights reserved.
 //
 
+/* 
+    Subclass to map strategy provides annotation for Style chosen breweries
+ 
+    This class will initial search for any breweries attached to the style and
+    then display that style. After that it will receive notifications from it's 
+    Delegate and update the annotations as a group. Since MKMapView suggests
+    updating the map all at once.
+
+ */
+
 import Foundation
 import MapKit
 import CoreData
@@ -119,7 +129,7 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
             try styleFRC.performFetch()
             breweryLocations = styleFRC.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]
         } catch {
-
+            fatalError("Error reading coredata")
         }
         // Initialize debounce function and associate it with sortanddisplay
         bounceDelay = initialDelay
@@ -140,7 +150,7 @@ extension StyleMapStrategy: ReceiveBroadcastManagedObjectContextRefresh {
         do {
             try styleFRC.performFetch()
         } catch {
-            
+            fatalError("Error reading coredata")
         }
     }
 }
