@@ -6,10 +6,11 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /*
- This program shows the details of a beer.
- You can unfavorite / favorite a beer.
- You can also add tasting notes to the beer that will be saved.
+    This program shows the details of a beer.
+    You can unfavorite / favorite a beer.
+    You can also add tasting notes to the beer that will be saved.
  */
+
 import UIKit
 import CoreData
 
@@ -168,7 +169,7 @@ class BeerDetailViewController: UIViewController {
             updatableBeer.tastingNotes = self.tasting.text
             do {
                 try context.save()
-            } catch let _ {
+            } catch {
                 self.displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
             }
         }
