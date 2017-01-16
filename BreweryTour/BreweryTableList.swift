@@ -6,9 +6,10 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /* 
- This is the view model backing the breweries with specified styles table on the
- main category viewcontroller.
- It initially shows nothing, waiting for a style to be select.
+    This is the view model backing the breweries with specified styles table on the
+    main category viewcontroller.
+    It initially shows nothing, waiting for a style to be selected by the
+    CategoryViewController.
  */
 
 
@@ -24,14 +25,14 @@ class BreweryTableList: NSObject, Subject {
 
 
     // MARK: Variables
+
     fileprivate var currentlyObservingStyle: Style?
-    var observer : Observer!
+    fileprivate var observer : Observer!
 
     // variables for selecting breweries with a style
-    var displayableBreweries = [Brewery]()
-    var newBeers = [Beer]()
+    fileprivate var displayableBreweries = [Brewery]()
+    fileprivate var newBeers = [Beer]()
 
-    //internal var mediator: NSManagedObjectDisplayable!
 
     // variable for search filtering
     internal var filteredObjects: [Brewery] = [Brewery]()
@@ -131,7 +132,6 @@ extension BreweryTableList: TableList {
                 DispatchQueue.main.async {
                     cell.imageView?.image = UIImage(data: data as Data)
                     cell.imageView?.setNeedsDisplay()
-                    print("Brewery tablelist finisehd setneedsdisplay")
                 }
             }
             cell.setNeedsDisplay()
@@ -163,7 +163,6 @@ extension BreweryTableList: TableList {
             return filteredObjects.count
         }
         return (copyOfSet.count )
-        //return displayableBreweries.count
     }
     
     
@@ -183,14 +182,11 @@ extension BreweryTableList: TableList {
         (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: savedBreweryForDisplay, completion: completion)
         return nil
     }
-    
-
-//    internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> (Void))?) {
-//        // This should be block at category view controller
-//    }
 
 }
 
+
+// MARK: - BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh
 
 extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
     internal func contextsRefreshAllObjects() {
@@ -206,10 +202,11 @@ extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
 }
 
 
+// MARK: - BreweryTableList : NSFetchedResultsControllerDelegate
+
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
     func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        //print("BreweryTableList \(#line) BreweryTableList changed object")
 
         func updateStyleSet() {
             let style = anObject as! Style
