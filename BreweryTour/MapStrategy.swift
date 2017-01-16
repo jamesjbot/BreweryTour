@@ -5,6 +5,9 @@
 //  Created by James Jongsurasithiwat on 1/14/17.
 //  Copyright © 2017 James Jongs. All rights reserved.
 //
+/*
+    The base class for map strategies, provides basic functions for subclasses.
+ */
 
 import Foundation
 import MapKit
@@ -23,9 +26,11 @@ class MapStrategy: NSObject {
     override init() {
     }
 
+
+    // converts breweries to annotations
     func convertLocationToAnnotation() -> [MKAnnotation] {
         var annotations = [MKAnnotation]()
-        for (number,i) in breweryLocations.enumerated() {
+        for i in breweryLocations {
 
             // Sometimes the breweries don't have a location
             guard i.latitude != nil && i.longitude != nil else {
@@ -42,6 +47,7 @@ class MapStrategy: NSObject {
     }
 
 
+    // sorts the breweries by distnace to targetLocation
     func sortLocations() {
         breweryLocations = breweryLocations.sorted(by:
             { (brewery1, brewery2) -> Bool in
