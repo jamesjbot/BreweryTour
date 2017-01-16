@@ -7,8 +7,8 @@
 //
 /*
  This view displays the breweries selected by the user.
- It gets the selection from the mediator and display a red pin for breweries
- and a blue pin for the user's location
+ It gets the selection from the mediator and display an orange pin for breweries
+ and a black pin for the user's location
  If the user presses on the pin a callout will show allowing the user to
  favorite the brewery, or go the the website for the brewery to check open
  times and current beer selection.
@@ -22,10 +22,8 @@
  The mediator will provide the brewery object, we will map breweries according 
  their location.
  
- There is a brewery buffer called breweriesToBeProcessed. It gets queued up
- with breweries from the both the initialfetch and also 
- the fetchresultscontrollerdelegate, and processes breweries in batches
- for display on the screen.
+ The appropriate strategy to convert to annotations will be chosen by style or 
+ brewery type that enter
  */
 
 
@@ -189,25 +187,29 @@ class MapViewController : UIViewController {
             mapView.setCenter(mapView.userLocation.coordinate, animated: false)
         }
 
+        // Which location will we use as distance reference.
+        var targetLocation: CLLocation?
+        if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
+            mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
+            targetLocation = centerLocation
+        } else {
+            targetLocation = mapView.userLocation.location
+        }
+
         // Decision making to display Breweries Style or Brewery
         if mapViewData is Style {
 
-            if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
-                mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
-                activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style, view: self, location: centerLocation)
-            } else {
-                activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style, view: self, location: mapView.userLocation.location!)
-            }
+            activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style,
+                                                     view: self,
+                                                     location: targetLocation!)
             activityIndicator.stopAnimating()
 
         } else if mapViewData is Brewery {
-            let uninitialzedLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-            if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
-                mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
-                activeMappingStrategy = BreweryMapStrategy(b: mapViewData as! Brewery, view: self, location: centerLocation)
-            } else {
-                activeMappingStrategy = BreweryMapStrategy(b: mapViewData as! Brewery, view: self, location: mapView.userLocation.location!)
-            }
+
+            activeMappingStrategy = BreweryMapStrategy(b: mapViewData as! Brewery,
+                                                       view: self,
+                                                       location: targetLocation!)
+
         } else { // No Selection what so ever
             fatalError()
             DispatchQueue.main.async {
