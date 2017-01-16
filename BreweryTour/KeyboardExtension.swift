@@ -73,14 +73,16 @@ extension BeerDetailViewController {
         // Notify this viewcontroller when keyboard will hide
         NotificationCenter.default.addObserver(self, selector: #selector(BeerDetailViewController.keyboardWillHide(_:)), name: NSNotification.Name.UIKeyboardWillHide, object: nil)
     }
-    
-    /// Unsubscribes to the notification center for keyboard appearnaces
+
+
+    // Unsubscribes to the notification center for keyboard appearnaces
     func unsubscribeFromKeyboardShowNotifications(){
         // Stop notifying this view controller when the keyboard will show
         NotificationCenter.default.removeObserver(self, name:NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
+
     
-    /// Unscubscribes to the notification center for keyboard disappearances
+    // Unscubscribes to the notification center for keyboard disappearances
     func unsubscribeFromKeyboardHideNotifications(){
         // Stop notifying this view controller when the keyboard will hide
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name.UIKeyboardWillHide, object: nil)
