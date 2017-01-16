@@ -6,15 +6,10 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /*
- This is the view model backing the Styles switch on the main category view
- controller
- 
- 
- Initialization Path
- CategoryViewController will initialize this
- 
- 
- 
+    This is the view model backing the Styles switch on the main category view controller
+    This will tell the CategoryViewController what styles to display
+    Initialization Path
+    CategoryViewController will initialize this
 
  */
 
@@ -32,7 +27,6 @@ class StylesTableList: NSObject {
 
     // MARK: Variables
     
-    //internal var mediator: NSManagedObjectDisplayable!
     fileprivate var filteredObjects: [Style] = [Style]()
     fileprivate var frc : NSFetchedResultsController<Style>!
     var observer : Observer!
@@ -43,6 +37,7 @@ class StylesTableList: NSObject {
     internal func element(at index: Int) -> Style {
         return frc.fetchedObjects![index]
     }
+
 
     internal override init(){
         super.init()
@@ -79,6 +74,7 @@ class StylesTableList: NSObject {
         }
     }
 
+
     // This is the inital styles populate on a brand new startup
     // This is performed in the background on initialization
     fileprivate func downloadBeerStyles() {
@@ -103,7 +99,6 @@ extension StylesTableList: ReceiveBroadcastManagedObjectContextRefresh {
         frc.managedObjectContext.refreshAllObjects()
         // Always keep this view populated with data
         downloadBeerStyles()
-
     }
 
 }
@@ -120,14 +115,6 @@ extension StylesTableList: Subject {
 
 extension StylesTableList: NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    }
-    
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-    }
-
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         observer.sendNotify(from: self, withMsg: Message.Reload)
     }
@@ -136,7 +123,7 @@ extension StylesTableList: NSFetchedResultsControllerDelegate {
 
 extension StylesTableList : TableList {
 
-    /*
+    /* Some test data.
      * 2 Adambier
      * 34 Aged beer
      * 24 American style amber low calorie
@@ -158,6 +145,7 @@ extension StylesTableList : TableList {
         return cell
     }
 
+
     private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
         DispatchQueue.main.async {
             cell.imageView?.image = nil
@@ -172,6 +160,7 @@ extension StylesTableList : TableList {
         }
     }
 
+    
     internal func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil) {
         guard frc.fetchedObjects != nil else {
             filteredObjects.removeAll()
