@@ -7,10 +7,7 @@
 //
 
 /*
- This program creates Brewery, Beers, and links styles Breweries to styles.
- 
- Internal notes.
-
+    This program creates Brewery, Beers, and links styles Breweries to styles.
  */
 
 
@@ -20,7 +17,18 @@ import CoreData
 import Dispatch
 
 
-internal protocol BreweryAndBeerCreationProtocol {
+
+protocol WorkSubject {
+    func registerMediatorObserver(m: MediatorBusyObserver)
+}
+
+extension BreweryAndBeerCreationQueue: WorkSubject {
+    func registerMediatorObserver(m: MediatorBusyObserver) {
+        mediatorObserver = m
+    }
+}
+
+protocol BreweryAndBeerCreationProtocol {
 
     func isBreweryAndBeerCreationRunning() -> Bool
     func queueBrewery(_ b: BreweryData?)
@@ -44,23 +52,25 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // Initial responsive load
     private let initialMaxSavesPerLoop: Int = 10
-    private let initialRepeatInterval: Double = 2000
+    private let initialRepeatInterval: Double = 3
 
     // Long running loads
     // System looks like it processes 1.2 records / second
     private let longrunningMaxSavesPerLoop: Int = 500
-    private let longRunningRepeatInterval: Double = 30000
+    private let longRunningRepeatInterval: Double = 30
 
-    private var currentMaxSavesPerLoop: Int = 0
-    private var currentRepeatInterval: Double = 0
-
-    private var loopCounter: Int = 0
     private let maximumSmallRuns = 30
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
 
     // MARK: Variables
+    fileprivate var mediatorObserver: MediatorBusyObserver?
+
+    private var currentMaxSavesPerLoop: Int = 0
+    private var currentRepeatInterval: Double = 0
+
+    private var loopCounter: Int = 0
 
     private var workTimer: Timer!
 
@@ -95,8 +105,60 @@ class BreweryAndBeerCreationQueue: NSObject {
                                          repeats: true)
         abreweryContext = container?.newBackgroundContext()
         (Mediator.sharedInstance() as BroadcastManagedObjectContextRefresh).registerManagedObjectContextRefresh(self)
-
+        mediatorObserver = Mediator.sharedInstance() as MediatorBusyObserver
         switchToInitialRunningDataLoad()
+    }
+
+
+    private func continueProcessingAfterContextRefresh() -> Bool {
+        // We've been told to abandon Processing because of a core data refresh.
+        if abandonProcessingQueue {
+            runningBeerQueue.removeAll()
+            runningBreweryQueue.removeAll()
+            abandonProcessingQueue = false
+            return false
+        }
+        return true
+    }
+
+
+
+    private func reinsertBeer(_ beer: BeerData, _ inAttempt: Int) {
+        print("This beer can't find brewer \(beer.beerName)")
+        // If we have breweries still running then put beer back
+        var attempt = inAttempt
+        if !runningBreweryQueue.isEmpty {
+            runningBeerQueue.append( (beer,attempt) )
+        } else { // Out of breweries. Try again 3 times then give up
+            if attempt < 3 {
+                attempt += 1
+                self.runningBeerQueue.append( (beer,attempt) )
+            }
+        }
+    }
+
+
+    private func reinitializeLoadParameter() {
+        switchToInitialRunningDataLoad()
+        stopWork()
+    }
+
+
+    fileprivate func startWorkTimer() {
+        if workTimer == nil {
+            workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
+                                             target: self,
+                                             selector: #selector(self.processQueue),
+                                             userInfo: nil,
+                                             repeats: true)
+        }
+    }
+
+    
+    private func stopWork() {
+        workTimer.invalidate()
+        workTimer = nil
+        mediatorObserver?.notifyStoppingWork()
     }
 
 
@@ -111,12 +173,6 @@ class BreweryAndBeerCreationQueue: NSObject {
         currentRepeatInterval = longRunningRepeatInterval
     }
 
-
-    private func reinitializeLoadParameter() {
-        switchToInitialRunningDataLoad()
-        workTimer.invalidate()
-        workTimer = nil
-    }
 
     
     // Periodic method to save breweries and beers
@@ -290,48 +346,14 @@ class BreweryAndBeerCreationQueue: NSObject {
 
         }
         print("exited the dispatch queue.")
-        //autoreleasepool(invoking: <#T##() throws -> Result#>)
     }
 
-    private func reinsertBeer(_ beer: BeerData, _ inAttempt: Int) {
-        print("This beer can't find brewer \(beer.beerName)")
-        // If we have breweries still running then put beer back
-        var attempt = inAttempt
-        if !runningBreweryQueue.isEmpty {
-            runningBeerQueue.append( (beer,attempt) )
-        } else { // Out of breweries. Try again 3 times then give up
-            if attempt < 3 {
-                attempt += 1
-                self.runningBeerQueue.append( (beer,attempt) )
-            }
-        }
-    }
-
-
-    private func continueProcessingAfterContextRefresh() -> Bool {
-        // We've been told to abandon Processing because of a core data refresh.
-        if abandonProcessingQueue {
-            runningBeerQueue.removeAll()
-            runningBreweryQueue.removeAll()
-            abandonProcessingQueue = false
-            return false
-        }
-        return true
-    }
-
-
-    fileprivate func startWorkTimer() {
-        if workTimer == nil {
-            workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
-                                             target: self,
-                                             selector: #selector(self.processQueue),
-                                             userInfo: nil,
-                                             repeats: true)
-        }
-    }
 
 }
 
+
+
+//  MARK: - BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol
 
 extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
 
@@ -361,8 +383,8 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
         }
         if let localBrewer = b {
             print("B&BQueue \(#line) brewery queued ")
-            startWorkTimer()
             runningBreweryQueue.append(localBrewer)
+            startWorkTimer()
         }
     }
 
@@ -386,9 +408,10 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
         }
         if let beer = b {
             print("B&BQueue \(#line) beer queued ")
-            startWorkTimer()
             let attempt = 0
             runningBeerQueue.append( (beer,attempt) )
+            startWorkTimer()
+
         }
     }
 }

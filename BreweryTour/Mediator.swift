@@ -15,6 +15,38 @@ import CoreData
  notify the other Views That will need to update because of that change.
  */
 
+protocol BusyObserver {
+    func stopAnimating()
+    func registerAsBusyObserverWithMediator()
+}
+
+protocol MediatorBusyObserver {
+    func registerForBusyIndicator(observer: BusyObserver)
+    //func notifyStartingWork()
+    func notifyStoppingWork()
+    func isSystemBusy() -> Bool
+}
+
+
+extension Mediator: MediatorBusyObserver {
+
+    func registerForBusyIndicator(observer: BusyObserver) {
+        busyObservers.append(observer)
+    }
+
+
+    func notifyStoppingWork() {
+        for i in busyObservers {
+            i.stopAnimating()
+        }
+    }
+
+
+    func isSystemBusy() -> Bool {
+        return BreweryAndBeerCreationQueue.sharedInstance().isBreweryAndBeerCreationRunning()
+    }
+}
+
 protocol MapUpdateable {
     func updateMap()
 }
@@ -48,6 +80,8 @@ class Mediator {
     fileprivate var mapObservers: [MapUpdateable] = []
 
     fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
+
+    fileprivate var busyObservers: [BusyObserver] = []
 
     private var automaticallySegueValue: Bool = false
 

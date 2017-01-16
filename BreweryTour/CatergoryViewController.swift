@@ -275,17 +275,11 @@ class CategoryViewController: UIViewController,
 
         print("Processing message from \(from) \(msg)")
 
-        if msg.contains("All Pages Processed") {
-            activityIndicator.stopAnimating()
-        }
+
 
         // This will update the contents of the table if needed
         // TODO We're going to need to upgrade this function to accomodate all message.
         switch msg {
-
-        case "stopIndicator":
-            activityIndicator.stopAnimating()
-            break
 
         case Message.Reload:
             // Only the active table should respond to a tablelist reload command
@@ -323,6 +317,9 @@ class CategoryViewController: UIViewController,
         // resume their tutorial state
         tutorialState = .RefreshDB
         nextTutorialScreen(self)//Dummy to load data into the tutorial
+
+        registerAsBusyObserverWithMediator()
+
     }
 
     
@@ -336,6 +333,9 @@ class CategoryViewController: UIViewController,
         // SegmentedControlClicked will reload the table.
         segmentedControlClicked(segmentedControl, forEvent: UIEvent())//Dummy event
 
+        if Mediator.sharedInstance().isSystemBusy() {
+            activityIndicator.startAnimating()
+        }
     }
 
 
@@ -351,7 +351,28 @@ class CategoryViewController: UIViewController,
 }
 
 
-extension CategoryViewController : UITableViewDataSource {
+// MARK: - BusyObserver
+
+
+extension CategoryViewController: BusyObserver {
+
+    func stopAnimating() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+
+
+    func registerAsBusyObserverWithMediator() {
+        Mediator.sharedInstance().registerForBusyIndicator(observer: self)
+    }
+
+}
+
+
+// MARK: - UITableViewDataSource
+
+extension CategoryViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = genericTable.dequeueReusableCell(withIdentifier: cellIdentifier)
@@ -408,13 +429,6 @@ extension CategoryViewController : UITableViewDelegate {
         // Create a completion handler for ViewModel to take.
         let activeTableListSelectedCompletionHandler = {
             (success: Bool ,msg: String?) -> Void in
-            // Every tablelist completion handler will come back here
-            // All the completion handlers will be passed to the mediator,
-            // then to the BreweryDB for processing.
-            DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
-                self.activityIndicator.setNeedsDisplay()
-            }
             if success {
                 if Mediator.sharedInstance().isAutomaticallySegueing() {
                     DispatchQueue.main.async {
@@ -432,7 +446,7 @@ extension CategoryViewController : UITableViewDelegate {
 }
 
 
-    // MARK: - UISearchBar Delegate
+    // MARK: - UISearchBarDelegate
 
 extension CategoryViewController: UISearchBarDelegate {
     
