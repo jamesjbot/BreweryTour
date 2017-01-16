@@ -171,8 +171,11 @@ extension StylesTableList : TableList {
             return
         }
         filteredObjects = (frc.fetchedObjects?.filter({ ( ( $0 ).displayName?.lowercased().contains(searchText.lowercased()) )! } ))!
+        if let completion = completion {
+            completion(true)
+        }
     }
-    
+
     
     internal func getNumberOfRowsInSection(searchText: String?) -> Int {
         guard searchText == "" else {
