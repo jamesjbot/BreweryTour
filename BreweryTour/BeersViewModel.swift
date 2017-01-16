@@ -180,7 +180,7 @@ extension BeersViewModel: TableList {
             var beer: Beer!
             if (searchText?.isEmpty)!  {
                 beer = self.frc.object(at: indexPath)
-            } else {
+            } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
                 beer = self.filteredObjects[indexPath.row]
             }
             cell.textLabel?.text = beer.beerName!

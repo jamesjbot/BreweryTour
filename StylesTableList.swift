@@ -153,7 +153,7 @@ extension StylesTableList : TableList {
             assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
             if (searchText?.isEmpty)! {
                 cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! )
-            } else {
+            } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
             }
             cell.setNeedsDisplay()

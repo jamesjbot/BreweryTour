@@ -93,7 +93,7 @@ extension AllBreweriesTableList : TableList {
             var brewery: Brewery!
             if (searchText?.isEmpty)!  {
                 brewery = self.frc.object(at: indexPath)
-            } else {
+            } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
                 brewery = self.filteredObjects[indexPath.row]
             }
             cell.textLabel?.text = brewery.name!

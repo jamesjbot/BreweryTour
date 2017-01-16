@@ -67,8 +67,6 @@ class BreweryTableList: NSObject, Subject {
         // Register for context updates with Mediator
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
-        Mediator.sharedInstance().registerAsBrewryImageObserver(t: self)
-
     }
 
 
@@ -108,6 +106,8 @@ class BreweryTableList: NSObject, Subject {
 }
 
 
+// MARK: - BreweryTableList: TableList
+
 extension BreweryTableList: TableList {
 
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
@@ -120,13 +120,6 @@ extension BreweryTableList: TableList {
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             let image = #imageLiteral(resourceName: "Nophoto.png")
             cell.imageView?.image = image
-
-            // When searchText is empty check to make sure indexpath is within set bounds
-            // When searchText is full check to make sure indexpath is within set bounds
-//            guard (searchText?.isEmpty)! ? (indexPath.row < copyOfSet.count) :
-//                indexPath.row < filteredObjects.count else {
-//                    return UITableViewCell()
-//            }
             var brewery: Brewery?
             if (searchText?.isEmpty)! {
                 brewery = self.copyOfSet[indexPath.row]
