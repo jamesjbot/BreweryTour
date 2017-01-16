@@ -5,6 +5,9 @@
 //  Created by James Jongsurasithiwat on 1/2/17.
 //  Copyright © 2017 James Jongs. All rights reserved.
 //
+/*
+    This is a custom MKPinAnnotation for our map
+ */
 
 import UIKit
 import MapKit

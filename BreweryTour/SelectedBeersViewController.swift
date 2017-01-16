@@ -21,6 +21,7 @@ import CoreData
 class SelectedBeersViewController: UIViewController, Observer {
     
     // MARK: Constants
+
     private enum SelectedBeersTutorialStage {
         case Table
         case SegementedControl
@@ -72,19 +73,17 @@ class SelectedBeersViewController: UIViewController, Observer {
 
 
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
-        print("selectedView \(#line) segementClicked ")
-        // Currently if the segmented control 1 (all beers mode selected send true)
-        // selectedBeersTableList.setAllBeersModeONThenperformFetch(sender.state.rawValue == 1 ? true :false)
+
         let segmentedMode: SegmentedControllerMode = SelectedBeersViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
 
         switch segmentedMode {
+            // Everytime we switch we have to refilter, otherwise the content won't update
             // If needed filter beers
             // Set the backing model
             // Reload our local data. 
 
         case .SelectedBeers: // Selected Beers mode
-            //selectedBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
-            // Everytime we switch we have to refilter the otherwise the content won't update
+
             if let text = searchBar?.text {
                 selectedBeersViewModel.filterContentForSearchText(searchText: text)
             }
@@ -95,9 +94,6 @@ class SelectedBeersViewController: UIViewController, Observer {
             }
 
         case .AllBeers: // All Beers mode
-            // This next line is useless as tableView.reloadData will call this function eventually in BeersViewModel getNumberOfRowsInSection
-            //allBeersViewModel.performFetchRequestFor(observerNeedsNotification: false)
-            // Everytime we switch we have to refilter the otherwise the content won't update
             if let text = searchBar?.text {
                 allBeersViewModel.filterContentForSearchText(searchText: text)
             }
@@ -317,8 +313,8 @@ extension SelectedBeersViewController : UISearchBarDelegate {
         print("SelectedViewController \(#line) searchBarSearchButton ")
         searchBar.resignFirstResponder()
 
-        // BLOCK ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow AllBeerTableList to search online
-        // This is because the selection will not encompass the search results
+        // PREVENT ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow AllBeerTableList to search online
+        // This is because the preselection will not encompass the search results
         guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBeers.rawValue else {
             return
         }
@@ -343,7 +339,7 @@ extension SelectedBeersViewController : UISearchBarDelegate {
                     if success {
                         self.tableView.reloadData()
                     } else {
-                        self.displayAlertWindow(title: "Search Failed", msg: "Please close the app\nandtry again.")
+                        self.displayAlertWindow(title: "Search Failed", msg: "Please close the app\nand try again.")
                     }
                 }
             }
