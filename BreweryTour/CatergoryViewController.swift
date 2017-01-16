@@ -81,8 +81,8 @@ class CategoryViewController: UIViewController,
      when switching segmented controller
      */
     fileprivate var styleSelectionIndex: IndexPath?
-    fileprivate var breweriesWithStyleSelectionIndex: IndexPath?
-    fileprivate var allBreweriesSelectionIndex: IndexPath?
+    //fileprivate var breweriesWithStyleSelectionIndex: IndexPath?
+    //fileprivate var allBreweriesSelectionIndex: IndexPath?
     
     private var tutorialModeOn : Bool = false {
         didSet {
@@ -156,12 +156,12 @@ class CategoryViewController: UIViewController,
         case .InitialScreen:
             pointer.isHidden = true
             pointer.setNeedsDisplay()
-            tutorialText.text = "Welcome to Brewery Tour. This app was designed to help you plan a trip to breweries that serve your favorite beer styles. Please step thru this tutorial with the next button. Dismiss it when you are done. To bring the tutorial back press Help?"
+            tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles. Please step thru this tutorial with the next button.\nDismiss it when you are done.\nTo bring the tutorial back press Help?"
 
         case .SegementedControl:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles, or\nSelect 'Breweries with Style' to show breweries that make the selected style. Select 'All Breweries' to see all the breweries currently downoaded."
+            tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downoaded."
             let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.frame.midY)
             pointer.center = segmentPoint
             UIView.animateKeyframes(withDuration: 0.5,
@@ -181,7 +181,7 @@ class CategoryViewController: UIViewController,
                                     completion: nil)
             break
         case .BreweriesWithStyleTable:
-            tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore. Or go the 'All Breweries' screen and enter a name in the search bar to search for a brewery online."
+            tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore."
             let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: 0.5,
@@ -226,9 +226,8 @@ class CategoryViewController: UIViewController,
         case .Style:
             activeTableList = styleList
             genericTable.reloadData()
-            // Set the last selection
-            genericTable.selectRow(at: styleSelectionIndex, animated: true, scrollPosition: .middle)
             newSearchBar.placeholder = "Select Style Below or Search here"
+
 
         case .BreweriesWithStyle:
 
@@ -241,16 +240,12 @@ class CategoryViewController: UIViewController,
             }
             activeTableList = breweryList
             genericTable.reloadData()
-            // Set the last selection
-            genericTable.selectRow(at: breweriesWithStyleSelectionIndex, animated: true, scrollPosition: .middle)
             newSearchBar.placeholder = "Select a brewery or Search here"
 
 
         case .AllBreweries:
             activeTableList = allBreweryList
             genericTable.reloadData()
-            // Set the last selection
-            genericTable.selectRow(at: allBreweriesSelectionIndex, animated: true, scrollPosition: .middle)
             newSearchBar.placeholder = "Select a brewery or Search for a brewery online"
         }
     }
@@ -258,7 +253,7 @@ class CategoryViewController: UIViewController,
     
     @IBAction func mapButtonClicked(_ sender: AnyObject) {
         _ = sender.resignFirstResponder()// Sometimes the button clicks twice
-        performSegue(withIdentifier:"Go", sender: sender)
+        performSegue(withIdentifier:"GoToMap", sender: sender)
     }
     
     
@@ -272,8 +267,6 @@ class CategoryViewController: UIViewController,
         } else {
             return
         }
-        //print("Received message from \(from) \(msg)")
-        //print("Category \(#line) Do i still need this? ")
         guard (isViewLoaded && view.window != nil ),
             (from === (activeTableList as AnyObject)) else {
             // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
@@ -301,9 +294,7 @@ class CategoryViewController: UIViewController,
                 searchBar(newSearchBar, textDidChange: newSearchBar.text!)
             }
             break
-        case "We have styles":
-            //searchBar(newSearchBar, textDidChange: newSearchBar.text!)
-            break
+
         case "failure":
             displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
         default:
@@ -365,16 +356,12 @@ extension CategoryViewController : UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         var cell = genericTable.dequeueReusableCell(withIdentifier: cellIdentifier)
         // Ask the viewmodel to populate our UITableViewCell
-        //cell?.textLabel?.text = ""
-        //print("Want cell \(indexPath)")
-        cell = activeTableList.cellForRowAt(indexPath: indexPath,
-                                         cell: cell!,
-                                         searchText: newSearchBar.text)
-        //print("Returned cell?")
-        // Remove subtitle
-        cell?.imageView?.contentMode = .scaleToFill
-        cell?.detailTextLabel?.text = ""
         DispatchQueue.main.async {
+            cell = self.activeTableList.cellForRowAt(indexPath: indexPath,
+                                                cell: cell!,
+                                                searchText: self.newSearchBar.text)
+            cell?.imageView?.contentMode = .scaleToFill
+            cell?.detailTextLabel?.text = ""
             cell?.setNeedsDisplay()
         }
         return cell!
@@ -400,16 +387,16 @@ extension CategoryViewController : UITableViewDelegate {
         switch SegmentedControllerMode(rawValue: segmentedControl.selectedSegmentIndex)! {
         case .Style:
             styleSelectionIndex = indexPath
-            breweriesWithStyleSelectionIndex = nil
-            allBreweriesSelectionIndex = nil
+            //breweriesWithStyleSelectionIndex = nil
+            //allBreweriesSelectionIndex = nil
         case .BreweriesWithStyle:
             styleSelectionIndex = nil
-            breweriesWithStyleSelectionIndex = indexPath
-            allBreweriesSelectionIndex = nil
+            //breweriesWithStyleSelectionIndex = indexPath
+            //allBreweriesSelectionIndex = nil
         case .AllBreweries:
             styleSelectionIndex = nil
-            breweriesWithStyleSelectionIndex = nil
-            allBreweriesSelectionIndex = indexPath
+            //breweriesWithStyleSelectionIndex = nil
+            //allBreweriesSelectionIndex = indexPath
         }
 
         // Set the Textfield to the name of the selected item so the user
