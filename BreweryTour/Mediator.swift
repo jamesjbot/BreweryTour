@@ -42,12 +42,6 @@ class Mediator {
 
     // MARK: Constants
 
-    // Initialize the classes that need to send and receive data from the mediator
-    //private let styleList : StylesTableList!// = StylesTableList()
-    //private let breweryWithStyleList : BreweryTableList!// = BreweryTableList()
-    //private let selectedBeersList : SelectedBeersTableList!// = SelectedBeersTableList()
-    //private let allBreweryList : AllBreweriesTableList!// = AllBreweriesTableList()
-
     // MARK: Variables
     fileprivate var objectObserver: [ReceiveBroadcastSetSelected] = []
 
