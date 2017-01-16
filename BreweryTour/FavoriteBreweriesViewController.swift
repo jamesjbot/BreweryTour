@@ -78,7 +78,7 @@ class FavoriteBreweriesViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Animate tutorial
-        tutorialText.text = "Select a brewery to show its location on the map"
+        tutorialText.text = "Select a brewery to show direction to this location."
         let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
         pointer.center = tablePoint
         UIView.animateKeyframes(withDuration: 0.5,
