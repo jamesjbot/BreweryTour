@@ -124,7 +124,7 @@ extension BreweryTableList: TableList {
             var brewery: Brewery?
             if (searchText?.isEmpty)! {
                 brewery = self.copyOfSet[indexPath.row]
-            } else {
+            } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
                 brewery = (self.filteredObjects[indexPath.row])
             }
             cell.textLabel?.text = brewery?.name
@@ -150,8 +150,11 @@ extension BreweryTableList: TableList {
             return
         }
         filteredObjects = (copyOfSet.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))
+        if let completion = completion {
+            completion(true)
+        }
     }
-    
+
     
     func getNumberOfRowsInSection(searchText: String?) -> Int {
         // If we batch delete in the background frc will not retrieve delete results.
@@ -232,20 +235,11 @@ extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    //print("BreweryTableList completed changes")
-    observer.sendNotify(from: self, withMsg: "reload data")
-    // Is this needed as I'm atomically doing it
-    //copyOfSet = ((controller.fetchedObjects as! [Style]).first?.brewerywithstyle?.allObjects as! [Brewery]?)!
+    observer.sendNotify(from: self, withMsg: Message.Reload)
+
     }
 }
 
-
-extension BreweryTableList: BreweryAndBeerImageNotifiable {
-
-    func tellImagesUpdate() {
-        observer.sendNotify(from: self, withMsg: "reload data")
-    }
-}
 
 
 
