@@ -6,6 +6,10 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 
+/*
+    These constants control the display of tutorials.
+ */
+
 import Foundation
 
 public struct g_constants {

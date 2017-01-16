@@ -7,9 +7,13 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /*
- This screen allows us to delete the Styles, Beers and Breweries currently
- on the device.
+    This screen allows us to delete the Styles, Beers and Breweries currently
+    on the device.
+    Download all the breweries in one shot.
+    And disable or enable auto map segueing on choices from the CategoryScreen
+
  */
+
 import UIKit
 import Foundation
 import CoreData
@@ -42,7 +46,6 @@ class SettingsViewController: UIViewController {
                                msg: "You got it, go take break this will take awhile")
             BreweryDBClient.sharedInstance().downloadAllBreweries {
                 (success, msg) in
-                // Use would have long move off this screen.
             }
         }
         let action = UIAlertAction(title: "Take as long as you want",
@@ -53,10 +56,12 @@ class SettingsViewController: UIViewController {
                            actions: [action])
     }
 
+
     @IBAction func toggleAutomaticMap(_ sender: UISwitch) {
         Mediator.sharedInstance().setAutomaticallySegue(to: sender.isOn)
     }
-    
+
+
     @IBAction func deleteBeersBrewery(_ sender: AnyObject) {
         // Prompt user should we delete all the beers and breweries
         // Create action for prompt
@@ -115,6 +120,7 @@ class SettingsViewController: UIViewController {
         Mediator.sharedInstance().setAutomaticallySegue(to: automaticMapSwitch.isOn)
     }
 
+    
     private func statistics() -> String {
         do {
             let beerCount =  try container?.viewContext.fetch(beerFetch).count
