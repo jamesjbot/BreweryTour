@@ -438,16 +438,13 @@ extension CategoryViewController: UISearchBarDelegate {
     
     // Filter out selections not conforming to the searchbar text
     func searchBar(_: UISearchBar, textDidChange: String){
-        /* 
-         User entered searchtext, filter data
-         if there is text
-         */
-        if !textDidChange.isEmpty {
-            activeTableList.filterContentForSearchText(searchText: textDidChange, completion: nil)
-            genericTable.reloadData()
+        // This will filter empty text too.
+        activeTableList.filterContentForSearchText(searchText: textDidChange) {
+            (ok) -> Void in
+            self.genericTable.reloadData()
         }
     }
-    
+
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         /*
