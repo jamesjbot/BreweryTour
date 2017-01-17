@@ -6,6 +6,11 @@
 //  Copyright © 2017 James Jongs. All rights reserved.
 //
 
+/*
+    This is the view model contains the extra code that give a BeersViewModel
+    the ability to search for results online.
+ */
+
 import Foundation
 import UIKit
 import CoreData
