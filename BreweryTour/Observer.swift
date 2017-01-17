@@ -14,8 +14,5 @@ struct Message {
 
 protocol Observer {
 
-    // MARK: Constant
-
-
     func sendNotify(from: AnyObject, withMsg msg: String )
 }

@@ -36,9 +36,7 @@ import CoreData
 import SwiftyWalkthrough
 
 class CategoryViewController: UIViewController,
-    NSFetchedResultsControllerDelegate, Observer {
-
-
+    NSFetchedResultsControllerDelegate {
 
     private let segmentedControlPaddding : CGFloat = 8
     private let paddingForPoint : CGFloat = 20
@@ -258,45 +256,7 @@ class CategoryViewController: UIViewController,
     
     
     // MARK: Functions
-    
-    // Receive notifcation when the TableList backing the current view has changed
-    func sendNotify(from: AnyObject, withMsg msg: String) {
-        // Only receive messages form the active tablelist
-        if from === (activeTableList as AnyObject) {
 
-        } else {
-            return
-        }
-        guard (isViewLoaded && view.window != nil ),
-            (from === (activeTableList as AnyObject)) else {
-            // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
-            return
-        }
-
-        print("Processing message from \(from) \(msg)")
-
-
-
-        // This will update the contents of the table if needed
-        // TODO We're going to need to upgrade this function to accomodate all message.
-        switch msg {
-
-        case Message.Reload:
-            // Only the active table should respond to a tablelist reload command
-            if (activeTableList as AnyObject) === from {
-                genericTable.reloadData()
-                searchBar(newSearchBar, textDidChange: newSearchBar.text!)
-            }
-            break
-
-        case "failure":
-            displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
-        default:
-            fatalError("uncaught message \(msg)")
-        }
-    }
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -524,4 +484,47 @@ extension CategoryViewController: UISearchBarDelegate {
 }
 
 
+// MARK: - Observer
 
+extension CategoryViewController: Observer {
+
+    // Receive notifcation when the TableList backing the current view has changed
+    func sendNotify(from: AnyObject, withMsg msg: String) {
+        // Only receive messages form the active tablelist
+        if from === (activeTableList as AnyObject) {
+
+        } else {
+            return
+        }
+        guard (isViewLoaded && view.window != nil ),
+            (from === (activeTableList as AnyObject)) else {
+                // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
+                return
+        }
+
+        print("Processing message from \(from) \(msg)")
+
+        // This will update the contents of the table if needed
+        // TODO We're going to need to upgrade this function to accomodate all message.
+        switch msg {
+
+        case Message.Reload:
+            // Only the active table should respond to a tablelist reload command
+            if (activeTableList as AnyObject) === from {
+                genericTable.reloadData()
+                searchBar(newSearchBar, textDidChange: newSearchBar.text!)
+            }
+            break
+
+        case Message.FetchError:
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
+            break
+
+        case Message.Retry:
+            break
+
+        default:
+            fatalError("uncaught message \(msg)")
+        }
+    }
+}

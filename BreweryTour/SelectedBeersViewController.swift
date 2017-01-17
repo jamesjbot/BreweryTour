@@ -18,7 +18,7 @@
 import UIKit
 import CoreData
 
-class SelectedBeersViewController: UIViewController, Observer {
+class SelectedBeersViewController: UIViewController {
     
     // MARK: Constants
 
@@ -220,7 +220,10 @@ class SelectedBeersViewController: UIViewController, Observer {
             tutorialView.isHidden = true
         }
     }
+}
 
+
+extension SelectedBeersViewController: Observer {
 
     // Method to receive notifications from outside this object.
     internal func sendNotify(from: AnyObject, withMsg msg: String) {
