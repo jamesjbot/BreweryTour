@@ -148,6 +148,8 @@ class MapViewController : UIViewController {
             locationManager.requestLocation()
         }
 
+        registerAsBusyObserverWithMediator()
+
     }
 
 
@@ -219,7 +221,11 @@ class MapViewController : UIViewController {
 
         // Capture last selection, so we can compare when an update is requested
         lastSelectedManagedObject = mapViewData
-        
+
+        // Activate indicator if system is busy
+        if Mediator.sharedInstance().isSystemBusy() {
+            activityIndicator.startAnimating()
+        }
     }
 
 
@@ -476,6 +482,21 @@ extension MapViewController : DismissableTutorial {
     internal func enableTutorial() {
         tutorialView.isHidden = false
     }
+}
+
+extension MapViewController: BusyObserver {
+
+    func stopAnimating() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+
+
+    func registerAsBusyObserverWithMediator() {
+        Mediator.sharedInstance().registerForBusyIndicator(observer: self)
+    }
+    
 }
 
 

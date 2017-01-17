@@ -177,6 +177,8 @@ class SelectedBeersViewController: UIViewController, Observer {
 
         // Initialize the active
         print("SelectedViewController \(#line) viewDidLoad exited ")
+
+        registerAsBusyObserverWithMediator()
     }
 
 
@@ -195,6 +197,11 @@ class SelectedBeersViewController: UIViewController, Observer {
 
         // Tell view model to load SelectedBeers
         segmentedClicked(segmentedControl)
+
+        // Activate indicator if system is busy
+        if Mediator.sharedInstance().isSystemBusy() {
+            activityIndicator.startAnimating()
+        }
     }
 
 
@@ -225,6 +232,25 @@ class SelectedBeersViewController: UIViewController, Observer {
         searchBar(searchBar, textDidChange: searchBar.text!)
     }
 }
+
+
+// MARK: -  BusyObserver
+
+extension SelectedBeersViewController: BusyObserver {
+
+    func stopAnimating() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+
+
+    func registerAsBusyObserverWithMediator() {
+        Mediator.sharedInstance().registerForBusyIndicator(observer: self)
+    }
+    
+}
+
 
 // MARK: - SelectedBeersViewController: UITableViewDataSource
 
