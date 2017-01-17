@@ -6,17 +6,17 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 
+/*
+    Keyboard elevating functions, will move the view up the same distance as
+    the height of the keyboard so that the keyboard doesn't block the bottom
+    most views.
+ */
+
 import Foundation
 import UIKit
 
 extension BeerDetailViewController {
-    /*
-     
-     Keyboard elevating functions, will move the view up the same distance as 
-     the height of the keyboard so that the keyboard doesn't block the bottom
-     most views.
-     
-     */
+
     // MARK: - Keyboard elevating functions
     
     // Generates a keyboard height for the bottom textfield, generates 0 for top textfield
