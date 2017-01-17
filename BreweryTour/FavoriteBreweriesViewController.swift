@@ -143,7 +143,6 @@ extension FavoriteBreweriesViewController: ReceiveBroadcastManagedObjectContextR
 
 
     internal func contextsRefreshAllObjects() {
-        print("code from extension internal to the class")
         frcForBrewery.managedObjectContext.refreshAllObjects()
         // We must performFetch after refreshing context, otherwise we will retain
         // Old information is retained.
@@ -181,7 +180,6 @@ extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
     
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("end updates")
         tableView.endUpdates()
         tableView.reloadData()
     }

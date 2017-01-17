@@ -124,7 +124,6 @@ class BreweryAndBeerCreationQueue: NSObject {
 
 
     private func reinsertBeer(_ beer: BeerData, _ inAttempt: Int) {
-        print("This beer can't find brewer \(beer.beerName)")
         // If we have breweries still running then put beer back
         var attempt = inAttempt
         if !runningBreweryQueue.isEmpty {
@@ -216,7 +215,6 @@ class BreweryAndBeerCreationQueue: NSObject {
                 autoreleasepool {
 
                     breweryLoop: for x in 1...maxSave {
-                        print("run \(x)")
                         guard continueProcessingAfterContextRefresh() else {
                             break breweryLoop
                         }
@@ -233,7 +231,6 @@ class BreweryAndBeerCreationQueue: NSObject {
                                 styleRequest.predicate = NSPredicate(format: "id == %@", b.styleID!)
                                 var resultStyle = try self.abreweryContext?.fetch(styleRequest)
                                 resultStyle?.first?.addToBrewerywithstyle(newBrewery)
-                                print("This style now has \(resultStyle?.first?.brewerywithstyle?.count)")
                             } catch let error {
                                 print(error.localizedDescription)
                             }
@@ -248,9 +245,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 }
                 // Save brewery and style data.
                 do {
-                    print("Brewery queue \(runningBreweryQueue.count)")
                     try abreweryContext?.save()
-                    print("B&BQueue \(#line) saving from processing breweries")
                 } catch let err {
                     print(err.localizedDescription)
                 }
@@ -317,7 +312,6 @@ class BreweryAndBeerCreationQueue: NSObject {
                             let createdBeer = Beer(data: beer, context: self.abreweryContext!)
                             createdBeer.brewer = brewers?.first
 
-                            //print("B&BQueue \(#line) saving Style and changes saved")
                             if beer.imageUrl != nil {
                                 // If we have image data download it
                                 DispatchQueue.global(qos: .utility).async {
@@ -335,17 +329,14 @@ class BreweryAndBeerCreationQueue: NSObject {
                 
                 // Help slow saving an memory leak.
                 do {
-                    print("beerqueue has \(self.runningBeerQueue.count)")
                     try self.abreweryContext?.save()
                     //Reset to help running out of memory
                     self.abreweryContext?.reset()
                 } catch let error {
-                    print("There was a memory allocation error I caught it \(error.localizedDescription)")
+                    fatalError()
                 }
             } // After beer for loop
-
         }
-        print("exited the dispatch queue.")
     }
 
 
@@ -382,7 +373,6 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
             return
         }
         if let localBrewer = b {
-            print("B&BQueue \(#line) brewery queued ")
             runningBreweryQueue.append(localBrewer)
             startWorkTimer()
         }
@@ -407,7 +397,6 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
             return
         }
         if let beer = b {
-            print("B&BQueue \(#line) beer queued ")
             let attempt = 0
             runningBeerQueue.append( (beer,attempt) )
             startWorkTimer()

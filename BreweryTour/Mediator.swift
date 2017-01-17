@@ -128,7 +128,6 @@ extension Mediator: MediatorBroadcastSetSelected {
         }
 
         if thisItem is Brewery {
-            //print("Mediator\(#line) Calling mediator to downloadbeers by brewery")
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
                                                              completionHandler : completion)
         } else if thisItem is Style {
@@ -154,7 +153,6 @@ extension Mediator: BroadcastManagedObjectContextRefresh {
     internal func allBeersAndBreweriesDeleted() {
 
         for i in contextObservers {
-            print("Mediator says there are \(contextObservers.count) contextObservers to update")
             i.contextsRefreshAllObjects()
         }
 

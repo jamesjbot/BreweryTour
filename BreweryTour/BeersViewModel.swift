@@ -73,7 +73,6 @@ class BeersViewModel: NSObject {
     // This generic fetch will get all the beers in the data base. SelectedBeersViewModel
     // Override this method and selects based on Brewery or Style
     internal func performFetchRequestFor(observerNeedsNotification: Bool){
-        print("beerstable \(#line) performFetchRequestFor called \(observerNeedsNotification) ")
         // Set default query to AllBeers mode
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]
@@ -105,7 +104,6 @@ class BeersViewModel: NSObject {
 extension BeersViewModel: ReceiveBroadcastSetSelected {
 
     internal func updateObserversSelected(item: NSManagedObject) {
-        print("beerstable \(#line) updateObserversSelected ")
         selectedObject = item
         // Start retrieving entries in the background but dont update as view
         // is not onscreen, because SelectedBeersViewController is mutually exclusive 
@@ -115,7 +113,6 @@ extension BeersViewModel: ReceiveBroadcastSetSelected {
 
     // This is just a helper function to register with the mediator for updates.
     fileprivate func registerForSelectedObjectObserver(broadcaster: MediatorBroadcastSetSelected) {
-        print("beerstable \(#line) registerAsSelectedObjectObserver ")
         broadcaster.registerForObjectUpdate(observer: self)
     }
 }
@@ -126,7 +123,6 @@ extension BeersViewModel: ReceiveBroadcastSetSelected {
 extension BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh {
     // When all coredata ManagedObjects are deleted this is called by the mediator to refresh the context
     internal func contextsRefreshAllObjects() {
-        print("beerstable \(#line) contextRefreshAllObjects ")
         frc.managedObjectContext.refreshAllObjects()
 
         // We must performFetch after refreshing context, otherwise we will retain
@@ -164,7 +160,6 @@ extension BeersViewModel: TableList {
 
     // Configures Tableviewcell for display
     internal func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
-        //print("beerstable \(#line) cellForRowAt ")
         configureCell(cell: cell, indexPath: indexPath, searchText: searchText)
         return cell
     }
@@ -197,7 +192,6 @@ extension BeersViewModel: TableList {
 
 
     internal func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil ) {
-        print("beerstable \(#line) filterContentForSearchText ")
         filteredObjects.removeAll()
 
         guard frc.fetchedObjects != nil else {
@@ -216,7 +210,6 @@ extension BeersViewModel: TableList {
 
     // TableView function
     internal func getNumberOfRowsInSection(searchText: String?) -> Int {
-        print("beerstable \(#line) getNumberOfRowInSection ")
         // Since the query is dynamic we need to refresh the data incase something changed.
         performFetchRequestFor(observerNeedsNotification: false )
         /*
@@ -233,7 +226,6 @@ extension BeersViewModel: TableList {
 
     // Register the SelectedBeersViewController that will display this data
     internal func registerObserver(view: Observer) {
-        print("beerstable \(#line) registerobserver ")
         observer = view
     }
 
@@ -242,7 +234,6 @@ extension BeersViewModel: TableList {
     internal func selected(elementAt: IndexPath,
                            searchText: String,
                            completion:  @escaping (Bool, String?) -> Void) -> AnyObject? {
-        print("beerstable \(#line) selected ")
         if searchText != "" {
             return filteredObjects[elementAt.row]
         } else {

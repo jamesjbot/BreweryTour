@@ -173,30 +173,6 @@ extension AllBreweriesTableList: OnlineSearchCapable {
 
 extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     
-    func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        //print("AllBreweryTableList \(#line) AllBreweriesTableList willchange")
-    }
-    
-    
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-        //print("AllBreweryTableList \(#line) AllBreweryTableList changed object")
-        switch (type){
-        case .insert:
-            //print("AllBreweryTable \(#line) inserting\n\(anObject)")
-            break
-        case .delete:
-            //print("AllBreweryTable \(#line) delete")
-            break
-        case .move:
-            //print("AllBreweryTable \(#line) move ")
-            break
-        case .update:
-            //print("AllBreweryTable \(#line) update ")
-            break
-        }
-    }
-
-    
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Send message to observer regardless of situation. The observer decides if it should act.
         observer.sendNotify(from: self, withMsg: Message.Reload)

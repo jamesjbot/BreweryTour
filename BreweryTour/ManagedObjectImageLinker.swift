@@ -63,7 +63,6 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
 
     // Process the last unfull set on the breweriesToBeProcessed queue.
     @objc private func timerProcessImageQueue() {
-        print("timerProcessImageQueue fired \(imagesToBeAssignedQueue.count) images")
         let dq = DispatchQueue.global(qos: .userInitiated)
         dq.sync {
             var saves = 0 // Stopping counter
@@ -110,7 +109,6 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                     switch type {
                     case .Beer:
                         guard (result?.first as! Beer).image == nil else {
-                            print("Skipping imagee loading")
                             self.imagesToBeAssignedQueue.removeValue(forKey: key)
                             continue
                         }
@@ -118,7 +116,6 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                         break
                     case .Brewery:
                         guard (result?.first as! Brewery).image == nil else {
-                            print("Skipping imagee loading")
                             self.imagesToBeAssignedQueue.removeValue(forKey: key)
                             continue
                         }

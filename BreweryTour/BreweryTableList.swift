@@ -162,7 +162,6 @@ extension BreweryTableList: TableList {
         //er crektemporaryFetchData()
         // First thing called on a reload from category screen
         guard searchText == "" else {
-            print("BreweryTableList \(#line) \(#function) filtered object count \(filteredObjects.count)")
             return filteredObjects.count
         }
         return (copyOfSet.count )

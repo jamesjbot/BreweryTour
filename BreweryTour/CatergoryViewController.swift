@@ -496,8 +496,6 @@ extension CategoryViewController: Observer {
                 return
         }
 
-        print("Processing message from \(from) \(msg)")
-
         // This will update the contents of the table if needed
         // TODO We're going to need to upgrade this function to accomodate all message.
         switch msg {

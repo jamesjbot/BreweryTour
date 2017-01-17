@@ -162,7 +162,6 @@ class SelectedBeersViewController: UIViewController {
     // MARK: - Functions
 
     override func viewDidLoad() {
-        print("SelectedViewController \(#line) viewDidLoad ")
         super.viewDidLoad()
 
         // Set the initial viewModel
@@ -175,15 +174,12 @@ class SelectedBeersViewController: UIViewController {
         // Register for searchBar updates
         searchBar.delegate = self
 
-        // Initialize the active
-        print("SelectedViewController \(#line) viewDidLoad exited ")
-
+        // Register for stop activity indicator
         registerAsBusyObserverWithMediator()
     }
 
 
     override func viewWillAppear(_ animated: Bool) {
-        print("SelectedViewController \(#line) viewWillAppear ")
         super.viewWillAppear(animated)
         // When switching from another viewcontroller the background data might
         // have changed
@@ -206,7 +202,6 @@ class SelectedBeersViewController: UIViewController {
 
 
     override func viewDidAppear(_ animated: Bool) {
-        print("SelectedViewController \(#line) viewDidAppear ")
         super.viewDidAppear(animated)
 
         // Prime the tutorial state
@@ -227,7 +222,6 @@ extension SelectedBeersViewController: Observer {
 
     // Method to receive notifications from outside this object.
     internal func sendNotify(from: AnyObject, withMsg msg: String) {
-        print("SelectedViewController \(#line) sendNotify ")
         // Prompts the tableView to refilter search listings.
         // TableView.reload will be handled by the searchBar function.
         // All notifications to SelectedBeersViewController will reload the table.
@@ -284,7 +278,6 @@ extension SelectedBeersViewController: UITableViewDataSource {
 extension SelectedBeersViewController : UITableViewDelegate {
     
     internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        print("SelectedViewController \(#line) didSelectRowAt ")
         // Open the beer detail view screen.
         let beer = activeViewModel.selected(elementAt: indexPath,
                                                    searchText: searchBar.text!) {
@@ -313,11 +306,9 @@ extension SelectedBeersViewController : UISearchBarDelegate {
 
     // Any text entered in the searchbar triggers this
     internal func searchBar(_: UISearchBar, textDidChange: String){
-        print("SelectedViewController \(#line) textDidChange ")
         // User entered searchtext, now filter data
         activeViewModel.filterContentForSearchText(searchText: textDidChange) {
             (ok) -> Void in
-            print("SelecteBeerView  \(#line) returned from textDidChange")
             self.tableView.reloadData()
         }
 
@@ -325,7 +316,6 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     
     
     internal func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print("SelectedViewController \(#line) searchBarCancelButtonClicked ")
         // Remove searchbar text so we stop searching
         // Put searchbar back into unselected state
         // Repopulate the table
@@ -337,7 +327,6 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     
     // Search for beer online at BreweryDB.
     internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        print("SelectedViewController \(#line) searchBarSearchButton ")
         searchBar.resignFirstResponder()
 
         // PREVENT ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow AllBeerTableList to search online
@@ -354,7 +343,6 @@ extension SelectedBeersViewController : UISearchBarDelegate {
 
         // Function to attach to alert button
         func searchOnline(_ action: UIAlertAction) {
-            print("SelectedViewController \(#line) searchOnline ")
             activityIndicator.startAnimating()
             activityIndicator.isHidden = false
             activityIndicator.setNeedsDisplay()

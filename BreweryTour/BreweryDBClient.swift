@@ -139,7 +139,6 @@ class BreweryDBClient {
 
         // Build the other parameters
         for (key, value) in parameters {
-            //print("BreweryDB \(#line)key,value")
             let queryItem = NSURLQueryItem(name: key, value: "\(value)")
             components.queryItems?.append(queryItem as URLQueryItem)
         }

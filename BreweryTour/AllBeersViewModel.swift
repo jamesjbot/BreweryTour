@@ -18,7 +18,6 @@ class AllBeersViewModel: BeersViewModel, Subject {
 extension AllBeersViewModel: OnlineSearchCapable {
     // When the user enters the name of a beer and it is not present.
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {
-        print("allbeers \(#line) searchForUserEntered ")
         BreweryDBClient.sharedInstance().downloadBeersBy(name: searchTerm) {
             (success, msg) -> Void in
             guard success == true else {
