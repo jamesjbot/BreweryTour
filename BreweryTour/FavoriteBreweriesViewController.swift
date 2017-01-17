@@ -252,6 +252,9 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     }
 }
 
+
+// MARK: - DismissableTutorial
+
 extension FavoriteBreweriesViewController : DismissableTutorial {
     func enableTutorial() {
         tutorialView.isHidden = false
