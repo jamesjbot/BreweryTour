@@ -33,7 +33,6 @@
 
 import UIKit
 import CoreData
-import SwiftyWalkthrough
 
 class CategoryViewController: UIViewController,
     NSFetchedResultsControllerDelegate {
