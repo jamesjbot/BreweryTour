@@ -25,7 +25,6 @@ class SelectedBeersViewModel: BeersViewModel, Subject {
     // is notified of changes with observer.notify(msg:"")
     // From then on the delegate takes over and notifies the observer of changes.
     override internal func performFetchRequestFor(observerNeedsNotification: Bool){
-        print("selecttable \(#line) performFetchRequest ")
         var subPredicates = [NSPredicate]()
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = [NSSortDescriptor(key: "beerName", ascending: true)]

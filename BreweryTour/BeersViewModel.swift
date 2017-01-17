@@ -36,7 +36,6 @@ class BeersViewModel: NSObject {
     // MARK: - Functions 
 
     internal override init(){
-        print("beerstable \(#line) init ")
         super.init()
 
         //Accept changes from other managed object contexts

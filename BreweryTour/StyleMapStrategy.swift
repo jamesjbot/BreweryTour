@@ -60,7 +60,6 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     // Used for when style is updated with new breweries
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
-        print("StyleMapStrategy \(#line) controllerDidChangeContext. ")
         breweryLocations = (controller.fetchedObjects?.first as! Style).brewerywithstyle?.allObjects as! [Brewery]
         debouncedFunction!()
     }
@@ -90,7 +89,6 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     private func fetch() {
         do {
             try styleFRC.performFetch()
-            //print("Found style \(styleFRC.fetchedObjects?.first?.brewerywithstyle)")
             breweryLocations = styleFRC.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]
         } catch {
             fatalError("Critical error unable to read database.")
