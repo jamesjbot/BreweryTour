@@ -484,13 +484,9 @@ extension CategoryViewController: Observer {
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(from: AnyObject, withMsg msg: String) {
         // Only receive messages form the active tablelist
-        if from === (activeTableList as AnyObject) {
 
-        } else {
-            return
-        }
-        guard (isViewLoaded && view.window != nil ),
-            (from === (activeTableList as AnyObject)) else {
+        guard (isViewLoaded && (view.window != nil) ),
+            (from === (activeTableList as AnyObject) ) else {
                 // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
                 return
         }
