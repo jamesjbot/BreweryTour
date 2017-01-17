@@ -136,7 +136,6 @@ class MapViewController : UIViewController {
             self.mapView.showsUserLocation = true
             self.mapView.showsScale = true
             self.mapView.showsCompass = true
-            self.activityIndicator.startAnimating()
         }
 
         // CoreLocation initialization, ask permission to utilize user location
