@@ -122,7 +122,6 @@ class MapViewController : UIViewController {
         DispatchQueue.main.async {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(b)
-            self.activityIndicator.stopAnimating()
         }
     }
 
@@ -156,6 +155,13 @@ class MapViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        // Activate indicator if system is busy
+        if Mediator.sharedInstance().isSystemBusy() {
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
+        }
+
         // Set the function of this screen
         tabBarController?.title = "Go To Website"
 
@@ -171,9 +177,6 @@ class MapViewController : UIViewController {
         // so the map view will show the last view ( default view) nothing
         guard lastSelectedManagedObject != mapViewData else {
             // No need to update the viewcontroller if the data has not changed
-            DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
-            }
             return
         }
 
@@ -204,7 +207,6 @@ class MapViewController : UIViewController {
             activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style,
                                                      view: self,
                                                      location: targetLocation!)
-            activityIndicator.stopAnimating()
 
         } else if mapViewData is Brewery {
 
@@ -214,9 +216,6 @@ class MapViewController : UIViewController {
 
         } else { // No Selection what so ever
             fatalError()
-            DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
-            }
         }
 
         // Capture last selection, so we can compare when an update is requested
@@ -224,7 +223,9 @@ class MapViewController : UIViewController {
 
         // Activate indicator if system is busy
         if Mediator.sharedInstance().isSystemBusy() {
-            activityIndicator.startAnimating()
+            DispatchQueue.main.async {
+                self.activityIndicator.startAnimating()
+            }
         }
     }
 

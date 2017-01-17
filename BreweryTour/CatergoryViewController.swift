@@ -79,8 +79,6 @@ class CategoryViewController: UIViewController,
      when switching segmented controller
      */
     fileprivate var styleSelectionIndex: IndexPath?
-    //fileprivate var breweriesWithStyleSelectionIndex: IndexPath?
-    //fileprivate var allBreweriesSelectionIndex: IndexPath?
     
     private var tutorialModeOn : Bool = false {
         didSet {
@@ -313,7 +311,6 @@ class CategoryViewController: UIViewController,
 
 // MARK: - BusyObserver
 
-
 extension CategoryViewController: BusyObserver {
 
     func stopAnimating() {
@@ -368,16 +365,13 @@ extension CategoryViewController : UITableViewDelegate {
         switch SegmentedControllerMode(rawValue: segmentedControl.selectedSegmentIndex)! {
         case .Style:
             styleSelectionIndex = indexPath
-            //breweriesWithStyleSelectionIndex = nil
-            //allBreweriesSelectionIndex = nil
+
         case .BreweriesWithStyle:
             styleSelectionIndex = nil
-            //breweriesWithStyleSelectionIndex = indexPath
-            //allBreweriesSelectionIndex = nil
+
         case .AllBreweries:
             styleSelectionIndex = nil
-            //breweriesWithStyleSelectionIndex = nil
-            //allBreweriesSelectionIndex = indexPath
+
         }
 
         // Set the Textfield to the name of the selected item so the user

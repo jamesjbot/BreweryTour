@@ -6,12 +6,12 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /*
- Shows all the beers or just the selected beers from styles and/or breweries.
+    Shows all the beers or just the selected beers from styles and/or breweries.
  
- Initialization process
- First Stored TableLists are created selectedBeersTableList and allBeersTableList
- We set the default viewmodel
- We register with the view models as their observer
+    Initialization process
+    First Stored TableLists are created selectedBeersTableList and allBeersTableList
+    We set the default viewmodel
+    We register with the view models as their observer
 
  */
 
@@ -260,13 +260,11 @@ extension SelectedBeersViewController: BusyObserver {
 extension SelectedBeersViewController: UITableViewDataSource {
     
     internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("SelectedViewController \(#line) numberOfRowsInSection ")
         return activeViewModel.getNumberOfRowsInSection(searchText: searchBar.text)
     }
     
     
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        print("SelectBeerView \(#line) cellForRowAt ")
         // Get a cell from the tableview and populate with name, brewery and image if available
         // By sending the cell to the model to populate
         var cell = tableView.dequeueReusableCell(withIdentifier: "BeerCell", for: indexPath)
