@@ -73,10 +73,6 @@ class CategoryViewController: UIViewController,
 
     // MARK: Variables
 
-    /*
-     variables for saving the current indexpath
-     when switching segmented controller
-     */
     fileprivate var styleSelectionIndex: IndexPath?
     
     private var tutorialModeOn : Bool = false {
@@ -93,7 +89,6 @@ class CategoryViewController: UIViewController,
 
     // Variable telling us if we should automatically go to map on completed request
     internal var automaticallySegueToMap: Bool = false
-
 
     // MARK: IBOutlets
 
@@ -213,10 +208,13 @@ class CategoryViewController: UIViewController,
     
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
 
-        //Capture the new screen mode
+        // Capture the new screen mode
         let segmentedMode: SegmentedControllerMode = CategoryViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
 
         switch segmentedMode {
+            // Set the model
+            // reload the data
+            // Set the place holder text
 
         case .Style:
             activeTableList = styleList
@@ -241,13 +239,13 @@ class CategoryViewController: UIViewController,
         case .AllBreweries:
             activeTableList = allBreweryList
             genericTable.reloadData()
-            newSearchBar.placeholder = "Select a brewery or Search for a brewery online"
+            newSearchBar.placeholder = "Select a brewery or Search online"
         }
     }
     
     
     @IBAction func mapButtonClicked(_ sender: AnyObject) {
-        _ = sender.resignFirstResponder()// Sometimes the button clicks twice
+        _ = sender.resignFirstResponder() // Sometimes the button clicks twice
         performSegue(withIdentifier:"GoToMap", sender: sender)
     }
     
