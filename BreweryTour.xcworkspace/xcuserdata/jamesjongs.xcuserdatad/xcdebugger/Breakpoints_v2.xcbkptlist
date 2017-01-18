@@ -209,22 +209,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BreweryTour/Mediator.swift"
-            timestampString = "506404216.034231"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "75"
-            endingLineNumber = "75"
-            landmarkName = "broadcastMapChanges()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "BreweryTour/BreweryAndBeerCreationQueue.swift"
             timestampString = "506260387.741814"
             startingColumnNumber = "9223372036854775807"
@@ -759,11 +743,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BreweryTour/CatergoryViewController.swift"
-            timestampString = "506408104.292809"
+            timestampString = "506458449.813453"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "486"
-            endingLineNumber = "486"
+            startingLineNumber = "487"
+            endingLineNumber = "487"
             landmarkName = "searchOnline(_:)"
             landmarkType = "9">
          </BreakpointContent>
@@ -871,11 +855,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BreweryTour/BreweryAndBeerCreationQueue.swift"
-            timestampString = "506451781.179697"
+            timestampString = "506456406.874613"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "196"
-            endingLineNumber = "196"
+            startingLineNumber = "197"
+            endingLineNumber = "197"
             landmarkName = "processQueue()"
             landmarkType = "7">
          </BreakpointContent>
@@ -887,11 +871,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BreweryTour/CatergoryViewController.swift"
-            timestampString = "506408104.292809"
+            timestampString = "506458449.813453"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "334"
-            endingLineNumber = "334"
+            startingLineNumber = "335"
+            endingLineNumber = "335"
             landmarkName = "CategoryViewController"
             landmarkType = "4">
          </BreakpointContent>
@@ -1045,11 +1029,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BreweryTour/BreweryAndBeerCreationQueue.swift"
-            timestampString = "506451898.778072"
+            timestampString = "506456406.874613"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "218"
-            endingLineNumber = "218"
+            startingLineNumber = "219"
+            endingLineNumber = "219"
             landmarkName = "processQueue()"
             landmarkType = "7">
          </BreakpointContent>

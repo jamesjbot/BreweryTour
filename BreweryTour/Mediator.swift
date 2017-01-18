@@ -15,76 +15,12 @@ import CoreData
  notify the other Views That will need to update because of that change.
  */
 
-protocol BusyObserver {
-    func startAnimating()
-    func stopAnimating()
-    func registerAsBusyObserverWithMediator()
-}
-
-protocol MediatorBusyObserver {
-    func registerForBusyIndicator(observer: BusyObserver)
-    //func notifyStartingWork()
-    func notifyStoppingWork()
-    func notifyStartingWork()
-    func isSystemBusy() -> Bool
-}
-
-
-extension Mediator: MediatorBusyObserver {
-
-    func registerForBusyIndicator(observer: BusyObserver) {
-        busyObservers.append(observer)
-    }
-
-
-    func notifyStoppingWork() {
-        for i in busyObservers {
-            i.stopAnimating()
-        }
-    }
-
-    func notifyStartingWork() {
-        for i in busyObservers {
-            i.startAnimating()
-        }
-    }
-
-    func isSystemBusy() -> Bool {
-        return BreweryAndBeerCreationQueue.sharedInstance().isBreweryAndBeerCreationRunning()
-    }
-}
-
-protocol MapUpdateable {
-    func updateMap()
-}
-
-protocol ObserverMapChanges {
-    func registerMapObservers(m: MapUpdateable)
-    func broadcastMapChanges()
-
-}
-
-
-extension Mediator: ObserverMapChanges {
-    func registerMapObservers(m: MapUpdateable) {
-        mapObservers.append(m)
-    }
-
-    func broadcastMapChanges() {
-        for i in mapObservers {
-            i.updateMap()
-        }
-    }
-}
 
 class Mediator {
 
-    // MARK: Constants
-
     // MARK: Variables
+    
     fileprivate var objectObserver: [ReceiveBroadcastSetSelected] = []
-
-    fileprivate var mapObservers: [MapUpdateable] = []
 
     fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
 
@@ -94,7 +30,6 @@ class Mediator {
 
     fileprivate var passedItem : NSManagedObject?
 
-    fileprivate var observersOfBreweryImages: [BreweryAndBeerImageNotifiable] = [BreweryAndBeerImageNotifiable]()
 
     // MARK: Functions
 
@@ -123,8 +58,9 @@ class Mediator {
 }
 
 
-extension Mediator: MediatorBroadcastSetSelected {
+// MARK: - MediatorBroadcastSetSelected
 
+extension Mediator: MediatorBroadcastSetSelected {
 
     // When an element on categoryScreen is selected, process it on BreweryDBClient
     internal func select(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
@@ -150,6 +86,35 @@ extension Mediator: MediatorBroadcastSetSelected {
 
 }
 
+
+// MARK: - MediatorBusyObserver
+
+extension Mediator: MediatorBusyObserver {
+
+    func registerForBusyIndicator(observer: BusyObserver) {
+        busyObservers.append(observer)
+    }
+
+    func notifyStoppingWork() {
+        for i in busyObservers {
+            i.stopAnimating()
+        }
+    }
+
+    func notifyStartingWork() {
+        for i in busyObservers {
+            i.startAnimating()
+        }
+    }
+
+    func isSystemBusy() -> Bool {
+        return BreweryAndBeerCreationQueue.sharedInstance().isBreweryAndBeerCreationRunning()
+    }
+}
+
+
+// MARK: - BroadcastManagedObjectContextRefresh
+
 extension Mediator: BroadcastManagedObjectContextRefresh {
 
     internal func registerManagedObjectContextRefresh(_ a: ReceiveBroadcastManagedObjectContextRefresh) {
@@ -162,26 +127,7 @@ extension Mediator: BroadcastManagedObjectContextRefresh {
         for i in contextObservers {
             i.contextsRefreshAllObjects()
         }
-
     }
-
-}
-
-extension Mediator: BreweryAndBeerImageNotifier {
-
-    func broadcastToBreweryImageObservers() {
-        guard (observersOfBreweryImages.count) > 0 else {
-            return
-        }
-        for i in observersOfBreweryImages {
-            i.tellImagesUpdate()
-        }
-    }
-
-    func registerAsBrewryImageObserver(t: BreweryAndBeerImageNotifiable) {
-        observersOfBreweryImages.append(t)
-    }
-
 }
 
 
