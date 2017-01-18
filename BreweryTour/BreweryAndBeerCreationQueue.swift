@@ -204,10 +204,7 @@ class BreweryAndBeerCreationQueue: NSObject {
             // This adjust the maximum amount of processing per data load
             // Low in the beginning then increasing
             var maxSave: Int!
-            maxSave = currentMaxSavesPerLoop
-            if runningBreweryQueue.count < maxSave {
-                maxSave = runningBreweryQueue.count
-            }
+            maxSave = decideOnMaximumRecordsPerLoop(queueCount: runningBreweryQueue.count)
 
             //Processing Breweries
             if !runningBreweryQueue.isEmpty {
@@ -251,21 +248,15 @@ class BreweryAndBeerCreationQueue: NSObject {
                 }
             }
 
-            // Process beers only if breweries are done.
-            guard runningBreweryQueue.isEmpty else {
+            // Begin to process beers only if breweries are done.
+            guard runningBreweryQueue.isEmpty,
+                !runningBeerQueue.isEmpty else {  // If beer queue is empty stop
                 // Wait for timer to fire again and process some more beers
                 return
             }
 
-            // If runningBeerQueue is empty stop
-            guard !runningBeerQueue.isEmpty else {
-                return
-            }
             // Reset the maximum records to process
-            maxSave = currentMaxSavesPerLoop
-            if runningBeerQueue.count < maxSave {
-                maxSave = runningBeerQueue.count
-            }
+            maxSave = decideOnMaximumRecordsPerLoop(queueCount: runningBeerQueue.count)
 
             // Using peform instead of performandwait to increase performance.
             abreweryContext?.performAndWait {
@@ -335,11 +326,17 @@ class BreweryAndBeerCreationQueue: NSObject {
                 } catch let error {
                     fatalError()
                 }
-            } // After beer for loop
+            }
         }
     }
 
-
+    private func decideOnMaximumRecordsPerLoop(queueCount: Int) -> Int {
+        var maxSave = currentMaxSavesPerLoop
+        if queueCount < maxSave {
+            maxSave = queueCount
+        }
+        return maxSave
+    }
 }
 
 
