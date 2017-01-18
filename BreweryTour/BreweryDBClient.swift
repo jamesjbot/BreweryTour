@@ -158,7 +158,7 @@ class BreweryDBClient {
                        group: DispatchGroup? = nil){
 
         // Process every query type accordingly
-        var parser: ParserProtocol = ParserFactory.sharedInstance().createParser(type: outputType)
+        let parser: ParserProtocol = ParserFactory.sharedInstance().createParser(type: outputType)
         parser.parse(response: response, querySpecificID: querySpecificID, completion: completion)
     }
 
