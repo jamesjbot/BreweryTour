@@ -217,6 +217,7 @@ class CategoryViewController: UIViewController,
             // Set the place holder text
 
         case .Style:
+            filterContent()
             activeTableList = styleList
             genericTable.reloadData()
             newSearchBar.placeholder = "Select Style Below or Search here"
@@ -231,12 +232,14 @@ class CategoryViewController: UIViewController,
             if styleSelectionIndex != nil {
                 breweryList.prepareToShowTable()
             }
+            filterContent()
             activeTableList = breweryList
             genericTable.reloadData()
             newSearchBar.placeholder = "Select a brewery or Search here"
 
 
         case .AllBreweries:
+            filterContent()
             activeTableList = allBreweryList
             genericTable.reloadData()
             newSearchBar.placeholder = "Select a brewery or Search online"
@@ -252,6 +255,13 @@ class CategoryViewController: UIViewController,
     
     // MARK: Functions
 
+    private func filterContent() {
+        if let text = newSearchBar.text {
+            allBreweryList.filterContentForSearchText(searchText: text)
+        }
+    }
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
