@@ -123,7 +123,7 @@ extension Mediator: BroadcastManagedObjectContextRefresh {
     }
 
     internal func allBeersAndBreweriesDeleted() {
-
+        passedItem = nil
         for i in contextObservers {
             i.contextsRefreshAllObjects()
         }
