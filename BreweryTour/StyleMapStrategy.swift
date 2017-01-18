@@ -89,7 +89,9 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     private func fetch() {
         do {
             try styleFRC.performFetch()
-            breweryLocations = styleFRC.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]
+            if let locations = styleFRC.fetchedObjects?.first?.brewerywithstyle?.allObjects as? [Brewery] {
+                breweryLocations = locations
+            }
         } catch {
             fatalError("Critical error unable to read database.")
         }
