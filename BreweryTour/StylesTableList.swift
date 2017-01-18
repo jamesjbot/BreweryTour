@@ -150,7 +150,6 @@ extension StylesTableList : TableList {
         DispatchQueue.main.async {
             cell.imageView?.image = nil
             cell.textLabel?.adjustsFontSizeToFitWidth = true
-            assert(indexPath.row < (self.frc.fetchedObjects?.count)!)
             if (searchText?.isEmpty)! {
                 cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! )
             } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
