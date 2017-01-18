@@ -6,7 +6,7 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /*
- This is the main screen where users can choose to explore Breweries by the 
+ This is the main screen where users can choose to explore Breweries by the
  beer styles they produce.
 
  Once a style has been selected, the program will go get beer names and
@@ -21,8 +21,8 @@
  Optional* The user can turn on automatic go to the Map display in settings.
  This will then automatically bring the user to the map screen showing all
  breweries that were retrieved.
- 
- Alternately the user can just select the name of a brewery in either 
+
+ Alternately the user can just select the name of a brewery in either
  'Brewery with style' or 'All Breweries' this will bring the user to the map
  screen but only show them their selected brewery.
 
@@ -35,20 +35,23 @@ import UIKit
 import CoreData
 
 class CategoryViewController: UIViewController,
-    NSFetchedResultsControllerDelegate {
+NSFetchedResultsControllerDelegate {
 
     private let segmentedControlPaddding : CGFloat = 8
     private let paddingForPoint : CGFloat = 20
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-        
+
     fileprivate let cellIdentifier = "genericTypeCell"
-    
+
     private let styleList : StylesTableList! = StylesTableList()
     private let breweryList : BreweryTableList! = BreweryTableList()
     private let allBreweryList : AllBreweriesTableList = AllBreweriesTableList()
 
     // The communicator between objects.
     private let med : Mediator = Mediator.sharedInstance()
+
+    // Pointer animation duration
+    private let pointerDuration : CGFloat = 1.0
 
     // For cycling thru the states of the tutorial for the viewcontroller
     private enum CategoryTutorialStage {
@@ -67,14 +70,13 @@ class CategoryViewController: UIViewController,
         case AllBreweries = 2
     }
 
-    // Pointer animation duration
-    private let pointerDuration : CGFloat = 1.0
+
 
 
     // MARK: Variables
 
     fileprivate var styleSelectionIndex: IndexPath?
-    
+
     private var tutorialModeOn : Bool = false {
         didSet {
             tutorialView.isHidden = !tutorialModeOn
@@ -98,13 +100,13 @@ class CategoryViewController: UIViewController,
     @IBOutlet weak var pointer: UIView!
     @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var selection: UITextField!
-    
+
     // Normal UI outlets
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
     @IBOutlet weak var newSearchBar: UISearchBar!
     @IBOutlet weak var genericTable: UITableView!
-    
+
 
     // MARK: IBActions
 
@@ -112,7 +114,7 @@ class CategoryViewController: UIViewController,
         tutorialModeOn = true
     }
 
-    
+
     @IBAction func dissMissTutorial(_ sender: UIButton) {
         tutorialModeOn = false
         // Set the tutorial off in permanent settings
@@ -196,8 +198,8 @@ class CategoryViewController: UIViewController,
             tutorialText.text = "Click on 'Map' to proceed to the map, to view your last selection."
             pointer.isHidden = true
             pointer.setNeedsDisplay()
-        
-        
+
+
         case .RefreshDB:
             tutorialText.text = "If you would like to delete all beers, breweries, and styles information click the settings (gear) button. To go to the settings screen"
             pointer.isHidden = true
@@ -205,7 +207,7 @@ class CategoryViewController: UIViewController,
         }
     }
 
-    
+
     @IBAction func segmentedControlClicked(_ sender: UISegmentedControl, forEvent event: UIEvent) {
 
         // Capture the new screen mode
@@ -227,7 +229,7 @@ class CategoryViewController: UIViewController,
 
             // Tell the the 'breweries with style' view model to prepare to
             // Show the selected style
-            // If no style was selected then it will show the last style group 
+            // If no style was selected then it will show the last style group
             // That was selected.
             if styleSelectionIndex != nil {
                 breweryList.prepareToShowTable()
@@ -245,14 +247,14 @@ class CategoryViewController: UIViewController,
             newSearchBar.placeholder = "Select a brewery or Search online"
         }
     }
-    
-    
+
+
     @IBAction func mapButtonClicked(_ sender: AnyObject) {
         _ = sender.resignFirstResponder() // Sometimes the button clicks twice
         performSegue(withIdentifier:"GoToMap", sender: sender)
     }
-    
-    
+
+
     // MARK: Functions
 
     private func filterContent() {
@@ -261,7 +263,7 @@ class CategoryViewController: UIViewController,
         }
     }
 
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -272,13 +274,13 @@ class CategoryViewController: UIViewController,
         styleList.registerObserver(view: self)
         breweryList.registerObserver(view: self)
         allBreweryList.registerObserver(view: self)
-        
+
         // Make Breweries with style segmented control title fit
         (segmentedControl.subviews[1].subviews.first as! UILabel).adjustsFontSizeToFitWidth = true
 
         // Set tutorial to the last screen, and advance into the first one
-        // This is here because I want it to always shows the initial screen 
-        // on a clean start. If user goes to another view and comes back they can 
+        // This is here because I want it to always shows the initial screen
+        // on a clean start. If user goes to another view and comes back they can
         // resume their tutorial state
         tutorialState = .RefreshDB
         nextTutorialScreen(self)//Dummy to load data into the tutorial
@@ -287,7 +289,7 @@ class CategoryViewController: UIViewController,
 
     }
 
-    
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         activeTableList.filterContentForSearchText(searchText: newSearchBar.text!, completion: nil)
@@ -350,16 +352,16 @@ extension CategoryViewController: UITableViewDataSource {
         // Ask the viewmodel to populate our UITableViewCell
         DispatchQueue.main.async {
             cell = self.activeTableList.cellForRowAt(indexPath: indexPath,
-                                                cell: cell!,
-                                                searchText: self.newSearchBar.text)
+                                                     cell: cell!,
+                                                     searchText: self.newSearchBar.text)
             cell?.imageView?.contentMode = .scaleToFill
             cell?.detailTextLabel?.text = ""
             cell?.setNeedsDisplay()
         }
         return cell!
     }
-    
-    
+
+
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 
         return activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
@@ -367,7 +369,7 @@ extension CategoryViewController: UITableViewDataSource {
 }
 
 
-    // MARK: UITableViewDelegate
+// MARK: - UITableViewDelegate
 
 extension CategoryViewController : UITableViewDelegate {
 
@@ -420,10 +422,10 @@ extension CategoryViewController : UITableViewDelegate {
 }
 
 
-    // MARK: - UISearchBarDelegate
+// MARK: - UISearchBarDelegate
 
 extension CategoryViewController: UISearchBarDelegate {
-    
+
     // Filter out selections not conforming to the searchbar text
     func searchBar(_: UISearchBar, textDidChange: String){
         // This will filter empty text too.
@@ -433,7 +435,7 @@ extension CategoryViewController: UISearchBarDelegate {
         }
     }
 
-    
+
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         /*
          Remove searchbar text so we stop searching
@@ -444,17 +446,17 @@ extension CategoryViewController: UISearchBarDelegate {
         newSearchBar.resignFirstResponder()
         genericTable.reloadData()
     }
-    
+
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
 
-        /* 
+        /*
          This method allows the user to put out a query to BreweryDB for
          breweries with the searchtext in their name
 
          Only allow the AllBreweries mode to searchonline for breweries
-         this is because when in the styles mode the downloaded brewery 
+         this is because when in the styles mode the downloaded brewery
          may not have that style and as such will not show up in the list
          making for a confusing experience.
          Same confusing experience goes for searching for styles.
@@ -523,14 +525,14 @@ extension CategoryViewController: Observer {
                 searchBar(newSearchBar, textDidChange: newSearchBar.text!)
             }
             break
-
+            
         case Message.FetchError:
             displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
             break
-
+            
         case Message.Retry:
             break
-
+            
         default:
             fatalError("uncaught message \(msg)")
         }
