@@ -209,50 +209,14 @@ class BreweryAndBeerCreationQueue: NSObject {
 
             //Processing Breweries
             if !runningBreweryQueue.isEmpty {
-                
-                autoreleasepool {
-
-                    breweryLoop: for x in 1...maxSave {
-                        guard continueProcessingAfterContextRefresh() else {
-                            break breweryLoop
-                        }
-
-                        let b = runningBreweryQueue.removeFirst()
-                        let newBrewery = Brewery(data: b, context: abreweryContext!)
-
-                        // We must save everyupdate individually or Unique constraints on the class will not be preserved
-                        if b.styleID != nil {
-                            do {
-                                // Adds the brewery to the style for easier searching
-                                let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
-                                styleRequest.sortDescriptors = []
-                                styleRequest.predicate = NSPredicate(format: "id == %@", b.styleID!)
-                                var resultStyle = try self.abreweryContext?.fetch(styleRequest)
-                                resultStyle?.first?.addToBrewerywithstyle(newBrewery)
-                            } catch let error {
-                                print(error.localizedDescription)
-                            }
-
-                        }
-
-                        if b.imageUrl != nil {
-                            // If we have image data download it
-                            BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Brewery,                                                                               aturl: NSURL(string: b.imageUrl!)!,                                                                             forID: b.id!)
-                        }
-                    }
-                }
-                // Save brewery and style data.
-                do {
-                    try abreweryContext?.save()
-                } catch let err {
-                    print(err.localizedDescription)
-                }
+                processBreweryLoop(maxSave)
             }
 
             // Begin to process beers only if breweries are done.
             guard runningBreweryQueue.isEmpty,
                 !runningBeerQueue.isEmpty else {  // If beer queue is empty stop
-                // Wait for timer to fire again and process some more beers
+                // Else Wait for timer to fire again and process some more 
+                // Breweries
                 return
             }
 
@@ -328,6 +292,51 @@ class BreweryAndBeerCreationQueue: NSObject {
             }
         }
     }
+
+
+    
+    private func processBreweryLoop(_ maxSave: Int) {
+        autoreleasepool {
+            breweryLoop: for _ in 1...maxSave {
+                guard continueProcessingAfterContextRefresh() else {
+                    break breweryLoop
+                }
+
+                let b = runningBreweryQueue.removeFirst()
+                let newBrewery = Brewery(data: b, context: abreweryContext!)
+
+                if let styleID = b.styleID {
+                    add(brewery: newBrewery, toStyleID: styleID)
+                }
+
+                if b.imageUrl != nil {
+                    // If we have image data download it
+                    BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Brewery,                                                                               aturl: NSURL(string: b.imageUrl!)!,                                                                             forID: b.id!)
+                }
+            }
+        }
+        // Save brewery and style data.
+        do {
+            try abreweryContext?.save()
+        } catch let error {
+            NSLog("There was and error saving brewery \(error.localizedDescription)")
+        }
+    }
+
+
+    private func add(brewery newBrewery: Brewery, toStyleID: String) {
+        do {
+            // Adds the brewery to the style for easier searching
+            let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
+            styleRequest.sortDescriptors = []
+            styleRequest.predicate = NSPredicate(format: "id == %@", toStyleID)
+            var resultStyle = try self.abreweryContext?.fetch(styleRequest)
+            resultStyle?.first?.addToBrewerywithstyle(newBrewery)
+        } catch let error {
+            NSLog("There was and error saving brewery to style\(error.localizedDescription)")
+        }
+    }
+
 
     private func decideOnMaximumRecordsPerLoop(queueCount: Int) -> Int {
         var maxSave = currentMaxSavesPerLoop
