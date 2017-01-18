@@ -150,6 +150,7 @@ class BreweryDBClient {
         return components.url! as NSURL
     }
 
+
     // Parse results into objects
     private func parse(response : NSDictionary,
                        querySpecificID : String?,
@@ -174,6 +175,7 @@ class BreweryDBClient {
         }
         return true
     }
+
 
     // Query for all breweries
     internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
@@ -539,8 +541,6 @@ class BreweryDBClient {
                 // Send linking job out for processing.
                 self.imageLinker.queueLinkJob(moID: forID, moType: forType, data: outputData)
             }
-
-
         }
         task.resume()
     }
