@@ -213,8 +213,6 @@ class MapViewController : UIViewController {
                                                        view: self,
                                                        location: targetLocation!)
 
-        } else { // No Selection what so ever
-            fatalError()
         }
 
         // Capture last selection, so we can compare when an update is requested
@@ -248,7 +246,7 @@ class MapViewController : UIViewController {
 }
 
 
-// MARK: - MapViewController : MKMapViewDelegate
+// MARK: - MKMapViewDelegate
 
 extension MapViewController : MKMapViewDelegate {
     
@@ -362,10 +360,12 @@ extension MapViewController : MKMapViewDelegate {
             container?.performBackgroundTask(){
                 (context) -> Void in
                 (context.object(with: tempObjectID!) as! Brewery).favorite = favBrewery.favorite
-                do {
-                    try context.save()
-                } catch _ {
-                    self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite brewery, \nplease try again")
+                context.performAndWait {
+                    do {
+                        try context.save()
+                    } catch _ {
+                        self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite brewery, \nplease try again")
+                    }
                 }
             }
             break
@@ -408,7 +408,6 @@ extension MapViewController {
         mapView.removeOverlays(mapView.overlays)
     }
 
-
     // Display the route on map
     func displayRouteOnMap(route: MKRoute){
         mapView.add(route.polyline)
@@ -422,7 +421,7 @@ extension MapViewController {
 }
 
 
-// MARK: - MapViewController: CLLocationManagerDelegate
+// MARK: - CLLocationManagerDelegate
 
 // Places the placemark for User's current location
  extension MapViewController: CLLocationManagerDelegate {
@@ -440,7 +439,7 @@ extension MapViewController {
 }
 
 
-// MARK: - MapViewController : NSFetchedResultsControllerDelegate
+// MARK: - NSFetchedResultsControllerDelegate
 
 extension MapViewController : NSFetchedResultsControllerDelegate {
     // Used for when style is updated with new breweries
@@ -450,8 +449,10 @@ extension MapViewController : NSFetchedResultsControllerDelegate {
     }
 }
 
-// MARK: - MapViewController : DismissableTutorial
+
+// MARK: - DismissableTutorial
 // Tutorial code.
+
 extension MapViewController : DismissableTutorial {
 
     // Tutoral Function to plot a circular path for the pointer
@@ -483,6 +484,9 @@ extension MapViewController : DismissableTutorial {
         tutorialView.isHidden = false
     }
 }
+
+
+// MARK: - BusyObserver
 
 extension MapViewController: BusyObserver {
 
