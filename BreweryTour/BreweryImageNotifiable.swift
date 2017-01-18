@@ -6,13 +6,13 @@
 //  Copyright © 2017 James Jongs. All rights reserved.
 //
 
-import Foundation
-
-protocol BreweryAndBeerImageNotifiable {
-    func tellImagesUpdate()
-}
-
-protocol BreweryAndBeerImageNotifier {
-    func broadcastToBreweryImageObservers()
-    func registerAsBrewryImageObserver(t: BreweryAndBeerImageNotifiable)
-}
+//import Foundation
+//
+//protocol BreweryAndBeerImageNotifiable {
+//    func tellImagesUpdate()
+//}
+//
+//protocol BreweryAndBeerImageNotifier {
+//    func broadcastToBreweryImageObservers()
+//    func registerAsBrewryImageObserver(t: BreweryAndBeerImageNotifiable)
+//}

@@ -76,7 +76,6 @@
 		A7DDC3F91DCC3A770077F34A /* BreweryDBClientConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DDC3F81DCC3A770077F34A /* BreweryDBClientConstants.swift */; };
 		A7E3E00F1E0B9B1E0068ED48 /* KeyboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3E00E1E0B9B1E0068ED48 /* KeyboardExtension.swift */; };
 		A7E932521E0A42F600E07F53 /* AllBreweriesTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E932511E0A42F500E07F53 /* AllBreweriesTableList.swift */; };
-		A7EE9CFA1E1B0DDE000EA411 /* BreweryImageNotifiable.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7EE9CF91E1B0DDE000EA411 /* BreweryImageNotifiable.swift */; };
 		A7FF1A071DB0E67E00AD0BB3 /* heart_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */; };
 		A7FF1A091DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */; };
 /* End PBXBuildFile section */
@@ -174,7 +173,6 @@
 		A7DDC3F81DCC3A770077F34A /* BreweryDBClientConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClientConstants.swift; sourceTree = "<group>"; };
 		A7E3E00E1E0B9B1E0068ED48 /* KeyboardExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardExtension.swift; sourceTree = "<group>"; };
 		A7E932511E0A42F500E07F53 /* AllBreweriesTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllBreweriesTableList.swift; sourceTree = "<group>"; };
-		A7EE9CF91E1B0DDE000EA411 /* BreweryImageNotifiable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryImageNotifiable.swift; sourceTree = "<group>"; };
 		A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon.png; sourceTree = "<group>"; };
 		A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon_black_white_line_art.png; sourceTree = "<group>"; };
 		C23C61975D032ABC404F3BC0 /* Pods-BreweryTour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BreweryTour.release.xcconfig"; path = "Pods/Target Support Files/Pods-BreweryTour/Pods-BreweryTour.release.xcconfig"; sourceTree = "<group>"; };
@@ -373,7 +371,6 @@
 				A74350671DB91454007AE08C /* NSManagedObjectDisplayable.swift */,
 				A74350731DBAA17F007AE08C /* Observer.swift */,
 				A74350751DBAA1AA007AE08C /* Subject.swift */,
-				A7EE9CF91E1B0DDE000EA411 /* BreweryImageNotifiable.swift */,
 				A78FBB5D1E2FF0DC00AE93A8 /* BusyObservers.swift */,
 			);
 			name = Protocols;
@@ -682,7 +679,6 @@
 				A711EC091DC8EBDF008E114A /* ExtensionUIViewController.swift in Sources */,
 				A74350741DBAA17F007AE08C /* Observer.swift in Sources */,
 				A74350681DB91454007AE08C /* NSManagedObjectDisplayable.swift in Sources */,
-				A7EE9CFA1E1B0DDE000EA411 /* BreweryImageNotifiable.swift in Sources */,
 				A7189CFB1DFDD487001409FA /* SettingsViewController.swift in Sources */,
 				A7634E6A1E2704A50066ACEF /* StylesParser.swift in Sources */,
 				A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */,
