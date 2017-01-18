@@ -9,7 +9,7 @@
     Shows all the beers or just the selected beers from styles and/or breweries.
  
     Initialization process
-    First Stored TableLists are created selectedBeersTableList and allBeersTableList
+    First the stored TableLists are created selectedBeersTableList and allBeersTableList
     We set the default viewmodel
     We register with the view models as their observer
 
@@ -77,8 +77,9 @@ class SelectedBeersViewController: UIViewController {
         let segmentedMode: SegmentedControllerMode = SelectedBeersViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
 
         switch segmentedMode {
-            // Everytime we switch we have to refilter, otherwise the content won't update
-            // If needed filter beers
+            // Everytime we switch we have to refilter,
+            // Here is the order of operations
+            // If needed, filter beers
             // Set the backing model
             // Reload our local data. 
 
@@ -224,8 +225,10 @@ extension SelectedBeersViewController: Observer {
     internal func sendNotify(from: AnyObject, withMsg msg: String) {
         // Prompts the tableView to refilter search listings.
         // TableView.reload will be handled by the searchBar function.
-        // All notifications to SelectedBeersViewController will reload the table.
-        // We invoke the search bar command just incase there is search text entered and we need to immediately filter the contents.
+        // This means all notifications to SelectedBeersViewController will 
+        // reload the table.
+        // Why do we invoke the search bar command? Because if there is
+        // search text entered and we need to immediately filter the contents.
         searchBar(searchBar, textDidChange: searchBar.text!)
     }
 }
@@ -252,12 +255,14 @@ extension SelectedBeersViewController: BusyObserver {
 // MARK: - SelectedBeersViewController: UITableViewDataSource
 
 extension SelectedBeersViewController: UITableViewDataSource {
-    
+
+    // Ask the model for the number of UITableViewCells
     internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return activeViewModel.getNumberOfRowsInSection(searchText: searchBar.text)
     }
-    
-    
+
+
+    // Ask the model for a formatted UITableViewCell
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name, brewery and image if available
         // By sending the cell to the model to populate
@@ -276,7 +281,8 @@ extension SelectedBeersViewController: UITableViewDataSource {
 // MARK: - SelectedBeersViewController : UITableViewDelegate
 
 extension SelectedBeersViewController : UITableViewDelegate {
-    
+
+    // Take the beer in the model and present it in the BeerDetailViewController
     internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Open the beer detail view screen.
         let beer = activeViewModel.selected(elementAt: indexPath,
@@ -311,7 +317,6 @@ extension SelectedBeersViewController : UISearchBarDelegate {
             (ok) -> Void in
             self.tableView.reloadData()
         }
-
     }
     
     
@@ -329,17 +334,14 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
 
-        // PREVENT ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow AllBeerTableList to search online
+        // PREVENT ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow 
+        // AllBeerTableList to search online
         // This is because the preselection will not encompass the search results
-        guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBeers.rawValue else {
+        guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBeers.rawValue,
+            // Escape beacuse nothing was entered in search bar
+                !(searchBar.text?.isEmpty)! else{
             return
         }
-
-        guard !(searchBar.text?.isEmpty)! else {
-            // Escape because nothing was entered in search bar
-            return
-        }
-
 
         // Function to attach to alert button
         func searchOnline(_ action: UIAlertAction) {
