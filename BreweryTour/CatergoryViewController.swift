@@ -452,7 +452,7 @@ extension CategoryViewController: UISearchBarDelegate {
         searchBar.resignFirstResponder()
 
         /*
-         This method allows the user to put out a query to BreweryDB for
+         This method allows the user to submit a query to BreweryDB for
          breweries with the searchtext in their name
 
          Only allow the AllBreweries mode to searchonline for breweries
