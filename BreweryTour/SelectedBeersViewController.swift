@@ -238,6 +238,12 @@ extension SelectedBeersViewController: Observer {
 
 extension SelectedBeersViewController: BusyObserver {
 
+    func startAnimating() {
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+    }
+
     func stopAnimating() {
         DispatchQueue.main.async {
             self.activityIndicator.stopAnimating()

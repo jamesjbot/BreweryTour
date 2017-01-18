@@ -299,7 +299,7 @@ class CategoryViewController: UIViewController,
         segmentedControlClicked(segmentedControl, forEvent: UIEvent())//Dummy event
 
         if Mediator.sharedInstance().isSystemBusy() {
-            activityIndicator.startAnimating()
+            activityIndicator.startAnimating() // Start animating faster.
         }
     }
 
@@ -319,6 +319,12 @@ class CategoryViewController: UIViewController,
 // MARK: - BusyObserver
 
 extension CategoryViewController: BusyObserver {
+
+    func startAnimating() {
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+    }
 
     func stopAnimating() {
         DispatchQueue.main.async {
@@ -385,12 +391,18 @@ extension CategoryViewController : UITableViewDelegate {
         // knows what they selected.
         selection.text = tableView.cellForRow(at: indexPath)?.textLabel?.text
 
-        activityIndicator.startAnimating()
+        activityIndicator.startAnimating() // A faster signal to start animating rather than wait for the actual brewery process.
 
         // Create a completion handler for ViewModel to take.
         let activeTableListSelectedCompletionHandler = {
             (success: Bool ,msg: String?) -> Void in
             if success {
+                // Stop the initial start animation a few lines up
+                // If and when the brewery process starts.
+                // It will invoke it's own start animation sequence
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
                 if Mediator.sharedInstance().isAutomaticallySegueing() {
                     DispatchQueue.main.async {
                         self.performSegue(withIdentifier: "Go", sender: nil)

@@ -151,6 +151,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                                              userInfo: nil,
                                              repeats: true)
         }
+        mediatorObserver?.notifyStartingWork()
     }
 
     
@@ -308,7 +309,6 @@ class BreweryAndBeerCreationQueue: NSObject {
                                 DispatchQueue.global(qos: .utility).async {
                                     BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: .Beer,                                                                               aturl: NSURL(string: beer.imageUrl!)!,                                                                             forID: beer.id!)
                                 }
-
                             }
 
                         } catch let error {
@@ -317,7 +317,6 @@ class BreweryAndBeerCreationQueue: NSObject {
                         }
                     }
                 }
-                
                 // Help slow saving an memory leak.
                 do {
                     try self.abreweryContext?.save()
@@ -397,7 +396,6 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
             let attempt = 0
             runningBeerQueue.append( (beer,attempt) )
             startWorkTimer()
-
         }
     }
 }

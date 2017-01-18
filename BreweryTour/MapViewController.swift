@@ -486,6 +486,12 @@ extension MapViewController : DismissableTutorial {
 
 extension MapViewController: BusyObserver {
 
+    func startAnimating() {
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+    }
+
     func stopAnimating() {
         DispatchQueue.main.async {
             self.activityIndicator.stopAnimating()

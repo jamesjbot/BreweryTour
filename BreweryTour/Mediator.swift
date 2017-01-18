@@ -16,6 +16,7 @@ import CoreData
  */
 
 protocol BusyObserver {
+    func startAnimating()
     func stopAnimating()
     func registerAsBusyObserverWithMediator()
 }
@@ -24,6 +25,7 @@ protocol MediatorBusyObserver {
     func registerForBusyIndicator(observer: BusyObserver)
     //func notifyStartingWork()
     func notifyStoppingWork()
+    func notifyStartingWork()
     func isSystemBusy() -> Bool
 }
 
@@ -41,6 +43,11 @@ extension Mediator: MediatorBusyObserver {
         }
     }
 
+    func notifyStartingWork() {
+        for i in busyObservers {
+            i.startAnimating()
+        }
+    }
 
     func isSystemBusy() -> Bool {
         return BreweryAndBeerCreationQueue.sharedInstance().isBreweryAndBeerCreationRunning()
