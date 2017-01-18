@@ -276,7 +276,7 @@ class CategoryViewController: UIViewController,
         // Make Breweries with style segmented control title fit
         (segmentedControl.subviews[1].subviews.first as! UILabel).adjustsFontSizeToFitWidth = true
 
-        // set tutorial to the last screen, and advance into the first one
+        // Set tutorial to the last screen, and advance into the first one
         // This is here because I want it to always shows the initial screen 
         // on a clean start. If user goes to another view and comes back they can 
         // resume their tutorial state
@@ -325,6 +325,7 @@ extension CategoryViewController: BusyObserver {
             self.activityIndicator.startAnimating()
         }
     }
+
 
     func stopAnimating() {
         DispatchQueue.main.async {
