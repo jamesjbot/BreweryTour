@@ -72,10 +72,6 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
             context?.automaticallyMergesChangesFromParent = true
             context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
             for (key, (type, data ) ) in self.imagesToBeAssignedQueue {
-                guard data != nil else { // There is no image remove image request
-                    self.imagesToBeAssignedQueue.removeValue(forKey: key)
-                    continue
-                }
                 let request: NSFetchRequest<NSFetchRequestResult>?
                 switch type {
                 case .Beer:
@@ -132,15 +128,12 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                 }
                 guard saves < self.maxSaves else {
                     // Block of images updated
-                    Mediator.sharedInstance().broadcastToBreweryImageObservers()
                     break
                 }
             }
             if self.imagesToBeAssignedQueue.count == 0 {
                 // If we finished processing all pending things; stop timer.
                 self.disableTimer()
-                // We finished tell people who are interesting in images to reload
-                Mediator.sharedInstance().broadcastToBreweryImageObservers()
             }
         }
     }
