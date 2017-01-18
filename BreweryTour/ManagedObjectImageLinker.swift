@@ -87,45 +87,53 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                 var result: [AnyObject]?
                 do {
                     result = try context?.fetch(request!)
-
-                    guard result?.count == 1 else  {
-                        // else try next image
-                        // As it currently stand we are guaranteed to have clear
-                        // All beers and breweries so if this image is orphaned 
-                        // It will be downloaded when the beer or brewery is
-                        // downloaded next time.
-                        if result?.count == 0                         {
-                                self.imagesToBeAssignedQueue.removeValue(forKey: key)
-                        }
-                        continue
-                    }
-
-
-                    // Currently may ask to replace same image due to unique problem in coredata.
-                    switch type {
-                    case .Beer:
-                        guard (result?.first as! Beer).image == nil else {
-                            self.imagesToBeAssignedQueue.removeValue(forKey: key)
-                            continue
-                        }
-                        (result?.first as! Beer).image = data as NSData?
-                        break
-                    case .Brewery:
-                        guard (result?.first as! Brewery).image == nil else {
-                            self.imagesToBeAssignedQueue.removeValue(forKey: key)
-                            continue
-                        }
-                        (result?.first as! Brewery).image = data as NSData?
-                        break
-                    }
-                    try context?.save()
-
-                    saves += 1
-
-                    self.imagesToBeAssignedQueue.removeValue(forKey: key)
                 } catch {
                     fatalError("Critical coredata read problems")
                 }
+
+                guard result?.count == 1 else  {
+                    // else try next image
+                    // As it currently stands we are guaranteed to have clear
+                    // All beers and breweries so if this image is orphaned
+                    // It will be downloaded when the beer or brewery is
+                    // downloaded next time.
+                    if result?.count == 0                         {
+                        self.imagesToBeAssignedQueue.removeValue(forKey: key)
+                    }
+                    continue
+                }
+
+                // Currently may ask to replace same image due to unique problem in coredata.
+                print("ImageLinker Linking images")
+                switch type {
+                case .Beer:
+                    guard (result?.first as! Beer).image == nil else {
+                        self.imagesToBeAssignedQueue.removeValue(forKey: key)
+                        continue
+                    }
+                    (result?.first as! Beer).image = data as NSData?
+                    break
+                case .Brewery:
+                    guard (result?.first as! Brewery).image == nil else {
+                        self.imagesToBeAssignedQueue.removeValue(forKey: key)
+                        continue
+                    }
+                    (result?.first as! Brewery).image = data as NSData?
+                    break
+                }
+
+                context?.performAndWait { 
+                    do {
+                        try context!.save()
+                    } catch {
+
+                    }
+                }
+
+                saves += 1
+
+                self.imagesToBeAssignedQueue.removeValue(forKey: key)
+
                 guard saves < self.maxSaves else {
                     // Block of images updated
                     break
