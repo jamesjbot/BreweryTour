@@ -362,8 +362,8 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
         var brewer: [Brewery]?
         do {
             brewer = try context?.fetch(request)
-        } catch {
-
+        } catch let error{
+            NSLog("Error finding a brewery because \(error.localizedDescription)")
         }
         guard brewer?.first == nil else {
             // Skip brewery creation when we already have the brewery
@@ -386,8 +386,8 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
         var beers: [Beer]?
         do {
             beers = try context?.fetch(request)
-        } catch {
-
+        } catch let error{
+            NSLog("Error finding a Beer because \(error.localizedDescription)")
         }
         guard beers?.first == nil else {
             // Skip beer creation when we already have the beer
