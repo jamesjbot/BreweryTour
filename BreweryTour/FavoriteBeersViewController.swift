@@ -55,7 +55,6 @@ class FavoriteBeersViewController: UIViewController {
         //Accept changes from backgroundContexts
         readOnlyContext?.automaticallyMergesChangesFromParent = true
 
-        assert(frc != nil)
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         frc.delegate = self
