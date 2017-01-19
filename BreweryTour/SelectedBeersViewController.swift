@@ -317,10 +317,12 @@ extension SelectedBeersViewController : UITableViewDelegate {
 extension SelectedBeersViewController : UISearchBarDelegate {
 
     // Any text entered in the searchbar triggers this
-    internal func searchBar(_: UISearchBar, textDidChange: String){
+    internal func searchBar(_ searchBar: UISearchBar, textDidChange: String){
         // User entered searchtext, now filter data
         if textDidChange.characters.count == 0 {
-            perform(#selector(hideKeyboardWithSearchBar), with: searchBar, afterDelay: 0)
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
         }
         activeViewModel.filterContentForSearchText(searchText: textDidChange) {
             (ok) -> Void in
@@ -329,11 +331,6 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     }
 
 
-    func hideKeyboardWithSearchBar(bar: UISearchBar) {
-        bar.resignFirstResponder()
-    }
-
-    
     internal func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         // Remove searchbar text so we stop searching
         // Put searchbar back into unselected state

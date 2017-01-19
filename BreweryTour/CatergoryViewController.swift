@@ -430,7 +430,9 @@ extension CategoryViewController: UISearchBarDelegate {
     func searchBar(_ searchBar: UISearchBar, textDidChange: String){
         // This will filter empty text too.
         if textDidChange.characters.count == 0 {
-            perform(#selector(hideKeyboardWithSearchBar), with: searchBar, afterDelay: 0)
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder()
+            }
         }
         activeTableList.filterContentForSearchText(searchText: textDidChange) {
             (ok) -> Void in
@@ -438,9 +440,6 @@ extension CategoryViewController: UISearchBarDelegate {
         }
     }
 
-    func hideKeyboardWithSearchBar(bar: UISearchBar) {
-        bar.resignFirstResponder()
-    }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         /*
