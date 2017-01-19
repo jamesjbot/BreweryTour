@@ -192,8 +192,6 @@ class BreweryAndBeerCreationQueue: NSObject {
             // Save breweries one at time. Batch saving generates conflict errors.
             let dq = DispatchQueue(label: "SerialQueue")
             dq.sync {
-                print("Processing breweries creation: we have \(self.runningBreweryQueue.count) breweries")
-                print("Processing beers creation: we have \(self.runningBeerQueue.count) beers")
                 guard !self.runningBreweryQueue.isEmpty || !self.runningBeerQueue.isEmpty else {
                     // Both queues are empty stop timer
                     self.self.reinitializeLoadParameter()

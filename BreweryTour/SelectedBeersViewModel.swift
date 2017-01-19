@@ -61,7 +61,7 @@ class SelectedBeersViewModel: BeersViewModel, Subject {
                 observer?.sendNotify(from: self, withMsg: Message.Reload)
             }
         } catch {
-            observer?.sendNotify(from: self, withMsg: Message.FetchError)
+            observer?.sendNotify(from: self, withMsg: Message.Retry)
         }
     }
 }

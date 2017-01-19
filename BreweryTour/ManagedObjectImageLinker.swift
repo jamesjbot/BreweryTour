@@ -108,7 +108,6 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                 }
 
                 // Currently may ask to replace same image due to unique problem in coredata.
-                print("ImageLinker Linking images")
                 switch type {
                 case .Beer:
                     guard (result?.first as! Beer).image == nil else {

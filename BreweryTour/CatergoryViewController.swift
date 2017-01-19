@@ -447,7 +447,6 @@ extension CategoryViewController: UISearchBarDelegate {
          Put searchbar back into unselected state
          Repopulate the table
          */
-        print("Search bar cancel button pressed")
         newSearchBar.text = ""
         newSearchBar.resignFirstResponder()
         genericTable.reloadData()
@@ -522,7 +521,6 @@ extension CategoryViewController: Observer {
         }
 
         // This will update the contents of the table if needed
-        // TODO We're going to need to upgrade this function to accomodate all message.
         switch msg {
 
         case Message.Reload:
@@ -533,11 +531,8 @@ extension CategoryViewController: Observer {
             }
             break
             
-        case Message.FetchError:
-            displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
-            break
-            
         case Message.Retry:
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
             break
             
         default:

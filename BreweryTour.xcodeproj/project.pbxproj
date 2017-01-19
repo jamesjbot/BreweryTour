@@ -197,8 +197,8 @@
 		A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClient.swift; sourceTree = "<group>"; };
 		A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A7D227231DB4D90D00360A3B /* BreweryTabbarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BreweryTabbarIcon.png; sourceTree = "<group>"; };
-		A7D227281DB55F3700360A3B /* small_heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = small_heart_icon_black_white_line_art.png; sourceTree = SOURCE_ROOT; };
-		A7D227291DB55F3700360A3B /* small_heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = small_heart_icon.png; sourceTree = SOURCE_ROOT; };
+		A7D227281DB55F3700360A3B /* small_heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = small_heart_icon_black_white_line_art.png; path = BreweryTour/small_heart_icon_black_white_line_art.png; sourceTree = SOURCE_ROOT; };
+		A7D227291DB55F3700360A3B /* small_heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = small_heart_icon.png; path = BreweryTour/small_heart_icon.png; sourceTree = SOURCE_ROOT; };
 		A7D2272C1DB5620300360A3B /* FavoriteBreweriesViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteBreweriesViewController.swift; sourceTree = "<group>"; };
 		A7D3B8961E19930E0017E5AE /* ManagedObjectContextRefreshProtocols.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ManagedObjectContextRefreshProtocols.swift; sourceTree = "<group>"; };
 		A7DDC3F61DCC24080077F34A /* BeersTabbaricon2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeersTabbaricon2.png; sourceTree = "<group>"; };
