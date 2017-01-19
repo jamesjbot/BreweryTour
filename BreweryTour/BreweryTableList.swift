@@ -51,11 +51,8 @@ class BreweryTableList: NSObject, Subject {
 
     // MARK: - Functions
 
-    //
-    /*
-     On start up we don't have a style selected so this ViewController will be
-     blank
-     */
+    //On start up we don't have a style selected so this ViewController 
+    //will be blank
     override init(){
         super.init()
         //Accept changes from backgroundContexts
@@ -95,7 +92,7 @@ class BreweryTableList: NSObject, Subject {
             try styleFRCObserver.performFetch()
             copyOfSet = (styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]?)!
         } catch {
-            fatalError("Critical error reading from coredata")
+            NSLog("Critical error reading from coredata")
         }
     }
 
@@ -115,6 +112,7 @@ extension BreweryTableList: TableList {
         configureCell(cell: cell, indexPath: indexPath, searchText: searchText)
         return cell
     }
+
 
     private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
         DispatchQueue.main.async {
@@ -184,7 +182,7 @@ extension BreweryTableList: TableList {
 }
 
 
-// MARK: - BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh
+// MARK: - ReceiveBroadcastManagedObjectContextRefresh
 
 extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
     internal func contextsRefreshAllObjects() {
@@ -200,7 +198,7 @@ extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
 }
 
 
-// MARK: - BreweryTableList : NSFetchedResultsControllerDelegate
+// MARK: - NSFetchedResultsControllerDelegate
 
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
 
