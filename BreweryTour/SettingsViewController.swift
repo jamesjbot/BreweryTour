@@ -117,7 +117,7 @@ class SettingsViewController: UIViewController {
     // MARK: - Functions
     override func viewDidLoad() {
         super.viewDidLoad()
-        Mediator.sharedInstance().setAutomaticallySegue(to: automaticMapSwitch.isOn)
+        automaticMapSwitch.isOn = Mediator.sharedInstance().isAutomaticallySegueing()
     }
 
     
