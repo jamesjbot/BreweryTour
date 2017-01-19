@@ -6,12 +6,12 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /*
- This program shows the favorited breweries.
- You can swipe left to remove the brewery from favorites.
- You can click on a brewery to show directions to the brewery.
- After selecting a brewery you can go back to selected beers and see this 
- brewery's beers.
- This is driven by an NSFetchedResultsController observing favoriteStatus's
+    This program shows the favorited breweries.
+    You can swipe left to remove the brewery from favorites.
+    You can click on a brewery to show directions to the brewery.
+    After selecting a brewery you can go back to selected beers and see this
+    brewery's beers.
+    This is driven by an NSFetchedResultsController observing favoriteStatus's
  */
 
 import UIKit
@@ -139,8 +139,9 @@ class FavoriteBreweriesViewController: UIViewController {
 }
 
 
-extension FavoriteBreweriesViewController: ReceiveBroadcastManagedObjectContextRefresh {
+// MARK: - ReceiveBroadcastManagedObjectContextRefresh
 
+extension FavoriteBreweriesViewController: ReceiveBroadcastManagedObjectContextRefresh {
 
     internal func contextsRefreshAllObjects() {
         frcForBrewery.managedObjectContext.refreshAllObjects()
@@ -154,6 +155,8 @@ extension FavoriteBreweriesViewController: ReceiveBroadcastManagedObjectContextR
     }
 }
 
+
+// MARK: - NSFetchedResultsControllerDelegate
 
 extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
     
@@ -186,6 +189,8 @@ extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
 }
 
 
+// MARK: - UITableViewDataSource
+
 extension FavoriteBreweriesViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -202,6 +207,9 @@ extension FavoriteBreweriesViewController: UITableViewDataSource {
     }
     
 }
+
+
+// MARK: - UITableViewDelegate
 
 extension FavoriteBreweriesViewController : UITableViewDelegate {
     
