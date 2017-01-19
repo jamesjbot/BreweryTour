@@ -24,9 +24,9 @@ class FavoriteBeersViewController: UIViewController {
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
+
     // MARK: Variables
 
-    // Currently this frc works on persistent
     fileprivate var frc : NSFetchedResultsController<Beer>
 
 
@@ -133,6 +133,8 @@ class FavoriteBeersViewController: UIViewController {
 }
 
 
+// MARK: - NSFetchedResultsControllerDelegate
+
 extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
     
     func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -164,6 +166,8 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
 }
 
 
+// MARK: - UITableViewDataSource
+
 extension FavoriteBeersViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -180,6 +184,8 @@ extension FavoriteBeersViewController: UITableViewDataSource {
     
 }
 
+
+// MARK: - UITableViewDelegate
 
 extension FavoriteBeersViewController : UITableViewDelegate {
     
@@ -226,7 +232,7 @@ extension FavoriteBeersViewController : UITableViewDelegate {
 }
 
 
-// MARK: - FavoriteBeersViewController: UpdateManagedObjectContext
+// MARK: - UpdateManagedObjectContext
 
 extension FavoriteBeersViewController: ReceiveBroadcastManagedObjectContextRefresh {
     func contextsRefreshAllObjects() {
@@ -236,13 +242,13 @@ extension FavoriteBeersViewController: ReceiveBroadcastManagedObjectContextRefre
         do {
             try frc.performFetch()
         } catch {
-
+            NSLog("Error fetching")
         }
     }
 }
 
 
-// MARK: - FavoriteBeersViewController : DismissableTutorial
+// MARK: - DismissableTutorial
 
 extension FavoriteBeersViewController : DismissableTutorial {
     func enableTutorial() {

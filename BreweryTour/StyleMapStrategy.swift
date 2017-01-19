@@ -93,7 +93,7 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
                 breweryLocations = locations
             }
         } catch {
-            fatalError("Critical error unable to read database.")
+            NSLog("Critical error unable to read database.")
         }
     }
 
@@ -129,7 +129,7 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
             try styleFRC.performFetch()
             breweryLocations = styleFRC.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]
         } catch {
-            fatalError("Error reading coredata")
+            NSLog("Error reading coredata")
         }
         // Initialize debounce function and associate it with sortanddisplay
         bounceDelay = initialDelay
@@ -150,7 +150,7 @@ extension StyleMapStrategy: ReceiveBroadcastManagedObjectContextRefresh {
         do {
             try styleFRC.performFetch()
         } catch {
-            fatalError("Error reading coredata")
+            NSLog("Error reading coredata")
         }
     }
 }
