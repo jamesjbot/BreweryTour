@@ -53,7 +53,7 @@ class AllBreweriesTableList: NSObject, Subject {
         do {
             try frc.performFetch()
         } catch {
-            observer.sendNotify(from: self, withMsg: Message.FetchError)
+            observer.sendNotify(from: self, withMsg: Message.Retry)
         }
         
         guard frc.fetchedObjects?.count == 0 else {

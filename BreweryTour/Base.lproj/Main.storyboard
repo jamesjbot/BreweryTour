@@ -26,16 +26,16 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi" userLabel="CompleteHorizontal">
-                                <rect key="frame" x="2" y="66" width="368" height="601"/>
+                                <rect key="frame" x="0.0" y="66" width="375" height="601"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Current Selection:" textAlignment="center" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0f8-gZ-M3j">
-                                        <rect key="frame" x="0.0" y="0.0" width="368" height="21"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="21"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mmN-dq-rb5">
-                                        <rect key="frame" x="0.0" y="22" width="368" height="29"/>
+                                        <rect key="frame" x="0.0" y="22" width="375" height="29"/>
                                         <color key="backgroundColor" red="0.81583412249999998" green="0.29526499470000001" blue="0.065191185060000004" alpha="1" colorSpace="calibratedRGB"/>
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                         <segments>
@@ -49,8 +49,8 @@
                                         </connections>
                                     </segmentedControl>
                                     <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Select Style Below / Search here" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
-                                        <rect key="frame" x="0.0" y="51" width="368" height="44"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <rect key="frame" x="0.0" y="51" width="375" height="44"/>
+                                        <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <textInputTraits key="textInputTraits" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
@@ -59,26 +59,26 @@
                                         </connections>
                                     </searchBar>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx" userLabel="Generic Table">
-                                        <rect key="frame" x="0.0" y="96" width="368" height="505"/>
+                                        <rect key="frame" x="0.0" y="96" width="375" height="505"/>
                                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="sectionIndexBackgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="genericTypeCell" textLabel="WUq-hH-lhL" detailTextLabel="n7M-rj-VPI" style="IBUITableViewCellStyleSubtitle" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="368" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="368" height="43.5"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WUq-hH-lhL">
-                                                            <rect key="frame" x="15" y="5" width="33.5" height="20.5"/>
+                                                            <rect key="frame" x="15" y="4" width="34" height="21"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="n7M-rj-VPI">
-                                                            <rect key="frame" x="15" y="25.5" width="44" height="14.5"/>
+                                                            <rect key="frame" x="15" y="25" width="44" height="15"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <nil key="textColor"/>
@@ -197,16 +197,22 @@
                         <constraints>
                             <constraint firstItem="FTn-Tc-4mi" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" constant="2" id="1Ju-Oo-ZhH"/>
                             <constraint firstItem="447-tn-FIf" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" id="6lT-LP-g9L"/>
-                            <constraint firstAttribute="trailing" secondItem="FTn-Tc-4mi" secondAttribute="trailing" constant="5" id="A3i-ph-YMo"/>
+                            <constraint firstAttribute="trailing" secondItem="FTn-Tc-4mi" secondAttribute="trailing" id="A3i-ph-YMo"/>
                             <constraint firstItem="wrT-1x-h0f" firstAttribute="top" secondItem="447-tn-FIf" secondAttribute="bottom" id="GMi-Me-47B"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="FTn-Tc-4mi" secondAttribute="trailing" constant="-11" id="HPc-wu-gNk"/>
                             <constraint firstItem="chy-Gf-XC8" firstAttribute="width" secondItem="ans-at-Olx" secondAttribute="width" multiplier="0.8" id="OA3-o7-1GF"/>
                             <constraint firstItem="bpZ-cN-Rf5" firstAttribute="centerX" secondItem="ans-at-Olx" secondAttribute="centerX" id="OKb-ey-Ejd"/>
                             <constraint firstAttribute="trailing" secondItem="447-tn-FIf" secondAttribute="trailing" id="bjq-ZM-qOs"/>
-                            <constraint firstItem="FTn-Tc-4mi" firstAttribute="leading" secondItem="ans-at-Olx" secondAttribute="leadingMargin" constant="-14" id="gEc-6i-2Wy"/>
+                            <constraint firstItem="FTn-Tc-4mi" firstAttribute="leading" secondItem="ans-at-Olx" secondAttribute="leading" id="gEc-6i-2Wy"/>
                             <constraint firstItem="wrT-1x-h0f" firstAttribute="top" secondItem="FTn-Tc-4mi" secondAttribute="bottom" id="r6E-e3-8Fi"/>
                             <constraint firstItem="bpZ-cN-Rf5" firstAttribute="centerY" secondItem="ans-at-Olx" secondAttribute="centerY" id="xgj-v9-aDD"/>
                             <constraint firstItem="447-tn-FIf" firstAttribute="leading" secondItem="ans-at-Olx" secondAttribute="leading" id="zhT-oy-7YS"/>
                         </constraints>
+                        <variation key="default">
+                            <mask key="constraints">
+                                <exclude reference="HPc-wu-gNk"/>
+                            </mask>
+                        </variation>
                     </view>
                     <navigationItem key="navigationItem" id="OFD-1P-5O8">
                         <barButtonItem key="leftBarButtonItem" image="Settings" id="WU6-mQ-wHx">
@@ -437,9 +443,9 @@ Click on information to bring up brewery website.</string>
                                             </mask>
                                         </variation>
                                     </stackView>
-                                    <searchBar contentMode="redraw" barStyle="black" searchBarStyle="minimal" placeholder="Select/search for a new beer." translatesAutoresizingMaskIntoConstraints="NO" id="vz7-RO-sWr">
+                                    <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Select/search for a new beer." translatesAutoresizingMaskIntoConstraints="NO" id="vz7-RO-sWr">
                                         <rect key="frame" x="0.0" y="8" width="375" height="0.0"/>
-                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
