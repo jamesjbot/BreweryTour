@@ -88,7 +88,6 @@ class FavoriteBeersViewController: UIViewController {
         } else {
             tutorialView.isHidden = true
         }
-    
     }
     
     
