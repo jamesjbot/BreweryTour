@@ -418,11 +418,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BreweryTour/SelectedBeersViewController.swift"
-            timestampString = "506492881.778226"
+            timestampString = "506493091.636399"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "325"
-            endingLineNumber = "325"
+            startingLineNumber = "327"
+            endingLineNumber = "327"
             landmarkName = "searchBar(_:textDidChange:)"
             landmarkType = "7">
             <Locations>
@@ -434,26 +434,26 @@
                   moduleName = "BreweryTour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/SelectedBeersViewController.swift"
-                  timestampString = "506492768.785993"
+                  timestampString = "506497344.020699"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "322"
-                  endingLineNumber = "322"
-                  offsetFromSymbolStart = "86">
+                  startingLineNumber = "327"
+                  endingLineNumber = "327"
+                  offsetFromSymbolStart = "511">
                </Location>
                <Location
                   shouldBeEnabled = "Yes"
                   ignoreCount = "0"
                   continueAfterRunningActions = "No"
-                  symbolName = "BreweryTour.SelectedBeersViewController.(searchBar (__ObjC.UISearchBar, textDidChange : Swift.String) -&gt; ()).(closure #1)"
+                  symbolName = "BreweryTour.SelectedBeersViewController.(searchBar (__ObjC.UISearchBar, textDidChange : Swift.String) -&gt; ()).(closure #2)"
                   moduleName = "BreweryTour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/SelectedBeersViewController.swift"
-                  timestampString = "506492768.78781"
+                  timestampString = "506497344.022709"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "324"
-                  endingLineNumber = "324"
+                  startingLineNumber = "329"
+                  endingLineNumber = "329"
                   offsetFromSymbolStart = "30">
                </Location>
             </Locations>
@@ -498,7 +498,7 @@
                   moduleName = "BreweryTour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/BeersViewModel.swift"
-                  timestampString = "506492768.794412"
+                  timestampString = "506497344.029813"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "194"
@@ -513,7 +513,7 @@
                   moduleName = "BreweryTour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/BeersViewModel.swift"
-                  timestampString = "506492768.796253"
+                  timestampString = "506497344.032306"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "195"
@@ -646,60 +646,12 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BreweryTour/AllBreweriesTableList.swift"
-            timestampString = "506485255.369497"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "128"
-            endingLineNumber = "128"
-            landmarkName = "filterContentForSearchText(searchText:completion:)"
-            landmarkType = "7">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BreweryTour.AllBreweriesTableList.(filterContentForSearchText (searchText : Swift.String, completion : Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()).(default argument 1)"
-                  moduleName = "BreweryTour"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/AllBreweriesTableList.swift"
-                  timestampString = "506492768.818293"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "128"
-                  endingLineNumber = "128"
-                  offsetFromSymbolStart = "3">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BreweryTour.AllBreweriesTableList.filterContentForSearchText (searchText : Swift.String, completion : Swift.Optional&lt;(Swift.Bool) -&gt; ()&gt;) -&gt; ()"
-                  moduleName = "BreweryTour"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/AllBreweriesTableList.swift"
-                  timestampString = "506492768.81997"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "131"
-                  endingLineNumber = "131"
-                  offsetFromSymbolStart = "64">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "BreweryTour/CatergoryViewController.swift"
-            timestampString = "506492627.420929"
+            timestampString = "506493091.636399"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "497"
-            endingLineNumber = "497"
+            startingLineNumber = "496"
+            endingLineNumber = "496"
             landmarkName = "searchOnline(_:)"
             landmarkType = "9">
          </BreakpointContent>
@@ -758,70 +710,6 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BreweryTour/BreweryAndBeerCreationQueue.swift"
-            timestampString = "506404216.034231"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "166"
-            endingLineNumber = "166"
-            landmarkName = "switchToInitialRunningDataLoad()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BreweryTour/BreweryAndBeerCreationQueue.swift"
-            timestampString = "506328137.215955"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "141"
-            endingLineNumber = "141"
-            landmarkName = "reinitializeLoadParameter()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BreweryTour/BreweryAndBeerCreationQueue.swift"
-            timestampString = "506404216.034231"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "161"
-            endingLineNumber = "161"
-            landmarkName = "stopWork()"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BreweryTour/CatergoryViewController.swift"
-            timestampString = "506465399.107334"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "337"
-            endingLineNumber = "337"
-            landmarkName = "CategoryViewController"
-            landmarkType = "4">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "BreweryTour/MapViewController.swift"
             timestampString = "506473284.421972"
             startingColumnNumber = "9223372036854775807"
@@ -839,7 +727,7 @@
                   moduleName = "BreweryTour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/MapViewController.swift"
-                  timestampString = "506492768.848911"
+                  timestampString = "506497344.069115"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "223"
@@ -854,90 +742,12 @@
                   moduleName = "BreweryTour"
                   usesParentBreakpointCondition = "Yes"
                   urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/MapViewController.swift"
-                  timestampString = "506492768.850602"
+                  timestampString = "506497344.070989"
                   startingColumnNumber = "9223372036854775807"
                   endingColumnNumber = "9223372036854775807"
                   startingLineNumber = "224"
                   endingLineNumber = "224"
                   offsetFromSymbolStart = "21">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "BreweryTour/MapViewController.swift"
-            timestampString = "506311060.477738"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "66"
-            endingLineNumber = "66"
-            landmarkName = "MapViewController"
-            landmarkType = "3">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BreweryTour.MapViewController.activityIndicator.getter : weak Swift.ImplicitlyUnwrappedOptional&lt;__ObjC.UIActivityIndicatorView&gt;"
-                  moduleName = "BreweryTour"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/MapViewController.swift"
-                  timestampString = "506492768.854112"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "34">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BreweryTour.MapViewController.activityIndicator.setter : weak Swift.ImplicitlyUnwrappedOptional&lt;__ObjC.UIActivityIndicatorView&gt;"
-                  moduleName = "BreweryTour"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/MapViewController.swift"
-                  timestampString = "506492768.855872"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "47">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BreweryTour.MapViewController.init (nibName : Swift.Optional&lt;Swift.String&gt;, bundle : Swift.Optional&lt;__ObjC.Bundle&gt;) -&gt; BreweryTour.MapViewController"
-                  moduleName = "BreweryTour"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/MapViewController.swift"
-                  timestampString = "506492768.857663"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "1689">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "BreweryTour.MapViewController.init (coder : __ObjC.NSCoder) -&gt; Swift.Optional&lt;BreweryTour.MapViewController&gt;"
-                  moduleName = "BreweryTour"
-                  usesParentBreakpointCondition = "Yes"
-                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/MapViewController.swift"
-                  timestampString = "506492768.859516"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "66"
-                  endingLineNumber = "66"
-                  offsetFromSymbolStart = "1565">
                </Location>
             </Locations>
          </BreakpointContent>
@@ -964,13 +774,76 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "BreweryTour/CatergoryViewController.swift"
-            timestampString = "506492643.287428"
+            filePath = "BreweryTour/Mediator.swift"
+            timestampString = "506496893.701156"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "432"
-            endingLineNumber = "432"
-            landmarkName = "searchBar(_:textDidChange:)"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "Mediator"
+            landmarkType = "3">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BreweryTour.Mediator.init () -&gt; BreweryTour.Mediator"
+                  moduleName = "BreweryTour"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/Mediator.swift"
+                  timestampString = "506497344.078637"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "29"
+                  endingLineNumber = "29"
+                  offsetFromSymbolStart = "137">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BreweryTour.Mediator.(automaticallySegueValue in _276375F5554098A8C04602035ADB7E0C).getter : Swift.Bool"
+                  moduleName = "BreweryTour"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/Mediator.swift"
+                  timestampString = "506497344.080845"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "29"
+                  endingLineNumber = "29"
+                  offsetFromSymbolStart = "13">
+               </Location>
+               <Location
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "BreweryTour.Mediator.(automaticallySegueValue in _276375F5554098A8C04602035ADB7E0C).setter : Swift.Bool"
+                  moduleName = "BreweryTour"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/jamesjongs/Desktop/Projects/BreweryTour/BreweryTour/Mediator.swift"
+                  timestampString = "506497344.083307"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "29"
+                  endingLineNumber = "29"
+                  offsetFromSymbolStart = "29">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "BreweryTour/SettingsViewController.swift"
+            timestampString = "506496988.929773"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "61"
+            endingLineNumber = "61"
+            landmarkName = "toggleAutomaticMap(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

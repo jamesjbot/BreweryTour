@@ -8,7 +8,8 @@
 /*
  This program is the view model for the selected beers tab.
  We create the NSFetchRequest based on what needs to be displayed on screen.
- Currently it will be either all beers or a selection of beers based on brewery or style of beer.
+ Currently it will be either all beers or a selection of beers based on brewery
+ or style of beer.
  The mediator will inject the search item
  The default screen before injection will show all beers.
  */

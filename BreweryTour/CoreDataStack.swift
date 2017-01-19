@@ -65,11 +65,7 @@ extension CoreDataStack {
     
     
     public func saveToFile() {
-        // We call this synchronously, but it's a very fast
-        // operation (it doesn't hit the disk). We need to know
-        // when it ends so we can call the next save (on the persisting
-        // context). The last save might take some time and is done
-        // in a background queue
+        // Saves all the way to disk.
         container.performBackgroundTask({
             (objectContext) -> Void in
             objectContext.automaticallyMergesChangesFromParent = true

@@ -348,7 +348,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 
 
 
-//  MARK: - BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol
+//  MARK: - BreweryAndBeerCreationProtocol
 
 extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
 

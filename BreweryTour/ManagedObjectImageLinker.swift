@@ -16,9 +16,11 @@ internal enum ImageDownloadType {
     case Brewery
 }
 
+
 protocol ImageLinkingProcotol {
     func queueLinkJob(moID: String, moType: ImageDownloadType, data: NSData)
 }
+
 
 class ManagedObjectImageLinker: ImageLinkingProcotol {
 
@@ -53,6 +55,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
         imagesToBeAssignedQueue[moID] = (moType, data)
     }
 
+
     // Image processing timer functions
     // Turns off the breweriesToBeProcessed timer
     private func disableTimer() {
@@ -61,6 +64,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
         }
     }
 
+    
     // Process the last unfull set on the breweriesToBeProcessed queue.
     @objc private func timerProcessImageQueue() {
         let dq = DispatchQueue.global(qos: .userInitiated)

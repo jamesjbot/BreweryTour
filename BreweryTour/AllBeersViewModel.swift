@@ -20,6 +20,9 @@ class AllBeersViewModel: BeersViewModel, Subject {
 
 }
 
+
+// MARK: - OnlineSearchCapable
+
 extension AllBeersViewModel: OnlineSearchCapable {
     // When the user enters the name of a beer and it is not present.
     internal func searchForUserEntered(searchTerm: String, completion: ((Bool, String?) -> Void)?) {

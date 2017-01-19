@@ -6,9 +6,10 @@
 //  Copyright © 2017 James Jongs. All rights reserved.
 //
 /*
- This is the viewmodel that will back the SelectedBeersViewController
- This is the new file
+    This is the viewmodel that will back the SelectedBeersViewController
+    This is the new file
  */
+
 import Foundation
 import UIKit
 import CoreData
@@ -97,7 +98,7 @@ class BeersViewModel: NSObject {
 }
 
 
-// MARK: - BeersViewModel: ReceiveBroadcastSetSelected
+// MARK: - ReceiveBroadcastSetSelected
 
 // When a new style or brewery is selected this method is called
 extension BeersViewModel: ReceiveBroadcastSetSelected {
@@ -117,7 +118,7 @@ extension BeersViewModel: ReceiveBroadcastSetSelected {
 }
 
 
-// MARK: - BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh
+// MARK: - ReceiveBroadcastManagedObjectContextRefresh
 
 extension BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh {
     // When all coredata ManagedObjects are deleted this is called by the mediator to refresh the context
@@ -140,7 +141,7 @@ extension BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh {
 }
 
 
-// MARK: - BeersViewModel: NSFetchedResultsControllerDelegate
+// MARK: - NSFetchedResultsControllerDelegate
 
 extension BeersViewModel: NSFetchedResultsControllerDelegate {
 
@@ -152,7 +153,7 @@ extension BeersViewModel: NSFetchedResultsControllerDelegate {
 }
 
 
-// MARK: - BeersViewModel: TableList
+// MARK: - TableList
 
 // All the methods that allow this object to function as a view model.
 extension BeersViewModel: TableList {
