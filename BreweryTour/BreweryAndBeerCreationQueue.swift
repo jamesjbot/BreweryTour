@@ -182,45 +182,48 @@ class BreweryAndBeerCreationQueue: NSObject {
 
         abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
 
-        loopCounter += 1
-        if loopCounter > maximumSmallRuns {
-            switchToLongRunningDataLoad()
-        }
+        abreweryContext?.performAndWait {
 
-        // Save breweries one at time. Batch saving generates conflict errors.
-        let dq = DispatchQueue(label: "SerialQueue")
-        dq.sync {
-            print("Processing breweries creation: we have \(runningBreweryQueue.count) breweries")
-            print("Processing beers creation: we have \(runningBeerQueue.count) beers")
-            guard !runningBreweryQueue.isEmpty || !runningBeerQueue.isEmpty else {
-                // Both queues are empty stop timer
-                reinitializeLoadParameter()
-                return
+            self.loopCounter += 1
+            if self.loopCounter > self.maximumSmallRuns {
+               self.switchToLongRunningDataLoad()
             }
 
-            // This adjusts the maximum amount of processing per data load
-            // Low in the beginning then increasing
-            var maxSave: Int!
-            maxSave = decideOnMaximumRecordsPerLoop(queueCount: runningBreweryQueue.count)
+            // Save breweries one at time. Batch saving generates conflict errors.
+            let dq = DispatchQueue(label: "SerialQueue")
+            dq.sync {
+                print("Processing breweries creation: we have \(self.runningBreweryQueue.count) breweries")
+                print("Processing beers creation: we have \(self.runningBeerQueue.count) beers")
+                guard !self.runningBreweryQueue.isEmpty || !self.runningBeerQueue.isEmpty else {
+                    // Both queues are empty stop timer
+                    self.self.reinitializeLoadParameter()
+                    return
+                }
 
-            // Processing Breweries
-            if !runningBreweryQueue.isEmpty { // Should we skip brewery processing
-                processBreweryLoop(maxSave)
-            }
+                // This adjusts the maximum amount of processing per data load
+                // Low in the beginning then increasing
+                var maxSave: Int!
+                maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBreweryQueue.count)
 
-            // Begin to process beers only if breweries are done.
-            guard runningBreweryQueue.isEmpty else {
-                // Else Wait for timer to fire again and process some more
-                // Breweries
-                return
-            }
+                // Processing Breweries
+                if !self.runningBreweryQueue.isEmpty { // Should we skip brewery processing
+                    self.processBreweryLoop(maxSave)
+                }
 
-            // Reset the maximum records to process
-            maxSave = decideOnMaximumRecordsPerLoop(queueCount: runningBeerQueue.count)
+                // Begin to process beers only if breweries are done.
+                guard self.runningBreweryQueue.isEmpty else {
+                    // Else Wait for timer to fire again and process some more
+                    // Breweries
+                    return
+                }
 
-            // Process Beers
-            if !self.runningBeerQueue.isEmpty { // We skip beer processing when
-                self.processBeerLoop(maxSave)
+                // Reset the maximum records to process
+                maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBeerQueue.count)
+                
+                // Process Beers
+                if !self.runningBeerQueue.isEmpty { // We skip beer processing when
+                    self.processBeerLoop(maxSave)
+                }
             }
         }
     }
@@ -283,7 +286,9 @@ class BreweryAndBeerCreationQueue: NSObject {
             // Help slow saving and memory leak.
             do {
                 self.abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
-                try self.abreweryContext?.save()
+                if (self.abreweryContext!.hasChanges) {
+                    try self.abreweryContext?.save()
+                }
                 // Reset to help running out of memory
                 self.abreweryContext?.reset()
             } catch let error {
