@@ -57,6 +57,8 @@
 		A78020881DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78020871DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift */; };
 		A78FBB5E1E2FF0DC00AE93A8 /* BusyObservers.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBB5D1E2FF0DC00AE93A8 /* BusyObservers.swift */; };
 		A794A68B1E2E2B6800797180 /* Nophoto.png in Resources */ = {isa = PBXBuildFile; fileRef = A794A68A1E2E2B6800797180 /* Nophoto.png */; };
+		A79EB6F21E308AA000C54D43 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79EB6F11E308AA000C54D43 /* Alamofire.framework */; };
+		A79EB6F41E308AB600C54D43 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A79EB6F31E308AB600C54D43 /* MapKit.framework */; };
 		A7A69D571DA8938F00E47C8E /* CoreDataStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */; };
 		A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AADE1DA791A400EE844C /* AppDelegate.swift */; };
 		A7B2AAE11DA791A400EE844C /* CatergoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */; };
@@ -148,6 +150,8 @@
 		A78020871DC71C4E00CF2F67 /* Beer+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Beer+CoreDataProperties.swift"; path = "BreweryTour/Beer+CoreDataProperties.swift"; sourceTree = SOURCE_ROOT; };
 		A78FBB5D1E2FF0DC00AE93A8 /* BusyObservers.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusyObservers.swift; sourceTree = "<group>"; };
 		A794A68A1E2E2B6800797180 /* Nophoto.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Nophoto.png; sourceTree = "<group>"; };
+		A79EB6F11E308AA000C54D43 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = "DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework"; sourceTree = "<group>"; };
+		A79EB6F31E308AB600C54D43 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreDataStack.swift; sourceTree = "<group>"; };
 		A7B2AADB1DA791A400EE844C /* BreweryTour.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BreweryTour.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B2AADE1DA791A400EE844C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -184,6 +188,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A79EB6F21E308AA000C54D43 /* Alamofire.framework in Frameworks */,
+				A79EB6F41E308AB600C54D43 /* MapKit.framework in Frameworks */,
 				5CEC755E8F1CEA8794EB7D7E /* Pods_BreweryTour.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -208,6 +214,8 @@
 		0759C63C724A3DC1C169FFB2 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A79EB6F31E308AB600C54D43 /* MapKit.framework */,
+				A79EB6F11E308AA000C54D43 /* Alamofire.framework */,
 				E9EC7BBC7977680F92446772 /* Pods_BreweryTour.framework */,
 			);
 			name = Frameworks;
@@ -216,8 +224,8 @@
 		A727D1451DA918D20063F2B3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				A7D3B8951E18FFF50017E5AE /* ViewModelBackedDataViews */,
 				A7D3B8941E18FFD70017E5AE /* NoViewModelDataViews */,
+				A7D3B8951E18FFF50017E5AE /* ViewModelBackedDataViews */,
 				A748FAD31DF6E95F005637BD /* MyTabBarController.swift */,
 				A752344E1DAEDB59008EF071 /* BeerDetailViewController.swift */,
 				A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */,
@@ -515,6 +523,11 @@
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = T37NKE3UT9;
 						ProvisioningStyle = Automatic;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 					A7B2AAF11DA791A400EE844C = {
 						CreatedOnToolsVersion = 8.0;
@@ -843,6 +856,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = T37NKE3UT9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire",
+				);
 				INFOPLIST_FILE = BreweryTour/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = JamesJongs.BreweryTour;
@@ -858,6 +875,10 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = T37NKE3UT9;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire",
+				);
 				INFOPLIST_FILE = BreweryTour/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = JamesJongs.BreweryTour;
