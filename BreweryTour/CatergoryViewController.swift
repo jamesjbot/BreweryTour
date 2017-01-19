@@ -427,14 +427,20 @@ extension CategoryViewController : UITableViewDelegate {
 extension CategoryViewController: UISearchBarDelegate {
 
     // Filter out selections not conforming to the searchbar text
-    func searchBar(_: UISearchBar, textDidChange: String){
+    func searchBar(_ searchBar: UISearchBar, textDidChange: String){
         // This will filter empty text too.
+        if textDidChange.characters.count == 0 {
+            perform(#selector(hideKeyboardWithSearchBar), with: searchBar, afterDelay: 0)
+        }
         activeTableList.filterContentForSearchText(searchText: textDidChange) {
             (ok) -> Void in
             self.genericTable.reloadData()
         }
     }
 
+    func hideKeyboardWithSearchBar(bar: UISearchBar) {
+        bar.resignFirstResponder()
+    }
 
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         /*
@@ -442,10 +448,12 @@ extension CategoryViewController: UISearchBarDelegate {
          Put searchbar back into unselected state
          Repopulate the table
          */
+        print("Search bar cancel button pressed")
         newSearchBar.text = ""
         newSearchBar.resignFirstResponder()
         genericTable.reloadData()
     }
+
 
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {

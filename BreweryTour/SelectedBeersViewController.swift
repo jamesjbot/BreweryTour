@@ -6,12 +6,12 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 /*
-    Shows all the beers or just the selected beers from styles and/or breweries.
- 
-    Initialization process
-    First the stored TableLists are created selectedBeersTableList and allBeersTableList
-    We set the default viewmodel
-    We register with the view models as their observer
+ Shows all the beers or just the selected beers from styles and/or breweries.
+
+ Initialization process
+ First the stored TableLists are created selectedBeersTableList and allBeersTableList
+ We set the default viewmodel
+ We register with the view models as their observer
 
  */
 
@@ -19,7 +19,7 @@ import UIKit
 import CoreData
 
 class SelectedBeersViewController: UIViewController {
-    
+
     // MARK: Constants
 
     private enum SelectedBeersTutorialStage {
@@ -37,13 +37,13 @@ class SelectedBeersViewController: UIViewController {
     private let paddingForPoint : CGFloat = 20
 
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    
+
     fileprivate let selectedBeersViewModel : SelectedBeersViewModel = SelectedBeersViewModel()
     fileprivate let allBeersViewModel: AllBeersViewModel = AllBeersViewModel()
 
 
     // MARK: Variables
-    
+
     internal var listOfBreweryIDToDisplay : [String]!
     private var tutorialState : SelectedBeersTutorialStage = .Table
 
@@ -81,7 +81,7 @@ class SelectedBeersViewController: UIViewController {
             // Here is the order of operations
             // If needed, filter beers
             // Set the backing model
-            // Reload our local data. 
+            // Reload our local data.
 
         case .SelectedBeers: // Selected Beers mode
 
@@ -117,7 +117,7 @@ class SelectedBeersViewController: UIViewController {
         case .SearchBar:
             tutorialState = .Table
         }
-        
+
         switch tutorialState {
         case .SegementedControl:
             // Set the initial point
@@ -131,7 +131,7 @@ class SelectedBeersViewController: UIViewController {
                                     animations: { self.pointer.center.x += self.segmentedControl.frame.width - (2*self.segmentedControlPaddding)},
                                     completion: nil)
             break
-            
+
         case .Table:
             tutorialText.text = "Select a beer to show its details."
             let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint ,
@@ -143,8 +143,8 @@ class SelectedBeersViewController: UIViewController {
                                     animations: { self.pointer.center.y += self.tableView.frame.height - self.paddingForPoint },
                                     completion: nil)
             break
-        
-        
+
+
         case .SearchBar:
             tutorialText.text = "Enter the name of a beer, and we will search online for it."
             let tablePoint = CGPoint(x: searchBar.frame.origin.x + paddingForPoint , y: searchBar.frame.midY)
@@ -155,11 +155,11 @@ class SelectedBeersViewController: UIViewController {
                                     animations: { self.pointer.center.x += self.searchBar.frame.maxX - (2*self.paddingForPoint) },
                                     completion: nil)
             break
-        
+
         }
     }
 
-    
+
     // MARK: - Functions
 
     override func viewDidLoad() {
@@ -225,7 +225,7 @@ extension SelectedBeersViewController: Observer {
     internal func sendNotify(from: AnyObject, withMsg msg: String) {
         // Prompts the tableView to refilter search listings.
         // TableView.reload will be handled by the searchBar function.
-        // This means all notifications to SelectedBeersViewController will 
+        // This means all notifications to SelectedBeersViewController will
         // reload the table.
         // Why do we invoke the search bar command? Because if there is
         // search text entered and we need to immediately filter the contents.
@@ -254,7 +254,7 @@ extension SelectedBeersViewController: BusyObserver {
     func registerAsBusyObserverWithMediator() {
         Mediator.sharedInstance().registerForBusyIndicator(observer: self)
     }
-    
+
 }
 
 
@@ -292,13 +292,13 @@ extension SelectedBeersViewController : UITableViewDelegate {
     internal func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // Open the beer detail view screen.
         let beer = activeViewModel.selected(elementAt: indexPath,
-                                                   searchText: searchBar.text!) {
-            (success,msg) -> Void in
-            // We don't need to process anything in the compeltion hanlder
+                                            searchText: searchBar.text!) {
+                                                (success,msg) -> Void in
+                                                // We don't need to process anything in the compeltion hanlder
         }
         // Create target viewcontroller
         let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
-        
+
         // Inject beer information into Detail View Controller
         destinationViewcontroller.beer = beer as! Beer
 
@@ -319,12 +319,20 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     // Any text entered in the searchbar triggers this
     internal func searchBar(_: UISearchBar, textDidChange: String){
         // User entered searchtext, now filter data
+        if textDidChange.characters.count == 0 {
+            perform(#selector(hideKeyboardWithSearchBar), with: searchBar, afterDelay: 0)
+        }
         activeViewModel.filterContentForSearchText(searchText: textDidChange) {
             (ok) -> Void in
             self.tableView.reloadData()
         }
     }
-    
+
+
+    func hideKeyboardWithSearchBar(bar: UISearchBar) {
+        bar.resignFirstResponder()
+    }
+
     
     internal func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         // Remove searchbar text so we stop searching
@@ -334,19 +342,19 @@ extension SelectedBeersViewController : UISearchBarDelegate {
         searchBar.resignFirstResponder()
         tableView.reloadData()
     }
-    
-    
+
+
     // Search for beer online at BreweryDB.
     internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
 
-        // PREVENT ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow 
+        // PREVENT ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow
         // AllBeerTableList to search online
         // This is because the preselection will not encompass the search results
         guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBeers.rawValue,
             // Escape beacuse nothing was entered in search bar
-                !(searchBar.text?.isEmpty)! else{
-            return
+            !(searchBar.text?.isEmpty)! else{
+                return
         }
 
         // Function to attach to alert button
