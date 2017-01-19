@@ -6,6 +6,10 @@
 //  Copyright © 2016 James Jongs. All rights reserved.
 //
 
+/*
+    This object is the backing model to show all breweries.
+ */
+
 import Foundation
 
 import UIKit
@@ -25,13 +29,10 @@ class AllBreweriesTableList: NSObject, Subject {
     
     internal var filteredObjects: [Brewery] = [Brewery]()
     
-    // Currently watches the persistentContext
     internal var frc : NSFetchedResultsController<Brewery>!
     
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
-    
-    //let backgroundContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.backgroundContext
-    
+
     override init(){
         super.init()
         //Accept changes from backgroundContexts
@@ -64,6 +65,8 @@ class AllBreweriesTableList: NSObject, Subject {
 }
 
 
+//  MARK: - ReceiveBroadcastManagedObjectContextRefresh
+
 extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 
     internal func contextsRefreshAllObjects() {
@@ -78,12 +81,16 @@ extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
     }
 }
 
+
+// MARK: - TableList
+
 extension AllBreweriesTableList : TableList {
 
     func cellForRowAt(indexPath: IndexPath, cell: UITableViewCell, searchText: String?) -> UITableViewCell {
         configureCell(cell: cell, indexPath: indexPath, searchText: searchText)
         return cell
     }
+
 
     private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
         DispatchQueue.main.async {
@@ -155,6 +162,8 @@ extension AllBreweriesTableList : TableList {
 }
 
 
+// MARK: - OnlineSearchCapable
+
 extension AllBreweriesTableList: OnlineSearchCapable {
     // When the user has typed out and pressed done in the search bar.
     // this is the function that gets called
@@ -170,6 +179,8 @@ extension AllBreweriesTableList: OnlineSearchCapable {
     }
 }
 
+
+// MARK: - NSFetchedResultsControllerDelegate
 
 extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
     
