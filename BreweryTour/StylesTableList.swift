@@ -93,6 +93,8 @@ class StylesTableList: NSObject {
 }
 
 
+// MARK: - ReceiveBroadcastManagedObjectContextRefresh
+
 extension StylesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 
     internal func contextsRefreshAllObjects() {
@@ -104,6 +106,8 @@ extension StylesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 }
 
 
+// MARK: - Subject
+
 extension StylesTableList: Subject {
     
     internal func registerObserver(view: Observer) {
@@ -112,6 +116,7 @@ extension StylesTableList: Subject {
 }
 
 
+// MARK: - NSFetchedResultsControllerDelegate
 
 extension StylesTableList: NSFetchedResultsControllerDelegate {
     
@@ -120,6 +125,8 @@ extension StylesTableList: NSFetchedResultsControllerDelegate {
     }
 }
 
+
+// MARK: - TableList
 
 extension StylesTableList : TableList {
 
