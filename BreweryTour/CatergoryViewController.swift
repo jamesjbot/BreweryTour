@@ -408,7 +408,7 @@ extension CategoryViewController : UITableViewDelegate {
                 }
                 if Mediator.sharedInstance().isAutomaticallySegueing() {
                     DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "Go", sender: nil)
+                        self.performSegue(withIdentifier: "GoToMap", sender: nil)
                     }
                 }
             }
