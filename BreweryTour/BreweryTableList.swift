@@ -142,7 +142,7 @@ extension BreweryTableList: TableList {
     func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil) {
         // Only filter object if there are objects to filter.
         guard (copyOfSet.count) > 0 else {
-            filteredObjects.removeAll()
+            filteredObjects.removeAll() // Remove all of last filtered objects
             return
         }
         filteredObjects = (copyOfSet.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))
