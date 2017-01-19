@@ -69,6 +69,7 @@ class BeerDetailViewController: UIViewController {
         beerDescriptionTextView.setContentOffset(CGPoint.zero, animated: false)
     }
 
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
