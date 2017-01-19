@@ -177,6 +177,8 @@ class BeerDetailViewController: UIViewController {
 }
 
 
+// MARK: - UITextViewDelegate
+
 extension BeerDetailViewController : UITextViewDelegate {
     
     // This clears the textView when the user begins editting the text view
