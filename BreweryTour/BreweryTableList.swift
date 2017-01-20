@@ -23,8 +23,13 @@ class BreweryTableList: NSObject, Subject {
 
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
 
+    let initialDelay = 1000 // 1 second
+    let longDelay = 10000 // 10 seconds
 
     // MARK: Variables
+
+    ///TODO var delayLoops = 0
+    var bounceDelay: Int = 0 // 10
 
     fileprivate var currentlyObservingStyle: Style?
     fileprivate var observer : Observer!
@@ -39,14 +44,9 @@ class BreweryTableList: NSObject, Subject {
 
     internal var styleFRCObserver: NSFetchedResultsController<Style>!
 
-    fileprivate var copyOfSet:[Brewery] = [] {
-        didSet {
-            // Automatically sort this set
-            copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
-                return a.name! < b.name!
-            })
-        }
-    }
+    fileprivate var copyOfSet:[Brewery] = []
+
+    fileprivate var debouncedFunction: (()->())? = nil
 
 
     // MARK: - Functions
@@ -65,6 +65,18 @@ class BreweryTableList: NSObject, Subject {
         // Register for context updates with Mediator
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
+        // Initialize debounce function and associate it with sortanddisplay
+        bounceDelay = initialDelay
+        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
+            self.sortSet()
+        })
+    }
+
+
+    private func sortSet() {
+        copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
+            return a.name! < b.name!
+        })
     }
 
 
@@ -80,7 +92,27 @@ class BreweryTableList: NSObject, Subject {
     }
 
 
+    // This function will drop the excessive calls sort
+    // Borrowed from
+    // http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call/33794262#33794262
+    private func debounce(delay:Int, queue:DispatchQueue, action: @escaping (()->())) -> ()->() {
+        var lastFireTime = DispatchTime.now()
+        let dispatchDelay = DispatchTimeInterval.milliseconds(delay)
 
+        return {
+            let dispatchTime: DispatchTime = lastFireTime + dispatchDelay
+            queue.asyncAfter(deadline: dispatchTime, execute: {
+                let when: DispatchTime = lastFireTime + dispatchDelay
+                let now = DispatchTime.now()
+                if now.rawValue >= when.rawValue {
+                    lastFireTime = DispatchTime.now()
+                    action()
+                }
+            })
+        }
+    }
+
+    
     internal func prepareToShowTable() {
         // Get the currently selected style form the mediator
         // If the selection is a brewery then the CategoryViewController would have intercepted that selection
@@ -90,7 +122,9 @@ class BreweryTableList: NSObject, Subject {
         styleFRCObserver.delegate = self
         do {
             try styleFRCObserver.performFetch()
-            copyOfSet = (styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as! [Brewery]?)!
+            if let breweries = styleFRCObserver.fetchedObjects?.first?.brewerywithstyle?.allObjects as? [Brewery] {
+                copySetAndDebounceSort(breweries: breweries)
+            }
         } catch {
             NSLog("Critical error reading from coredata")
         }
@@ -101,6 +135,13 @@ class BreweryTableList: NSObject, Subject {
     func registerObserver(view: Observer) {
         observer = view
     }
+
+
+    fileprivate func copySetAndDebounceSort(breweries: [Brewery]) {
+        copyOfSet = breweries
+        debouncedFunction!()
+    }
+
 }
 
 
@@ -201,34 +242,13 @@ extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
 // MARK: - NSFetchedResultsControllerDelegate
 
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
-
-    func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
-
-        func updateStyleSet() {
-            let style = anObject as! Style
-            if style.id == currentlyObservingStyle?.id {
-                copyOfSet = style.brewerywithstyle?.allObjects as! [Brewery]
-            }
-        }
-
-        switch (type){
-        case .insert:
-            updateStyleSet()
-            break
-        case .delete:
-            updateStyleSet()
-            break
-        case .move:
-            break
-        case .update:
-            updateStyleSet()
-            break
-        }
-    }
-
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-    observer.sendNotify(from: self, withMsg: Message.Reload)
+        print("Cheaper sort")
+        if let breweries = (controller.fetchedObjects?.first as? Style)?.brewerywithstyle?.allObjects as? [Brewery] {
+            copySetAndDebounceSort(breweries: breweries)
+        }
+        observer.sendNotify(from: self, withMsg: Message.Reload)
 
     }
 }
