@@ -72,6 +72,7 @@ class BeersViewModel: NSObject {
 
     // This generic fetch will get all the beers in the data base. SelectedBeersViewModel
     // Override this method and selects based on Brewery or Style
+    // Internal because the SelectedBeersViewClass need to override this
     internal func performFetchRequestFor(observerNeedsNotification: Bool){
         // Set default query to AllBeers mode
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
