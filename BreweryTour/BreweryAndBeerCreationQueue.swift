@@ -182,46 +182,43 @@ class BreweryAndBeerCreationQueue: NSObject {
 
         abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
 
-        abreweryContext?.performAndWait {
+        self.loopCounter += 1
+        if self.loopCounter > self.maximumSmallRuns {
+            self.switchToLongRunningDataLoad()
+        }
 
-            self.loopCounter += 1
-            if self.loopCounter > self.maximumSmallRuns {
-               self.switchToLongRunningDataLoad()
+        // Save breweries one at time. Batch saving generates conflict errors.
+        let dq = DispatchQueue(label: "SerialQueue")
+        dq.sync {
+            guard !self.runningBreweryQueue.isEmpty || !self.runningBeerQueue.isEmpty else {
+                // Both queues are empty stop timer
+                self.self.reinitializeLoadParameter()
+                return
             }
 
-            // Save breweries one at time. Batch saving generates conflict errors.
-            let dq = DispatchQueue(label: "SerialQueue")
-            dq.sync {
-                guard !self.runningBreweryQueue.isEmpty || !self.runningBeerQueue.isEmpty else {
-                    // Both queues are empty stop timer
-                    self.self.reinitializeLoadParameter()
-                    return
-                }
+            // This adjusts the maximum amount of processing per data load
+            // Low in the beginning then increasing
+            var maxSave: Int!
+            maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBreweryQueue.count)
 
-                // This adjusts the maximum amount of processing per data load
-                // Low in the beginning then increasing
-                var maxSave: Int!
-                maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBreweryQueue.count)
+            // Processing Breweries
+            if !self.runningBreweryQueue.isEmpty { // Should we skip brewery processing
+                self.processBreweryLoop(maxSave)
+            }
 
-                // Processing Breweries
-                if !self.runningBreweryQueue.isEmpty { // Should we skip brewery processing
-                    self.processBreweryLoop(maxSave)
-                }
+            // Begin to process beers only if breweries are done.
+            guard self.runningBreweryQueue.isEmpty else {
+                // Else Wait for timer to fire again and process some more
+                // Breweries
+                return
+            }
 
-                // Begin to process beers only if breweries are done.
-                guard self.runningBreweryQueue.isEmpty else {
-                    // Else Wait for timer to fire again and process some more
-                    // Breweries
-                    return
-                }
+            // Reset the maximum records to process
+            maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBeerQueue.count)
 
-                // Reset the maximum records to process
-                maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBeerQueue.count)
-                
-                // Process Beers
-                if !self.runningBeerQueue.isEmpty { // We skip beer processing when
-                    self.processBeerLoop(maxSave)
-                }
+            // Process Beers
+            if !self.runningBeerQueue.isEmpty { // We skip beer processing when
+                self.processBeerLoop(maxSave)
             }
         }
     }
@@ -240,9 +237,11 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     private func processBeerLoop(_ maxSave: Int) {
         // Processing Beers
-        abreweryContext?.performAndWait {
+        let tempContext = container?.newBackgroundContext()
+        tempContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
+        tempContext?.performAndWait {
+            
             autoreleasepool {
-
                 beerLoop: for _ in 1...maxSave {
 
                     guard self.continueProcessingAfterContextRefresh() else {
@@ -283,12 +282,11 @@ class BreweryAndBeerCreationQueue: NSObject {
             }
             // Help slow saving and memory leak.
             do {
-                self.abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
-                if (self.abreweryContext!.hasChanges) {
-                    try self.abreweryContext?.save()
+                if (tempContext?.hasChanges)! {
+                    try tempContext?.save()
                 }
                 // Reset to help running out of memory
-                self.abreweryContext?.reset()
+                tempContext?.reset()
             } catch let error {
                 NSLog("There was and error saving brewery to style\(error.localizedDescription)")
             }
