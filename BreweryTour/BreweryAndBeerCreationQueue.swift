@@ -42,14 +42,19 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // Initial responsive load
     private let initialMaxSavesPerLoop: Int = 3
-    private let initialRepeatInterval: Double = 3
+    private let initialRepeatInterval: Double = 2
 
     // Long running loads
     // System fastest processes is 1.2 records / second
-    private let longrunningMaxSavesPerLoop: Int = 250
-    private let longRunningRepeatInterval: Double = 45
+    // Slowest I've seen is .5 records / second and could go lower
+    private let longrunningMaxSavesPerLoop: Int = 100
+    private let longRunningRepeatInterval: Double = 10
 
-    private let maximumSmallRuns = 30
+    private let verylongrunningMaxSavesPerLoop: Int = 10
+    private let verylongrunningRepeatInterval: Double = 30
+
+    private let maximumSmallRuns = 28
+    private let maximumLargeRuns = 100
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
@@ -149,6 +154,7 @@ class BreweryAndBeerCreationQueue: NSObject {
         workTimer.invalidate()
         workTimer = nil
         mediatorObserver?.notifyStoppingWork()
+        loopCounter = 0
     }
 
 
@@ -161,9 +167,13 @@ class BreweryAndBeerCreationQueue: NSObject {
     private func switchToLongRunningDataLoad() {
         currentMaxSavesPerLoop = longrunningMaxSavesPerLoop
         currentRepeatInterval = longRunningRepeatInterval
-        loopCounter = 0
     }
 
+
+    private func switchToVeryLongRunningDataLoad() {
+        currentMaxSavesPerLoop = verylongrunningMaxSavesPerLoop
+        currentRepeatInterval = verylongrunningRepeatInterval
+    }
 
     
     // Periodic method to save breweries and beers
@@ -176,6 +186,8 @@ class BreweryAndBeerCreationQueue: NSObject {
         self.loopCounter += 1
         if self.loopCounter > self.maximumSmallRuns {
             self.switchToLongRunningDataLoad()
+        } else if self.loopCounter > self.maximumLargeRuns {
+            self.switchToVeryLongRunningDataLoad()
         }
 
         // Save breweries one at time. Batch saving generates conflict errors.
@@ -275,7 +287,6 @@ class BreweryAndBeerCreationQueue: NSObject {
             }
             // Help slow saving and memory leak.
             do {
-
                 if (tempContext?.hasChanges)! {
                     try tempContext?.save()
                 } else {
@@ -320,20 +331,26 @@ class BreweryAndBeerCreationQueue: NSObject {
                 fatalError()
                 NSLog("There was and error saving brewery \(error.localizedDescription)")
             }
+            self.classContext?.reset()
+
         }
     }
 
 
     private func add(brewery newBrewery: Brewery, toStyleID: String, context: NSManagedObjectContext) {
-        do {
-            // Adds the brewery to the style for easier searching
-            let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
-            styleRequest.sortDescriptors = []
-            styleRequest.predicate = NSPredicate(format: "id == %@", toStyleID)
-            let resultStyle = try context.fetch(styleRequest)
-            resultStyle.first?.addToBrewerywithstyle(newBrewery)
-        } catch let error {
-            NSLog("There was and error saving brewery to style\(error.localizedDescription)")
+        autoreleasepool {
+            do {
+                // Adds the brewery to the style for easier searching
+                let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
+                styleRequest.sortDescriptors = []
+                styleRequest.predicate = NSPredicate(format: "id == %@", toStyleID)
+                let resultStyle = try context.fetch(styleRequest)
+                resultStyle.first?.addToBrewerywithstyle(newBrewery)
+                // TODO Experiment
+                try context.save()
+            } catch let error {
+                NSLog("There was and error saving brewery to style\(error.localizedDescription)")
+            }
         }
     }
 
