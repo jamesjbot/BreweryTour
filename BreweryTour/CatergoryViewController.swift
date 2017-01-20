@@ -51,7 +51,8 @@ NSFetchedResultsControllerDelegate {
     private let med : Mediator = Mediator.sharedInstance()
 
     // Pointer animation duration
-    private let pointerDuration : CGFloat = 1.0
+    private let pointerDuration: CGFloat = 0.5
+    private let pointerDelay: CGFloat = 0.0
 
     // For cycling thru the states of the tutorial for the viewcontroller
     private enum CategoryTutorialStage {
@@ -69,8 +70,6 @@ NSFetchedResultsControllerDelegate {
         case BreweriesWithStyle = 1
         case AllBreweries = 2
     }
-
-
 
 
     // MARK: Variables
@@ -156,8 +155,8 @@ NSFetchedResultsControllerDelegate {
             tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downoaded."
             let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.frame.midY)
             pointer.center = segmentPoint
-            UIView.animateKeyframes(withDuration: 0.5,
-                                    delay: 0.0,
+            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
+                                    delay: TimeInterval(pointerDelay),
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.x += self.segmentedControl.frame.width - self.segmentedControlPaddding},
                                     completion: nil)
@@ -166,8 +165,8 @@ NSFetchedResultsControllerDelegate {
             tutorialText.text = "Select a style or a brewery from list, then go to the map to see its location"
             let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
             pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: 0.5,
-                                    delay: 0.0,
+            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
+                                    delay: TimeInterval(pointerDelay),
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                     completion: nil)
@@ -176,8 +175,8 @@ NSFetchedResultsControllerDelegate {
             tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore."
             let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
             pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: 0.5,
-                                    delay: 0.0,
+            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
+                                    delay: TimeInterval(pointerDelay),
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                     completion: nil)
@@ -188,10 +187,10 @@ NSFetchedResultsControllerDelegate {
             pointer.setNeedsDisplay()
             let tablePoint = CGPoint(x: newSearchBar.frame.origin.x + paddingForPoint , y: newSearchBar.frame.midY)
             pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: 0.5,
-                                    delay: 0.0,
+            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
+                                    delay: TimeInterval(pointerDelay),
                                     options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.x += self.newSearchBar.frame.maxX - (2*self.paddingForPoint) },
+                                    animations: { self.pointer.center.x += self.newSearchBar.frame.maxX - ( self.paddingForPoint ) },
                                     completion: nil)
 
         case .Map:
@@ -309,10 +308,9 @@ NSFetchedResultsControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Show tutorial
-        if UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) {
-            // Do nothing because the tutorial will show automatically.
-        } else {
+        guard UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) else {
             tutorialView.isHidden = true
+            return
         }
     }
 }
@@ -399,18 +397,24 @@ extension CategoryViewController : UITableViewDelegate {
         // Create a completion handler for ViewModel to take.
         let activeTableListSelectedCompletionHandler = {
             (success: Bool ,msg: String?) -> Void in
-            if success {
-                // Stop the initial start animation a few lines up
-                // If and when the brewery process starts.
-                // It will invoke it's own start animation sequence
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                }
-                if Mediator.sharedInstance().isAutomaticallySegueing() {
-                    DispatchQueue.main.async {
-                        self.performSegue(withIdentifier: "GoToMap", sender: nil)
-                    }
-                }
+            // Stop the initial start animation a few lines up
+            // If and when the brewery process starts.
+            // It will invoke it's own start animation sequence
+            DispatchQueue.main.async {
+                self.activityIndicator.stopAnimating()
+            }
+
+            guard success else {
+                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again later")
+                return
+            }
+
+            guard Mediator.sharedInstance().isAutomaticallySegueing() else {
+                return
+            }
+
+            DispatchQueue.main.async {
+                self.performSegue(withIdentifier: "GoToMap", sender: nil)
             }
         }
         // Tell the view model something was selected.
@@ -478,23 +482,33 @@ extension CategoryViewController: UISearchBarDelegate {
             return
         }
 
-        // Definition of the function to be used in AlertWindow.
+        // Definition of the inline function to be used in AlertWindow.
         func searchOnline(_ action: UIAlertAction) {
-            if activeTableList is OnlineSearchCapable {
-                (activeTableList as! OnlineSearchCapable).searchForUserEntered(searchTerm: searchBar.text!) {
-                    (success, msg) -> Void in
-                    DispatchQueue.main.async {
-                        self.activityIndicator.stopAnimating()
-                    }
-                    if success {
-                        self.genericTable.reloadData()
-                    } else {
-                        self.displayAlertWindow(title: "Search Failed", msg: msg!)
-                    }
-                }
-                activityIndicator.startAnimating()
+
+            guard activeTableList is OnlineSearchCapable else {
+                return
             }
+
+            guard let onlineSearch : OnlineSearchCapable = activeTableList as! OnlineSearchCapable? else {
+                return
+            }
+
+            onlineSearch.searchForUserEntered(searchTerm: searchBar.text!) {
+                (success, msg) -> Void in
+
+                DispatchQueue.main.async {
+                    self.activityIndicator.stopAnimating()
+                }
+                guard success else {
+                    self.displayAlertWindow(title: "Search Failed", msg: msg!)
+                    return
+                }
+                self.genericTable.reloadData()
+            }
+            activityIndicator.startAnimating()
         }
+
+
         // Set the function to the action button
         let action = UIAlertAction(title: "Search Online",
                                    style: .default,
