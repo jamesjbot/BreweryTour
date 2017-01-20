@@ -29,7 +29,7 @@ extension BreweryAndBeerCreationQueue: ReceiveBroadcastManagedObjectContextRefre
 
     func contextsRefreshAllObjects() {
         abandonProcessingQueue = true
-        abreweryContext?.refreshAllObjects()
+        classContext?.refreshAllObjects()
     }
 }
 
@@ -69,9 +69,9 @@ class BreweryAndBeerCreationQueue: NSObject {
     fileprivate var runningBreweryQueue = [BreweryData]()
     fileprivate var runningBeerQueue = [(BeerData,Int)]()
 
-    fileprivate var abreweryContext: NSManagedObjectContext? {
+    fileprivate var classContext: NSManagedObjectContext? {
         didSet {
-            abreweryContext?.automaticallyMergesChangesFromParent = true
+            classContext?.automaticallyMergesChangesFromParent = true
         }
     }
 
@@ -93,7 +93,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                                          selector: #selector(self.processQueue),
                                          userInfo: nil,
                                          repeats: true)
-        abreweryContext = container?.newBackgroundContext()
+        classContext = container?.newBackgroundContext()
         (Mediator.sharedInstance() as BroadcastManagedObjectContextRefresh).registerManagedObjectContextRefresh(self)
         mediatorObserver = Mediator.sharedInstance() as MediatorBusyObserver
         switchToInitialRunningDataLoad()
@@ -169,9 +169,10 @@ class BreweryAndBeerCreationQueue: NSObject {
     // Periodic method to save breweries and beers
     @objc private func processQueue() {
         // This function will save all breweries before saving beers.
+        print("Processing breweries creation: we have \(self.runningBreweryQueue.count) breweries")
+        print("Processing beers creation: we have \(self.runningBeerQueue.count) beers")
 
-        abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
-
+        classContext?.automaticallyMergesChangesFromParent = true
         self.loopCounter += 1
         if self.loopCounter > self.maximumSmallRuns {
             self.switchToLongRunningDataLoad()
@@ -229,8 +230,9 @@ class BreweryAndBeerCreationQueue: NSObject {
         // Processing Beers
         let tempContext = container?.newBackgroundContext()
         tempContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
+        tempContext?.automaticallyMergesChangesFromParent = true
+
         tempContext?.performAndWait {
-            
             autoreleasepool {
                 beerLoop: for _ in 1...maxSave {
 
@@ -247,7 +249,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                     request.predicate = NSPredicate(format: "id == %@", beer.breweryID!)
 
                     do {
-                        let brewers = try self.abreweryContext?.fetch(request)
+                        let brewers = try tempContext?.fetch(request)
 
                         // Request did not find breweries
                         guard brewers?.count == 1 else {
@@ -256,10 +258,11 @@ class BreweryAndBeerCreationQueue: NSObject {
                         }
 
                         if let styleID = beer.styleID {
-                            self.add(brewery: (brewers?.first)!, toStyleID: styleID)
+                            self.add(brewery: (brewers?.first)!, toStyleID: styleID,
+                                     context: tempContext!)
                         }
 
-                        let createdBeer = Beer(data: beer, context: self.abreweryContext!)
+                        let createdBeer = Beer(data: beer, context: tempContext!)
                         createdBeer.brewer = brewers?.first
 
                         self.decideOnDownloadingImage(fromURL: beer.imageUrl, forType: .Beer, forID: beer.id!)
@@ -272,12 +275,16 @@ class BreweryAndBeerCreationQueue: NSObject {
             }
             // Help slow saving and memory leak.
             do {
+
                 if (tempContext?.hasChanges)! {
                     try tempContext?.save()
+                } else {
+                    fatalError()
                 }
                 // Reset to help running out of memory
                 tempContext?.reset()
             } catch let error {
+                fatalError()
                 NSLog("There was and error saving brewery to style\(error.localizedDescription)")
             }
         }
@@ -285,7 +292,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 
 
     private func processBreweryLoop(_ maxSave: Int) {
-        abreweryContext?.performAndWait {
+        classContext?.performAndWait {
 
             autoreleasepool {
                 breweryLoop: for _ in 1...maxSave {
@@ -294,10 +301,12 @@ class BreweryAndBeerCreationQueue: NSObject {
                     }
 
                     let b = self.runningBreweryQueue.removeFirst()
-                    let newBrewery = Brewery(data: b, context: self.abreweryContext!)
+                    let newBrewery = Brewery(data: b, context: self.classContext!)
 
                     if let styleID = b.styleID {
-                        self.add(brewery: newBrewery, toStyleID: styleID)
+                        self.add(brewery: newBrewery,
+                                 toStyleID: styleID,
+                                 context: self.classContext!)
                     }
 
                     self.decideOnDownloadingImage(fromURL: b.imageUrl, forType: .Brewery, forID: b.id!)
@@ -305,23 +314,24 @@ class BreweryAndBeerCreationQueue: NSObject {
             }
             // Save brewery and style data.
             do {
-                self.abreweryContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
-                try self.abreweryContext?.save()
+                self.classContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
+                try self.classContext?.save()
             } catch let error {
+                fatalError()
                 NSLog("There was and error saving brewery \(error.localizedDescription)")
             }
         }
     }
 
 
-    private func add(brewery newBrewery: Brewery, toStyleID: String) {
+    private func add(brewery newBrewery: Brewery, toStyleID: String, context: NSManagedObjectContext) {
         do {
             // Adds the brewery to the style for easier searching
             let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
             styleRequest.sortDescriptors = []
             styleRequest.predicate = NSPredicate(format: "id == %@", toStyleID)
-            let resultStyle = try self.abreweryContext?.fetch(styleRequest)
-            resultStyle?.first?.addToBrewerywithstyle(newBrewery)
+            let resultStyle = try context.fetch(styleRequest)
+            resultStyle.first?.addToBrewerywithstyle(newBrewery)
         } catch let error {
             NSLog("There was and error saving brewery to style\(error.localizedDescription)")
         }
