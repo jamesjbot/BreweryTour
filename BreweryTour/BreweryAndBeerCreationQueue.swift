@@ -17,17 +17,6 @@ import CoreData
 import Dispatch
 
 
-
-protocol WorkSubject {
-    func registerMediatorObserver(m: MediatorBusyObserver)
-}
-
-extension BreweryAndBeerCreationQueue: WorkSubject {
-    func registerMediatorObserver(m: MediatorBusyObserver) {
-        mediatorObserver = m
-    }
-}
-
 protocol BreweryAndBeerCreationProtocol {
 
     func isBreweryAndBeerCreationRunning() -> Bool
@@ -37,6 +26,7 @@ protocol BreweryAndBeerCreationProtocol {
 
 
 extension BreweryAndBeerCreationQueue: ReceiveBroadcastManagedObjectContextRefresh {
+
     func contextsRefreshAllObjects() {
         abandonProcessingQueue = true
         abreweryContext?.refreshAllObjects()
