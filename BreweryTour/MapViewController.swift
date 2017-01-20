@@ -37,9 +37,9 @@ class MapViewController : UIViewController {
     
     // MARK: Constants
     let reuseId = "pin"
-    let maxBreweryBuffer = 50
-    let bounceDelay = 5000 // 5 seconds
-    let maximumClosestBreweries = 100
+    let circularAnimationDuration = 5
+    let radiusDivisor = 4
+    let iphoneFactor = 2
     let centerLocation = CLLocation(latitude: 39.5, longitude: -98.35)
 
     // Location manager allows us access to the user's location
@@ -459,11 +459,11 @@ extension MapViewController : DismissableTutorial {
     fileprivate func addCircularPathToPointer() {
         // Circular path
         var point = CGPoint(x: view.frame.midX, y: view.frame.midY)
-        var rotationRadius = view.frame.width/4
+        var rotationRadius = view.frame.width/CGFloat(radiusDivisor)
 
         if UIDevice.current.model == "iPhone" {
-            point = CGPoint(x: view.frame.midX, y: view.frame.midY*0.5)
-            rotationRadius = view.frame.width/8
+            point = CGPoint(x: view.frame.midX, y: view.frame.midY * 0.5)
+            rotationRadius = view.frame.width/CGFloat(radiusDivisor*iphoneFactor)
         }
 
         let circlePath = UIBezierPath(arcCenter: point,
@@ -472,7 +472,7 @@ extension MapViewController : DismissableTutorial {
                                       endAngle:CGFloat(M_PI)*2,
                                       clockwise: true)
         let circularAnimation = CAKeyframeAnimation(keyPath: "position")
-        circularAnimation.duration = 5
+        circularAnimation.duration = CFTimeInterval(circularAnimationDuration)
         circularAnimation.repeatCount = MAXFLOAT
         circularAnimation.path = circlePath.cgPath
         pointer.layer.add(circularAnimation, forKey: nil)
