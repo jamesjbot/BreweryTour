@@ -152,8 +152,8 @@ extension BreweryTableList: TableList {
     
     func getNumberOfRowsInSection(searchText: String?) -> Int {
         // If we batch delete in the background frc will not retrieve delete results.
-        // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
-        //er crektemporaryFetchData()
+        // Fetch data because when we use the on screen segemented display to switch 
+        // to this it will refresh the display, because of the back delete.
         // First thing called on a reload from category screen
         guard searchText == "" else {
             return filteredObjects.count

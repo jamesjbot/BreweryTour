@@ -22,9 +22,7 @@ class CoreDataStack: NSObject {
     private var modelURL: NSURL!
     private var dbURL: NSURL!
     internal var breweryCreationContext: NSManagedObjectContext?
-    //internal var persistingContext: NSManagedObjectContext!
-    //public var backgroundContext : NSManagedObjectContext!
-    //internal var mainContext: NSManagedObjectContext!
+    
     
     // MARK: - Initializers
     init?(modelName: String) {

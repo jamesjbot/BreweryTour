@@ -52,7 +52,7 @@ class FavoriteBeersViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //Accept changes from backgroundContexts
+        // Accept changes from backgroundContexts
         readOnlyContext?.automaticallyMergesChangesFromParent = true
 
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)

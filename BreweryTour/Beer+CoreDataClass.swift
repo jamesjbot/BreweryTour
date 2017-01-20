@@ -16,7 +16,6 @@ public class Beer: NSManagedObject {
         self.beerName = name
         self.beerDescription = beerDescription
         self.availability = availability
-        //self.style = style
         self.id = id
     }
     
