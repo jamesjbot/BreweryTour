@@ -47,8 +47,8 @@ class BreweryAndBeerCreationQueue: NSObject {
     // Long running loads
     // System fastest processes is 1.2 records / second
     // Slowest I've seen is .5 records / second and could go lower
-    private let longrunningMaxSavesPerLoop: Int = 100
-    private let longRunningRepeatInterval: Double = 10
+    private let longrunningMaxSavesPerLoop: Int = 30
+    private let longRunningRepeatInterval: Double = 60
 
     private let verylongrunningMaxSavesPerLoop: Int = 10
     private let verylongrunningRepeatInterval: Double = 30
@@ -295,8 +295,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 // Reset to help running out of memory
                 tempContext?.reset()
             } catch let error {
-                fatalError()
-                NSLog("There was and error saving brewery to style\(error.localizedDescription)")
+               NSLog("There was and error saving brewery to style\(error.localizedDescription)")
             }
         }
     }
@@ -328,8 +327,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 self.classContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
                 try self.classContext?.save()
             } catch let error {
-                fatalError()
-                NSLog("There was and error saving brewery \(error.localizedDescription)")
+               NSLog("There was and error saving brewery \(error.localizedDescription)")
             }
             self.classContext?.reset()
 
