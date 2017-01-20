@@ -27,7 +27,7 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     let initialDelay = 1000 // 1 second
     let longDelay = 10000 // 10 seconds
 
-    let maxShortDelayLoops = 3
+    let maxShortDelayLoops = 10
 
     // Coredata
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
@@ -37,7 +37,7 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 // MARK: - Variables
 
     var delayLoops = 0
-    var bounceDelay: Int = 0 // 10 seconds
+    var bounceDelay: Int = 0
 
     fileprivate var styleFRC: NSFetchedResultsController<Style> = NSFetchedResultsController<Style>()
 
@@ -100,7 +100,7 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 
     private func fetchSortandSend() {
         delayLoops += 1
-        if delayLoops > 10 {
+        if delayLoops > maxShortDelayLoops { // After 10 run make the delay even longer
             bounceDelay = longDelay
             debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
                 self.fetchSortandSend()
@@ -112,6 +112,7 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     }
 
 
+    // This functio is called once only during initializaiton
     private func initialFetchBreweries(byStyle: Style) {
         // Fetch all the Breweries with style
         readOnlyContext?.automaticallyMergesChangesFromParent = true
