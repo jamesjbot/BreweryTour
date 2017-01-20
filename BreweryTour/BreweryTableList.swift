@@ -28,7 +28,6 @@ class BreweryTableList: NSObject, Subject {
 
     // MARK: Variables
 
-    ///TODO var delayLoops = 0
     var bounceDelay: Int = 0 // 10
 
     fileprivate var currentlyObservingStyle: Style?
