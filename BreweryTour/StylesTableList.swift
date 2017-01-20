@@ -159,7 +159,9 @@ extension StylesTableList : TableList {
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             if (searchText?.isEmpty)! {
                 cell.textLabel?.text = ( (self.frc.object(at: indexPath )).displayName! )
-            } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
+            } else if !((searchText?.isEmpty)!)
+                && self.filteredObjects.count > 0
+                && indexPath.row < self.filteredObjects.count {
                 cell.textLabel?.text = (self.filteredObjects[indexPath.row]).displayName ?? "Error"
             }
             cell.setNeedsDisplay()
