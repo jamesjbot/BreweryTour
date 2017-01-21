@@ -197,6 +197,7 @@ extension BeerDetailViewController : UITextViewDelegate {
         saveBeerInCoreDataToBackgroundContext(makeFavorite: beer.favorite)
     }
 
+    
     // Apply textchanges or remove keyboard.
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         // When the done key is pressed don't change text.
