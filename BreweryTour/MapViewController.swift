@@ -61,6 +61,10 @@ class MapViewController : UIViewController {
 
     // MARK: Variables
 
+    fileprivate var routedAnnotation: MKAnnotationView?
+
+    fileprivate var floatingAnnotation: MKAnnotation!
+
     fileprivate var targetLocation: CLLocation?
 
     fileprivate var activeMappingStrategy: MapStrategy? = nil
@@ -71,10 +75,12 @@ class MapViewController : UIViewController {
 
     // New breweries with styles variable
     fileprivate var sortedBreweries: [Brewery] = []
+    @IBOutlet weak var currentLocation: UIButton!
     fileprivate var breweriesForDisplay: [Brewery] = [] 
 
     // MARK: IBOutlet
 
+    @IBOutlet weak var longPressRecognizer: UILongPressGestureRecognizer!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
@@ -85,6 +91,61 @@ class MapViewController : UIViewController {
     
 
     // MARK: IBAction
+
+    @IBAction func currentLocationTapped(_ sender: UIButton) {
+        clearPointFromTargetLocation()
+    }
+
+
+    @IBAction func handleLongPress(_ sender: UILongPressGestureRecognizer) {
+            // Remove redundant calls to long press
+        mapView.resignFirstResponder()
+
+        // Always set a pin down when user presses down
+        // When the pin state is changed delete old pin and replace with new pin
+        // When user release drop the pin and save it to the database
+        print(sender.state.rawValue)
+        print("Long press detected")
+        switch sender.state {
+        case UIGestureRecognizerState.began:
+
+            // Remove old annotation
+            if floatingAnnotation != nil {
+                mapView.removeAnnotation(floatingAnnotation)
+            }
+
+            // Set floating annotation
+            let coordinateOnMap = mapView.convert(sender.location(in: mapView), toCoordinateFrom: mapView)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinateOnMap
+            mapView.addAnnotation(annotation)
+            floatingAnnotation = annotation
+
+        case UIGestureRecognizerState.changed:
+            // Move floating annotation
+            mapView.removeAnnotation(floatingAnnotation)
+            let coordinateOnMap = mapView.convert(sender.location(in: mapView), toCoordinateFrom: mapView)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coordinateOnMap
+            mapView.addAnnotation(annotation)
+            floatingAnnotation = annotation
+
+        case UIGestureRecognizerState.ended:
+            // Make new pointer targetlocation
+            makePointTargetLocation()
+
+        case UIGestureRecognizerState.cancelled:
+            break
+
+        case UIGestureRecognizerState.failed:
+            break
+
+        case UIGestureRecognizerState.possible:
+            break
+        }
+    }
+
+
     @IBAction func sliderTouchUpInside(_ sender: UISlider, forEvent event: UIEvent) {
         guard mapView.userLocation.coordinate.latitude != 0,
             mapView.userLocation.coordinate.longitude != 0 else {
@@ -96,12 +157,12 @@ class MapViewController : UIViewController {
         // Save slider value for the future
         Mediator.sharedInstance().setLastSliderValue(intValue)
 
+        // Replotting
         let mapViewData = Mediator.sharedInstance().getPassedItem()
         guard mapViewData is Style else {
             return
         }
 
-        targetLocation = mapView.userLocation.location
         (activeMappingStrategy as! StyleMapStrategy).endSearch()
         activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style,
                                                  view: self,
@@ -126,6 +187,55 @@ class MapViewController : UIViewController {
     
     // MARK: - Functions
 
+    private func makePointTargetLocation() {
+        let location = CLLocation(latitude: floatingAnnotation.coordinate.latitude, longitude: floatingAnnotation.coordinate.longitude)
+        targetLocation = location
+        displayNewStrategyWithNewPoint()
+    }
+
+
+    @objc private func clearPointFromTargetLocation() {
+        guard floatingAnnotation != nil else {
+            return
+        }
+        mapView.removeAnnotation(floatingAnnotation)
+        floatingAnnotation = nil
+        // Reset back to user true location
+        targetLocation = nil
+        displayNewStrategyWithNewPoint()
+    }
+
+
+    private func setTargetLocationWhenTargetLocationIsNil() {
+        // Zoom to users location first if we have it.
+        // When we first join the mapview and the userlocation has not been set.
+        // It will default to 0,0, so we center the location in the US
+
+        // TODO When centerlocation comes in
+        // When userlocation comes in
+        // When arbitratylocation comes in
+
+
+        // Only do these when target location is nil or this 
+        // is the temporary centerLocation
+        
+        guard targetLocation == nil || targetLocation == centerLocation else {
+            return
+        }
+
+        let uninitialzedLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
+            mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
+            targetLocation = centerLocation
+            print("Using our center location because user location has not been populated")
+        } else {
+            //mapView.setCenter(mapView.userLocation.coordinate, animated: false)
+            targetLocation = mapView.userLocation.location
+            print("User location is \(targetLocation)")
+        }
+    }
+
+
     func centerMapOnLocation(location: CLLocation?, radius regionRadius: CLLocationDistance?, centerUS: Bool) {
         DispatchQueue.main.async {
             guard ( location != nil && !centerUS )  else {
@@ -145,26 +255,74 @@ class MapViewController : UIViewController {
     }
 
 
+    private func compareCoordinates(a: CLLocationCoordinate2D, b: CLLocationCoordinate2D) -> Bool {
+        if a.latitude == b.latitude && a.longitude == b.longitude {
+            return true
+        }
+        return false
+    }
+
+
+    func isAnnotation(inArray: [MKAnnotation]) -> Bool {
+        if let routedAnnotation = routedAnnotation {
+            for i in inArray {
+                print(inArray)
+                print(routedAnnotation)
+                if compareCoordinates(a: i.coordinate, b: (routedAnnotation.annotation?.coordinate)!) {
+                    return true
+                }
+            }
+        }
+        return false
+    }
+
+
+    // Draw the annotations on the map
     internal func updateMap(b: [MKAnnotation]) {
-        // Draw the annotations on the map
-        let theseArraysAreSame = compareArraysForDifference(a: mapView.annotations, b: b)
+
+        if !isAnnotation(inArray: b) {
+            mapView.removeOverlays(mapView.overlays)
+        }
+
+        // If the annotation display are the same do nothing
+        var copy = mapView.annotations
+        // remove floatingannotation
+        if !copy.isEmpty {
+            copy.removeLast()
+        }
+        let theseArraysAreSame = arraysAreDifferent(a: copy, b: b)
+        print(copy)
+        print(b)
         print("These arrays are the different \(theseArraysAreSame)")
-        guard compareArraysForDifference(a: mapView.annotations, b: b) else {
+        guard arraysAreDifferent(a: copy, b: b) else {
             print("STOPPING UPDATER--------------------------------------------")
             return
         }
+
         DispatchQueue.main.async {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(b)
+            // Add back out floating annotation we deleted.
+            if let floatingAnnotation = self.floatingAnnotation {
+                self.mapView.addAnnotation(floatingAnnotation)
+            }
         }
     }
 
 
-    private func compareArraysForDifference(a: [MKAnnotation], b: [MKAnnotation]) -> Bool {
+    private func arraysAreDifferent(a: [MKAnnotation], b: [MKAnnotation]) -> Bool {
+        guard a.count == b.count else {
+            return true
+        }
+
+        // They are either both zero or both not zero
+        guard a.count != 0 && b.count != 0 else {
+            return false
+        }
+
         for i in a {
             for j in b {
-                print("i:\(i.coordinate)")
-                print("k:\(j.coordinate)")
+                print("i:\(i.coordinate) j:\(j.coordinate)")
                 if i.coordinate.latitude != j.coordinate.latitude ||
                     i.coordinate.longitude != j.coordinate.longitude {
                     return true
@@ -175,7 +333,23 @@ class MapViewController : UIViewController {
     }
 
 
-    // MARK: - View functions
+    private func createCurrentLocationButton() {
+        let userLocationButton = UIBarButtonItem(title: "Current location", style: .plain, target: self, action: #selector(clearPointFromTargetLocation))
+        self.navigationItem.setRightBarButtonItems([userLocationButton], animated: true)
+    }
+
+
+    private func initCoreLoction() {
+        // CoreLocation initialization, ask permission to utilize user location
+        locationManager.delegate = self
+        locationManager.requestWhenInUseAuthorization()
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
+            locationManager.requestLocation()
+        }
+    }
+
+    // MARK: - View Life Cycle functions
 
     // Ask user for access to their location
     override func viewDidLoad(){
@@ -187,16 +361,13 @@ class MapViewController : UIViewController {
             self.mapView.showsCompass = true
         }
 
-        // CoreLocation initialization, ask permission to utilize user location
-        locationManager.delegate = self
-        locationManager.requestWhenInUseAuthorization()
-        if CLLocationManager.locationServicesEnabled() {
-            locationManager.desiredAccuracy = kCLLocationAccuracyHundredMeters
-            locationManager.requestLocation()
-        }
+        initCoreLoction()
 
         registerAsBusyObserverWithMediator()
 
+        mapView.addGestureRecognizer(longPressRecognizer)
+
+        createCurrentLocationButton()
     }
 
 
@@ -219,20 +390,25 @@ class MapViewController : UIViewController {
         slider.value = Float(Mediator.sharedInstance().lastSliderValue())
         numberOfPoints.text = "\(Int(slider.value))"
 
-        // When we first start up and nothing has been selected and we click map
+        // TODO Delete?When we first start up and nothing has been selected and we click map
         // It will come here there is no last selected and mediator has nothing
         // so the map view will show the last view ( default view) nothing
-        //        guard lastSelectedManagedObject != mapViewData else {
+        // TODO Delete?       guard lastSelectedManagedObject != mapViewData else {
         //            // No need to update the viewcontroller if the data has not changed
         //            return Doesn't work because viewDidLoad is caleld again?
         //        }
-        displayNewStrategy()
+        displayNewStrategyWithNewPoint()
     }
 
 
     override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)
 
+        tutorialInitialization()
+    }
+
+
+    private func tutorialInitialization() {
         // Tutorial layers
         // Adds a circular path to tutorial pointer
         addCircularPathToPointer()
@@ -248,16 +424,16 @@ class MapViewController : UIViewController {
     }
 
 
-    fileprivate func displayNewStrategy() {
+    fileprivate func displayNewStrategyWithNewPoint() {
 
         // Get new selection
         let mapViewData = Mediator.sharedInstance().getPassedItem()
-
+        // If there is nothing no changes need to be made to the map
         guard mapViewData != nil else {
             return
         }
 
-        // When we first start up and nothing has been selected and we click map
+        // TODO When we first start up and nothing has been selected and we click map
         // It will come here there is no last selected and mediator has nothing
         // so the map view will show the last view ( default view) nothing
 //        guard lastSelectedManagedObject != mapViewData else {
@@ -265,23 +441,18 @@ class MapViewController : UIViewController {
 //            return Doesn't work because viewDidLoad is caleld again?
 //        }
 
+        setTargetLocationWhenTargetLocationIsNil()
 
-        // Zoom to users location first if we have it.
-        // When we first join the mapview and the userlocation has not been set.
-        // It will default to 0,0, so we center the location in the US
-        let uninitialzedLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        decideOnMappingStrategyAndInvoke(mapViewData: mapViewData!)
 
-        if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
-            mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
-            //centerMapOnLocation(location: nil, radius: nil, centerUS: true)
-            targetLocation = centerLocation
-            print("Using our location because user location has not been populated")
-        } else {
-            //mapView.setCenter(mapView.userLocation.coordinate, animated: false)
-            targetLocation = mapView.userLocation.location
-            print("User location is \(targetLocation)")
-        }
+        // Capture last selection, so we can compare when an update is requested
+        lastSelectedManagedObject = mapViewData
 
+        activateIndicatorIfSystemBusy()
+
+    }
+
+    private func decideOnMappingStrategyAndInvoke(mapViewData: NSManagedObject) {
         // Decision making to display Breweries Style or Brewery
         if mapViewData is Style {
 
@@ -295,12 +466,11 @@ class MapViewController : UIViewController {
             activeMappingStrategy = BreweryMapStrategy(b: mapViewData as! Brewery,
                                                        view: self,
                                                        location: targetLocation!)
-
+            
         }
+    }
 
-        // Capture last selection, so we can compare when an update is requested
-        lastSelectedManagedObject = mapViewData
-
+    private func activateIndicatorIfSystemBusy() {
         // Activate indicator if system is busy
         if Mediator.sharedInstance().isSystemBusy() {
             DispatchQueue.main.async {
@@ -344,6 +514,11 @@ extension MapViewController : MKMapViewDelegate {
 
         pinView!.canShowCallout = true
 
+        if annotation === floatingAnnotation {
+            pinView!.pinTintColor = UIColor.magenta
+            return pinView
+        }
+
         // If incoming annotation is user location.
         if mapView.userLocation.coordinate.latitude == annotation.coordinate.latitude ,
             mapView.userLocation.coordinate.longitude == annotation.coordinate.longitude {
@@ -370,6 +545,9 @@ extension MapViewController : MKMapViewDelegate {
 
     // Selecting a Pin, draw the route to this pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+
+        // Save the routed annotation
+        routedAnnotation = view
 
         // Our location
         let origin = MKMapItem(placemark: MKPlacemark(coordinate: mapView.userLocation.coordinate))
@@ -506,7 +684,7 @@ extension MapViewController {
 
 
 // MARK: - CLLocationManagerDelegate
-
+// TODO initial placement is still going toward the center of the map
 // Places the placemark for User's current location
  extension MapViewController: CLLocationManagerDelegate {
 
@@ -517,7 +695,7 @@ extension MapViewController {
 
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
         print("DID update user location \(userLocation)")
-        displayNewStrategy()
+        displayNewStrategyWithNewPoint()
         return
     }
 
@@ -598,7 +776,6 @@ extension MapViewController: BusyObserver {
     }
     
 }
-
 
 
 
