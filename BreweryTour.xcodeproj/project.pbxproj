@@ -268,7 +268,6 @@
 				A77DEEBA1E1C66960054F95C /* CategoryViewControllerViewModels */,
 				A7D3B8931E18FFAA0017E5AE /* SelectedBeerModelViews */,
 				A7A69D561DA8938F00E47C8E /* CoreDataStack.swift */,
-				A74350651DB8FBA1007AE08C /* Mediator.swift */,
 				A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */,
 				A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */,
 				A7195F801E2AA7620089C1ED /* BreweryAndBeerStructs.swift */,
@@ -352,6 +351,7 @@
 		A7B2AADD1DA791A400EE844C /* BreweryTour */ = {
 			isa = PBXGroup;
 			children = (
+				A74350651DB8FBA1007AE08C /* Mediator.swift */,
 				A7B2AADE1DA791A400EE844C /* AppDelegate.swift */,
 				A7D227251DB54D1D00360A3B /* View */,
 				A727D1451DA918D20063F2B3 /* Controller */,

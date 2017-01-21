@@ -28,9 +28,9 @@ class Mediator {
 
     private var automaticallySegueValue: Bool = false
 
-    fileprivate var passedItem : NSManagedObject?
+    fileprivate var passedItem: NSManagedObject?
 
-
+    fileprivate var lastMapSliderValue: Int = 250
     // MARK: Functions
 
     internal func setAutomaticallySegue(to: Bool) {
@@ -44,7 +44,16 @@ class Mediator {
     internal func getPassedItem() -> NSManagedObject? {
         return passedItem
     }
-    
+
+    internal func setLastSliderValue(_ i: Int) {
+        lastMapSliderValue = Int(i)
+    }
+
+    internal func lastSliderValue() -> Int {
+        return lastMapSliderValue
+    }
+
+
     // Singleton Implementation
     private init(){
     }

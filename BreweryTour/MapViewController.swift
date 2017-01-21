@@ -16,14 +16,24 @@
  brewery.
  
  Internals
- The MapViewController only considers what the Mediator currently has selected
+ The MapViewController takes what the Mediator currently has selected
  
+ Then viewWillAppear chooses the strategy based on the selected item
+ MapStrategy the super class maps multiple breweries on the map.
+ It does this by sorting and finally send the annotation back to the update
+ map function.
+ For brewery we just immediately display the brewery's location by sending it as 
+ a single brewery to it's superclass MapStrategy
+ For style we 
+
  When choosing brewery from CategoryViewController:
  The mediator will provide the brewery object, we will map breweries according 
  their location.
  
  The appropriate strategy to convert to annotations will be chosen by style or 
  brewery type that enter
+ 
+ Then when it finishes it will send the annotation back
  */
 
 
@@ -51,6 +61,8 @@ class MapViewController : UIViewController {
 
     // MARK: Variables
 
+    fileprivate var targetLocation: CLLocation?
+
     fileprivate var activeMappingStrategy: MapStrategy? = nil
 
     fileprivate var lastSelectedManagedObject : NSManagedObject?
@@ -68,10 +80,43 @@ class MapViewController : UIViewController {
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var numberOfPoints: UILabel!
+    @IBOutlet weak var slider: UISlider!
     
 
     // MARK: IBAction
-    
+    @IBAction func sliderTouchUpInside(_ sender: UISlider, forEvent event: UIEvent) {
+        guard mapView.userLocation.coordinate.latitude != 0,
+            mapView.userLocation.coordinate.longitude != 0 else {
+                return
+        }
+        let intValue: Int = Int(sender.value)
+        numberOfPoints.text = String(intValue)
+
+        // Save slider value for the future
+        Mediator.sharedInstance().setLastSliderValue(intValue)
+
+        let mapViewData = Mediator.sharedInstance().getPassedItem()
+        guard mapViewData is Style else {
+            return
+        }
+
+        targetLocation = mapView.userLocation.location
+        (activeMappingStrategy as! StyleMapStrategy).endSearch()
+        activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style,
+                                                 view: self,
+                                                 location: targetLocation!,
+                                                 maxPoints: Int(slider.value))
+
+    }
+
+
+    @IBAction func sliderAction(_ sender: UISlider, forEvent event: UIEvent) {
+        let intValue: Int = Int(sender.value)
+        numberOfPoints.text = String(intValue)
+    }
+
+
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
         UserDefaults.standard.set(false, forKey: g_constants.MapViewTutorial)
@@ -100,29 +145,33 @@ class MapViewController : UIViewController {
     }
 
 
-    // Find brewery objectid by using name in annotation
-    fileprivate func convertAnnotationToObjectID(by: MKAnnotation) -> NSManagedObjectID? {
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "name = %@", by.title!! )
-        do {
-            let breweries = try readOnlyContext?.fetch(request)
-            if let brewery = breweries?.first {
-                return brewery.objectID
-            }
-        } catch {
-            displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
-        }
-        return nil
-    }
-
-
     internal func updateMap(b: [MKAnnotation]) {
         // Draw the annotations on the map
+        let theseArraysAreSame = compareArraysForDifference(a: mapView.annotations, b: b)
+        print("These arrays are the different \(theseArraysAreSame)")
+        guard compareArraysForDifference(a: mapView.annotations, b: b) else {
+            print("STOPPING UPDATER--------------------------------------------")
+            return
+        }
         DispatchQueue.main.async {
             self.mapView.removeAnnotations(self.mapView.annotations)
             self.mapView.addAnnotations(b)
         }
+    }
+
+
+    private func compareArraysForDifference(a: [MKAnnotation], b: [MKAnnotation]) -> Bool {
+        for i in a {
+            for j in b {
+                print("i:\(i.coordinate)")
+                print("k:\(j.coordinate)")
+                if i.coordinate.latitude != j.coordinate.latitude ||
+                    i.coordinate.longitude != j.coordinate.longitude {
+                    return true
+                }
+            }
+        }
+        return false
     }
 
 
@@ -154,6 +203,8 @@ class MapViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
+        print("\(mapView.userLocation.location)")
+
         // Activate indicator if system is busy
         if Mediator.sharedInstance().isSystemBusy() {
             DispatchQueue.main.async {
@@ -164,40 +215,71 @@ class MapViewController : UIViewController {
         // Set the function of this screen
         tabBarController?.title = "Go To Website"
 
+        // Set slider value and text
+        slider.value = Float(Mediator.sharedInstance().lastSliderValue())
+        numberOfPoints.text = "\(Int(slider.value))"
+
+        // When we first start up and nothing has been selected and we click map
+        // It will come here there is no last selected and mediator has nothing
+        // so the map view will show the last view ( default view) nothing
+        //        guard lastSelectedManagedObject != mapViewData else {
+        //            // No need to update the viewcontroller if the data has not changed
+        //            return Doesn't work because viewDidLoad is caleld again?
+        //        }
+        displayNewStrategy()
+    }
+
+
+    override func viewDidAppear(_ animated : Bool) {
+        super.viewDidAppear(animated)
+
+        // Tutorial layers
+        // Adds a circular path to tutorial pointer
+        addCircularPathToPointer()
+
+        // Display tutorial view.
+        if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
+            // Do nothing because the tutorial will show automatically.
+            tutorialView.isHidden = false
+
+        } else {
+            tutorialView.isHidden = true
+        }
+    }
+
+
+    fileprivate func displayNewStrategy() {
+
         // Get new selection
         let mapViewData = Mediator.sharedInstance().getPassedItem()
 
         guard mapViewData != nil else {
-            return 
+            return
         }
 
         // When we first start up and nothing has been selected and we click map
-        // It will come here there is no last selected and mediator has nothing 
+        // It will come here there is no last selected and mediator has nothing
         // so the map view will show the last view ( default view) nothing
-        guard lastSelectedManagedObject != mapViewData else {
-            // No need to update the viewcontroller if the data has not changed
-            return
-        }
+//        guard lastSelectedManagedObject != mapViewData else {
+//            // No need to update the viewcontroller if the data has not changed
+//            return Doesn't work because viewDidLoad is caleld again?
+//        }
 
 
         // Zoom to users location first if we have it.
         // When we first join the mapview and the userlocation has not been set.
         // It will default to 0,0, so we center the location in the US
         let uninitialzedLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-        if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
-            mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
-            centerMapOnLocation(location: nil, radius: nil, centerUS: true)
-        } else {
-            mapView.setCenter(mapView.userLocation.coordinate, animated: false)
-        }
 
-        // Which location will we use as distance reference.
-        var targetLocation: CLLocation?
         if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
             mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
+            //centerMapOnLocation(location: nil, radius: nil, centerUS: true)
             targetLocation = centerLocation
+            print("Using our location because user location has not been populated")
         } else {
+            //mapView.setCenter(mapView.userLocation.coordinate, animated: false)
             targetLocation = mapView.userLocation.location
+            print("User location is \(targetLocation)")
         }
 
         // Decision making to display Breweries Style or Brewery
@@ -205,7 +287,8 @@ class MapViewController : UIViewController {
 
             activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style,
                                                      view: self,
-                                                     location: targetLocation!)
+                                                     location: targetLocation!,
+                                                     maxPoints: Int(slider.value))
 
         } else if mapViewData is Brewery {
 
@@ -226,30 +309,31 @@ class MapViewController : UIViewController {
         }
     }
 
-
-    override func viewDidAppear(_ animated : Bool) {
-        super.viewDidAppear(animated)
-
-        // Tutorial layers
-        // Adds a circular path to tutorial pointer
-        addCircularPathToPointer()
-
-        // Display tutorial view.
-        if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
-            // Do nothing because the tutorial will show automatically.
-            tutorialView.isHidden = false
-
-        } else {
-            tutorialView.isHidden = true
-        }
-    }
 }
+
 
 
 // MARK: - MKMapViewDelegate
 
 extension MapViewController : MKMapViewDelegate {
-    
+
+    //Find brewery objectid by using name in annotation
+    fileprivate func convertAnnotationToObjectID(by: MKAnnotation) -> NSManagedObjectID? {
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "name = %@", by.title!! )
+        do {
+            let breweries = try readOnlyContext?.fetch(request)
+            if let brewery = breweries?.first {
+                return brewery.objectID
+            }
+        } catch {
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error, \nplease try again")
+        }
+        return nil
+    }
+
+
     // This formats the pins and calloutAccessory views on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 
@@ -283,7 +367,7 @@ extension MapViewController : MKMapViewDelegate {
         return pinView?.setBrewery(foundBrewery)
     }
 
-    
+
     // Selecting a Pin, draw the route to this pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 
@@ -322,8 +406,8 @@ extension MapViewController : MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         // Did the user favorite or ask for more information on the brewery
         switch control as UIView {
-        // UIControl is subclass of UIView
-        // Testing if UIControl is one of the MKAnnotationView's subviews
+            // UIControl is subclass of UIView
+            // Testing if UIControl is one of the MKAnnotationView's subviews
 
         case view.leftCalloutAccessoryView!:// Favorite or unfavorite a brewery
 
@@ -369,10 +453,10 @@ extension MapViewController : MKMapViewDelegate {
                 }
             }
             break
-            
+
         // Goto Webpage Information
         case view.rightCalloutAccessoryView!:
-            
+
             if let str : String = (view.annotation?.subtitle)!,
                 let url: URL = URL(string: str) {
                 if UIApplication.shared.canOpenURL(url) {
@@ -385,7 +469,7 @@ extension MapViewController : MKMapViewDelegate {
             break
         }
     }
-
+    
 }
 
 
@@ -425,13 +509,19 @@ extension MapViewController {
 
 // Places the placemark for User's current location
  extension MapViewController: CLLocationManagerDelegate {
-    
+
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        CLGeocoder().reverseGeocodeLocation(locations.last!){
-            (placemarks, error) -> Void in
-        }
+        return
     }
-    
+
+
+    func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
+        print("DID update user location \(userLocation)")
+        displayNewStrategy()
+        return
+    }
+
+
     func locationManager(_ manager: CLLocationManager, didFailWithError error: Error) {
         return
     }

@@ -49,6 +49,7 @@ class MapStrategy: NSObject {
 
     // sorts the breweries by distnace to targetLocation
     func sortLocations() {
+        print("Map Strategy using this location \(targetLocation)")
         breweryLocations = breweryLocations.sorted(by:
             { (brewery1, brewery2) -> Bool in
                 let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
@@ -57,7 +58,6 @@ class MapStrategy: NSObject {
         })
 
     }
-
 
 
     func sendAnnotationsToMap() {

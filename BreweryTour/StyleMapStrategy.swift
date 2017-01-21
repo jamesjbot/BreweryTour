@@ -9,10 +9,14 @@
 /* 
     Subclass to map strategy provides annotation for Style chosen breweries
  
-    This class will initial search for any breweries attached to the style and
-    then display that style. After that it will receive notifications from it's 
-    Delegate and update the annotations as a group. Since MKMapView suggests
-    updating the map all at once.
+    This class will initial search for any breweries attached to the style 
+    initialFetchBreweries
+    This will also register for update to the breweries set in the Style object
+    When Style is update it will fire the NSFetchedResultsDelegate that we will
+    We to call a new fetch to get the whole set of update
+    fetch
+    sortTheLocations from the superclass.
+    sendTheAnnotations back to the view controller from the superclass
 
  */
 
@@ -24,6 +28,7 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 
 // MARK: - Constants
 
+    // These are delays to update the mapViewController
     let initialDelay = 1000 // 1 second
     let longDelay = 10000 // 10 seconds
 
@@ -36,6 +41,8 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 
 // MARK: - Variables
 
+    private var maxPoints: Int?
+
     var delayLoops = 0
     var bounceDelay: Int = 0
 
@@ -46,13 +53,18 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 
 // MARK: - Functions
 
-    init(s: Style, view: MapViewController, location: CLLocation) {
+    init(s: Style, view: MapViewController, location: CLLocation, maxPoints points: Int) {
         super.init()
+        maxPoints = points
         targetLocation = location
         breweryLocations.removeAll()
         initialFetchBreweries(byStyle: s)
         mapViewController = view
         sortLocations()
+        print("Style thinks this many points \(maxPoints)")
+        if breweryLocations.count > maxPoints! {
+            breweryLocations = Array(breweryLocations[0..<maxPoints!])
+        }
         sendAnnotationsToMap()
     }
 
@@ -86,6 +98,11 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     }
 
 
+    func endSearch() {
+        styleFRC.delegate = nil
+    }
+
+
     private func fetch() {
         do {
             try styleFRC.performFetch()
@@ -102,12 +119,17 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
         delayLoops += 1
         if delayLoops > maxShortDelayLoops { // After 10 run make the delay even longer
             bounceDelay = longDelay
+            // Replace the debounced function with a longer version
+            debouncedFunction = nil
             debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
                 self.fetchSortandSend()
             })
         }
         fetch()
         sortLocations()
+        if breweryLocations.count > maxPoints! {
+            breweryLocations = Array(breweryLocations[0..<maxPoints!])
+        }
         sendAnnotationsToMap()
     }
 
@@ -141,18 +163,19 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 }
 
 
-// MARK: - MapViewController: UpdateManagedObjectContext
+// TODO Delete? MARK: - UpdateManagedObjectContext
 
-extension StyleMapStrategy: ReceiveBroadcastManagedObjectContextRefresh {
-    internal func contextsRefreshAllObjects() {
-        styleFRC.managedObjectContext.refreshAllObjects()
-        // We must performFetch after refreshing context, otherwise we will retain
-        // Old information is retained.
-        do {
-            try styleFRC.performFetch()
-        } catch {
-            NSLog("Error reading coredata")
-        }
-    }
-}
+//extension StyleMapStrategy: ReceiveBroadcastManagedObjectContextRefresh {
+//
+//    internal func contextsRefreshAllObjects() {
+//        styleFRC.managedObjectContext.refreshAllObjects()
+//        // We must performFetch after refreshing context, otherwise we will retain
+//        // Old information is retained.
+//        do {
+//            try styleFRC.performFetch()
+//        } catch {
+//            NSLog("Error reading coredata")
+//        }
+//    }
+//}
 
