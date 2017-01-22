@@ -536,10 +536,12 @@ class BreweryDBClient {
             }
 
             // Package the data and queue it up for linking
-            if let outputData : NSData = UIImagePNGRepresentation(UIImage(data: data!)!) as NSData? {
+            if let outputData  = data,
+                let image = UIImage(data: outputData),
+                let png = UIImagePNGRepresentation(image) {
 
                 // Send linking job out for processing.
-                self.imageLinker.queueLinkJob(moID: forID, moType: forType, data: outputData)
+                self.imageLinker.queueLinkJob(moID: forID, moType: forType, data: png as NSData)
             }
         }
         task.resume()

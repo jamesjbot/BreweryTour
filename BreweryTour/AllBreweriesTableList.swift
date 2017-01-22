@@ -48,7 +48,6 @@ class AllBreweriesTableList: NSObject, Subject {
 
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
-
         do {
             try frc.performFetch()
         } catch {
@@ -74,10 +73,12 @@ extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 
     internal func contextsRefreshAllObjects() {
         frc.managedObjectContext.refreshAllObjects()
+        frc.managedObjectContext.reset()
         // We must performFetch after refreshing context, otherwise we will retain
         // Old information is retained.
         do {
             try frc.performFetch()
+            observer.sendNotify(from: self, withMsg: Message.Reload)
         } catch {
 
         }

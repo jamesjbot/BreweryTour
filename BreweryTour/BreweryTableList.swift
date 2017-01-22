@@ -243,7 +243,7 @@ extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
         do {
             try styleFRCObserver.performFetch()
         } catch {
-
+            NSLog("failed to fetch on context refresh")
         }
     }
 }
