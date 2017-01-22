@@ -15,3 +15,7 @@ protocol Observer {
 
     func sendNotify(from: AnyObject, withMsg msg: String )
 }
+
+protocol Subject {
+    func registerObserver(view: Observer)
+}

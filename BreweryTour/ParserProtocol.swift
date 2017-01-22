@@ -10,6 +10,6 @@ import Foundation
 
 protocol ParserProtocol {
     func parse(response : NSDictionary,
-    querySpecificID : String?,
-    completion: (( (_ success :  Bool, _ msg: String?) -> Void )?) )
+               querySpecificID : String?,
+               completion: (( (_ success :  Bool, _ msg: String?) -> Void )?) )
 }

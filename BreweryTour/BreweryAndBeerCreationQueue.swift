@@ -40,6 +40,8 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     // MARK: Constants
 
+    fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+
     // Initial responsive load
     private let initialMaxSavesPerLoop: Int = 3
     private let initialRepeatInterval: Double = 2
@@ -50,22 +52,27 @@ class BreweryAndBeerCreationQueue: NSObject {
     private let longrunningMaxSavesPerLoop: Int = 30
     private let longRunningRepeatInterval: Double = 60
 
+    // Very long running (memory constraiend)
     private let verylongrunningMaxSavesPerLoop: Int = 10
     private let verylongrunningRepeatInterval: Double = 30
 
     private let maximumSmallRuns = 28
     private let maximumLargeRuns = 100
 
-    fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
-
-
     // MARK: Variables
-    fileprivate var mediatorObserver: MediatorBusyObserver?
+
+    fileprivate var classContext: NSManagedObjectContext? {
+        didSet {
+            classContext?.automaticallyMergesChangesFromParent = true
+        }
+    }
 
     private var currentMaxSavesPerLoop: Int = 0
     private var currentRepeatInterval: Double = 0
 
     private var loopCounter: Int = 0
+
+    fileprivate var mediatorObserver: MediatorBusyObserver?
 
     private var workTimer: Timer!
 
@@ -73,12 +80,6 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     fileprivate var runningBreweryQueue = [BreweryData]()
     fileprivate var runningBeerQueue = [(BeerData,Int)]()
-
-    fileprivate var classContext: NSManagedObjectContext? {
-        didSet {
-            classContext?.automaticallyMergesChangesFromParent = true
-        }
-    }
 
 
     // MARK: Functions
@@ -91,17 +92,20 @@ class BreweryAndBeerCreationQueue: NSObject {
     }
 
 
-    private override init() {
-        super.init()
-        workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
-                                         target: self,
-                                         selector: #selector(self.processQueue),
-                                         userInfo: nil,
-                                         repeats: true)
-        classContext = container?.newBackgroundContext()
-        (Mediator.sharedInstance() as BroadcastManagedObjectContextRefresh).registerManagedObjectContextRefresh(self)
-        mediatorObserver = Mediator.sharedInstance() as MediatorBusyObserver
-        switchToInitialRunningDataLoad()
+
+    private func add(brewery newBrewery: Brewery, toStyleID: String, context: NSManagedObjectContext) {
+        autoreleasepool {
+            do {
+                // Adds the brewery to the style for easier searching
+                let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
+                styleRequest.sortDescriptors = []
+                styleRequest.predicate = NSPredicate(format: "id == %@", toStyleID)
+                let resultStyle = try context.fetch(styleRequest)
+                resultStyle.first?.addToBrewerywithstyle(newBrewery)
+            } catch let error {
+                NSLog("There was and error saving brewery to style\(error.localizedDescription)")
+            }
+        }
     }
 
 
@@ -117,113 +121,6 @@ class BreweryAndBeerCreationQueue: NSObject {
     }
 
 
-
-    private func reinsertBeer(_ beer: BeerData, _ inAttempt: Int) {
-        // If we have breweries still running then put beer back
-        var attempt = inAttempt
-        if !runningBreweryQueue.isEmpty {
-            runningBeerQueue.append( (beer,attempt) )
-        } else { // Out of breweries. Try again 3 times then give up
-            if attempt < 3 {
-                attempt += 1
-                self.runningBeerQueue.append( (beer,attempt) )
-            }
-        }
-    }
-
-
-    private func reinitializeLoadParameter() {
-        switchToInitialRunningDataLoad()
-        stopWork()
-    }
-
-
-    fileprivate func startWorkTimer() {
-        if workTimer == nil {
-            workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
-                                             target: self,
-                                             selector: #selector(self.processQueue),
-                                             userInfo: nil,
-                                             repeats: true)
-        }
-        mediatorObserver?.notifyStartingWork()
-    }
-
-    
-    private func stopWork() {
-        workTimer.invalidate()
-        workTimer = nil
-        mediatorObserver?.notifyStoppingWork()
-        loopCounter = 0
-    }
-
-
-    private func switchToInitialRunningDataLoad() {
-        currentMaxSavesPerLoop = initialMaxSavesPerLoop
-        currentRepeatInterval = initialRepeatInterval
-    }
-
-
-    private func switchToLongRunningDataLoad() {
-        currentMaxSavesPerLoop = longrunningMaxSavesPerLoop
-        currentRepeatInterval = longRunningRepeatInterval
-    }
-
-
-    private func switchToVeryLongRunningDataLoad() {
-        currentMaxSavesPerLoop = verylongrunningMaxSavesPerLoop
-        currentRepeatInterval = verylongrunningRepeatInterval
-    }
-
-    
-    // Periodic method to save breweries and beers
-    @objc private func processQueue() {
-        // This function will save all breweries before saving beers.
-        classContext?.automaticallyMergesChangesFromParent = true
-        self.loopCounter += 1
-        if self.loopCounter > self.maximumSmallRuns {
-            self.switchToLongRunningDataLoad()
-        } else if self.loopCounter > self.maximumLargeRuns {
-            self.switchToVeryLongRunningDataLoad()
-        }
-
-        // Save breweries one at time. Batch saving generates conflict errors.
-        let dq = DispatchQueue(label: "SerialQueue")
-        dq.sync {
-            guard !self.runningBreweryQueue.isEmpty || !self.runningBeerQueue.isEmpty else {
-                // Both queues are empty stop timer
-                self.self.reinitializeLoadParameter()
-                return
-            }
-
-            // This adjusts the maximum amount of processing per data load
-            // Low in the beginning then increasing
-            var maxSave: Int!
-            maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBreweryQueue.count)
-
-            // Processing Breweries
-            if !self.runningBreweryQueue.isEmpty { // Should we skip brewery processing
-                self.processBreweryLoop(maxSave)
-            }
-
-            // Begin to process beers only if breweries are done.
-            guard self.runningBreweryQueue.isEmpty else {
-                // Else Wait for timer to fire again and process some more
-                // Breweries
-                return
-            }
-
-            // Reset the maximum records to process
-            maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBeerQueue.count)
-
-            // Process Beers
-            if !self.runningBeerQueue.isEmpty { // We skip beer processing when
-                self.processBeerLoop(maxSave)
-            }
-        }
-    }
-
-
     private func decideOnDownloadingImage(fromURL: String?, forType: ImageDownloadType, forID: String) {
         if let url = fromURL {
             DispatchQueue.global(qos: .utility).async {
@@ -232,6 +129,29 @@ class BreweryAndBeerCreationQueue: NSObject {
                                                                          forID: forID)
             }
         }
+    }
+
+
+    private func decideOnMaximumRecordsPerLoop(queueCount: Int) -> Int {
+        var maxSave = currentMaxSavesPerLoop
+        if queueCount < maxSave {
+            maxSave = queueCount
+        }
+        return maxSave
+    }
+
+
+    private override init() {
+        super.init()
+        workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
+                                         target: self,
+                                         selector: #selector(self.processQueue),
+                                         userInfo: nil,
+                                         repeats: true)
+        classContext = container?.newBackgroundContext()
+        (Mediator.sharedInstance() as BroadcastManagedObjectContextRefresh).registerManagedObjectContextRefresh(self)
+        mediatorObserver = Mediator.sharedInstance() as MediatorBusyObserver
+        switchToInitialRunningDataLoad()
     }
 
 
@@ -286,11 +206,11 @@ class BreweryAndBeerCreationQueue: NSObject {
             do {
                 if (tempContext?.hasChanges)! {
                     try tempContext?.save()
-                } 
+                }
                 // Reset to help running out of memory
                 tempContext?.reset()
             } catch let error {
-               NSLog("There was and error saving brewery to style\(error.localizedDescription)")
+                NSLog("There was and error saving brewery to style\(error.localizedDescription)")
             }
         }
     }
@@ -322,42 +242,124 @@ class BreweryAndBeerCreationQueue: NSObject {
                 self.classContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
                 try self.classContext?.save()
             } catch let error {
-               NSLog("There was and error saving brewery \(error.localizedDescription)")
+                NSLog("There was and error saving brewery \(error.localizedDescription)")
             }
             self.classContext?.reset()
-
+            
         }
     }
 
 
-    private func add(brewery newBrewery: Brewery, toStyleID: String, context: NSManagedObjectContext) {
-        autoreleasepool {
-            do {
-                // Adds the brewery to the style for easier searching
-                let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
-                styleRequest.sortDescriptors = []
-                styleRequest.predicate = NSPredicate(format: "id == %@", toStyleID)
-                let resultStyle = try context.fetch(styleRequest)
-                resultStyle.first?.addToBrewerywithstyle(newBrewery)
-            } catch let error {
-                NSLog("There was and error saving brewery to style\(error.localizedDescription)")
+    // Periodic method to save breweries and beers
+    @objc private func processQueue() {
+        // This function will save all breweries before saving beers.
+        classContext?.automaticallyMergesChangesFromParent = true
+        self.loopCounter += 1
+        if self.loopCounter > self.maximumSmallRuns {
+            self.switchToLongRunningDataLoad()
+        } else if self.loopCounter > self.maximumLargeRuns {
+            self.switchToVeryLongRunningDataLoad()
+        }
+
+        // Save breweries one at time. Batch saving generates conflict errors.
+        let dq = DispatchQueue(label: "SerialQueue")
+        dq.sync {
+            guard !self.runningBreweryQueue.isEmpty || !self.runningBeerQueue.isEmpty else {
+                // Both queues are empty stop timer
+                self.self.reinitializeLoadParameter()
+                return
+            }
+
+            // This adjusts the maximum amount of processing per data load
+            // Low in the beginning then increasing
+            var maxSave: Int!
+            maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBreweryQueue.count)
+
+            // Processing Breweries
+            if !self.runningBreweryQueue.isEmpty { // Should we skip brewery processing
+                self.processBreweryLoop(maxSave)
+            }
+
+            // Begin to process beers only if breweries are done.
+            guard self.runningBreweryQueue.isEmpty else {
+                // Else Wait for timer to fire again and process some more
+                // Breweries
+                return
+            }
+
+            // Reset the maximum records to process
+            maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBeerQueue.count)
+
+            // Process Beers
+            if !self.runningBeerQueue.isEmpty { // We skip beer processing when
+                self.processBeerLoop(maxSave)
             }
         }
     }
 
 
-    private func decideOnMaximumRecordsPerLoop(queueCount: Int) -> Int {
-        var maxSave = currentMaxSavesPerLoop
-        if queueCount < maxSave {
-            maxSave = queueCount
-        }
-        return maxSave
+    private func reinitializeLoadParameter() {
+        switchToInitialRunningDataLoad()
+        stopWork()
     }
+
+
+    private func reinsertBeer(_ beer: BeerData, _ inAttempt: Int) {
+        // If we have breweries still running then put beer back
+        var attempt = inAttempt
+        if !runningBreweryQueue.isEmpty {
+            runningBeerQueue.append( (beer,attempt) )
+        } else { // Out of breweries. Try again 3 times then give up
+            if attempt < 3 {
+                attempt += 1
+                self.runningBeerQueue.append( (beer,attempt) )
+            }
+        }
+    }
+
+    
+    fileprivate func startWorkTimer() {
+        if workTimer == nil {
+            workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
+                                             target: self,
+                                             selector: #selector(self.processQueue),
+                                             userInfo: nil,
+                                             repeats: true)
+        }
+        mediatorObserver?.notifyStartingWork()
+    }
+
+
+    private func stopWork() {
+        workTimer.invalidate()
+        workTimer = nil
+        mediatorObserver?.notifyStoppingWork()
+        loopCounter = 0
+    }
+
+
+    private func switchToInitialRunningDataLoad() {
+        currentMaxSavesPerLoop = initialMaxSavesPerLoop
+        currentRepeatInterval = initialRepeatInterval
+    }
+
+
+    private func switchToLongRunningDataLoad() {
+        currentMaxSavesPerLoop = longrunningMaxSavesPerLoop
+        currentRepeatInterval = longRunningRepeatInterval
+    }
+
+
+    private func switchToVeryLongRunningDataLoad() {
+        currentMaxSavesPerLoop = verylongrunningMaxSavesPerLoop
+        currentRepeatInterval = verylongrunningRepeatInterval
+    }
+
 }
 
 
 
-//  MARK: - BreweryAndBeerCreationProtocol
+//  MARK: - BreweryAndBeerCreationProtocol Extension
 
 extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
 

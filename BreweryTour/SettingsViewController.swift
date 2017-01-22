@@ -22,44 +22,22 @@ class SettingsViewController: UIViewController {
     
     // MARK: Constants
 
-    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
-    private let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     private let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
     private let breweryFetch: NSFetchRequest<Brewery> = Brewery.fetchRequest()
-    private let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
+    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     private let mediator = Mediator.sharedInstance()
+    private let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
 
 
     // MARK: IBOutlet
 
+    @IBOutlet weak var activityIndic: UIActivityIndicatorView!
     @IBOutlet weak var automaticMapSwitch: UISwitch!
     @IBOutlet weak var deleteButton: UIButton!
-    @IBOutlet weak var activityIndic: UIActivityIndicatorView!
 
 
     // MARK: IBAction
-    
-    @IBAction func downloadAllBreweries(_ sender: UIButton) {
-
-        func downloadAll(_ action: UIAlertAction) {
-            displayAlertWindow(title: "Downloading...",
-                               msg: "You got it, go take break this will take awhile")
-            BreweryDBClient.sharedInstance().downloadAllBreweries {
-                (success, msg) in
-            }
-        }
-        let action = UIAlertAction(title: "Take as long as you want",
-                                   style: .default,
-                                   handler: downloadAll)
-        displayAlertWindow(title: "Download All Breweries",
-                           msg: "Are you sure you want to download all breweries, this will take along time to complete",
-                           actions: [action])
-    }
-
-
-    @IBAction func toggleAutomaticMap(_ sender: UISwitch) {
-        Mediator.sharedInstance().setAutomaticallySegue(to: sender.isOn)
-    }
 
 
     @IBAction func deleteBeersBrewery(_ sender: AnyObject) {
@@ -112,15 +90,41 @@ class SettingsViewController: UIViewController {
                            msg: "Are you sure you want to delete all data, this includes\ntasting notes and favorites?"+statistics(),
                            actions: [action])
     }
-    
-    
-    // MARK: - Functions
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        automaticMapSwitch.isOn = Mediator.sharedInstance().isAutomaticallySegueing()
+
+
+    @IBAction func downloadAllBreweries(_ sender: UIButton) {
+
+        func downloadAll(_ action: UIAlertAction) {
+            displayAlertWindow(title: "Downloading...",
+                               msg: "You got it, go take break this will take awhile")
+            BreweryDBClient.sharedInstance().downloadAllBreweries {
+                (success, msg) in
+            }
+        }
+        let action = UIAlertAction(title: "Take as long as you want",
+                                   style: .default,
+                                   handler: downloadAll)
+        displayAlertWindow(title: "Download All Breweries",
+                           msg: "Are you sure you want to download all breweries, this will take along time to complete",
+                           actions: [action])
     }
 
-    
+
+    @IBAction func toggleAutomaticMap(_ sender: UISwitch) {
+        Mediator.sharedInstance().setAutomaticallySegue(to: sender.isOn)
+    }
+
+
+    // MARK: - Functions
+
+    private func startIndicator() {
+        DispatchQueue.main.async {
+            self.activityIndic.startAnimating()
+            self.activityIndic.setNeedsDisplay()
+        }
+    }
+
+
     private func statistics() -> String {
         do {
             let beerCount =  try container?.viewContext.fetch(beerFetch).count
@@ -132,16 +136,7 @@ class SettingsViewController: UIViewController {
             return ""
         }
     }
-    
-    
-    private func startIndicator() {
-        DispatchQueue.main.async {
-            self.activityIndic.startAnimating()
-            self.activityIndic.setNeedsDisplay()
-        }
-    }
-    
-    
+
     private func stopIndicator() {
         DispatchQueue.main.async {
             self.activityIndic.stopAnimating()
@@ -149,4 +144,15 @@ class SettingsViewController: UIViewController {
             self.activityIndic.setNeedsDisplay()
         }
     }
+
+    // MARK: - Life Cycle Management
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        automaticMapSwitch.isOn = Mediator.sharedInstance().isAutomaticallySegueing()
+    }
+
 }
+
+
+

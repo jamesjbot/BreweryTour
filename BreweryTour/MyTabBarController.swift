@@ -28,15 +28,19 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
         setHelpButton(tutorial: dismissable)
     }
 
+
+    private func setHelpButton(tutorial dismissable: DismissableTutorial) {
+        let helpButton = UIBarButtonItem(title: "Help?", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
+        self.navigationItem.setRightBarButton(helpButton, animated: false)
+    }
+
+    
     internal func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let dismissable = viewController as! DismissableTutorial
         setHelpButton(tutorial: dismissable)
     }
 
 
-    private func setHelpButton(tutorial dismissable: DismissableTutorial) {
-        let helpButton = UIBarButtonItem(title: "Help?", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
-        self.navigationItem.setRightBarButton(helpButton, animated: false)
-    }
+
 
 }

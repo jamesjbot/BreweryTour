@@ -29,11 +29,26 @@ class StylesTableList: NSObject {
     
     fileprivate var filteredObjects: [Style] = [Style]()
     fileprivate var frc : NSFetchedResultsController<Style>!
-    var observer : Observer!
+    fileprivate var observer : Observer!
 
 
     // MARK: Functions
 
+    // This is the inital styles populate on a brand new startup
+    // This is performed in the background on initialization
+    fileprivate func downloadBeerStyles() {
+        BreweryDBClient.sharedInstance().downloadBeerStyles(){
+            (success, msg) -> Void in
+            if !success {
+                self.observer.sendNotify(from: self, withMsg: "Failed to download initial styles\ncheck network connection and try again.")
+            } else {
+                // Added performFetch otherwise dat would not reload when there is a
+                // refreshAllObjects in the context.
+                self.refetchData()
+                self.observer.sendNotify(from: self, withMsg: Message.Reload)
+            }
+        }
+    }
     internal func element(at index: Int) -> Style {
         return frc.fetchedObjects![index]
     }
@@ -73,22 +88,15 @@ class StylesTableList: NSObject {
             fatalError("Critical coredata read failure")
         }
     }
+}
 
 
-    // This is the inital styles populate on a brand new startup
-    // This is performed in the background on initialization
-    fileprivate func downloadBeerStyles() {
-        BreweryDBClient.sharedInstance().downloadBeerStyles(){
-            (success, msg) -> Void in
-            if !success {
-                self.observer.sendNotify(from: self, withMsg: "Failed to download initial styles\ncheck network connection and try again.")
-            } else {
-                // Added performFetch otherwise dat would not reload when there is a
-                // refreshAllObjects in the context.
-                self.refetchData()
-                self.observer.sendNotify(from: self, withMsg: Message.Reload)
-            }
-        }
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension StylesTableList: NSFetchedResultsControllerDelegate {
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        observer.sendNotify(from: self, withMsg: Message.Reload)
     }
 }
 
@@ -112,16 +120,6 @@ extension StylesTableList: Subject {
     
     internal func registerObserver(view: Observer) {
         observer = view
-    }
-}
-
-
-// MARK: - NSFetchedResultsControllerDelegate
-
-extension StylesTableList: NSFetchedResultsControllerDelegate {
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        observer.sendNotify(from: self, withMsg: Message.Reload)
     }
 }
 

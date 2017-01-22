@@ -25,11 +25,9 @@ protocol ImageLinkingProcotol {
 class ManagedObjectImageLinker: ImageLinkingProcotol {
 
     // MARK: Constants
-
-    private let timerDelay: Double = 3
-    private let maxSaves = 200
-
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
+    private let maxSaves = 200
+    private let timerDelay: Double = 3
 
     // MARK: Variables
 

@@ -22,51 +22,54 @@ class Mediator {
 
     // MARK: Variables
 
+    private var automaticallySegueValue: Bool = false
+    fileprivate var busyObservers: [BusyObserver] = []
+    fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
+    fileprivate var passedItemObservers: [ReceiveBroadcastSetSelected] = []
+    fileprivate var passedItem: NSManagedObject?
+
+    // StyleMapStrategy variables
     internal var onlyValidStyleStrategy: Int = 1
-
-    private var StyleStrategyID:Int = 1
-
     internal var nextPublicStyleStrategyID: Int {
         get {
             StyleStrategyID = StyleStrategyID + 1
             return StyleStrategyID
         }
     }
-
-    fileprivate var objectObserver: [ReceiveBroadcastSetSelected] = []
-
-    fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
-
-    fileprivate var busyObservers: [BusyObserver] = []
-
-    private var automaticallySegueValue: Bool = false
-
-    fileprivate var passedItem: NSManagedObject?
+    private var StyleStrategyID:Int = 1
 
     fileprivate var lastMapSliderValue: Int = 42
+
     // MARK: Functions
 
-    internal func setAutomaticallySegue(to: Bool) {
-        automaticallySegueValue = to
-    }
-
-    internal func isAutomaticallySegueing() -> Bool {
-        return automaticallySegueValue
-    }
-
-    internal func getPassedItem() -> NSManagedObject? {
-        return passedItem
+    // MARK: - Mapslider values
+    internal func lastSliderValue() -> Int {
+        return lastMapSliderValue
     }
 
     internal func setLastSliderValue(_ i: Int) {
         lastMapSliderValue = Int(i)
     }
 
-    internal func lastSliderValue() -> Int {
-        return lastMapSliderValue
+
+    // MARK: - PassingItem
+    internal func getPassedItem() -> NSManagedObject? {
+        return passedItem
     }
 
-    // Singleton Implementation
+
+    // MARK: - Segueing
+    internal func isAutomaticallySegueing() -> Bool {
+        return automaticallySegueValue
+    }
+
+
+    internal func setAutomaticallySegue(to: Bool) {
+        automaticallySegueValue = to
+    }
+
+
+    // MARK: - Singleton Implementation
     private init(){
     }
     
@@ -83,11 +86,16 @@ class Mediator {
 
 extension Mediator: MediatorBroadcastSetSelected {
 
+    internal func registerForObjectUpdate(observer: ReceiveBroadcastSetSelected) {
+        passedItemObservers.append(observer)
+    }
+
+
     // When an element on categoryScreen is selected, process it on BreweryDBClient
     internal func select(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passedItem = thisItem
         //Notify everyone who wants to know what the selcted item is
-        for i in objectObserver {
+        for i in passedItemObservers {
             i.updateObserversSelected(item: thisItem)
         }
 
@@ -100,27 +108,16 @@ extension Mediator: MediatorBroadcastSetSelected {
                 completion: completion)
         }
     }
-
-    internal func registerForObjectUpdate(observer: ReceiveBroadcastSetSelected) {
-        objectObserver.append(observer)
-    }
-
 }
 
 
 // MARK: - MediatorBusyObserver
 
 extension Mediator: MediatorBusyObserver {
-
-    func registerForBusyIndicator(observer: BusyObserver) {
-        busyObservers.append(observer)
+    func isSystemBusy() -> Bool {
+        return BreweryAndBeerCreationQueue.sharedInstance().isBreweryAndBeerCreationRunning()
     }
 
-    func notifyStoppingWork() {
-        for i in busyObservers {
-            i.stopAnimating()
-        }
-    }
 
     func notifyStartingWork() {
         for i in busyObservers {
@@ -128,8 +125,16 @@ extension Mediator: MediatorBusyObserver {
         }
     }
 
-    func isSystemBusy() -> Bool {
-        return BreweryAndBeerCreationQueue.sharedInstance().isBreweryAndBeerCreationRunning()
+
+    func notifyStoppingWork() {
+        for i in busyObservers {
+            i.stopAnimating()
+        }
+    }
+
+
+    func registerForBusyIndicator(observer: BusyObserver) {
+        busyObservers.append(observer)
     }
 }
 
@@ -138,16 +143,17 @@ extension Mediator: MediatorBusyObserver {
 
 extension Mediator: BroadcastManagedObjectContextRefresh {
 
-    internal func registerManagedObjectContextRefresh(_ a: ReceiveBroadcastManagedObjectContextRefresh) {
-        // Add a new observer
-        contextObservers.append(a)
-    }
-
     internal func allBeersAndBreweriesDeleted() {
         passedItem = nil
         for i in contextObservers {
             i.contextsRefreshAllObjects()
         }
+    }
+
+
+    internal func registerManagedObjectContextRefresh(_ a: ReceiveBroadcastManagedObjectContextRefresh) {
+        // Add a new observer
+        contextObservers.append(a)
     }
 }
 

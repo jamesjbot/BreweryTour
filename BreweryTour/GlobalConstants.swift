@@ -12,6 +12,7 @@
 
 import Foundation
 
+// Constants for tutorial screen
 public struct g_constants {
     static let FirstLaunched = "firstLaunched"
     static let CategoryViewTutorial = "categoryTutorial"

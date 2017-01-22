@@ -22,9 +22,8 @@ import MapKit
 class FavoriteBreweriesViewController: UIViewController {
     
     // MARK: Constants
-    
-    let paddingForPoint : CGFloat = 20
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+    fileprivate let paddingForPoint : CGFloat = 20
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
 
@@ -35,10 +34,10 @@ class FavoriteBreweriesViewController: UIViewController {
 
     // MARK: IBOutlets
 
-    @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
-    
+    @IBOutlet weak var tutorialView: UIView!
+
     @IBOutlet weak var tableView: UITableView!
 
 
@@ -52,7 +51,51 @@ class FavoriteBreweriesViewController: UIViewController {
 
     
     // MARK: Functions
-    
+
+    func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
+        guard let selectedObject = frcForBrewery.object(at: indexPath as IndexPath) as Brewery? else {
+            displayAlertWindow(title: "Error", msg: "Sorry there was an error formating page, \nplease try again.")
+            return
+        }
+        // Populate cell from the NSManagedObject instance
+        DispatchQueue.main.async {
+            cell.textLabel?.text = selectedObject.name!
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.detailTextLabel?.text = ""
+            if let data : NSData = (selectedObject.image) {
+                let im = UIImage(data: data as Data)
+                cell.imageView?.image = im
+            }
+        }
+
+    }
+
+    // Favorite Breweries now runs off of MainContext
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+        performFetchOnResultsController()
+    }
+
+
+    fileprivate func performFetchOnResultsController(){
+        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "favorite = 1")
+        frcForBrewery = NSFetchedResultsController(fetchRequest: request,
+                                                   managedObjectContext: readOnlyContext!,
+                                                   sectionNameKeyPath: nil,
+                                                   cacheName: nil)
+        // Create a request for Brewery objects and fetch the request from Coredata
+        do {
+            try frcForBrewery.performFetch()
+        } catch {
+            displayAlertWindow(title: "Read Coredata", msg: "Sorry there was an error, \nplease try again.")
+        }
+    }
+
+
+    // MARK: - Life Cycle Management
+
     override func viewDidLoad() {
         super.viewDidLoad()
         //Accept changes from backgroundContexts
@@ -94,64 +137,12 @@ class FavoriteBreweriesViewController: UIViewController {
         }
     }
 
-    
-    // Favorite Breweries now runs off of MainContext
-    required init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
-        performFetchOnResultsController()
-    }
-    
-    
-    fileprivate func performFetchOnResultsController(){
-        let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "favorite = 1")
-        frcForBrewery = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: readOnlyContext!,
-                                         sectionNameKeyPath: nil,
-                                         cacheName: nil)
-        // Create a request for Brewery objects and fetch the request from Coredata
-        do {
-            try frcForBrewery.performFetch()
-        } catch {
-            displayAlertWindow(title: "Read Coredata", msg: "Sorry there was an error, \nplease try again.")
-        }
-    }
-    
-    
-    func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        guard let selectedObject = frcForBrewery.object(at: indexPath as IndexPath) as Brewery? else {
-            displayAlertWindow(title: "Error", msg: "Sorry there was an error formating page, \nplease try again.")
-            return
-        }
-        // Populate cell from the NSManagedObject instance
-        DispatchQueue.main.async {
-            cell.textLabel?.text = selectedObject.name!
-            cell.textLabel?.adjustsFontSizeToFitWidth = true
-            cell.detailTextLabel?.text = ""
-            if let data : NSData = (selectedObject.image) {
-                let im = UIImage(data: data as Data)
-                cell.imageView?.image = im
-            }
-        }
-
-    }
 }
+// MARK: - DismissableTutorial
 
-
-// MARK: - ReceiveBroadcastManagedObjectContextRefresh
-
-extension FavoriteBreweriesViewController: ReceiveBroadcastManagedObjectContextRefresh {
-
-    internal func contextsRefreshAllObjects() {
-        frcForBrewery.managedObjectContext.refreshAllObjects()
-        // We must performFetch after refreshing context, otherwise we will retain
-        // Old information is retained.
-        do {
-            try frcForBrewery.performFetch()
-        } catch {
-
-        }
+extension FavoriteBreweriesViewController : DismissableTutorial {
+    func enableTutorial() {
+        tutorialView.isHidden = false
     }
 }
 
@@ -189,30 +180,65 @@ extension FavoriteBreweriesViewController: NSFetchedResultsControllerDelegate {
 }
 
 
+// MARK: - ReceiveBroadcastManagedObjectContextRefresh
+
+extension FavoriteBreweriesViewController: ReceiveBroadcastManagedObjectContextRefresh {
+
+    internal func contextsRefreshAllObjects() {
+        frcForBrewery.managedObjectContext.refreshAllObjects()
+        // We must performFetch after refreshing context, otherwise we will retain
+        // Old information is retained.
+        do {
+            try frcForBrewery.performFetch()
+        } catch {
+
+        }
+    }
+}
+
+
 // MARK: - UITableViewDataSource
 
 extension FavoriteBreweriesViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        performFetchOnResultsController()
-        return (frcForBrewery.fetchedObjects?.count)!
-    }
-    
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name
         let cell = tableView.dequeueReusableCell(withIdentifier: "FavoriteCell", for: indexPath)
         configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
     }
-    
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        performFetchOnResultsController()
+        return (frcForBrewery.fetchedObjects?.count)!
+    }
 }
 
 
 // MARK: - UITableViewDelegate
 
 extension FavoriteBreweriesViewController : UITableViewDelegate {
-    
+
+    // When we select a favorite brewery lets zoom to that brewery on the map
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+
+        // Send the brewery to the mediator so that selected beers will update with the selection
+        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: frcForBrewery.object(at: indexPath)) {
+            (success, msg) -> Void in
+        }
+
+        // Switch to get directions to brewery
+        if let lat = Double(frcForBrewery.object(at: indexPath).latitude!) ,
+            let long = Double(frcForBrewery.object(at: indexPath).longitude!) {
+            let location: MKPlacemark =  MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
+            let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
+            let mapItem = MKMapItem(placemark: location)
+            mapItem.name = frcForBrewery.object(at: indexPath).name
+            mapItem.openInMaps(launchOptions: launchOptions)
+        }
+    }
+
+
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         let deleteAction = UITableViewRowAction(style: .normal, title: "Remove from Favorite") {
             (rowAction: UITableViewRowAction, indexPath: IndexPath) -> Void in
@@ -236,35 +262,9 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
         deleteAction.backgroundColor = UIColor.green
         return [deleteAction]
     }
-    
-    
-    // When we select a favorite brewery lets zoom to that brewery on the map
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        // Send the brewery to the mediator so that selected beers will update with the selection
-        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: frcForBrewery.object(at: indexPath)) {
-            (success, msg) -> Void in
-        }
-
-        // Switch to get directions to brewery
-        if let lat = Double(frcForBrewery.object(at: indexPath).latitude!) ,
-            let long = Double(frcForBrewery.object(at: indexPath).longitude!) {
-            let location: MKPlacemark =  MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: lat, longitude: long ))
-            let launchOptions = [MKLaunchOptionsDirectionsModeKey: MKLaunchOptionsDirectionsModeDriving]
-            let mapItem = MKMapItem(placemark: location)
-            mapItem.name = frcForBrewery.object(at: indexPath).name
-            mapItem.openInMaps(launchOptions: launchOptions)
-        }
-    }
 }
 
 
-// MARK: - DismissableTutorial
 
-extension FavoriteBreweriesViewController : DismissableTutorial {
-    func enableTutorial() {
-        tutorialView.isHidden = false
-    }
-}
 
 

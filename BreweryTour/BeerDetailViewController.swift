@@ -18,29 +18,30 @@ class BeerDetailViewController: UIViewController {
 
     // MARK: Constants
 
+    private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
-    private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
+
 
     // MARK: Variables
 
-    private var isBeerFavorited : Bool!
     internal var beer : Beer!
+    private var isBeerFavorited : Bool!
 
 
     // MARK: IBOutlets
-    
-    @IBOutlet weak fileprivate var tasting: UITextView!
-    @IBOutlet weak var breweryName: UILabel!
-    @IBOutlet weak var beerNameLabel: UILabel!
-    @IBOutlet weak var availableText: UILabel!
-    @IBOutlet weak var organicLabel: UILabel!
+
     @IBOutlet weak var abv: UILabel!
-    @IBOutlet weak var style: UILabel!
-    @IBOutlet weak var ibu: UILabel!
+    @IBOutlet weak var availableText: UILabel!
     @IBOutlet weak var beerDescriptionTextView: UITextView!
-    @IBOutlet weak var favoriteButton: UIButton!
     @IBOutlet weak var beerImage: UIImageView!
+    @IBOutlet weak var beerNameLabel: UILabel!
+    @IBOutlet weak var breweryName: UILabel!
+    @IBOutlet weak var favoriteButton: UIButton!
+    @IBOutlet weak var ibu: UILabel!
+    @IBOutlet weak var organicLabel: UILabel!
+    @IBOutlet weak var style: UILabel!
+    @IBOutlet weak fileprivate var tasting: UITextView!
 
 
     // MARK: IBActions
@@ -64,12 +65,66 @@ class BeerDetailViewController: UIViewController {
     
     // MARK: Functions
 
+    private func getStyleName(id : String,
+                              completion: @escaping (_ name: String ) -> Void ) {
+        let request = NSFetchRequest<Style>(entityName: "Style")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format : "id = %@", id )
+        readOnlyContext?.perform {
+            do {
+                let result = try self.readOnlyContext?.fetch(request)
+                completion(result?.first?.displayName as String? ?? "")
+            } catch {
+                // StyleID not in database.
+                completion("")
+            }
+        }
+    }
+
+
+    // All beers are in the database already, we just mark their
+    // favorite status and update tasting notes
+    fileprivate func saveBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
+        container?.performBackgroundTask() {
+            (context) -> Void in
+            let updatableBeer = context.object(with: self.beer.objectID) as! Beer
+            updatableBeer.favorite = makeFavorite
+            updatableBeer.tastingNotes = self.tasting.text
+            do {
+                try context.save()
+            } catch {
+                self.displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
+            }
+        }
+    }
+
+
+    private func searchForBeerInCoreData(context: NSManagedObjectContext) -> Beer? {
+        // Check to make sure the Beer isn't already in the database
+        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
+        do {
+            let results = try context.fetch(request)
+            if (results.count) > 0 {
+                return results[0]
+            }
+        } catch {
+            // Should never happen.
+            fatalError("Error retriving a beer")
+        }
+        return nil
+    }
+    
+
     // Makes the description UITextView scroll to the top.
     override func viewDidLayoutSubviews() {
         beerDescriptionTextView.setContentOffset(CGPoint.zero, animated: false)
     }
 
-    
+
+    // MARK: - Life Cycle Management 
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -123,65 +178,19 @@ class BeerDetailViewController: UIViewController {
         // Raise keyboard when typing in UITextView
         subscribeToKeyboardShowNotifications()
     }
-
-
-    private func getStyleName(id : String,
-                              completion: @escaping (_ name: String ) -> Void ) {
-        let request = NSFetchRequest<Style>(entityName: "Style")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format : "id = %@", id )
-        readOnlyContext?.perform {
-            do {
-                let result = try self.readOnlyContext?.fetch(request)
-                completion(result?.first?.displayName as String? ?? "")
-            } catch {
-                // StyleID not in database.
-                completion("")
-            }
-        }
-    }
-    
-    
-    private func searchForBeerInCoreData(context: NSManagedObjectContext) -> Beer? {
-        // Check to make sure the Beer isn't already in the database
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
-        do {
-            let results = try context.fetch(request)
-            if (results.count) > 0 {
-                return results[0]
-            }
-        } catch {
-            // Should never happen.
-            fatalError("Error retriving a beer")
-        }
-        return nil
-    }
-
-    
-    // All beers are in the database already, we just mark their 
-    // favorite status and update tasting notes
-    fileprivate func saveBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
-        container?.performBackgroundTask() {
-            (context) -> Void in
-            let updatableBeer = context.object(with: self.beer.objectID) as! Beer
-            updatableBeer.favorite = makeFavorite
-            updatableBeer.tastingNotes = self.tasting.text
-            do {
-                try context.save()
-            } catch {
-                self.displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
-            }
-        }
-    }
 }
 
 
 // MARK: - UITextViewDelegate
 
 extension BeerDetailViewController : UITextViewDelegate {
-    
+
+    // Every time the user finshes editing their tasting notes save the notes
+    func textViewDidEndEditing(_ textView: UITextView) {
+        saveBeerInCoreDataToBackgroundContext(makeFavorite: beer.favorite)
+    }
+
+
     // This clears the textView when the user begins editting the text view
     func textViewShouldBeginEditing(_ textView: UITextView) -> Bool {
         //The tasting notes should only be deleted if it is placeholder info
@@ -189,12 +198,6 @@ extension BeerDetailViewController : UITextViewDelegate {
             textView.text = ""
         }
         return true
-    }
-
-    
-    // Every time the user finshes editing their tasting notes save the notes
-    func textViewDidEndEditing(_ textView: UITextView) {
-        saveBeerInCoreDataToBackgroundContext(makeFavorite: beer.favorite)
     }
 
     

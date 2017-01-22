@@ -29,47 +29,31 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 // MARK: - Constants
 
     // These are delays to update the mapViewController
-    let initialDelay = 1000 // 1 second
-    let longDelay = 10000 // 10 seconds
+    private let initialDelay = 1000 // 1 second
+    private let longDelay = 10000 // 10 seconds
 
-    let maxShortDelayLoops = 3
-    private let strategyIDIncrement = 20
+    private let maxShortDelayLoops = 3
+
+    internal var runningID: Int?
+
     // Coredata
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
-    var runningID: Int?
 
 // MARK: - Variables
 
-    private var maxPoints: Int?
+    private var bounceDelay: Int = 0
+    private var debouncedFunction: (()->())? = nil
 
-    var delayLoops = 0
-    var bounceDelay: Int = 0
+    private var delayLoops = 0
+    private var maxPoints: Int?
 
     fileprivate var styleFRC: NSFetchedResultsController<Style> = NSFetchedResultsController<Style>()
 
-    private var debouncedFunction: (()->())? = nil
 
 
 // MARK: - Functions
-
-    init(s: Style, view: MapViewController, location: CLLocation, maxPoints points: Int) {
-        super.init()
-        runningID = Mediator.sharedInstance().nextPublicStyleStrategyID
-        //Mediator.sharedInstance().StyleStrategyID += strategyIDIncrement
-        maxPoints = points
-        targetLocation = location
-        breweryLocations.removeAll()
-        initialFetchBreweries(byStyle: s)
-        parentMapViewController = view
-        sortLocations()
-        if breweryLocations.count > maxPoints! {
-            breweryLocations = Array(breweryLocations[0..<maxPoints!])
-        }
-        sendAnnotationsToMap()
-    }
-
 
     // Used for when style is updated with new breweries
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
@@ -134,6 +118,23 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
             })
         }
         fetch()
+        sortLocations()
+        if breweryLocations.count > maxPoints! {
+            breweryLocations = Array(breweryLocations[0..<maxPoints!])
+        }
+        sendAnnotationsToMap()
+    }
+
+
+    init(s: Style, view: MapViewController, location: CLLocation, maxPoints points: Int) {
+        super.init()
+        runningID = Mediator.sharedInstance().nextPublicStyleStrategyID
+        //Mediator.sharedInstance().StyleStrategyID += strategyIDIncrement
+        maxPoints = points
+        targetLocation = location
+        breweryLocations.removeAll()
+        initialFetchBreweries(byStyle: s)
+        parentMapViewController = view
         sortLocations()
         if breweryLocations.count > maxPoints! {
             breweryLocations = Array(breweryLocations[0..<maxPoints!])

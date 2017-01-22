@@ -21,63 +21,38 @@ class BreweryTableList: NSObject, Subject {
 
     // MARK: Constants
 
+    private let initialDelay = 1000 // 1 second
+    private let longDelay = 10000 // 10 seconds
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
-
-    let initialDelay = 1000 // 1 second
-    let longDelay = 10000 // 10 seconds
 
     // MARK: Variables
 
-    var bounceDelay: Int = 0 // 10
+    private var bounceDelay: Int = 0 // 10
+
+    // Hold the brewery from the style object
+    fileprivate var copyOfSet:[Brewery] = []
 
     fileprivate var currentlyObservingStyle: Style?
-    fileprivate var observer : Observer!
+
+    fileprivate var debouncedFunction: (()->())? = nil
 
     // variables for selecting breweries with a style
     fileprivate var displayableBreweries = [Brewery]()
-    fileprivate var newBeers = [Beer]()
-
 
     // variable for search filtering
     internal var filteredObjects: [Brewery] = [Brewery]()
 
+    fileprivate var observer : Observer!
+
     internal var styleFRCObserver: NSFetchedResultsController<Style>!
-
-    fileprivate var copyOfSet:[Brewery] = []
-
-    fileprivate var debouncedFunction: (()->())? = nil
 
 
     // MARK: - Functions
 
-    //On start up we don't have a style selected so this ViewController 
-    //will be blank
-    override init(){
-        super.init()
-        //Accept changes from backgroundContexts
-        readOnlyContext?.automaticallyMergesChangesFromParent = true
-
-        // Create a Style fetched results controller that will get updates from coredata.
-        // The fetched style has the breweries embedded in brewerywithstyle NSSet
-        styleFRCObserver = createFetchedResultsController(withStyleID: nil)
-
-        // Register for context updates with Mediator
-        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
-
-        // Initialize debounce function and associate it with sortanddisplay
-        bounceDelay = initialDelay
-        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
-            self.sortSet()
-        })
+    fileprivate func copySetAndDebounceSort(breweries: [Brewery]) {
+        copyOfSet = breweries
+        debouncedFunction!()
     }
-
-
-    private func sortSet() {
-        copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
-            return a.name! < b.name!
-        })
-    }
-
 
     private func createFetchedResultsController(withStyleID: String?) -> NSFetchedResultsController<Style> {
         let styleRequest: NSFetchRequest<Style> = Style.fetchRequest()
@@ -85,11 +60,10 @@ class BreweryTableList: NSObject, Subject {
         styleRequest.predicate = NSPredicate(format: "id == %@",
                                              (withStyleID ?? "") )
         let tempFRC = NSFetchedResultsController(fetchRequest: styleRequest,
-                                                      managedObjectContext: readOnlyContext!,
-                                                      sectionNameKeyPath: nil, cacheName: nil)
+                                                 managedObjectContext: readOnlyContext!,
+                                                 sectionNameKeyPath: nil, cacheName: nil)
         return tempFRC
     }
-
 
     // This function will drop the excessive calls sort
     // Borrowed from
@@ -111,7 +85,29 @@ class BreweryTableList: NSObject, Subject {
         }
     }
 
-    
+
+    //On start up we don't have a style selected so this ViewController
+    //will be blank
+    override init(){
+        super.init()
+        //Accept changes from backgroundContexts
+        readOnlyContext?.automaticallyMergesChangesFromParent = true
+
+        // Create a Style fetched results controller that will get updates from coredata.
+        // The fetched style has the breweries embedded in brewerywithstyle NSSet
+        styleFRCObserver = createFetchedResultsController(withStyleID: nil)
+
+        // Register for context updates with Mediator
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
+
+        // Initialize debounce function and associate it with sortanddisplay
+        bounceDelay = initialDelay
+        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
+            self.sortSet()
+        })
+    }
+
+
     internal func prepareToShowTable() {
         // Get the currently selected style form the mediator
         // If the selection is a brewery then the CategoryViewController would have intercepted that selection
@@ -136,9 +132,10 @@ class BreweryTableList: NSObject, Subject {
     }
 
 
-    fileprivate func copySetAndDebounceSort(breweries: [Brewery]) {
-        copyOfSet = breweries
-        debouncedFunction!()
+    private func sortSet() {
+        copyOfSet.sort(by: { (a: Brewery, b: Brewery) -> Bool in
+            return a.name! < b.name!
+        })
     }
 
 }
@@ -222,6 +219,20 @@ extension BreweryTableList: TableList {
 }
 
 
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension BreweryTableList : NSFetchedResultsControllerDelegate {
+
+    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        if let breweries = (controller.fetchedObjects?.first as? Style)?.brewerywithstyle?.allObjects as? [Brewery] {
+            copySetAndDebounceSort(breweries: breweries)
+        }
+        observer.sendNotify(from: self, withMsg: Message.Reload)
+
+    }
+}
+
+
 // MARK: - ReceiveBroadcastManagedObjectContextRefresh
 
 extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
@@ -238,18 +249,7 @@ extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
 }
 
 
-// MARK: - NSFetchedResultsControllerDelegate
 
-extension BreweryTableList : NSFetchedResultsControllerDelegate {
-    
-    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        if let breweries = (controller.fetchedObjects?.first as? Style)?.brewerywithstyle?.allObjects as? [Brewery] {
-            copySetAndDebounceSort(breweries: breweries)
-        }
-        observer.sendNotify(from: self, withMsg: Message.Reload)
-
-    }
-}
 
 
 

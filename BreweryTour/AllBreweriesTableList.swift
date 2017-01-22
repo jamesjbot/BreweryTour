@@ -7,7 +7,7 @@
 //
 
 /*
-    This object is the backing model to show all breweries.
+ This object is the backing model to show all breweries.
  */
 
 import Foundation
@@ -19,19 +19,18 @@ class AllBreweriesTableList: NSObject, Subject {
 
     // MARK: Constants
 
-    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
-
-    var observer : Observer!
-    
-    func registerObserver(view: Observer) {
-        observer = view
-    }
-    
-    internal var filteredObjects: [Brewery] = [Brewery]()
-    
-    internal var frc : NSFetchedResultsController<Brewery>!
-    
     private let coreDataStack = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack
+
+    internal var filteredObjects: [Brewery] = [Brewery]()
+
+    internal var frc : NSFetchedResultsController<Brewery>!
+
+    fileprivate var observer : Observer!
+
+    private let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+
+
+    // MARK: - Functions
 
     override init(){
         super.init()
@@ -55,13 +54,17 @@ class AllBreweriesTableList: NSObject, Subject {
         } catch {
             observer.sendNotify(from: self, withMsg: Message.Retry)
         }
-        
+
         guard frc.fetchedObjects?.count == 0 else {
             // We have brewery entries go ahead and display them viewcontroller
             return
         }
-
     }
+
+    internal func registerObserver(view: Observer) {
+        observer = view
+    }
+
 }
 
 
@@ -70,7 +73,7 @@ class AllBreweriesTableList: NSObject, Subject {
 extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 
     internal func contextsRefreshAllObjects() {
-         frc.managedObjectContext.refreshAllObjects()
+        frc.managedObjectContext.refreshAllObjects()
         // We must performFetch after refreshing context, otherwise we will retain
         // Old information is retained.
         do {
@@ -115,16 +118,6 @@ extension AllBreweriesTableList : TableList {
     }
 
 
-    func getNumberOfRowsInSection(searchText: String?) -> Int {
-        // If we batch delete in the background frc will not retrieve delete results.
-        // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
-        guard searchText == "" else {
-            return filteredObjects.count
-        }
-        return frc.fetchedObjects!.count
-    }
-
-
     func filterContentForSearchText(searchText: String, completion: ((_ success: Bool)-> Void)? = nil ) {
 
         // Only filter object if there are objects to filter.
@@ -140,6 +133,16 @@ extension AllBreweriesTableList : TableList {
         if let completion = completion {
             completion(true)
         }
+    }
+
+
+    func getNumberOfRowsInSection(searchText: String?) -> Int {
+        // If we batch delete in the background frc will not retrieve delete results.
+        // Fetch data because when we use the on screen segemented display to switch to this it will refresh the display, because of the back delete.
+        guard searchText == "" else {
+            return filteredObjects.count
+        }
+        return frc.fetchedObjects!.count
     }
 
 
@@ -183,11 +186,16 @@ extension AllBreweriesTableList: OnlineSearchCapable {
 // MARK: - NSFetchedResultsControllerDelegate
 
 extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
-    
+
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Send message to observer regardless of situation. The observer decides if it should act.
         observer.sendNotify(from: self, withMsg: Message.Reload)
 
     }
 }
+
+
+
+
+
 

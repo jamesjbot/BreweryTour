@@ -23,11 +23,11 @@ class BeersViewModel: NSObject {
     
     // MARK: Variables
 
-    fileprivate var mediator:  Mediator = Mediator.sharedInstance()
-
     fileprivate var filteredObjects: [Beer] = [Beer]()
 
     internal var frc : NSFetchedResultsController<Beer>! = NSFetchedResultsController()
+
+    fileprivate var mediator:  Mediator = Mediator.sharedInstance()
 
     internal var observer : Observer?
 
@@ -99,10 +99,28 @@ class BeersViewModel: NSObject {
 }
 
 
+// MARK: - NSFetchedResultsControllerDelegate
+
+extension BeersViewModel: NSFetchedResultsControllerDelegate {
+
+    // Delegate changes occured now notify observer to reload itself
+    internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        // Tell the SelectedBeersViewController that is registerd to refresh itself from me
+        observer?.sendNotify(from: self, withMsg: Message.Reload)
+    }
+}
+
+
 // MARK: - ReceiveBroadcastSetSelected
 
 // When a new style or brewery is selected this method is called
 extension BeersViewModel: ReceiveBroadcastSetSelected {
+
+    // This is just a helper function to register with the mediator for updates.
+    fileprivate func registerForSelectedObjectObserver(broadcaster: MediatorBroadcastSetSelected) {
+        broadcaster.registerForObjectUpdate(observer: self)
+    }
+
 
     internal func updateObserversSelected(item: NSManagedObject) {
         selectedObject = item
@@ -110,11 +128,6 @@ extension BeersViewModel: ReceiveBroadcastSetSelected {
         // is not onscreen, because SelectedBeersViewController is mutually exclusive 
         // to the CategoryViewController.
         performFetchRequestFor(observerNeedsNotification: false)
-    }
-
-    // This is just a helper function to register with the mediator for updates.
-    fileprivate func registerForSelectedObjectObserver(broadcaster: MediatorBroadcastSetSelected) {
-        broadcaster.registerForObjectUpdate(observer: self)
     }
 }
 
@@ -138,18 +151,6 @@ extension BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh {
     // Helper function to register as an obsever
     fileprivate func registerForManagedObjectContextRefresh(broadcaster: BroadcastManagedObjectContextRefresh) {
         broadcaster.registerManagedObjectContextRefresh(self)
-    }
-}
-
-
-// MARK: - NSFetchedResultsControllerDelegate
-
-extension BeersViewModel: NSFetchedResultsControllerDelegate {
-
-    // Delegate changes occured now notify observer to reload itself
-    internal func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        // Tell the SelectedBeersViewController that is registerd to refresh itself from me
-        observer?.sendNotify(from: self, withMsg: Message.Reload)
     }
 }
 

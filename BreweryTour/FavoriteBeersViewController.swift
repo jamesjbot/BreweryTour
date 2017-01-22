@@ -19,10 +19,10 @@ class FavoriteBeersViewController: UIViewController {
     
     // MARK: Constants
 
-    fileprivate let reuseID = "FavoriteCell"
-    private let paddingForPoint : CGFloat = 20
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+    private let paddingForPoint : CGFloat = 20
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+    fileprivate let reuseID = "FavoriteCell"
 
 
     // MARK: Variables
@@ -32,9 +32,9 @@ class FavoriteBeersViewController: UIViewController {
 
     // MARK: IBOutlets
     
-    @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
+    @IBOutlet weak var tutorialView: UIView!
 
     @IBOutlet weak var tableView: UITableView!
 
@@ -49,7 +49,48 @@ class FavoriteBeersViewController: UIViewController {
 
 
     // MARK: - Functions
-    
+
+    fileprivate func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
+        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Beer? else {
+            displayAlertWindow(title: "Data Access", msg: "Sorry there was an error accessing data please try again")
+            return
+        }
+        // Populate cell from the NSManagedObject instance
+        DispatchQueue.main.async {
+            cell.textLabel?.adjustsFontSizeToFitWidth = true
+            cell.textLabel?.text = selectedObject.beerName
+            cell.detailTextLabel?.text = selectedObject.brewer?.name
+            if let data : NSData = (selectedObject.image) {
+                let im = UIImage(data: data as Data)
+                cell.imageView?.image = im
+            }
+        }
+    }
+
+
+    required init?(coder aDecoder: NSCoder) {
+        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
+        request.sortDescriptors = []
+        request.predicate = NSPredicate( format: "favorite == YES")
+        frc = NSFetchedResultsController(fetchRequest: request,
+                                         managedObjectContext: readOnlyContext!,
+                                         sectionNameKeyPath: nil,
+                                         cacheName: nil)
+        super.init(coder: aDecoder)
+    }
+
+
+    fileprivate func performFetchOnResultsController(){
+        // Create a request for Beer objects and fetch the request from Coredata
+        do {
+            try frc.performFetch()
+        } catch {
+            displayAlertWindow(title: "Data access", msg: "Sorry there was an error accessing data please try again.")
+        }
+    }
+
+    // MARK: - Life Cycle Management
+
     override func viewDidLoad() {
         super.viewDidLoad()
         // Accept changes from backgroundContexts
@@ -89,45 +130,14 @@ class FavoriteBeersViewController: UIViewController {
             tutorialView.isHidden = true
         }
     }
-    
-    
-    required init?(coder aDecoder: NSCoder) {
-        let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
-        request.sortDescriptors = []
-        request.predicate = NSPredicate( format: "favorite == YES")
-        frc = NSFetchedResultsController(fetchRequest: request,
-                                         managedObjectContext: readOnlyContext!,
-                                         sectionNameKeyPath: nil,
-                                         cacheName: nil)
-        super.init(coder: aDecoder)
-    }
-    
+}
 
-    fileprivate func performFetchOnResultsController(){
-        // Create a request for Beer objects and fetch the request from Coredata
-        do {
-            try frc.performFetch()
-        } catch {
-            displayAlertWindow(title: "Data access", msg: "Sorry there was an error accessing data please try again.")
-        }
-    }
-    
-    
-    fileprivate func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
-        guard let selectedObject = frc.object(at: indexPath as IndexPath) as Beer? else {
-            displayAlertWindow(title: "Data Access", msg: "Sorry there was an error accessing data please try again")
-            return
-        }
-        // Populate cell from the NSManagedObject instance
-        DispatchQueue.main.async {
-            cell.textLabel?.adjustsFontSizeToFitWidth = true
-            cell.textLabel?.text = selectedObject.beerName
-            cell.detailTextLabel?.text = selectedObject.brewer?.name
-            if let data : NSData = (selectedObject.image) {
-                let im = UIImage(data: data as Data)
-                cell.imageView?.image = im
-            }
-        }
+
+// MARK: - DismissableTutorial
+
+extension FavoriteBeersViewController : DismissableTutorial {
+    func enableTutorial() {
+        tutorialView.isHidden = false
     }
 }
 
@@ -168,25 +178,45 @@ extension FavoriteBeersViewController: NSFetchedResultsControllerDelegate {
 // MARK: - UITableViewDataSource
 
 extension FavoriteBeersViewController: UITableViewDataSource {
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return (frc.fetchedObjects?.count) ?? 0
-    }
-    
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name
         let cell = tableView.dequeueReusableCell(withIdentifier: reuseID, for: indexPath)
         configureCell(cell: cell, indexPath: indexPath as NSIndexPath)
         return cell
     }
-    
+
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return (frc.fetchedObjects?.count) ?? 0
+    }
+
 }
 
 
 // MARK: - UITableViewDelegate
 
 extension FavoriteBeersViewController : UITableViewDelegate {
+
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Create target viewcontroller
+        let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
+
+        // Push beer information to Detail View Controller
+        // If there is a data mismatch show error screen
+        if tableView.cellForRow(at: indexPath)?.textLabel?.text != frc.object(at: indexPath).beerName {
+            displayAlertWindow(title: "Data access", msg: "Sorry there was a problem accessing data please try again")
+        }
+
+        // Pass the beer to next view controller via injection
+        destinationViewcontroller.beer = frc.object(at: indexPath)
+
+        // Change the name of the back button
+        tabBarController?.title = "Back"
+
+        // Segue to view controller
+        navigationController?.pushViewController(destinationViewcontroller, animated: true)
+    }
+
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         
@@ -207,27 +237,7 @@ extension FavoriteBeersViewController : UITableViewDelegate {
         deleteAction.backgroundColor = UIColor.green
         return [deleteAction]
     }
-    
-    
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        // Create target viewcontroller
-        let destinationViewcontroller = storyboard?.instantiateViewController(withIdentifier: "BeerDetailViewController") as! BeerDetailViewController
-        
-        // Push beer information to Detail View Controller
-        // If there is a data mismatch show error screen
-        if tableView.cellForRow(at: indexPath)?.textLabel?.text != frc.object(at: indexPath).beerName {
-            displayAlertWindow(title: "Data access", msg: "Sorry there was a problem accessing data please try again")
-        }
 
-        // Pass the beer to next view controller via injection
-        destinationViewcontroller.beer = frc.object(at: indexPath)
-
-        // Change the name of the back button
-        tabBarController?.title = "Back"
-
-        // Segue to view controller
-        navigationController?.pushViewController(destinationViewcontroller, animated: true)
-    }
 }
 
 
@@ -247,12 +257,6 @@ extension FavoriteBeersViewController: ReceiveBroadcastManagedObjectContextRefre
 }
 
 
-// MARK: - DismissableTutorial
 
-extension FavoriteBeersViewController : DismissableTutorial {
-    func enableTutorial() {
-        tutorialView.isHidden = false
-    }
-}
 
 
