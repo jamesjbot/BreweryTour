@@ -117,9 +117,10 @@ class BeerDetailViewController: UIViewController {
     }
     
 
-    // Makes the description UITextView scroll to the top.
+    // Makes the description and tasting notes UITextView scroll to the top.
     override func viewDidLayoutSubviews() {
         beerDescriptionTextView.setContentOffset(CGPoint.zero, animated: false)
+        tasting.setContentOffset(CGPoint.zero, animated: false)
     }
 
 
