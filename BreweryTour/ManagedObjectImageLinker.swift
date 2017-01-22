@@ -51,8 +51,11 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
 
     // MARK: Functions
 
-    internal func queueLinkJob(moID: String, moType: ImageDownloadType, data: NSData) {
-        imagesToBeAssignedQueue[moID] = (moType, data)
+    private func decideToDisableTimer() {
+        if imagesToBeAssignedQueue.count == 0 {
+            // If we finished processing all pending things; stop timer.
+            disableTimer()
+        }
     }
 
 
@@ -64,44 +67,57 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
         }
     }
 
-    
+
+    private func fetchExecute(request: NSFetchRequest<NSFetchRequestResult>, withKey key: String, inContext context: NSManagedObjectContext?) -> [AnyObject]? {
+        // is the Object in Coredata yet
+        request.sortDescriptors = []
+        request.predicate = NSPredicate(format: "id == %@", key)
+        var result: [AnyObject]?
+        do {
+            result = try context?.fetch(request)
+        } catch {
+            NSLog("Critical coredata read problems")
+        }
+        return result
+    }
+
+
+    private func generateRequest(_ type: ImageDownloadType) -> NSFetchRequest<NSFetchRequestResult> {
+        let request: NSFetchRequest<NSFetchRequestResult>?
+        switch type {
+        case .Beer:
+            request = Beer.fetchRequest()
+            break
+        case .Brewery:
+            request = Brewery.fetchRequest()
+            break
+        }
+        return request!
+    }
+
+
+    private func initContext(_ context: NSManagedObjectContext?) {
+        context?.automaticallyMergesChangesFromParent = true
+        context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
+    }
+
+    internal func queueLinkJob(moID: String, moType: ImageDownloadType, data: NSData) {
+        imagesToBeAssignedQueue[moID] = (moType, data)
+    }
+
+
     // Process the last unfull set on the breweriesToBeProcessed queue.
     @objc private func timerProcessImageQueue() {
         let dq = DispatchQueue.global(qos: .userInitiated)
+        let context = backContext
+        initContext(context)
         dq.sync {
             var saves = 0 // Stopping counter
-
-            // configure our context
-            let context = backContext
-            context?.automaticallyMergesChangesFromParent = true
-            context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
             for (key, (type, data ) ) in self.imagesToBeAssignedQueue {
-                let request: NSFetchRequest<NSFetchRequestResult>?
-                switch type {
-                case .Beer:
-                    request = Beer.fetchRequest()
-                    break
-                case .Brewery:
-                    request = Brewery.fetchRequest()
-                    break
-                }
-                // is the Object in Coredata yet
-                request?.sortDescriptors = []
-                request?.predicate = NSPredicate(format: "id == %@", key)
-                var result: [AnyObject]?
-                do {
-                    result = try context?.fetch(request!)
-                } catch {
-                    fatalError("Critical coredata read problems")
-                }
-
+                let request = generateRequest(type)
+                let result = fetchExecute(request: request, withKey: key, inContext: context)
                 guard result?.count == 1 else  {
-                    // else try next image
-                    // As it currently stands we are guaranteed to have clear
-                    // All beers and breweries so if this image is orphaned
-                    // It will be downloaded when the beer or brewery is
-                    // downloaded next time.
-                    if result?.count == 0                         {
+                    if result?.count == 0 { // Remove, no parent found
                         self.imagesToBeAssignedQueue.removeValue(forKey: key)
                     }
                     continue
@@ -129,23 +145,19 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                     do {
                         try context!.save()
                     } catch {
-
+                        NSLog("Failed to save context")
                     }
                 }
 
                 saves += 1
-
                 self.imagesToBeAssignedQueue.removeValue(forKey: key)
-
                 guard saves < self.maxSaves else {
                     // Block of images updated
                     break
                 }
             }
-            if self.imagesToBeAssignedQueue.count == 0 {
-                // If we finished processing all pending things; stop timer.
-                self.disableTimer()
-            }
+            self.decideToDisableTimer()
         }
     }
+
 }
