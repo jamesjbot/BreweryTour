@@ -16,7 +16,7 @@ class MapStrategy: NSObject {
 
     // MARK: - Variables
 
-    var mapViewController: MapViewController? = nil
+    var parentMapViewController: MapViewController? = nil
     var breweryLocations: [Brewery] = []
     var targetLocation: CLLocation? = nil
 
@@ -24,6 +24,12 @@ class MapStrategy: NSObject {
     // MARK: - Functions
 
     override init() {
+    }
+
+
+    func endSearch() {
+        // Dummy stub for BreweryMapStrategy
+        // StyleMapStrategy will override it's implementation
     }
 
 
@@ -49,7 +55,6 @@ class MapStrategy: NSObject {
 
     // sorts the breweries by distnace to targetLocation
     func sortLocations() {
-        print("Map Strategy using this location \(targetLocation)")
         breweryLocations = breweryLocations.sorted(by:
             { (brewery1, brewery2) -> Bool in
                 let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
@@ -61,7 +66,7 @@ class MapStrategy: NSObject {
 
     func sendAnnotationsToMap() {
         // Format the first maximumClosestBreweries for display.
-        mapViewController?.updateMap(b: convertLocationToAnnotation())
+        parentMapViewController?.updateMap(withAnnotations: convertLocationToAnnotation())
     }
 
 

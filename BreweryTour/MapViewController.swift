@@ -67,7 +67,7 @@ class MapViewController : UIViewController {
 
     fileprivate var targetLocation: CLLocation?
 
-    fileprivate var activeMappingStrategy: MapStrategy? = nil
+    fileprivate weak var activeMappingStrategy: MapStrategy? = nil
 
     fileprivate var lastSelectedManagedObject : NSManagedObject?
 
@@ -98,14 +98,12 @@ class MapViewController : UIViewController {
 
 
     @IBAction func handleLongPress(_ sender: UILongPressGestureRecognizer) {
-            // Remove redundant calls to long press
+        // Remove redundant calls to long press
         mapView.resignFirstResponder()
 
         // Always set a pin down when user presses down
         // When the pin state is changed delete old pin and replace with new pin
-        // When user release drop the pin and save it to the database
-        print(sender.state.rawValue)
-        print("Long press detected")
+        // When user release drop the pin and save it locally
         switch sender.state {
         case UIGestureRecognizerState.began:
 
@@ -146,28 +144,13 @@ class MapViewController : UIViewController {
     }
 
 
+    @IBAction func touchUpOutside(_ sender: UISlider) {
+        touchUpSlider(sender)
+    }
+
+
     @IBAction func sliderTouchUpInside(_ sender: UISlider, forEvent event: UIEvent) {
-        guard mapView.userLocation.coordinate.latitude != 0,
-            mapView.userLocation.coordinate.longitude != 0 else {
-                return
-        }
-        let intValue: Int = Int(sender.value)
-        numberOfPoints.text = String(intValue)
-
-        // Save slider value for the future
-        Mediator.sharedInstance().setLastSliderValue(intValue)
-
-        // Replotting
-        let mapViewData = Mediator.sharedInstance().getPassedItem()
-        guard mapViewData is Style else {
-            return
-        }
-
-        (activeMappingStrategy as! StyleMapStrategy).endSearch()
-        activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style,
-                                                 view: self,
-                                                 location: targetLocation!,
-                                                 maxPoints: Int(slider.value))
+        touchUpSlider(sender)
 
     }
 
@@ -186,6 +169,26 @@ class MapViewController : UIViewController {
     
     
     // MARK: - Functions
+
+    private func touchUpSlider(_ sender: UISlider) {
+        guard mapView.userLocation.coordinate.latitude != 0,
+            mapView.userLocation.coordinate.longitude != 0 else {
+                return
+        }
+        let intValue: Int = Int(sender.value)
+        numberOfPoints.text = String(intValue)
+
+        // Save slider value for the future
+        Mediator.sharedInstance().setLastSliderValue(intValue)
+
+        // Replotting
+        let mapViewData = Mediator.sharedInstance().getPassedItem()
+        guard mapViewData is Style else {
+            return
+        }
+
+        displayNewStrategyWithNewPoint()
+    }
 
     private func makePointTargetLocation() {
         let location = CLLocation(latitude: floatingAnnotation.coordinate.latitude, longitude: floatingAnnotation.coordinate.longitude)
@@ -211,14 +214,8 @@ class MapViewController : UIViewController {
         // When we first join the mapview and the userlocation has not been set.
         // It will default to 0,0, so we center the location in the US
 
-        // TODO When centerlocation comes in
-        // When userlocation comes in
-        // When arbitratylocation comes in
-
-
         // Only do these when target location is nil or this 
         // is the temporary centerLocation
-        
         guard targetLocation == nil || targetLocation == centerLocation else {
             return
         }
@@ -227,11 +224,8 @@ class MapViewController : UIViewController {
         if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
             mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
             targetLocation = centerLocation
-            print("Using our center location because user location has not been populated")
         } else {
-            //mapView.setCenter(mapView.userLocation.coordinate, animated: false)
             targetLocation = mapView.userLocation.location
-            print("User location is \(targetLocation)")
         }
     }
 
@@ -264,11 +258,9 @@ class MapViewController : UIViewController {
 
 
     func isAnnotation(inArray: [MKAnnotation]) -> Bool {
-        if let routedAnnotation = routedAnnotation {
+        if let coordinate = routedAnnotation?.annotation?.coordinate {
             for i in inArray {
-                print(inArray)
-                print(routedAnnotation)
-                if compareCoordinates(a: i.coordinate, b: (routedAnnotation.annotation?.coordinate)!) {
+                if compareCoordinates(a: i.coordinate, b: coordinate ) {
                     return true
                 }
             }
@@ -278,24 +270,15 @@ class MapViewController : UIViewController {
 
 
     // Draw the annotations on the map
-    internal func updateMap(b: [MKAnnotation]) {
+    internal func updateMap(withAnnotations b: [MKAnnotation]) {
 
         if !isAnnotation(inArray: b) {
             mapView.removeOverlays(mapView.overlays)
         }
 
-        // If the annotation display are the same do nothing
-        var copy = mapView.annotations
-        // remove floatingannotation
-        if !copy.isEmpty {
-            copy.removeLast()
-        }
-        let theseArraysAreSame = arraysAreDifferent(a: copy, b: b)
-        print(copy)
-        print(b)
-        print("These arrays are the different \(theseArraysAreSame)")
-        guard arraysAreDifferent(a: copy, b: b) else {
-            print("STOPPING UPDATER--------------------------------------------")
+        // If the annotation displayed are the same do nothing
+        guard arraysAreDifferent(a: mapView.annotations, b: b) else {
+            // Do nothing annotations are the same
             return
         }
 
@@ -310,7 +293,11 @@ class MapViewController : UIViewController {
     }
 
 
-    private func arraysAreDifferent(a: [MKAnnotation], b: [MKAnnotation]) -> Bool {
+    private func arraysAreDifferent(a copy: [MKAnnotation], b: [MKAnnotation]) -> Bool {
+        var a = copy
+        if !copy.isEmpty {
+            a.removeLast() // remove floatingannotation
+        }
         guard a.count == b.count else {
             return true
         }
@@ -320,13 +307,10 @@ class MapViewController : UIViewController {
             return false
         }
 
-        for i in a {
-            for j in b {
-                print("i:\(i.coordinate) j:\(j.coordinate)")
-                if i.coordinate.latitude != j.coordinate.latitude ||
-                    i.coordinate.longitude != j.coordinate.longitude {
-                    return true
-                }
+        for (i,annot) in a.enumerated() {
+            if a[i].coordinate.latitude != b[i].coordinate.latitude ||
+                a[i].coordinate.longitude != b[i].coordinate.longitude {
+                return true
             }
         }
         return false
@@ -368,13 +352,17 @@ class MapViewController : UIViewController {
         mapView.addGestureRecognizer(longPressRecognizer)
 
         createCurrentLocationButton()
+
+        // Set slider value and text
+        slider.value = Float(Mediator.sharedInstance().lastSliderValue())
+        numberOfPoints.text = String(Int(slider.value))
+
     }
 
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-        print("\(mapView.userLocation.location)")
 
         // Activate indicator if system is busy
         if Mediator.sharedInstance().isSystemBusy() {
@@ -386,17 +374,6 @@ class MapViewController : UIViewController {
         // Set the function of this screen
         tabBarController?.title = "Go To Website"
 
-        // Set slider value and text
-        slider.value = Float(Mediator.sharedInstance().lastSliderValue())
-        numberOfPoints.text = "\(Int(slider.value))"
-
-        // TODO Delete?When we first start up and nothing has been selected and we click map
-        // It will come here there is no last selected and mediator has nothing
-        // so the map view will show the last view ( default view) nothing
-        // TODO Delete?       guard lastSelectedManagedObject != mapViewData else {
-        //            // No need to update the viewcontroller if the data has not changed
-        //            return Doesn't work because viewDidLoad is caleld again?
-        //        }
         displayNewStrategyWithNewPoint()
     }
 
@@ -433,14 +410,6 @@ class MapViewController : UIViewController {
             return
         }
 
-        // TODO When we first start up and nothing has been selected and we click map
-        // It will come here there is no last selected and mediator has nothing
-        // so the map view will show the last view ( default view) nothing
-//        guard lastSelectedManagedObject != mapViewData else {
-//            // No need to update the viewcontroller if the data has not changed
-//            return Doesn't work because viewDidLoad is caleld again?
-//        }
-
         setTargetLocationWhenTargetLocationIsNil()
 
         decideOnMappingStrategyAndInvoke(mapViewData: mapViewData!)
@@ -454,12 +423,16 @@ class MapViewController : UIViewController {
 
     private func decideOnMappingStrategyAndInvoke(mapViewData: NSManagedObject) {
         // Decision making to display Breweries Style or Brewery
+
+        activeMappingStrategy?.endSearch()
+
         if mapViewData is Style {
 
             activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style,
                                                      view: self,
                                                      location: targetLocation!,
                                                      maxPoints: Int(slider.value))
+            Mediator.sharedInstance().onlyValidStyleStrategy = (activeMappingStrategy as! StyleMapStrategy).runningID!
 
         } else if mapViewData is Brewery {
 
@@ -684,17 +657,16 @@ extension MapViewController {
 
 
 // MARK: - CLLocationManagerDelegate
-// TODO initial placement is still going toward the center of the map
 // Places the placemark for User's current location
  extension MapViewController: CLLocationManagerDelegate {
-
+    // When we first start the MapViewController, the initial placement will 
+    // always be in the middle as it take CLLocationManager a few minutes
     func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         return
     }
 
 
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        print("DID update user location \(userLocation)")
         displayNewStrategyWithNewPoint()
         return
     }

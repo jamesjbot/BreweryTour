@@ -20,7 +20,7 @@ class BreweryMapStrategy: MapStrategy {
         targetLocation = location
         breweryLocations.removeAll()
         breweryLocations.append(b)
-        mapViewController = view
+        parentMapViewController = view
         sortLocations()
         sendAnnotationsToMap()
     }

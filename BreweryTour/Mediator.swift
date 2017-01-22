@@ -18,8 +18,21 @@ import CoreData
 
 class Mediator {
 
+    // MARK: Constants
+
     // MARK: Variables
-    
+
+    internal var onlyValidStyleStrategy: Int = 1
+
+    private var StyleStrategyID:Int = 1
+
+    internal var nextPublicStyleStrategyID: Int {
+        get {
+            StyleStrategyID = StyleStrategyID + 1
+            return StyleStrategyID
+        }
+    }
+
     fileprivate var objectObserver: [ReceiveBroadcastSetSelected] = []
 
     fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
@@ -30,7 +43,7 @@ class Mediator {
 
     fileprivate var passedItem: NSManagedObject?
 
-    fileprivate var lastMapSliderValue: Int = 250
+    fileprivate var lastMapSliderValue: Int = 42
     // MARK: Functions
 
     internal func setAutomaticallySegue(to: Bool) {
@@ -52,7 +65,6 @@ class Mediator {
     internal func lastSliderValue() -> Int {
         return lastMapSliderValue
     }
-
 
     // Singleton Implementation
     private init(){

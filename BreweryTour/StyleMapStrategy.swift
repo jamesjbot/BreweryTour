@@ -32,12 +32,13 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     let initialDelay = 1000 // 1 second
     let longDelay = 10000 // 10 seconds
 
-    let maxShortDelayLoops = 10
-
+    let maxShortDelayLoops = 3
+    private let strategyIDIncrement = 20
     // Coredata
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
+    var runningID: Int?
 
 // MARK: - Variables
 
@@ -55,13 +56,14 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 
     init(s: Style, view: MapViewController, location: CLLocation, maxPoints points: Int) {
         super.init()
+        runningID = Mediator.sharedInstance().nextPublicStyleStrategyID
+        //Mediator.sharedInstance().StyleStrategyID += strategyIDIncrement
         maxPoints = points
         targetLocation = location
         breweryLocations.removeAll()
         initialFetchBreweries(byStyle: s)
-        mapViewController = view
+        parentMapViewController = view
         sortLocations()
-        print("Style thinks this many points \(maxPoints)")
         if breweryLocations.count > maxPoints! {
             breweryLocations = Array(breweryLocations[0..<maxPoints!])
         }
@@ -72,7 +74,6 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     // Used for when style is updated with new breweries
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
-        breweryLocations = (controller.fetchedObjects?.first as! Style).brewerywithstyle?.allObjects as! [Brewery]
         debouncedFunction!()
     }
 
@@ -98,7 +99,8 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
     }
 
 
-    func endSearch() {
+    override func endSearch() {
+        debouncedFunction = nil
         styleFRC.delegate = nil
     }
 
@@ -116,6 +118,12 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
 
 
     private func fetchSortandSend() {
+        // Only the last created strategy is allow to run
+        guard Mediator.sharedInstance().onlyValidStyleStrategy == runningID else {
+            endSearch()
+            return
+        }
+
         delayLoops += 1
         if delayLoops > maxShortDelayLoops { // After 10 run make the delay even longer
             bounceDelay = longDelay
@@ -161,21 +169,4 @@ class StyleMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
         })
     }
 }
-
-
-// TODO Delete? MARK: - UpdateManagedObjectContext
-
-//extension StyleMapStrategy: ReceiveBroadcastManagedObjectContextRefresh {
-//
-//    internal func contextsRefreshAllObjects() {
-//        styleFRC.managedObjectContext.refreshAllObjects()
-//        // We must performFetch after refreshing context, otherwise we will retain
-//        // Old information is retained.
-//        do {
-//            try styleFRC.performFetch()
-//        } catch {
-//            NSLog("Error reading coredata")
-//        }
-//    }
-//}
 

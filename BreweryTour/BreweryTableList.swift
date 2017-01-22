@@ -243,7 +243,6 @@ extension BreweryTableList: ReceiveBroadcastManagedObjectContextRefresh {
 extension BreweryTableList : NSFetchedResultsControllerDelegate {
     
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        print("Cheaper sort")
         if let breweries = (controller.fetchedObjects?.first as? Style)?.brewerywithstyle?.allObjects as? [Brewery] {
             copySetAndDebounceSort(breweries: breweries)
         }
