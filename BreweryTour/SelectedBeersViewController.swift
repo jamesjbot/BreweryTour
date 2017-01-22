@@ -367,7 +367,7 @@ extension SelectedBeersViewController : UISearchBarDelegate {
                     if success {
                         self.tableView.reloadData()
                     } else {
-                        self.displayAlertWindow(title: "Search Failed", msg: "Please close the app\nand try again.")
+                        self.displayAlertWindow(title: "Search Failed", msg: msg!)
                     }
                 }
             }
