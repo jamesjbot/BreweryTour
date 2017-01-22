@@ -37,22 +37,23 @@ import CoreData
 class CategoryViewController: UIViewController,
 NSFetchedResultsControllerDelegate {
 
-    private let segmentedControlPaddding : CGFloat = 8
-    private let paddingForPoint : CGFloat = 20
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
 
-    fileprivate let cellIdentifier = "genericTypeCell"
+    private let paddingForPoint : CGFloat = 20
+    private let segmentedControlPaddding : CGFloat = 8
 
-    private let styleList : StylesTableList! = StylesTableList()
-    private let breweryList : BreweryTableList! = BreweryTableList()
+    internal let cellIdentifier = "genericTypeCell"
+
     private let allBreweryList : AllBreweriesTableList = AllBreweriesTableList()
+    private let breweryList : BreweryTableList! = BreweryTableList()
+    private let styleList : StylesTableList! = StylesTableList()
 
     // The communicator between objects.
     private let med : Mediator = Mediator.sharedInstance()
 
     // Pointer animation duration
-    private let pointerDuration: CGFloat = 0.5
     private let pointerDelay: CGFloat = 0.0
+    private let pointerDuration: CGFloat = 0.5
 
     // For cycling thru the states of the tutorial for the viewcontroller
     private enum CategoryTutorialStage {
@@ -65,7 +66,8 @@ NSFetchedResultsControllerDelegate {
         case RefreshDB
     }
 
-    fileprivate enum SegmentedControllerMode: Int {
+
+    internal enum SegmentedControllerMode: Int {
         case Style = 0
         case BreweriesWithStyle = 1
         case AllBreweries = 2
@@ -73,8 +75,17 @@ NSFetchedResultsControllerDelegate {
 
 
     // MARK: Variables
+    // This is the active view model
+    internal var activeTableList : TableList!
 
-    fileprivate var styleSelectionIndex: IndexPath?
+    // Variable telling us if we should automatically go to map on completed request
+    internal var automaticallySegueToMap: Bool {
+        get {
+            return Mediator.sharedInstance().isAutomaticallySegueing()
+        }
+    }
+
+    internal var styleSelectionIndex: IndexPath?
 
     private var tutorialModeOn : Bool = false {
         didSet {
@@ -85,40 +96,42 @@ NSFetchedResultsControllerDelegate {
     // Initialize the tutorial views initial screen
     private var tutorialState: CategoryTutorialStage = .InitialScreen
 
-    // This is the active view model
-    fileprivate var activeTableList : TableList!
-
-    // Variable telling us if we should automatically go to map on completed request
-    internal var automaticallySegueToMap: Bool = false
 
     // MARK: IBOutlets
 
     // Tutorial outlets
     @IBOutlet weak var mapButton: UIBarButtonItem!
-    @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var pointer: UIView!
-    @IBOutlet weak var tutorialView: UIView!
     @IBOutlet weak var selection: UITextField!
+
+    @IBOutlet weak var tutorialText: UITextView!
+    @IBOutlet weak var tutorialView: UIView!
 
     // Normal UI outlets
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
-    @IBOutlet weak var segmentedControl: UISegmentedControl!
-    @IBOutlet weak var newSearchBar: UISearchBar!
     @IBOutlet weak var genericTable: UITableView!
+    @IBOutlet weak var newSearchBar: UISearchBar!
+    @IBOutlet weak var segmentedControl: UISegmentedControl!
 
 
     // MARK: IBActions
-
-    @IBAction func helpButton(_ sender: UIBarButtonItem) {
-        tutorialModeOn = true
-    }
-
 
     @IBAction func dissMissTutorial(_ sender: UIButton) {
         tutorialModeOn = false
         // Set the tutorial off in permanent settings
         UserDefaults.standard.set(false, forKey: g_constants.CategoryViewTutorial)
         UserDefaults.standard.synchronize()
+    }
+
+
+    @IBAction func helpButton(_ sender: UIBarButtonItem) {
+        tutorialModeOn = true
+    }
+
+
+    @IBAction func mapButtonClicked(_ sender: AnyObject) {
+        _ = sender.resignFirstResponder() // Sometimes the button clicks twice
+        performSegue(withIdentifier:"GoToMap", sender: sender)
     }
 
 
@@ -248,12 +261,6 @@ NSFetchedResultsControllerDelegate {
     }
 
 
-    @IBAction func mapButtonClicked(_ sender: AnyObject) {
-        _ = sender.resignFirstResponder() // Sometimes the button clicks twice
-        performSegue(withIdentifier:"GoToMap", sender: sender)
-    }
-
-
     // MARK: Functions
 
     private func filterContent() {
@@ -270,6 +277,7 @@ NSFetchedResultsControllerDelegate {
         tutorialState = .RefreshDB
         nextTutorialScreen(self)//Dummy to load data into the tutorial
     }
+
 
     // MARK: - View Life Cycle
 
@@ -321,251 +329,3 @@ NSFetchedResultsControllerDelegate {
 }
 
 
-// MARK: - BusyObserver
-
-extension CategoryViewController: BusyObserver {
-
-    func startAnimating() {
-        DispatchQueue.main.async {
-            self.activityIndicator.startAnimating()
-        }
-    }
-
-
-    func stopAnimating() {
-        DispatchQueue.main.async {
-            self.activityIndicator.stopAnimating()
-        }
-    }
-
-
-    func registerAsBusyObserverWithMediator() {
-        Mediator.sharedInstance().registerForBusyIndicator(observer: self)
-    }
-
-}
-
-
-// MARK: - UITableViewDataSource
-
-extension CategoryViewController: UITableViewDataSource {
-
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        var cell = genericTable.dequeueReusableCell(withIdentifier: cellIdentifier)
-        // Ask the viewmodel to populate our UITableViewCell
-        DispatchQueue.main.async {
-            cell = self.activeTableList.cellForRowAt(indexPath: indexPath,
-                                                     cell: cell!,
-                                                     searchText: self.newSearchBar.text)
-            cell?.imageView?.contentMode = .scaleToFill
-            cell?.detailTextLabel?.text = ""
-            cell?.setNeedsDisplay()
-        }
-        return cell!
-    }
-
-
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-
-        return activeTableList.getNumberOfRowsInSection(searchText: newSearchBar.text)
-    }
-}
-
-
-// MARK: - UITableViewDelegate
-
-extension CategoryViewController : UITableViewDelegate {
-
-    // Capture user selections, communicate with the mediator on what the
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-
-        // Save the selection index
-        // Only one selected item can exist at all times
-        // This allows us to preload the BreweryTableList
-        switch SegmentedControllerMode(rawValue: segmentedControl.selectedSegmentIndex)! {
-        case .Style:
-            styleSelectionIndex = indexPath
-
-        case .BreweriesWithStyle:
-            styleSelectionIndex = nil
-
-        case .AllBreweries:
-            styleSelectionIndex = nil
-
-        }
-
-        // Set the Textfield to the name of the selected item so the user
-        // knows what they selected.
-        selection.text = tableView.cellForRow(at: indexPath)?.textLabel?.text
-        DispatchQueue.main.async {
-            self.activityIndicator.startAnimating() // A faster signal to start animating rather than wait for the actual brewery process.
-        }
-
-        let completionHandler = createActiveTableListCompletionHandler()
-
-        // Tell the view model something was selected.
-        // The view model will go tell the mediator what it needs to download.
-        _ = activeTableList.selected(elementAt: indexPath,
-                                     searchText: newSearchBar.text!,
-                                     completion: completionHandler)
-    }
-
-
-    private func createActiveTableListCompletionHandler() -> ((Bool, String?)-> Void) {
-        // Create a completion handler for ViewModel to take.
-        let activeTableListSelectedCompletionHandler = {
-            (success: Bool ,msg: String?) -> Void in
-            // Stop the initial start animation a few lines up
-            // If and when the brewery process starts.
-            // It will invoke it's own start animation sequence
-            DispatchQueue.main.async {
-                self.activityIndicator.stopAnimating()
-            }
-
-            guard success else {
-                self.displayAlertWindow(title: "Error", msg: msg!)
-                return
-            }
-
-            guard Mediator.sharedInstance().isAutomaticallySegueing() else {
-                return
-            }
-
-            DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "GoToMap", sender: nil)
-            }
-        }
-        return activeTableListSelectedCompletionHandler
-    }
-
-}
-
-
-// MARK: - UISearchBarDelegate
-
-extension CategoryViewController: UISearchBarDelegate {
-
-    // Filter out selections not conforming to the searchbar text
-    func searchBar(_ searchBar: UISearchBar, textDidChange: String){
-        // This will filter empty text too.
-        if textDidChange.characters.count == 0 {
-            DispatchQueue.main.async {
-                searchBar.resignFirstResponder()
-            }
-        }
-        activeTableList.filterContentForSearchText(searchText: textDidChange) {
-            (ok) -> Void in
-            self.genericTable.reloadData()
-        }
-    }
-
-
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        /*
-         Remove searchbar text so we stop searching
-         Put searchbar back into unselected state
-         Repopulate the table
-         */
-        newSearchBar.text = ""
-        newSearchBar.resignFirstResponder()
-        genericTable.reloadData()
-    }
-
-
-
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-
-        /*
-         This method allows the user to submit a query to BreweryDB for
-         breweries with the searchtext in their name
-
-         Only allow the AllBreweries mode to searchonline for breweries
-         this is because when in the styles mode the downloaded brewery
-         may not have that style and as such will not show up in the list
-         making for a confusing experience.
-         Same confusing experience goes for searching for styles.
-         */
-
-        // BLOCK ALL ONLINE SEARCHES, except from AllBreweriesTableList
-        guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBreweries.rawValue else {
-            return
-        }
-
-        // Do nothing, because nothing entered in search bar, just return
-        guard !(searchBar.text?.isEmpty)! else {
-            return
-        }
-
-        // Definition of the inline function to be used in AlertWindow.
-        func searchOnline(_ action: UIAlertAction) {
-
-            guard activeTableList is OnlineSearchCapable else {
-                return
-            }
-
-            guard let onlineSearch : OnlineSearchCapable = activeTableList as! OnlineSearchCapable? else {
-                return
-            }
-
-            onlineSearch.searchForUserEntered(searchTerm: searchBar.text!) {
-                (success, msg) -> Void in
-
-                DispatchQueue.main.async {
-                    self.activityIndicator.stopAnimating()
-                }
-                guard success else {
-                    self.displayAlertWindow(title: "Search Failed", msg: msg!)
-                    return
-                }
-                self.genericTable.reloadData()
-            }
-            activityIndicator.startAnimating()
-        }
-
-
-        // Set the function to the action button
-        let action = UIAlertAction(title: "Search Online",
-                                   style: .default,
-                                   handler: searchOnline)
-        displayAlertWindow(title: "Search Online",
-                           msg: "Dismiss to review the search results\nor press Search Online\nto search for more.",
-                           actions: [action])
-    }
-}
-
-
-// MARK: - Observer
-
-extension CategoryViewController: Observer {
-
-    // Receive notifcation when the TableList backing the current view has changed
-    func sendNotify(from: AnyObject, withMsg msg: String) {
-        // Only receive messages form the active tablelist
-
-        guard (isViewLoaded && (view.window != nil) ),
-            (from === (activeTableList as AnyObject) ) else {
-                // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
-                return
-        }
-
-        // This will update the contents of the table if needed
-        switch msg {
-
-        case Message.Reload:
-            // Only the active table should respond to a tablelist reload command
-            if (activeTableList as AnyObject) === from {
-                genericTable.reloadData()
-                searchBar(newSearchBar, textDidChange: newSearchBar.text!)
-            }
-            break
-            
-        case Message.Retry:
-            displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
-            break
-            
-        default:
-            fatalError("uncaught message \(msg)")
-        }
-    }
-}

@@ -22,45 +22,42 @@ class SelectedBeersViewController: UIViewController {
 
     // MARK: Constants
 
+    fileprivate enum SegmentedControllerMode: Int {
+        case SelectedBeers = 0
+        case AllBeers = 1
+    }
+
     private enum SelectedBeersTutorialStage {
         case Table
         case SegementedControl
         case SearchBar
     }
 
-    fileprivate enum SegmentedControllerMode: Int {
-        case SelectedBeers = 0
-        case AllBeers = 1
-    }
-
-    private let segmentedControlPaddding : CGFloat = 8
-    private let paddingForPoint : CGFloat = 20
-
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let paddingForPoint : CGFloat = 20
+    private let segmentedControlPaddding : CGFloat = 8
 
-    fileprivate let selectedBeersViewModel : SelectedBeersViewModel = SelectedBeersViewModel()
     fileprivate let allBeersViewModel: AllBeersViewModel = AllBeersViewModel()
+    fileprivate let selectedBeersViewModel : SelectedBeersViewModel = SelectedBeersViewModel()
 
 
     // MARK: Variables
 
+    fileprivate var activeViewModel: TableList!
     internal var listOfBreweryIDToDisplay : [String]!
     private var tutorialState : SelectedBeersTutorialStage = .Table
 
-    fileprivate var activeViewModel: TableList!
-
-
     // MARK: IBOutlets
 
-    @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var nextLessonButton: UIButton!
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
-    @IBOutlet weak var nextLessonButton: UIButton!
+    @IBOutlet weak var tutorialView: UIView!
 
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var segmentedControl: UISegmentedControl!
+    @IBOutlet weak var tableView: UITableView!
 
 
     // MARK: IBActions
@@ -70,42 +67,6 @@ class SelectedBeersViewController: UIViewController {
         UserDefaults.standard.set(false, forKey: g_constants.SelectedBeersTutorial)
         UserDefaults.standard.synchronize()
     }
-
-
-    @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
-
-        let segmentedMode: SegmentedControllerMode = SelectedBeersViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
-
-        switch segmentedMode {
-            // Everytime we switch we have to refilter,
-            // Here is the order of operations
-            // If needed, filter beers
-            // Set the backing model
-            // Reload our local data.
-
-        case .SelectedBeers: // Selected Beers mode
-
-            if let text = searchBar?.text {
-                selectedBeersViewModel.filterContentForSearchText(searchText: text)
-            }
-            activeViewModel = selectedBeersViewModel
-            tableView.reloadData()
-            DispatchQueue.main.async {
-                self.searchBar.placeholder = "Search For Beer here"
-            }
-
-        case .AllBeers: // All Beers mode
-            if let text = searchBar?.text {
-                allBeersViewModel.filterContentForSearchText(searchText: text)
-            }
-            activeViewModel = allBeersViewModel
-            tableView.reloadData()
-            DispatchQueue.main.async {
-                self.searchBar.placeholder = "Search For Beer here or online"
-            }
-        }
-    }
-
 
     @IBAction func nextLesson(_ sender: UIButton) {
         // Advance the tutorial state
@@ -155,12 +116,48 @@ class SelectedBeersViewController: UIViewController {
                                     animations: { self.pointer.center.x += self.searchBar.frame.maxX - (2*self.paddingForPoint) },
                                     completion: nil)
             break
+            
+        }
 
+    }
+
+    @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
+
+        let segmentedMode: SegmentedControllerMode = SelectedBeersViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
+
+        switch segmentedMode {
+            // Everytime we switch we have to refilter,
+            // Here is the order of operations
+            // If needed, filter beers
+            // Set the backing model
+            // Reload our local data.
+
+        case .SelectedBeers: // Selected Beers mode
+
+            if let text = searchBar?.text {
+                selectedBeersViewModel.filterContentForSearchText(searchText: text)
+            }
+            activeViewModel = selectedBeersViewModel
+            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.searchBar.placeholder = "Search For Beer here"
+            }
+
+        case .AllBeers: // All Beers mode
+            if let text = searchBar?.text {
+                allBeersViewModel.filterContentForSearchText(searchText: text)
+            }
+            activeViewModel = allBeersViewModel
+            tableView.reloadData()
+            DispatchQueue.main.async {
+                self.searchBar.placeholder = "Search For Beer here or online"
+            }
         }
     }
 
-
     // MARK: - Functions
+
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -219,6 +216,33 @@ class SelectedBeersViewController: UIViewController {
 }
 
 
+// MARK: -  BusyObserver
+
+extension SelectedBeersViewController: BusyObserver {
+
+    func registerAsBusyObserverWithMediator() {
+        Mediator.sharedInstance().registerForBusyIndicator(observer: self)
+    }
+
+
+    func startAnimating() {
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+    }
+
+
+    func stopAnimating() {
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+    }
+
+}
+
+
+// MARK: - Observer
+
 extension SelectedBeersViewController: Observer {
 
     // Method to receive notifications from outside this object.
@@ -234,40 +258,10 @@ extension SelectedBeersViewController: Observer {
 }
 
 
-// MARK: -  BusyObserver
-
-extension SelectedBeersViewController: BusyObserver {
-
-    func startAnimating() {
-        DispatchQueue.main.async {
-            self.activityIndicator.startAnimating()
-        }
-    }
-
-    func stopAnimating() {
-        DispatchQueue.main.async {
-            self.activityIndicator.stopAnimating()
-        }
-    }
-
-
-    func registerAsBusyObserverWithMediator() {
-        Mediator.sharedInstance().registerForBusyIndicator(observer: self)
-    }
-
-}
-
-
-// MARK: - SelectedBeersViewController: UITableViewDataSource
+// MARK: - UITableViewDataSource
 
 extension SelectedBeersViewController: UITableViewDataSource {
-
-    // Ask the model for the number of UITableViewCells
-    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return activeViewModel.getNumberOfRowsInSection(searchText: searchBar.text)
-    }
-
-
+    
     // Ask the model for a formatted UITableViewCell
     internal func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         // Get a cell from the tableview and populate with name, brewery and image if available
@@ -281,10 +275,16 @@ extension SelectedBeersViewController: UITableViewDataSource {
         return cell
     }
 
+
+    // Ask the model for the number of UITableViewCells
+    internal func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return activeViewModel.getNumberOfRowsInSection(searchText: searchBar.text)
+    }
+
 }
 
 
-// MARK: - SelectedBeersViewController : UITableViewDelegate
+// MARK: - UITableViewDelegate
 
 extension SelectedBeersViewController : UITableViewDelegate {
 
@@ -312,7 +312,7 @@ extension SelectedBeersViewController : UITableViewDelegate {
 }
 
 
-// MARK: - SelectedBeersViewController : UISearchBarDelegate
+// MARK: - UISearchBarDelegate
 
 extension SelectedBeersViewController : UISearchBarDelegate {
 
