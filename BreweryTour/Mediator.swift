@@ -86,6 +86,12 @@ class Mediator {
 
 extension Mediator: MediatorBroadcastSetSelected {
 
+    private func notifyPassedItemObservers(thisItem: NSManagedObject) {
+        for i in passedItemObservers {
+            i.updateObserversSelected(item: thisItem)
+        }
+    }
+
     internal func registerForObjectUpdate(observer: ReceiveBroadcastSetSelected) {
         passedItemObservers.append(observer)
     }
@@ -94,10 +100,8 @@ extension Mediator: MediatorBroadcastSetSelected {
     // When an element on categoryScreen is selected, process it on BreweryDBClient
     internal func select(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
         passedItem = thisItem
-        //Notify everyone who wants to know what the selcted item is
-        for i in passedItemObservers {
-            i.updateObserversSelected(item: thisItem)
-        }
+
+        notifyPassedItemObservers(thisItem: passedItem!)
 
         if thisItem is Brewery {
             BreweryDBClient.sharedInstance().downloadBeersBy(brewery : thisItem as! Brewery,
