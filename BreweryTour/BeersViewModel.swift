@@ -167,26 +167,29 @@ extension BeersViewModel: TableList {
 
 
     private func configureCell(cell: UITableViewCell, indexPath: IndexPath, searchText: String?) {
+        // Set a default image
+        // Depending on what data is shown populate image and text data.
+        cell.textLabel?.adjustsFontSizeToFitWidth = true
+        let image = #imageLiteral(resourceName: "Nophoto.png")
+        cell.imageView?.image = image
+        var beer: Beer!
+        if (searchText?.isEmpty)!  {
+            beer = self.frc.object(at: indexPath)
+        } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
+            beer = self.filteredObjects[indexPath.row]
+        }
+        if let beerName = beer.beerName,
+            let brewerName = beer.brewer?.name {
+            cell.textLabel?.text = beerName
+            cell.detailTextLabel?.text = brewerName
+        }
+        if let data = beer.image {
+            DispatchQueue.main.async {
+                cell.imageView?.image = UIImage(data: data as Data)
+                cell.imageView?.setNeedsDisplay()
+            }
+        }
         DispatchQueue.main.async {
-            // Set a default image
-            // Depending on what data is shown populate image and text data.
-            cell.textLabel?.adjustsFontSizeToFitWidth = true
-            let image = #imageLiteral(resourceName: "Nophoto.png")
-            cell.imageView?.image = image
-            var beer: Beer!
-            if (searchText?.isEmpty)!  {
-                beer = self.frc.object(at: indexPath)
-            } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
-                beer = self.filteredObjects[indexPath.row]
-            }
-            cell.textLabel?.text = beer.beerName!
-            cell.detailTextLabel?.text = beer.brewer?.name
-            if let data = beer.image {
-                DispatchQueue.main.async {
-                    cell.imageView?.image = UIImage(data: data as Data)
-                    cell.imageView?.setNeedsDisplay()
-                }
-            }
             cell.setNeedsDisplay()
         }
     }
