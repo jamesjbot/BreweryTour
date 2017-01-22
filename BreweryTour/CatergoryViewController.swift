@@ -262,6 +262,14 @@ NSFetchedResultsControllerDelegate {
         }
     }
 
+    private func initializeTutorial() {
+        // Set tutorial to the last screen, and advance into the first one
+        // This is here because I want it to always shows the initial screen
+        // on a clean start. If user goes to another view and comes back they can
+        // resume their tutorial state
+        tutorialState = .RefreshDB
+        nextTutorialScreen(self)//Dummy to load data into the tutorial
+    }
 
     // MARK: - View Life Cycle
 
@@ -279,12 +287,7 @@ NSFetchedResultsControllerDelegate {
         // Make Breweries with style segmented control title fit
         (segmentedControl.subviews[1].subviews.first as! UILabel).adjustsFontSizeToFitWidth = true
 
-        // Set tutorial to the last screen, and advance into the first one
-        // This is here because I want it to always shows the initial screen
-        // on a clean start. If user goes to another view and comes back they can
-        // resume their tutorial state
-        tutorialState = .RefreshDB
-        nextTutorialScreen(self)//Dummy to load data into the tutorial
+        initializeTutorial()
 
         registerAsBusyObserverWithMediator()
 
@@ -394,8 +397,9 @@ extension CategoryViewController : UITableViewDelegate {
         // Set the Textfield to the name of the selected item so the user
         // knows what they selected.
         selection.text = tableView.cellForRow(at: indexPath)?.textLabel?.text
-
-        activityIndicator.startAnimating() // A faster signal to start animating rather than wait for the actual brewery process.
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating() // A faster signal to start animating rather than wait for the actual brewery process.
+        }
 
         let completionHandler = createActiveTableListCompletionHandler()
 
@@ -419,7 +423,7 @@ extension CategoryViewController : UITableViewDelegate {
             }
 
             guard success else {
-                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again later")
+                self.displayAlertWindow(title: "Error", msg: msg!)
                 return
             }
 
