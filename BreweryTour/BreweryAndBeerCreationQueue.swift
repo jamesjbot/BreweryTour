@@ -179,9 +179,6 @@ class BreweryAndBeerCreationQueue: NSObject {
     // Periodic method to save breweries and beers
     @objc private func processQueue() {
         // This function will save all breweries before saving beers.
-        print("Processing breweries creation: we have \(self.runningBreweryQueue.count) breweries")
-        print("Processing beers creation: we have \(self.runningBeerQueue.count) beers")
-
         classContext?.automaticallyMergesChangesFromParent = true
         self.loopCounter += 1
         if self.loopCounter > self.maximumSmallRuns {
@@ -289,9 +286,7 @@ class BreweryAndBeerCreationQueue: NSObject {
             do {
                 if (tempContext?.hasChanges)! {
                     try tempContext?.save()
-                } else {
-                    fatalError()
-                }
+                } 
                 // Reset to help running out of memory
                 tempContext?.reset()
             } catch let error {
@@ -344,8 +339,6 @@ class BreweryAndBeerCreationQueue: NSObject {
                 styleRequest.predicate = NSPredicate(format: "id == %@", toStyleID)
                 let resultStyle = try context.fetch(styleRequest)
                 resultStyle.first?.addToBrewerywithstyle(newBrewery)
-                // TODO Experiment
-                try context.save()
             } catch let error {
                 NSLog("There was and error saving brewery to style\(error.localizedDescription)")
             }
