@@ -7,7 +7,10 @@
 //
 /*
     This is the viewmodel that will back the SelectedBeersViewController
-    This is the new file
+    The BeersViewModel is already setup up to pull in All Beers
+    The subclass AllBeersViewModel just includes it special online search capability
+    The SelectedBeersViewModel overrides the perform Fetch Request to pull in 
+    either Brewery or Style.
  */
 
 import Foundation
