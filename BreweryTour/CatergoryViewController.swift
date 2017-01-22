@@ -263,6 +263,8 @@ NSFetchedResultsControllerDelegate {
     }
 
 
+    // MARK: - View Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -376,6 +378,7 @@ extension CategoryViewController : UITableViewDelegate {
 
         // Save the selection index
         // Only one selected item can exist at all times
+        // This allows us to preload the BreweryTableList
         switch SegmentedControllerMode(rawValue: segmentedControl.selectedSegmentIndex)! {
         case .Style:
             styleSelectionIndex = indexPath
@@ -394,6 +397,17 @@ extension CategoryViewController : UITableViewDelegate {
 
         activityIndicator.startAnimating() // A faster signal to start animating rather than wait for the actual brewery process.
 
+        let completionHandler = createActiveTableListCompletionHandler()
+
+        // Tell the view model something was selected.
+        // The view model will go tell the mediator what it needs to download.
+        _ = activeTableList.selected(elementAt: indexPath,
+                                     searchText: newSearchBar.text!,
+                                     completion: completionHandler)
+    }
+
+
+    private func createActiveTableListCompletionHandler() -> ((Bool, String?)-> Void) {
         // Create a completion handler for ViewModel to take.
         let activeTableListSelectedCompletionHandler = {
             (success: Bool ,msg: String?) -> Void in
@@ -417,12 +431,9 @@ extension CategoryViewController : UITableViewDelegate {
                 self.performSegue(withIdentifier: "GoToMap", sender: nil)
             }
         }
-        // Tell the view model something was selected.
-        // The view model will go tell the mediator what it needs to download.
-        _ = activeTableList.selected(elementAt: indexPath,
-                                     searchText: newSearchBar.text!,
-                                     completion: activeTableListSelectedCompletionHandler)
+        return activeTableListSelectedCompletionHandler
     }
+
 }
 
 
