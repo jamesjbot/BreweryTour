@@ -307,7 +307,7 @@ class MapViewController : UIViewController {
             return false
         }
 
-        for (i,annot) in a.enumerated() {
+        for (i,_) in a.enumerated() {
             if a[i].coordinate.latitude != b[i].coordinate.latitude ||
                 a[i].coordinate.longitude != b[i].coordinate.longitude {
                 return true
