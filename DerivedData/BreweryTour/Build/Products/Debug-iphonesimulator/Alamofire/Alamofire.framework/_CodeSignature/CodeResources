@@ -16,13 +16,13 @@
 		<data>
 		i0ZTiOCDqZsoM5fnliHTgAWmqHM=
 		</data>
-		<key>Modules/Alamofire.swiftmodule/x86_64.swiftdoc</key>
+		<key>Modules/Alamofire.swiftmodule/i386.swiftdoc</key>
 		<data>
-		0vRgmvtfyWyOz4LVVVyHNDSvKIE=
+		JhBP0nM9HNhLfOdTkAWmhmr9mBQ=
 		</data>
-		<key>Modules/Alamofire.swiftmodule/x86_64.swiftmodule</key>
+		<key>Modules/Alamofire.swiftmodule/i386.swiftmodule</key>
 		<data>
-		5BosyBHhhyWDFtPX1E15uIhotRs=
+		tqd120eQSsu+usLSTq0MhUNO+Cc=
 		</data>
 		<key>Modules/module.modulemap</key>
 		<data>
@@ -53,26 +53,26 @@
 			Cxne0QPnXWNnlsin4NvVDNH2cAI2EtiA4xXZeireu54=
 			</data>
 		</dict>
-		<key>Modules/Alamofire.swiftmodule/x86_64.swiftdoc</key>
+		<key>Modules/Alamofire.swiftmodule/i386.swiftdoc</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			0vRgmvtfyWyOz4LVVVyHNDSvKIE=
+			JhBP0nM9HNhLfOdTkAWmhmr9mBQ=
 			</data>
 			<key>hash2</key>
 			<data>
-			qer1TPmXRWwJaZx8rPTt+xjTyiZijbYOuGf1+AyKmV4=
+			tf0WtGdpdtUUrB5tndQJ4FXo1EGue8WMrcn6gJklE38=
 			</data>
 		</dict>
-		<key>Modules/Alamofire.swiftmodule/x86_64.swiftmodule</key>
+		<key>Modules/Alamofire.swiftmodule/i386.swiftmodule</key>
 		<dict>
 			<key>hash</key>
 			<data>
-			5BosyBHhhyWDFtPX1E15uIhotRs=
+			tqd120eQSsu+usLSTq0MhUNO+Cc=
 			</data>
 			<key>hash2</key>
 			<data>
-			RM1RmwDouj7pX7nUav4N2zKowye+wIZd3RsHsUC3aV4=
+			cClOVOLhBQNBJeXkjVGdNpyu22yiMZC/reWokewpgoc=
 			</data>
 		</dict>
 		<key>Modules/module.modulemap</key>

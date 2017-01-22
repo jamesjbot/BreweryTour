@@ -67,18 +67,18 @@
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WUq-hH-lhL">
-                                                            <rect key="frame" x="15" y="4" width="34" height="21"/>
+                                                            <rect key="frame" x="15" y="5" width="33.5" height="20.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="0.0"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="n7M-rj-VPI">
-                                                            <rect key="frame" x="15" y="25" width="44" height="15"/>
+                                                            <rect key="frame" x="15" y="25.5" width="44" height="14.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <nil key="textColor"/>
@@ -348,14 +348,11 @@
                                         </constraints>
                                     </view>
                                     <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Pci-Qx-EEF" userLabel="TableTutorialText">
-                                        <rect key="frame" x="86" y="345.5" width="281" height="159.5"/>
+                                        <rect key="frame" x="86" y="465" width="281" height="40"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" id="KbS-7T-6eP"/>
                                         </constraints>
-                                        <string key="text">Select Any Brewery Marker to see it's route. 
-Click the Heart to favorite a brewery. 
-Click on information to bring up brewery website.</string>
                                         <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
@@ -383,7 +380,7 @@ Click on information to bring up brewery website.</string>
                                             <action selector="dissMissTutorial:" destination="RKC-MN-s1K" eventType="touchUpInside" id="6tp-kA-19C"/>
                                         </connections>
                                     </button>
-                                    <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Pc-m6-hEY">
+                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="8Pc-m6-hEY">
                                         <rect key="frame" x="164" y="513" width="50" height="33"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
@@ -398,6 +395,7 @@ Click on information to bring up brewery website.</string>
                                         </userDefinedRuntimeAttributes>
                                         <connections>
                                             <action selector="nextCommandPressed:" destination="RKC-MN-s1K" eventType="touchUpInside" id="x4o-T6-Bkb"/>
+                                            <action selector="nextTutorialAction:" destination="kc4-oF-YzA" eventType="touchUpInside" id="6bG-UK-W59"/>
                                         </connections>
                                     </button>
                                 </subviews>
@@ -446,6 +444,7 @@ Click on information to bring up brewery website.</string>
                         <outlet property="currentLocation" destination="yrc-0a-qnb" id="SDS-MY-lPj"/>
                         <outlet property="longPressRecognizer" destination="if2-iF-Eb5" id="EXz-gc-J2J"/>
                         <outlet property="mapView" destination="idd-zP-hy0" id="hTM-gR-Klp"/>
+                        <outlet property="nextTutorial" destination="8Pc-m6-hEY" id="LLf-8h-UYK"/>
                         <outlet property="numberOfPoints" destination="CXH-BH-Cuf" id="joi-sq-JAz"/>
                         <outlet property="pointer" destination="DB0-f6-MiY" id="DJk-9Q-Vxb"/>
                         <outlet property="slider" destination="pbH-Lz-OoH" id="mKh-Bz-xzn"/>
@@ -1010,10 +1009,11 @@ Click on information to bring up brewery website.</string>
                                                     <constraint firstAttribute="width" constant="40" id="vWX-RL-Apc"/>
                                                 </constraints>
                                             </view>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dng-sO-x7w">
+                                            <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dng-sO-x7w">
                                                 <rect key="frame" x="164" y="513" width="50" height="33"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                                <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
                                                 <state key="normal" title="Next"/>
                                                 <userDefinedRuntimeAttributes>
@@ -1036,10 +1036,11 @@ Click on information to bring up brewery website.</string>
                                     <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a beer to see its details." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBt-SP-ZqP" userLabel="TableTutorialText">
                                         <rect key="frame" x="86" y="441" width="281" height="64"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" id="Jde-vZ-cjr"/>
                                         </constraints>
-                                        <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                        <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                         <userDefinedRuntimeAttributes>
@@ -1052,10 +1053,9 @@ Click on information to bring up brewery website.</string>
                                         <rect key="frame" x="222" y="513" width="145" height="33"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                        <state key="normal" title="Dismiss Tutorial">
-                                            <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                        </state>
+                                        <state key="normal" title="Dismiss Tutorial"/>
                                         <userDefinedRuntimeAttributes>
                                             <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                 <integer key="value" value="5"/>
@@ -1122,7 +1122,6 @@ Click on information to bring up brewery website.</string>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MTM-AV-wIe">
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
-                                <color key="sectionIndexBackgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FavoriteCell" textLabel="L0G-7N-7Tr" detailTextLabel="tyv-eG-Ufw" imageView="Isa-JK-NWA" style="IBUITableViewCellStyleSubtitle" id="EPN-e6-10X">
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
@@ -1173,27 +1172,15 @@ Click on information to bring up brewery website.</string>
                                                     <constraint firstAttribute="width" secondItem="A06-Fi-xnD" secondAttribute="height" multiplier="1:1" id="hCm-pS-Fyh"/>
                                                 </constraints>
                                             </view>
-                                            <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a brewery to see it on the map." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66j-wi-SEc" userLabel="TableTutorialText">
-                                                <rect key="frame" x="86" y="441" width="281" height="64"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <constraints>
-                                                    <constraint firstAttribute="height" relation="greaterThanOrEqual" id="bJm-u2-m51"/>
-                                                </constraints>
-                                                <color key="textColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                                <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                        <integer key="value" value="5"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                            </textView>
-                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B9e-Ht-eQN">
+                                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="B9e-Ht-eQN">
                                                 <rect key="frame" x="164" y="513" width="50" height="33"/>
+                                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                                <state key="normal" title="Next"/>
+                                                <state key="normal" title="Next">
+                                                    <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                                </state>
                                                 <userDefinedRuntimeAttributes>
                                                     <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
                                                         <integer key="value" value="5"/>
@@ -1204,40 +1191,50 @@ Click on information to bring up brewery website.</string>
                                                     <action selector="nextLesson:" destination="CGT-bu-6NU" eventType="touchUpInside" id="ubm-5g-UZw"/>
                                                 </connections>
                                             </button>
-                                            <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zd5-8B-CTh">
-                                                <rect key="frame" x="222" y="513" width="145" height="33"/>
-                                                <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
-                                                <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
-                                                <state key="normal" title="Dismiss Tutorial">
-                                                    <color key="titleColor" red="0.0" green="0.50196081400000003" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                                </state>
-                                                <userDefinedRuntimeAttributes>
-                                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
-                                                        <integer key="value" value="5"/>
-                                                    </userDefinedRuntimeAttribute>
-                                                </userDefinedRuntimeAttributes>
-                                                <connections>
-                                                    <action selector="dismissTutorial:" destination="vMd-lA-jRB" eventType="touchUpInside" id="Gnm-9v-Eht"/>
-                                                    <action selector="dismissTutorial:" destination="CGT-bu-6NU" eventType="touchUpInside" id="Nna-Gy-PLo"/>
-                                                </connections>
-                                            </button>
                                         </subviews>
                                         <color key="backgroundColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
-                                            <constraint firstAttribute="trailing" secondItem="66j-wi-SEc" secondAttribute="trailing" constant="8" id="5UW-OM-nAx"/>
                                             <constraint firstItem="A06-Fi-xnD" firstAttribute="top" secondItem="fCF-E4-Faw" secondAttribute="top" constant="295" id="8mM-CD-tTu"/>
-                                            <constraint firstItem="zd5-8B-CTh" firstAttribute="top" secondItem="66j-wi-SEc" secondAttribute="bottom" constant="8" id="HrI-dl-JG2"/>
-                                            <constraint firstAttribute="bottom" secondItem="zd5-8B-CTh" secondAttribute="bottom" constant="8" id="ODk-2r-YIG"/>
                                             <constraint firstItem="A06-Fi-xnD" firstAttribute="leading" secondItem="fCF-E4-Faw" secondAttribute="leading" constant="15" id="fuV-g0-d8f"/>
-                                            <constraint firstItem="zd5-8B-CTh" firstAttribute="leading" secondItem="B9e-Ht-eQN" secondAttribute="trailing" constant="8" id="klf-Pw-TTr"/>
-                                            <constraint firstItem="B9e-Ht-eQN" firstAttribute="baseline" secondItem="zd5-8B-CTh" secondAttribute="baseline" id="wLM-NL-Gxn"/>
-                                            <constraint firstAttribute="trailing" secondItem="zd5-8B-CTh" secondAttribute="trailing" constant="8" id="wcL-0L-Qng"/>
                                         </constraints>
                                     </view>
+                                    <textView userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a brewery to see it on the map." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66j-wi-SEc" userLabel="TableTutorialText">
+                                        <rect key="frame" x="86" y="441" width="281" height="64"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" id="bJm-u2-m51"/>
+                                        </constraints>
+                                        <color key="textColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                    </textView>
+                                    <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zd5-8B-CTh">
+                                        <rect key="frame" x="222" y="513" width="145" height="33"/>
+                                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
+                                        <state key="normal" title="Dismiss Tutorial"/>
+                                        <userDefinedRuntimeAttributes>
+                                            <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                                <integer key="value" value="5"/>
+                                            </userDefinedRuntimeAttribute>
+                                        </userDefinedRuntimeAttributes>
+                                        <connections>
+                                            <action selector="dismissTutorial:" destination="vMd-lA-jRB" eventType="touchUpInside" id="Gnm-9v-Eht"/>
+                                            <action selector="dismissTutorial:" destination="CGT-bu-6NU" eventType="touchUpInside" id="Nna-Gy-PLo"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <constraints>
                                     <constraint firstAttribute="trailing" secondItem="fCF-E4-Faw" secondAttribute="trailing" id="2HH-WA-Srv"/>
+                                    <constraint firstItem="zd5-8B-CTh" firstAttribute="top" secondItem="66j-wi-SEc" secondAttribute="bottom" constant="8" id="2f7-8V-UF6"/>
                                     <constraint firstAttribute="bottom" secondItem="fCF-E4-Faw" secondAttribute="bottom" id="7iJ-Cx-V9U"/>
                                     <constraint firstItem="fCF-E4-Faw" firstAttribute="top" secondItem="uPp-fq-N67" secondAttribute="top" id="AOW-wg-Nmt"/>
                                     <constraint firstItem="fCF-E4-Faw" firstAttribute="leading" secondItem="uPp-fq-N67" secondAttribute="leading" id="o3d-Fg-1FB"/>
@@ -1248,11 +1245,14 @@ Click on information to bring up brewery website.</string>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <color key="tintColor" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
+                            <constraint firstAttribute="trailing" secondItem="zd5-8B-CTh" secondAttribute="trailing" constant="8" id="6bi-1S-fVf"/>
+                            <constraint firstItem="66j-wi-SEc" firstAttribute="width" secondItem="6A8-hw-vmK" secondAttribute="width" multiplier="0.75" id="8Fm-f5-YiW"/>
                             <constraint firstItem="MTM-AV-wIe" firstAttribute="leading" secondItem="6A8-hw-vmK" secondAttribute="leading" id="9WQ-ON-6Ad"/>
                             <constraint firstItem="uPp-fq-N67" firstAttribute="leading" secondItem="6A8-hw-vmK" secondAttribute="leading" id="BNf-ur-K6g"/>
                             <constraint firstItem="MdR-6K-4Gv" firstAttribute="top" secondItem="uPp-fq-N67" secondAttribute="bottom" id="ClY-6p-hLB"/>
-                            <constraint firstItem="66j-wi-SEc" firstAttribute="width" secondItem="6A8-hw-vmK" secondAttribute="width" multiplier="0.75" id="HvJ-CB-HJn"/>
                             <constraint firstItem="MTM-AV-wIe" firstAttribute="top" secondItem="TG5-1t-1Mw" secondAttribute="bottom" id="Wx3-Kq-91F"/>
+                            <constraint firstAttribute="trailing" secondItem="66j-wi-SEc" secondAttribute="trailing" constant="8" id="XZ8-fq-B8f"/>
+                            <constraint firstItem="MdR-6K-4Gv" firstAttribute="top" secondItem="zd5-8B-CTh" secondAttribute="bottom" constant="8" id="e1Y-7F-usr"/>
                             <constraint firstAttribute="trailing" secondItem="MTM-AV-wIe" secondAttribute="trailing" id="eZf-9H-OHJ"/>
                             <constraint firstItem="uPp-fq-N67" firstAttribute="top" secondItem="TG5-1t-1Mw" secondAttribute="bottom" id="kWO-YS-XSK"/>
                             <constraint firstItem="MdR-6K-4Gv" firstAttribute="top" secondItem="MTM-AV-wIe" secondAttribute="bottom" id="oBV-qM-kM1"/>

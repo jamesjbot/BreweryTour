@@ -52,6 +52,16 @@ class MapViewController : UIViewController {
     let radiusDivisor = 4
     let reuseId = "pin"
 
+    // Pointer animation duration
+    private let pointerDelay: CGFloat = 0.0
+    private let pointerDuration: CGFloat = 0.5
+
+    // For cycling thru the states of the tutorial for the viewcontroller
+    private enum CategoryTutorialStage {
+        case Map
+        case Longpress
+        case Slider
+    }
 
     // Location manager allows us access to the user's location
     private let locationManager = CLLocationManager()
@@ -59,6 +69,8 @@ class MapViewController : UIViewController {
     // Coredata
     internal let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     internal let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+
+    private let sliderPaddding : CGFloat = 8
 
     // MARK: Variables
 
@@ -69,6 +81,8 @@ class MapViewController : UIViewController {
     fileprivate var styleFRC: NSFetchedResultsController<Style> = NSFetchedResultsController<Style>()
     fileprivate var targetLocation: CLLocation?
 
+    // Initialize the tutorial views initial screen
+    private var tutorialState: CategoryTutorialStage = .Map
 
     // New breweries with styles variable
     internal var breweriesForDisplay: [Brewery] = []
@@ -86,6 +100,7 @@ class MapViewController : UIViewController {
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var tutorialView: UIView!
+    @IBOutlet weak var nextTutorial: UIButton!
 
 
     // MARK: IBAction
@@ -94,8 +109,55 @@ class MapViewController : UIViewController {
         clearPointFromTargetLocation()
     }
 
-    
+
+    @IBAction func nextTutorialAction(_ sender: UIButton) {
+        // Advance the tutorial state
+        switch tutorialState {
+        case .Map:
+            tutorialState = .Longpress
+        case .Longpress:
+            tutorialState = .Slider
+        case .Slider:
+            tutorialState = .Map
+        }
+
+        // Show tutorial content
+        switch tutorialState {
+        case .Map:
+            pointer.isHidden = false
+            pointer.setNeedsDisplay()
+            tutorialText.text = "Select any brewery marker to see it's route.\nClick the heart to favorite a brewery.\nClick on information to bring up brewery website."
+            // Adds a circular path to tutorial pointer
+            addCircularPathToPointer()
+
+        case .Longpress:
+            pointer.isHidden = false
+            pointer.setNeedsDisplay()
+            tutorialText.text = "Hold down on any location to set a new\ncenter for breweries to gather around\nPress Reset to home to return to your location"
+            // Adds a circular path to tutorial pointer
+            addCircularPathToPointer()
+            break
+
+        case .Slider:
+            pointer.isHidden = false
+            pointer.layer.removeAllAnimations()
+            pointer.setNeedsDisplay()
+            tutorialText.text = "Move the slider to select how many breweries you want displayed"
+            let sliderPoint  = CGPoint(x: slider.frame.origin.x + sliderPaddding , y: slider.frame.midY)
+            pointer.center = sliderPoint
+            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
+                                    delay: TimeInterval(pointerDelay),
+                                    options: [ .autoreverse, .repeat ],
+                                    animations: { self.pointer.center.x += self.slider.frame.width - self.sliderPaddding},
+                                    completion: nil)
+            break
+        }
+
+    }
+
+
     @IBAction func dismissTutorial(_ sender: UIButton) {
+
         tutorialView.isHidden = true
         UserDefaults.standard.set(false, forKey: g_constants.MapViewTutorial)
         UserDefaults.standard.synchronize()
@@ -157,7 +219,6 @@ class MapViewController : UIViewController {
 
     @IBAction func sliderTouchUpInside(_ sender: UISlider, forEvent event: UIEvent) {
         touchUpSlider(sender)
-
     }
 
 
@@ -166,10 +227,8 @@ class MapViewController : UIViewController {
     }
 
 
-
-    
-    
     // MARK: - Functions
+
     private func activateIndicatorIfSystemBusy() {
         // Activate indicator if system is busy
         if Mediator.sharedInstance().isSystemBusy() {
@@ -320,10 +379,7 @@ class MapViewController : UIViewController {
         targetLocation = location
         displayNewStrategyWithNewPoint()
     }
-
-
-
-
+    
 
     private func setTargetLocationWhenTargetLocationIsNil() {
         // Zoom to users location first if we have it.
@@ -344,15 +400,6 @@ class MapViewController : UIViewController {
             targetLocation = mapView.userLocation.location
         }
     }
-
-
-
-
-
-
-
-
-
 
 
     private func touchUpSlider(_ sender: UISlider) {
@@ -378,9 +425,8 @@ class MapViewController : UIViewController {
 
     private func tutorialInitialization() {
         // Tutorial layers
-        // Adds a circular path to tutorial pointer
-        addCircularPathToPointer()
-
+        tutorialState = .Slider
+        nextTutorialAction(UIButton())
         // Display tutorial view.
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
             // Do nothing because the tutorial will show automatically.
