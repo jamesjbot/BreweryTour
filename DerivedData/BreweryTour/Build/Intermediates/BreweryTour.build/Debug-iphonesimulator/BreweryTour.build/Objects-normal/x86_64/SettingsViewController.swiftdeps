@@ -6,40 +6,40 @@ provides-nominal:
 provides-member:
 - ["C11BreweryTour22SettingsViewController", ""]
 provides-dynamic-lookup:
-- "downloadAllBreweries"
 - "viewDidLoad"
 - "automaticMapSwitch"
-- "deleteBeersBrewery"
 - "toggleAutomaticMap"
-- "activityIndic"
 - "deleteButton"
+- "activityIndic"
+- "downloadAllBreweries"
+- "deleteBeersBrewery"
 depends-top-level:
 - !private "Array"
 - !private "BreweryDBClient"
-- !private "DispatchQueue"
-- !private "NSFetchRequestResult"
-- "Brewery"
-- "AnyObject"
-- "CastingPrecedence"
-- !private "UIAlertAction"
-- "Mediator"
 - "AssignmentPrecedence"
+- "AnyObject"
 - !private "=="
+- "Brewery"
+- !private "NSFetchRequestResult"
+- "Mediator"
 - "UIViewController"
-- !private "Bool"
-- "UIButton"
 - "BooleanLiteralType"
-- "AppDelegate"
-- !private "+"
-- "UIActivityIndicatorView"
+- "UIButton"
 - "SettingsViewController"
-- !private "String"
-- "Beer"
+- "UIActivityIndicatorView"
+- !private "+"
 - "UIApplication"
+- "Beer"
+- !private "Bool"
 - "UISwitch"
+- !private "String"
 - !private "NSBatchDeleteRequest"
+- !private "UIAlertAction"
+- !private "DispatchQueue"
 - "Style"
 - "NSFetchRequest"
+- "AppDelegate"
+- "CastingPrecedence"
 depends-member:
 - ["Ps9AnyObject", "Beer"]
 - ["Ps9AnyObject", "Brewery"]
@@ -648,6 +648,10 @@ depends-member:
 - !private ["C11BreweryTour22SettingsViewController", "styleFetch"]
 - ["C11BreweryTour22SettingsViewController", "toggleAutomaticMap"]
 - ["C11BreweryTour22SettingsViewController", "viewDidLoad"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "allBeersAndBreweriesDeleted"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "isAutomaticallySegueing"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "setAutomaticallySegue"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "sharedInstance"]
 - ["SS", "deinit"]
 - !private ["SS", "init"]
 - ["C11BreweryTour5Style", "deinit"]
@@ -1120,6 +1124,7 @@ depends-nominal:
 - !private "Ps16RawRepresentable"
 - !private "Ps8Sequence"
 - "C11BreweryTour22SettingsViewController"
+- "P11BreweryTour26StorableFloatingAnnotation"
 - "SS"
 - "C11BreweryTour5Style"
 - !private "Ps16TextOutputStream"

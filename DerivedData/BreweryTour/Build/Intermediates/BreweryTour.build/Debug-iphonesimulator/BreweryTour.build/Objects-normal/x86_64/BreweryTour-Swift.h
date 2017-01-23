@@ -386,13 +386,13 @@ SWIFT_CLASS("_TtC11BreweryTour16BreweryTableList")
 @end
 
 
-@interface BreweryTableList (SWIFT_EXTENSION(BreweryTour))
-- (void)contextsRefreshAllObjects;
+@interface BreweryTableList (SWIFT_EXTENSION(BreweryTour)) <NSFetchedResultsControllerDelegate>
+- (void)controllerDidChangeContent:(NSFetchedResultsController<id <NSFetchRequestResult>> * _Nonnull)controller;
 @end
 
 
-@interface BreweryTableList (SWIFT_EXTENSION(BreweryTour)) <NSFetchedResultsControllerDelegate>
-- (void)controllerDidChangeContent:(NSFetchedResultsController<id <NSFetchRequestResult>> * _Nonnull)controller;
+@interface BreweryTableList (SWIFT_EXTENSION(BreweryTour))
+- (void)contextsRefreshAllObjects;
 @end
 
 
@@ -522,13 +522,13 @@ SWIFT_CLASS("_TtC11BreweryTour27FavoriteBeersViewController")
 @end
 
 
-@interface FavoriteBeersViewController (SWIFT_EXTENSION(BreweryTour)) <DismissableTutorial>
-- (void)enableTutorial;
+@interface FavoriteBeersViewController (SWIFT_EXTENSION(BreweryTour))
+- (void)contextsRefreshAllObjects;
 @end
 
 
-@interface FavoriteBeersViewController (SWIFT_EXTENSION(BreweryTour))
-- (void)contextsRefreshAllObjects;
+@interface FavoriteBeersViewController (SWIFT_EXTENSION(BreweryTour)) <DismissableTutorial>
+- (void)enableTutorial;
 @end
 
 
@@ -633,7 +633,7 @@ SWIFT_CLASS("_TtC11BreweryTour17MapViewController")
 - (IBAction)sliderTouchUpInside:(UISlider * _Nonnull)sender forEvent:(UIEvent * _Nonnull)event;
 - (IBAction)touchUpOutside:(UISlider * _Nonnull)sender;
 - (void)displayNewStrategyWithNewPoint;
-- (void)updateMapWithAnnotations:(NSArray<id <MKAnnotation>> * _Nonnull)b;
+- (void)updateMapWithAnnotations:(NSArray<id <MKAnnotation>> * _Nonnull)withAnnotations;
 - (void)viewDidLoad;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidAppear:(BOOL)animated;
@@ -652,6 +652,13 @@ SWIFT_CLASS("_TtC11BreweryTour17MapViewController")
 - (void)enableTutorial;
 @end
 
+
+@interface MapViewController (SWIFT_EXTENSION(BreweryTour))
+- (void)registerAsBusyObserverWithMediator;
+- (void)startAnimating;
+- (void)stopAnimating;
+@end
+
 @class CLLocationManager;
 @class MKUserLocation;
 
@@ -659,13 +666,6 @@ SWIFT_CLASS("_TtC11BreweryTour17MapViewController")
 - (void)locationManager:(CLLocationManager * _Nonnull)manager didFailWithError:(NSError * _Nonnull)error;
 - (void)locationManager:(CLLocationManager * _Nonnull)manager didUpdateLocations:(NSArray<CLLocation *> * _Nonnull)locations;
 - (void)mapView:(MKMapView * _Nonnull)mapView didUpdateUserLocation:(MKUserLocation * _Nonnull)userLocation;
-@end
-
-
-@interface MapViewController (SWIFT_EXTENSION(BreweryTour))
-- (void)registerAsBusyObserverWithMediator;
-- (void)startAnimating;
-- (void)stopAnimating;
 @end
 
 @class MKMapItem;
@@ -686,6 +686,15 @@ SWIFT_CLASS("_TtC11BreweryTour17MapViewController")
 - (void)mapView:(MKMapView * _Nonnull)mapView didSelectAnnotationView:(MKAnnotationView * _Nonnull)view;
 - (void)mapView:(MKMapView * _Nonnull)mapView annotationView:(MKAnnotationView * _Nonnull)view calloutAccessoryControlTapped:(UIControl * _Nonnull)control;
 - (MKAnnotationView * _Nullable)mapView:(MKMapView * _Nonnull)mapView viewForAnnotation:(id <MKAnnotation> _Nonnull)annotation;
+@end
+
+
+SWIFT_CLASS("_TtC11BreweryTour16MyAnnotationView")
+@interface MyAnnotationView : MKAnnotationView
+- (nullable instancetype)initWithCoder:(NSCoder * _Nonnull)aDecoder OBJC_DESIGNATED_INITIALIZER;
+- (nonnull instancetype)initWithAnnot:(id <MKAnnotation> _Nonnull)annot reuse:(NSString * _Null_unspecified)reuse brewery:(Brewery * _Nullable)brewery OBJC_DESIGNATED_INITIALIZER;
+- (MyAnnotationView * _Nonnull)setBrewery:(Brewery * _Nonnull)brewery;
+- (nonnull instancetype)initWithAnnotation:(id <MKAnnotation> _Nullable)annotation reuseIdentifier:(NSString * _Nullable)reuseIdentifier SWIFT_UNAVAILABLE;
 @end
 
 

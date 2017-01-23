@@ -43,7 +43,7 @@ import MapKit
 import CoreLocation
 import CoreData
 
-// Helper class to short filter annotations
+// Helper class to sort filter annotations
 fileprivate class MyAnnotation: NSObject, MKAnnotation {
     var title: String?
     var subtitle: String?

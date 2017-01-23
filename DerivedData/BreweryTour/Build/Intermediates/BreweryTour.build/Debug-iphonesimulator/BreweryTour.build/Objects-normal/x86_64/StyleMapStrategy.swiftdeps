@@ -9,34 +9,34 @@ provides-dynamic-lookup:
 - "endSearch"
 - "controllerDidChangeContent"
 depends-top-level:
-- !private "DispatchQueue"
-- "StyleMapStrategy"
-- "Int"
-- "UIApplication"
-- "CastingPrecedence"
-- "Style"
-- !private ">="
-- "AssignmentPrecedence"
-- !private "DispatchTime"
-- !private "Array"
-- !private "=="
-- "AppDelegate"
+- !private "+"
 - !private "+="
-- "CLLocation"
-- "MapViewController"
-- "MapStrategy"
-- "NSFetchedResultsControllerDelegate"
-- !private "..<"
-- !private "NSPredicate"
+- "AssignmentPrecedence"
+- !private "=="
+- "CastingPrecedence"
+- !private "DispatchQueue"
 - !private "Mediator"
 - !private "NSFetchRequest"
+- !private "NSPredicate"
+- "MapStrategy"
+- "StyleMapStrategy"
+- "NSFetchedResultsController"
 - !private "DispatchTimeInterval"
-- !private "NSLog"
-- !private "BooleanLiteralType"
+- "UIApplication"
+- "Int"
+- "Style"
+- !private "Array"
 - !private "Brewery"
 - "NSFetchRequestResult"
-- !private "+"
-- "NSFetchedResultsController"
+- "MapViewController"
+- !private "..<"
+- !private "BooleanLiteralType"
+- "CLLocation"
+- !private "NSLog"
+- !private "DispatchTime"
+- !private ">="
+- "AppDelegate"
+- "NSFetchedResultsControllerDelegate"
 - !private ">"
 depends-member:
 - !private ["Ps9AnyObject", "Array"]
@@ -919,6 +919,9 @@ depends-member:
 - !private ["Vs5Slice", "_Element"]
 - ["Vs12StaticString", "deinit"]
 - !private ["Vs12StaticString", "init"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "nextPublicStyleStrategyID"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "onlyValidStyleStrategy"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "sharedInstance"]
 - !private ["Ps10Strideable", "IntegerLiteralType"]
 - !private ["Ps10Strideable", "Stride"]
 - !private ["Ps10Strideable", "_DisabledRangeIndex"]
@@ -1190,6 +1193,7 @@ depends-nominal:
 - !private "Ps12SignedNumber"
 - !private "Vs5Slice"
 - "Vs12StaticString"
+- !private "P11BreweryTour26StorableFloatingAnnotation"
 - !private "Ps10Strideable"
 - !private "SS"
 - "C11BreweryTour5Style"

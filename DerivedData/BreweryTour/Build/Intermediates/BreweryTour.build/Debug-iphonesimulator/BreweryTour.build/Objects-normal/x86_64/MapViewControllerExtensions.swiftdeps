@@ -9,87 +9,87 @@ provides-member:
 - ["C11BreweryTour17MapViewController", "mapView"]
 - ["C11BreweryTour17MapViewController", "removeRouteOnMap"]
 provides-dynamic-lookup:
-- "controllerDidChangeContent"
-- "locationManager"
-- "locationManager"
-- "displayRouteOnMap"
 - "registerAsBusyObserverWithMediator"
 - "startAnimating"
+- "locationManager"
+- "locationManager"
 - "mapView"
 - "mapView"
 - "mapView"
 - "mapView"
 - "mapView"
-- "stopAnimating"
-- "removeRouteOnMap"
-- "enableTutorial"
+- "controllerDidChangeContent"
 - "convertToMKMapItemThis"
 - "addCircularPathToPointer"
+- "removeRouteOnMap"
+- "enableTutorial"
+- "stopAnimating"
+- "displayRouteOnMap"
 depends-top-level:
-- !private "NSPredicate"
-- !private "NSManagedObjectID"
-- !private "CAKeyframeAnimation"
 - !private "UIImage"
+- !private "~="
+- !private "=="
+- "AssignmentPrecedence"
+- "DismissableTutorial"
 - "CastingPrecedence"
 - "MKAnnotationView"
-- !private "=="
-- "DismissableTutorial"
-- !private "UIColor"
-- "AssignmentPrecedence"
-- !private "~="
-- "NSFetchRequestResult"
-- "MKUserLocation"
-- "MKMapView"
-- !private "MKDirectionsRequest"
-- !private "MKPolyline"
-- !private "UIApplication"
-- "MapViewController"
-- !private "DispatchQueue"
-- !private "==="
-- !private "MKPlacemark"
-- "CLLocation"
-- !private "*"
-- !private "CFTimeInterval"
-- !private "URL"
-- "CLLocationManagerDelegate"
-- "MKAnnotation"
-- "CLLocationManager"
-- !private "UIDevice"
-- !private "Dictionary"
-- !private "UIEdgeInsetsMake"
-- "NSFetchedResultsControllerDelegate"
-- !private "UIView"
-- "MKOverlay"
-- !private "MKPolylineRenderer"
-- !private "UIButton"
-- !private "CGPoint"
-- !private "M_PI"
-- !private "NSFetchRequest"
-- "BusyObserver"
-- !private "MAXFLOAT"
-- !private "<"
-- "NSFetchedResultsController"
-- !private "!"
-- !private "CGFloat"
-- "MKOverlayRenderer"
-- !private "Brewery"
-- !private "Void"
-- !private "MyPinAnnotationView"
-- !private "BooleanLiteralType"
-- "UIControl"
-- "MKRoute"
-- !private "!="
-- "MKMapViewDelegate"
-- !private "Array"
-- !private "Style"
-- "MKMapItem"
-- !private "MKDirections"
 - !private "/"
-- !private "Mediator"
-- !private "UIBezierPath"
-- !private "StringLiteralType"
+- "CLLocation"
+- !private "Dictionary"
+- "MKMapView"
+- !private "CAKeyframeAnimation"
+- "MapViewController"
+- "MKUserLocation"
+- "UIControl"
+- !private "MKPlacemark"
+- !private "MKPolyline"
+- !private "MKDirectionsRequest"
+- "MKMapViewDelegate"
+- !private "Style"
+- !private "URL"
+- !private "!="
+- "MKAnnotation"
+- !private "BooleanLiteralType"
+- !private "NSFetchRequest"
+- !private "UIView"
 - !private "String"
 - "Error"
+- !private "StringLiteralType"
+- !private "CFTimeInterval"
+- !private "Brewery"
+- !private "MKPolylineRenderer"
+- !private "<"
+- "MKOverlay"
+- !private "MAXFLOAT"
+- "NSFetchedResultsControllerDelegate"
+- !private "CGPoint"
+- !private "UIDevice"
+- "MKMapItem"
+- !private "UIButton"
+- !private "NSManagedObjectID"
+- !private "CGFloat"
+- "BusyObserver"
+- !private "M_PI"
+- !private "Array"
+- "NSFetchRequestResult"
+- !private "UIEdgeInsetsMake"
+- "MKOverlayRenderer"
+- "NSFetchedResultsController"
+- !private "MakePinView"
+- !private "UIColor"
+- "CLLocationManagerDelegate"
+- !private "*"
+- !private "MKDirections"
+- "MKRoute"
+- !private "UIApplication"
+- !private "NSPredicate"
+- !private "UIBezierPath"
+- !private "Mediator"
+- !private "!"
+- "CLLocationManager"
+- !private "MyAnnotationView"
+- !private "Void"
+- !private "DispatchQueue"
 depends-member:
 - !private ["Ps16AbsoluteValuable", "init"]
 - !private ["Ps9AnyObject", "CAKeyframeAnimation"]
@@ -104,8 +104,8 @@ depends-member:
 - !private ["Ps9AnyObject", "MKPlacemark"]
 - !private ["Ps9AnyObject", "MKPolylineRenderer"]
 - !private ["Ps9AnyObject", "M_PI"]
+- !private ["Ps9AnyObject", "MakePinView"]
 - !private ["Ps9AnyObject", "Mediator"]
-- !private ["Ps9AnyObject", "MyPinAnnotationView"]
 - !private ["Ps9AnyObject", "NSFetchRequest"]
 - !private ["Ps9AnyObject", "NSPredicate"]
 - !private ["Ps9AnyObject", "UIApplication"]
@@ -121,13 +121,11 @@ depends-member:
 - !private ["Ps9AnyObject", "allObjects"]
 - !private ["Ps9AnyObject", "annotation"]
 - !private ["Ps9AnyObject", "async"]
-- !private ["Ps9AnyObject", "black"]
 - !private ["Ps9AnyObject", "boundingMapRect"]
 - !private ["Ps9AnyObject", "breweriesForDisplay"]
 - !private ["Ps9AnyObject", "brewerywithstyle"]
 - !private ["Ps9AnyObject", "calculate"]
 - !private ["Ps9AnyObject", "canOpenURL"]
-- !private ["Ps9AnyObject", "canShowCallout"]
 - !private ["Ps9AnyObject", "cgPath"]
 - !private ["Ps9AnyObject", "circularAnimationDuration"]
 - !private ["Ps9AnyObject", "container"]
@@ -162,8 +160,8 @@ depends-member:
 - ["Ps9AnyObject", "locationManagerDidPauseLocationUpdates"]
 - ["Ps9AnyObject", "locationManagerDidResumeLocationUpdates"]
 - ["Ps9AnyObject", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["Ps9AnyObject", "magenta"]
 - !private ["Ps9AnyObject", "main"]
+- !private ["Ps9AnyObject", "makePinView"]
 - ["Ps9AnyObject", "mapView"]
 - ["Ps9AnyObject", "mapViewDidFailLoadingMap"]
 - ["Ps9AnyObject", "mapViewDidFinishLoadingMap"]
@@ -176,12 +174,10 @@ depends-member:
 - !private ["Ps9AnyObject", "object"]
 - !private ["Ps9AnyObject", "objectID"]
 - !private ["Ps9AnyObject", "open"]
-- !private ["Ps9AnyObject", "orange"]
 - !private ["Ps9AnyObject", "overlays"]
 - !private ["Ps9AnyObject", "path"]
 - !private ["Ps9AnyObject", "performAndWait"]
 - !private ["Ps9AnyObject", "performBackgroundTask"]
-- !private ["Ps9AnyObject", "pinTintColor"]
 - !private ["Ps9AnyObject", "pointer"]
 - !private ["Ps9AnyObject", "polyline"]
 - !private ["Ps9AnyObject", "predicate"]
@@ -198,7 +194,6 @@ depends-member:
 - !private ["Ps9AnyObject", "routedAnnotation"]
 - !private ["Ps9AnyObject", "routes"]
 - !private ["Ps9AnyObject", "save"]
-- !private ["Ps9AnyObject", "setBrewery"]
 - !private ["Ps9AnyObject", "setImage"]
 - !private ["Ps9AnyObject", "setNeedsDisplay"]
 - !private ["Ps9AnyObject", "setVisibleMapRect"]
@@ -274,8 +269,8 @@ depends-member:
 - !private ["P11BreweryTour12BusyObserver", "MKPlacemark"]
 - !private ["P11BreweryTour12BusyObserver", "MKPolylineRenderer"]
 - !private ["P11BreweryTour12BusyObserver", "M_PI"]
+- !private ["P11BreweryTour12BusyObserver", "MakePinView"]
 - !private ["P11BreweryTour12BusyObserver", "Mediator"]
-- !private ["P11BreweryTour12BusyObserver", "MyPinAnnotationView"]
 - !private ["P11BreweryTour12BusyObserver", "NSFetchRequest"]
 - !private ["P11BreweryTour12BusyObserver", "NSPredicate"]
 - !private ["P11BreweryTour12BusyObserver", "UIApplication"]
@@ -341,18 +336,14 @@ depends-member:
 - ["CSo7CALayer", "deinit"]
 - !private ["PSo15CALayerDelegate", "add"]
 - !private ["PSo15CALayerDelegate", "annotation"]
-- !private ["PSo15CALayerDelegate", "canShowCallout"]
 - !private ["PSo15CALayerDelegate", "dequeueReusableAnnotationView"]
 - !private ["PSo15CALayerDelegate", "frame"]
-- !private ["PSo15CALayerDelegate", "init"]
 - !private ["PSo15CALayerDelegate", "isHidden"]
 - !private ["PSo15CALayerDelegate", "layer"]
 - !private ["PSo15CALayerDelegate", "leftCalloutAccessoryView"]
 - !private ["PSo15CALayerDelegate", "overlays"]
-- !private ["PSo15CALayerDelegate", "pinTintColor"]
 - !private ["PSo15CALayerDelegate", "removeOverlays"]
 - !private ["PSo15CALayerDelegate", "rightCalloutAccessoryView"]
-- !private ["PSo15CALayerDelegate", "setBrewery"]
 - !private ["PSo15CALayerDelegate", "setImage"]
 - !private ["PSo15CALayerDelegate", "setNeedsDisplay"]
 - !private ["PSo15CALayerDelegate", "setVisibleMapRect"]
@@ -376,8 +367,6 @@ depends-member:
 - !private ["VSC6CGRect", "midY"]
 - !private ["VSC6CGRect", "width"]
 - ["VSC22CLLocationCoordinate2D", "deinit"]
-- !private ["VSC22CLLocationCoordinate2D", "latitude"]
-- !private ["VSC22CLLocationCoordinate2D", "longitude"]
 - !private ["PSo25CLLocationManagerDelegate", "CAKeyframeAnimation"]
 - !private ["PSo25CLLocationManagerDelegate", "CFTimeInterval"]
 - !private ["PSo25CLLocationManagerDelegate", "CGFloat"]
@@ -390,8 +379,8 @@ depends-member:
 - !private ["PSo25CLLocationManagerDelegate", "MKPlacemark"]
 - !private ["PSo25CLLocationManagerDelegate", "MKPolylineRenderer"]
 - !private ["PSo25CLLocationManagerDelegate", "M_PI"]
+- !private ["PSo25CLLocationManagerDelegate", "MakePinView"]
 - !private ["PSo25CLLocationManagerDelegate", "Mediator"]
-- !private ["PSo25CLLocationManagerDelegate", "MyPinAnnotationView"]
 - !private ["PSo25CLLocationManagerDelegate", "NSFetchRequest"]
 - !private ["PSo25CLLocationManagerDelegate", "NSPredicate"]
 - !private ["PSo25CLLocationManagerDelegate", "UIApplication"]
@@ -459,8 +448,8 @@ depends-member:
 - !private ["Ps7CVarArg", "MKPlacemark"]
 - !private ["Ps7CVarArg", "MKPolylineRenderer"]
 - !private ["Ps7CVarArg", "M_PI"]
+- !private ["Ps7CVarArg", "MakePinView"]
 - !private ["Ps7CVarArg", "Mediator"]
-- !private ["Ps7CVarArg", "MyPinAnnotationView"]
 - !private ["Ps7CVarArg", "NSFetchRequest"]
 - !private ["Ps7CVarArg", "NSPredicate"]
 - !private ["Ps7CVarArg", "Stride"]
@@ -481,13 +470,11 @@ depends-member:
 - !private ["Ps7CVarArg", "allObjects"]
 - !private ["Ps7CVarArg", "annotation"]
 - !private ["Ps7CVarArg", "async"]
-- !private ["Ps7CVarArg", "black"]
 - !private ["Ps7CVarArg", "boundingMapRect"]
 - !private ["Ps7CVarArg", "breweriesForDisplay"]
 - !private ["Ps7CVarArg", "brewerywithstyle"]
 - !private ["Ps7CVarArg", "calculate"]
 - !private ["Ps7CVarArg", "canOpenURL"]
-- !private ["Ps7CVarArg", "canShowCallout"]
 - !private ["Ps7CVarArg", "cgPath"]
 - !private ["Ps7CVarArg", "circularAnimationDuration"]
 - !private ["Ps7CVarArg", "container"]
@@ -523,7 +510,6 @@ depends-member:
 - ["Ps7CVarArg", "locationManagerDidPauseLocationUpdates"]
 - ["Ps7CVarArg", "locationManagerDidResumeLocationUpdates"]
 - ["Ps7CVarArg", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["Ps7CVarArg", "magenta"]
 - !private ["Ps7CVarArg", "main"]
 - ["Ps7CVarArg", "mapView"]
 - ["Ps7CVarArg", "mapViewDidFailLoadingMap"]
@@ -537,12 +523,10 @@ depends-member:
 - !private ["Ps7CVarArg", "object"]
 - !private ["Ps7CVarArg", "objectID"]
 - !private ["Ps7CVarArg", "open"]
-- !private ["Ps7CVarArg", "orange"]
 - !private ["Ps7CVarArg", "overlays"]
 - !private ["Ps7CVarArg", "path"]
 - !private ["Ps7CVarArg", "performAndWait"]
 - !private ["Ps7CVarArg", "performBackgroundTask"]
-- !private ["Ps7CVarArg", "pinTintColor"]
 - !private ["Ps7CVarArg", "pointer"]
 - !private ["Ps7CVarArg", "polyline"]
 - !private ["Ps7CVarArg", "predicate"]
@@ -558,7 +542,6 @@ depends-member:
 - !private ["Ps7CVarArg", "routedAnnotation"]
 - !private ["Ps7CVarArg", "routes"]
 - !private ["Ps7CVarArg", "save"]
-- !private ["Ps7CVarArg", "setBrewery"]
 - !private ["Ps7CVarArg", "setImage"]
 - !private ["Ps7CVarArg", "setNeedsDisplay"]
 - !private ["Ps7CVarArg", "setVisibleMapRect"]
@@ -611,8 +594,8 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "MKPlacemark"]
 - !private ["Ps28CustomDebugStringConvertible", "MKPolylineRenderer"]
 - !private ["Ps28CustomDebugStringConvertible", "M_PI"]
+- !private ["Ps28CustomDebugStringConvertible", "MakePinView"]
 - !private ["Ps28CustomDebugStringConvertible", "Mediator"]
-- !private ["Ps28CustomDebugStringConvertible", "MyPinAnnotationView"]
 - !private ["Ps28CustomDebugStringConvertible", "NSFetchRequest"]
 - !private ["Ps28CustomDebugStringConvertible", "NSPredicate"]
 - !private ["Ps28CustomDebugStringConvertible", "SubSequence"]
@@ -631,13 +614,11 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "allObjects"]
 - !private ["Ps28CustomDebugStringConvertible", "annotation"]
 - !private ["Ps28CustomDebugStringConvertible", "async"]
-- !private ["Ps28CustomDebugStringConvertible", "black"]
 - !private ["Ps28CustomDebugStringConvertible", "boundingMapRect"]
 - !private ["Ps28CustomDebugStringConvertible", "breweriesForDisplay"]
 - !private ["Ps28CustomDebugStringConvertible", "brewerywithstyle"]
 - !private ["Ps28CustomDebugStringConvertible", "calculate"]
 - !private ["Ps28CustomDebugStringConvertible", "canOpenURL"]
-- !private ["Ps28CustomDebugStringConvertible", "canShowCallout"]
 - !private ["Ps28CustomDebugStringConvertible", "cgPath"]
 - !private ["Ps28CustomDebugStringConvertible", "circularAnimationDuration"]
 - !private ["Ps28CustomDebugStringConvertible", "container"]
@@ -673,7 +654,6 @@ depends-member:
 - ["Ps28CustomDebugStringConvertible", "locationManagerDidPauseLocationUpdates"]
 - ["Ps28CustomDebugStringConvertible", "locationManagerDidResumeLocationUpdates"]
 - ["Ps28CustomDebugStringConvertible", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["Ps28CustomDebugStringConvertible", "magenta"]
 - !private ["Ps28CustomDebugStringConvertible", "main"]
 - ["Ps28CustomDebugStringConvertible", "mapView"]
 - ["Ps28CustomDebugStringConvertible", "mapViewDidFailLoadingMap"]
@@ -689,12 +669,10 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "object"]
 - !private ["Ps28CustomDebugStringConvertible", "objectID"]
 - !private ["Ps28CustomDebugStringConvertible", "open"]
-- !private ["Ps28CustomDebugStringConvertible", "orange"]
 - !private ["Ps28CustomDebugStringConvertible", "overlays"]
 - !private ["Ps28CustomDebugStringConvertible", "path"]
 - !private ["Ps28CustomDebugStringConvertible", "performAndWait"]
 - !private ["Ps28CustomDebugStringConvertible", "performBackgroundTask"]
-- !private ["Ps28CustomDebugStringConvertible", "pinTintColor"]
 - !private ["Ps28CustomDebugStringConvertible", "pointer"]
 - !private ["Ps28CustomDebugStringConvertible", "polyline"]
 - !private ["Ps28CustomDebugStringConvertible", "predicate"]
@@ -710,7 +688,6 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "routedAnnotation"]
 - !private ["Ps28CustomDebugStringConvertible", "routes"]
 - !private ["Ps28CustomDebugStringConvertible", "save"]
-- !private ["Ps28CustomDebugStringConvertible", "setBrewery"]
 - !private ["Ps28CustomDebugStringConvertible", "setImage"]
 - !private ["Ps28CustomDebugStringConvertible", "setNeedsDisplay"]
 - !private ["Ps28CustomDebugStringConvertible", "setVisibleMapRect"]
@@ -775,8 +752,8 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "MKPlacemark"]
 - !private ["Ps23CustomStringConvertible", "MKPolylineRenderer"]
 - !private ["Ps23CustomStringConvertible", "M_PI"]
+- !private ["Ps23CustomStringConvertible", "MakePinView"]
 - !private ["Ps23CustomStringConvertible", "Mediator"]
-- !private ["Ps23CustomStringConvertible", "MyPinAnnotationView"]
 - !private ["Ps23CustomStringConvertible", "NSFetchRequest"]
 - !private ["Ps23CustomStringConvertible", "NSPredicate"]
 - !private ["Ps23CustomStringConvertible", "Stride"]
@@ -798,13 +775,11 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "allObjects"]
 - !private ["Ps23CustomStringConvertible", "annotation"]
 - !private ["Ps23CustomStringConvertible", "async"]
-- !private ["Ps23CustomStringConvertible", "black"]
 - !private ["Ps23CustomStringConvertible", "boundingMapRect"]
 - !private ["Ps23CustomStringConvertible", "breweriesForDisplay"]
 - !private ["Ps23CustomStringConvertible", "brewerywithstyle"]
 - !private ["Ps23CustomStringConvertible", "calculate"]
 - !private ["Ps23CustomStringConvertible", "canOpenURL"]
-- !private ["Ps23CustomStringConvertible", "canShowCallout"]
 - !private ["Ps23CustomStringConvertible", "cgPath"]
 - !private ["Ps23CustomStringConvertible", "circularAnimationDuration"]
 - !private ["Ps23CustomStringConvertible", "container"]
@@ -840,7 +815,6 @@ depends-member:
 - ["Ps23CustomStringConvertible", "locationManagerDidPauseLocationUpdates"]
 - ["Ps23CustomStringConvertible", "locationManagerDidResumeLocationUpdates"]
 - ["Ps23CustomStringConvertible", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["Ps23CustomStringConvertible", "magenta"]
 - !private ["Ps23CustomStringConvertible", "main"]
 - ["Ps23CustomStringConvertible", "mapView"]
 - ["Ps23CustomStringConvertible", "mapViewDidFailLoadingMap"]
@@ -854,12 +828,10 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "object"]
 - !private ["Ps23CustomStringConvertible", "objectID"]
 - !private ["Ps23CustomStringConvertible", "open"]
-- !private ["Ps23CustomStringConvertible", "orange"]
 - !private ["Ps23CustomStringConvertible", "overlays"]
 - !private ["Ps23CustomStringConvertible", "path"]
 - !private ["Ps23CustomStringConvertible", "performAndWait"]
 - !private ["Ps23CustomStringConvertible", "performBackgroundTask"]
-- !private ["Ps23CustomStringConvertible", "pinTintColor"]
 - !private ["Ps23CustomStringConvertible", "pointer"]
 - !private ["Ps23CustomStringConvertible", "polyline"]
 - !private ["Ps23CustomStringConvertible", "predicate"]
@@ -875,7 +847,6 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "routedAnnotation"]
 - !private ["Ps23CustomStringConvertible", "routes"]
 - !private ["Ps23CustomStringConvertible", "save"]
-- !private ["Ps23CustomStringConvertible", "setBrewery"]
 - !private ["Ps23CustomStringConvertible", "setImage"]
 - !private ["Ps23CustomStringConvertible", "setNeedsDisplay"]
 - !private ["Ps23CustomStringConvertible", "setVisibleMapRect"]
@@ -918,8 +889,8 @@ depends-member:
 - !private ["P11BreweryTour19DismissableTutorial", "MKPlacemark"]
 - !private ["P11BreweryTour19DismissableTutorial", "MKPolylineRenderer"]
 - !private ["P11BreweryTour19DismissableTutorial", "M_PI"]
+- !private ["P11BreweryTour19DismissableTutorial", "MakePinView"]
 - !private ["P11BreweryTour19DismissableTutorial", "Mediator"]
-- !private ["P11BreweryTour19DismissableTutorial", "MyPinAnnotationView"]
 - !private ["P11BreweryTour19DismissableTutorial", "NSFetchRequest"]
 - !private ["P11BreweryTour19DismissableTutorial", "NSPredicate"]
 - !private ["P11BreweryTour19DismissableTutorial", "UIApplication"]
@@ -988,8 +959,8 @@ depends-member:
 - !private ["Ps9Equatable", "MKPlacemark"]
 - !private ["Ps9Equatable", "MKPolylineRenderer"]
 - !private ["Ps9Equatable", "M_PI"]
+- !private ["Ps9Equatable", "MakePinView"]
 - !private ["Ps9Equatable", "Mediator"]
-- !private ["Ps9Equatable", "MyPinAnnotationView"]
 - !private ["Ps9Equatable", "NSFetchRequest"]
 - !private ["Ps9Equatable", "NSPredicate"]
 - !private ["Ps9Equatable", "Stride"]
@@ -1010,13 +981,11 @@ depends-member:
 - !private ["Ps9Equatable", "annotation"]
 - !private ["Ps9Equatable", "async"]
 - !private ["Ps9Equatable", "automobile"]
-- !private ["Ps9Equatable", "black"]
 - !private ["Ps9Equatable", "boundingMapRect"]
 - !private ["Ps9Equatable", "breweriesForDisplay"]
 - !private ["Ps9Equatable", "brewerywithstyle"]
 - !private ["Ps9Equatable", "calculate"]
 - !private ["Ps9Equatable", "canOpenURL"]
-- !private ["Ps9Equatable", "canShowCallout"]
 - !private ["Ps9Equatable", "cgPath"]
 - !private ["Ps9Equatable", "circularAnimationDuration"]
 - !private ["Ps9Equatable", "container"]
@@ -1051,7 +1020,6 @@ depends-member:
 - ["Ps9Equatable", "locationManagerDidPauseLocationUpdates"]
 - ["Ps9Equatable", "locationManagerDidResumeLocationUpdates"]
 - ["Ps9Equatable", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["Ps9Equatable", "magenta"]
 - !private ["Ps9Equatable", "main"]
 - ["Ps9Equatable", "mapView"]
 - ["Ps9Equatable", "mapViewDidFailLoadingMap"]
@@ -1068,12 +1036,10 @@ depends-member:
 - !private ["Ps9Equatable", "object"]
 - !private ["Ps9Equatable", "objectID"]
 - !private ["Ps9Equatable", "open"]
-- !private ["Ps9Equatable", "orange"]
 - !private ["Ps9Equatable", "overlays"]
 - !private ["Ps9Equatable", "path"]
 - !private ["Ps9Equatable", "performAndWait"]
 - !private ["Ps9Equatable", "performBackgroundTask"]
-- !private ["Ps9Equatable", "pinTintColor"]
 - !private ["Ps9Equatable", "pointer"]
 - !private ["Ps9Equatable", "polyline"]
 - !private ["Ps9Equatable", "predicate"]
@@ -1089,7 +1055,6 @@ depends-member:
 - !private ["Ps9Equatable", "routedAnnotation"]
 - !private ["Ps9Equatable", "routes"]
 - !private ["Ps9Equatable", "save"]
-- !private ["Ps9Equatable", "setBrewery"]
 - !private ["Ps9Equatable", "setImage"]
 - !private ["Ps9Equatable", "setNeedsDisplay"]
 - !private ["Ps9Equatable", "setVisibleMapRect"]
@@ -1145,8 +1110,8 @@ depends-member:
 - !private ["Ps8Hashable", "MKPlacemark"]
 - !private ["Ps8Hashable", "MKPolylineRenderer"]
 - !private ["Ps8Hashable", "M_PI"]
+- !private ["Ps8Hashable", "MakePinView"]
 - !private ["Ps8Hashable", "Mediator"]
-- !private ["Ps8Hashable", "MyPinAnnotationView"]
 - !private ["Ps8Hashable", "NSFetchRequest"]
 - !private ["Ps8Hashable", "NSPredicate"]
 - !private ["Ps8Hashable", "Stride"]
@@ -1166,13 +1131,11 @@ depends-member:
 - !private ["Ps8Hashable", "alwaysOriginal"]
 - !private ["Ps8Hashable", "annotation"]
 - !private ["Ps8Hashable", "async"]
-- !private ["Ps8Hashable", "black"]
 - !private ["Ps8Hashable", "boundingMapRect"]
 - !private ["Ps8Hashable", "breweriesForDisplay"]
 - !private ["Ps8Hashable", "brewerywithstyle"]
 - !private ["Ps8Hashable", "calculate"]
 - !private ["Ps8Hashable", "canOpenURL"]
-- !private ["Ps8Hashable", "canShowCallout"]
 - !private ["Ps8Hashable", "cgPath"]
 - !private ["Ps8Hashable", "circularAnimationDuration"]
 - !private ["Ps8Hashable", "container"]
@@ -1207,7 +1170,6 @@ depends-member:
 - ["Ps8Hashable", "locationManagerDidPauseLocationUpdates"]
 - ["Ps8Hashable", "locationManagerDidResumeLocationUpdates"]
 - ["Ps8Hashable", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["Ps8Hashable", "magenta"]
 - !private ["Ps8Hashable", "main"]
 - ["Ps8Hashable", "mapView"]
 - ["Ps8Hashable", "mapViewDidFailLoadingMap"]
@@ -1221,12 +1183,10 @@ depends-member:
 - !private ["Ps8Hashable", "object"]
 - !private ["Ps8Hashable", "objectID"]
 - !private ["Ps8Hashable", "open"]
-- !private ["Ps8Hashable", "orange"]
 - !private ["Ps8Hashable", "overlays"]
 - !private ["Ps8Hashable", "path"]
 - !private ["Ps8Hashable", "performAndWait"]
 - !private ["Ps8Hashable", "performBackgroundTask"]
-- !private ["Ps8Hashable", "pinTintColor"]
 - !private ["Ps8Hashable", "pointer"]
 - !private ["Ps8Hashable", "polyline"]
 - !private ["Ps8Hashable", "predicate"]
@@ -1242,7 +1202,6 @@ depends-member:
 - !private ["Ps8Hashable", "routedAnnotation"]
 - !private ["Ps8Hashable", "routes"]
 - !private ["Ps8Hashable", "save"]
-- !private ["Ps8Hashable", "setBrewery"]
 - !private ["Ps8Hashable", "setImage"]
 - !private ["Ps8Hashable", "setNeedsDisplay"]
 - !private ["Ps8Hashable", "setVisibleMapRect"]
@@ -1304,12 +1263,9 @@ depends-member:
 - !private ["PSo12MKAnnotation", "subtitle"]
 - !private ["PSo12MKAnnotation", "title"]
 - !private ["CSo16MKAnnotationView", "annotation"]
-- !private ["CSo16MKAnnotationView", "canShowCallout"]
 - ["CSo16MKAnnotationView", "deinit"]
 - !private ["CSo16MKAnnotationView", "leftCalloutAccessoryView"]
-- !private ["CSo16MKAnnotationView", "pinTintColor"]
 - !private ["CSo16MKAnnotationView", "rightCalloutAccessoryView"]
-- !private ["CSo16MKAnnotationView", "setBrewery"]
 - !private ["CSo16MKAnnotationView", "setNeedsDisplay"]
 - !private ["CSo12MKDirections", "calculate"]
 - ["CSo12MKDirections", "deinit"]
@@ -1346,8 +1302,8 @@ depends-member:
 - !private ["PSo17MKMapViewDelegate", "MKPlacemark"]
 - !private ["PSo17MKMapViewDelegate", "MKPolylineRenderer"]
 - !private ["PSo17MKMapViewDelegate", "M_PI"]
+- !private ["PSo17MKMapViewDelegate", "MakePinView"]
 - !private ["PSo17MKMapViewDelegate", "Mediator"]
-- !private ["PSo17MKMapViewDelegate", "MyPinAnnotationView"]
 - !private ["PSo17MKMapViewDelegate", "NSFetchRequest"]
 - !private ["PSo17MKMapViewDelegate", "NSPredicate"]
 - !private ["PSo17MKMapViewDelegate", "UIApplication"]
@@ -1405,9 +1361,6 @@ depends-member:
 - !private ["CSo17MKOverlayRenderer", "init"]
 - !private ["CSo17MKOverlayRenderer", "lineWidth"]
 - !private ["CSo17MKOverlayRenderer", "strokeColor"]
-- !private ["CSo19MKPinAnnotationView", "canShowCallout"]
-- !private ["CSo19MKPinAnnotationView", "pinTintColor"]
-- !private ["CSo19MKPinAnnotationView", "setBrewery"]
 - ["CSo11MKPlacemark", "deinit"]
 - !private ["CSo11MKPlacemark", "init"]
 - !private ["CSo10MKPolyline", "boundingMapRect"]
@@ -1422,6 +1375,9 @@ depends-member:
 - !private ["CSo7MKShape", "boundingMapRect"]
 - !private ["CSo14MKUserLocation", "coordinate"]
 - ["CSo14MKUserLocation", "deinit"]
+- ["C11BreweryTour11MakePinView", "deinit"]
+- !private ["C11BreweryTour11MakePinView", "makePinView"]
+- !private ["C11BreweryTour11MakePinView", "sharedInstance"]
 - !private ["C11BreweryTour17MapViewController", "Brewery"]
 - !private ["C11BreweryTour17MapViewController", "CAKeyframeAnimation"]
 - !private ["C11BreweryTour17MapViewController", "CFTimeInterval"]
@@ -1446,8 +1402,9 @@ depends-member:
 - ["C11BreweryTour17MapViewController", "MKRoute"]
 - ["C11BreweryTour17MapViewController", "MKUserLocation"]
 - !private ["C11BreweryTour17MapViewController", "M_PI"]
+- !private ["C11BreweryTour17MapViewController", "MakePinView"]
 - !private ["C11BreweryTour17MapViewController", "Mediator"]
-- !private ["C11BreweryTour17MapViewController", "MyPinAnnotationView"]
+- !private ["C11BreweryTour17MapViewController", "MyAnnotationView"]
 - !private ["C11BreweryTour17MapViewController", "NSFetchRequest"]
 - ["C11BreweryTour17MapViewController", "NSFetchRequestResult"]
 - ["C11BreweryTour17MapViewController", "NSFetchedResultsController"]
@@ -1535,11 +1492,7 @@ depends-member:
 - !private ["Ps16MutableIndexable", "first"]
 - !private ["Ps16MutableIndexable", "sorted"]
 - !private ["Ps16MutableIndexable", "subscript"]
-- !private ["C11BreweryTour19MyPinAnnotationView", "canShowCallout"]
-- ["C11BreweryTour19MyPinAnnotationView", "deinit"]
-- !private ["C11BreweryTour19MyPinAnnotationView", "init"]
-- !private ["C11BreweryTour19MyPinAnnotationView", "pinTintColor"]
-- !private ["C11BreweryTour19MyPinAnnotationView", "setBrewery"]
+- ["C11BreweryTour16MyAnnotationView", "deinit"]
 - !private ["PSo8NSCoding", "CAKeyframeAnimation"]
 - !private ["PSo8NSCoding", "CFTimeInterval"]
 - !private ["PSo8NSCoding", "CGFloat"]
@@ -1552,8 +1505,8 @@ depends-member:
 - !private ["PSo8NSCoding", "MKPlacemark"]
 - !private ["PSo8NSCoding", "MKPolylineRenderer"]
 - !private ["PSo8NSCoding", "M_PI"]
+- !private ["PSo8NSCoding", "MakePinView"]
 - !private ["PSo8NSCoding", "Mediator"]
-- !private ["PSo8NSCoding", "MyPinAnnotationView"]
 - !private ["PSo8NSCoding", "NSFetchRequest"]
 - !private ["PSo8NSCoding", "NSPredicate"]
 - !private ["PSo8NSCoding", "UIApplication"]
@@ -1568,9 +1521,7 @@ depends-member:
 - ["PSo8NSCoding", "addCircularPathToPointer"]
 - !private ["PSo8NSCoding", "allObjects"]
 - !private ["PSo8NSCoding", "annotation"]
-- !private ["PSo8NSCoding", "black"]
 - !private ["PSo8NSCoding", "breweriesForDisplay"]
-- !private ["PSo8NSCoding", "canShowCallout"]
 - !private ["PSo8NSCoding", "cgPath"]
 - !private ["PSo8NSCoding", "circularAnimationDuration"]
 - !private ["PSo8NSCoding", "container"]
@@ -1598,7 +1549,6 @@ depends-member:
 - ["PSo8NSCoding", "locationManagerDidPauseLocationUpdates"]
 - ["PSo8NSCoding", "locationManagerDidResumeLocationUpdates"]
 - ["PSo8NSCoding", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["PSo8NSCoding", "magenta"]
 - ["PSo8NSCoding", "mapView"]
 - ["PSo8NSCoding", "mapViewDidFailLoadingMap"]
 - ["PSo8NSCoding", "mapViewDidFinishLoadingMap"]
@@ -1608,11 +1558,9 @@ depends-member:
 - ["PSo8NSCoding", "mapViewWillStartLocatingUser"]
 - ["PSo8NSCoding", "mapViewWillStartRenderingMap"]
 - !private ["PSo8NSCoding", "object"]
-- !private ["PSo8NSCoding", "orange"]
 - !private ["PSo8NSCoding", "overlays"]
 - !private ["PSo8NSCoding", "path"]
 - !private ["PSo8NSCoding", "performAndWait"]
-- !private ["PSo8NSCoding", "pinTintColor"]
 - !private ["PSo8NSCoding", "pointer"]
 - !private ["PSo8NSCoding", "predicate"]
 - !private ["PSo8NSCoding", "radiusDivisor"]
@@ -1625,7 +1573,6 @@ depends-member:
 - !private ["PSo8NSCoding", "rightCalloutAccessoryView"]
 - !private ["PSo8NSCoding", "routedAnnotation"]
 - !private ["PSo8NSCoding", "save"]
-- !private ["PSo8NSCoding", "setBrewery"]
 - !private ["PSo8NSCoding", "setImage"]
 - !private ["PSo8NSCoding", "setNeedsDisplay"]
 - !private ["PSo8NSCoding", "setVisibleMapRect"]
@@ -1638,13 +1585,10 @@ depends-member:
 - !private ["PSo8NSCoding", "withAlphaComponent"]
 - !private ["PSo8NSCoding", "withRenderingMode"]
 - !private ["PSo9NSCopying", "allObjects"]
-- !private ["PSo9NSCopying", "black"]
 - !private ["PSo9NSCopying", "cgPath"]
 - !private ["PSo9NSCopying", "duration"]
 - !private ["PSo9NSCopying", "green"]
 - !private ["PSo9NSCopying", "init"]
-- !private ["PSo9NSCopying", "magenta"]
-- !private ["PSo9NSCopying", "orange"]
 - !private ["PSo9NSCopying", "path"]
 - !private ["PSo9NSCopying", "predicate"]
 - !private ["PSo9NSCopying", "repeatCount"]
@@ -1662,8 +1606,8 @@ depends-member:
 - !private ["PSo26NSExtensionRequestHandling", "MKPlacemark"]
 - !private ["PSo26NSExtensionRequestHandling", "MKPolylineRenderer"]
 - !private ["PSo26NSExtensionRequestHandling", "M_PI"]
+- !private ["PSo26NSExtensionRequestHandling", "MakePinView"]
 - !private ["PSo26NSExtensionRequestHandling", "Mediator"]
-- !private ["PSo26NSExtensionRequestHandling", "MyPinAnnotationView"]
 - !private ["PSo26NSExtensionRequestHandling", "NSFetchRequest"]
 - !private ["PSo26NSExtensionRequestHandling", "NSPredicate"]
 - !private ["PSo26NSExtensionRequestHandling", "UIApplication"]
@@ -1735,8 +1679,8 @@ depends-member:
 - !private ["PSo34NSFetchedResultsControllerDelegate", "MKPlacemark"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "MKPolylineRenderer"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "M_PI"]
+- !private ["PSo34NSFetchedResultsControllerDelegate", "MakePinView"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "Mediator"]
-- !private ["PSo34NSFetchedResultsControllerDelegate", "MyPinAnnotationView"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "NSFetchRequest"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "NSPredicate"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "UIApplication"]
@@ -1825,8 +1769,9 @@ depends-member:
 - ["CSo8NSObject", "MKRoute"]
 - ["CSo8NSObject", "MKUserLocation"]
 - !private ["CSo8NSObject", "M_PI"]
+- !private ["CSo8NSObject", "MakePinView"]
 - !private ["CSo8NSObject", "Mediator"]
-- !private ["CSo8NSObject", "MyPinAnnotationView"]
+- !private ["CSo8NSObject", "MyAnnotationView"]
 - !private ["CSo8NSObject", "NSFetchRequest"]
 - ["CSo8NSObject", "NSFetchRequestResult"]
 - ["CSo8NSObject", "NSFetchedResultsController"]
@@ -1851,13 +1796,11 @@ depends-member:
 - !private ["CSo8NSObject", "allObjects"]
 - !private ["CSo8NSObject", "annotation"]
 - !private ["CSo8NSObject", "async"]
-- !private ["CSo8NSObject", "black"]
 - !private ["CSo8NSObject", "boundingMapRect"]
 - !private ["CSo8NSObject", "breweriesForDisplay"]
 - !private ["CSo8NSObject", "brewerywithstyle"]
 - !private ["CSo8NSObject", "calculate"]
 - !private ["CSo8NSObject", "canOpenURL"]
-- !private ["CSo8NSObject", "canShowCallout"]
 - !private ["CSo8NSObject", "cgPath"]
 - !private ["CSo8NSObject", "circularAnimationDuration"]
 - !private ["CSo8NSObject", "container"]
@@ -1892,7 +1835,6 @@ depends-member:
 - ["CSo8NSObject", "locationManagerDidPauseLocationUpdates"]
 - ["CSo8NSObject", "locationManagerDidResumeLocationUpdates"]
 - ["CSo8NSObject", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["CSo8NSObject", "magenta"]
 - !private ["CSo8NSObject", "main"]
 - ["CSo8NSObject", "mapView"]
 - ["CSo8NSObject", "mapViewDidFailLoadingMap"]
@@ -1906,12 +1848,10 @@ depends-member:
 - !private ["CSo8NSObject", "object"]
 - !private ["CSo8NSObject", "objectID"]
 - !private ["CSo8NSObject", "open"]
-- !private ["CSo8NSObject", "orange"]
 - !private ["CSo8NSObject", "overlays"]
 - !private ["CSo8NSObject", "path"]
 - !private ["CSo8NSObject", "performAndWait"]
 - !private ["CSo8NSObject", "performBackgroundTask"]
-- !private ["CSo8NSObject", "pinTintColor"]
 - !private ["CSo8NSObject", "pointer"]
 - !private ["CSo8NSObject", "polyline"]
 - !private ["CSo8NSObject", "predicate"]
@@ -1927,7 +1867,6 @@ depends-member:
 - !private ["CSo8NSObject", "routedAnnotation"]
 - !private ["CSo8NSObject", "routes"]
 - !private ["CSo8NSObject", "save"]
-- !private ["CSo8NSObject", "setBrewery"]
 - !private ["CSo8NSObject", "setImage"]
 - !private ["CSo8NSObject", "setNeedsDisplay"]
 - !private ["CSo8NSObject", "setVisibleMapRect"]
@@ -1955,8 +1894,8 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "MKPlacemark"]
 - !private ["PSo16NSObjectProtocol", "MKPolylineRenderer"]
 - !private ["PSo16NSObjectProtocol", "M_PI"]
+- !private ["PSo16NSObjectProtocol", "MakePinView"]
 - !private ["PSo16NSObjectProtocol", "Mediator"]
-- !private ["PSo16NSObjectProtocol", "MyPinAnnotationView"]
 - !private ["PSo16NSObjectProtocol", "NSFetchRequest"]
 - !private ["PSo16NSObjectProtocol", "NSPredicate"]
 - !private ["PSo16NSObjectProtocol", "UIApplication"]
@@ -1972,13 +1911,11 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "allObjects"]
 - !private ["PSo16NSObjectProtocol", "annotation"]
 - !private ["PSo16NSObjectProtocol", "async"]
-- !private ["PSo16NSObjectProtocol", "black"]
 - !private ["PSo16NSObjectProtocol", "boundingMapRect"]
 - !private ["PSo16NSObjectProtocol", "breweriesForDisplay"]
 - !private ["PSo16NSObjectProtocol", "brewerywithstyle"]
 - !private ["PSo16NSObjectProtocol", "calculate"]
 - !private ["PSo16NSObjectProtocol", "canOpenURL"]
-- !private ["PSo16NSObjectProtocol", "canShowCallout"]
 - !private ["PSo16NSObjectProtocol", "cgPath"]
 - !private ["PSo16NSObjectProtocol", "circularAnimationDuration"]
 - !private ["PSo16NSObjectProtocol", "container"]
@@ -2013,7 +1950,6 @@ depends-member:
 - ["PSo16NSObjectProtocol", "locationManagerDidPauseLocationUpdates"]
 - ["PSo16NSObjectProtocol", "locationManagerDidResumeLocationUpdates"]
 - ["PSo16NSObjectProtocol", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["PSo16NSObjectProtocol", "magenta"]
 - !private ["PSo16NSObjectProtocol", "main"]
 - ["PSo16NSObjectProtocol", "mapView"]
 - ["PSo16NSObjectProtocol", "mapViewDidFailLoadingMap"]
@@ -2027,12 +1963,10 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "object"]
 - !private ["PSo16NSObjectProtocol", "objectID"]
 - !private ["PSo16NSObjectProtocol", "open"]
-- !private ["PSo16NSObjectProtocol", "orange"]
 - !private ["PSo16NSObjectProtocol", "overlays"]
 - !private ["PSo16NSObjectProtocol", "path"]
 - !private ["PSo16NSObjectProtocol", "performAndWait"]
 - !private ["PSo16NSObjectProtocol", "performBackgroundTask"]
-- !private ["PSo16NSObjectProtocol", "pinTintColor"]
 - !private ["PSo16NSObjectProtocol", "pointer"]
 - !private ["PSo16NSObjectProtocol", "polyline"]
 - !private ["PSo16NSObjectProtocol", "predicate"]
@@ -2048,7 +1982,6 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "routedAnnotation"]
 - !private ["PSo16NSObjectProtocol", "routes"]
 - !private ["PSo16NSObjectProtocol", "save"]
-- !private ["PSo16NSObjectProtocol", "setBrewery"]
 - !private ["PSo16NSObjectProtocol", "setImage"]
 - !private ["PSo16NSObjectProtocol", "setNeedsDisplay"]
 - !private ["PSo16NSObjectProtocol", "setVisibleMapRect"]
@@ -2073,11 +2006,8 @@ depends-member:
 - !private ["CSo11NSPredicate", "deinit"]
 - !private ["CSo11NSPredicate", "init"]
 - !private ["PSo14NSSecureCoding", "allObjects"]
-- !private ["PSo14NSSecureCoding", "black"]
 - !private ["PSo14NSSecureCoding", "green"]
 - !private ["PSo14NSSecureCoding", "init"]
-- !private ["PSo14NSSecureCoding", "magenta"]
-- !private ["PSo14NSSecureCoding", "orange"]
 - !private ["PSo14NSSecureCoding", "withAlphaComponent"]
 - !private ["PSo14NSSecureCoding", "withRenderingMode"]
 - !private ["CSo5NSSet", "allObjects"]
@@ -2161,6 +2091,8 @@ depends-member:
 - !private ["Vs5Slice", "Iterator"]
 - !private ["Vs5Slice", "SubSequence"]
 - !private ["Vs5Slice", "_Element"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "registerForBusyIndicator"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "sharedInstance"]
 - !private ["Ps10Strideable", "IntegerLiteralType"]
 - !private ["Ps10Strideable", "Stride"]
 - !private ["Ps10Strideable", "_DisabledRangeIndex"]
@@ -2173,7 +2105,6 @@ depends-member:
 - !private ["Ps20TextOutputStreamable", "init"]
 - !private ["PSo29UIAccessibilityIdentification", "add"]
 - !private ["PSo29UIAccessibilityIdentification", "annotation"]
-- !private ["PSo29UIAccessibilityIdentification", "canShowCallout"]
 - !private ["PSo29UIAccessibilityIdentification", "dequeueReusableAnnotationView"]
 - !private ["PSo29UIAccessibilityIdentification", "frame"]
 - !private ["PSo29UIAccessibilityIdentification", "init"]
@@ -2181,10 +2112,8 @@ depends-member:
 - !private ["PSo29UIAccessibilityIdentification", "layer"]
 - !private ["PSo29UIAccessibilityIdentification", "leftCalloutAccessoryView"]
 - !private ["PSo29UIAccessibilityIdentification", "overlays"]
-- !private ["PSo29UIAccessibilityIdentification", "pinTintColor"]
 - !private ["PSo29UIAccessibilityIdentification", "removeOverlays"]
 - !private ["PSo29UIAccessibilityIdentification", "rightCalloutAccessoryView"]
-- !private ["PSo29UIAccessibilityIdentification", "setBrewery"]
 - !private ["PSo29UIAccessibilityIdentification", "setImage"]
 - !private ["PSo29UIAccessibilityIdentification", "setNeedsDisplay"]
 - !private ["PSo29UIAccessibilityIdentification", "setVisibleMapRect"]
@@ -2196,18 +2125,14 @@ depends-member:
 - !private ["CSo23UIActivityIndicatorView", "stopAnimating"]
 - !private ["PSo12UIAppearance", "add"]
 - !private ["PSo12UIAppearance", "annotation"]
-- !private ["PSo12UIAppearance", "canShowCallout"]
 - !private ["PSo12UIAppearance", "dequeueReusableAnnotationView"]
 - !private ["PSo12UIAppearance", "frame"]
-- !private ["PSo12UIAppearance", "init"]
 - !private ["PSo12UIAppearance", "isHidden"]
 - !private ["PSo12UIAppearance", "layer"]
 - !private ["PSo12UIAppearance", "leftCalloutAccessoryView"]
 - !private ["PSo12UIAppearance", "overlays"]
-- !private ["PSo12UIAppearance", "pinTintColor"]
 - !private ["PSo12UIAppearance", "removeOverlays"]
 - !private ["PSo12UIAppearance", "rightCalloutAccessoryView"]
-- !private ["PSo12UIAppearance", "setBrewery"]
 - !private ["PSo12UIAppearance", "setImage"]
 - !private ["PSo12UIAppearance", "setNeedsDisplay"]
 - !private ["PSo12UIAppearance", "setVisibleMapRect"]
@@ -2226,8 +2151,8 @@ depends-member:
 - !private ["PSo21UIAppearanceContainer", "MKPlacemark"]
 - !private ["PSo21UIAppearanceContainer", "MKPolylineRenderer"]
 - !private ["PSo21UIAppearanceContainer", "M_PI"]
+- !private ["PSo21UIAppearanceContainer", "MakePinView"]
 - !private ["PSo21UIAppearanceContainer", "Mediator"]
-- !private ["PSo21UIAppearanceContainer", "MyPinAnnotationView"]
 - !private ["PSo21UIAppearanceContainer", "NSFetchRequest"]
 - !private ["PSo21UIAppearanceContainer", "NSPredicate"]
 - !private ["PSo21UIAppearanceContainer", "UIApplication"]
@@ -2242,7 +2167,6 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "addCircularPathToPointer"]
 - !private ["PSo21UIAppearanceContainer", "annotation"]
 - !private ["PSo21UIAppearanceContainer", "breweriesForDisplay"]
-- !private ["PSo21UIAppearanceContainer", "canShowCallout"]
 - !private ["PSo21UIAppearanceContainer", "circularAnimationDuration"]
 - !private ["PSo21UIAppearanceContainer", "container"]
 - ["PSo21UIAppearanceContainer", "controller"]
@@ -2257,7 +2181,6 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "enableTutorial"]
 - !private ["PSo21UIAppearanceContainer", "floatingAnnotation"]
 - !private ["PSo21UIAppearanceContainer", "frame"]
-- !private ["PSo21UIAppearanceContainer", "init"]
 - !private ["PSo21UIAppearanceContainer", "iphoneFactor"]
 - !private ["PSo21UIAppearanceContainer", "isHidden"]
 - !private ["PSo21UIAppearanceContainer", "layer"]
@@ -2275,7 +2198,6 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "mapViewWillStartLocatingUser"]
 - ["PSo21UIAppearanceContainer", "mapViewWillStartRenderingMap"]
 - !private ["PSo21UIAppearanceContainer", "overlays"]
-- !private ["PSo21UIAppearanceContainer", "pinTintColor"]
 - !private ["PSo21UIAppearanceContainer", "pointer"]
 - !private ["PSo21UIAppearanceContainer", "radiusDivisor"]
 - !private ["PSo21UIAppearanceContainer", "readOnlyContext"]
@@ -2285,7 +2207,6 @@ depends-member:
 - !private ["PSo21UIAppearanceContainer", "reuseId"]
 - !private ["PSo21UIAppearanceContainer", "rightCalloutAccessoryView"]
 - !private ["PSo21UIAppearanceContainer", "routedAnnotation"]
-- !private ["PSo21UIAppearanceContainer", "setBrewery"]
 - !private ["PSo21UIAppearanceContainer", "setImage"]
 - !private ["PSo21UIAppearanceContainer", "setNeedsDisplay"]
 - !private ["PSo21UIAppearanceContainer", "setVisibleMapRect"]
@@ -2303,11 +2224,8 @@ depends-member:
 - !private ["CSo12UIBezierPath", "init"]
 - !private ["CSo8UIButton", "deinit"]
 - !private ["CSo8UIButton", "setImage"]
-- !private ["CSo7UIColor", "black"]
 - ["CSo7UIColor", "deinit"]
 - !private ["CSo7UIColor", "green"]
-- !private ["CSo7UIColor", "magenta"]
-- !private ["CSo7UIColor", "orange"]
 - !private ["CSo7UIColor", "withAlphaComponent"]
 - !private ["PSo18UIContentContainer", "CAKeyframeAnimation"]
 - !private ["PSo18UIContentContainer", "CFTimeInterval"]
@@ -2321,8 +2239,8 @@ depends-member:
 - !private ["PSo18UIContentContainer", "MKPlacemark"]
 - !private ["PSo18UIContentContainer", "MKPolylineRenderer"]
 - !private ["PSo18UIContentContainer", "M_PI"]
+- !private ["PSo18UIContentContainer", "MakePinView"]
 - !private ["PSo18UIContentContainer", "Mediator"]
-- !private ["PSo18UIContentContainer", "MyPinAnnotationView"]
 - !private ["PSo18UIContentContainer", "NSFetchRequest"]
 - !private ["PSo18UIContentContainer", "NSPredicate"]
 - !private ["PSo18UIContentContainer", "UIApplication"]
@@ -2377,18 +2295,14 @@ depends-member:
 - !private ["VSC14UIControlState", "normal"]
 - !private ["PSo17UICoordinateSpace", "add"]
 - !private ["PSo17UICoordinateSpace", "annotation"]
-- !private ["PSo17UICoordinateSpace", "canShowCallout"]
 - !private ["PSo17UICoordinateSpace", "dequeueReusableAnnotationView"]
 - !private ["PSo17UICoordinateSpace", "frame"]
-- !private ["PSo17UICoordinateSpace", "init"]
 - !private ["PSo17UICoordinateSpace", "isHidden"]
 - !private ["PSo17UICoordinateSpace", "layer"]
 - !private ["PSo17UICoordinateSpace", "leftCalloutAccessoryView"]
 - !private ["PSo17UICoordinateSpace", "overlays"]
-- !private ["PSo17UICoordinateSpace", "pinTintColor"]
 - !private ["PSo17UICoordinateSpace", "removeOverlays"]
 - !private ["PSo17UICoordinateSpace", "rightCalloutAccessoryView"]
-- !private ["PSo17UICoordinateSpace", "setBrewery"]
 - !private ["PSo17UICoordinateSpace", "setImage"]
 - !private ["PSo17UICoordinateSpace", "setNeedsDisplay"]
 - !private ["PSo17UICoordinateSpace", "setVisibleMapRect"]
@@ -2400,18 +2314,14 @@ depends-member:
 - !private ["CSo8UIDevice", "model"]
 - !private ["PSo13UIDynamicItem", "add"]
 - !private ["PSo13UIDynamicItem", "annotation"]
-- !private ["PSo13UIDynamicItem", "canShowCallout"]
 - !private ["PSo13UIDynamicItem", "dequeueReusableAnnotationView"]
 - !private ["PSo13UIDynamicItem", "frame"]
-- !private ["PSo13UIDynamicItem", "init"]
 - !private ["PSo13UIDynamicItem", "isHidden"]
 - !private ["PSo13UIDynamicItem", "layer"]
 - !private ["PSo13UIDynamicItem", "leftCalloutAccessoryView"]
 - !private ["PSo13UIDynamicItem", "overlays"]
-- !private ["PSo13UIDynamicItem", "pinTintColor"]
 - !private ["PSo13UIDynamicItem", "removeOverlays"]
 - !private ["PSo13UIDynamicItem", "rightCalloutAccessoryView"]
-- !private ["PSo13UIDynamicItem", "setBrewery"]
 - !private ["PSo13UIDynamicItem", "setImage"]
 - !private ["PSo13UIDynamicItem", "setNeedsDisplay"]
 - !private ["PSo13UIDynamicItem", "setVisibleMapRect"]
@@ -2431,8 +2341,8 @@ depends-member:
 - !private ["PSo18UIFocusEnvironment", "MKPlacemark"]
 - !private ["PSo18UIFocusEnvironment", "MKPolylineRenderer"]
 - !private ["PSo18UIFocusEnvironment", "M_PI"]
+- !private ["PSo18UIFocusEnvironment", "MakePinView"]
 - !private ["PSo18UIFocusEnvironment", "Mediator"]
-- !private ["PSo18UIFocusEnvironment", "MyPinAnnotationView"]
 - !private ["PSo18UIFocusEnvironment", "NSFetchRequest"]
 - !private ["PSo18UIFocusEnvironment", "NSPredicate"]
 - !private ["PSo18UIFocusEnvironment", "UIApplication"]
@@ -2447,7 +2357,6 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "addCircularPathToPointer"]
 - !private ["PSo18UIFocusEnvironment", "annotation"]
 - !private ["PSo18UIFocusEnvironment", "breweriesForDisplay"]
-- !private ["PSo18UIFocusEnvironment", "canShowCallout"]
 - !private ["PSo18UIFocusEnvironment", "circularAnimationDuration"]
 - !private ["PSo18UIFocusEnvironment", "container"]
 - ["PSo18UIFocusEnvironment", "controller"]
@@ -2462,7 +2371,6 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "enableTutorial"]
 - !private ["PSo18UIFocusEnvironment", "floatingAnnotation"]
 - !private ["PSo18UIFocusEnvironment", "frame"]
-- !private ["PSo18UIFocusEnvironment", "init"]
 - !private ["PSo18UIFocusEnvironment", "iphoneFactor"]
 - !private ["PSo18UIFocusEnvironment", "isHidden"]
 - !private ["PSo18UIFocusEnvironment", "layer"]
@@ -2480,7 +2388,6 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "mapViewWillStartLocatingUser"]
 - ["PSo18UIFocusEnvironment", "mapViewWillStartRenderingMap"]
 - !private ["PSo18UIFocusEnvironment", "overlays"]
-- !private ["PSo18UIFocusEnvironment", "pinTintColor"]
 - !private ["PSo18UIFocusEnvironment", "pointer"]
 - !private ["PSo18UIFocusEnvironment", "radiusDivisor"]
 - !private ["PSo18UIFocusEnvironment", "readOnlyContext"]
@@ -2490,7 +2397,6 @@ depends-member:
 - !private ["PSo18UIFocusEnvironment", "reuseId"]
 - !private ["PSo18UIFocusEnvironment", "rightCalloutAccessoryView"]
 - !private ["PSo18UIFocusEnvironment", "routedAnnotation"]
-- !private ["PSo18UIFocusEnvironment", "setBrewery"]
 - !private ["PSo18UIFocusEnvironment", "setImage"]
 - !private ["PSo18UIFocusEnvironment", "setNeedsDisplay"]
 - !private ["PSo18UIFocusEnvironment", "setVisibleMapRect"]
@@ -2501,18 +2407,14 @@ depends-member:
 - !private ["PSo18UIFocusEnvironment", "view"]
 - !private ["PSo11UIFocusItem", "add"]
 - !private ["PSo11UIFocusItem", "annotation"]
-- !private ["PSo11UIFocusItem", "canShowCallout"]
 - !private ["PSo11UIFocusItem", "dequeueReusableAnnotationView"]
 - !private ["PSo11UIFocusItem", "frame"]
-- !private ["PSo11UIFocusItem", "init"]
 - !private ["PSo11UIFocusItem", "isHidden"]
 - !private ["PSo11UIFocusItem", "layer"]
 - !private ["PSo11UIFocusItem", "leftCalloutAccessoryView"]
 - !private ["PSo11UIFocusItem", "overlays"]
-- !private ["PSo11UIFocusItem", "pinTintColor"]
 - !private ["PSo11UIFocusItem", "removeOverlays"]
 - !private ["PSo11UIFocusItem", "rightCalloutAccessoryView"]
-- !private ["PSo11UIFocusItem", "setBrewery"]
 - !private ["PSo11UIFocusItem", "setImage"]
 - !private ["PSo11UIFocusItem", "setNeedsDisplay"]
 - !private ["PSo11UIFocusItem", "setVisibleMapRect"]
@@ -2548,8 +2450,9 @@ depends-member:
 - ["CSo11UIResponder", "MKRoute"]
 - ["CSo11UIResponder", "MKUserLocation"]
 - !private ["CSo11UIResponder", "M_PI"]
+- !private ["CSo11UIResponder", "MakePinView"]
 - !private ["CSo11UIResponder", "Mediator"]
-- !private ["CSo11UIResponder", "MyPinAnnotationView"]
+- !private ["CSo11UIResponder", "MyAnnotationView"]
 - !private ["CSo11UIResponder", "NSFetchRequest"]
 - ["CSo11UIResponder", "NSFetchRequestResult"]
 - ["CSo11UIResponder", "NSFetchedResultsController"]
@@ -2574,7 +2477,6 @@ depends-member:
 - !private ["CSo11UIResponder", "annotation"]
 - !private ["CSo11UIResponder", "breweriesForDisplay"]
 - !private ["CSo11UIResponder", "canOpenURL"]
-- !private ["CSo11UIResponder", "canShowCallout"]
 - !private ["CSo11UIResponder", "circularAnimationDuration"]
 - !private ["CSo11UIResponder", "container"]
 - ["CSo11UIResponder", "controller"]
@@ -2607,7 +2509,6 @@ depends-member:
 - ["CSo11UIResponder", "mapViewWillStartRenderingMap"]
 - !private ["CSo11UIResponder", "open"]
 - !private ["CSo11UIResponder", "overlays"]
-- !private ["CSo11UIResponder", "pinTintColor"]
 - !private ["CSo11UIResponder", "pointer"]
 - !private ["CSo11UIResponder", "radiusDivisor"]
 - !private ["CSo11UIResponder", "readOnlyContext"]
@@ -2617,7 +2518,6 @@ depends-member:
 - !private ["CSo11UIResponder", "reuseId"]
 - !private ["CSo11UIResponder", "rightCalloutAccessoryView"]
 - !private ["CSo11UIResponder", "routedAnnotation"]
-- !private ["CSo11UIResponder", "setBrewery"]
 - !private ["CSo11UIResponder", "setImage"]
 - !private ["CSo11UIResponder", "setNeedsDisplay"]
 - !private ["CSo11UIResponder", "setVisibleMapRect"]
@@ -2639,8 +2539,8 @@ depends-member:
 - !private ["PSo30UIResponderStandardEditActions", "MKPlacemark"]
 - !private ["PSo30UIResponderStandardEditActions", "MKPolylineRenderer"]
 - !private ["PSo30UIResponderStandardEditActions", "M_PI"]
+- !private ["PSo30UIResponderStandardEditActions", "MakePinView"]
 - !private ["PSo30UIResponderStandardEditActions", "Mediator"]
-- !private ["PSo30UIResponderStandardEditActions", "MyPinAnnotationView"]
 - !private ["PSo30UIResponderStandardEditActions", "NSFetchRequest"]
 - !private ["PSo30UIResponderStandardEditActions", "NSPredicate"]
 - !private ["PSo30UIResponderStandardEditActions", "UIApplication"]
@@ -2656,7 +2556,6 @@ depends-member:
 - !private ["PSo30UIResponderStandardEditActions", "annotation"]
 - !private ["PSo30UIResponderStandardEditActions", "breweriesForDisplay"]
 - !private ["PSo30UIResponderStandardEditActions", "canOpenURL"]
-- !private ["PSo30UIResponderStandardEditActions", "canShowCallout"]
 - !private ["PSo30UIResponderStandardEditActions", "circularAnimationDuration"]
 - !private ["PSo30UIResponderStandardEditActions", "container"]
 - ["PSo30UIResponderStandardEditActions", "controller"]
@@ -2671,7 +2570,6 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "enableTutorial"]
 - !private ["PSo30UIResponderStandardEditActions", "floatingAnnotation"]
 - !private ["PSo30UIResponderStandardEditActions", "frame"]
-- !private ["PSo30UIResponderStandardEditActions", "init"]
 - !private ["PSo30UIResponderStandardEditActions", "iphoneFactor"]
 - !private ["PSo30UIResponderStandardEditActions", "isHidden"]
 - !private ["PSo30UIResponderStandardEditActions", "layer"]
@@ -2690,7 +2588,6 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "mapViewWillStartRenderingMap"]
 - !private ["PSo30UIResponderStandardEditActions", "open"]
 - !private ["PSo30UIResponderStandardEditActions", "overlays"]
-- !private ["PSo30UIResponderStandardEditActions", "pinTintColor"]
 - !private ["PSo30UIResponderStandardEditActions", "pointer"]
 - !private ["PSo30UIResponderStandardEditActions", "radiusDivisor"]
 - !private ["PSo30UIResponderStandardEditActions", "readOnlyContext"]
@@ -2700,7 +2597,6 @@ depends-member:
 - !private ["PSo30UIResponderStandardEditActions", "reuseId"]
 - !private ["PSo30UIResponderStandardEditActions", "rightCalloutAccessoryView"]
 - !private ["PSo30UIResponderStandardEditActions", "routedAnnotation"]
-- !private ["PSo30UIResponderStandardEditActions", "setBrewery"]
 - !private ["PSo30UIResponderStandardEditActions", "setImage"]
 - !private ["PSo30UIResponderStandardEditActions", "setNeedsDisplay"]
 - !private ["PSo30UIResponderStandardEditActions", "setVisibleMapRect"]
@@ -2722,8 +2618,8 @@ depends-member:
 - !private ["PSo16UIStateRestoring", "MKPlacemark"]
 - !private ["PSo16UIStateRestoring", "MKPolylineRenderer"]
 - !private ["PSo16UIStateRestoring", "M_PI"]
+- !private ["PSo16UIStateRestoring", "MakePinView"]
 - !private ["PSo16UIStateRestoring", "Mediator"]
-- !private ["PSo16UIStateRestoring", "MyPinAnnotationView"]
 - !private ["PSo16UIStateRestoring", "NSFetchRequest"]
 - !private ["PSo16UIStateRestoring", "NSPredicate"]
 - !private ["PSo16UIStateRestoring", "UIApplication"]
@@ -2784,8 +2680,8 @@ depends-member:
 - !private ["PSo18UITraitEnvironment", "MKPlacemark"]
 - !private ["PSo18UITraitEnvironment", "MKPolylineRenderer"]
 - !private ["PSo18UITraitEnvironment", "M_PI"]
+- !private ["PSo18UITraitEnvironment", "MakePinView"]
 - !private ["PSo18UITraitEnvironment", "Mediator"]
-- !private ["PSo18UITraitEnvironment", "MyPinAnnotationView"]
 - !private ["PSo18UITraitEnvironment", "NSFetchRequest"]
 - !private ["PSo18UITraitEnvironment", "NSPredicate"]
 - !private ["PSo18UITraitEnvironment", "UIApplication"]
@@ -2800,7 +2696,6 @@ depends-member:
 - ["PSo18UITraitEnvironment", "addCircularPathToPointer"]
 - !private ["PSo18UITraitEnvironment", "annotation"]
 - !private ["PSo18UITraitEnvironment", "breweriesForDisplay"]
-- !private ["PSo18UITraitEnvironment", "canShowCallout"]
 - !private ["PSo18UITraitEnvironment", "circularAnimationDuration"]
 - !private ["PSo18UITraitEnvironment", "container"]
 - ["PSo18UITraitEnvironment", "controller"]
@@ -2815,7 +2710,6 @@ depends-member:
 - ["PSo18UITraitEnvironment", "enableTutorial"]
 - !private ["PSo18UITraitEnvironment", "floatingAnnotation"]
 - !private ["PSo18UITraitEnvironment", "frame"]
-- !private ["PSo18UITraitEnvironment", "init"]
 - !private ["PSo18UITraitEnvironment", "iphoneFactor"]
 - !private ["PSo18UITraitEnvironment", "isHidden"]
 - !private ["PSo18UITraitEnvironment", "layer"]
@@ -2833,7 +2727,6 @@ depends-member:
 - ["PSo18UITraitEnvironment", "mapViewWillStartLocatingUser"]
 - ["PSo18UITraitEnvironment", "mapViewWillStartRenderingMap"]
 - !private ["PSo18UITraitEnvironment", "overlays"]
-- !private ["PSo18UITraitEnvironment", "pinTintColor"]
 - !private ["PSo18UITraitEnvironment", "pointer"]
 - !private ["PSo18UITraitEnvironment", "radiusDivisor"]
 - !private ["PSo18UITraitEnvironment", "readOnlyContext"]
@@ -2843,7 +2736,6 @@ depends-member:
 - !private ["PSo18UITraitEnvironment", "reuseId"]
 - !private ["PSo18UITraitEnvironment", "rightCalloutAccessoryView"]
 - !private ["PSo18UITraitEnvironment", "routedAnnotation"]
-- !private ["PSo18UITraitEnvironment", "setBrewery"]
 - !private ["PSo18UITraitEnvironment", "setImage"]
 - !private ["PSo18UITraitEnvironment", "setNeedsDisplay"]
 - !private ["PSo18UITraitEnvironment", "setVisibleMapRect"]
@@ -2854,7 +2746,6 @@ depends-member:
 - !private ["PSo18UITraitEnvironment", "view"]
 - !private ["CSo6UIView", "add"]
 - !private ["CSo6UIView", "annotation"]
-- !private ["CSo6UIView", "canShowCallout"]
 - ["CSo6UIView", "deinit"]
 - !private ["CSo6UIView", "dequeueReusableAnnotationView"]
 - !private ["CSo6UIView", "frame"]
@@ -2862,10 +2753,8 @@ depends-member:
 - !private ["CSo6UIView", "layer"]
 - !private ["CSo6UIView", "leftCalloutAccessoryView"]
 - !private ["CSo6UIView", "overlays"]
-- !private ["CSo6UIView", "pinTintColor"]
 - !private ["CSo6UIView", "removeOverlays"]
 - !private ["CSo6UIView", "rightCalloutAccessoryView"]
-- !private ["CSo6UIView", "setBrewery"]
 - !private ["CSo6UIView", "setImage"]
 - !private ["CSo6UIView", "setNeedsDisplay"]
 - !private ["CSo6UIView", "setVisibleMapRect"]
@@ -2896,8 +2785,9 @@ depends-member:
 - ["CSo16UIViewController", "MKRoute"]
 - ["CSo16UIViewController", "MKUserLocation"]
 - !private ["CSo16UIViewController", "M_PI"]
+- !private ["CSo16UIViewController", "MakePinView"]
 - !private ["CSo16UIViewController", "Mediator"]
-- !private ["CSo16UIViewController", "MyPinAnnotationView"]
+- !private ["CSo16UIViewController", "MyAnnotationView"]
 - !private ["CSo16UIViewController", "NSFetchRequest"]
 - ["CSo16UIViewController", "NSFetchRequestResult"]
 - ["CSo16UIViewController", "NSFetchedResultsController"]
@@ -2971,18 +2861,14 @@ depends-member:
 - !private ["Ps22_CVarArgPassedAsDouble", "init"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "add"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "annotation"]
-- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "canShowCallout"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "dequeueReusableAnnotationView"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "frame"]
-- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "init"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "isHidden"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "layer"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "leftCalloutAccessoryView"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "overlays"]
-- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "pinTintColor"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "removeOverlays"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "rightCalloutAccessoryView"]
-- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "setBrewery"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "setImage"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "setNeedsDisplay"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "setVisibleMapRect"]
@@ -3008,10 +2894,7 @@ depends-member:
 - !private ["Ps34_ExpressibleByBuiltinStringLiteral", "init"]
 - !private ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "init"]
 - !private ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
-- !private ["Ps26_ExpressibleByColorLiteral", "black"]
 - !private ["Ps26_ExpressibleByColorLiteral", "green"]
-- !private ["Ps26_ExpressibleByColorLiteral", "magenta"]
-- !private ["Ps26_ExpressibleByColorLiteral", "orange"]
 - !private ["Ps26_ExpressibleByColorLiteral", "withAlphaComponent"]
 - !private ["Ps34_ExpressibleByFileReferenceLiteral", "init"]
 - !private ["Ps26_ExpressibleByImageLiteral", "init"]
@@ -3031,8 +2914,8 @@ depends-member:
 - !private ["Ps9_Hashable", "MKPlacemark"]
 - !private ["Ps9_Hashable", "MKPolylineRenderer"]
 - !private ["Ps9_Hashable", "M_PI"]
+- !private ["Ps9_Hashable", "MakePinView"]
 - !private ["Ps9_Hashable", "Mediator"]
-- !private ["Ps9_Hashable", "MyPinAnnotationView"]
 - !private ["Ps9_Hashable", "NSFetchRequest"]
 - !private ["Ps9_Hashable", "NSPredicate"]
 - !private ["Ps9_Hashable", "Stride"]
@@ -3052,13 +2935,11 @@ depends-member:
 - !private ["Ps9_Hashable", "alwaysOriginal"]
 - !private ["Ps9_Hashable", "annotation"]
 - !private ["Ps9_Hashable", "async"]
-- !private ["Ps9_Hashable", "black"]
 - !private ["Ps9_Hashable", "boundingMapRect"]
 - !private ["Ps9_Hashable", "breweriesForDisplay"]
 - !private ["Ps9_Hashable", "brewerywithstyle"]
 - !private ["Ps9_Hashable", "calculate"]
 - !private ["Ps9_Hashable", "canOpenURL"]
-- !private ["Ps9_Hashable", "canShowCallout"]
 - !private ["Ps9_Hashable", "cgPath"]
 - !private ["Ps9_Hashable", "circularAnimationDuration"]
 - !private ["Ps9_Hashable", "container"]
@@ -3093,7 +2974,6 @@ depends-member:
 - ["Ps9_Hashable", "locationManagerDidPauseLocationUpdates"]
 - ["Ps9_Hashable", "locationManagerDidResumeLocationUpdates"]
 - ["Ps9_Hashable", "locationManagerShouldDisplayHeadingCalibration"]
-- !private ["Ps9_Hashable", "magenta"]
 - !private ["Ps9_Hashable", "main"]
 - ["Ps9_Hashable", "mapView"]
 - ["Ps9_Hashable", "mapViewDidFailLoadingMap"]
@@ -3107,12 +2987,10 @@ depends-member:
 - !private ["Ps9_Hashable", "object"]
 - !private ["Ps9_Hashable", "objectID"]
 - !private ["Ps9_Hashable", "open"]
-- !private ["Ps9_Hashable", "orange"]
 - !private ["Ps9_Hashable", "overlays"]
 - !private ["Ps9_Hashable", "path"]
 - !private ["Ps9_Hashable", "performAndWait"]
 - !private ["Ps9_Hashable", "performBackgroundTask"]
-- !private ["Ps9_Hashable", "pinTintColor"]
 - !private ["Ps9_Hashable", "pointer"]
 - !private ["Ps9_Hashable", "polyline"]
 - !private ["Ps9_Hashable", "predicate"]
@@ -3128,7 +3006,6 @@ depends-member:
 - !private ["Ps9_Hashable", "routedAnnotation"]
 - !private ["Ps9_Hashable", "routes"]
 - !private ["Ps9_Hashable", "save"]
-- !private ["Ps9_Hashable", "setBrewery"]
 - !private ["Ps9_Hashable", "setImage"]
 - !private ["Ps9_Hashable", "setNeedsDisplay"]
 - !private ["Ps9_Hashable", "setVisibleMapRect"]
@@ -3167,8 +3044,6 @@ depends-member:
 - !private ["Ps21_ObjectiveCBridgeable", "_getBuiltinLogicValue"]
 - !private ["Ps21_ObjectiveCBridgeable", "first"]
 - !private ["Ps21_ObjectiveCBridgeable", "init"]
-- !private ["Ps21_ObjectiveCBridgeable", "latitude"]
-- !private ["Ps21_ObjectiveCBridgeable", "longitude"]
 - !private ["Ps21_ObjectiveCBridgeable", "midX"]
 - !private ["Ps21_ObjectiveCBridgeable", "midY"]
 - !private ["Ps21_ObjectiveCBridgeable", "sorted"]
@@ -3259,13 +3134,13 @@ depends-nominal:
 - "PSo9MKOverlay"
 - !private "CSo21MKOverlayPathRenderer"
 - !private "CSo17MKOverlayRenderer"
-- !private "CSo19MKPinAnnotationView"
 - "CSo11MKPlacemark"
 - "CSo10MKPolyline"
 - "CSo18MKPolylineRenderer"
 - "CSo7MKRoute"
 - !private "CSo7MKShape"
 - "CSo14MKUserLocation"
+- "C11BreweryTour11MakePinView"
 - "C11BreweryTour17MapViewController"
 - "C11BreweryTour8Mediator"
 - !private "P11BreweryTour28MediatorBroadcastSetSelected"
@@ -3273,7 +3148,7 @@ depends-nominal:
 - !private "Ps10MirrorPath"
 - !private "Ps17MutableCollection"
 - !private "Ps16MutableIndexable"
-- "C11BreweryTour19MyPinAnnotationView"
+- "C11BreweryTour16MyAnnotationView"
 - "PSo8NSCoding"
 - !private "PSo9NSCopying"
 - "PSo26NSExtensionRequestHandling"
@@ -3310,6 +3185,7 @@ depends-nominal:
 - !private "Ps13SignedInteger"
 - !private "Ps12SignedNumber"
 - !private "Vs5Slice"
+- !private "P11BreweryTour26StorableFloatingAnnotation"
 - !private "Ps10Strideable"
 - "SS"
 - "C11BreweryTour5Style"

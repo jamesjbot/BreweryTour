@@ -7,26 +7,28 @@ provides-member:
 - ["C11BreweryTour8Mediator", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "Mediator"
-- "BroadcastManagedObjectContextRefresh"
-- !private "BreweryAndBeerCreationQueue"
-- "MediatorBroadcastSetSelected"
-- "AssignmentPrecedence"
-- "Void"
-- "CastingPrecedence"
-- "Int"
-- !private "BreweryDBClient"
-- !private "Style"
-- "BusyObserver"
-- !private "+"
-- "Bool"
 - "ReceiveBroadcastSetSelected"
-- "NSManagedObject"
+- "Int"
+- "AssignmentPrecedence"
+- "CastingPrecedence"
+- !private "Style"
+- !private "BreweryDBClient"
 - "ReceiveBroadcastManagedObjectContextRefresh"
-- "String"
-- "BooleanLiteralType"
+- "Bool"
+- "MediatorBroadcastSetSelected"
+- !private "BreweryAndBeerCreationQueue"
 - !private "Brewery"
+- "BusyObserver"
 - "MediatorBusyObserver"
+- "Mediator"
+- "NSManagedObject"
+- !private "+"
+- "BooleanLiteralType"
+- "StorableFloatingAnnotation"
+- "MKAnnotation"
+- "Void"
+- "String"
+- "BroadcastManagedObjectContextRefresh"
 depends-member:
 - !private ["Ps9AnyObject", "BreweryAndBeerCreationQueue"]
 - !private ["Ps9AnyObject", "BreweryDBClient"]
@@ -40,10 +42,13 @@ depends-member:
 - !private ["Ps9AnyObject", "contextObservers"]
 - !private ["Ps9AnyObject", "downloadBeersAndBreweriesBy"]
 - !private ["Ps9AnyObject", "downloadBeersBy"]
+- !private ["Ps9AnyObject", "floatingAnnotation"]
+- ["Ps9AnyObject", "getFloatingAnnotation"]
 - !private ["Ps9AnyObject", "id"]
 - !private ["Ps9AnyObject", "init"]
 - ["Ps9AnyObject", "isSystemBusy"]
 - !private ["Ps9AnyObject", "lastMapSliderValue"]
+- !private ["Ps9AnyObject", "notifyPassedItemObservers"]
 - ["Ps9AnyObject", "notifyStartingWork"]
 - ["Ps9AnyObject", "notifyStoppingWork"]
 - !private ["Ps9AnyObject", "passedItem"]
@@ -52,6 +57,7 @@ depends-member:
 - ["Ps9AnyObject", "registerForObjectUpdate"]
 - ["Ps9AnyObject", "registerManagedObjectContextRefresh"]
 - ["Ps9AnyObject", "select"]
+- ["Ps9AnyObject", "setFloating"]
 - !private ["Ps9AnyObject", "sharedInstance"]
 - ["Ps9AnyObject", ""]
 - !private ["Sa", "Iterator"]
@@ -89,9 +95,12 @@ depends-member:
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "automaticallySegueValue"]
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "busyObservers"]
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "contextObservers"]
+- !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "floatingAnnotation"]
+- ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "getFloatingAnnotation"]
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "init"]
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "isSystemBusy"]
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "lastMapSliderValue"]
+- !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "notifyPassedItemObservers"]
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "notifyStartingWork"]
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "notifyStoppingWork"]
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "passedItem"]
@@ -100,6 +109,7 @@ depends-member:
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "registerForObjectUpdate"]
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "registerManagedObjectContextRefresh"]
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "select"]
+- ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "setFloating"]
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", ""]
 - ["P11BreweryTour12BusyObserver", "deinit"]
 - !private ["P11BreweryTour12BusyObserver", "startAnimating"]
@@ -164,12 +174,14 @@ depends-member:
 - !private ["Ps17IntegerArithmetic", "init"]
 - !private ["Ps16IteratorProtocol", "Element"]
 - !private ["Ps25LosslessStringConvertible", "_getBuiltinLogicValue"]
+- ["PSo12MKAnnotation", "deinit"]
 - ["C11BreweryTour8Mediator", "Bool"]
 - !private ["C11BreweryTour8Mediator", "Brewery"]
 - !private ["C11BreweryTour8Mediator", "BreweryAndBeerCreationQueue"]
 - !private ["C11BreweryTour8Mediator", "BreweryDBClient"]
 - ["C11BreweryTour8Mediator", "BusyObserver"]
 - ["C11BreweryTour8Mediator", "Int"]
+- ["C11BreweryTour8Mediator", "MKAnnotation"]
 - ["C11BreweryTour8Mediator", "Mediator"]
 - ["C11BreweryTour8Mediator", "NSManagedObject"]
 - ["C11BreweryTour8Mediator", "ReceiveBroadcastManagedObjectContextRefresh"]
@@ -183,6 +195,8 @@ depends-member:
 - !private ["C11BreweryTour8Mediator", "busyObservers"]
 - !private ["C11BreweryTour8Mediator", "contextObservers"]
 - ["C11BreweryTour8Mediator", "deinit"]
+- !private ["C11BreweryTour8Mediator", "floatingAnnotation"]
+- ["C11BreweryTour8Mediator", "getFloatingAnnotation"]
 - ["C11BreweryTour8Mediator", "getPassedItem"]
 - !private ["C11BreweryTour8Mediator", "init"]
 - ["C11BreweryTour8Mediator", "isAutomaticallySegueing"]
@@ -190,6 +204,7 @@ depends-member:
 - !private ["C11BreweryTour8Mediator", "lastMapSliderValue"]
 - ["C11BreweryTour8Mediator", "lastSliderValue"]
 - ["C11BreweryTour8Mediator", "nextPublicStyleStrategyID"]
+- !private ["C11BreweryTour8Mediator", "notifyPassedItemObservers"]
 - ["C11BreweryTour8Mediator", "notifyStartingWork"]
 - ["C11BreweryTour8Mediator", "notifyStoppingWork"]
 - ["C11BreweryTour8Mediator", "onlyValidStyleStrategy"]
@@ -200,6 +215,7 @@ depends-member:
 - ["C11BreweryTour8Mediator", "registerManagedObjectContextRefresh"]
 - ["C11BreweryTour8Mediator", "select"]
 - ["C11BreweryTour8Mediator", "setAutomaticallySegue"]
+- ["C11BreweryTour8Mediator", "setFloating"]
 - ["C11BreweryTour8Mediator", "setLastSliderValue"]
 - ["C11BreweryTour8Mediator", "sharedInstance"]
 - !private ["P11BreweryTour28MediatorBroadcastSetSelected", "BreweryAndBeerCreationQueue"]
@@ -212,9 +228,12 @@ depends-member:
 - !private ["P11BreweryTour28MediatorBroadcastSetSelected", "automaticallySegueValue"]
 - !private ["P11BreweryTour28MediatorBroadcastSetSelected", "busyObservers"]
 - !private ["P11BreweryTour28MediatorBroadcastSetSelected", "contextObservers"]
+- !private ["P11BreweryTour28MediatorBroadcastSetSelected", "floatingAnnotation"]
+- ["P11BreweryTour28MediatorBroadcastSetSelected", "getFloatingAnnotation"]
 - !private ["P11BreweryTour28MediatorBroadcastSetSelected", "init"]
 - ["P11BreweryTour28MediatorBroadcastSetSelected", "isSystemBusy"]
 - !private ["P11BreweryTour28MediatorBroadcastSetSelected", "lastMapSliderValue"]
+- !private ["P11BreweryTour28MediatorBroadcastSetSelected", "notifyPassedItemObservers"]
 - ["P11BreweryTour28MediatorBroadcastSetSelected", "notifyStartingWork"]
 - ["P11BreweryTour28MediatorBroadcastSetSelected", "notifyStoppingWork"]
 - !private ["P11BreweryTour28MediatorBroadcastSetSelected", "passedItem"]
@@ -223,6 +242,7 @@ depends-member:
 - ["P11BreweryTour28MediatorBroadcastSetSelected", "registerForObjectUpdate"]
 - ["P11BreweryTour28MediatorBroadcastSetSelected", "registerManagedObjectContextRefresh"]
 - ["P11BreweryTour28MediatorBroadcastSetSelected", "select"]
+- ["P11BreweryTour28MediatorBroadcastSetSelected", "setFloating"]
 - ["P11BreweryTour28MediatorBroadcastSetSelected", ""]
 - !private ["P11BreweryTour20MediatorBusyObserver", "BreweryAndBeerCreationQueue"]
 - !private ["P11BreweryTour20MediatorBusyObserver", "BreweryDBClient"]
@@ -234,9 +254,12 @@ depends-member:
 - !private ["P11BreweryTour20MediatorBusyObserver", "automaticallySegueValue"]
 - !private ["P11BreweryTour20MediatorBusyObserver", "busyObservers"]
 - !private ["P11BreweryTour20MediatorBusyObserver", "contextObservers"]
+- !private ["P11BreweryTour20MediatorBusyObserver", "floatingAnnotation"]
+- ["P11BreweryTour20MediatorBusyObserver", "getFloatingAnnotation"]
 - !private ["P11BreweryTour20MediatorBusyObserver", "init"]
 - ["P11BreweryTour20MediatorBusyObserver", "isSystemBusy"]
 - !private ["P11BreweryTour20MediatorBusyObserver", "lastMapSliderValue"]
+- !private ["P11BreweryTour20MediatorBusyObserver", "notifyPassedItemObservers"]
 - ["P11BreweryTour20MediatorBusyObserver", "notifyStartingWork"]
 - ["P11BreweryTour20MediatorBusyObserver", "notifyStoppingWork"]
 - !private ["P11BreweryTour20MediatorBusyObserver", "passedItem"]
@@ -245,6 +268,7 @@ depends-member:
 - ["P11BreweryTour20MediatorBusyObserver", "registerForObjectUpdate"]
 - ["P11BreweryTour20MediatorBusyObserver", "registerManagedObjectContextRefresh"]
 - ["P11BreweryTour20MediatorBusyObserver", "select"]
+- ["P11BreweryTour20MediatorBusyObserver", "setFloating"]
 - ["P11BreweryTour20MediatorBusyObserver", ""]
 - !private ["Ps10MirrorPath", "init"]
 - !private ["Ps17MutableCollection", "Iterator"]
@@ -291,6 +315,32 @@ depends-member:
 - ["Ps8Sequence", "init"]
 - !private ["Ps13SignedInteger", "init"]
 - !private ["Ps12SignedNumber", "init"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "BreweryAndBeerCreationQueue"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "BreweryDBClient"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "Int"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "Mediator"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "ReceiveBroadcastManagedObjectContextRefresh"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "StyleStrategyID"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "allBeersAndBreweriesDeleted"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "automaticallySegueValue"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "busyObservers"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "contextObservers"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "floatingAnnotation"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "getFloatingAnnotation"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "init"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "isSystemBusy"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "lastMapSliderValue"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "notifyPassedItemObservers"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "notifyStartingWork"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "notifyStoppingWork"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "passedItem"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "passedItemObservers"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "registerForBusyIndicator"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "registerForObjectUpdate"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "registerManagedObjectContextRefresh"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "select"]
+- ["P11BreweryTour26StorableFloatingAnnotation", "setFloating"]
+- ["P11BreweryTour26StorableFloatingAnnotation", ""]
 - !private ["Ps10Strideable", "init"]
 - ["C11BreweryTour5Style", "deinit"]
 - !private ["C11BreweryTour5Style", "id"]
@@ -351,6 +401,7 @@ depends-nominal:
 - !private "Ps17IntegerArithmetic"
 - !private "Ps16IteratorProtocol"
 - !private "Ps25LosslessStringConvertible"
+- "PSo12MKAnnotation"
 - "C11BreweryTour8Mediator"
 - "P11BreweryTour28MediatorBroadcastSetSelected"
 - "P11BreweryTour20MediatorBusyObserver"
@@ -371,6 +422,7 @@ depends-nominal:
 - "Ps8Sequence"
 - !private "Ps13SignedInteger"
 - !private "Ps12SignedNumber"
+- "P11BreweryTour26StorableFloatingAnnotation"
 - !private "Ps10Strideable"
 - "C11BreweryTour5Style"
 - "Ps14_ArrayProtocol"
@@ -403,4 +455,4 @@ depends-external:
 - "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
 - "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
 - "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/module.modulemap"
-interface-hash: "9a3c2cf9fc99c57371f4eff854e24966"
+interface-hash: "0b6bd3df956fa71669adfd60713c8e69"

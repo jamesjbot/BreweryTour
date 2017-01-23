@@ -5,48 +5,48 @@ provides-nominal:
 provides-member:
 - ["C11BreweryTour22CategoryViewController", ""]
 provides-dynamic-lookup:
+- "sendNotify"
 - "searchBar"
 - "searchBarSearchButtonClicked"
-- "sendNotify"
 - "startAnimating"
 - "registerAsBusyObserverWithMediator"
+- "stopAnimating"
 - "tableView"
 - "tableView"
 - "tableView"
 - "searchBarCancelButtonClicked"
-- "stopAnimating"
 depends-top-level:
-- !private "StringLiteralType"
-- "BusyObserver"
-- "AnyObject"
-- !private "DispatchQueue"
+- "UISearchBar"
 - !private "UIAlertAction"
-- "CategoryViewController"
-- !private "fatalError"
-- !private "!="
 - !private "&&"
-- !private "Message"
 - "Observer"
-- !private "Array"
-- "Int"
-- "UISearchBarDelegate"
-- !private "Bool"
-- !private "Mediator"
-- "String"
-- !private "==="
-- "UITableViewCell"
-- "UITableView"
-- !private "OnlineSearchCapable"
 - "IndexPath"
+- !private "Message"
+- "UITableViewCell"
+- "UISearchBarDelegate"
+- "String"
+- "Int"
+- !private "StringLiteralType"
+- !private "OnlineSearchCapable"
+- !private "DispatchQueue"
+- !private "Array"
 - "UITableViewDataSource"
 - "UITableViewDelegate"
-- !private "Void"
+- "AnyObject"
 - !private "!"
-- "CastingPrecedence"
-- "UISearchBar"
-- !private "=="
+- !private "Mediator"
+- !private "Void"
+- !private "fatalError"
+- !private "Bool"
+- !private "==="
 - !private "~="
+- "BusyObserver"
+- !private "=="
+- !private "!="
 - "AssignmentPrecedence"
+- "CategoryViewController"
+- "UITableView"
+- "CastingPrecedence"
 depends-member:
 - !private ["Ps9AnyObject", "DispatchQueue"]
 - !private ["Ps9AnyObject", "Mediator"]
@@ -1159,6 +1159,9 @@ depends-member:
 - !private ["Ps8Sequence", "count"]
 - ["Vs12StaticString", "deinit"]
 - !private ["Vs12StaticString", "init"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "isAutomaticallySegueing"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "registerForBusyIndicator"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "sharedInstance"]
 - !private ["SS", "characters"]
 - ["SS", "deinit"]
 - !private ["SS", "init"]
@@ -2295,6 +2298,7 @@ depends-nominal:
 - "OC11BreweryTour22CategoryViewController23SegmentedControllerMode"
 - !private "Ps8Sequence"
 - "Vs12StaticString"
+- !private "P11BreweryTour26StorableFloatingAnnotation"
 - "SS"
 - !private "P11BreweryTour9TableList"
 - !private "Ps16TextOutputStream"

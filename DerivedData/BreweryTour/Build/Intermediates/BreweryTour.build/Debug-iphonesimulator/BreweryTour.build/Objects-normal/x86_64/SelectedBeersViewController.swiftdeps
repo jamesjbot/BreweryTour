@@ -6,82 +6,83 @@ provides-nominal:
 provides-member:
 - ["C11BreweryTour27SelectedBeersViewController", ""]
 provides-dynamic-lookup:
-- "segmentedClicked"
-- "viewWillAppear"
-- "viewDidLoad"
-- "tableView"
-- "tableView"
-- "tableView"
-- "tableView"
-- "stopAnimating"
-- "pointer"
-- "tutorialText"
-- "searchBarSearchButtonClicked"
-- "segmentedControl"
-- "searchBar"
-- "searchBar"
-- "dismissTutorial"
-- "sendNotify"
-- "enableTutorial"
-- "nextLessonButton"
-- "startAnimating"
-- "registerAsBusyObserverWithMediator"
-- "activityIndicator"
-- "tutorialView"
-- "listOfBreweryIDToDisplay"
 - "viewDidAppear"
+- "pointer"
+- "segmentedControl"
+- "enableTutorial"
+- "searchBarSearchButtonClicked"
 - "nextLesson"
+- "viewWillAppear"
+- "searchBar"
+- "searchBar"
+- "listOfBreweryIDToDisplay"
+- "tableView"
+- "tableView"
+- "tableView"
+- "tableView"
+- "registerAsBusyObserverWithMediator"
+- "startAnimating"
+- "nextLessonButton"
+- "sendNotify"
 - "searchBarCancelButtonClicked"
+- "viewDidLoad"
+- "tutorialView"
+- "tutorialText"
+- "segmentedClicked"
+- "dismissTutorial"
+- "activityIndicator"
+- "stopAnimating"
 depends-top-level:
-- "UIView"
-- "CircleView"
-- !private "Mediator"
-- "UISearchBar"
-- "UIButton"
-- !private "Array"
-- !private "-"
-- "CGFloat"
-- "UIActivityIndicatorView"
-- "DismissableTutorial"
-- "AllBeersViewModel"
-- "UITableView"
-- "UIViewController"
-- "Int"
-- !private "DispatchQueue"
-- "UIApplication"
-- "Bool"
-- "AnyObject"
-- !private "BooleanLiteralType"
-- !private "UIAlertAction"
-- !private "*"
-- "AppDelegate"
-- "Observer"
 - !private "BeerDetailViewController"
-- "BusyObserver"
-- !private "Beer"
-- "UISearchBarDelegate"
-- !private "+"
-- !private "+="
-- !private "!"
-- "UITextView"
-- "SelectedBeersViewController"
-- "SelectedBeersViewModel"
-- !private "CGPoint"
-- !private "=="
-- "AssignmentPrecedence"
-- "CastingPrecedence"
-- "TableList"
+- "UIButton"
+- "UISegmentedControl"
+- "UIActivityIndicatorView"
+- "Bool"
 - "UITableViewDataSource"
-- !private "OnlineSearchCapable"
-- !private "Void"
-- !private "~="
-- !private "UserDefaults"
+- "UIView"
 - "UITableViewDelegate"
+- !private "Array"
+- "SelectedBeersViewModel"
+- !private "UIOffset"
+- "CircleView"
+- !private "DispatchQueue"
+- "Int"
+- !private "Beer"
+- !private "CGPoint"
+- "SelectedBeersViewController"
+- "CGFloat"
+- !private "-"
+- !private "!"
+- !private "Mediator"
+- "TableList"
+- !private "Void"
+- !private "UserDefaults"
+- "AppDelegate"
+- "UISearchBarDelegate"
+- "IndexPath"
+- "Observer"
 - "UITableViewCell"
+- !private "BooleanLiteralType"
+- !private "+"
 - "String"
 - !private "g_constants"
-- "IndexPath"
-- "UISegmentedControl"
+- "UITableView"
+- "UITextView"
+- "UIApplication"
+- !private "*"
+- !private "OnlineSearchCapable"
+- !private "+="
+- "AllBeersViewModel"
+- !private "~="
+- !private "=="
+- "AssignmentPrecedence"
+- "DismissableTutorial"
+- "CastingPrecedence"
+- "AnyObject"
+- "UISearchBar"
+- "BusyObserver"
+- !private "UIAlertAction"
+- "UIViewController"
 depends-member:
 - !private ["Ps16AbsoluteValuable", "Stride"]
 - ["C11BreweryTour17AllBeersViewModel", "deinit"]
@@ -97,6 +98,7 @@ depends-member:
 - ["Ps9AnyObject", "SelectedBeersViewModel"]
 - !private ["Ps9AnyObject", "UIAlertAction"]
 - ["Ps9AnyObject", "UIApplication"]
+- !private ["Ps9AnyObject", "UIOffset"]
 - !private ["Ps9AnyObject", "UIView"]
 - !private ["Ps9AnyObject", "UserDefaults"]
 - ["Ps9AnyObject", "activeViewModel"]
@@ -163,6 +165,7 @@ depends-member:
 - ["Ps9AnyObject", "searchBarShouldEndEditing"]
 - ["Ps9AnyObject", "searchBarTextDidBeginEditing"]
 - ["Ps9AnyObject", "searchBarTextDidEndEditing"]
+- !private ["Ps9AnyObject", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps9AnyObject", "sectionIndexTitles"]
 - ["Ps9AnyObject", "sectionIndexTitlesForTableView"]
 - ["Ps9AnyObject", "segmentedClicked"]
@@ -226,6 +229,7 @@ depends-member:
 - ["P11BreweryTour12BusyObserver", "SelectedBeersViewModel"]
 - !private ["P11BreweryTour12BusyObserver", "UIAlertAction"]
 - ["P11BreweryTour12BusyObserver", "UIApplication"]
+- !private ["P11BreweryTour12BusyObserver", "UIOffset"]
 - !private ["P11BreweryTour12BusyObserver", "UIView"]
 - !private ["P11BreweryTour12BusyObserver", "UserDefaults"]
 - !private ["P11BreweryTour12BusyObserver", "activeViewModel"]
@@ -294,6 +298,7 @@ depends-member:
 - !private ["PSo15CALayerDelegate", "placeholder"]
 - !private ["PSo15CALayerDelegate", "reloadData"]
 - !private ["PSo15CALayerDelegate", "resignFirstResponder"]
+- !private ["PSo15CALayerDelegate", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo15CALayerDelegate", "selectedSegmentIndex"]
 - !private ["PSo15CALayerDelegate", "setNeedsDisplay"]
 - !private ["PSo15CALayerDelegate", "startAnimating"]
@@ -320,6 +325,7 @@ depends-member:
 - !private ["Ps7CVarArg", "Stride"]
 - !private ["Ps7CVarArg", "UIAlertAction"]
 - ["Ps7CVarArg", "UIApplication"]
+- !private ["Ps7CVarArg", "UIOffset"]
 - !private ["Ps7CVarArg", "UIView"]
 - !private ["Ps7CVarArg", "UserDefaults"]
 - ["Ps7CVarArg", "activeViewModel"]
@@ -385,6 +391,7 @@ depends-member:
 - ["Ps7CVarArg", "searchBarShouldEndEditing"]
 - ["Ps7CVarArg", "searchBarTextDidBeginEditing"]
 - ["Ps7CVarArg", "searchBarTextDidEndEditing"]
+- !private ["Ps7CVarArg", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps7CVarArg", "sectionIndexTitles"]
 - ["Ps7CVarArg", "sectionIndexTitlesForTableView"]
 - ["Ps7CVarArg", "segmentedClicked"]
@@ -441,6 +448,7 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "Stride"]
 - !private ["Ps28CustomDebugStringConvertible", "UIAlertAction"]
 - ["Ps28CustomDebugStringConvertible", "UIApplication"]
+- !private ["Ps28CustomDebugStringConvertible", "UIOffset"]
 - !private ["Ps28CustomDebugStringConvertible", "UIView"]
 - !private ["Ps28CustomDebugStringConvertible", "UserDefaults"]
 - ["Ps28CustomDebugStringConvertible", "activeViewModel"]
@@ -509,6 +517,7 @@ depends-member:
 - ["Ps28CustomDebugStringConvertible", "searchBarShouldEndEditing"]
 - ["Ps28CustomDebugStringConvertible", "searchBarTextDidBeginEditing"]
 - ["Ps28CustomDebugStringConvertible", "searchBarTextDidEndEditing"]
+- !private ["Ps28CustomDebugStringConvertible", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps28CustomDebugStringConvertible", "sectionIndexTitles"]
 - ["Ps28CustomDebugStringConvertible", "sectionIndexTitlesForTableView"]
 - ["Ps28CustomDebugStringConvertible", "segmentedClicked"]
@@ -579,6 +588,7 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "Stride"]
 - !private ["Ps23CustomStringConvertible", "UIAlertAction"]
 - ["Ps23CustomStringConvertible", "UIApplication"]
+- !private ["Ps23CustomStringConvertible", "UIOffset"]
 - !private ["Ps23CustomStringConvertible", "UIView"]
 - !private ["Ps23CustomStringConvertible", "UserDefaults"]
 - !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
@@ -645,6 +655,7 @@ depends-member:
 - ["Ps23CustomStringConvertible", "searchBarShouldEndEditing"]
 - ["Ps23CustomStringConvertible", "searchBarTextDidBeginEditing"]
 - ["Ps23CustomStringConvertible", "searchBarTextDidEndEditing"]
+- !private ["Ps23CustomStringConvertible", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps23CustomStringConvertible", "sectionIndexTitles"]
 - ["Ps23CustomStringConvertible", "sectionIndexTitlesForTableView"]
 - ["Ps23CustomStringConvertible", "segmentedClicked"]
@@ -683,6 +694,7 @@ depends-member:
 - ["P11BreweryTour19DismissableTutorial", "SelectedBeersViewModel"]
 - !private ["P11BreweryTour19DismissableTutorial", "UIAlertAction"]
 - ["P11BreweryTour19DismissableTutorial", "UIApplication"]
+- !private ["P11BreweryTour19DismissableTutorial", "UIOffset"]
 - !private ["P11BreweryTour19DismissableTutorial", "UIView"]
 - !private ["P11BreweryTour19DismissableTutorial", "UserDefaults"]
 - !private ["P11BreweryTour19DismissableTutorial", "activeViewModel"]
@@ -766,6 +778,7 @@ depends-member:
 - ["Ps9Equatable", "Table"]
 - !private ["Ps9Equatable", "UIAlertAction"]
 - ["Ps9Equatable", "UIApplication"]
+- !private ["Ps9Equatable", "UIOffset"]
 - !private ["Ps9Equatable", "UIView"]
 - !private ["Ps9Equatable", "UserDefaults"]
 - !private ["Ps9Equatable", "_getBuiltinLogicValue"]
@@ -841,6 +854,7 @@ depends-member:
 - ["Ps9Equatable", "searchBarShouldEndEditing"]
 - ["Ps9Equatable", "searchBarTextDidBeginEditing"]
 - ["Ps9Equatable", "searchBarTextDidEndEditing"]
+- !private ["Ps9Equatable", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps9Equatable", "sectionIndexTitles"]
 - ["Ps9Equatable", "sectionIndexTitlesForTableView"]
 - ["Ps9Equatable", "segmentedClicked"]
@@ -910,6 +924,7 @@ depends-member:
 - ["Ps8Hashable", "Table"]
 - !private ["Ps8Hashable", "UIAlertAction"]
 - ["Ps8Hashable", "UIApplication"]
+- !private ["Ps8Hashable", "UIOffset"]
 - !private ["Ps8Hashable", "UIView"]
 - !private ["Ps8Hashable", "UserDefaults"]
 - !private ["Ps8Hashable", "_getBuiltinLogicValue"]
@@ -979,6 +994,7 @@ depends-member:
 - ["Ps8Hashable", "searchBarShouldEndEditing"]
 - ["Ps8Hashable", "searchBarTextDidBeginEditing"]
 - ["Ps8Hashable", "searchBarTextDidEndEditing"]
+- !private ["Ps8Hashable", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps8Hashable", "sectionIndexTitles"]
 - ["Ps8Hashable", "sectionIndexTitlesForTableView"]
 - ["Ps8Hashable", "segmentedClicked"]
@@ -1055,6 +1071,7 @@ depends-member:
 - ["PSo8NSCoding", "SelectedBeersViewModel"]
 - !private ["PSo8NSCoding", "UIAlertAction"]
 - ["PSo8NSCoding", "UIApplication"]
+- !private ["PSo8NSCoding", "UIOffset"]
 - !private ["PSo8NSCoding", "UIView"]
 - !private ["PSo8NSCoding", "UserDefaults"]
 - ["PSo8NSCoding", "activeViewModel"]
@@ -1113,6 +1130,7 @@ depends-member:
 - ["PSo8NSCoding", "searchBarShouldEndEditing"]
 - ["PSo8NSCoding", "searchBarTextDidBeginEditing"]
 - ["PSo8NSCoding", "searchBarTextDidEndEditing"]
+- !private ["PSo8NSCoding", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo8NSCoding", "sectionIndexTitles"]
 - ["PSo8NSCoding", "sectionIndexTitlesForTableView"]
 - ["PSo8NSCoding", "segmentedClicked"]
@@ -1150,6 +1168,7 @@ depends-member:
 - ["PSo26NSExtensionRequestHandling", "SelectedBeersViewModel"]
 - !private ["PSo26NSExtensionRequestHandling", "UIAlertAction"]
 - ["PSo26NSExtensionRequestHandling", "UIApplication"]
+- !private ["PSo26NSExtensionRequestHandling", "UIOffset"]
 - !private ["PSo26NSExtensionRequestHandling", "UIView"]
 - !private ["PSo26NSExtensionRequestHandling", "UserDefaults"]
 - ["PSo26NSExtensionRequestHandling", "activeViewModel"]
@@ -1249,6 +1268,7 @@ depends-member:
 - !private ["CSo8NSObject", "UIAlertAction"]
 - ["CSo8NSObject", "UIApplication"]
 - ["CSo8NSObject", "UIButton"]
+- !private ["CSo8NSObject", "UIOffset"]
 - ["CSo8NSObject", "UISearchBar"]
 - ["CSo8NSObject", "UISegmentedControl"]
 - ["CSo8NSObject", "UITableView"]
@@ -1319,6 +1339,7 @@ depends-member:
 - ["CSo8NSObject", "searchBarShouldEndEditing"]
 - ["CSo8NSObject", "searchBarTextDidBeginEditing"]
 - ["CSo8NSObject", "searchBarTextDidEndEditing"]
+- !private ["CSo8NSObject", "searchFieldBackgroundPositionAdjustment"]
 - ["CSo8NSObject", "sectionIndexTitles"]
 - ["CSo8NSObject", "sectionIndexTitlesForTableView"]
 - ["CSo8NSObject", "segmentedClicked"]
@@ -1356,6 +1377,7 @@ depends-member:
 - ["PSo16NSObjectProtocol", "SelectedBeersViewModel"]
 - !private ["PSo16NSObjectProtocol", "UIAlertAction"]
 - ["PSo16NSObjectProtocol", "UIApplication"]
+- !private ["PSo16NSObjectProtocol", "UIOffset"]
 - !private ["PSo16NSObjectProtocol", "UIView"]
 - !private ["PSo16NSObjectProtocol", "UserDefaults"]
 - ["PSo16NSObjectProtocol", "activeViewModel"]
@@ -1420,6 +1442,7 @@ depends-member:
 - ["PSo16NSObjectProtocol", "searchBarShouldEndEditing"]
 - ["PSo16NSObjectProtocol", "searchBarTextDidBeginEditing"]
 - ["PSo16NSObjectProtocol", "searchBarTextDidEndEditing"]
+- !private ["PSo16NSObjectProtocol", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo16NSObjectProtocol", "sectionIndexTitles"]
 - ["PSo16NSObjectProtocol", "sectionIndexTitlesForTableView"]
 - ["PSo16NSObjectProtocol", "segmentedClicked"]
@@ -1466,6 +1489,7 @@ depends-member:
 - ["P11BreweryTour8Observer", "SelectedBeersViewModel"]
 - !private ["P11BreweryTour8Observer", "UIAlertAction"]
 - ["P11BreweryTour8Observer", "UIApplication"]
+- !private ["P11BreweryTour8Observer", "UIOffset"]
 - !private ["P11BreweryTour8Observer", "UIView"]
 - !private ["P11BreweryTour8Observer", "UserDefaults"]
 - !private ["P11BreweryTour8Observer", "activeViewModel"]
@@ -1585,6 +1609,7 @@ depends-member:
 - !private ["C11BreweryTour27SelectedBeersViewController", "UIAlertAction"]
 - ["C11BreweryTour27SelectedBeersViewController", "UIApplication"]
 - ["C11BreweryTour27SelectedBeersViewController", "UIButton"]
+- !private ["C11BreweryTour27SelectedBeersViewController", "UIOffset"]
 - ["C11BreweryTour27SelectedBeersViewController", "UISearchBar"]
 - ["C11BreweryTour27SelectedBeersViewController", "UISegmentedControl"]
 - ["C11BreweryTour27SelectedBeersViewController", "UITableView"]
@@ -1671,6 +1696,9 @@ depends-member:
 - !private ["Ps13SignedInteger", "hashValue"]
 - !private ["Ps12SignedNumber", "Stride"]
 - !private ["Ps12SignedNumber", "hashValue"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "isSystemBusy"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "registerForBusyIndicator"]
+- !private ["P11BreweryTour26StorableFloatingAnnotation", "sharedInstance"]
 - !private ["Ps10Strideable", "Stride"]
 - !private ["Ps10Strideable", "hashValue"]
 - !private ["SS", "characters"]
@@ -1701,6 +1729,7 @@ depends-member:
 - !private ["PSo29UIAccessibilityIdentification", "placeholder"]
 - !private ["PSo29UIAccessibilityIdentification", "reloadData"]
 - !private ["PSo29UIAccessibilityIdentification", "resignFirstResponder"]
+- !private ["PSo29UIAccessibilityIdentification", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo29UIAccessibilityIdentification", "selectedSegmentIndex"]
 - !private ["PSo29UIAccessibilityIdentification", "setNeedsDisplay"]
 - !private ["PSo29UIAccessibilityIdentification", "startAnimating"]
@@ -1723,6 +1752,7 @@ depends-member:
 - !private ["PSo12UIAppearance", "placeholder"]
 - !private ["PSo12UIAppearance", "reloadData"]
 - !private ["PSo12UIAppearance", "resignFirstResponder"]
+- !private ["PSo12UIAppearance", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo12UIAppearance", "selectedSegmentIndex"]
 - !private ["PSo12UIAppearance", "setNeedsDisplay"]
 - !private ["PSo12UIAppearance", "startAnimating"]
@@ -1737,6 +1767,7 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "SelectedBeersViewModel"]
 - !private ["PSo21UIAppearanceContainer", "UIAlertAction"]
 - ["PSo21UIAppearanceContainer", "UIApplication"]
+- !private ["PSo21UIAppearanceContainer", "UIOffset"]
 - !private ["PSo21UIAppearanceContainer", "UIView"]
 - !private ["PSo21UIAppearanceContainer", "UserDefaults"]
 - ["PSo21UIAppearanceContainer", "activeViewModel"]
@@ -1793,6 +1824,7 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "searchBarShouldEndEditing"]
 - ["PSo21UIAppearanceContainer", "searchBarTextDidBeginEditing"]
 - ["PSo21UIAppearanceContainer", "searchBarTextDidEndEditing"]
+- !private ["PSo21UIAppearanceContainer", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo21UIAppearanceContainer", "sectionIndexTitles"]
 - ["PSo21UIAppearanceContainer", "sectionIndexTitlesForTableView"]
 - ["PSo21UIAppearanceContainer", "segmentedClicked"]
@@ -1826,6 +1858,7 @@ depends-member:
 - !private ["PSo16UIBarPositioning", "frame"]
 - !private ["PSo16UIBarPositioning", "placeholder"]
 - !private ["PSo16UIBarPositioning", "resignFirstResponder"]
+- !private ["PSo16UIBarPositioning", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo16UIBarPositioning", "text"]
 - ["PSo24UIBarPositioningDelegate", "AllBeersViewModel"]
 - !private ["PSo24UIBarPositioningDelegate", "CGPoint"]
@@ -1836,6 +1869,7 @@ depends-member:
 - ["PSo24UIBarPositioningDelegate", "SelectedBeersViewModel"]
 - !private ["PSo24UIBarPositioningDelegate", "UIAlertAction"]
 - ["PSo24UIBarPositioningDelegate", "UIApplication"]
+- !private ["PSo24UIBarPositioningDelegate", "UIOffset"]
 - !private ["PSo24UIBarPositioningDelegate", "UIView"]
 - !private ["PSo24UIBarPositioningDelegate", "UserDefaults"]
 - !private ["PSo24UIBarPositioningDelegate", "activeViewModel"]
@@ -1904,6 +1938,7 @@ depends-member:
 - ["PSo18UIContentContainer", "SelectedBeersViewModel"]
 - !private ["PSo18UIContentContainer", "UIAlertAction"]
 - ["PSo18UIContentContainer", "UIApplication"]
+- !private ["PSo18UIContentContainer", "UIOffset"]
 - !private ["PSo18UIContentContainer", "UIView"]
 - !private ["PSo18UIContentContainer", "UserDefaults"]
 - ["PSo18UIContentContainer", "activeViewModel"]
@@ -1986,6 +2021,7 @@ depends-member:
 - !private ["PSo17UICoordinateSpace", "placeholder"]
 - !private ["PSo17UICoordinateSpace", "reloadData"]
 - !private ["PSo17UICoordinateSpace", "resignFirstResponder"]
+- !private ["PSo17UICoordinateSpace", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo17UICoordinateSpace", "selectedSegmentIndex"]
 - !private ["PSo17UICoordinateSpace", "setNeedsDisplay"]
 - !private ["PSo17UICoordinateSpace", "startAnimating"]
@@ -2000,6 +2036,7 @@ depends-member:
 - !private ["PSo13UIDynamicItem", "placeholder"]
 - !private ["PSo13UIDynamicItem", "reloadData"]
 - !private ["PSo13UIDynamicItem", "resignFirstResponder"]
+- !private ["PSo13UIDynamicItem", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo13UIDynamicItem", "selectedSegmentIndex"]
 - !private ["PSo13UIDynamicItem", "setNeedsDisplay"]
 - !private ["PSo13UIDynamicItem", "startAnimating"]
@@ -2014,6 +2051,7 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "SelectedBeersViewModel"]
 - !private ["PSo18UIFocusEnvironment", "UIAlertAction"]
 - ["PSo18UIFocusEnvironment", "UIApplication"]
+- !private ["PSo18UIFocusEnvironment", "UIOffset"]
 - !private ["PSo18UIFocusEnvironment", "UIView"]
 - !private ["PSo18UIFocusEnvironment", "UserDefaults"]
 - ["PSo18UIFocusEnvironment", "activeViewModel"]
@@ -2070,6 +2108,7 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "searchBarShouldEndEditing"]
 - ["PSo18UIFocusEnvironment", "searchBarTextDidBeginEditing"]
 - ["PSo18UIFocusEnvironment", "searchBarTextDidEndEditing"]
+- !private ["PSo18UIFocusEnvironment", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo18UIFocusEnvironment", "sectionIndexTitles"]
 - ["PSo18UIFocusEnvironment", "sectionIndexTitlesForTableView"]
 - ["PSo18UIFocusEnvironment", "segmentedClicked"]
@@ -2104,6 +2143,7 @@ depends-member:
 - !private ["PSo11UIFocusItem", "placeholder"]
 - !private ["PSo11UIFocusItem", "reloadData"]
 - !private ["PSo11UIFocusItem", "resignFirstResponder"]
+- !private ["PSo11UIFocusItem", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo11UIFocusItem", "selectedSegmentIndex"]
 - !private ["PSo11UIFocusItem", "setNeedsDisplay"]
 - !private ["PSo11UIFocusItem", "startAnimating"]
@@ -2113,6 +2153,8 @@ depends-member:
 - !private ["PSo10UIKeyInput", "text"]
 - ["CSo22UINavigationController", "deinit"]
 - !private ["CSo22UINavigationController", "pushViewController"]
+- ["VSC8UIOffset", "deinit"]
+- !private ["VSC8UIOffset", "init"]
 - ["CSo11UIResponder", "AllBeersViewModel"]
 - ["CSo11UIResponder", "AnyObject"]
 - ["CSo11UIResponder", "AppDelegate"]
@@ -2137,6 +2179,7 @@ depends-member:
 - !private ["CSo11UIResponder", "UIAlertAction"]
 - ["CSo11UIResponder", "UIApplication"]
 - ["CSo11UIResponder", "UIButton"]
+- !private ["CSo11UIResponder", "UIOffset"]
 - ["CSo11UIResponder", "UISearchBar"]
 - ["CSo11UIResponder", "UISegmentedControl"]
 - ["CSo11UIResponder", "UITableView"]
@@ -2199,6 +2242,7 @@ depends-member:
 - ["CSo11UIResponder", "searchBarShouldEndEditing"]
 - ["CSo11UIResponder", "searchBarTextDidBeginEditing"]
 - ["CSo11UIResponder", "searchBarTextDidEndEditing"]
+- !private ["CSo11UIResponder", "searchFieldBackgroundPositionAdjustment"]
 - ["CSo11UIResponder", "sectionIndexTitles"]
 - ["CSo11UIResponder", "sectionIndexTitlesForTableView"]
 - ["CSo11UIResponder", "segmentedClicked"]
@@ -2233,6 +2277,7 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "SelectedBeersViewModel"]
 - !private ["PSo30UIResponderStandardEditActions", "UIAlertAction"]
 - ["PSo30UIResponderStandardEditActions", "UIApplication"]
+- !private ["PSo30UIResponderStandardEditActions", "UIOffset"]
 - !private ["PSo30UIResponderStandardEditActions", "UIView"]
 - !private ["PSo30UIResponderStandardEditActions", "UserDefaults"]
 - ["PSo30UIResponderStandardEditActions", "activeViewModel"]
@@ -2289,6 +2334,7 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "searchBarShouldEndEditing"]
 - ["PSo30UIResponderStandardEditActions", "searchBarTextDidBeginEditing"]
 - ["PSo30UIResponderStandardEditActions", "searchBarTextDidEndEditing"]
+- !private ["PSo30UIResponderStandardEditActions", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo30UIResponderStandardEditActions", "sectionIndexTitles"]
 - ["PSo30UIResponderStandardEditActions", "sectionIndexTitlesForTableView"]
 - ["PSo30UIResponderStandardEditActions", "segmentedClicked"]
@@ -2328,6 +2374,7 @@ depends-member:
 - ["PSo20UIScrollViewDelegate", "SelectedBeersViewModel"]
 - !private ["PSo20UIScrollViewDelegate", "UIAlertAction"]
 - ["PSo20UIScrollViewDelegate", "UIApplication"]
+- !private ["PSo20UIScrollViewDelegate", "UIOffset"]
 - !private ["PSo20UIScrollViewDelegate", "UIView"]
 - !private ["PSo20UIScrollViewDelegate", "UserDefaults"]
 - !private ["PSo20UIScrollViewDelegate", "activeViewModel"]
@@ -2393,6 +2440,7 @@ depends-member:
 - !private ["CSo11UISearchBar", "frame"]
 - !private ["CSo11UISearchBar", "placeholder"]
 - !private ["CSo11UISearchBar", "resignFirstResponder"]
+- !private ["CSo11UISearchBar", "searchFieldBackgroundPositionAdjustment"]
 - !private ["CSo11UISearchBar", "text"]
 - ["PSo19UISearchBarDelegate", "AllBeersViewModel"]
 - !private ["PSo19UISearchBarDelegate", "CGPoint"]
@@ -2403,6 +2451,7 @@ depends-member:
 - ["PSo19UISearchBarDelegate", "SelectedBeersViewModel"]
 - !private ["PSo19UISearchBarDelegate", "UIAlertAction"]
 - ["PSo19UISearchBarDelegate", "UIApplication"]
+- !private ["PSo19UISearchBarDelegate", "UIOffset"]
 - !private ["PSo19UISearchBarDelegate", "UIView"]
 - !private ["PSo19UISearchBarDelegate", "UserDefaults"]
 - !private ["PSo19UISearchBarDelegate", "activeViewModel"]
@@ -2475,6 +2524,7 @@ depends-member:
 - ["PSo16UIStateRestoring", "SelectedBeersViewModel"]
 - !private ["PSo16UIStateRestoring", "UIAlertAction"]
 - ["PSo16UIStateRestoring", "UIApplication"]
+- !private ["PSo16UIStateRestoring", "UIOffset"]
 - !private ["PSo16UIStateRestoring", "UIView"]
 - !private ["PSo16UIStateRestoring", "UserDefaults"]
 - ["PSo16UIStateRestoring", "activeViewModel"]
@@ -2564,6 +2614,7 @@ depends-member:
 - ["PSo21UITableViewDataSource", "SelectedBeersViewModel"]
 - !private ["PSo21UITableViewDataSource", "UIAlertAction"]
 - ["PSo21UITableViewDataSource", "UIApplication"]
+- !private ["PSo21UITableViewDataSource", "UIOffset"]
 - !private ["PSo21UITableViewDataSource", "UIView"]
 - !private ["PSo21UITableViewDataSource", "UserDefaults"]
 - !private ["PSo21UITableViewDataSource", "activeViewModel"]
@@ -2632,6 +2683,7 @@ depends-member:
 - ["PSo19UITableViewDelegate", "SelectedBeersViewModel"]
 - !private ["PSo19UITableViewDelegate", "UIAlertAction"]
 - ["PSo19UITableViewDelegate", "UIApplication"]
+- !private ["PSo19UITableViewDelegate", "UIOffset"]
 - !private ["PSo19UITableViewDelegate", "UIView"]
 - !private ["PSo19UITableViewDelegate", "UserDefaults"]
 - !private ["PSo19UITableViewDelegate", "activeViewModel"]
@@ -2696,6 +2748,7 @@ depends-member:
 - !private ["PSo17UITextInputTraits", "frame"]
 - !private ["PSo17UITextInputTraits", "placeholder"]
 - !private ["PSo17UITextInputTraits", "resignFirstResponder"]
+- !private ["PSo17UITextInputTraits", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo17UITextInputTraits", "text"]
 - !private ["CSo10UITextView", "text"]
 - !private ["PSo18UITextViewDelegate", "beer"]
@@ -2708,6 +2761,7 @@ depends-member:
 - ["PSo18UITraitEnvironment", "SelectedBeersViewModel"]
 - !private ["PSo18UITraitEnvironment", "UIAlertAction"]
 - ["PSo18UITraitEnvironment", "UIApplication"]
+- !private ["PSo18UITraitEnvironment", "UIOffset"]
 - !private ["PSo18UITraitEnvironment", "UIView"]
 - !private ["PSo18UITraitEnvironment", "UserDefaults"]
 - ["PSo18UITraitEnvironment", "activeViewModel"]
@@ -2764,6 +2818,7 @@ depends-member:
 - ["PSo18UITraitEnvironment", "searchBarShouldEndEditing"]
 - ["PSo18UITraitEnvironment", "searchBarTextDidBeginEditing"]
 - ["PSo18UITraitEnvironment", "searchBarTextDidEndEditing"]
+- !private ["PSo18UITraitEnvironment", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo18UITraitEnvironment", "sectionIndexTitles"]
 - ["PSo18UITraitEnvironment", "sectionIndexTitlesForTableView"]
 - ["PSo18UITraitEnvironment", "segmentedClicked"]
@@ -2798,6 +2853,7 @@ depends-member:
 - !private ["CSo6UIView", "placeholder"]
 - !private ["CSo6UIView", "reloadData"]
 - !private ["CSo6UIView", "resignFirstResponder"]
+- !private ["CSo6UIView", "searchFieldBackgroundPositionAdjustment"]
 - !private ["CSo6UIView", "selectedSegmentIndex"]
 - !private ["CSo6UIView", "setNeedsDisplay"]
 - !private ["CSo6UIView", "startAnimating"]
@@ -2827,6 +2883,7 @@ depends-member:
 - !private ["CSo16UIViewController", "UIAlertAction"]
 - ["CSo16UIViewController", "UIApplication"]
 - ["CSo16UIViewController", "UIButton"]
+- !private ["CSo16UIViewController", "UIOffset"]
 - ["CSo16UIViewController", "UISearchBar"]
 - ["CSo16UIViewController", "UISegmentedControl"]
 - ["CSo16UIViewController", "UITableView"]
@@ -2928,6 +2985,7 @@ depends-member:
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "placeholder"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "reloadData"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "resignFirstResponder"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "searchFieldBackgroundPositionAdjustment"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "selectedSegmentIndex"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "setNeedsDisplay"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "startAnimating"]
@@ -2969,6 +3027,7 @@ depends-member:
 - ["Ps9_Hashable", "Table"]
 - !private ["Ps9_Hashable", "UIAlertAction"]
 - ["Ps9_Hashable", "UIApplication"]
+- !private ["Ps9_Hashable", "UIOffset"]
 - !private ["Ps9_Hashable", "UIView"]
 - !private ["Ps9_Hashable", "UserDefaults"]
 - !private ["Ps9_Hashable", "_getBuiltinLogicValue"]
@@ -3038,6 +3097,7 @@ depends-member:
 - ["Ps9_Hashable", "searchBarShouldEndEditing"]
 - ["Ps9_Hashable", "searchBarTextDidBeginEditing"]
 - ["Ps9_Hashable", "searchBarTextDidEndEditing"]
+- !private ["Ps9_Hashable", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps9_Hashable", "sectionIndexTitles"]
 - ["Ps9_Hashable", "sectionIndexTitlesForTableView"]
 - ["Ps9_Hashable", "segmentedClicked"]
@@ -3185,6 +3245,7 @@ depends-nominal:
 - !private "Ps10SetAlgebra"
 - !private "Ps13SignedInteger"
 - !private "Ps12SignedNumber"
+- !private "P11BreweryTour26StorableFloatingAnnotation"
 - !private "Ps10Strideable"
 - "SS"
 - "P11BreweryTour7Subject"
@@ -3211,6 +3272,7 @@ depends-nominal:
 - !private "PSo27UIGestureRecognizerDelegate"
 - !private "PSo10UIKeyInput"
 - "CSo22UINavigationController"
+- "VSC8UIOffset"
 - "CSo11UIResponder"
 - "PSo30UIResponderStandardEditActions"
 - !private "CSo12UIScrollView"
