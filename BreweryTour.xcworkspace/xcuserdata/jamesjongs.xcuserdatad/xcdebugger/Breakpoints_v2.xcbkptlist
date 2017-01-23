@@ -58,11 +58,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "BreweryTour/MapViewController.swift"
-            timestampString = "506790364.000899"
+            timestampString = "506904426.445974"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "119"
-            endingLineNumber = "119"
+            startingLineNumber = "143"
+            endingLineNumber = "143"
             landmarkName = "nextTutorialAction(_:)"
             landmarkType = "7">
          </BreakpointContent>

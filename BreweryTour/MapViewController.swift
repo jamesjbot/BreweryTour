@@ -43,6 +43,32 @@ import MapKit
 import CoreLocation
 import CoreData
 
+// Helper class to short filter annotations
+fileprivate class MyAnnotation: NSObject, MKAnnotation {
+    var title: String?
+    var subtitle: String?
+    var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+    override init() {
+        super.init()
+    }
+
+    init(_ mka: MKAnnotation) {
+        super.init()
+        coordinate = mka.coordinate
+        title = mka.title!
+        subtitle = mka.subtitle!
+    }
+
+    static func ==(left: MyAnnotation, right: MyAnnotation) -> Bool {
+        return left.coordinate.latitude == right.coordinate.latitude && left.coordinate.longitude == right.coordinate.longitude
+    }
+
+    override var hashValue: Int {
+        return Int((coordinate.latitude * 10000000) + coordinate.longitude)
+    }
+}
+
+
 class MapViewController : UIViewController {
     
     // MARK: Constants
@@ -443,21 +469,39 @@ class MapViewController : UIViewController {
 
 
     // Draw the annotations on the map
-    internal func updateMap(withAnnotations b: [MKAnnotation]) {
+    internal func updateMap(withAnnotations: [MKAnnotation]) {
 
-        if !isAnnotation(inArray: b) {
+        if !isAnnotation(inArray: withAnnotations) {
             mapView.removeOverlays(mapView.overlays)
         }
 
         // If the annotation displayed are the same do nothing
-        guard arraysAreDifferent(a: mapView.annotations, b: b) else {
+        guard arraysAreDifferent(a: mapView.annotations, b: withAnnotations) else {
             // Do nothing annotations are the same
             return
         }
 
+        // Add only new annotations, remove old annotations
+        // This prevents flashing
         DispatchQueue.main.async {
-            self.mapView.removeAnnotations(self.mapView.annotations)
-            self.mapView.addAnnotations(b)
+            var mya: [MyAnnotation] = [MyAnnotation]()
+            for a in self.mapView.annotations {
+                mya.append(MyAnnotation(a))
+            }
+            var myb: [MyAnnotation] = [MyAnnotation]()
+            for a in withAnnotations {
+                myb.append(MyAnnotation(a))
+            }
+
+            let originalSet:Set<MyAnnotation> = Set<MyAnnotation>(mya)
+            let newSet = Set<MyAnnotation>(myb)
+            let intersectSet = originalSet.intersection(newSet)
+            let removeSet = originalSet.symmetricDifference(intersectSet)
+            let addSet = newSet.symmetricDifference(intersectSet)
+
+            self.mapView.removeAnnotations(Array(removeSet))
+            self.mapView.addAnnotations(Array(addSet))
+
             // Add back out floating annotation we deleted.
             if let floatingAnnotation = self.floatingAnnotation {
                 self.mapView.addAnnotation(floatingAnnotation)
@@ -524,6 +568,12 @@ class MapViewController : UIViewController {
         tutorialInitialization()
     }
 }
+
+
+
+
+
+
 
 
 
