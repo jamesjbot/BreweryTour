@@ -1,0 +1,468 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "CoreDataStack"
+provides-nominal:
+- "C11BreweryTour13CoreDataStack"
+provides-member:
+- ["C11BreweryTour13CoreDataStack", ""]
+- ["C11BreweryTour13CoreDataStack", "saveToFile"]
+provides-dynamic-lookup:
+- "breweryCreationContext"
+- "saveToFile"
+- "container"
+- "mainStoreCoordinator"
+depends-top-level:
+- !private "CastingPrecedence"
+- "CoreDataStack"
+- "String"
+- "AssignmentPrecedence"
+- "NSManagedObjectContext"
+- !private "NSBatchDeleteRequest"
+- !private "NSFetchRequest"
+- !private "NSBatchDeleteResult"
+- "BooleanLiteralType"
+- "NSObject"
+- "NSPersistentStoreCoordinator"
+- !private "NSFetchRequestResult"
+- "NSURL"
+- !private "Void"
+- !private "Bool"
+- "NSPersistentContainer"
+- "StringLiteralType"
+- !private "fatalError"
+- "NSManagedObjectModel"
+depends-member:
+- !private ["Ps9AnyObject", "NSBatchDeleteRequest"]
+- !private ["Ps9AnyObject", "NSFetchRequest"]
+- !private ["Ps9AnyObject", "NSPersistentContainer"]
+- !private ["Ps9AnyObject", "automaticallyMergesChangesFromParent"]
+- ["Ps9AnyObject", "breweryCreationContext"]
+- ["Ps9AnyObject", "container"]
+- ["Ps9AnyObject", "dbURL"]
+- ["Ps9AnyObject", "deleteFromCoreData"]
+- !private ["Ps9AnyObject", "execute"]
+- !private ["Ps9AnyObject", "fatalError"]
+- !private ["Ps9AnyObject", "hasChanges"]
+- ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "loadPersistentStores"]
+- ["Ps9AnyObject", "mainStoreCoordinator"]
+- ["Ps9AnyObject", "model"]
+- ["Ps9AnyObject", "modelURL"]
+- !private ["Ps9AnyObject", "newBackgroundContext"]
+- !private ["Ps9AnyObject", "performAndWait"]
+- !private ["Ps9AnyObject", "performBackgroundTask"]
+- !private ["Ps9AnyObject", "resultType"]
+- !private ["Ps9AnyObject", "save"]
+- ["Ps9AnyObject", "saveToFile"]
+- ["Ps9AnyObject", "sqlFilename"]
+- ["Ps9AnyObject", ""]
+- !private ["Sb", "_getBuiltinLogicValue"]
+- !private ["Sb", "deinit"]
+- !private ["Ps7CVarArg", "NSBatchDeleteRequest"]
+- !private ["Ps7CVarArg", "NSFetchRequest"]
+- !private ["Ps7CVarArg", "NSPersistentContainer"]
+- !private ["Ps7CVarArg", "automaticallyMergesChangesFromParent"]
+- ["Ps7CVarArg", "breweryCreationContext"]
+- ["Ps7CVarArg", "container"]
+- ["Ps7CVarArg", "dbURL"]
+- ["Ps7CVarArg", "deleteFromCoreData"]
+- !private ["Ps7CVarArg", "execute"]
+- !private ["Ps7CVarArg", "fatalError"]
+- !private ["Ps7CVarArg", "hasChanges"]
+- ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "loadPersistentStores"]
+- ["Ps7CVarArg", "mainStoreCoordinator"]
+- ["Ps7CVarArg", "model"]
+- ["Ps7CVarArg", "modelURL"]
+- !private ["Ps7CVarArg", "newBackgroundContext"]
+- !private ["Ps7CVarArg", "performAndWait"]
+- !private ["Ps7CVarArg", "performBackgroundTask"]
+- !private ["Ps7CVarArg", "resultType"]
+- !private ["Ps7CVarArg", "save"]
+- ["Ps7CVarArg", "saveToFile"]
+- ["Ps7CVarArg", "sqlFilename"]
+- ["Ps7CVarArg", ""]
+- !private ["Vs9Character", "deinit"]
+- ["Ps10Comparable", "init"]
+- !private ["C11BreweryTour13CoreDataStack", "Bool"]
+- !private ["C11BreweryTour13CoreDataStack", "NSBatchDeleteRequest"]
+- !private ["C11BreweryTour13CoreDataStack", "NSBatchDeleteResult"]
+- !private ["C11BreweryTour13CoreDataStack", "NSFetchRequest"]
+- !private ["C11BreweryTour13CoreDataStack", "NSFetchRequestResult"]
+- ["C11BreweryTour13CoreDataStack", "NSManagedObjectContext"]
+- ["C11BreweryTour13CoreDataStack", "NSManagedObjectModel"]
+- ["C11BreweryTour13CoreDataStack", "NSPersistentContainer"]
+- ["C11BreweryTour13CoreDataStack", "NSPersistentStoreCoordinator"]
+- ["C11BreweryTour13CoreDataStack", "NSURL"]
+- ["C11BreweryTour13CoreDataStack", "String"]
+- !private ["C11BreweryTour13CoreDataStack", "Void"]
+- ["C11BreweryTour13CoreDataStack", "breweryCreationContext"]
+- ["C11BreweryTour13CoreDataStack", "container"]
+- !private ["C11BreweryTour13CoreDataStack", "dbURL"]
+- ["C11BreweryTour13CoreDataStack", "deinit"]
+- !private ["C11BreweryTour13CoreDataStack", "deleteFromCoreData"]
+- !private ["C11BreweryTour13CoreDataStack", "fatalError"]
+- ["C11BreweryTour13CoreDataStack", "init"]
+- ["C11BreweryTour13CoreDataStack", "mainStoreCoordinator"]
+- !private ["C11BreweryTour13CoreDataStack", "model"]
+- !private ["C11BreweryTour13CoreDataStack", "modelURL"]
+- ["C11BreweryTour13CoreDataStack", "saveToFile"]
+- !private ["C11BreweryTour13CoreDataStack", "sqlFilename"]
+- !private ["Ps28CustomDebugStringConvertible", "NSBatchDeleteRequest"]
+- !private ["Ps28CustomDebugStringConvertible", "NSFetchRequest"]
+- !private ["Ps28CustomDebugStringConvertible", "NSPersistentContainer"]
+- !private ["Ps28CustomDebugStringConvertible", "automaticallyMergesChangesFromParent"]
+- ["Ps28CustomDebugStringConvertible", "breweryCreationContext"]
+- ["Ps28CustomDebugStringConvertible", "container"]
+- ["Ps28CustomDebugStringConvertible", "dbURL"]
+- ["Ps28CustomDebugStringConvertible", "deleteFromCoreData"]
+- !private ["Ps28CustomDebugStringConvertible", "execute"]
+- !private ["Ps28CustomDebugStringConvertible", "fatalError"]
+- !private ["Ps28CustomDebugStringConvertible", "hasChanges"]
+- ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "loadPersistentStores"]
+- ["Ps28CustomDebugStringConvertible", "mainStoreCoordinator"]
+- ["Ps28CustomDebugStringConvertible", "model"]
+- ["Ps28CustomDebugStringConvertible", "modelURL"]
+- !private ["Ps28CustomDebugStringConvertible", "newBackgroundContext"]
+- !private ["Ps28CustomDebugStringConvertible", "performAndWait"]
+- !private ["Ps28CustomDebugStringConvertible", "performBackgroundTask"]
+- !private ["Ps28CustomDebugStringConvertible", "resultType"]
+- !private ["Ps28CustomDebugStringConvertible", "save"]
+- ["Ps28CustomDebugStringConvertible", "saveToFile"]
+- ["Ps28CustomDebugStringConvertible", "sqlFilename"]
+- ["Ps28CustomDebugStringConvertible", ""]
+- !private ["Ps29CustomPlaygroundQuickLookable", "_getBuiltinLogicValue"]
+- ["Ps29CustomPlaygroundQuickLookable", "init"]
+- !private ["Ps17CustomReflectable", "_getBuiltinLogicValue"]
+- ["Ps17CustomReflectable", "init"]
+- !private ["Ps23CustomStringConvertible", "NSBatchDeleteRequest"]
+- !private ["Ps23CustomStringConvertible", "NSFetchRequest"]
+- !private ["Ps23CustomStringConvertible", "NSPersistentContainer"]
+- !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "automaticallyMergesChangesFromParent"]
+- ["Ps23CustomStringConvertible", "breweryCreationContext"]
+- ["Ps23CustomStringConvertible", "container"]
+- ["Ps23CustomStringConvertible", "dbURL"]
+- ["Ps23CustomStringConvertible", "deleteFromCoreData"]
+- !private ["Ps23CustomStringConvertible", "execute"]
+- !private ["Ps23CustomStringConvertible", "fatalError"]
+- !private ["Ps23CustomStringConvertible", "hasChanges"]
+- ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "loadPersistentStores"]
+- ["Ps23CustomStringConvertible", "mainStoreCoordinator"]
+- ["Ps23CustomStringConvertible", "model"]
+- ["Ps23CustomStringConvertible", "modelURL"]
+- !private ["Ps23CustomStringConvertible", "newBackgroundContext"]
+- !private ["Ps23CustomStringConvertible", "performAndWait"]
+- !private ["Ps23CustomStringConvertible", "performBackgroundTask"]
+- !private ["Ps23CustomStringConvertible", "resultType"]
+- !private ["Ps23CustomStringConvertible", "save"]
+- ["Ps23CustomStringConvertible", "saveToFile"]
+- ["Ps23CustomStringConvertible", "sqlFilename"]
+- ["Ps23CustomStringConvertible", ""]
+- !private ["Sd", "deinit"]
+- !private ["Ps9Equatable", "NSBatchDeleteRequest"]
+- !private ["Ps9Equatable", "NSFetchRequest"]
+- !private ["Ps9Equatable", "NSPersistentContainer"]
+- !private ["Ps9Equatable", "_getBuiltinLogicValue"]
+- !private ["Ps9Equatable", "automaticallyMergesChangesFromParent"]
+- ["Ps9Equatable", "breweryCreationContext"]
+- ["Ps9Equatable", "container"]
+- ["Ps9Equatable", "dbURL"]
+- ["Ps9Equatable", "deleteFromCoreData"]
+- !private ["Ps9Equatable", "execute"]
+- !private ["Ps9Equatable", "fatalError"]
+- !private ["Ps9Equatable", "hasChanges"]
+- ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "loadPersistentStores"]
+- ["Ps9Equatable", "mainStoreCoordinator"]
+- ["Ps9Equatable", "model"]
+- ["Ps9Equatable", "modelURL"]
+- !private ["Ps9Equatable", "newBackgroundContext"]
+- !private ["Ps9Equatable", "performAndWait"]
+- !private ["Ps9Equatable", "performBackgroundTask"]
+- !private ["Ps9Equatable", "resultType"]
+- !private ["Ps9Equatable", "resultTypeCount"]
+- !private ["Ps9Equatable", "save"]
+- ["Ps9Equatable", "saveToFile"]
+- ["Ps9Equatable", "sqlFilename"]
+- ["Ps9Equatable", ""]
+- !private ["Ps5Error", "deinit"]
+- !private ["Ps5Error", "localizedDescription"]
+- !private ["Ps27ExpressibleByBooleanLiteral", "_getBuiltinLogicValue"]
+- ["Ps43ExpressibleByExtendedGraphemeClusterLiteral", "init"]
+- ["Ps32ExpressibleByStringInterpolation", "init"]
+- ["Ps26ExpressibleByStringLiteral", "init"]
+- ["Ps33ExpressibleByUnicodeScalarLiteral", "init"]
+- !private ["Sf", "deinit"]
+- !private ["Ps8Hashable", "NSBatchDeleteRequest"]
+- !private ["Ps8Hashable", "NSFetchRequest"]
+- !private ["Ps8Hashable", "NSPersistentContainer"]
+- !private ["Ps8Hashable", "_getBuiltinLogicValue"]
+- !private ["Ps8Hashable", "automaticallyMergesChangesFromParent"]
+- ["Ps8Hashable", "breweryCreationContext"]
+- ["Ps8Hashable", "container"]
+- ["Ps8Hashable", "dbURL"]
+- ["Ps8Hashable", "deleteFromCoreData"]
+- !private ["Ps8Hashable", "execute"]
+- !private ["Ps8Hashable", "fatalError"]
+- !private ["Ps8Hashable", "hasChanges"]
+- ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "loadPersistentStores"]
+- ["Ps8Hashable", "mainStoreCoordinator"]
+- ["Ps8Hashable", "model"]
+- ["Ps8Hashable", "modelURL"]
+- !private ["Ps8Hashable", "newBackgroundContext"]
+- !private ["Ps8Hashable", "performAndWait"]
+- !private ["Ps8Hashable", "performBackgroundTask"]
+- !private ["Ps8Hashable", "resultType"]
+- !private ["Ps8Hashable", "resultTypeCount"]
+- !private ["Ps8Hashable", "save"]
+- ["Ps8Hashable", "saveToFile"]
+- ["Ps8Hashable", "sqlFilename"]
+- ["Ps8Hashable", ""]
+- ["SQ", "deinit"]
+- !private ["Si", "deinit"]
+- !private ["Vs5Int16", "deinit"]
+- !private ["Vs5Int32", "deinit"]
+- !private ["Vs5Int64", "deinit"]
+- !private ["Vs4Int8", "deinit"]
+- !private ["Ps25LosslessStringConvertible", "_getBuiltinLogicValue"]
+- ["Ps25LosslessStringConvertible", "init"]
+- ["Ps10MirrorPath", "init"]
+- !private ["CSo20NSBatchDeleteRequest", "deinit"]
+- !private ["CSo20NSBatchDeleteRequest", "init"]
+- !private ["CSo20NSBatchDeleteRequest", "resultType"]
+- !private ["OSC30NSBatchDeleteRequestResultType", "deinit"]
+- !private ["OSC30NSBatchDeleteRequestResultType", "resultTypeCount"]
+- !private ["CSo19NSBatchDeleteResult", "deinit"]
+- !private ["PSo8NSCoding", "automaticallyMergesChangesFromParent"]
+- !private ["PSo8NSCoding", "execute"]
+- !private ["PSo8NSCoding", "hasChanges"]
+- ["PSo8NSCoding", "init"]
+- !private ["PSo8NSCoding", "performAndWait"]
+- !private ["PSo8NSCoding", "save"]
+- ["PSo9NSCopying", "init"]
+- !private ["PSo9NSCopying", "resultType"]
+- !private ["CSo14NSFetchRequest", "deinit"]
+- !private ["CSo14NSFetchRequest", "init"]
+- !private ["PSo20NSFetchRequestResult", "deinit"]
+- !private ["PSo9NSLocking", "automaticallyMergesChangesFromParent"]
+- !private ["PSo9NSLocking", "execute"]
+- !private ["PSo9NSLocking", "hasChanges"]
+- !private ["PSo9NSLocking", "performAndWait"]
+- !private ["PSo9NSLocking", "save"]
+- !private ["CSo22NSManagedObjectContext", "automaticallyMergesChangesFromParent"]
+- ["CSo22NSManagedObjectContext", "deinit"]
+- !private ["CSo22NSManagedObjectContext", "execute"]
+- !private ["CSo22NSManagedObjectContext", "hasChanges"]
+- !private ["CSo22NSManagedObjectContext", "performAndWait"]
+- !private ["CSo22NSManagedObjectContext", "save"]
+- ["PSo16NSMutableCopying", "init"]
+- !private ["CSo8NSObject", "Bool"]
+- !private ["CSo8NSObject", "NSBatchDeleteRequest"]
+- !private ["CSo8NSObject", "NSBatchDeleteResult"]
+- !private ["CSo8NSObject", "NSFetchRequest"]
+- !private ["CSo8NSObject", "NSFetchRequestResult"]
+- ["CSo8NSObject", "NSManagedObjectContext"]
+- ["CSo8NSObject", "NSManagedObjectModel"]
+- ["CSo8NSObject", "NSPersistentContainer"]
+- ["CSo8NSObject", "NSPersistentStoreCoordinator"]
+- ["CSo8NSObject", "NSURL"]
+- ["CSo8NSObject", "String"]
+- !private ["CSo8NSObject", "Void"]
+- !private ["CSo8NSObject", "automaticallyMergesChangesFromParent"]
+- ["CSo8NSObject", "breweryCreationContext"]
+- ["CSo8NSObject", "container"]
+- ["CSo8NSObject", "dbURL"]
+- ["CSo8NSObject", "deinit"]
+- ["CSo8NSObject", "deleteFromCoreData"]
+- !private ["CSo8NSObject", "execute"]
+- !private ["CSo8NSObject", "fatalError"]
+- !private ["CSo8NSObject", "hasChanges"]
+- ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "loadPersistentStores"]
+- ["CSo8NSObject", "mainStoreCoordinator"]
+- ["CSo8NSObject", "model"]
+- ["CSo8NSObject", "modelURL"]
+- !private ["CSo8NSObject", "newBackgroundContext"]
+- !private ["CSo8NSObject", "performAndWait"]
+- !private ["CSo8NSObject", "performBackgroundTask"]
+- !private ["CSo8NSObject", "resultType"]
+- !private ["CSo8NSObject", "save"]
+- ["CSo8NSObject", "saveToFile"]
+- ["CSo8NSObject", "sqlFilename"]
+- ["CSo8NSObject", ""]
+- !private ["PSo16NSObjectProtocol", "NSBatchDeleteRequest"]
+- !private ["PSo16NSObjectProtocol", "NSFetchRequest"]
+- !private ["PSo16NSObjectProtocol", "NSPersistentContainer"]
+- !private ["PSo16NSObjectProtocol", "automaticallyMergesChangesFromParent"]
+- ["PSo16NSObjectProtocol", "breweryCreationContext"]
+- ["PSo16NSObjectProtocol", "container"]
+- ["PSo16NSObjectProtocol", "dbURL"]
+- ["PSo16NSObjectProtocol", "deleteFromCoreData"]
+- !private ["PSo16NSObjectProtocol", "execute"]
+- !private ["PSo16NSObjectProtocol", "fatalError"]
+- !private ["PSo16NSObjectProtocol", "hasChanges"]
+- ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "loadPersistentStores"]
+- ["PSo16NSObjectProtocol", "mainStoreCoordinator"]
+- ["PSo16NSObjectProtocol", "model"]
+- ["PSo16NSObjectProtocol", "modelURL"]
+- !private ["PSo16NSObjectProtocol", "newBackgroundContext"]
+- !private ["PSo16NSObjectProtocol", "performAndWait"]
+- !private ["PSo16NSObjectProtocol", "performBackgroundTask"]
+- !private ["PSo16NSObjectProtocol", "resultType"]
+- !private ["PSo16NSObjectProtocol", "save"]
+- ["PSo16NSObjectProtocol", "saveToFile"]
+- ["PSo16NSObjectProtocol", "sqlFilename"]
+- ["PSo16NSObjectProtocol", ""]
+- ["CSo21NSPersistentContainer", "deinit"]
+- !private ["CSo21NSPersistentContainer", "init"]
+- !private ["CSo21NSPersistentContainer", "loadPersistentStores"]
+- !private ["CSo21NSPersistentContainer", "newBackgroundContext"]
+- !private ["CSo21NSPersistentContainer", "performBackgroundTask"]
+- !private ["CSo24NSPersistentStoreRequest", "init"]
+- !private ["CSo24NSPersistentStoreRequest", "resultType"]
+- !private ["CSo23NSPersistentStoreResult", "deinit"]
+- ["PSo14NSSecureCoding", "init"]
+- ["CSo8NSString", "init"]
+- ["Os5Never", "deinit"]
+- ["Sq", "deinit"]
+- !private ["Ps16RawRepresentable", "resultTypeCount"]
+- ["Vs12StaticString", "deinit"]
+- !private ["Vs12StaticString", "init"]
+- ["SS", "deinit"]
+- ["SS", "init"]
+- ["Ps16TextOutputStream", "init"]
+- ["Ps20TextOutputStreamable", "init"]
+- ["Su", "deinit"]
+- !private ["Vs6UInt16", "deinit"]
+- !private ["Vs6UInt32", "deinit"]
+- !private ["Vs6UInt64", "deinit"]
+- !private ["Vs5UInt8", "deinit"]
+- ["P9Alamofire14URLConvertible", "init"]
+- !private ["Sc", "deinit"]
+- !private ["Ps35_ExpressibleByBuiltinBooleanLiteral", "_getBuiltinLogicValue"]
+- ["Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral", "init"]
+- ["Ps34_ExpressibleByBuiltinStringLiteral", "init"]
+- ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "init"]
+- ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
+- ["Ps35_HasCustomAnyHashableRepresentation", "init"]
+- !private ["Ps9_Hashable", "NSBatchDeleteRequest"]
+- !private ["Ps9_Hashable", "NSFetchRequest"]
+- !private ["Ps9_Hashable", "NSPersistentContainer"]
+- !private ["Ps9_Hashable", "_getBuiltinLogicValue"]
+- !private ["Ps9_Hashable", "automaticallyMergesChangesFromParent"]
+- ["Ps9_Hashable", "breweryCreationContext"]
+- ["Ps9_Hashable", "container"]
+- ["Ps9_Hashable", "dbURL"]
+- ["Ps9_Hashable", "deleteFromCoreData"]
+- !private ["Ps9_Hashable", "execute"]
+- !private ["Ps9_Hashable", "fatalError"]
+- !private ["Ps9_Hashable", "hasChanges"]
+- ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "loadPersistentStores"]
+- ["Ps9_Hashable", "mainStoreCoordinator"]
+- ["Ps9_Hashable", "model"]
+- ["Ps9_Hashable", "modelURL"]
+- !private ["Ps9_Hashable", "newBackgroundContext"]
+- !private ["Ps9_Hashable", "performAndWait"]
+- !private ["Ps9_Hashable", "performBackgroundTask"]
+- !private ["Ps9_Hashable", "resultType"]
+- !private ["Ps9_Hashable", "resultTypeCount"]
+- !private ["Ps9_Hashable", "save"]
+- ["Ps9_Hashable", "saveToFile"]
+- ["Ps9_Hashable", "sqlFilename"]
+- ["Ps9_Hashable", ""]
+- !private ["Ps21_ObjectiveCBridgeable", "_getBuiltinLogicValue"]
+- ["Ps21_ObjectiveCBridgeable", "init"]
+depends-nominal:
+- "Ps9AnyObject"
+- !private "Sb"
+- "Ps7CVarArg"
+- !private "Vs9Character"
+- "Ps10Comparable"
+- "C11BreweryTour13CoreDataStack"
+- "Ps28CustomDebugStringConvertible"
+- "Ps29CustomPlaygroundQuickLookable"
+- "Ps17CustomReflectable"
+- "Ps23CustomStringConvertible"
+- !private "Sd"
+- "Ps9Equatable"
+- !private "Ps5Error"
+- !private "Ps27ExpressibleByBooleanLiteral"
+- "Ps43ExpressibleByExtendedGraphemeClusterLiteral"
+- "Ps32ExpressibleByStringInterpolation"
+- "Ps26ExpressibleByStringLiteral"
+- "Ps33ExpressibleByUnicodeScalarLiteral"
+- !private "Sf"
+- "Ps8Hashable"
+- "SQ"
+- !private "Si"
+- !private "Vs5Int16"
+- !private "Vs5Int32"
+- !private "Vs5Int64"
+- !private "Vs4Int8"
+- "Ps25LosslessStringConvertible"
+- "Ps10MirrorPath"
+- !private "CSo20NSBatchDeleteRequest"
+- !private "OSC30NSBatchDeleteRequestResultType"
+- !private "CSo19NSBatchDeleteResult"
+- "PSo8NSCoding"
+- "PSo9NSCopying"
+- !private "CSo14NSFetchRequest"
+- !private "PSo20NSFetchRequestResult"
+- !private "PSo9NSLocking"
+- "CSo22NSManagedObjectContext"
+- "PSo16NSMutableCopying"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- "CSo21NSPersistentContainer"
+- !private "CSo24NSPersistentStoreRequest"
+- !private "CSo23NSPersistentStoreResult"
+- "PSo14NSSecureCoding"
+- "CSo8NSString"
+- "Os5Never"
+- "Sq"
+- !private "Ps16RawRepresentable"
+- "Vs12StaticString"
+- "SS"
+- "Ps16TextOutputStream"
+- "Ps20TextOutputStreamable"
+- "Su"
+- !private "Vs6UInt16"
+- !private "Vs6UInt32"
+- !private "Vs6UInt64"
+- !private "Vs5UInt8"
+- "P9Alamofire14URLConvertible"
+- !private "Sc"
+- !private "Ps35_ExpressibleByBuiltinBooleanLiteral"
+- "Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral"
+- "Ps34_ExpressibleByBuiltinStringLiteral"
+- "Ps39_ExpressibleByBuiltinUTF16StringLiteral"
+- "Ps41_ExpressibleByBuiltinUnicodeScalarLiteral"
+- "Ps35_HasCustomAnyHashableRepresentation"
+- "Ps9_Hashable"
+- "Ps21_ObjectiveCBridgeable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/SwiftOnoneSupport.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/MapKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreLocation.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/Alamofire.swiftmodule/x86_64.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/module.modulemap"
+interface-hash: "af54dcb8a83d56a95b53ff4776bcc403"

@@ -161,6 +161,8 @@ class SelectedBeersViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Remove space on top of search bar
+        searchBar.searchFieldBackgroundPositionAdjustment = UIOffset(horizontal: 0.0, vertical: -6.0)
 
         // Set the initial viewModel
         activeViewModel = selectedBeersViewModel

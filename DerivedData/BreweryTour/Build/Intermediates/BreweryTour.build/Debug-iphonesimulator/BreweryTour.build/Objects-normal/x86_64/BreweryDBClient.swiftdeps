@@ -1,0 +1,948 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "BreweryDBClientProtocol"
+- "BreweryDBClient"
+- "=="
+provides-nominal:
+- "P11BreweryTour23BreweryDBClientProtocol"
+- "C11BreweryTour15BreweryDBClient"
+- "OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes"
+provides-member:
+- ["P11BreweryTour23BreweryDBClientProtocol", ""]
+- ["C11BreweryTour15BreweryDBClient", ""]
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", ""]
+provides-dynamic-lookup:
+depends-top-level:
+- !private "!="
+- !private "UIImage"
+- "NSURL"
+- "ManagedObjectImageLinker"
+- "Bool"
+- !private "Int"
+- !private "NSDictionary"
+- "UIApplication"
+- !private "UIImagePNGRepresentation"
+- !private "AnyObject"
+- "String"
+- !private "NSURLComponents"
+- !private "DispatchGroup"
+- !private "+"
+- "BreweryDBClient"
+- "AppDelegate"
+- "=="
+- !private "AssignmentPrecedence"
+- "CastingPrecedence"
+- !private "DataResponse"
+- !private "ParserFactory"
+- !private "DispatchQueue"
+- "BreweryDBClientProtocol"
+- "Brewery"
+- !private "..."
+- !private "NSURLQueryItem"
+- "Void"
+- !private "URLSession"
+- "ImageDownloadType"
+- !private "UnicodeScalarType"
+- !private "URL"
+- !private "Alamofire"
+- !private "URLQueryItem"
+- !private "ParserProtocol"
+- !private "BooleanLiteralType"
+- !private "NSData"
+- !private "Dictionary"
+depends-member:
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "=="]
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "BeersByBreweryID"]
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "BeersFollowedByBreweries"]
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "Breweries"]
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "Styles"]
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "_toAnyHashable"]
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "deinit"]
+- ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "hashValue"]
+- !private ["Ps9AnyObject", "APIQueryResponseProcessingTypes"]
+- !private ["Ps9AnyObject", "Alamofire"]
+- !private ["Ps9AnyObject", "BreweryDBClient"]
+- !private ["Ps9AnyObject", "Constants"]
+- !private ["Ps9AnyObject", "DispatchGroup"]
+- !private ["Ps9AnyObject", "DispatchQueue"]
+- ["Ps9AnyObject", "ManagedObjectImageLinker"]
+- !private ["Ps9AnyObject", "NSURLComponents"]
+- !private ["Ps9AnyObject", "NSURLQueryItem"]
+- !private ["Ps9AnyObject", "ParserFactory"]
+- ["Ps9AnyObject", "UIApplication"]
+- !private ["Ps9AnyObject", "UIImage"]
+- !private ["Ps9AnyObject", "UIImagePNGRepresentation"]
+- !private ["Ps9AnyObject", "URLSession"]
+- !private ["Ps9AnyObject", "absoluteString"]
+- !private ["Ps9AnyObject", "async"]
+- ["Ps9AnyObject", "container"]
+- ["Ps9AnyObject", "coreDataStack"]
+- !private ["Ps9AnyObject", "createURLFromParameters"]
+- !private ["Ps9AnyObject", "dataTask"]
+- ["Ps9AnyObject", "deinit"]
+- ["Ps9AnyObject", "delegate"]
+- !private ["Ps9AnyObject", "downloadImageToCoreData"]
+- !private ["Ps9AnyObject", "enter"]
+- !private ["Ps9AnyObject", "genericJSONResponseProcessSuccess"]
+- !private ["Ps9AnyObject", "global"]
+- !private ["Ps9AnyObject", "host"]
+- !private ["Ps9AnyObject", "id"]
+- !private ["Ps9AnyObject", "imageLinker"]
+- ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "leave"]
+- ["Ps9AnyObject", "newBackgroundContext"]
+- !private ["Ps9AnyObject", "notify"]
+- !private ["Ps9AnyObject", "parse"]
+- !private ["Ps9AnyObject", "path"]
+- !private ["Ps9AnyObject", "queryItems"]
+- !private ["Ps9AnyObject", "queueLinkJob"]
+- !private ["Ps9AnyObject", "responseJSON"]
+- !private ["Ps9AnyObject", "resume"]
+- !private ["Ps9AnyObject", "scheme"]
+- ["Ps9AnyObject", "shared"]
+- !private ["Ps9AnyObject", "sharedInstance"]
+- !private ["Ps9AnyObject", "url"]
+- ["Ps9AnyObject", "viewContext"]
+- ["Ps9AnyObject", ""]
+- ["C11BreweryTour11AppDelegate", "coreDataStack"]
+- ["C11BreweryTour11AppDelegate", "deinit"]
+- !private ["Sa", "Iterator"]
+- !private ["Sa", "_Element"]
+- !private ["Sa", "append"]
+- !private ["Sa", "deinit"]
+- !private ["Sa", "init"]
+- !private ["Ps23BidirectionalCollection", "Iterator"]
+- !private ["Ps23BidirectionalCollection", "_Element"]
+- !private ["Ps23BidirectionalCollection", "append"]
+- !private ["Ps23BidirectionalCollection", "init"]
+- !private ["Ps22BidirectionalIndexable", "Iterator"]
+- !private ["Ps22BidirectionalIndexable", "_Element"]
+- !private ["Ps22BidirectionalIndexable", "append"]
+- !private ["Ps22BidirectionalIndexable", "init"]
+- !private ["Ps17BitwiseOperations", "IntegerLiteralType"]
+- !private ["Ps17BitwiseOperations", "Stride"]
+- !private ["Ps17BitwiseOperations", "_DisabledRangeIndex"]
+- !private ["Ps17BitwiseOperations", "hashValue"]
+- !private ["Sb", "_getBuiltinLogicValue"]
+- ["Sb", "deinit"]
+- ["C11BreweryTour7Brewery", "deinit"]
+- !private ["C11BreweryTour7Brewery", "id"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants9BreweryDB", "APIHost"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants9BreweryDB", "APIPath"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants9BreweryDB", "APIScheme"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants9BreweryDB", "Methods"]
+- ["C11BreweryTour15BreweryDBClient", "APIQueryResponseProcessingTypes"]
+- !private ["C11BreweryTour15BreweryDBClient", "Alamofire"]
+- !private ["C11BreweryTour15BreweryDBClient", "AnyObject"]
+- ["C11BreweryTour15BreweryDBClient", "AppDelegate"]
+- ["C11BreweryTour15BreweryDBClient", "Bool"]
+- ["C11BreweryTour15BreweryDBClient", "Brewery"]
+- ["C11BreweryTour15BreweryDBClient", "BreweryDBClient"]
+- !private ["C11BreweryTour15BreweryDBClient", "Constants"]
+- !private ["C11BreweryTour15BreweryDBClient", "DataResponse"]
+- !private ["C11BreweryTour15BreweryDBClient", "DispatchGroup"]
+- !private ["C11BreweryTour15BreweryDBClient", "DispatchQueue"]
+- ["C11BreweryTour15BreweryDBClient", "ImageDownloadType"]
+- !private ["C11BreweryTour15BreweryDBClient", "Int"]
+- ["C11BreweryTour15BreweryDBClient", "ManagedObjectImageLinker"]
+- !private ["C11BreweryTour15BreweryDBClient", "NSData"]
+- !private ["C11BreweryTour15BreweryDBClient", "NSDictionary"]
+- ["C11BreweryTour15BreweryDBClient", "NSURL"]
+- !private ["C11BreweryTour15BreweryDBClient", "NSURLComponents"]
+- !private ["C11BreweryTour15BreweryDBClient", "NSURLQueryItem"]
+- !private ["C11BreweryTour15BreweryDBClient", "ParserFactory"]
+- !private ["C11BreweryTour15BreweryDBClient", "ParserProtocol"]
+- ["C11BreweryTour15BreweryDBClient", "String"]
+- ["C11BreweryTour15BreweryDBClient", "UIApplication"]
+- !private ["C11BreweryTour15BreweryDBClient", "UIImage"]
+- !private ["C11BreweryTour15BreweryDBClient", "UIImagePNGRepresentation"]
+- !private ["C11BreweryTour15BreweryDBClient", "URL"]
+- !private ["C11BreweryTour15BreweryDBClient", "URLQueryItem"]
+- !private ["C11BreweryTour15BreweryDBClient", "URLSession"]
+- ["C11BreweryTour15BreweryDBClient", "Void"]
+- !private ["C11BreweryTour15BreweryDBClient", "backContext"]
+- !private ["C11BreweryTour15BreweryDBClient", "createURLFromParameters"]
+- ["C11BreweryTour15BreweryDBClient", "deinit"]
+- ["C11BreweryTour15BreweryDBClient", "downloadAllBreweries"]
+- ["C11BreweryTour15BreweryDBClient", "downloadBeerStyles"]
+- ["C11BreweryTour15BreweryDBClient", "downloadBeersAndBreweriesBy"]
+- ["C11BreweryTour15BreweryDBClient", "downloadBeersBy"]
+- ["C11BreweryTour15BreweryDBClient", "downloadBreweryBy"]
+- ["C11BreweryTour15BreweryDBClient", "downloadImageToCoreData"]
+- !private ["C11BreweryTour15BreweryDBClient", "genericJSONResponseProcessSuccess"]
+- !private ["C11BreweryTour15BreweryDBClient", "imageLinker"]
+- !private ["C11BreweryTour15BreweryDBClient", "init"]
+- !private ["C11BreweryTour15BreweryDBClient", "parse"]
+- !private ["C11BreweryTour15BreweryDBClient", "readOnlyContext"]
+- ["C11BreweryTour15BreweryDBClient", "sharedInstance"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "Bool"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "Brewery"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "ImageDownloadType"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "NSURL"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "String"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "Void"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "downloadAllBreweries"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "downloadBeerStyles"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "downloadBeersAndBreweriesBy"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "downloadBeersBy"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "downloadBreweryBy"]
+- ["P11BreweryTour23BreweryDBClientProtocol", "downloadImageToCoreData"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants20BreweryParameterKeys", "Format"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants20BreweryParameterKeys", "Key"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants20BreweryParameterKeys", "Page"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants20BreweryParameterKeys", "StyleID"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants20BreweryParameterKeys", "WithBreweries"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants20BreweryParameterKeys", "WithLocations"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants22BreweryParameterValues", "APIKey"]
+- !private ["VVC11BreweryTour15BreweryDBClient9Constants22BreweryParameterValues", "FormatJSON"]
+- !private ["Ps7CVarArg", "Index"]
+- !private ["Ps7CVarArg", "IntegerLiteralType"]
+- !private ["Ps7CVarArg", "Iterator"]
+- !private ["Ps7CVarArg", "Key"]
+- !private ["Ps7CVarArg", "Stride"]
+- !private ["Ps7CVarArg", "SubSequence"]
+- !private ["Ps7CVarArg", "Value"]
+- !private ["Ps7CVarArg", "_DisabledRangeIndex"]
+- !private ["Ps7CVarArg", "_Element"]
+- !private ["Ps7CVarArg", "absoluteString"]
+- !private ["Ps7CVarArg", "append"]
+- !private ["Ps7CVarArg", "async"]
+- ["Ps7CVarArg", "container"]
+- ["Ps7CVarArg", "coreDataStack"]
+- !private ["Ps7CVarArg", "dataTask"]
+- ["Ps7CVarArg", "delegate"]
+- !private ["Ps7CVarArg", "enter"]
+- !private ["Ps7CVarArg", "global"]
+- !private ["Ps7CVarArg", "hashValue"]
+- !private ["Ps7CVarArg", "host"]
+- !private ["Ps7CVarArg", "id"]
+- !private ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "leave"]
+- ["Ps7CVarArg", "newBackgroundContext"]
+- !private ["Ps7CVarArg", "notify"]
+- !private ["Ps7CVarArg", "path"]
+- !private ["Ps7CVarArg", "queryItems"]
+- !private ["Ps7CVarArg", "resume"]
+- !private ["Ps7CVarArg", "scheme"]
+- ["Ps7CVarArg", "shared"]
+- !private ["Ps7CVarArg", "subscript"]
+- !private ["Ps7CVarArg", "url"]
+- ["Ps7CVarArg", "viewContext"]
+- !private ["Vs9Character", "deinit"]
+- !private ["Vs11ClosedRange", "deinit"]
+- !private ["Vs19ClosedRangeIterator", "Element"]
+- !private ["Ps10Collection", "Index"]
+- !private ["Ps10Collection", "Iterator"]
+- !private ["Ps10Collection", "Key"]
+- !private ["Ps10Collection", "SubSequence"]
+- !private ["Ps10Collection", "Value"]
+- !private ["Ps10Collection", "_Element"]
+- !private ["Ps10Collection", "append"]
+- !private ["Ps10Collection", "init"]
+- !private ["Ps10Collection", "subscript"]
+- !private ["Ps10Comparable", "IntegerLiteralType"]
+- !private ["Ps10Comparable", "Stride"]
+- !private ["Ps10Comparable", "_DisabledRangeIndex"]
+- !private ["Ps10Comparable", "hashValue"]
+- !private ["Ps10Comparable", "init"]
+- !private ["VC11BreweryTour15BreweryDBClient9Constants", "BreweryDB"]
+- !private ["VC11BreweryTour15BreweryDBClient9Constants", "BreweryParameterKeys"]
+- !private ["VC11BreweryTour15BreweryDBClient9Constants", "BreweryParameterValues"]
+- ["C11BreweryTour13CoreDataStack", "container"]
+- ["C11BreweryTour13CoreDataStack", "deinit"]
+- !private ["Vs20CountableClosedRange", "Iterator"]
+- !private ["Vs20CountableClosedRange", "deinit"]
+- !private ["Ps28CustomDebugStringConvertible", "Index"]
+- !private ["Ps28CustomDebugStringConvertible", "Iterator"]
+- !private ["Ps28CustomDebugStringConvertible", "Key"]
+- !private ["Ps28CustomDebugStringConvertible", "SubSequence"]
+- !private ["Ps28CustomDebugStringConvertible", "Value"]
+- !private ["Ps28CustomDebugStringConvertible", "_Element"]
+- !private ["Ps28CustomDebugStringConvertible", "absoluteString"]
+- !private ["Ps28CustomDebugStringConvertible", "append"]
+- !private ["Ps28CustomDebugStringConvertible", "async"]
+- ["Ps28CustomDebugStringConvertible", "container"]
+- ["Ps28CustomDebugStringConvertible", "coreDataStack"]
+- !private ["Ps28CustomDebugStringConvertible", "dataTask"]
+- ["Ps28CustomDebugStringConvertible", "delegate"]
+- !private ["Ps28CustomDebugStringConvertible", "enter"]
+- !private ["Ps28CustomDebugStringConvertible", "global"]
+- !private ["Ps28CustomDebugStringConvertible", "host"]
+- !private ["Ps28CustomDebugStringConvertible", "id"]
+- !private ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "isSuccess"]
+- !private ["Ps28CustomDebugStringConvertible", "leave"]
+- ["Ps28CustomDebugStringConvertible", "newBackgroundContext"]
+- !private ["Ps28CustomDebugStringConvertible", "notify"]
+- !private ["Ps28CustomDebugStringConvertible", "path"]
+- !private ["Ps28CustomDebugStringConvertible", "queryItems"]
+- !private ["Ps28CustomDebugStringConvertible", "responseJSON"]
+- !private ["Ps28CustomDebugStringConvertible", "result"]
+- !private ["Ps28CustomDebugStringConvertible", "resume"]
+- !private ["Ps28CustomDebugStringConvertible", "scheme"]
+- ["Ps28CustomDebugStringConvertible", "shared"]
+- !private ["Ps28CustomDebugStringConvertible", "subscript"]
+- !private ["Ps28CustomDebugStringConvertible", "url"]
+- !private ["Ps28CustomDebugStringConvertible", "value"]
+- ["Ps28CustomDebugStringConvertible", "viewContext"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "IntegerLiteralType"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "Stride"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "_DisabledRangeIndex"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "_getBuiltinLogicValue"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "absoluteString"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "hashValue"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "init"]
+- !private ["Ps17CustomReflectable", "Element"]
+- !private ["Ps17CustomReflectable", "Index"]
+- !private ["Ps17CustomReflectable", "IntegerLiteralType"]
+- !private ["Ps17CustomReflectable", "Iterator"]
+- !private ["Ps17CustomReflectable", "Key"]
+- !private ["Ps17CustomReflectable", "Stride"]
+- !private ["Ps17CustomReflectable", "SubSequence"]
+- !private ["Ps17CustomReflectable", "Value"]
+- !private ["Ps17CustomReflectable", "_DisabledRangeIndex"]
+- !private ["Ps17CustomReflectable", "_Element"]
+- !private ["Ps17CustomReflectable", "_getBuiltinLogicValue"]
+- !private ["Ps17CustomReflectable", "append"]
+- !private ["Ps17CustomReflectable", "hashValue"]
+- !private ["Ps17CustomReflectable", "init"]
+- !private ["Ps17CustomReflectable", "subscript"]
+- !private ["Ps23CustomStringConvertible", "Index"]
+- !private ["Ps23CustomStringConvertible", "IntegerLiteralType"]
+- !private ["Ps23CustomStringConvertible", "Iterator"]
+- !private ["Ps23CustomStringConvertible", "Key"]
+- !private ["Ps23CustomStringConvertible", "Stride"]
+- !private ["Ps23CustomStringConvertible", "SubSequence"]
+- !private ["Ps23CustomStringConvertible", "Value"]
+- !private ["Ps23CustomStringConvertible", "_DisabledRangeIndex"]
+- !private ["Ps23CustomStringConvertible", "_Element"]
+- !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "absoluteString"]
+- !private ["Ps23CustomStringConvertible", "append"]
+- !private ["Ps23CustomStringConvertible", "async"]
+- ["Ps23CustomStringConvertible", "container"]
+- ["Ps23CustomStringConvertible", "coreDataStack"]
+- !private ["Ps23CustomStringConvertible", "dataTask"]
+- ["Ps23CustomStringConvertible", "delegate"]
+- !private ["Ps23CustomStringConvertible", "enter"]
+- !private ["Ps23CustomStringConvertible", "global"]
+- !private ["Ps23CustomStringConvertible", "hashValue"]
+- !private ["Ps23CustomStringConvertible", "host"]
+- !private ["Ps23CustomStringConvertible", "id"]
+- !private ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "isSuccess"]
+- !private ["Ps23CustomStringConvertible", "leave"]
+- ["Ps23CustomStringConvertible", "newBackgroundContext"]
+- !private ["Ps23CustomStringConvertible", "notify"]
+- !private ["Ps23CustomStringConvertible", "path"]
+- !private ["Ps23CustomStringConvertible", "queryItems"]
+- !private ["Ps23CustomStringConvertible", "responseJSON"]
+- !private ["Ps23CustomStringConvertible", "result"]
+- !private ["Ps23CustomStringConvertible", "resume"]
+- !private ["Ps23CustomStringConvertible", "scheme"]
+- ["Ps23CustomStringConvertible", "shared"]
+- !private ["Ps23CustomStringConvertible", "subscript"]
+- !private ["Ps23CustomStringConvertible", "url"]
+- !private ["Ps23CustomStringConvertible", "value"]
+- ["Ps23CustomStringConvertible", "viewContext"]
+- !private ["V10Foundation4Data", "deinit"]
+- ["C9Alamofire11DataRequest", "deinit"]
+- !private ["C9Alamofire11DataRequest", "responseJSON"]
+- !private ["V9Alamofire12DataResponse", "deinit"]
+- !private ["V9Alamofire12DataResponse", "result"]
+- !private ["Vs10Dictionary", "Index"]
+- !private ["Vs10Dictionary", "Iterator"]
+- !private ["Vs10Dictionary", "Key"]
+- !private ["Vs10Dictionary", "SubSequence"]
+- !private ["Vs10Dictionary", "Value"]
+- ["Vs10Dictionary", "deinit"]
+- !private ["Vs10Dictionary", "subscript"]
+- !private ["Vs18DictionaryIterator", "Element"]
+- !private ["CSo13DispatchGroup", "deinit"]
+- !private ["CSo13DispatchGroup", "enter"]
+- !private ["CSo13DispatchGroup", "init"]
+- !private ["CSo13DispatchGroup", "leave"]
+- !private ["CSo13DispatchGroup", "notify"]
+- !private ["CSo14DispatchObject", "async"]
+- !private ["CSo14DispatchObject", "enter"]
+- !private ["CSo14DispatchObject", "global"]
+- !private ["CSo14DispatchObject", "init"]
+- !private ["CSo14DispatchObject", "leave"]
+- !private ["CSo14DispatchObject", "notify"]
+- !private ["CSo13DispatchQueue", "async"]
+- !private ["CSo13DispatchQueue", "deinit"]
+- !private ["CSo13DispatchQueue", "global"]
+- !private ["Sd", "deinit"]
+- !private ["Ps9Equatable", "BeersByBreweryID"]
+- !private ["Ps9Equatable", "BeersFollowedByBreweries"]
+- !private ["Ps9Equatable", "Breweries"]
+- !private ["Ps9Equatable", "IntegerLiteralType"]
+- !private ["Ps9Equatable", "Iterator"]
+- !private ["Ps9Equatable", "Stride"]
+- !private ["Ps9Equatable", "Styles"]
+- !private ["Ps9Equatable", "_DisabledRangeIndex"]
+- !private ["Ps9Equatable", "_getBuiltinLogicValue"]
+- ["Ps9Equatable", "_toAnyHashable"]
+- !private ["Ps9Equatable", "absoluteString"]
+- !private ["Ps9Equatable", "async"]
+- ["Ps9Equatable", "container"]
+- ["Ps9Equatable", "coreDataStack"]
+- !private ["Ps9Equatable", "dataTask"]
+- ["Ps9Equatable", "delegate"]
+- !private ["Ps9Equatable", "enter"]
+- !private ["Ps9Equatable", "global"]
+- ["Ps9Equatable", "hashValue"]
+- !private ["Ps9Equatable", "host"]
+- !private ["Ps9Equatable", "id"]
+- !private ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "leave"]
+- ["Ps9Equatable", "newBackgroundContext"]
+- !private ["Ps9Equatable", "notify"]
+- !private ["Ps9Equatable", "path"]
+- !private ["Ps9Equatable", "queryItems"]
+- !private ["Ps9Equatable", "resume"]
+- !private ["Ps9Equatable", "scheme"]
+- ["Ps9Equatable", "shared"]
+- !private ["Ps9Equatable", "url"]
+- !private ["Ps9Equatable", "utility"]
+- ["Ps9Equatable", "viewContext"]
+- ["Ps9Equatable", ""]
+- !private ["Ps5Error", "deinit"]
+- !private ["Ps25ExpressibleByArrayLiteral", "Iterator"]
+- !private ["Ps25ExpressibleByArrayLiteral", "_Element"]
+- !private ["Ps25ExpressibleByArrayLiteral", "append"]
+- !private ["Ps25ExpressibleByArrayLiteral", "init"]
+- !private ["Ps27ExpressibleByBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "Index"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "Iterator"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "Key"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "SubSequence"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "Value"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "subscript"]
+- !private ["Ps43ExpressibleByExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps27ExpressibleByIntegerLiteral", "IntegerLiteralType"]
+- !private ["Ps27ExpressibleByIntegerLiteral", "Stride"]
+- !private ["Ps27ExpressibleByIntegerLiteral", "_DisabledRangeIndex"]
+- !private ["Ps27ExpressibleByIntegerLiteral", "hashValue"]
+- !private ["Ps32ExpressibleByStringInterpolation", "init"]
+- !private ["Ps26ExpressibleByStringLiteral", "init"]
+- !private ["Ps33ExpressibleByUnicodeScalarLiteral", "init"]
+- !private ["Sf", "deinit"]
+- !private ["Ps8Hashable", "BeersByBreweryID"]
+- !private ["Ps8Hashable", "BeersFollowedByBreweries"]
+- !private ["Ps8Hashable", "Breweries"]
+- !private ["Ps8Hashable", "IntegerLiteralType"]
+- !private ["Ps8Hashable", "Stride"]
+- !private ["Ps8Hashable", "Styles"]
+- !private ["Ps8Hashable", "_DisabledRangeIndex"]
+- !private ["Ps8Hashable", "_getBuiltinLogicValue"]
+- ["Ps8Hashable", "_toAnyHashable"]
+- !private ["Ps8Hashable", "absoluteString"]
+- !private ["Ps8Hashable", "async"]
+- ["Ps8Hashable", "container"]
+- ["Ps8Hashable", "coreDataStack"]
+- !private ["Ps8Hashable", "dataTask"]
+- ["Ps8Hashable", "delegate"]
+- !private ["Ps8Hashable", "enter"]
+- !private ["Ps8Hashable", "global"]
+- ["Ps8Hashable", "hashValue"]
+- !private ["Ps8Hashable", "host"]
+- !private ["Ps8Hashable", "id"]
+- !private ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "leave"]
+- ["Ps8Hashable", "newBackgroundContext"]
+- !private ["Ps8Hashable", "notify"]
+- !private ["Ps8Hashable", "path"]
+- !private ["Ps8Hashable", "queryItems"]
+- !private ["Ps8Hashable", "resume"]
+- !private ["Ps8Hashable", "scheme"]
+- ["Ps8Hashable", "shared"]
+- !private ["Ps8Hashable", "url"]
+- !private ["Ps8Hashable", "utility"]
+- ["Ps8Hashable", "viewContext"]
+- ["Ps8Hashable", ""]
+- !private ["O11BreweryTour17ImageDownloadType", "deinit"]
+- ["P11BreweryTour20ImageLinkingProcotol", "init"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "queueLinkJob"]
+- !private ["Ps9Indexable", "Index"]
+- !private ["Ps9Indexable", "Iterator"]
+- !private ["Ps9Indexable", "Key"]
+- !private ["Ps9Indexable", "SubSequence"]
+- !private ["Ps9Indexable", "Value"]
+- !private ["Ps9Indexable", "_Element"]
+- !private ["Ps9Indexable", "append"]
+- !private ["Ps9Indexable", "init"]
+- !private ["Ps9Indexable", "subscript"]
+- !private ["Ps13IndexableBase", "Index"]
+- !private ["Ps13IndexableBase", "Iterator"]
+- !private ["Ps13IndexableBase", "Key"]
+- !private ["Ps13IndexableBase", "SubSequence"]
+- !private ["Ps13IndexableBase", "Value"]
+- !private ["Ps13IndexableBase", "_Element"]
+- !private ["Ps13IndexableBase", "append"]
+- !private ["Ps13IndexableBase", "init"]
+- !private ["Ps13IndexableBase", "subscript"]
+- !private ["Vs16IndexingIterator", "Element"]
+- !private ["Si", "IntegerLiteralType"]
+- !private ["Si", "Stride"]
+- !private ["Si", "_DisabledRangeIndex"]
+- ["Si", "deinit"]
+- !private ["Si", "hashValue"]
+- !private ["Vs5Int16", "deinit"]
+- !private ["Vs5Int32", "deinit"]
+- !private ["Vs5Int64", "deinit"]
+- !private ["Vs4Int8", "deinit"]
+- !private ["Ps7Integer", "IntegerLiteralType"]
+- !private ["Ps7Integer", "Stride"]
+- !private ["Ps7Integer", "_DisabledRangeIndex"]
+- !private ["Ps7Integer", "hashValue"]
+- !private ["Ps17IntegerArithmetic", "IntegerLiteralType"]
+- !private ["Ps17IntegerArithmetic", "Stride"]
+- !private ["Ps17IntegerArithmetic", "_DisabledRangeIndex"]
+- !private ["Ps17IntegerArithmetic", "hashValue"]
+- !private ["Ps16IteratorProtocol", "Element"]
+- !private ["Ps25LosslessStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps25LosslessStringConvertible", "init"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "deinit"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "init"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "queueLinkJob"]
+- !private ["VVVC11BreweryTour15BreweryDBClient9Constants9BreweryDB7Methods", "Beers"]
+- !private ["VVVC11BreweryTour15BreweryDBClient9Constants9BreweryDB7Methods", "Breweries"]
+- !private ["VVVC11BreweryTour15BreweryDBClient9Constants9BreweryDB7Methods", "Brewery"]
+- !private ["VVVC11BreweryTour15BreweryDBClient9Constants9BreweryDB7Methods", "Styles"]
+- !private ["Ps10MirrorPath", "IntegerLiteralType"]
+- !private ["Ps10MirrorPath", "Stride"]
+- !private ["Ps10MirrorPath", "_DisabledRangeIndex"]
+- !private ["Ps10MirrorPath", "hashValue"]
+- !private ["Ps10MirrorPath", "init"]
+- !private ["Ps17MutableCollection", "Iterator"]
+- !private ["Ps17MutableCollection", "_Element"]
+- !private ["Ps17MutableCollection", "append"]
+- !private ["Ps17MutableCollection", "init"]
+- !private ["Ps16MutableIndexable", "Iterator"]
+- !private ["Ps16MutableIndexable", "_Element"]
+- !private ["Ps16MutableIndexable", "append"]
+- !private ["Ps16MutableIndexable", "init"]
+- !private ["PSo8NSCoding", "absoluteString"]
+- !private ["PSo8NSCoding", "init"]
+- !private ["PSo9NSCopying", "absoluteString"]
+- !private ["PSo9NSCopying", "host"]
+- !private ["PSo9NSCopying", "init"]
+- !private ["PSo9NSCopying", "path"]
+- !private ["PSo9NSCopying", "queryItems"]
+- !private ["PSo9NSCopying", "resume"]
+- !private ["PSo9NSCopying", "scheme"]
+- !private ["PSo9NSCopying", "url"]
+- !private ["CSo6NSData", "deinit"]
+- !private ["CSo12NSDictionary", "deinit"]
+- !private ["PSo20NSFetchRequestResult", "id"]
+- !private ["CSo15NSManagedObject", "id"]
+- ["CSo22NSManagedObjectContext", "deinit"]
+- !private ["PSo16NSMutableCopying", "init"]
+- !private ["CSo8NSObject", "absoluteString"]
+- !private ["CSo8NSObject", "async"]
+- ["CSo8NSObject", "container"]
+- ["CSo8NSObject", "coreDataStack"]
+- !private ["CSo8NSObject", "dataTask"]
+- ["CSo8NSObject", "delegate"]
+- !private ["CSo8NSObject", "enter"]
+- !private ["CSo8NSObject", "global"]
+- !private ["CSo8NSObject", "host"]
+- !private ["CSo8NSObject", "id"]
+- !private ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "leave"]
+- ["CSo8NSObject", "newBackgroundContext"]
+- !private ["CSo8NSObject", "notify"]
+- !private ["CSo8NSObject", "path"]
+- !private ["CSo8NSObject", "queryItems"]
+- !private ["CSo8NSObject", "resume"]
+- !private ["CSo8NSObject", "scheme"]
+- ["CSo8NSObject", "shared"]
+- !private ["CSo8NSObject", "url"]
+- ["CSo8NSObject", "viewContext"]
+- !private ["PSo16NSObjectProtocol", "absoluteString"]
+- !private ["PSo16NSObjectProtocol", "async"]
+- ["PSo16NSObjectProtocol", "container"]
+- ["PSo16NSObjectProtocol", "coreDataStack"]
+- !private ["PSo16NSObjectProtocol", "dataTask"]
+- ["PSo16NSObjectProtocol", "delegate"]
+- !private ["PSo16NSObjectProtocol", "enter"]
+- !private ["PSo16NSObjectProtocol", "global"]
+- !private ["PSo16NSObjectProtocol", "host"]
+- !private ["PSo16NSObjectProtocol", "id"]
+- !private ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "leave"]
+- ["PSo16NSObjectProtocol", "newBackgroundContext"]
+- !private ["PSo16NSObjectProtocol", "notify"]
+- !private ["PSo16NSObjectProtocol", "path"]
+- !private ["PSo16NSObjectProtocol", "queryItems"]
+- !private ["PSo16NSObjectProtocol", "resume"]
+- !private ["PSo16NSObjectProtocol", "scheme"]
+- ["PSo16NSObjectProtocol", "shared"]
+- !private ["PSo16NSObjectProtocol", "url"]
+- ["PSo16NSObjectProtocol", "viewContext"]
+- ["CSo21NSPersistentContainer", "newBackgroundContext"]
+- ["CSo21NSPersistentContainer", "viewContext"]
+- !private ["PSo14NSSecureCoding", "absoluteString"]
+- !private ["PSo14NSSecureCoding", "init"]
+- !private ["CSo8NSString", "init"]
+- !private ["CSo5NSURL", "absoluteString"]
+- ["CSo5NSURL", "deinit"]
+- !private ["CSo15NSURLComponents", "deinit"]
+- !private ["CSo15NSURLComponents", "host"]
+- !private ["CSo15NSURLComponents", "init"]
+- !private ["CSo15NSURLComponents", "path"]
+- !private ["CSo15NSURLComponents", "queryItems"]
+- !private ["CSo15NSURLComponents", "scheme"]
+- !private ["CSo15NSURLComponents", "url"]
+- !private ["CSo14NSURLQueryItem", "deinit"]
+- !private ["CSo14NSURLQueryItem", "init"]
+- !private ["CSo9OS_object", "async"]
+- !private ["CSo9OS_object", "enter"]
+- !private ["CSo9OS_object", "global"]
+- !private ["CSo9OS_object", "init"]
+- !private ["CSo9OS_object", "leave"]
+- !private ["CSo9OS_object", "notify"]
+- ["Sq", "deinit"]
+- !private ["C11BreweryTour13ParserFactory", "sharedInstance"]
+- !private ["P11BreweryTour21ParserFactoryProtocol", "createParser"]
+- !private ["P11BreweryTour21ParserFactoryProtocol", "deinit"]
+- !private ["P11BreweryTour21ParserFactoryProtocol", "sharedInstance"]
+- !private ["P11BreweryTour14ParserProtocol", "deinit"]
+- !private ["P11BreweryTour14ParserProtocol", "parse"]
+- !private ["OV8Dispatch11DispatchQoS8QoSClass", "deinit"]
+- !private ["OV8Dispatch11DispatchQoS8QoSClass", "utility"]
+- !private ["Ps22RandomAccessCollection", "Iterator"]
+- !private ["Ps22RandomAccessCollection", "_Element"]
+- !private ["Ps22RandomAccessCollection", "append"]
+- !private ["Ps22RandomAccessCollection", "init"]
+- !private ["Ps21RandomAccessIndexable", "Iterator"]
+- !private ["Ps21RandomAccessIndexable", "_Element"]
+- !private ["Ps21RandomAccessIndexable", "append"]
+- !private ["Ps21RandomAccessIndexable", "init"]
+- !private ["Ps26RangeReplaceableCollection", "Iterator"]
+- !private ["Ps26RangeReplaceableCollection", "_Element"]
+- !private ["Ps26RangeReplaceableCollection", "append"]
+- !private ["Ps26RangeReplaceableCollection", "init"]
+- !private ["Ps25RangeReplaceableIndexable", "Iterator"]
+- !private ["Ps25RangeReplaceableIndexable", "_Element"]
+- !private ["Ps25RangeReplaceableIndexable", "append"]
+- !private ["Ps25RangeReplaceableIndexable", "init"]
+- !private ["C9Alamofire7Request", "responseJSON"]
+- !private ["P9Alamofire8Response", "result"]
+- !private ["O9Alamofire6Result", "deinit"]
+- !private ["O9Alamofire6Result", "isSuccess"]
+- !private ["O9Alamofire6Result", "value"]
+- !private ["Ps8Sequence", "Element"]
+- !private ["Ps8Sequence", "Index"]
+- !private ["Ps8Sequence", "Iterator"]
+- !private ["Ps8Sequence", "Key"]
+- !private ["Ps8Sequence", "SubSequence"]
+- !private ["Ps8Sequence", "Value"]
+- !private ["Ps8Sequence", "_Element"]
+- !private ["Ps8Sequence", "append"]
+- !private ["Ps8Sequence", "init"]
+- !private ["Ps8Sequence", "subscript"]
+- !private ["Ps13SignedInteger", "IntegerLiteralType"]
+- !private ["Ps13SignedInteger", "Stride"]
+- !private ["Ps13SignedInteger", "_DisabledRangeIndex"]
+- !private ["Ps13SignedInteger", "hashValue"]
+- !private ["Ps12SignedNumber", "IntegerLiteralType"]
+- !private ["Ps12SignedNumber", "Stride"]
+- !private ["Ps12SignedNumber", "_DisabledRangeIndex"]
+- !private ["Ps12SignedNumber", "hashValue"]
+- !private ["Vs5Slice", "Index"]
+- !private ["Vs5Slice", "Iterator"]
+- !private ["Vs5Slice", "SubSequence"]
+- !private ["Vs5Slice", "_Element"]
+- !private ["Ps10Strideable", "IntegerLiteralType"]
+- !private ["Ps10Strideable", "Stride"]
+- !private ["Ps10Strideable", "_DisabledRangeIndex"]
+- !private ["Ps10Strideable", "hashValue"]
+- ["SS", "deinit"]
+- !private ["SS", "init"]
+- !private ["Ps16TextOutputStream", "init"]
+- !private ["Ps20TextOutputStreamable", "init"]
+- !private ["PSo29UIAccessibilityIdentification", "init"]
+- ["CSo13UIApplication", "deinit"]
+- ["CSo13UIApplication", "delegate"]
+- ["CSo13UIApplication", "shared"]
+- ["PSo21UIApplicationDelegate", "coreDataStack"]
+- !private ["CSo7UIImage", "deinit"]
+- !private ["CSo7UIImage", "init"]
+- ["CSo11UIResponder", "coreDataStack"]
+- ["CSo11UIResponder", "delegate"]
+- ["CSo11UIResponder", "shared"]
+- ["PSo30UIResponderStandardEditActions", "coreDataStack"]
+- ["PSo30UIResponderStandardEditActions", "delegate"]
+- ["PSo30UIResponderStandardEditActions", "shared"]
+- !private ["Su", "deinit"]
+- !private ["Vs6UInt16", "deinit"]
+- !private ["Vs6UInt32", "deinit"]
+- !private ["Vs6UInt64", "deinit"]
+- !private ["Vs5UInt8", "deinit"]
+- ["V10Foundation3URL", "deinit"]
+- !private ["P9Alamofire14URLConvertible", "init"]
+- !private ["V10Foundation12URLQueryItem", "deinit"]
+- !private ["CSo10URLSession", "dataTask"]
+- ["CSo10URLSession", "deinit"]
+- !private ["CSo10URLSession", "shared"]
+- ["CSo18URLSessionDataTask", "deinit"]
+- !private ["CSo18URLSessionDataTask", "resume"]
+- !private ["CSo14URLSessionTask", "resume"]
+- !private ["Sc", "deinit"]
+- !private ["Ps14_ArrayProtocol", "Iterator"]
+- !private ["Ps14_ArrayProtocol", "_Element"]
+- !private ["Ps14_ArrayProtocol", "append"]
+- !private ["Ps14_ArrayProtocol", "init"]
+- !private ["Ps24_DestructorSafeContainer", "Iterator"]
+- !private ["Ps24_DestructorSafeContainer", "_Element"]
+- !private ["Ps24_DestructorSafeContainer", "append"]
+- !private ["Ps24_DestructorSafeContainer", "init"]
+- !private ["Ps35_ExpressibleByBuiltinBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "IntegerLiteralType"]
+- !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "Stride"]
+- !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "_DisabledRangeIndex"]
+- !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "hashValue"]
+- !private ["Ps34_ExpressibleByBuiltinStringLiteral", "init"]
+- !private ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "init"]
+- !private ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
+- !private ["Ps26_ExpressibleByImageLiteral", "init"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "absoluteString"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "host"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "init"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "path"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "queryItems"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "scheme"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "url"]
+- !private ["Ps9_Hashable", "BeersByBreweryID"]
+- !private ["Ps9_Hashable", "BeersFollowedByBreweries"]
+- !private ["Ps9_Hashable", "Breweries"]
+- !private ["Ps9_Hashable", "IntegerLiteralType"]
+- !private ["Ps9_Hashable", "Stride"]
+- !private ["Ps9_Hashable", "Styles"]
+- !private ["Ps9_Hashable", "_DisabledRangeIndex"]
+- !private ["Ps9_Hashable", "_getBuiltinLogicValue"]
+- ["Ps9_Hashable", "_toAnyHashable"]
+- !private ["Ps9_Hashable", "absoluteString"]
+- !private ["Ps9_Hashable", "async"]
+- ["Ps9_Hashable", "container"]
+- ["Ps9_Hashable", "coreDataStack"]
+- !private ["Ps9_Hashable", "dataTask"]
+- ["Ps9_Hashable", "delegate"]
+- !private ["Ps9_Hashable", "enter"]
+- !private ["Ps9_Hashable", "global"]
+- ["Ps9_Hashable", "hashValue"]
+- !private ["Ps9_Hashable", "host"]
+- !private ["Ps9_Hashable", "id"]
+- !private ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "leave"]
+- ["Ps9_Hashable", "newBackgroundContext"]
+- !private ["Ps9_Hashable", "notify"]
+- !private ["Ps9_Hashable", "path"]
+- !private ["Ps9_Hashable", "queryItems"]
+- !private ["Ps9_Hashable", "resume"]
+- !private ["Ps9_Hashable", "scheme"]
+- ["Ps9_Hashable", "shared"]
+- !private ["Ps9_Hashable", "url"]
+- !private ["Ps9_Hashable", "utility"]
+- ["Ps9_Hashable", "viewContext"]
+- ["Ps9_Hashable", ""]
+- !private ["Ps14_Incrementable", "IntegerLiteralType"]
+- !private ["Ps14_Incrementable", "Stride"]
+- !private ["Ps14_Incrementable", "_DisabledRangeIndex"]
+- !private ["Ps14_Incrementable", "hashValue"]
+- !private ["Ps8_Integer", "IntegerLiteralType"]
+- !private ["Ps8_Integer", "Stride"]
+- !private ["Ps8_Integer", "_DisabledRangeIndex"]
+- !private ["Ps8_Integer", "hashValue"]
+- !private ["Ps18_IntegerArithmetic", "IntegerLiteralType"]
+- !private ["Ps18_IntegerArithmetic", "Stride"]
+- !private ["Ps18_IntegerArithmetic", "_DisabledRangeIndex"]
+- !private ["Ps18_IntegerArithmetic", "hashValue"]
+- !private ["Ps21_ObjectiveCBridgeable", "Index"]
+- !private ["Ps21_ObjectiveCBridgeable", "IntegerLiteralType"]
+- !private ["Ps21_ObjectiveCBridgeable", "Iterator"]
+- !private ["Ps21_ObjectiveCBridgeable", "Key"]
+- !private ["Ps21_ObjectiveCBridgeable", "Stride"]
+- !private ["Ps21_ObjectiveCBridgeable", "SubSequence"]
+- !private ["Ps21_ObjectiveCBridgeable", "Value"]
+- !private ["Ps21_ObjectiveCBridgeable", "_DisabledRangeIndex"]
+- !private ["Ps21_ObjectiveCBridgeable", "_Element"]
+- !private ["Ps21_ObjectiveCBridgeable", "_getBuiltinLogicValue"]
+- !private ["Ps21_ObjectiveCBridgeable", "append"]
+- !private ["Ps21_ObjectiveCBridgeable", "hashValue"]
+- !private ["Ps21_ObjectiveCBridgeable", "init"]
+- !private ["Ps21_ObjectiveCBridgeable", "subscript"]
+- !private ["Vs26_OptionalNilComparisonType", "deinit"]
+- !private ["Ps14_SignedInteger", "IntegerLiteralType"]
+- !private ["Ps14_SignedInteger", "Stride"]
+- !private ["Ps14_SignedInteger", "_DisabledRangeIndex"]
+- !private ["Ps14_SignedInteger", "hashValue"]
+- !private ["Ps11_Strideable", "IntegerLiteralType"]
+- !private ["Ps11_Strideable", "Stride"]
+- !private ["Ps11_Strideable", "_DisabledRangeIndex"]
+- !private ["Ps11_Strideable", "hashValue"]
+depends-nominal:
+- "OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes"
+- "Ps9AnyObject"
+- "C11BreweryTour11AppDelegate"
+- !private "Sa"
+- !private "Ps23BidirectionalCollection"
+- !private "Ps22BidirectionalIndexable"
+- !private "Ps17BitwiseOperations"
+- "Sb"
+- "C11BreweryTour7Brewery"
+- !private "VVC11BreweryTour15BreweryDBClient9Constants9BreweryDB"
+- "C11BreweryTour15BreweryDBClient"
+- "P11BreweryTour23BreweryDBClientProtocol"
+- !private "VVC11BreweryTour15BreweryDBClient9Constants20BreweryParameterKeys"
+- !private "VVC11BreweryTour15BreweryDBClient9Constants22BreweryParameterValues"
+- "Ps7CVarArg"
+- !private "Vs9Character"
+- !private "Vs11ClosedRange"
+- !private "Vs19ClosedRangeIterator"
+- !private "Ps10Collection"
+- !private "Ps10Comparable"
+- !private "VC11BreweryTour15BreweryDBClient9Constants"
+- "C11BreweryTour13CoreDataStack"
+- !private "Vs20CountableClosedRange"
+- "Ps28CustomDebugStringConvertible"
+- !private "Ps29CustomPlaygroundQuickLookable"
+- !private "Ps17CustomReflectable"
+- "Ps23CustomStringConvertible"
+- !private "V10Foundation4Data"
+- "C9Alamofire11DataRequest"
+- !private "V9Alamofire12DataResponse"
+- "Vs10Dictionary"
+- !private "Vs18DictionaryIterator"
+- !private "CSo13DispatchGroup"
+- !private "CSo14DispatchObject"
+- !private "CSo13DispatchQueue"
+- !private "Sd"
+- "Ps9Equatable"
+- !private "Ps5Error"
+- !private "Ps25ExpressibleByArrayLiteral"
+- !private "Ps27ExpressibleByBooleanLiteral"
+- !private "Ps30ExpressibleByDictionaryLiteral"
+- !private "Ps43ExpressibleByExtendedGraphemeClusterLiteral"
+- !private "Ps27ExpressibleByIntegerLiteral"
+- !private "Ps32ExpressibleByStringInterpolation"
+- !private "Ps26ExpressibleByStringLiteral"
+- !private "Ps33ExpressibleByUnicodeScalarLiteral"
+- !private "Sf"
+- "Ps8Hashable"
+- !private "O11BreweryTour17ImageDownloadType"
+- "P11BreweryTour20ImageLinkingProcotol"
+- !private "Ps9Indexable"
+- !private "Ps13IndexableBase"
+- !private "Vs16IndexingIterator"
+- "Si"
+- !private "Vs5Int16"
+- !private "Vs5Int32"
+- !private "Vs5Int64"
+- !private "Vs4Int8"
+- !private "Ps7Integer"
+- !private "Ps17IntegerArithmetic"
+- !private "Ps16IteratorProtocol"
+- !private "Ps25LosslessStringConvertible"
+- "C11BreweryTour24ManagedObjectImageLinker"
+- !private "VVVC11BreweryTour15BreweryDBClient9Constants9BreweryDB7Methods"
+- !private "Ps10MirrorPath"
+- !private "Ps17MutableCollection"
+- !private "Ps16MutableIndexable"
+- !private "PSo8NSCoding"
+- !private "PSo9NSCopying"
+- !private "CSo6NSData"
+- !private "CSo12NSDictionary"
+- !private "PSo20NSFetchRequestResult"
+- !private "CSo15NSManagedObject"
+- "CSo22NSManagedObjectContext"
+- !private "PSo16NSMutableCopying"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- "CSo21NSPersistentContainer"
+- !private "PSo14NSSecureCoding"
+- !private "CSo8NSString"
+- "CSo5NSURL"
+- !private "CSo15NSURLComponents"
+- !private "CSo14NSURLQueryItem"
+- !private "CSo9OS_object"
+- "Sq"
+- !private "C11BreweryTour13ParserFactory"
+- !private "P11BreweryTour21ParserFactoryProtocol"
+- !private "P11BreweryTour14ParserProtocol"
+- !private "OV8Dispatch11DispatchQoS8QoSClass"
+- !private "Ps22RandomAccessCollection"
+- !private "Ps21RandomAccessIndexable"
+- !private "Ps26RangeReplaceableCollection"
+- !private "Ps25RangeReplaceableIndexable"
+- !private "C9Alamofire7Request"
+- !private "P9Alamofire8Response"
+- !private "O9Alamofire6Result"
+- !private "Ps8Sequence"
+- !private "Ps13SignedInteger"
+- !private "Ps12SignedNumber"
+- !private "Vs5Slice"
+- !private "Ps10Strideable"
+- "SS"
+- !private "Ps16TextOutputStream"
+- !private "Ps20TextOutputStreamable"
+- !private "PSo29UIAccessibilityIdentification"
+- "CSo13UIApplication"
+- "PSo21UIApplicationDelegate"
+- !private "CSo7UIImage"
+- "CSo11UIResponder"
+- "PSo30UIResponderStandardEditActions"
+- !private "Su"
+- !private "Vs6UInt16"
+- !private "Vs6UInt32"
+- !private "Vs6UInt64"
+- !private "Vs5UInt8"
+- "V10Foundation3URL"
+- !private "P9Alamofire14URLConvertible"
+- !private "V10Foundation12URLQueryItem"
+- "CSo10URLSession"
+- "CSo18URLSessionDataTask"
+- !private "CSo14URLSessionTask"
+- !private "Sc"
+- !private "Ps14_ArrayProtocol"
+- !private "Ps24_DestructorSafeContainer"
+- !private "Ps35_ExpressibleByBuiltinBooleanLiteral"
+- !private "Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral"
+- !private "Ps35_ExpressibleByBuiltinIntegerLiteral"
+- !private "Ps34_ExpressibleByBuiltinStringLiteral"
+- !private "Ps39_ExpressibleByBuiltinUTF16StringLiteral"
+- !private "Ps41_ExpressibleByBuiltinUnicodeScalarLiteral"
+- !private "Ps26_ExpressibleByImageLiteral"
+- !private "Ps35_HasCustomAnyHashableRepresentation"
+- "Ps9_Hashable"
+- !private "Ps14_Incrementable"
+- !private "Ps8_Integer"
+- !private "Ps18_IntegerArithmetic"
+- !private "Ps21_ObjectiveCBridgeable"
+- !private "Vs26_OptionalNilComparisonType"
+- !private "Ps14_SignedInteger"
+- !private "Ps11_Strideable"
+depends-dynamic-lookup:
+- !private "init"
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/SwiftOnoneSupport.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/MapKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreLocation.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/Alamofire.swiftmodule/x86_64.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/module.modulemap"
+interface-hash: "a29ad2415339e360a3f78f09d8cf235b"

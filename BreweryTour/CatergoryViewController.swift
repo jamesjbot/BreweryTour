@@ -28,6 +28,33 @@
 
  The user can also search through available styles and available breweries
  by name, just by entering the name in the searchbar.
+ 
+ Internals:
+ This view is back by 3 view models
+ When you select an item it passes this request to the view model to process,
+ with a completion handler back to this view.
+ The view model will intern notify the mediator what the selected item is.
+ 
+ Take for example a style choice.
+ Will call the TableViewDelegate didSelectRow (in the extension)
+ Then a completion handler will be created and passed to the view model with
+ the selected indexpath.
+ The style view model will find the style then send it to the mediator with a
+ The completion handler from the CategoryView.
+ Then the mediator will pull in the selection and call the BreweryDBClient with the 
+ selection and the completion handler.
+ After the breweryDBClient submits the internet requests it will prompt the
+ completion handler to stop animating. 
+ The view model will patiently wait or new breweries to be stored in the style.
+ The view model will use the NSFetchedResults controller delegate to pick up 
+ These new breweries and display them.
+ 
+ A map of the call looks like this.
+ CategoryViewController -> ViewModel -> Mediator -> BreweryDB -> 
+ CategoryViewController via completion to stop animating.
+ Also the view model will associate itself with the style. So now its fetched
+ results delegate is pulling in new breweries that are applied to the style.
+ 
  */
 
 
@@ -283,7 +310,7 @@ NSFetchedResultsControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        newSearchBar.searchFieldBackgroundPositionAdjustment = UIOffset(horizontal: 0.0, vertical: -6.0)
         // Set the initial viewModel
         activeTableList = styleList
 
@@ -304,8 +331,11 @@ NSFetchedResultsControllerDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        activeTableList.filterContentForSearchText(searchText: newSearchBar.text!, completion: nil)
-
+        activeTableList.filterContentForSearchText(searchText: newSearchBar.text!){
+            (success) -> Void in
+            self.genericTable.reloadData()
+        }
+        
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
 

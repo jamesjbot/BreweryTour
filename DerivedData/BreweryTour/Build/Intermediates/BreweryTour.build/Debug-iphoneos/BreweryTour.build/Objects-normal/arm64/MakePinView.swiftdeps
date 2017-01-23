@@ -1,0 +1,210 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "MakePinView"
+provides-nominal:
+- "C11BreweryTour11MakePinView"
+provides-member:
+- ["C11BreweryTour11MakePinView", ""]
+provides-dynamic-lookup:
+depends-top-level:
+- "MKAnnotationView"
+- !private "MKPinAnnotationView"
+- "MKAnnotation"
+- !private "Bool"
+- "MKUserLocation"
+- !private "UIColor"
+- "AssignmentPrecedence"
+- "CastingPrecedence"
+- !private "||"
+- !private "MyAnnotationView"
+- !private "==="
+- "String"
+- !private "MyPinAnnotationView"
+- "Brewery"
+- "MakePinView"
+depends-member:
+- !private ["Ps9AnyObject", "MakePinView"]
+- !private ["Ps9AnyObject", "MyAnnotationView"]
+- !private ["Ps9AnyObject", "MyPinAnnotationView"]
+- !private ["Ps9AnyObject", "UIColor"]
+- !private ["Ps9AnyObject", "black"]
+- !private ["Ps9AnyObject", "createMKAnnnotationView"]
+- !private ["Ps9AnyObject", "createPinAnnotationView"]
+- !private ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "magenta"]
+- !private ["Ps9AnyObject", "pinTintColor"]
+- ["Ps9AnyObject", ""]
+- !private ["Sb", "_getBuiltinLogicValue"]
+- ["Sb", "deinit"]
+- !private ["PSo15CALayerDelegate", "init"]
+- !private ["PSo15CALayerDelegate", "pinTintColor"]
+- !private ["Ps7CVarArg", "black"]
+- !private ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "magenta"]
+- !private ["Ps7CVarArg", "pinTintColor"]
+- !private ["Ps28CustomDebugStringConvertible", "black"]
+- !private ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "magenta"]
+- !private ["Ps28CustomDebugStringConvertible", "pinTintColor"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "_getBuiltinLogicValue"]
+- !private ["Ps17CustomReflectable", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "black"]
+- !private ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "magenta"]
+- !private ["Ps23CustomStringConvertible", "pinTintColor"]
+- !private ["Ps9Equatable", "_getBuiltinLogicValue"]
+- !private ["Ps9Equatable", "black"]
+- !private ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "magenta"]
+- !private ["Ps9Equatable", "pinTintColor"]
+- !private ["Ps27ExpressibleByBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps8Hashable", "_getBuiltinLogicValue"]
+- !private ["Ps8Hashable", "black"]
+- !private ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "magenta"]
+- !private ["Ps8Hashable", "pinTintColor"]
+- !private ["Ps25LosslessStringConvertible", "_getBuiltinLogicValue"]
+- ["PSo12MKAnnotation", "deinit"]
+- ["CSo16MKAnnotationView", "deinit"]
+- !private ["CSo16MKAnnotationView", "pinTintColor"]
+- ["CSo19MKPinAnnotationView", "deinit"]
+- !private ["CSo19MKPinAnnotationView", "pinTintColor"]
+- ["CSo14MKUserLocation", "deinit"]
+- !private ["C11BreweryTour11MakePinView", "Bool"]
+- ["C11BreweryTour11MakePinView", "Brewery"]
+- ["C11BreweryTour11MakePinView", "MKAnnotation"]
+- ["C11BreweryTour11MakePinView", "MKAnnotationView"]
+- !private ["C11BreweryTour11MakePinView", "MKPinAnnotationView"]
+- ["C11BreweryTour11MakePinView", "MKUserLocation"]
+- ["C11BreweryTour11MakePinView", "MakePinView"]
+- !private ["C11BreweryTour11MakePinView", "MyAnnotationView"]
+- !private ["C11BreweryTour11MakePinView", "MyPinAnnotationView"]
+- ["C11BreweryTour11MakePinView", "String"]
+- !private ["C11BreweryTour11MakePinView", "UIColor"]
+- !private ["C11BreweryTour11MakePinView", "createMKAnnnotationView"]
+- !private ["C11BreweryTour11MakePinView", "createPinAnnotationView"]
+- ["C11BreweryTour11MakePinView", "deinit"]
+- !private ["C11BreweryTour11MakePinView", "init"]
+- ["C11BreweryTour11MakePinView", "makePinView"]
+- ["C11BreweryTour11MakePinView", "sharedInstance"]
+- !private ["C11BreweryTour16MyAnnotationView", "deinit"]
+- !private ["C11BreweryTour16MyAnnotationView", "init"]
+- !private ["C11BreweryTour19MyPinAnnotationView", "deinit"]
+- !private ["C11BreweryTour19MyPinAnnotationView", "init"]
+- !private ["C11BreweryTour19MyPinAnnotationView", "pinTintColor"]
+- !private ["PSo8NSCoding", "black"]
+- !private ["PSo8NSCoding", "init"]
+- !private ["PSo8NSCoding", "magenta"]
+- !private ["PSo8NSCoding", "pinTintColor"]
+- !private ["PSo9NSCopying", "black"]
+- !private ["PSo9NSCopying", "magenta"]
+- !private ["CSo8NSObject", "black"]
+- !private ["CSo8NSObject", "magenta"]
+- !private ["CSo8NSObject", "pinTintColor"]
+- !private ["PSo16NSObjectProtocol", "black"]
+- !private ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "magenta"]
+- !private ["PSo16NSObjectProtocol", "pinTintColor"]
+- !private ["PSo14NSSecureCoding", "black"]
+- !private ["PSo14NSSecureCoding", "magenta"]
+- ["Sq", "deinit"]
+- ["SS", "deinit"]
+- !private ["PSo29UIAccessibilityIdentification", "init"]
+- !private ["PSo29UIAccessibilityIdentification", "pinTintColor"]
+- !private ["PSo12UIAppearance", "init"]
+- !private ["PSo12UIAppearance", "pinTintColor"]
+- !private ["PSo21UIAppearanceContainer", "init"]
+- !private ["PSo21UIAppearanceContainer", "pinTintColor"]
+- !private ["CSo7UIColor", "black"]
+- ["CSo7UIColor", "deinit"]
+- !private ["CSo7UIColor", "magenta"]
+- !private ["PSo17UICoordinateSpace", "init"]
+- !private ["PSo17UICoordinateSpace", "pinTintColor"]
+- !private ["PSo13UIDynamicItem", "init"]
+- !private ["PSo13UIDynamicItem", "pinTintColor"]
+- !private ["PSo18UIFocusEnvironment", "init"]
+- !private ["PSo18UIFocusEnvironment", "pinTintColor"]
+- !private ["PSo11UIFocusItem", "init"]
+- !private ["PSo11UIFocusItem", "pinTintColor"]
+- !private ["CSo11UIResponder", "pinTintColor"]
+- !private ["PSo30UIResponderStandardEditActions", "init"]
+- !private ["PSo30UIResponderStandardEditActions", "pinTintColor"]
+- !private ["PSo18UITraitEnvironment", "init"]
+- !private ["PSo18UITraitEnvironment", "pinTintColor"]
+- !private ["CSo6UIView", "pinTintColor"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "init"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "pinTintColor"]
+- !private ["Ps35_ExpressibleByBuiltinBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps26_ExpressibleByColorLiteral", "black"]
+- !private ["Ps26_ExpressibleByColorLiteral", "magenta"]
+- !private ["Ps9_Hashable", "_getBuiltinLogicValue"]
+- !private ["Ps9_Hashable", "black"]
+- !private ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "magenta"]
+- !private ["Ps9_Hashable", "pinTintColor"]
+- !private ["Ps21_ObjectiveCBridgeable", "_getBuiltinLogicValue"]
+depends-nominal:
+- "Ps9AnyObject"
+- "Sb"
+- !private "PSo15CALayerDelegate"
+- !private "Ps7CVarArg"
+- !private "Ps28CustomDebugStringConvertible"
+- !private "Ps29CustomPlaygroundQuickLookable"
+- !private "Ps17CustomReflectable"
+- !private "Ps23CustomStringConvertible"
+- !private "Ps9Equatable"
+- !private "Ps27ExpressibleByBooleanLiteral"
+- !private "Ps8Hashable"
+- !private "Ps25LosslessStringConvertible"
+- "PSo12MKAnnotation"
+- "CSo16MKAnnotationView"
+- "CSo19MKPinAnnotationView"
+- "CSo14MKUserLocation"
+- "C11BreweryTour11MakePinView"
+- !private "C11BreweryTour16MyAnnotationView"
+- !private "C11BreweryTour19MyPinAnnotationView"
+- !private "PSo8NSCoding"
+- !private "PSo9NSCopying"
+- !private "CSo8NSObject"
+- !private "PSo16NSObjectProtocol"
+- !private "PSo14NSSecureCoding"
+- "Sq"
+- "SS"
+- !private "PSo29UIAccessibilityIdentification"
+- !private "PSo12UIAppearance"
+- !private "PSo21UIAppearanceContainer"
+- "CSo7UIColor"
+- !private "PSo17UICoordinateSpace"
+- !private "PSo13UIDynamicItem"
+- !private "PSo18UIFocusEnvironment"
+- !private "PSo11UIFocusItem"
+- !private "CSo11UIResponder"
+- !private "PSo30UIResponderStandardEditActions"
+- !private "PSo18UITraitEnvironment"
+- !private "CSo6UIView"
+- !private "Ps37_DefaultCustomPlaygroundQuickLookable"
+- !private "Ps35_ExpressibleByBuiltinBooleanLiteral"
+- !private "Ps26_ExpressibleByColorLiteral"
+- !private "Ps9_Hashable"
+- !private "Ps21_ObjectiveCBridgeable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/SwiftOnoneSupport.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/MapKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreLocation.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework/Modules/Alamofire.swiftmodule/arm64.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework/Modules/module.modulemap"
+interface-hash: "88e9d05c69b031a86e863977b634751b"

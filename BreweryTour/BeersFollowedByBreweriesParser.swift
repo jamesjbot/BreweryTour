@@ -40,6 +40,10 @@ class BeersFollowedByBreweriesParser: ParserProtocol {
                         continue createBeerLoop
                 }
 
+                guard locDic["isPrimary"] as? String == "Y"  else {
+                        continue breweryLoop
+                }
+
                 guard breweryDict["name"] != nil else { // Sometimes the breweries have no name, making it useless
                     continue breweryLoop
                 }

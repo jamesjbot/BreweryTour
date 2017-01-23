@@ -1,0 +1,466 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "MyTabBarController"
+provides-nominal:
+- "C11BreweryTour18MyTabBarController"
+provides-member:
+- ["C11BreweryTour18MyTabBarController", ""]
+provides-dynamic-lookup:
+- "viewDidLoad"
+- "viewWillAppear"
+- "tabBarController"
+depends-top-level:
+- "UIViewController"
+- !private "BooleanLiteralType"
+- "Bool"
+- "UITabBarController"
+- !private "StringLiteralType"
+- "CastingPrecedence"
+- !private "UIBarButtonItem"
+- "UITabBarControllerDelegate"
+- "AssignmentPrecedence"
+- !private "DismissableTutorial"
+- "MyTabBarController"
+depends-member:
+- !private ["Ps9AnyObject", "DismissableTutorial"]
+- !private ["Ps9AnyObject", "UIBarButtonItem"]
+- !private ["Ps9AnyObject", "delegate"]
+- !private ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "navigationItem"]
+- !private ["Ps9AnyObject", "selectedViewController"]
+- ["Ps9AnyObject", "setHelpButton"]
+- !private ["Ps9AnyObject", "setRightBarButton"]
+- ["Ps9AnyObject", "tabBarController"]
+- ["Ps9AnyObject", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["Ps9AnyObject", "tabBarControllerSupportedInterfaceOrientations"]
+- ["Ps9AnyObject", "viewDidLoad"]
+- ["Ps9AnyObject", "viewWillAppear"]
+- ["Ps9AnyObject", ""]
+- ["Sb", "deinit"]
+- !private ["Ps7CVarArg", "DismissableTutorial"]
+- !private ["Ps7CVarArg", "UIBarButtonItem"]
+- !private ["Ps7CVarArg", "delegate"]
+- !private ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "navigationItem"]
+- !private ["Ps7CVarArg", "selectedViewController"]
+- ["Ps7CVarArg", "setHelpButton"]
+- !private ["Ps7CVarArg", "setRightBarButton"]
+- ["Ps7CVarArg", "tabBarController"]
+- ["Ps7CVarArg", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["Ps7CVarArg", "tabBarControllerSupportedInterfaceOrientations"]
+- ["Ps7CVarArg", "viewDidLoad"]
+- ["Ps7CVarArg", "viewWillAppear"]
+- ["Ps7CVarArg", ""]
+- !private ["Ps10Comparable", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "DismissableTutorial"]
+- !private ["Ps28CustomDebugStringConvertible", "UIBarButtonItem"]
+- !private ["Ps28CustomDebugStringConvertible", "delegate"]
+- !private ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "navigationItem"]
+- !private ["Ps28CustomDebugStringConvertible", "selectedViewController"]
+- ["Ps28CustomDebugStringConvertible", "setHelpButton"]
+- !private ["Ps28CustomDebugStringConvertible", "setRightBarButton"]
+- ["Ps28CustomDebugStringConvertible", "tabBarController"]
+- ["Ps28CustomDebugStringConvertible", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["Ps28CustomDebugStringConvertible", "tabBarControllerSupportedInterfaceOrientations"]
+- ["Ps28CustomDebugStringConvertible", "viewDidLoad"]
+- ["Ps28CustomDebugStringConvertible", "viewWillAppear"]
+- ["Ps28CustomDebugStringConvertible", ""]
+- !private ["Ps29CustomPlaygroundQuickLookable", "init"]
+- !private ["Ps17CustomReflectable", "init"]
+- !private ["Ps23CustomStringConvertible", "DismissableTutorial"]
+- !private ["Ps23CustomStringConvertible", "UIBarButtonItem"]
+- !private ["Ps23CustomStringConvertible", "delegate"]
+- !private ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "navigationItem"]
+- !private ["Ps23CustomStringConvertible", "selectedViewController"]
+- ["Ps23CustomStringConvertible", "setHelpButton"]
+- !private ["Ps23CustomStringConvertible", "setRightBarButton"]
+- ["Ps23CustomStringConvertible", "tabBarController"]
+- ["Ps23CustomStringConvertible", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["Ps23CustomStringConvertible", "tabBarControllerSupportedInterfaceOrientations"]
+- ["Ps23CustomStringConvertible", "viewDidLoad"]
+- ["Ps23CustomStringConvertible", "viewWillAppear"]
+- ["Ps23CustomStringConvertible", ""]
+- ["P11BreweryTour19DismissableTutorial", "deinit"]
+- !private ["P11BreweryTour19DismissableTutorial", "enableTutorial"]
+- !private ["Ps9Equatable", "DismissableTutorial"]
+- !private ["Ps9Equatable", "UIBarButtonItem"]
+- !private ["Ps9Equatable", "delegate"]
+- !private ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "navigationItem"]
+- !private ["Ps9Equatable", "plain"]
+- !private ["Ps9Equatable", "selectedViewController"]
+- ["Ps9Equatable", "setHelpButton"]
+- !private ["Ps9Equatable", "setRightBarButton"]
+- ["Ps9Equatable", "tabBarController"]
+- ["Ps9Equatable", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["Ps9Equatable", "tabBarControllerSupportedInterfaceOrientations"]
+- ["Ps9Equatable", "viewDidLoad"]
+- ["Ps9Equatable", "viewWillAppear"]
+- ["Ps9Equatable", ""]
+- !private ["Ps43ExpressibleByExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps32ExpressibleByStringInterpolation", "init"]
+- !private ["Ps26ExpressibleByStringLiteral", "init"]
+- !private ["Ps33ExpressibleByUnicodeScalarLiteral", "init"]
+- !private ["Ps8Hashable", "DismissableTutorial"]
+- !private ["Ps8Hashable", "UIBarButtonItem"]
+- !private ["Ps8Hashable", "delegate"]
+- !private ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "navigationItem"]
+- !private ["Ps8Hashable", "plain"]
+- !private ["Ps8Hashable", "selectedViewController"]
+- ["Ps8Hashable", "setHelpButton"]
+- !private ["Ps8Hashable", "setRightBarButton"]
+- ["Ps8Hashable", "tabBarController"]
+- ["Ps8Hashable", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["Ps8Hashable", "tabBarControllerSupportedInterfaceOrientations"]
+- ["Ps8Hashable", "viewDidLoad"]
+- ["Ps8Hashable", "viewWillAppear"]
+- ["Ps8Hashable", ""]
+- !private ["Ps25LosslessStringConvertible", "init"]
+- !private ["Ps10MirrorPath", "init"]
+- ["C11BreweryTour18MyTabBarController", "Bool"]
+- !private ["C11BreweryTour18MyTabBarController", "DismissableTutorial"]
+- !private ["C11BreweryTour18MyTabBarController", "UIBarButtonItem"]
+- ["C11BreweryTour18MyTabBarController", "UITabBarController"]
+- ["C11BreweryTour18MyTabBarController", "UIViewController"]
+- ["C11BreweryTour18MyTabBarController", "deinit"]
+- !private ["C11BreweryTour18MyTabBarController", "delegate"]
+- ["C11BreweryTour18MyTabBarController", "init"]
+- !private ["C11BreweryTour18MyTabBarController", "navigationItem"]
+- !private ["C11BreweryTour18MyTabBarController", "selectedViewController"]
+- !private ["C11BreweryTour18MyTabBarController", "setHelpButton"]
+- ["C11BreweryTour18MyTabBarController", "tabBarController"]
+- ["C11BreweryTour18MyTabBarController", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["C11BreweryTour18MyTabBarController", "tabBarControllerSupportedInterfaceOrientations"]
+- ["C11BreweryTour18MyTabBarController", "viewDidLoad"]
+- ["C11BreweryTour18MyTabBarController", "viewWillAppear"]
+- ["CSo7NSCoder", "deinit"]
+- !private ["PSo8NSCoding", "DismissableTutorial"]
+- !private ["PSo8NSCoding", "UIBarButtonItem"]
+- !private ["PSo8NSCoding", "delegate"]
+- !private ["PSo8NSCoding", "init"]
+- !private ["PSo8NSCoding", "navigationItem"]
+- !private ["PSo8NSCoding", "selectedViewController"]
+- ["PSo8NSCoding", "setHelpButton"]
+- !private ["PSo8NSCoding", "setRightBarButton"]
+- ["PSo8NSCoding", "tabBarController"]
+- ["PSo8NSCoding", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo8NSCoding", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo8NSCoding", "viewDidLoad"]
+- ["PSo8NSCoding", "viewWillAppear"]
+- ["PSo8NSCoding", ""]
+- !private ["PSo9NSCopying", "init"]
+- !private ["PSo26NSExtensionRequestHandling", "DismissableTutorial"]
+- !private ["PSo26NSExtensionRequestHandling", "UIBarButtonItem"]
+- !private ["PSo26NSExtensionRequestHandling", "delegate"]
+- !private ["PSo26NSExtensionRequestHandling", "init"]
+- !private ["PSo26NSExtensionRequestHandling", "navigationItem"]
+- !private ["PSo26NSExtensionRequestHandling", "selectedViewController"]
+- ["PSo26NSExtensionRequestHandling", "setHelpButton"]
+- ["PSo26NSExtensionRequestHandling", "tabBarController"]
+- ["PSo26NSExtensionRequestHandling", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo26NSExtensionRequestHandling", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo26NSExtensionRequestHandling", "viewDidLoad"]
+- ["PSo26NSExtensionRequestHandling", "viewWillAppear"]
+- ["PSo26NSExtensionRequestHandling", ""]
+- !private ["PSo16NSMutableCopying", "init"]
+- ["CSo8NSObject", "Bool"]
+- !private ["CSo8NSObject", "DismissableTutorial"]
+- !private ["CSo8NSObject", "UIBarButtonItem"]
+- ["CSo8NSObject", "UITabBarController"]
+- ["CSo8NSObject", "UIViewController"]
+- !private ["CSo8NSObject", "delegate"]
+- ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "navigationItem"]
+- !private ["CSo8NSObject", "selectedViewController"]
+- ["CSo8NSObject", "setHelpButton"]
+- !private ["CSo8NSObject", "setRightBarButton"]
+- ["CSo8NSObject", "tabBarController"]
+- ["CSo8NSObject", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["CSo8NSObject", "tabBarControllerSupportedInterfaceOrientations"]
+- ["CSo8NSObject", "viewDidLoad"]
+- ["CSo8NSObject", "viewWillAppear"]
+- !private ["PSo16NSObjectProtocol", "DismissableTutorial"]
+- !private ["PSo16NSObjectProtocol", "UIBarButtonItem"]
+- !private ["PSo16NSObjectProtocol", "delegate"]
+- !private ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "navigationItem"]
+- !private ["PSo16NSObjectProtocol", "selectedViewController"]
+- ["PSo16NSObjectProtocol", "setHelpButton"]
+- !private ["PSo16NSObjectProtocol", "setRightBarButton"]
+- ["PSo16NSObjectProtocol", "tabBarController"]
+- ["PSo16NSObjectProtocol", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo16NSObjectProtocol", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo16NSObjectProtocol", "viewDidLoad"]
+- ["PSo16NSObjectProtocol", "viewWillAppear"]
+- ["PSo16NSObjectProtocol", ""]
+- !private ["PSo14NSSecureCoding", "init"]
+- !private ["CSo8NSString", "init"]
+- ["Sq", "deinit"]
+- !private ["Ps16RawRepresentable", "plain"]
+- !private ["V10ObjectiveC8Selector", "deinit"]
+- !private ["SS", "deinit"]
+- !private ["SS", "init"]
+- !private ["Ps16TextOutputStream", "init"]
+- !private ["Ps20TextOutputStreamable", "init"]
+- !private ["PSo29UIAccessibilityIdentification", "init"]
+- !private ["PSo12UIAppearance", "init"]
+- !private ["PSo21UIAppearanceContainer", "DismissableTutorial"]
+- !private ["PSo21UIAppearanceContainer", "UIBarButtonItem"]
+- !private ["PSo21UIAppearanceContainer", "delegate"]
+- !private ["PSo21UIAppearanceContainer", "init"]
+- !private ["PSo21UIAppearanceContainer", "navigationItem"]
+- !private ["PSo21UIAppearanceContainer", "selectedViewController"]
+- ["PSo21UIAppearanceContainer", "setHelpButton"]
+- ["PSo21UIAppearanceContainer", "tabBarController"]
+- ["PSo21UIAppearanceContainer", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo21UIAppearanceContainer", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo21UIAppearanceContainer", "viewDidLoad"]
+- ["PSo21UIAppearanceContainer", "viewWillAppear"]
+- ["PSo21UIAppearanceContainer", ""]
+- !private ["CSo15UIBarButtonItem", "deinit"]
+- !private ["CSo15UIBarButtonItem", "init"]
+- !private ["OSC20UIBarButtonItemStyle", "deinit"]
+- !private ["OSC20UIBarButtonItemStyle", "plain"]
+- !private ["CSo9UIBarItem", "init"]
+- !private ["PSo18UIContentContainer", "DismissableTutorial"]
+- !private ["PSo18UIContentContainer", "UIBarButtonItem"]
+- !private ["PSo18UIContentContainer", "delegate"]
+- !private ["PSo18UIContentContainer", "init"]
+- !private ["PSo18UIContentContainer", "navigationItem"]
+- !private ["PSo18UIContentContainer", "selectedViewController"]
+- ["PSo18UIContentContainer", "setHelpButton"]
+- ["PSo18UIContentContainer", "tabBarController"]
+- ["PSo18UIContentContainer", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo18UIContentContainer", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo18UIContentContainer", "viewDidLoad"]
+- ["PSo18UIContentContainer", "viewWillAppear"]
+- ["PSo18UIContentContainer", ""]
+- !private ["PSo18UIFocusEnvironment", "DismissableTutorial"]
+- !private ["PSo18UIFocusEnvironment", "UIBarButtonItem"]
+- !private ["PSo18UIFocusEnvironment", "delegate"]
+- !private ["PSo18UIFocusEnvironment", "init"]
+- !private ["PSo18UIFocusEnvironment", "navigationItem"]
+- !private ["PSo18UIFocusEnvironment", "selectedViewController"]
+- ["PSo18UIFocusEnvironment", "setHelpButton"]
+- ["PSo18UIFocusEnvironment", "tabBarController"]
+- ["PSo18UIFocusEnvironment", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo18UIFocusEnvironment", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo18UIFocusEnvironment", "viewDidLoad"]
+- ["PSo18UIFocusEnvironment", "viewWillAppear"]
+- ["PSo18UIFocusEnvironment", ""]
+- !private ["CSo16UINavigationItem", "deinit"]
+- !private ["CSo16UINavigationItem", "setRightBarButton"]
+- ["CSo11UIResponder", "Bool"]
+- !private ["CSo11UIResponder", "DismissableTutorial"]
+- !private ["CSo11UIResponder", "UIBarButtonItem"]
+- ["CSo11UIResponder", "UITabBarController"]
+- ["CSo11UIResponder", "UIViewController"]
+- !private ["CSo11UIResponder", "delegate"]
+- ["CSo11UIResponder", "init"]
+- !private ["CSo11UIResponder", "navigationItem"]
+- !private ["CSo11UIResponder", "selectedViewController"]
+- ["CSo11UIResponder", "setHelpButton"]
+- ["CSo11UIResponder", "tabBarController"]
+- ["CSo11UIResponder", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["CSo11UIResponder", "tabBarControllerSupportedInterfaceOrientations"]
+- ["CSo11UIResponder", "viewDidLoad"]
+- ["CSo11UIResponder", "viewWillAppear"]
+- !private ["PSo30UIResponderStandardEditActions", "DismissableTutorial"]
+- !private ["PSo30UIResponderStandardEditActions", "UIBarButtonItem"]
+- !private ["PSo30UIResponderStandardEditActions", "delegate"]
+- !private ["PSo30UIResponderStandardEditActions", "init"]
+- !private ["PSo30UIResponderStandardEditActions", "navigationItem"]
+- !private ["PSo30UIResponderStandardEditActions", "selectedViewController"]
+- ["PSo30UIResponderStandardEditActions", "setHelpButton"]
+- ["PSo30UIResponderStandardEditActions", "tabBarController"]
+- ["PSo30UIResponderStandardEditActions", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo30UIResponderStandardEditActions", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo30UIResponderStandardEditActions", "viewDidLoad"]
+- ["PSo30UIResponderStandardEditActions", "viewWillAppear"]
+- ["PSo30UIResponderStandardEditActions", ""]
+- !private ["PSo16UIStateRestoring", "DismissableTutorial"]
+- !private ["PSo16UIStateRestoring", "UIBarButtonItem"]
+- !private ["PSo16UIStateRestoring", "delegate"]
+- !private ["PSo16UIStateRestoring", "init"]
+- !private ["PSo16UIStateRestoring", "navigationItem"]
+- !private ["PSo16UIStateRestoring", "selectedViewController"]
+- ["PSo16UIStateRestoring", "setHelpButton"]
+- ["PSo16UIStateRestoring", "tabBarController"]
+- ["PSo16UIStateRestoring", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo16UIStateRestoring", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo16UIStateRestoring", "viewDidLoad"]
+- ["PSo16UIStateRestoring", "viewWillAppear"]
+- ["PSo16UIStateRestoring", ""]
+- ["CSo18UITabBarController", "Bool"]
+- !private ["CSo18UITabBarController", "DismissableTutorial"]
+- !private ["CSo18UITabBarController", "UIBarButtonItem"]
+- ["CSo18UITabBarController", "UITabBarController"]
+- ["CSo18UITabBarController", "UIViewController"]
+- ["CSo18UITabBarController", "deinit"]
+- !private ["CSo18UITabBarController", "delegate"]
+- ["CSo18UITabBarController", "init"]
+- !private ["CSo18UITabBarController", "navigationItem"]
+- !private ["CSo18UITabBarController", "selectedViewController"]
+- ["CSo18UITabBarController", "setHelpButton"]
+- ["CSo18UITabBarController", "tabBarController"]
+- ["CSo18UITabBarController", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["CSo18UITabBarController", "tabBarControllerSupportedInterfaceOrientations"]
+- ["CSo18UITabBarController", "viewDidLoad"]
+- ["CSo18UITabBarController", "viewWillAppear"]
+- ["CSo18UITabBarController", ""]
+- !private ["PSo26UITabBarControllerDelegate", "DismissableTutorial"]
+- !private ["PSo26UITabBarControllerDelegate", "UIBarButtonItem"]
+- !private ["PSo26UITabBarControllerDelegate", "delegate"]
+- !private ["PSo26UITabBarControllerDelegate", "navigationItem"]
+- !private ["PSo26UITabBarControllerDelegate", "selectedViewController"]
+- !private ["PSo26UITabBarControllerDelegate", "setHelpButton"]
+- ["PSo26UITabBarControllerDelegate", "tabBarController"]
+- ["PSo26UITabBarControllerDelegate", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo26UITabBarControllerDelegate", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo26UITabBarControllerDelegate", ""]
+- !private ["PSo16UITabBarDelegate", "DismissableTutorial"]
+- !private ["PSo16UITabBarDelegate", "UIBarButtonItem"]
+- !private ["PSo16UITabBarDelegate", "delegate"]
+- !private ["PSo16UITabBarDelegate", "init"]
+- !private ["PSo16UITabBarDelegate", "navigationItem"]
+- !private ["PSo16UITabBarDelegate", "selectedViewController"]
+- ["PSo16UITabBarDelegate", "setHelpButton"]
+- ["PSo16UITabBarDelegate", "tabBarController"]
+- ["PSo16UITabBarDelegate", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo16UITabBarDelegate", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo16UITabBarDelegate", "viewDidLoad"]
+- ["PSo16UITabBarDelegate", "viewWillAppear"]
+- ["PSo16UITabBarDelegate", ""]
+- !private ["PSo18UITraitEnvironment", "DismissableTutorial"]
+- !private ["PSo18UITraitEnvironment", "UIBarButtonItem"]
+- !private ["PSo18UITraitEnvironment", "delegate"]
+- !private ["PSo18UITraitEnvironment", "init"]
+- !private ["PSo18UITraitEnvironment", "navigationItem"]
+- !private ["PSo18UITraitEnvironment", "selectedViewController"]
+- ["PSo18UITraitEnvironment", "setHelpButton"]
+- ["PSo18UITraitEnvironment", "tabBarController"]
+- ["PSo18UITraitEnvironment", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["PSo18UITraitEnvironment", "tabBarControllerSupportedInterfaceOrientations"]
+- ["PSo18UITraitEnvironment", "viewDidLoad"]
+- ["PSo18UITraitEnvironment", "viewWillAppear"]
+- ["PSo18UITraitEnvironment", ""]
+- ["CSo16UIViewController", "Bool"]
+- !private ["CSo16UIViewController", "DismissableTutorial"]
+- !private ["CSo16UIViewController", "UIBarButtonItem"]
+- ["CSo16UIViewController", "UITabBarController"]
+- ["CSo16UIViewController", "UIViewController"]
+- ["CSo16UIViewController", "deinit"]
+- !private ["CSo16UIViewController", "delegate"]
+- ["CSo16UIViewController", "init"]
+- !private ["CSo16UIViewController", "navigationItem"]
+- !private ["CSo16UIViewController", "selectedViewController"]
+- ["CSo16UIViewController", "setHelpButton"]
+- ["CSo16UIViewController", "tabBarController"]
+- ["CSo16UIViewController", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["CSo16UIViewController", "tabBarControllerSupportedInterfaceOrientations"]
+- ["CSo16UIViewController", "viewDidLoad"]
+- ["CSo16UIViewController", "viewWillAppear"]
+- !private ["P9Alamofire14URLConvertible", "init"]
+- !private ["Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps34_ExpressibleByBuiltinStringLiteral", "init"]
+- !private ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "init"]
+- !private ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "init"]
+- !private ["Ps9_Hashable", "DismissableTutorial"]
+- !private ["Ps9_Hashable", "UIBarButtonItem"]
+- !private ["Ps9_Hashable", "delegate"]
+- !private ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "navigationItem"]
+- !private ["Ps9_Hashable", "plain"]
+- !private ["Ps9_Hashable", "selectedViewController"]
+- ["Ps9_Hashable", "setHelpButton"]
+- !private ["Ps9_Hashable", "setRightBarButton"]
+- ["Ps9_Hashable", "tabBarController"]
+- ["Ps9_Hashable", "tabBarControllerPreferredInterfaceOrientationForPresentation"]
+- ["Ps9_Hashable", "tabBarControllerSupportedInterfaceOrientations"]
+- ["Ps9_Hashable", "viewDidLoad"]
+- ["Ps9_Hashable", "viewWillAppear"]
+- ["Ps9_Hashable", ""]
+- !private ["Ps21_ObjectiveCBridgeable", "init"]
+depends-nominal:
+- "Ps9AnyObject"
+- "Sb"
+- "Ps7CVarArg"
+- !private "Ps10Comparable"
+- "Ps28CustomDebugStringConvertible"
+- !private "Ps29CustomPlaygroundQuickLookable"
+- !private "Ps17CustomReflectable"
+- "Ps23CustomStringConvertible"
+- "P11BreweryTour19DismissableTutorial"
+- "Ps9Equatable"
+- !private "Ps43ExpressibleByExtendedGraphemeClusterLiteral"
+- !private "Ps32ExpressibleByStringInterpolation"
+- !private "Ps26ExpressibleByStringLiteral"
+- !private "Ps33ExpressibleByUnicodeScalarLiteral"
+- "Ps8Hashable"
+- !private "Ps25LosslessStringConvertible"
+- !private "Ps10MirrorPath"
+- "C11BreweryTour18MyTabBarController"
+- "CSo7NSCoder"
+- "PSo8NSCoding"
+- !private "PSo9NSCopying"
+- "PSo26NSExtensionRequestHandling"
+- !private "PSo16NSMutableCopying"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- !private "PSo14NSSecureCoding"
+- !private "CSo8NSString"
+- "Sq"
+- !private "Ps16RawRepresentable"
+- !private "V10ObjectiveC8Selector"
+- !private "SS"
+- !private "Ps16TextOutputStream"
+- !private "Ps20TextOutputStreamable"
+- !private "PSo29UIAccessibilityIdentification"
+- !private "PSo12UIAppearance"
+- "PSo21UIAppearanceContainer"
+- !private "CSo15UIBarButtonItem"
+- !private "OSC20UIBarButtonItemStyle"
+- !private "CSo9UIBarItem"
+- "PSo18UIContentContainer"
+- "PSo18UIFocusEnvironment"
+- !private "CSo16UINavigationItem"
+- "CSo11UIResponder"
+- "PSo30UIResponderStandardEditActions"
+- "PSo16UIStateRestoring"
+- "CSo18UITabBarController"
+- "PSo26UITabBarControllerDelegate"
+- "PSo16UITabBarDelegate"
+- "PSo18UITraitEnvironment"
+- "CSo16UIViewController"
+- !private "P9Alamofire14URLConvertible"
+- !private "Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral"
+- !private "Ps34_ExpressibleByBuiltinStringLiteral"
+- !private "Ps39_ExpressibleByBuiltinUTF16StringLiteral"
+- !private "Ps41_ExpressibleByBuiltinUnicodeScalarLiteral"
+- !private "Ps35_HasCustomAnyHashableRepresentation"
+- "Ps9_Hashable"
+- !private "Ps21_ObjectiveCBridgeable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/SwiftOnoneSupport.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/MapKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreLocation.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/Alamofire.swiftmodule/x86_64.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/module.modulemap"
+interface-hash: "fa341585a720d4ca90883a229143faea"

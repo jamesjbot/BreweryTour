@@ -1,0 +1,559 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "MapStrategy"
+provides-nominal:
+- "C11BreweryTour11MapStrategy"
+provides-member:
+- ["C11BreweryTour11MapStrategy", ""]
+provides-dynamic-lookup:
+- "endSearch"
+- "sendAnnotationsToMap"
+- "convertLocationToAnnotation"
+- "breweryLocations"
+- "parentMapViewController"
+- "sortLocations"
+- "targetLocation"
+depends-top-level:
+- "AssignmentPrecedence"
+- "MapStrategy"
+- !private "MKPointAnnotation"
+- !private "CastingPrecedence"
+- !private "<"
+- "NSObject"
+- "MapViewController"
+- !private "!="
+- "Brewery"
+- "CLLocation"
+- !private "CLLocationDegrees"
+- "MKAnnotation"
+- !private "&&"
+- !private "Bool"
+- !private "Double"
+- !private "CLLocationCoordinate2D"
+depends-member:
+- !private ["Ps16AbsoluteValuable", "init"]
+- !private ["Ps9AnyObject", "CLLocation"]
+- !private ["Ps9AnyObject", "CLLocationCoordinate2D"]
+- !private ["Ps9AnyObject", "CLLocationDegrees"]
+- !private ["Ps9AnyObject", "Double"]
+- !private ["Ps9AnyObject", "MKAnnotation"]
+- !private ["Ps9AnyObject", "MKPointAnnotation"]
+- ["Ps9AnyObject", "breweryLocations"]
+- ["Ps9AnyObject", "convertLocationToAnnotation"]
+- !private ["Ps9AnyObject", "coordinate"]
+- !private ["Ps9AnyObject", "distance"]
+- ["Ps9AnyObject", "endSearch"]
+- ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "latitude"]
+- !private ["Ps9AnyObject", "longitude"]
+- !private ["Ps9AnyObject", "name"]
+- ["Ps9AnyObject", "parentMapViewController"]
+- ["Ps9AnyObject", "sendAnnotationsToMap"]
+- ["Ps9AnyObject", "sortLocations"]
+- !private ["Ps9AnyObject", "subtitle"]
+- ["Ps9AnyObject", "targetLocation"]
+- !private ["Ps9AnyObject", "title"]
+- !private ["Ps9AnyObject", "updateMap"]
+- !private ["Ps9AnyObject", "url"]
+- ["Ps9AnyObject", ""]
+- !private ["Sa", "Iterator"]
+- !private ["Sa", "_Element"]
+- !private ["Sa", "append"]
+- ["Sa", "deinit"]
+- !private ["Sa", "init"]
+- !private ["Sa", "sorted"]
+- !private ["Ps23BidirectionalCollection", "Iterator"]
+- !private ["Ps23BidirectionalCollection", "_Element"]
+- !private ["Ps23BidirectionalCollection", "append"]
+- !private ["Ps23BidirectionalCollection", "init"]
+- !private ["Ps23BidirectionalCollection", "sorted"]
+- !private ["Ps22BidirectionalIndexable", "Iterator"]
+- !private ["Ps22BidirectionalIndexable", "_Element"]
+- !private ["Ps22BidirectionalIndexable", "append"]
+- !private ["Ps22BidirectionalIndexable", "init"]
+- !private ["Ps22BidirectionalIndexable", "sorted"]
+- !private ["Ps19BinaryFloatingPoint", "init"]
+- !private ["Sb", "_getBuiltinLogicValue"]
+- ["Sb", "deinit"]
+- ["C11BreweryTour7Brewery", "deinit"]
+- !private ["C11BreweryTour7Brewery", "latitude"]
+- !private ["C11BreweryTour7Brewery", "longitude"]
+- !private ["C11BreweryTour7Brewery", "name"]
+- !private ["C11BreweryTour7Brewery", "url"]
+- !private ["P11BreweryTour12BusyObserver", "updateMap"]
+- !private ["CSo10CLLocation", "deinit"]
+- !private ["CSo10CLLocation", "distance"]
+- !private ["CSo10CLLocation", "init"]
+- ["VSC22CLLocationCoordinate2D", "deinit"]
+- !private ["VSC22CLLocationCoordinate2D", "init"]
+- !private ["PSo25CLLocationManagerDelegate", "updateMap"]
+- !private ["Ps7CVarArg", "CLLocation"]
+- !private ["Ps7CVarArg", "CLLocationCoordinate2D"]
+- !private ["Ps7CVarArg", "CLLocationDegrees"]
+- !private ["Ps7CVarArg", "Double"]
+- !private ["Ps7CVarArg", "Iterator"]
+- !private ["Ps7CVarArg", "MKAnnotation"]
+- !private ["Ps7CVarArg", "MKPointAnnotation"]
+- !private ["Ps7CVarArg", "_Element"]
+- !private ["Ps7CVarArg", "append"]
+- ["Ps7CVarArg", "breweryLocations"]
+- ["Ps7CVarArg", "convertLocationToAnnotation"]
+- !private ["Ps7CVarArg", "coordinate"]
+- !private ["Ps7CVarArg", "distance"]
+- ["Ps7CVarArg", "endSearch"]
+- ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "latitude"]
+- !private ["Ps7CVarArg", "longitude"]
+- !private ["Ps7CVarArg", "name"]
+- ["Ps7CVarArg", "parentMapViewController"]
+- ["Ps7CVarArg", "sendAnnotationsToMap"]
+- ["Ps7CVarArg", "sortLocations"]
+- !private ["Ps7CVarArg", "sorted"]
+- !private ["Ps7CVarArg", "subtitle"]
+- ["Ps7CVarArg", "targetLocation"]
+- !private ["Ps7CVarArg", "title"]
+- !private ["Ps7CVarArg", "updateMap"]
+- !private ["Ps7CVarArg", "url"]
+- ["Ps7CVarArg", ""]
+- !private ["Ps10Collection", "Iterator"]
+- !private ["Ps10Collection", "_Element"]
+- !private ["Ps10Collection", "append"]
+- !private ["Ps10Collection", "init"]
+- !private ["Ps10Collection", "sorted"]
+- !private ["Ps10Comparable", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "CLLocation"]
+- !private ["Ps28CustomDebugStringConvertible", "CLLocationCoordinate2D"]
+- !private ["Ps28CustomDebugStringConvertible", "CLLocationDegrees"]
+- !private ["Ps28CustomDebugStringConvertible", "Double"]
+- !private ["Ps28CustomDebugStringConvertible", "Iterator"]
+- !private ["Ps28CustomDebugStringConvertible", "MKAnnotation"]
+- !private ["Ps28CustomDebugStringConvertible", "MKPointAnnotation"]
+- !private ["Ps28CustomDebugStringConvertible", "_Element"]
+- !private ["Ps28CustomDebugStringConvertible", "append"]
+- ["Ps28CustomDebugStringConvertible", "breweryLocations"]
+- ["Ps28CustomDebugStringConvertible", "convertLocationToAnnotation"]
+- !private ["Ps28CustomDebugStringConvertible", "coordinate"]
+- !private ["Ps28CustomDebugStringConvertible", "distance"]
+- ["Ps28CustomDebugStringConvertible", "endSearch"]
+- ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "latitude"]
+- !private ["Ps28CustomDebugStringConvertible", "longitude"]
+- !private ["Ps28CustomDebugStringConvertible", "name"]
+- ["Ps28CustomDebugStringConvertible", "parentMapViewController"]
+- ["Ps28CustomDebugStringConvertible", "sendAnnotationsToMap"]
+- ["Ps28CustomDebugStringConvertible", "sortLocations"]
+- !private ["Ps28CustomDebugStringConvertible", "sorted"]
+- !private ["Ps28CustomDebugStringConvertible", "subtitle"]
+- ["Ps28CustomDebugStringConvertible", "targetLocation"]
+- !private ["Ps28CustomDebugStringConvertible", "title"]
+- !private ["Ps28CustomDebugStringConvertible", "updateMap"]
+- !private ["Ps28CustomDebugStringConvertible", "url"]
+- ["Ps28CustomDebugStringConvertible", ""]
+- !private ["Ps29CustomPlaygroundQuickLookable", "_getBuiltinLogicValue"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "init"]
+- !private ["Ps17CustomReflectable", "Iterator"]
+- !private ["Ps17CustomReflectable", "_Element"]
+- !private ["Ps17CustomReflectable", "_getBuiltinLogicValue"]
+- !private ["Ps17CustomReflectable", "append"]
+- !private ["Ps17CustomReflectable", "init"]
+- !private ["Ps17CustomReflectable", "sorted"]
+- !private ["Ps23CustomStringConvertible", "CLLocation"]
+- !private ["Ps23CustomStringConvertible", "CLLocationCoordinate2D"]
+- !private ["Ps23CustomStringConvertible", "CLLocationDegrees"]
+- !private ["Ps23CustomStringConvertible", "Double"]
+- !private ["Ps23CustomStringConvertible", "Iterator"]
+- !private ["Ps23CustomStringConvertible", "MKAnnotation"]
+- !private ["Ps23CustomStringConvertible", "MKPointAnnotation"]
+- !private ["Ps23CustomStringConvertible", "_Element"]
+- !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "append"]
+- ["Ps23CustomStringConvertible", "breweryLocations"]
+- ["Ps23CustomStringConvertible", "convertLocationToAnnotation"]
+- !private ["Ps23CustomStringConvertible", "coordinate"]
+- !private ["Ps23CustomStringConvertible", "distance"]
+- ["Ps23CustomStringConvertible", "endSearch"]
+- ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "latitude"]
+- !private ["Ps23CustomStringConvertible", "longitude"]
+- !private ["Ps23CustomStringConvertible", "name"]
+- ["Ps23CustomStringConvertible", "parentMapViewController"]
+- ["Ps23CustomStringConvertible", "sendAnnotationsToMap"]
+- ["Ps23CustomStringConvertible", "sortLocations"]
+- !private ["Ps23CustomStringConvertible", "sorted"]
+- !private ["Ps23CustomStringConvertible", "subtitle"]
+- ["Ps23CustomStringConvertible", "targetLocation"]
+- !private ["Ps23CustomStringConvertible", "title"]
+- !private ["Ps23CustomStringConvertible", "updateMap"]
+- !private ["Ps23CustomStringConvertible", "url"]
+- ["Ps23CustomStringConvertible", ""]
+- !private ["P11BreweryTour19DismissableTutorial", "updateMap"]
+- ["Sd", "deinit"]
+- !private ["Sd", "init"]
+- !private ["Ps9Equatable", "CLLocation"]
+- !private ["Ps9Equatable", "CLLocationCoordinate2D"]
+- !private ["Ps9Equatable", "CLLocationDegrees"]
+- !private ["Ps9Equatable", "Double"]
+- !private ["Ps9Equatable", "MKAnnotation"]
+- !private ["Ps9Equatable", "MKPointAnnotation"]
+- !private ["Ps9Equatable", "_getBuiltinLogicValue"]
+- ["Ps9Equatable", "breweryLocations"]
+- ["Ps9Equatable", "convertLocationToAnnotation"]
+- !private ["Ps9Equatable", "coordinate"]
+- !private ["Ps9Equatable", "distance"]
+- ["Ps9Equatable", "endSearch"]
+- ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "latitude"]
+- !private ["Ps9Equatable", "longitude"]
+- !private ["Ps9Equatable", "name"]
+- ["Ps9Equatable", "parentMapViewController"]
+- ["Ps9Equatable", "sendAnnotationsToMap"]
+- ["Ps9Equatable", "sortLocations"]
+- !private ["Ps9Equatable", "subtitle"]
+- ["Ps9Equatable", "targetLocation"]
+- !private ["Ps9Equatable", "title"]
+- !private ["Ps9Equatable", "updateMap"]
+- !private ["Ps9Equatable", "url"]
+- ["Ps9Equatable", ""]
+- !private ["Ps25ExpressibleByArrayLiteral", "Iterator"]
+- !private ["Ps25ExpressibleByArrayLiteral", "_Element"]
+- !private ["Ps25ExpressibleByArrayLiteral", "append"]
+- !private ["Ps25ExpressibleByArrayLiteral", "init"]
+- !private ["Ps25ExpressibleByArrayLiteral", "sorted"]
+- !private ["Ps27ExpressibleByBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps25ExpressibleByFloatLiteral", "init"]
+- !private ["Ps27ExpressibleByIntegerLiteral", "init"]
+- !private ["Ps13FloatingPoint", "init"]
+- !private ["Ps8Hashable", "CLLocation"]
+- !private ["Ps8Hashable", "CLLocationCoordinate2D"]
+- !private ["Ps8Hashable", "CLLocationDegrees"]
+- !private ["Ps8Hashable", "Double"]
+- !private ["Ps8Hashable", "MKAnnotation"]
+- !private ["Ps8Hashable", "MKPointAnnotation"]
+- !private ["Ps8Hashable", "_getBuiltinLogicValue"]
+- ["Ps8Hashable", "breweryLocations"]
+- ["Ps8Hashable", "convertLocationToAnnotation"]
+- !private ["Ps8Hashable", "coordinate"]
+- !private ["Ps8Hashable", "distance"]
+- ["Ps8Hashable", "endSearch"]
+- ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "latitude"]
+- !private ["Ps8Hashable", "longitude"]
+- !private ["Ps8Hashable", "name"]
+- ["Ps8Hashable", "parentMapViewController"]
+- ["Ps8Hashable", "sendAnnotationsToMap"]
+- ["Ps8Hashable", "sortLocations"]
+- !private ["Ps8Hashable", "subtitle"]
+- ["Ps8Hashable", "targetLocation"]
+- !private ["Ps8Hashable", "title"]
+- !private ["Ps8Hashable", "updateMap"]
+- !private ["Ps8Hashable", "url"]
+- ["Ps8Hashable", ""]
+- !private ["Ps9Indexable", "Iterator"]
+- !private ["Ps9Indexable", "_Element"]
+- !private ["Ps9Indexable", "append"]
+- !private ["Ps9Indexable", "init"]
+- !private ["Ps9Indexable", "sorted"]
+- !private ["Ps13IndexableBase", "Iterator"]
+- !private ["Ps13IndexableBase", "_Element"]
+- !private ["Ps13IndexableBase", "append"]
+- !private ["Ps13IndexableBase", "init"]
+- !private ["Ps13IndexableBase", "sorted"]
+- !private ["Vs16IndexingIterator", "Element"]
+- !private ["Ps16IteratorProtocol", "Element"]
+- !private ["Ps25LosslessStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps25LosslessStringConvertible", "init"]
+- !private ["PSo12MKAnnotation", "coordinate"]
+- !private ["PSo12MKAnnotation", "init"]
+- !private ["PSo12MKAnnotation", "subtitle"]
+- !private ["PSo12MKAnnotation", "title"]
+- !private ["PSo17MKMapViewDelegate", "updateMap"]
+- !private ["CSo17MKPointAnnotation", "coordinate"]
+- ["CSo17MKPointAnnotation", "deinit"]
+- !private ["CSo17MKPointAnnotation", "init"]
+- !private ["CSo17MKPointAnnotation", "subtitle"]
+- !private ["CSo17MKPointAnnotation", "title"]
+- !private ["CSo7MKShape", "coordinate"]
+- !private ["CSo7MKShape", "init"]
+- !private ["CSo7MKShape", "subtitle"]
+- !private ["CSo7MKShape", "title"]
+- !private ["C11BreweryTour11MapStrategy", "Bool"]
+- ["C11BreweryTour11MapStrategy", "Brewery"]
+- ["C11BreweryTour11MapStrategy", "CLLocation"]
+- !private ["C11BreweryTour11MapStrategy", "CLLocationCoordinate2D"]
+- !private ["C11BreweryTour11MapStrategy", "CLLocationDegrees"]
+- !private ["C11BreweryTour11MapStrategy", "Double"]
+- ["C11BreweryTour11MapStrategy", "MKAnnotation"]
+- !private ["C11BreweryTour11MapStrategy", "MKPointAnnotation"]
+- ["C11BreweryTour11MapStrategy", "MapViewController"]
+- ["C11BreweryTour11MapStrategy", "breweryLocations"]
+- ["C11BreweryTour11MapStrategy", "convertLocationToAnnotation"]
+- ["C11BreweryTour11MapStrategy", "deinit"]
+- ["C11BreweryTour11MapStrategy", "endSearch"]
+- ["C11BreweryTour11MapStrategy", "init"]
+- ["C11BreweryTour11MapStrategy", "parentMapViewController"]
+- ["C11BreweryTour11MapStrategy", "sendAnnotationsToMap"]
+- ["C11BreweryTour11MapStrategy", "sortLocations"]
+- ["C11BreweryTour11MapStrategy", "targetLocation"]
+- !private ["C11BreweryTour17MapViewController", "updateMap"]
+- !private ["Ps17MutableCollection", "Iterator"]
+- !private ["Ps17MutableCollection", "_Element"]
+- !private ["Ps17MutableCollection", "append"]
+- !private ["Ps17MutableCollection", "init"]
+- !private ["Ps17MutableCollection", "sorted"]
+- !private ["Ps16MutableIndexable", "Iterator"]
+- !private ["Ps16MutableIndexable", "_Element"]
+- !private ["Ps16MutableIndexable", "append"]
+- !private ["Ps16MutableIndexable", "init"]
+- !private ["Ps16MutableIndexable", "sorted"]
+- !private ["PSo8NSCoding", "distance"]
+- !private ["PSo8NSCoding", "init"]
+- !private ["PSo8NSCoding", "updateMap"]
+- !private ["PSo9NSCopying", "distance"]
+- !private ["PSo9NSCopying", "init"]
+- !private ["PSo26NSExtensionRequestHandling", "updateMap"]
+- !private ["PSo20NSFetchRequestResult", "latitude"]
+- !private ["PSo20NSFetchRequestResult", "longitude"]
+- !private ["PSo20NSFetchRequestResult", "name"]
+- !private ["PSo20NSFetchRequestResult", "url"]
+- !private ["PSo34NSFetchedResultsControllerDelegate", "updateMap"]
+- !private ["CSo15NSManagedObject", "latitude"]
+- !private ["CSo15NSManagedObject", "longitude"]
+- !private ["CSo15NSManagedObject", "name"]
+- !private ["CSo15NSManagedObject", "url"]
+- !private ["CSo8NSObject", "Bool"]
+- ["CSo8NSObject", "Brewery"]
+- ["CSo8NSObject", "CLLocation"]
+- !private ["CSo8NSObject", "CLLocationCoordinate2D"]
+- !private ["CSo8NSObject", "CLLocationDegrees"]
+- !private ["CSo8NSObject", "Double"]
+- ["CSo8NSObject", "MKAnnotation"]
+- !private ["CSo8NSObject", "MKPointAnnotation"]
+- ["CSo8NSObject", "MapViewController"]
+- ["CSo8NSObject", "breweryLocations"]
+- ["CSo8NSObject", "convertLocationToAnnotation"]
+- !private ["CSo8NSObject", "coordinate"]
+- ["CSo8NSObject", "deinit"]
+- !private ["CSo8NSObject", "distance"]
+- ["CSo8NSObject", "endSearch"]
+- ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "latitude"]
+- !private ["CSo8NSObject", "longitude"]
+- !private ["CSo8NSObject", "name"]
+- ["CSo8NSObject", "parentMapViewController"]
+- ["CSo8NSObject", "sendAnnotationsToMap"]
+- ["CSo8NSObject", "sortLocations"]
+- !private ["CSo8NSObject", "subtitle"]
+- ["CSo8NSObject", "targetLocation"]
+- !private ["CSo8NSObject", "title"]
+- !private ["CSo8NSObject", "updateMap"]
+- !private ["CSo8NSObject", "url"]
+- ["CSo8NSObject", ""]
+- !private ["PSo16NSObjectProtocol", "CLLocation"]
+- !private ["PSo16NSObjectProtocol", "CLLocationCoordinate2D"]
+- !private ["PSo16NSObjectProtocol", "CLLocationDegrees"]
+- !private ["PSo16NSObjectProtocol", "Double"]
+- !private ["PSo16NSObjectProtocol", "MKAnnotation"]
+- !private ["PSo16NSObjectProtocol", "MKPointAnnotation"]
+- ["PSo16NSObjectProtocol", "breweryLocations"]
+- ["PSo16NSObjectProtocol", "convertLocationToAnnotation"]
+- !private ["PSo16NSObjectProtocol", "coordinate"]
+- !private ["PSo16NSObjectProtocol", "distance"]
+- ["PSo16NSObjectProtocol", "endSearch"]
+- ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "latitude"]
+- !private ["PSo16NSObjectProtocol", "longitude"]
+- !private ["PSo16NSObjectProtocol", "name"]
+- ["PSo16NSObjectProtocol", "parentMapViewController"]
+- ["PSo16NSObjectProtocol", "sendAnnotationsToMap"]
+- ["PSo16NSObjectProtocol", "sortLocations"]
+- !private ["PSo16NSObjectProtocol", "subtitle"]
+- ["PSo16NSObjectProtocol", "targetLocation"]
+- !private ["PSo16NSObjectProtocol", "title"]
+- !private ["PSo16NSObjectProtocol", "updateMap"]
+- !private ["PSo16NSObjectProtocol", "url"]
+- ["PSo16NSObjectProtocol", ""]
+- !private ["PSo14NSSecureCoding", "distance"]
+- !private ["PSo14NSSecureCoding", "init"]
+- ["Sq", "deinit"]
+- !private ["Ps22RandomAccessCollection", "Iterator"]
+- !private ["Ps22RandomAccessCollection", "_Element"]
+- !private ["Ps22RandomAccessCollection", "append"]
+- !private ["Ps22RandomAccessCollection", "init"]
+- !private ["Ps22RandomAccessCollection", "sorted"]
+- !private ["Ps21RandomAccessIndexable", "Iterator"]
+- !private ["Ps21RandomAccessIndexable", "_Element"]
+- !private ["Ps21RandomAccessIndexable", "append"]
+- !private ["Ps21RandomAccessIndexable", "init"]
+- !private ["Ps21RandomAccessIndexable", "sorted"]
+- !private ["Ps26RangeReplaceableCollection", "Iterator"]
+- !private ["Ps26RangeReplaceableCollection", "_Element"]
+- !private ["Ps26RangeReplaceableCollection", "append"]
+- !private ["Ps26RangeReplaceableCollection", "init"]
+- !private ["Ps26RangeReplaceableCollection", "sorted"]
+- !private ["Ps25RangeReplaceableIndexable", "Iterator"]
+- !private ["Ps25RangeReplaceableIndexable", "_Element"]
+- !private ["Ps25RangeReplaceableIndexable", "append"]
+- !private ["Ps25RangeReplaceableIndexable", "init"]
+- !private ["Ps25RangeReplaceableIndexable", "sorted"]
+- !private ["Ps8Sequence", "Element"]
+- !private ["Ps8Sequence", "Iterator"]
+- !private ["Ps8Sequence", "_Element"]
+- !private ["Ps8Sequence", "append"]
+- !private ["Ps8Sequence", "init"]
+- !private ["Ps8Sequence", "sorted"]
+- !private ["Ps12SignedNumber", "init"]
+- !private ["Ps10Strideable", "init"]
+- !private ["PSo21UIAppearanceContainer", "updateMap"]
+- !private ["PSo18UIContentContainer", "updateMap"]
+- !private ["PSo18UIFocusEnvironment", "updateMap"]
+- !private ["CSo11UIResponder", "updateMap"]
+- !private ["PSo30UIResponderStandardEditActions", "updateMap"]
+- !private ["PSo16UIStateRestoring", "updateMap"]
+- !private ["PSo18UITraitEnvironment", "updateMap"]
+- !private ["CSo16UIViewController", "updateMap"]
+- !private ["Ps14_ArrayProtocol", "Iterator"]
+- !private ["Ps14_ArrayProtocol", "_Element"]
+- !private ["Ps14_ArrayProtocol", "append"]
+- !private ["Ps14_ArrayProtocol", "init"]
+- !private ["Ps14_ArrayProtocol", "sorted"]
+- !private ["Ps15_CVarArgAligned", "init"]
+- !private ["Ps22_CVarArgPassedAsDouble", "init"]
+- !private ["Ps24_DestructorSafeContainer", "Iterator"]
+- !private ["Ps24_DestructorSafeContainer", "_Element"]
+- !private ["Ps24_DestructorSafeContainer", "append"]
+- !private ["Ps24_DestructorSafeContainer", "init"]
+- !private ["Ps24_DestructorSafeContainer", "sorted"]
+- !private ["Ps35_ExpressibleByBuiltinBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps33_ExpressibleByBuiltinFloatLiteral", "init"]
+- !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "init"]
+- !private ["Ps9_Hashable", "CLLocation"]
+- !private ["Ps9_Hashable", "CLLocationCoordinate2D"]
+- !private ["Ps9_Hashable", "CLLocationDegrees"]
+- !private ["Ps9_Hashable", "Double"]
+- !private ["Ps9_Hashable", "MKAnnotation"]
+- !private ["Ps9_Hashable", "MKPointAnnotation"]
+- !private ["Ps9_Hashable", "_getBuiltinLogicValue"]
+- ["Ps9_Hashable", "breweryLocations"]
+- ["Ps9_Hashable", "convertLocationToAnnotation"]
+- !private ["Ps9_Hashable", "coordinate"]
+- !private ["Ps9_Hashable", "distance"]
+- ["Ps9_Hashable", "endSearch"]
+- ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "latitude"]
+- !private ["Ps9_Hashable", "longitude"]
+- !private ["Ps9_Hashable", "name"]
+- ["Ps9_Hashable", "parentMapViewController"]
+- ["Ps9_Hashable", "sendAnnotationsToMap"]
+- ["Ps9_Hashable", "sortLocations"]
+- !private ["Ps9_Hashable", "subtitle"]
+- ["Ps9_Hashable", "targetLocation"]
+- !private ["Ps9_Hashable", "title"]
+- !private ["Ps9_Hashable", "updateMap"]
+- !private ["Ps9_Hashable", "url"]
+- ["Ps9_Hashable", ""]
+- !private ["Ps21_ObjectiveCBridgeable", "Iterator"]
+- !private ["Ps21_ObjectiveCBridgeable", "_Element"]
+- !private ["Ps21_ObjectiveCBridgeable", "_getBuiltinLogicValue"]
+- !private ["Ps21_ObjectiveCBridgeable", "append"]
+- !private ["Ps21_ObjectiveCBridgeable", "init"]
+- !private ["Ps21_ObjectiveCBridgeable", "sorted"]
+- !private ["Vs26_OptionalNilComparisonType", "deinit"]
+- !private ["Ps11_Strideable", "init"]
+depends-nominal:
+- !private "Ps16AbsoluteValuable"
+- "Ps9AnyObject"
+- "Sa"
+- !private "Ps23BidirectionalCollection"
+- !private "Ps22BidirectionalIndexable"
+- !private "Ps19BinaryFloatingPoint"
+- "Sb"
+- "C11BreweryTour7Brewery"
+- !private "P11BreweryTour12BusyObserver"
+- !private "CSo10CLLocation"
+- "VSC22CLLocationCoordinate2D"
+- !private "PSo25CLLocationManagerDelegate"
+- "Ps7CVarArg"
+- !private "Ps10Collection"
+- !private "Ps10Comparable"
+- "Ps28CustomDebugStringConvertible"
+- !private "Ps29CustomPlaygroundQuickLookable"
+- !private "Ps17CustomReflectable"
+- "Ps23CustomStringConvertible"
+- !private "P11BreweryTour19DismissableTutorial"
+- "Sd"
+- "Ps9Equatable"
+- !private "Ps25ExpressibleByArrayLiteral"
+- !private "Ps27ExpressibleByBooleanLiteral"
+- !private "Ps25ExpressibleByFloatLiteral"
+- !private "Ps27ExpressibleByIntegerLiteral"
+- !private "Ps13FloatingPoint"
+- "Ps8Hashable"
+- !private "Ps9Indexable"
+- !private "Ps13IndexableBase"
+- !private "Vs16IndexingIterator"
+- !private "Ps16IteratorProtocol"
+- !private "Ps25LosslessStringConvertible"
+- !private "PSo12MKAnnotation"
+- !private "PSo17MKMapViewDelegate"
+- "CSo17MKPointAnnotation"
+- !private "CSo7MKShape"
+- "C11BreweryTour11MapStrategy"
+- !private "C11BreweryTour17MapViewController"
+- !private "Ps17MutableCollection"
+- !private "Ps16MutableIndexable"
+- !private "PSo8NSCoding"
+- !private "PSo9NSCopying"
+- !private "PSo26NSExtensionRequestHandling"
+- !private "PSo20NSFetchRequestResult"
+- !private "PSo34NSFetchedResultsControllerDelegate"
+- !private "CSo15NSManagedObject"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- !private "PSo14NSSecureCoding"
+- "Sq"
+- !private "Ps22RandomAccessCollection"
+- !private "Ps21RandomAccessIndexable"
+- !private "Ps26RangeReplaceableCollection"
+- !private "Ps25RangeReplaceableIndexable"
+- !private "Ps8Sequence"
+- !private "Ps12SignedNumber"
+- !private "Ps10Strideable"
+- !private "PSo21UIAppearanceContainer"
+- !private "PSo18UIContentContainer"
+- !private "PSo18UIFocusEnvironment"
+- !private "CSo11UIResponder"
+- !private "PSo30UIResponderStandardEditActions"
+- !private "PSo16UIStateRestoring"
+- !private "PSo18UITraitEnvironment"
+- !private "CSo16UIViewController"
+- !private "Ps14_ArrayProtocol"
+- !private "Ps15_CVarArgAligned"
+- !private "Ps22_CVarArgPassedAsDouble"
+- !private "Ps24_DestructorSafeContainer"
+- !private "Ps35_ExpressibleByBuiltinBooleanLiteral"
+- !private "Ps33_ExpressibleByBuiltinFloatLiteral"
+- !private "Ps35_ExpressibleByBuiltinIntegerLiteral"
+- "Ps9_Hashable"
+- !private "Ps21_ObjectiveCBridgeable"
+- !private "Vs26_OptionalNilComparisonType"
+- !private "Ps11_Strideable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/SwiftOnoneSupport.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/MapKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreLocation.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/Alamofire.swiftmodule/x86_64.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/module.modulemap"
+interface-hash: "0eeecd8f88f4b6fb6a73660d44e64397"

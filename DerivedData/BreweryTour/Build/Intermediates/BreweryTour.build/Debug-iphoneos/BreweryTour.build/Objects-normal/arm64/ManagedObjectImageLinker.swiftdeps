@@ -1,0 +1,787 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "ImageDownloadType"
+- "ImageLinkingProcotol"
+- "ManagedObjectImageLinker"
+- "=="
+provides-nominal:
+- "O11BreweryTour17ImageDownloadType"
+- "P11BreweryTour20ImageLinkingProcotol"
+- "C11BreweryTour24ManagedObjectImageLinker"
+provides-member:
+- ["O11BreweryTour17ImageDownloadType", ""]
+- ["P11BreweryTour20ImageLinkingProcotol", ""]
+- ["C11BreweryTour24ManagedObjectImageLinker", ""]
+provides-dynamic-lookup:
+- "timerProcessImageQueue"
+depends-top-level:
+- "UIApplication"
+- !private "AnyObject"
+- !private "Brewery"
+- !private "DispatchQueue"
+- "BooleanLiteralType"
+- !private "+="
+- !private "!="
+- "ImageLinkingProcotol"
+- "AppDelegate"
+- !private "Array"
+- !private "NSLog"
+- "Timer"
+- "NSData"
+- "ImageDownloadType"
+- "CastingPrecedence"
+- "String"
+- !private "NSFetchRequest"
+- !private "NSPredicate"
+- !private "NSManagedObjectContext"
+- "=="
+- "AssignmentPrecedence"
+- !private "NSMergePolicy"
+- "Double"
+- !private "<"
+- !private "NSFetchRequestResult"
+- !private "Beer"
+- "ManagedObjectImageLinker"
+depends-member:
+- !private ["Ps9AnyObject", "Beer"]
+- !private ["Ps9AnyObject", "Brewery"]
+- !private ["Ps9AnyObject", "DispatchQueue"]
+- ["Ps9AnyObject", "ImageDownloadType"]
+- ["Ps9AnyObject", "NSData"]
+- !private ["Ps9AnyObject", "NSLog"]
+- !private ["Ps9AnyObject", "NSMergePolicy"]
+- !private ["Ps9AnyObject", "NSPredicate"]
+- ["Ps9AnyObject", "String"]
+- !private ["Ps9AnyObject", "Timer"]
+- ["Ps9AnyObject", "UIApplication"]
+- !private ["Ps9AnyObject", "async"]
+- !private ["Ps9AnyObject", "automaticallyMergesChangesFromParent"]
+- !private ["Ps9AnyObject", "backContext"]
+- ["Ps9AnyObject", "container"]
+- ["Ps9AnyObject", "coreDataStack"]
+- !private ["Ps9AnyObject", "decideToDisableTimer"]
+- ["Ps9AnyObject", "delegate"]
+- !private ["Ps9AnyObject", "disableTimer"]
+- !private ["Ps9AnyObject", "fetch"]
+- !private ["Ps9AnyObject", "fetchExecute"]
+- !private ["Ps9AnyObject", "fetchRequest"]
+- !private ["Ps9AnyObject", "generateRequest"]
+- !private ["Ps9AnyObject", "global"]
+- !private ["Ps9AnyObject", "image"]
+- !private ["Ps9AnyObject", "imageProcessTimer"]
+- !private ["Ps9AnyObject", "imagesToBeAssignedQueue"]
+- !private ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "initContext"]
+- !private ["Ps9AnyObject", "invalidate"]
+- !private ["Ps9AnyObject", "main"]
+- !private ["Ps9AnyObject", "maxSaves"]
+- !private ["Ps9AnyObject", "mergeByPropertyObjectTrump"]
+- !private ["Ps9AnyObject", "mergePolicy"]
+- ["Ps9AnyObject", "newBackgroundContext"]
+- !private ["Ps9AnyObject", "performAndWait"]
+- !private ["Ps9AnyObject", "predicate"]
+- ["Ps9AnyObject", "queueLinkJob"]
+- !private ["Ps9AnyObject", "save"]
+- !private ["Ps9AnyObject", "scheduledTimer"]
+- ["Ps9AnyObject", "shared"]
+- !private ["Ps9AnyObject", "sortDescriptors"]
+- !private ["Ps9AnyObject", "sync"]
+- !private ["Ps9AnyObject", "timerDelay"]
+- !private ["Ps9AnyObject", "timerProcessImageQueue"]
+- ["Ps9AnyObject", ""]
+- ["C11BreweryTour11AppDelegate", "coreDataStack"]
+- ["C11BreweryTour11AppDelegate", "deinit"]
+- !private ["Sa", "Element"]
+- !private ["Sa", "IndexDistance"]
+- !private ["Sa", "Iterator"]
+- !private ["Sa", "_Element"]
+- !private ["Sa", "count"]
+- !private ["Sa", "deinit"]
+- !private ["Sa", "first"]
+- !private ["C11BreweryTour4Beer", "deinit"]
+- !private ["C11BreweryTour4Beer", "fetchRequest"]
+- !private ["C11BreweryTour4Beer", "image"]
+- !private ["Ps23BidirectionalCollection", "Element"]
+- !private ["Ps23BidirectionalCollection", "IndexDistance"]
+- !private ["Ps23BidirectionalCollection", "Iterator"]
+- !private ["Ps23BidirectionalCollection", "_Element"]
+- !private ["Ps23BidirectionalCollection", "count"]
+- !private ["Ps23BidirectionalCollection", "first"]
+- !private ["Ps22BidirectionalIndexable", "Element"]
+- !private ["Ps22BidirectionalIndexable", "IndexDistance"]
+- !private ["Ps22BidirectionalIndexable", "Iterator"]
+- !private ["Ps22BidirectionalIndexable", "_Element"]
+- !private ["Ps22BidirectionalIndexable", "count"]
+- !private ["Ps22BidirectionalIndexable", "first"]
+- !private ["Ps17BitwiseOperations", "hashValue"]
+- !private ["Sb", "_getBuiltinLogicValue"]
+- !private ["Sb", "deinit"]
+- !private ["C11BreweryTour7Brewery", "deinit"]
+- !private ["C11BreweryTour7Brewery", "fetchRequest"]
+- !private ["C11BreweryTour7Brewery", "image"]
+- !private ["Ps7CVarArg", "Element"]
+- !private ["Ps7CVarArg", "IndexDistance"]
+- !private ["Ps7CVarArg", "Iterator"]
+- !private ["Ps7CVarArg", "_Element"]
+- !private ["Ps7CVarArg", "async"]
+- !private ["Ps7CVarArg", "automaticallyMergesChangesFromParent"]
+- ["Ps7CVarArg", "container"]
+- ["Ps7CVarArg", "coreDataStack"]
+- !private ["Ps7CVarArg", "count"]
+- ["Ps7CVarArg", "delegate"]
+- !private ["Ps7CVarArg", "fetch"]
+- !private ["Ps7CVarArg", "fetchRequest"]
+- !private ["Ps7CVarArg", "first"]
+- !private ["Ps7CVarArg", "global"]
+- !private ["Ps7CVarArg", "hashValue"]
+- !private ["Ps7CVarArg", "image"]
+- ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "invalidate"]
+- !private ["Ps7CVarArg", "main"]
+- !private ["Ps7CVarArg", "mergeByPropertyObjectTrump"]
+- !private ["Ps7CVarArg", "mergePolicy"]
+- ["Ps7CVarArg", "newBackgroundContext"]
+- !private ["Ps7CVarArg", "performAndWait"]
+- !private ["Ps7CVarArg", "predicate"]
+- !private ["Ps7CVarArg", "removeValue"]
+- !private ["Ps7CVarArg", "save"]
+- !private ["Ps7CVarArg", "scheduledTimer"]
+- ["Ps7CVarArg", "shared"]
+- !private ["Ps7CVarArg", "sortDescriptors"]
+- !private ["Ps7CVarArg", "subscript"]
+- !private ["Ps7CVarArg", "sync"]
+- !private ["Ps10Collection", "Element"]
+- !private ["Ps10Collection", "Index"]
+- !private ["Ps10Collection", "IndexDistance"]
+- !private ["Ps10Collection", "Iterator"]
+- !private ["Ps10Collection", "SubSequence"]
+- !private ["Ps10Collection", "_Element"]
+- !private ["Ps10Collection", "count"]
+- !private ["Ps10Collection", "first"]
+- ["Ps10Collection", "init"]
+- !private ["Ps10Collection", "removeValue"]
+- !private ["Ps10Collection", "subscript"]
+- !private ["Ps10Comparable", "hashValue"]
+- !private ["Ps10Comparable", "init"]
+- ["C11BreweryTour13CoreDataStack", "container"]
+- ["C11BreweryTour13CoreDataStack", "deinit"]
+- !private ["Ps28CustomDebugStringConvertible", "Element"]
+- !private ["Ps28CustomDebugStringConvertible", "IndexDistance"]
+- !private ["Ps28CustomDebugStringConvertible", "Iterator"]
+- !private ["Ps28CustomDebugStringConvertible", "_Element"]
+- !private ["Ps28CustomDebugStringConvertible", "async"]
+- !private ["Ps28CustomDebugStringConvertible", "automaticallyMergesChangesFromParent"]
+- ["Ps28CustomDebugStringConvertible", "container"]
+- ["Ps28CustomDebugStringConvertible", "coreDataStack"]
+- !private ["Ps28CustomDebugStringConvertible", "count"]
+- ["Ps28CustomDebugStringConvertible", "delegate"]
+- !private ["Ps28CustomDebugStringConvertible", "fetch"]
+- !private ["Ps28CustomDebugStringConvertible", "fetchRequest"]
+- !private ["Ps28CustomDebugStringConvertible", "first"]
+- !private ["Ps28CustomDebugStringConvertible", "global"]
+- !private ["Ps28CustomDebugStringConvertible", "image"]
+- ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "invalidate"]
+- !private ["Ps28CustomDebugStringConvertible", "main"]
+- !private ["Ps28CustomDebugStringConvertible", "mergeByPropertyObjectTrump"]
+- !private ["Ps28CustomDebugStringConvertible", "mergePolicy"]
+- ["Ps28CustomDebugStringConvertible", "newBackgroundContext"]
+- !private ["Ps28CustomDebugStringConvertible", "performAndWait"]
+- !private ["Ps28CustomDebugStringConvertible", "predicate"]
+- !private ["Ps28CustomDebugStringConvertible", "removeValue"]
+- !private ["Ps28CustomDebugStringConvertible", "save"]
+- !private ["Ps28CustomDebugStringConvertible", "scheduledTimer"]
+- ["Ps28CustomDebugStringConvertible", "shared"]
+- !private ["Ps28CustomDebugStringConvertible", "sortDescriptors"]
+- !private ["Ps28CustomDebugStringConvertible", "subscript"]
+- !private ["Ps28CustomDebugStringConvertible", "sync"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "_getBuiltinLogicValue"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "hashValue"]
+- !private ["Ps29CustomPlaygroundQuickLookable", "init"]
+- !private ["Ps17CustomReflectable", "Element"]
+- !private ["Ps17CustomReflectable", "IndexDistance"]
+- !private ["Ps17CustomReflectable", "Iterator"]
+- !private ["Ps17CustomReflectable", "_Element"]
+- !private ["Ps17CustomReflectable", "_getBuiltinLogicValue"]
+- !private ["Ps17CustomReflectable", "count"]
+- !private ["Ps17CustomReflectable", "first"]
+- !private ["Ps17CustomReflectable", "hashValue"]
+- ["Ps17CustomReflectable", "init"]
+- !private ["Ps17CustomReflectable", "removeValue"]
+- !private ["Ps17CustomReflectable", "subscript"]
+- !private ["Ps23CustomStringConvertible", "Element"]
+- !private ["Ps23CustomStringConvertible", "IndexDistance"]
+- !private ["Ps23CustomStringConvertible", "Iterator"]
+- !private ["Ps23CustomStringConvertible", "_Element"]
+- !private ["Ps23CustomStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps23CustomStringConvertible", "async"]
+- !private ["Ps23CustomStringConvertible", "automaticallyMergesChangesFromParent"]
+- ["Ps23CustomStringConvertible", "container"]
+- ["Ps23CustomStringConvertible", "coreDataStack"]
+- !private ["Ps23CustomStringConvertible", "count"]
+- ["Ps23CustomStringConvertible", "delegate"]
+- !private ["Ps23CustomStringConvertible", "fetch"]
+- !private ["Ps23CustomStringConvertible", "fetchRequest"]
+- !private ["Ps23CustomStringConvertible", "first"]
+- !private ["Ps23CustomStringConvertible", "global"]
+- !private ["Ps23CustomStringConvertible", "hashValue"]
+- !private ["Ps23CustomStringConvertible", "image"]
+- ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "invalidate"]
+- !private ["Ps23CustomStringConvertible", "main"]
+- !private ["Ps23CustomStringConvertible", "mergeByPropertyObjectTrump"]
+- !private ["Ps23CustomStringConvertible", "mergePolicy"]
+- ["Ps23CustomStringConvertible", "newBackgroundContext"]
+- !private ["Ps23CustomStringConvertible", "performAndWait"]
+- !private ["Ps23CustomStringConvertible", "predicate"]
+- !private ["Ps23CustomStringConvertible", "removeValue"]
+- !private ["Ps23CustomStringConvertible", "save"]
+- !private ["Ps23CustomStringConvertible", "scheduledTimer"]
+- ["Ps23CustomStringConvertible", "shared"]
+- !private ["Ps23CustomStringConvertible", "sortDescriptors"]
+- !private ["Ps23CustomStringConvertible", "subscript"]
+- !private ["Ps23CustomStringConvertible", "sync"]
+- !private ["Vs10Dictionary", "IndexDistance"]
+- !private ["Vs10Dictionary", "Iterator"]
+- !private ["Vs10Dictionary", "count"]
+- ["Vs10Dictionary", "deinit"]
+- ["Vs10Dictionary", "init"]
+- !private ["Vs10Dictionary", "removeValue"]
+- !private ["Vs10Dictionary", "subscript"]
+- !private ["Vs18DictionaryIterator", "Element"]
+- !private ["CSo14DispatchObject", "async"]
+- !private ["CSo14DispatchObject", "global"]
+- !private ["CSo14DispatchObject", "main"]
+- !private ["CSo14DispatchObject", "sync"]
+- !private ["CSo13DispatchQueue", "async"]
+- !private ["CSo13DispatchQueue", "deinit"]
+- !private ["CSo13DispatchQueue", "global"]
+- !private ["CSo13DispatchQueue", "main"]
+- !private ["CSo13DispatchQueue", "sync"]
+- ["Sd", "deinit"]
+- !private ["Ps9Equatable", "Beer"]
+- !private ["Ps9Equatable", "Brewery"]
+- !private ["Ps9Equatable", "_getBuiltinLogicValue"]
+- ["Ps9Equatable", "_toAnyHashable"]
+- !private ["Ps9Equatable", "async"]
+- !private ["Ps9Equatable", "automaticallyMergesChangesFromParent"]
+- ["Ps9Equatable", "container"]
+- ["Ps9Equatable", "coreDataStack"]
+- ["Ps9Equatable", "delegate"]
+- !private ["Ps9Equatable", "fetch"]
+- !private ["Ps9Equatable", "fetchRequest"]
+- !private ["Ps9Equatable", "global"]
+- ["Ps9Equatable", "hashValue"]
+- !private ["Ps9Equatable", "image"]
+- !private ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "invalidate"]
+- !private ["Ps9Equatable", "main"]
+- !private ["Ps9Equatable", "mergeByPropertyObjectTrump"]
+- !private ["Ps9Equatable", "mergePolicy"]
+- ["Ps9Equatable", "newBackgroundContext"]
+- !private ["Ps9Equatable", "performAndWait"]
+- !private ["Ps9Equatable", "predicate"]
+- !private ["Ps9Equatable", "save"]
+- !private ["Ps9Equatable", "scheduledTimer"]
+- ["Ps9Equatable", "shared"]
+- !private ["Ps9Equatable", "sortDescriptors"]
+- !private ["Ps9Equatable", "sync"]
+- !private ["Ps9Equatable", "userInitiated"]
+- ["Ps9Equatable", ""]
+- !private ["Ps25ExpressibleByArrayLiteral", "Element"]
+- !private ["Ps25ExpressibleByArrayLiteral", "IndexDistance"]
+- !private ["Ps25ExpressibleByArrayLiteral", "Iterator"]
+- !private ["Ps25ExpressibleByArrayLiteral", "_Element"]
+- !private ["Ps25ExpressibleByArrayLiteral", "count"]
+- !private ["Ps25ExpressibleByArrayLiteral", "first"]
+- !private ["Ps27ExpressibleByBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "IndexDistance"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "Iterator"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "count"]
+- ["Ps30ExpressibleByDictionaryLiteral", "init"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "removeValue"]
+- !private ["Ps30ExpressibleByDictionaryLiteral", "subscript"]
+- !private ["Ps43ExpressibleByExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps27ExpressibleByIntegerLiteral", "hashValue"]
+- !private ["Ps32ExpressibleByStringInterpolation", "init"]
+- !private ["Ps26ExpressibleByStringLiteral", "init"]
+- !private ["Ps33ExpressibleByUnicodeScalarLiteral", "init"]
+- !private ["Ps8Hashable", "Beer"]
+- !private ["Ps8Hashable", "Brewery"]
+- !private ["Ps8Hashable", "_getBuiltinLogicValue"]
+- ["Ps8Hashable", "_toAnyHashable"]
+- !private ["Ps8Hashable", "async"]
+- !private ["Ps8Hashable", "automaticallyMergesChangesFromParent"]
+- ["Ps8Hashable", "container"]
+- ["Ps8Hashable", "coreDataStack"]
+- ["Ps8Hashable", "delegate"]
+- !private ["Ps8Hashable", "fetch"]
+- !private ["Ps8Hashable", "fetchRequest"]
+- !private ["Ps8Hashable", "global"]
+- ["Ps8Hashable", "hashValue"]
+- !private ["Ps8Hashable", "image"]
+- !private ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "invalidate"]
+- !private ["Ps8Hashable", "main"]
+- !private ["Ps8Hashable", "mergeByPropertyObjectTrump"]
+- !private ["Ps8Hashable", "mergePolicy"]
+- ["Ps8Hashable", "newBackgroundContext"]
+- !private ["Ps8Hashable", "performAndWait"]
+- !private ["Ps8Hashable", "predicate"]
+- !private ["Ps8Hashable", "save"]
+- !private ["Ps8Hashable", "scheduledTimer"]
+- ["Ps8Hashable", "shared"]
+- !private ["Ps8Hashable", "sortDescriptors"]
+- !private ["Ps8Hashable", "sync"]
+- !private ["Ps8Hashable", "userInitiated"]
+- ["Ps8Hashable", ""]
+- ["O11BreweryTour17ImageDownloadType", "=="]
+- ["O11BreweryTour17ImageDownloadType", "Beer"]
+- ["O11BreweryTour17ImageDownloadType", "Brewery"]
+- ["O11BreweryTour17ImageDownloadType", "_toAnyHashable"]
+- ["O11BreweryTour17ImageDownloadType", "deinit"]
+- ["O11BreweryTour17ImageDownloadType", "hashValue"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "Beer"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "Brewery"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "DispatchQueue"]
+- ["P11BreweryTour20ImageLinkingProcotol", "ImageDownloadType"]
+- ["P11BreweryTour20ImageLinkingProcotol", "NSData"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "NSLog"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "NSMergePolicy"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "NSPredicate"]
+- ["P11BreweryTour20ImageLinkingProcotol", "String"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "Timer"]
+- ["P11BreweryTour20ImageLinkingProcotol", "UIApplication"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "backContext"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "decideToDisableTimer"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "disableTimer"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "fetchExecute"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "generateRequest"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "imageProcessTimer"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "imagesToBeAssignedQueue"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "initContext"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "maxSaves"]
+- ["P11BreweryTour20ImageLinkingProcotol", "queueLinkJob"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "timerDelay"]
+- !private ["P11BreweryTour20ImageLinkingProcotol", "timerProcessImageQueue"]
+- ["P11BreweryTour20ImageLinkingProcotol", ""]
+- ["SQ", "deinit"]
+- !private ["Ps9Indexable", "Element"]
+- !private ["Ps9Indexable", "Index"]
+- !private ["Ps9Indexable", "IndexDistance"]
+- !private ["Ps9Indexable", "Iterator"]
+- !private ["Ps9Indexable", "SubSequence"]
+- !private ["Ps9Indexable", "_Element"]
+- !private ["Ps9Indexable", "count"]
+- !private ["Ps9Indexable", "first"]
+- ["Ps9Indexable", "init"]
+- !private ["Ps9Indexable", "removeValue"]
+- !private ["Ps9Indexable", "subscript"]
+- !private ["Ps13IndexableBase", "Element"]
+- !private ["Ps13IndexableBase", "Index"]
+- !private ["Ps13IndexableBase", "IndexDistance"]
+- !private ["Ps13IndexableBase", "Iterator"]
+- !private ["Ps13IndexableBase", "SubSequence"]
+- !private ["Ps13IndexableBase", "_Element"]
+- !private ["Ps13IndexableBase", "count"]
+- !private ["Ps13IndexableBase", "first"]
+- ["Ps13IndexableBase", "init"]
+- !private ["Ps13IndexableBase", "removeValue"]
+- !private ["Ps13IndexableBase", "subscript"]
+- !private ["Vs16IndexingIterator", "Element"]
+- ["Si", "deinit"]
+- !private ["Si", "hashValue"]
+- !private ["Ps7Integer", "hashValue"]
+- !private ["Ps17IntegerArithmetic", "hashValue"]
+- !private ["Ps16IteratorProtocol", "Element"]
+- !private ["Ps25LosslessStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps25LosslessStringConvertible", "init"]
+- !private ["PSo12MKAnnotation", "deinit"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "AnyObject"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "AppDelegate"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "Beer"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "Brewery"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "DispatchQueue"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "Double"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "ImageDownloadType"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "NSData"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "NSFetchRequest"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "NSFetchRequestResult"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "NSLog"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "NSManagedObjectContext"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "NSMergePolicy"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "NSPredicate"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "String"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "Timer"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "UIApplication"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "backContext"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "decideToDisableTimer"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "deinit"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "disableTimer"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "fetchExecute"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "generateRequest"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "imageProcessTimer"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "imagesToBeAssignedQueue"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "init"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "initContext"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "maxSaves"]
+- ["C11BreweryTour24ManagedObjectImageLinker", "queueLinkJob"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "timerDelay"]
+- !private ["C11BreweryTour24ManagedObjectImageLinker", "timerProcessImageQueue"]
+- !private ["Ps10MirrorPath", "hashValue"]
+- !private ["Ps10MirrorPath", "init"]
+- !private ["Ps17MutableCollection", "Element"]
+- !private ["Ps17MutableCollection", "IndexDistance"]
+- !private ["Ps17MutableCollection", "Iterator"]
+- !private ["Ps17MutableCollection", "_Element"]
+- !private ["Ps17MutableCollection", "count"]
+- !private ["Ps17MutableCollection", "first"]
+- !private ["Ps16MutableIndexable", "Element"]
+- !private ["Ps16MutableIndexable", "IndexDistance"]
+- !private ["Ps16MutableIndexable", "Iterator"]
+- !private ["Ps16MutableIndexable", "_Element"]
+- !private ["Ps16MutableIndexable", "count"]
+- !private ["Ps16MutableIndexable", "first"]
+- !private ["PSo8NSCoding", "automaticallyMergesChangesFromParent"]
+- !private ["PSo8NSCoding", "fetch"]
+- !private ["PSo8NSCoding", "init"]
+- !private ["PSo8NSCoding", "mergePolicy"]
+- !private ["PSo8NSCoding", "performAndWait"]
+- !private ["PSo8NSCoding", "predicate"]
+- !private ["PSo8NSCoding", "save"]
+- !private ["PSo8NSCoding", "sortDescriptors"]
+- !private ["PSo9NSCopying", "init"]
+- !private ["PSo9NSCopying", "predicate"]
+- !private ["PSo9NSCopying", "sortDescriptors"]
+- ["CSo6NSData", "deinit"]
+- !private ["CSo14NSFetchRequest", "deinit"]
+- !private ["CSo14NSFetchRequest", "predicate"]
+- !private ["CSo14NSFetchRequest", "sortDescriptors"]
+- !private ["PSo20NSFetchRequestResult", "deinit"]
+- !private ["PSo20NSFetchRequestResult", "fetchRequest"]
+- !private ["PSo20NSFetchRequestResult", "image"]
+- !private ["PSo9NSLocking", "automaticallyMergesChangesFromParent"]
+- !private ["PSo9NSLocking", "fetch"]
+- !private ["PSo9NSLocking", "mergePolicy"]
+- !private ["PSo9NSLocking", "performAndWait"]
+- !private ["PSo9NSLocking", "save"]
+- !private ["CSo15NSManagedObject", "fetchRequest"]
+- !private ["CSo15NSManagedObject", "image"]
+- !private ["CSo22NSManagedObjectContext", "automaticallyMergesChangesFromParent"]
+- ["CSo22NSManagedObjectContext", "deinit"]
+- !private ["CSo22NSManagedObjectContext", "fetch"]
+- !private ["CSo22NSManagedObjectContext", "mergePolicy"]
+- !private ["CSo22NSManagedObjectContext", "performAndWait"]
+- !private ["CSo22NSManagedObjectContext", "save"]
+- !private ["CSo13NSMergePolicy", "deinit"]
+- !private ["CSo13NSMergePolicy", "mergeByPropertyObjectTrump"]
+- !private ["PSo16NSMutableCopying", "init"]
+- !private ["CSo8NSObject", "async"]
+- !private ["CSo8NSObject", "automaticallyMergesChangesFromParent"]
+- ["CSo8NSObject", "container"]
+- ["CSo8NSObject", "coreDataStack"]
+- ["CSo8NSObject", "delegate"]
+- !private ["CSo8NSObject", "fetch"]
+- !private ["CSo8NSObject", "fetchRequest"]
+- !private ["CSo8NSObject", "global"]
+- !private ["CSo8NSObject", "image"]
+- !private ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "invalidate"]
+- !private ["CSo8NSObject", "main"]
+- !private ["CSo8NSObject", "mergeByPropertyObjectTrump"]
+- !private ["CSo8NSObject", "mergePolicy"]
+- ["CSo8NSObject", "newBackgroundContext"]
+- !private ["CSo8NSObject", "performAndWait"]
+- !private ["CSo8NSObject", "predicate"]
+- !private ["CSo8NSObject", "save"]
+- !private ["CSo8NSObject", "scheduledTimer"]
+- ["CSo8NSObject", "shared"]
+- !private ["CSo8NSObject", "sortDescriptors"]
+- !private ["CSo8NSObject", "sync"]
+- !private ["PSo16NSObjectProtocol", "async"]
+- !private ["PSo16NSObjectProtocol", "automaticallyMergesChangesFromParent"]
+- ["PSo16NSObjectProtocol", "container"]
+- ["PSo16NSObjectProtocol", "coreDataStack"]
+- ["PSo16NSObjectProtocol", "delegate"]
+- !private ["PSo16NSObjectProtocol", "fetch"]
+- !private ["PSo16NSObjectProtocol", "fetchRequest"]
+- !private ["PSo16NSObjectProtocol", "global"]
+- !private ["PSo16NSObjectProtocol", "image"]
+- !private ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "invalidate"]
+- !private ["PSo16NSObjectProtocol", "main"]
+- !private ["PSo16NSObjectProtocol", "mergeByPropertyObjectTrump"]
+- !private ["PSo16NSObjectProtocol", "mergePolicy"]
+- ["PSo16NSObjectProtocol", "newBackgroundContext"]
+- !private ["PSo16NSObjectProtocol", "performAndWait"]
+- !private ["PSo16NSObjectProtocol", "predicate"]
+- !private ["PSo16NSObjectProtocol", "save"]
+- !private ["PSo16NSObjectProtocol", "scheduledTimer"]
+- ["PSo16NSObjectProtocol", "shared"]
+- !private ["PSo16NSObjectProtocol", "sortDescriptors"]
+- !private ["PSo16NSObjectProtocol", "sync"]
+- ["CSo21NSPersistentContainer", "newBackgroundContext"]
+- !private ["CSo24NSPersistentStoreRequest", "predicate"]
+- !private ["CSo24NSPersistentStoreRequest", "sortDescriptors"]
+- !private ["CSo11NSPredicate", "deinit"]
+- !private ["CSo11NSPredicate", "init"]
+- !private ["PSo14NSSecureCoding", "init"]
+- !private ["CSo8NSString", "init"]
+- !private ["CSo9OS_object", "async"]
+- !private ["CSo9OS_object", "global"]
+- !private ["CSo9OS_object", "main"]
+- !private ["CSo9OS_object", "sync"]
+- ["Sq", "deinit"]
+- !private ["OV8Dispatch11DispatchQoS8QoSClass", "deinit"]
+- !private ["OV8Dispatch11DispatchQoS8QoSClass", "userInitiated"]
+- !private ["Ps22RandomAccessCollection", "Element"]
+- !private ["Ps22RandomAccessCollection", "IndexDistance"]
+- !private ["Ps22RandomAccessCollection", "Iterator"]
+- !private ["Ps22RandomAccessCollection", "_Element"]
+- !private ["Ps22RandomAccessCollection", "count"]
+- !private ["Ps22RandomAccessCollection", "first"]
+- !private ["Ps21RandomAccessIndexable", "Element"]
+- !private ["Ps21RandomAccessIndexable", "IndexDistance"]
+- !private ["Ps21RandomAccessIndexable", "Iterator"]
+- !private ["Ps21RandomAccessIndexable", "_Element"]
+- !private ["Ps21RandomAccessIndexable", "count"]
+- !private ["Ps21RandomAccessIndexable", "first"]
+- !private ["Ps26RangeReplaceableCollection", "Element"]
+- !private ["Ps26RangeReplaceableCollection", "IndexDistance"]
+- !private ["Ps26RangeReplaceableCollection", "Iterator"]
+- !private ["Ps26RangeReplaceableCollection", "_Element"]
+- !private ["Ps26RangeReplaceableCollection", "count"]
+- !private ["Ps26RangeReplaceableCollection", "first"]
+- !private ["Ps25RangeReplaceableIndexable", "Element"]
+- !private ["Ps25RangeReplaceableIndexable", "IndexDistance"]
+- !private ["Ps25RangeReplaceableIndexable", "Iterator"]
+- !private ["Ps25RangeReplaceableIndexable", "_Element"]
+- !private ["Ps25RangeReplaceableIndexable", "count"]
+- !private ["Ps25RangeReplaceableIndexable", "first"]
+- !private ["V10ObjectiveC8Selector", "deinit"]
+- !private ["Ps8Sequence", "Element"]
+- !private ["Ps8Sequence", "Index"]
+- !private ["Ps8Sequence", "IndexDistance"]
+- !private ["Ps8Sequence", "Iterator"]
+- !private ["Ps8Sequence", "SubSequence"]
+- !private ["Ps8Sequence", "_Element"]
+- !private ["Ps8Sequence", "count"]
+- !private ["Ps8Sequence", "first"]
+- ["Ps8Sequence", "init"]
+- !private ["Ps8Sequence", "removeValue"]
+- !private ["Ps8Sequence", "subscript"]
+- !private ["Ps13SignedInteger", "hashValue"]
+- !private ["Ps12SignedNumber", "hashValue"]
+- !private ["Vs5Slice", "Index"]
+- !private ["Vs5Slice", "Iterator"]
+- !private ["Vs5Slice", "SubSequence"]
+- !private ["Vs5Slice", "_Element"]
+- !private ["Ps10Strideable", "hashValue"]
+- ["SS", "deinit"]
+- !private ["SS", "init"]
+- !private ["Ps16TextOutputStream", "init"]
+- !private ["Ps20TextOutputStreamable", "init"]
+- !private ["CSo5Timer", "deinit"]
+- !private ["CSo5Timer", "invalidate"]
+- !private ["CSo5Timer", "scheduledTimer"]
+- ["CSo13UIApplication", "deinit"]
+- ["CSo13UIApplication", "delegate"]
+- ["CSo13UIApplication", "shared"]
+- ["PSo21UIApplicationDelegate", "coreDataStack"]
+- ["CSo11UIResponder", "coreDataStack"]
+- ["CSo11UIResponder", "delegate"]
+- ["CSo11UIResponder", "shared"]
+- ["PSo30UIResponderStandardEditActions", "coreDataStack"]
+- ["PSo30UIResponderStandardEditActions", "delegate"]
+- ["PSo30UIResponderStandardEditActions", "shared"]
+- !private ["P9Alamofire14URLConvertible", "init"]
+- !private ["Ps14_ArrayProtocol", "Element"]
+- !private ["Ps14_ArrayProtocol", "IndexDistance"]
+- !private ["Ps14_ArrayProtocol", "Iterator"]
+- !private ["Ps14_ArrayProtocol", "_Element"]
+- !private ["Ps14_ArrayProtocol", "count"]
+- !private ["Ps14_ArrayProtocol", "first"]
+- !private ["Ps24_DestructorSafeContainer", "Element"]
+- !private ["Ps24_DestructorSafeContainer", "IndexDistance"]
+- !private ["Ps24_DestructorSafeContainer", "Iterator"]
+- !private ["Ps24_DestructorSafeContainer", "_Element"]
+- !private ["Ps24_DestructorSafeContainer", "count"]
+- !private ["Ps24_DestructorSafeContainer", "first"]
+- !private ["Ps35_ExpressibleByBuiltinBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "hashValue"]
+- !private ["Ps34_ExpressibleByBuiltinStringLiteral", "init"]
+- !private ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "init"]
+- !private ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "init"]
+- !private ["Ps9_Hashable", "Beer"]
+- !private ["Ps9_Hashable", "Brewery"]
+- !private ["Ps9_Hashable", "_getBuiltinLogicValue"]
+- ["Ps9_Hashable", "_toAnyHashable"]
+- !private ["Ps9_Hashable", "async"]
+- !private ["Ps9_Hashable", "automaticallyMergesChangesFromParent"]
+- ["Ps9_Hashable", "container"]
+- ["Ps9_Hashable", "coreDataStack"]
+- ["Ps9_Hashable", "delegate"]
+- !private ["Ps9_Hashable", "fetch"]
+- !private ["Ps9_Hashable", "fetchRequest"]
+- !private ["Ps9_Hashable", "global"]
+- ["Ps9_Hashable", "hashValue"]
+- !private ["Ps9_Hashable", "image"]
+- !private ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "invalidate"]
+- !private ["Ps9_Hashable", "main"]
+- !private ["Ps9_Hashable", "mergeByPropertyObjectTrump"]
+- !private ["Ps9_Hashable", "mergePolicy"]
+- ["Ps9_Hashable", "newBackgroundContext"]
+- !private ["Ps9_Hashable", "performAndWait"]
+- !private ["Ps9_Hashable", "predicate"]
+- !private ["Ps9_Hashable", "save"]
+- !private ["Ps9_Hashable", "scheduledTimer"]
+- ["Ps9_Hashable", "shared"]
+- !private ["Ps9_Hashable", "sortDescriptors"]
+- !private ["Ps9_Hashable", "sync"]
+- !private ["Ps9_Hashable", "userInitiated"]
+- ["Ps9_Hashable", ""]
+- !private ["Ps14_Incrementable", "hashValue"]
+- !private ["Ps8_Integer", "hashValue"]
+- !private ["Ps18_IntegerArithmetic", "hashValue"]
+- !private ["Ps21_ObjectiveCBridgeable", "Element"]
+- !private ["Ps21_ObjectiveCBridgeable", "IndexDistance"]
+- !private ["Ps21_ObjectiveCBridgeable", "Iterator"]
+- !private ["Ps21_ObjectiveCBridgeable", "_Element"]
+- !private ["Ps21_ObjectiveCBridgeable", "_getBuiltinLogicValue"]
+- !private ["Ps21_ObjectiveCBridgeable", "count"]
+- !private ["Ps21_ObjectiveCBridgeable", "first"]
+- !private ["Ps21_ObjectiveCBridgeable", "hashValue"]
+- ["Ps21_ObjectiveCBridgeable", "init"]
+- !private ["Ps21_ObjectiveCBridgeable", "removeValue"]
+- !private ["Ps21_ObjectiveCBridgeable", "subscript"]
+- !private ["Vs26_OptionalNilComparisonType", "deinit"]
+- !private ["Ps14_SignedInteger", "hashValue"]
+- !private ["Ps11_Strideable", "hashValue"]
+depends-nominal:
+- "Ps9AnyObject"
+- "C11BreweryTour11AppDelegate"
+- !private "Sa"
+- !private "C11BreweryTour4Beer"
+- !private "Ps23BidirectionalCollection"
+- !private "Ps22BidirectionalIndexable"
+- !private "Ps17BitwiseOperations"
+- !private "Sb"
+- !private "C11BreweryTour7Brewery"
+- "Ps7CVarArg"
+- "Ps10Collection"
+- !private "Ps10Comparable"
+- "C11BreweryTour13CoreDataStack"
+- "Ps28CustomDebugStringConvertible"
+- !private "Ps29CustomPlaygroundQuickLookable"
+- "Ps17CustomReflectable"
+- "Ps23CustomStringConvertible"
+- "Vs10Dictionary"
+- !private "Vs18DictionaryIterator"
+- !private "CSo14DispatchObject"
+- !private "CSo13DispatchQueue"
+- "Sd"
+- "Ps9Equatable"
+- !private "Ps25ExpressibleByArrayLiteral"
+- !private "Ps27ExpressibleByBooleanLiteral"
+- "Ps30ExpressibleByDictionaryLiteral"
+- !private "Ps43ExpressibleByExtendedGraphemeClusterLiteral"
+- !private "Ps27ExpressibleByIntegerLiteral"
+- !private "Ps32ExpressibleByStringInterpolation"
+- !private "Ps26ExpressibleByStringLiteral"
+- !private "Ps33ExpressibleByUnicodeScalarLiteral"
+- "Ps8Hashable"
+- "O11BreweryTour17ImageDownloadType"
+- "P11BreweryTour20ImageLinkingProcotol"
+- "SQ"
+- "Ps9Indexable"
+- "Ps13IndexableBase"
+- !private "Vs16IndexingIterator"
+- "Si"
+- !private "Ps7Integer"
+- !private "Ps17IntegerArithmetic"
+- !private "Ps16IteratorProtocol"
+- !private "Ps25LosslessStringConvertible"
+- !private "PSo12MKAnnotation"
+- "C11BreweryTour24ManagedObjectImageLinker"
+- !private "Ps10MirrorPath"
+- !private "Ps17MutableCollection"
+- !private "Ps16MutableIndexable"
+- !private "PSo8NSCoding"
+- !private "PSo9NSCopying"
+- "CSo6NSData"
+- !private "CSo14NSFetchRequest"
+- !private "PSo20NSFetchRequestResult"
+- !private "PSo9NSLocking"
+- !private "CSo15NSManagedObject"
+- "CSo22NSManagedObjectContext"
+- !private "CSo13NSMergePolicy"
+- !private "PSo16NSMutableCopying"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- "CSo21NSPersistentContainer"
+- !private "CSo24NSPersistentStoreRequest"
+- !private "CSo11NSPredicate"
+- !private "PSo14NSSecureCoding"
+- !private "CSo8NSString"
+- !private "CSo9OS_object"
+- "Sq"
+- !private "OV8Dispatch11DispatchQoS8QoSClass"
+- !private "Ps22RandomAccessCollection"
+- !private "Ps21RandomAccessIndexable"
+- !private "Ps26RangeReplaceableCollection"
+- !private "Ps25RangeReplaceableIndexable"
+- !private "V10ObjectiveC8Selector"
+- "Ps8Sequence"
+- !private "Ps13SignedInteger"
+- !private "Ps12SignedNumber"
+- !private "Vs5Slice"
+- !private "Ps10Strideable"
+- "SS"
+- !private "Ps16TextOutputStream"
+- !private "Ps20TextOutputStreamable"
+- !private "CSo5Timer"
+- "CSo13UIApplication"
+- "PSo21UIApplicationDelegate"
+- "CSo11UIResponder"
+- "PSo30UIResponderStandardEditActions"
+- !private "P9Alamofire14URLConvertible"
+- !private "Ps14_ArrayProtocol"
+- !private "Ps24_DestructorSafeContainer"
+- !private "Ps35_ExpressibleByBuiltinBooleanLiteral"
+- !private "Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral"
+- !private "Ps35_ExpressibleByBuiltinIntegerLiteral"
+- !private "Ps34_ExpressibleByBuiltinStringLiteral"
+- !private "Ps39_ExpressibleByBuiltinUTF16StringLiteral"
+- !private "Ps41_ExpressibleByBuiltinUnicodeScalarLiteral"
+- !private "Ps35_HasCustomAnyHashableRepresentation"
+- "Ps9_Hashable"
+- !private "Ps14_Incrementable"
+- !private "Ps8_Integer"
+- !private "Ps18_IntegerArithmetic"
+- "Ps21_ObjectiveCBridgeable"
+- !private "Vs26_OptionalNilComparisonType"
+- !private "Ps14_SignedInteger"
+- !private "Ps11_Strideable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/SwiftOnoneSupport.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/MapKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphoneos/arm64/CoreLocation.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework/Modules/Alamofire.swiftmodule/arm64.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Products/Debug-iphoneos/Alamofire/Alamofire.framework/Modules/module.modulemap"
+interface-hash: "1692ee2d251f85c1cdced232b15d3626"

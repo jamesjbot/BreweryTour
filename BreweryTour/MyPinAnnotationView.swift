@@ -23,8 +23,7 @@ class MyPinAnnotationView: MKPinAnnotationView {
     init(annot: MKAnnotation, reuse: String!) {
         super.init(annotation: annot, reuseIdentifier: reuse)
         // Format annotation callouts here
-        tintColor = UIColor.red
-
+        canShowCallout = true
         // Set the information icon on the right button
         rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         annotation = annotation

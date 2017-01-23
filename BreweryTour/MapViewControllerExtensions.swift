@@ -193,11 +193,8 @@ extension MapViewController : MKMapViewDelegate {
             favBrewery.favorite = !(favBrewery.favorite)
             let image : UIImage!
             if favBrewery.favorite == false {
-
                 image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
-
             } else {
-
                 image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
             }
 
@@ -240,9 +237,12 @@ extension MapViewController : MKMapViewDelegate {
 
     //Find brewery objectid by using name in annotation
     fileprivate func convertAnnotationToObjectID(by: MKAnnotation) -> NSManagedObjectID? {
+        guard let myTitle = by.title! else {
+            return nil
+        }
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "name = %@", by.title!! )
+        request.predicate = NSPredicate(format: "name = %@", myTitle )
         do {
             let breweries = try readOnlyContext?.fetch(request)
             if let brewery = breweries?.first {
@@ -258,39 +258,22 @@ extension MapViewController : MKMapViewDelegate {
     // This formats the pins and calloutAccessory views on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MyPinAnnotationView
-        if pinView == nil {
-            pinView = MyPinAnnotationView(annot: annotation, reuse: reuseId)
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MyAnnotationView
+
+        var foundBrewery: Brewery?
+
+        if let objectID = convertAnnotationToObjectID(by: annotation) {
+             foundBrewery = readOnlyContext?.object(with: objectID) as? Brewery
         }
 
-        pinView!.canShowCallout = true
-
-        if annotation === floatingAnnotation {
-            pinView!.pinTintColor = UIColor.magenta
-            return pinView
-        }
-
-        // If incoming annotation is user location.
-        if mapView.userLocation.coordinate.latitude == annotation.coordinate.latitude ,
-            mapView.userLocation.coordinate.longitude == annotation.coordinate.longitude {
-            // User's location doesn't need the other decorations
-            pinView!.pinTintColor = UIColor.black
-            return pinView
-
-        } else { // breweries
-            pinView?.pinTintColor = UIColor.orange
-        }
-
-        // Find the brewery in the proper context,
-        // If not then this is the user location.
-        // No formating needed on user location.
-        guard let objectID = convertAnnotationToObjectID(by: annotation),
-            let foundBrewery = readOnlyContext?.object(with: objectID) as? Brewery else {
-                return pinView
-        }
-
-        // Set the found brewery to the pin
-        return pinView?.setBrewery(foundBrewery)
+        // Based on the incoming annotationView let change this pinView
+        let annotationView =  MakePinView.sharedInstance().makePinView(fromAnnotationView: pinView,
+                                                                  fromAnnotation: annotation,
+                                                                  withUserLocation: mapView.userLocation,
+                                                                  floatingAnnotation: floatingAnnotation,
+                                                                  reuseID: reuseId,
+                                                                  brewery: foundBrewery)
+        return annotationView
     }
 
 }

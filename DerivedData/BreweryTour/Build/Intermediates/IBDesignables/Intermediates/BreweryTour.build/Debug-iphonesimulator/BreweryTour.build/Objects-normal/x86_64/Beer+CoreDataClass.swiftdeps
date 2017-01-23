@@ -1,0 +1,377 @@
+### Swift dependencies file v0 ###
+provides-top-level:
+- "Beer"
+provides-nominal:
+- "C11BreweryTour4Beer"
+provides-member:
+- ["C11BreweryTour4Beer", ""]
+provides-dynamic-lookup:
+depends-top-level:
+- "NSManagedObject"
+- "Beer"
+- "String"
+- !private "NSEntityDescription"
+- "NSManagedObjectContext"
+- "AssignmentPrecedence"
+- "Brewery"
+- !private "StringLiteralType"
+- "BeerData"
+- "NSData"
+- "Bool"
+depends-member:
+- !private ["Ps9AnyObject", "Beer"]
+- !private ["Ps9AnyObject", "NSEntityDescription"]
+- !private ["Ps9AnyObject", "abv"]
+- !private ["Ps9AnyObject", "availability"]
+- !private ["Ps9AnyObject", "beerDescription"]
+- !private ["Ps9AnyObject", "beerName"]
+- !private ["Ps9AnyObject", "brewer"]
+- !private ["Ps9AnyObject", "breweryID"]
+- !private ["Ps9AnyObject", "entity"]
+- !private ["Ps9AnyObject", "favorite"]
+- !private ["Ps9AnyObject", "ibu"]
+- !private ["Ps9AnyObject", "id"]
+- !private ["Ps9AnyObject", "image"]
+- !private ["Ps9AnyObject", "imageUrl"]
+- ["Ps9AnyObject", "init"]
+- !private ["Ps9AnyObject", "isOrganic"]
+- !private ["Ps9AnyObject", "styleID"]
+- !private ["Ps9AnyObject", "tastingNotes"]
+- ["Ps9AnyObject", ""]
+- !private ["C11BreweryTour4Beer", "Beer"]
+- ["C11BreweryTour4Beer", "BeerData"]
+- ["C11BreweryTour4Beer", "Bool"]
+- ["C11BreweryTour4Beer", "Brewery"]
+- ["C11BreweryTour4Beer", "NSData"]
+- !private ["C11BreweryTour4Beer", "NSEntityDescription"]
+- ["C11BreweryTour4Beer", "NSManagedObjectContext"]
+- ["C11BreweryTour4Beer", "String"]
+- !private ["C11BreweryTour4Beer", "abv"]
+- !private ["C11BreweryTour4Beer", "availability"]
+- !private ["C11BreweryTour4Beer", "beerDescription"]
+- !private ["C11BreweryTour4Beer", "beerName"]
+- !private ["C11BreweryTour4Beer", "brewer"]
+- !private ["C11BreweryTour4Beer", "breweryID"]
+- ["C11BreweryTour4Beer", "deinit"]
+- !private ["C11BreweryTour4Beer", "entity"]
+- !private ["C11BreweryTour4Beer", "favorite"]
+- !private ["C11BreweryTour4Beer", "ibu"]
+- !private ["C11BreweryTour4Beer", "id"]
+- !private ["C11BreweryTour4Beer", "image"]
+- !private ["C11BreweryTour4Beer", "imageUrl"]
+- ["C11BreweryTour4Beer", "init"]
+- !private ["C11BreweryTour4Beer", "isOrganic"]
+- !private ["C11BreweryTour4Beer", "styleID"]
+- !private ["C11BreweryTour4Beer", "tastingNotes"]
+- !private ["V11BreweryTour8BeerData", "abv"]
+- !private ["V11BreweryTour8BeerData", "availability"]
+- !private ["V11BreweryTour8BeerData", "beerDescription"]
+- !private ["V11BreweryTour8BeerData", "beerName"]
+- !private ["V11BreweryTour8BeerData", "breweryID"]
+- ["V11BreweryTour8BeerData", "deinit"]
+- !private ["V11BreweryTour8BeerData", "ibu"]
+- !private ["V11BreweryTour8BeerData", "id"]
+- !private ["V11BreweryTour8BeerData", "imageUrl"]
+- !private ["V11BreweryTour8BeerData", "isOrganic"]
+- !private ["V11BreweryTour8BeerData", "styleID"]
+- ["Sb", "deinit"]
+- ["C11BreweryTour7Brewery", "deinit"]
+- !private ["C11BreweryTour7Brewery", "id"]
+- !private ["Ps7CVarArg", "Beer"]
+- !private ["Ps7CVarArg", "NSEntityDescription"]
+- !private ["Ps7CVarArg", "abv"]
+- !private ["Ps7CVarArg", "availability"]
+- !private ["Ps7CVarArg", "beerDescription"]
+- !private ["Ps7CVarArg", "beerName"]
+- !private ["Ps7CVarArg", "brewer"]
+- !private ["Ps7CVarArg", "breweryID"]
+- !private ["Ps7CVarArg", "entity"]
+- !private ["Ps7CVarArg", "favorite"]
+- !private ["Ps7CVarArg", "ibu"]
+- !private ["Ps7CVarArg", "id"]
+- !private ["Ps7CVarArg", "image"]
+- !private ["Ps7CVarArg", "imageUrl"]
+- ["Ps7CVarArg", "init"]
+- !private ["Ps7CVarArg", "isOrganic"]
+- !private ["Ps7CVarArg", "styleID"]
+- !private ["Ps7CVarArg", "tastingNotes"]
+- ["Ps7CVarArg", ""]
+- !private ["Ps10Comparable", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "Beer"]
+- !private ["Ps28CustomDebugStringConvertible", "NSEntityDescription"]
+- !private ["Ps28CustomDebugStringConvertible", "abv"]
+- !private ["Ps28CustomDebugStringConvertible", "availability"]
+- !private ["Ps28CustomDebugStringConvertible", "beerDescription"]
+- !private ["Ps28CustomDebugStringConvertible", "beerName"]
+- !private ["Ps28CustomDebugStringConvertible", "brewer"]
+- !private ["Ps28CustomDebugStringConvertible", "breweryID"]
+- !private ["Ps28CustomDebugStringConvertible", "entity"]
+- !private ["Ps28CustomDebugStringConvertible", "favorite"]
+- !private ["Ps28CustomDebugStringConvertible", "ibu"]
+- !private ["Ps28CustomDebugStringConvertible", "id"]
+- !private ["Ps28CustomDebugStringConvertible", "image"]
+- !private ["Ps28CustomDebugStringConvertible", "imageUrl"]
+- ["Ps28CustomDebugStringConvertible", "init"]
+- !private ["Ps28CustomDebugStringConvertible", "isOrganic"]
+- !private ["Ps28CustomDebugStringConvertible", "styleID"]
+- !private ["Ps28CustomDebugStringConvertible", "tastingNotes"]
+- ["Ps28CustomDebugStringConvertible", ""]
+- !private ["Ps29CustomPlaygroundQuickLookable", "init"]
+- !private ["Ps17CustomReflectable", "init"]
+- !private ["Ps23CustomStringConvertible", "Beer"]
+- !private ["Ps23CustomStringConvertible", "NSEntityDescription"]
+- !private ["Ps23CustomStringConvertible", "abv"]
+- !private ["Ps23CustomStringConvertible", "availability"]
+- !private ["Ps23CustomStringConvertible", "beerDescription"]
+- !private ["Ps23CustomStringConvertible", "beerName"]
+- !private ["Ps23CustomStringConvertible", "brewer"]
+- !private ["Ps23CustomStringConvertible", "breweryID"]
+- !private ["Ps23CustomStringConvertible", "entity"]
+- !private ["Ps23CustomStringConvertible", "favorite"]
+- !private ["Ps23CustomStringConvertible", "ibu"]
+- !private ["Ps23CustomStringConvertible", "id"]
+- !private ["Ps23CustomStringConvertible", "image"]
+- !private ["Ps23CustomStringConvertible", "imageUrl"]
+- ["Ps23CustomStringConvertible", "init"]
+- !private ["Ps23CustomStringConvertible", "isOrganic"]
+- !private ["Ps23CustomStringConvertible", "styleID"]
+- !private ["Ps23CustomStringConvertible", "tastingNotes"]
+- ["Ps23CustomStringConvertible", ""]
+- !private ["Ps9Equatable", "Beer"]
+- !private ["Ps9Equatable", "NSEntityDescription"]
+- !private ["Ps9Equatable", "abv"]
+- !private ["Ps9Equatable", "availability"]
+- !private ["Ps9Equatable", "beerDescription"]
+- !private ["Ps9Equatable", "beerName"]
+- !private ["Ps9Equatable", "brewer"]
+- !private ["Ps9Equatable", "breweryID"]
+- !private ["Ps9Equatable", "entity"]
+- !private ["Ps9Equatable", "favorite"]
+- !private ["Ps9Equatable", "ibu"]
+- !private ["Ps9Equatable", "id"]
+- !private ["Ps9Equatable", "image"]
+- !private ["Ps9Equatable", "imageUrl"]
+- ["Ps9Equatable", "init"]
+- !private ["Ps9Equatable", "isOrganic"]
+- !private ["Ps9Equatable", "styleID"]
+- !private ["Ps9Equatable", "tastingNotes"]
+- ["Ps9Equatable", ""]
+- !private ["Ps43ExpressibleByExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps32ExpressibleByStringInterpolation", "init"]
+- !private ["Ps26ExpressibleByStringLiteral", "init"]
+- !private ["Ps33ExpressibleByUnicodeScalarLiteral", "init"]
+- !private ["Ps8Hashable", "Beer"]
+- !private ["Ps8Hashable", "NSEntityDescription"]
+- !private ["Ps8Hashable", "abv"]
+- !private ["Ps8Hashable", "availability"]
+- !private ["Ps8Hashable", "beerDescription"]
+- !private ["Ps8Hashable", "beerName"]
+- !private ["Ps8Hashable", "brewer"]
+- !private ["Ps8Hashable", "breweryID"]
+- !private ["Ps8Hashable", "entity"]
+- !private ["Ps8Hashable", "favorite"]
+- !private ["Ps8Hashable", "ibu"]
+- !private ["Ps8Hashable", "id"]
+- !private ["Ps8Hashable", "image"]
+- !private ["Ps8Hashable", "imageUrl"]
+- ["Ps8Hashable", "init"]
+- !private ["Ps8Hashable", "isOrganic"]
+- !private ["Ps8Hashable", "styleID"]
+- !private ["Ps8Hashable", "tastingNotes"]
+- ["Ps8Hashable", ""]
+- !private ["Ps25LosslessStringConvertible", "init"]
+- !private ["Ps10MirrorPath", "init"]
+- !private ["PSo8NSCoding", "entity"]
+- !private ["PSo8NSCoding", "init"]
+- !private ["PSo9NSCopying", "entity"]
+- !private ["PSo9NSCopying", "init"]
+- ["CSo19NSEntityDescription", "deinit"]
+- !private ["CSo19NSEntityDescription", "entity"]
+- !private ["PSo17NSFastEnumeration", "entity"]
+- !private ["PSo20NSFetchRequestResult", "Beer"]
+- !private ["PSo20NSFetchRequestResult", "NSEntityDescription"]
+- !private ["PSo20NSFetchRequestResult", "abv"]
+- !private ["PSo20NSFetchRequestResult", "availability"]
+- !private ["PSo20NSFetchRequestResult", "beerDescription"]
+- !private ["PSo20NSFetchRequestResult", "beerName"]
+- !private ["PSo20NSFetchRequestResult", "brewer"]
+- !private ["PSo20NSFetchRequestResult", "breweryID"]
+- !private ["PSo20NSFetchRequestResult", "entity"]
+- !private ["PSo20NSFetchRequestResult", "favorite"]
+- !private ["PSo20NSFetchRequestResult", "ibu"]
+- !private ["PSo20NSFetchRequestResult", "id"]
+- !private ["PSo20NSFetchRequestResult", "image"]
+- !private ["PSo20NSFetchRequestResult", "imageUrl"]
+- ["PSo20NSFetchRequestResult", "init"]
+- !private ["PSo20NSFetchRequestResult", "isOrganic"]
+- !private ["PSo20NSFetchRequestResult", "styleID"]
+- !private ["PSo20NSFetchRequestResult", "tastingNotes"]
+- ["PSo20NSFetchRequestResult", ""]
+- !private ["CSo15NSManagedObject", "Beer"]
+- ["CSo15NSManagedObject", "BeerData"]
+- ["CSo15NSManagedObject", "Bool"]
+- ["CSo15NSManagedObject", "Brewery"]
+- ["CSo15NSManagedObject", "NSData"]
+- !private ["CSo15NSManagedObject", "NSEntityDescription"]
+- ["CSo15NSManagedObject", "NSManagedObjectContext"]
+- ["CSo15NSManagedObject", "String"]
+- !private ["CSo15NSManagedObject", "abv"]
+- !private ["CSo15NSManagedObject", "availability"]
+- !private ["CSo15NSManagedObject", "beerDescription"]
+- !private ["CSo15NSManagedObject", "beerName"]
+- !private ["CSo15NSManagedObject", "brewer"]
+- !private ["CSo15NSManagedObject", "breweryID"]
+- ["CSo15NSManagedObject", "deinit"]
+- !private ["CSo15NSManagedObject", "entity"]
+- !private ["CSo15NSManagedObject", "favorite"]
+- !private ["CSo15NSManagedObject", "ibu"]
+- !private ["CSo15NSManagedObject", "id"]
+- !private ["CSo15NSManagedObject", "image"]
+- !private ["CSo15NSManagedObject", "imageUrl"]
+- ["CSo15NSManagedObject", "init"]
+- !private ["CSo15NSManagedObject", "isOrganic"]
+- !private ["CSo15NSManagedObject", "styleID"]
+- !private ["CSo15NSManagedObject", "tastingNotes"]
+- ["CSo15NSManagedObject", ""]
+- ["CSo22NSManagedObjectContext", "deinit"]
+- !private ["PSo16NSMutableCopying", "init"]
+- !private ["CSo8NSObject", "Beer"]
+- ["CSo8NSObject", "BeerData"]
+- ["CSo8NSObject", "Bool"]
+- ["CSo8NSObject", "Brewery"]
+- ["CSo8NSObject", "NSData"]
+- !private ["CSo8NSObject", "NSEntityDescription"]
+- ["CSo8NSObject", "NSManagedObjectContext"]
+- ["CSo8NSObject", "String"]
+- !private ["CSo8NSObject", "abv"]
+- !private ["CSo8NSObject", "availability"]
+- !private ["CSo8NSObject", "beerDescription"]
+- !private ["CSo8NSObject", "beerName"]
+- !private ["CSo8NSObject", "brewer"]
+- !private ["CSo8NSObject", "breweryID"]
+- !private ["CSo8NSObject", "entity"]
+- !private ["CSo8NSObject", "favorite"]
+- !private ["CSo8NSObject", "ibu"]
+- !private ["CSo8NSObject", "id"]
+- !private ["CSo8NSObject", "image"]
+- !private ["CSo8NSObject", "imageUrl"]
+- ["CSo8NSObject", "init"]
+- !private ["CSo8NSObject", "isOrganic"]
+- !private ["CSo8NSObject", "styleID"]
+- !private ["CSo8NSObject", "tastingNotes"]
+- !private ["PSo16NSObjectProtocol", "Beer"]
+- !private ["PSo16NSObjectProtocol", "NSEntityDescription"]
+- !private ["PSo16NSObjectProtocol", "abv"]
+- !private ["PSo16NSObjectProtocol", "availability"]
+- !private ["PSo16NSObjectProtocol", "beerDescription"]
+- !private ["PSo16NSObjectProtocol", "beerName"]
+- !private ["PSo16NSObjectProtocol", "brewer"]
+- !private ["PSo16NSObjectProtocol", "breweryID"]
+- !private ["PSo16NSObjectProtocol", "entity"]
+- !private ["PSo16NSObjectProtocol", "favorite"]
+- !private ["PSo16NSObjectProtocol", "ibu"]
+- !private ["PSo16NSObjectProtocol", "id"]
+- !private ["PSo16NSObjectProtocol", "image"]
+- !private ["PSo16NSObjectProtocol", "imageUrl"]
+- ["PSo16NSObjectProtocol", "init"]
+- !private ["PSo16NSObjectProtocol", "isOrganic"]
+- !private ["PSo16NSObjectProtocol", "styleID"]
+- !private ["PSo16NSObjectProtocol", "tastingNotes"]
+- ["PSo16NSObjectProtocol", ""]
+- !private ["PSo14NSSecureCoding", "init"]
+- !private ["CSo8NSString", "init"]
+- ["Sq", "deinit"]
+- ["SS", "deinit"]
+- !private ["SS", "init"]
+- !private ["Ps16TextOutputStream", "init"]
+- !private ["Ps20TextOutputStreamable", "init"]
+- !private ["P9Alamofire14URLConvertible", "init"]
+- !private ["Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral", "init"]
+- !private ["Ps34_ExpressibleByBuiltinStringLiteral", "init"]
+- !private ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "init"]
+- !private ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "init"]
+- !private ["Ps9_Hashable", "Beer"]
+- !private ["Ps9_Hashable", "NSEntityDescription"]
+- !private ["Ps9_Hashable", "abv"]
+- !private ["Ps9_Hashable", "availability"]
+- !private ["Ps9_Hashable", "beerDescription"]
+- !private ["Ps9_Hashable", "beerName"]
+- !private ["Ps9_Hashable", "brewer"]
+- !private ["Ps9_Hashable", "breweryID"]
+- !private ["Ps9_Hashable", "entity"]
+- !private ["Ps9_Hashable", "favorite"]
+- !private ["Ps9_Hashable", "ibu"]
+- !private ["Ps9_Hashable", "id"]
+- !private ["Ps9_Hashable", "image"]
+- !private ["Ps9_Hashable", "imageUrl"]
+- ["Ps9_Hashable", "init"]
+- !private ["Ps9_Hashable", "isOrganic"]
+- !private ["Ps9_Hashable", "styleID"]
+- !private ["Ps9_Hashable", "tastingNotes"]
+- ["Ps9_Hashable", ""]
+- !private ["Ps21_ObjectiveCBridgeable", "init"]
+depends-nominal:
+- "Ps9AnyObject"
+- "C11BreweryTour4Beer"
+- "V11BreweryTour8BeerData"
+- "Sb"
+- "C11BreweryTour7Brewery"
+- "Ps7CVarArg"
+- !private "Ps10Comparable"
+- "Ps28CustomDebugStringConvertible"
+- !private "Ps29CustomPlaygroundQuickLookable"
+- !private "Ps17CustomReflectable"
+- "Ps23CustomStringConvertible"
+- "Ps9Equatable"
+- !private "Ps43ExpressibleByExtendedGraphemeClusterLiteral"
+- !private "Ps32ExpressibleByStringInterpolation"
+- !private "Ps26ExpressibleByStringLiteral"
+- !private "Ps33ExpressibleByUnicodeScalarLiteral"
+- "Ps8Hashable"
+- !private "Ps25LosslessStringConvertible"
+- !private "Ps10MirrorPath"
+- !private "PSo8NSCoding"
+- !private "PSo9NSCopying"
+- "CSo19NSEntityDescription"
+- !private "PSo17NSFastEnumeration"
+- "PSo20NSFetchRequestResult"
+- "CSo15NSManagedObject"
+- "CSo22NSManagedObjectContext"
+- !private "PSo16NSMutableCopying"
+- "CSo8NSObject"
+- "PSo16NSObjectProtocol"
+- !private "PSo14NSSecureCoding"
+- !private "CSo8NSString"
+- "Sq"
+- "SS"
+- !private "Ps16TextOutputStream"
+- !private "Ps20TextOutputStreamable"
+- !private "P9Alamofire14URLConvertible"
+- !private "Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral"
+- !private "Ps34_ExpressibleByBuiltinStringLiteral"
+- !private "Ps39_ExpressibleByBuiltinUTF16StringLiteral"
+- !private "Ps41_ExpressibleByBuiltinUnicodeScalarLiteral"
+- !private "Ps35_HasCustomAnyHashableRepresentation"
+- "Ps9_Hashable"
+- !private "Ps21_ObjectiveCBridgeable"
+depends-dynamic-lookup:
+depends-external:
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Swift.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/SwiftOnoneSupport.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/UIKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Foundation.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Darwin.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/Dispatch.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/ObjectiveC.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreGraphics.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/QuartzCore.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreImage.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreData.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/MapKit.swiftmodule"
+- "/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/lib/swift/iphonesimulator/x86_64/CoreLocation.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Intermediates/IBDesignables/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/Alamofire.swiftmodule/x86_64.swiftmodule"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Intermediates/IBDesignables/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Intermediates/IBDesignables/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
+- "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Intermediates/IBDesignables/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/module.modulemap"
+interface-hash: "ee1d887059a24b30366254791cc7caba"
