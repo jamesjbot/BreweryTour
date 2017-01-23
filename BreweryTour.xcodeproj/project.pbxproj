@@ -39,6 +39,7 @@
 		A75160281E356AB50078F6F9 /* MyAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A75160271E356AB50078F6F9 /* MyAnnotationView.swift */; };
 		A751602A1E35AA250078F6F9 /* beermap.png in Resources */ = {isa = PBXBuildFile; fileRef = A75160291E35AA250078F6F9 /* beermap.png */; };
 		A751602C1E35C29D0078F6F9 /* MakePinView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751602B1E35C29D0078F6F9 /* MakePinView.swift */; };
+		A751602E1E3638010078F6F9 /* StorableFloatingAnnotation.swift in Sources */ = {isa = PBXBuildFile; fileRef = A751602D1E3638010078F6F9 /* StorableFloatingAnnotation.swift */; };
 		A752344D1DAEA666008EF071 /* SelectedBeersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A752344C1DAEA666008EF071 /* SelectedBeersViewController.swift */; };
 		A752344F1DAEDB59008EF071 /* BeerDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A752344E1DAEDB59008EF071 /* BeerDetailViewController.swift */; };
 		A7634E661E26EBB00066ACEF /* ParserProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7634E651E26EBB00066ACEF /* ParserProtocol.swift */; };
@@ -150,6 +151,7 @@
 		A75160271E356AB50078F6F9 /* MyAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MyAnnotationView.swift; sourceTree = "<group>"; };
 		A75160291E35AA250078F6F9 /* beermap.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = beermap.png; sourceTree = "<group>"; };
 		A751602B1E35C29D0078F6F9 /* MakePinView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MakePinView.swift; sourceTree = "<group>"; };
+		A751602D1E3638010078F6F9 /* StorableFloatingAnnotation.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StorableFloatingAnnotation.swift; sourceTree = "<group>"; };
 		A752344C1DAEA666008EF071 /* SelectedBeersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SelectedBeersViewController.swift; sourceTree = "<group>"; };
 		A752344E1DAEDB59008EF071 /* BeerDetailViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BeerDetailViewController.swift; sourceTree = "<group>"; };
 		A7634E651E26EBB00066ACEF /* ParserProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParserProtocol.swift; sourceTree = "<group>"; };
@@ -416,6 +418,7 @@
 				A74350671DB91454007AE08C /* NSManagedObjectDisplayable.swift */,
 				A74350731DBAA17F007AE08C /* ObserverAndSubjectProtocol.swift */,
 				A78FBB5D1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift */,
+				A751602D1E3638010078F6F9 /* StorableFloatingAnnotation.swift */,
 			);
 			name = Protocols;
 			sourceTree = "<group>";
@@ -777,6 +780,7 @@
 				A78FBB5E1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift in Sources */,
 				A77FEBF71E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift in Sources */,
 				A7634E731E2734770066ACEF /* BeersByBreweryIDParser.swift in Sources */,
+				A751602E1E3638010078F6F9 /* StorableFloatingAnnotation.swift in Sources */,
 				A7B2AADF1DA791A400EE844C /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

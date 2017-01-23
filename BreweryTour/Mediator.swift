@@ -8,7 +8,7 @@
 
 import Foundation
 import CoreData
-
+import MapKit
 /*
  This class managed states changes across the app
  If a selection is made on the selection screen then we can 
@@ -21,10 +21,13 @@ class Mediator {
     // MARK: Constants
 
     // MARK: Variables
-
     private var automaticallySegueValue: Bool = false
     fileprivate var busyObservers: [BusyObserver] = []
     fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
+
+    fileprivate var floatingAnnotation: MKAnnotation?
+    fileprivate var lastMapSliderValue: Int = 42
+
     fileprivate var passedItemObservers: [ReceiveBroadcastSetSelected] = []
     fileprivate var passedItem: NSManagedObject?
 
@@ -38,19 +41,7 @@ class Mediator {
     }
     private var StyleStrategyID:Int = 1
 
-    fileprivate var lastMapSliderValue: Int = 42
-
     // MARK: Functions
-
-    // MARK: - Mapslider values
-    internal func lastSliderValue() -> Int {
-        return lastMapSliderValue
-    }
-
-    internal func setLastSliderValue(_ i: Int) {
-        lastMapSliderValue = Int(i)
-    }
-
 
     // MARK: - PassingItem
     internal func getPassedItem() -> NSManagedObject? {
@@ -68,6 +59,14 @@ class Mediator {
         automaticallySegueValue = to
     }
 
+    // MARK: - Mapslider values
+    internal func lastSliderValue() -> Int {
+        return lastMapSliderValue
+    }
+
+    internal func setLastSliderValue(_ i: Int) {
+        lastMapSliderValue = Int(i)
+    }
 
     // MARK: - Singleton Implementation
     private init(){
@@ -160,5 +159,21 @@ extension Mediator: BroadcastManagedObjectContextRefresh {
         contextObservers.append(a)
     }
 }
+
+// MARK: - StorableFloatingAnnotation
+
+extension Mediator: StorableFloatingAnnotation {
+
+    internal func getFloatingAnnotation() -> MKAnnotation? {
+        return floatingAnnotation
+    }
+
+    internal func setFloating(annotation: MKAnnotation) {
+        floatingAnnotation = annotation
+    }
+}
+
+
+
 
 

@@ -378,7 +378,7 @@ class MapViewController : UIViewController {
     private func makePointTargetLocation() {
         // Expose the button only when we have pin
         currentLocation.isHidden = false
-
+        Mediator.sharedInstance().setFloating(annotation: floatingAnnotation)
         let location = CLLocation(latitude: floatingAnnotation.coordinate.latitude, longitude: floatingAnnotation.coordinate.longitude)
         targetLocation = location
         displayNewStrategyWithNewPoint()
@@ -492,6 +492,11 @@ class MapViewController : UIViewController {
         slider.value = Float(Mediator.sharedInstance().lastSliderValue())
         numberOfPoints.text = String(Int(slider.value))
 
+        if let annotation = Mediator.sharedInstance().getFloatingAnnotation() {
+            floatingAnnotation = annotation
+            mapView.addAnnotation(floatingAnnotation)
+            makePointTargetLocation()
+        }
     }
 
 
