@@ -20,7 +20,8 @@ class MyAnnotationView: MKAnnotationView {
     init(annot: MKAnnotation, reuse: String!, brewery: Brewery?) {
         super.init(annotation: annot, reuseIdentifier: reuse)
         // Format annotation callouts here
-
+        canShowCallout = true
+        
         // Set the information icon on the right button
         rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
         annotation = annotation
