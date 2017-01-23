@@ -6,30 +6,30 @@ provides-nominal:
 provides-member:
 - ["C11BreweryTour11MapStrategy", ""]
 provides-dynamic-lookup:
-- "targetLocation"
+- "sendAnnotationsToMap"
 - "breweryLocations"
+- "targetLocation"
+- "convertLocationToAnnotation"
 - "sortLocations"
 - "endSearch"
 - "parentMapViewController"
-- "sendAnnotationsToMap"
-- "convertLocationToAnnotation"
 depends-top-level:
+- !private "Double"
 - !private "CLLocationDegrees"
-- "MapStrategy"
-- !private "!="
-- !private "MKPointAnnotation"
-- "CLLocation"
-- "MKAnnotation"
-- !private "&&"
-- !private "Bool"
-- "MapViewController"
 - !private "CastingPrecedence"
-- "NSObject"
+- "MKAnnotation"
 - "AssignmentPrecedence"
 - "Brewery"
 - !private "<"
-- !private "Double"
+- "NSObject"
+- !private "MKPointAnnotation"
+- !private "Bool"
+- !private "!="
+- !private "&&"
+- "CLLocation"
 - !private "CLLocationCoordinate2D"
+- "MapViewController"
+- "MapStrategy"
 depends-member:
 - !private ["Ps16AbsoluteValuable", "init"]
 - !private ["Ps9AnyObject", "CLLocation"]

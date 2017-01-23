@@ -633,7 +633,7 @@ SWIFT_CLASS("_TtC11BreweryTour17MapViewController")
 - (IBAction)sliderTouchUpInside:(UISlider * _Nonnull)sender forEvent:(UIEvent * _Nonnull)event;
 - (IBAction)touchUpOutside:(UISlider * _Nonnull)sender;
 - (void)displayNewStrategyWithNewPoint;
-- (void)updateMapWithAnnotations:(NSArray<id <MKAnnotation>> * _Nonnull)b;
+- (void)updateMapWithAnnotations:(NSArray<id <MKAnnotation>> * _Nonnull)withAnnotations;
 - (void)viewDidLoad;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewDidAppear:(BOOL)animated;

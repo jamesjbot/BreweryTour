@@ -10,17 +10,17 @@ provides-dynamic-lookup:
 - "viewDidLoad"
 - "viewWillAppear"
 depends-top-level:
-- !private "BooleanLiteralType"
-- "UITabBarControllerDelegate"
-- !private "UIBarButtonItem"
 - "Bool"
-- !private "DismissableTutorial"
-- !private "StringLiteralType"
-- "UIViewController"
-- "AssignmentPrecedence"
-- "MyTabBarController"
 - "CastingPrecedence"
+- "AssignmentPrecedence"
+- !private "DismissableTutorial"
+- "UIViewController"
+- !private "StringLiteralType"
 - "UITabBarController"
+- "MyTabBarController"
+- !private "UIBarButtonItem"
+- "UITabBarControllerDelegate"
+- !private "BooleanLiteralType"
 depends-member:
 - !private ["Ps9AnyObject", "DismissableTutorial"]
 - !private ["Ps9AnyObject", "UIBarButtonItem"]

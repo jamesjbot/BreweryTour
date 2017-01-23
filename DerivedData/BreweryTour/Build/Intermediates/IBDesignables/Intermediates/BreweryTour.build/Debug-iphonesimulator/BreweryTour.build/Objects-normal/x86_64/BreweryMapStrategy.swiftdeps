@@ -7,13 +7,13 @@ provides-member:
 - ["C11BreweryTour18BreweryMapStrategy", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "MapStrategy"
 - "MapViewController"
 - "CLLocation"
-- "Brewery"
-- "AssignmentPrecedence"
 - "BreweryMapStrategy"
+- "AssignmentPrecedence"
 - !private "StringLiteralType"
+- "MapStrategy"
+- "Brewery"
 depends-member:
 - !private ["Ps9AnyObject", "breweryLocations"]
 - ["Ps9AnyObject", "init"]

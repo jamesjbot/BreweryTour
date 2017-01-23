@@ -8,69 +8,70 @@ provides-member:
 - ["C11BreweryTour22CategoryViewController", ""]
 - ["OC11BreweryTour22CategoryViewController23SegmentedControllerMode", ""]
 provides-dynamic-lookup:
-- "cellIdentifier"
-- "selection"
-- "nextTutorialScreen"
-- "newSearchBar"
-- "segmentedControlClicked"
-- "tutorialView"
-- "tutorialText"
-- "segmentedControl"
-- "viewWillAppear"
-- "helpButton"
-- "automaticallySegueToMap"
 - "mapButtonClicked"
+- "viewDidAppear"
+- "newSearchBar"
 - "mapButton"
 - "pointer"
 - "activityIndicator"
-- "viewDidAppear"
+- "selection"
+- "tutorialText"
+- "segmentedControlClicked"
+- "nextTutorialScreen"
+- "tutorialView"
+- "cellIdentifier"
+- "helpButton"
+- "viewWillAppear"
 - "styleSelectionIndex"
-- "genericTable"
-- "dissMissTutorial"
 - "viewDidLoad"
+- "automaticallySegueToMap"
+- "genericTable"
+- "segmentedControl"
+- "dissMissTutorial"
 depends-top-level:
-- "UIBarButtonItem"
-- !private "!="
-- "StylesTableList"
-- "=="
-- "AssignmentPrecedence"
-- "CastingPrecedence"
 - "UISegmentedControl"
-- "UIButton"
-- "Bool"
-- "UIActivityIndicatorView"
-- "AnyObject"
-- "AppDelegate"
-- !private "UserDefaults"
-- !private "~="
-- "CGFloat"
-- "UITableView"
 - "Mediator"
-- !private "!"
 - !private "TimeInterval"
-- "BreweryTableList"
-- "UIEvent"
-- "UIApplication"
-- !private "+"
-- "TableList"
-- "CategoryViewController"
-- !private "Void"
-- "UITextField"
-- "AllBreweriesTableList"
-- "UISearchBar"
-- "UIView"
-- "NSFetchedResultsControllerDelegate"
-- !private "Array"
-- "BooleanLiteralType"
-- !private "-"
-- !private "g_constants"
-- !private "CGPoint"
-- "IndexPath"
 - "UIViewController"
-- "UITextView"
+- !private "Void"
+- !private "g_constants"
+- "CastingPrecedence"
+- !private "+"
+- "=="
+- !private "~="
 - !private "+="
+- !private "!"
+- "AllBreweriesTableList"
+- "CGFloat"
+- "UITextField"
+- "UITextView"
+- !private "-"
+- !private "Array"
+- "AssignmentPrecedence"
+- "TableList"
+- "AnyObject"
+- "UIEvent"
+- !private "UIOffset"
+- "CategoryViewController"
+- !private "!="
 - !private "UILabel"
+- "UIApplication"
 - "Int"
+- "Bool"
+- "UIButton"
+- "BooleanLiteralType"
+- "UIBarButtonItem"
+- !private "CGPoint"
+- "NSFetchedResultsControllerDelegate"
+- "StylesTableList"
+- "UIView"
+- "BreweryTableList"
+- "UISearchBar"
+- !private "UserDefaults"
+- "UITableView"
+- "IndexPath"
+- "UIActivityIndicatorView"
+- "AppDelegate"
 depends-member:
 - !private ["Ps16AbsoluteValuable", "init"]
 - ["C11BreweryTour21AllBreweriesTableList", "deinit"]
@@ -87,6 +88,7 @@ depends-member:
 - !private ["Ps9AnyObject", "TimeInterval"]
 - ["Ps9AnyObject", "UIApplication"]
 - !private ["Ps9AnyObject", "UIEvent"]
+- !private ["Ps9AnyObject", "UIOffset"]
 - !private ["Ps9AnyObject", "UIView"]
 - !private ["Ps9AnyObject", "UserDefaults"]
 - ["Ps9AnyObject", "activeTableList"]
@@ -135,6 +137,7 @@ depends-member:
 - !private ["Ps9AnyObject", "registerObserver"]
 - !private ["Ps9AnyObject", "reloadData"]
 - !private ["Ps9AnyObject", "resignFirstResponder"]
+- !private ["Ps9AnyObject", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps9AnyObject", "segmentedControl"]
 - ["Ps9AnyObject", "segmentedControlClicked"]
 - ["Ps9AnyObject", "segmentedControlPaddding"]
@@ -216,6 +219,7 @@ depends-member:
 - !private ["P11BreweryTour12BusyObserver", "TimeInterval"]
 - ["P11BreweryTour12BusyObserver", "UIApplication"]
 - !private ["P11BreweryTour12BusyObserver", "UIEvent"]
+- !private ["P11BreweryTour12BusyObserver", "UIOffset"]
 - !private ["P11BreweryTour12BusyObserver", "UIView"]
 - !private ["P11BreweryTour12BusyObserver", "UserDefaults"]
 - !private ["P11BreweryTour12BusyObserver", "activeTableList"]
@@ -254,6 +258,7 @@ depends-member:
 - !private ["PSo15CALayerDelegate", "isHidden"]
 - !private ["PSo15CALayerDelegate", "placeholder"]
 - !private ["PSo15CALayerDelegate", "reloadData"]
+- !private ["PSo15CALayerDelegate", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo15CALayerDelegate", "selectedSegmentIndex"]
 - !private ["PSo15CALayerDelegate", "setNeedsDisplay"]
 - !private ["PSo15CALayerDelegate", "startAnimating"]
@@ -285,6 +290,7 @@ depends-member:
 - !private ["Ps7CVarArg", "TimeInterval"]
 - ["Ps7CVarArg", "UIApplication"]
 - !private ["Ps7CVarArg", "UIEvent"]
+- !private ["Ps7CVarArg", "UIOffset"]
 - !private ["Ps7CVarArg", "UIView"]
 - !private ["Ps7CVarArg", "UserDefaults"]
 - !private ["Ps7CVarArg", "_DisabledRangeIndex"]
@@ -333,6 +339,7 @@ depends-member:
 - !private ["Ps7CVarArg", "registerAsBusyObserverWithMediator"]
 - !private ["Ps7CVarArg", "registerObserver"]
 - !private ["Ps7CVarArg", "reloadData"]
+- !private ["Ps7CVarArg", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps7CVarArg", "segmentedControl"]
 - ["Ps7CVarArg", "segmentedControlClicked"]
 - ["Ps7CVarArg", "segmentedControlPaddding"]
@@ -381,6 +388,7 @@ depends-member:
 - ["C11BreweryTour22CategoryViewController", "UIButton"]
 - ["C11BreweryTour22CategoryViewController", "UIEvent"]
 - !private ["C11BreweryTour22CategoryViewController", "UILabel"]
+- !private ["C11BreweryTour22CategoryViewController", "UIOffset"]
 - ["C11BreweryTour22CategoryViewController", "UISearchBar"]
 - ["C11BreweryTour22CategoryViewController", "UISegmentedControl"]
 - ["C11BreweryTour22CategoryViewController", "UITableView"]
@@ -461,6 +469,7 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "TimeInterval"]
 - ["Ps28CustomDebugStringConvertible", "UIApplication"]
 - !private ["Ps28CustomDebugStringConvertible", "UIEvent"]
+- !private ["Ps28CustomDebugStringConvertible", "UIOffset"]
 - !private ["Ps28CustomDebugStringConvertible", "UIView"]
 - !private ["Ps28CustomDebugStringConvertible", "UserDefaults"]
 - !private ["Ps28CustomDebugStringConvertible", "_Element"]
@@ -511,6 +520,7 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "registerAsBusyObserverWithMediator"]
 - !private ["Ps28CustomDebugStringConvertible", "registerObserver"]
 - !private ["Ps28CustomDebugStringConvertible", "reloadData"]
+- !private ["Ps28CustomDebugStringConvertible", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps28CustomDebugStringConvertible", "segmentedControl"]
 - ["Ps28CustomDebugStringConvertible", "segmentedControlClicked"]
 - ["Ps28CustomDebugStringConvertible", "segmentedControlPaddding"]
@@ -587,6 +597,7 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "TimeInterval"]
 - ["Ps23CustomStringConvertible", "UIApplication"]
 - !private ["Ps23CustomStringConvertible", "UIEvent"]
+- !private ["Ps23CustomStringConvertible", "UIOffset"]
 - !private ["Ps23CustomStringConvertible", "UIView"]
 - !private ["Ps23CustomStringConvertible", "UserDefaults"]
 - !private ["Ps23CustomStringConvertible", "_DisabledRangeIndex"]
@@ -636,6 +647,7 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "registerAsBusyObserverWithMediator"]
 - !private ["Ps23CustomStringConvertible", "registerObserver"]
 - !private ["Ps23CustomStringConvertible", "reloadData"]
+- !private ["Ps23CustomStringConvertible", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps23CustomStringConvertible", "segmentedControl"]
 - ["Ps23CustomStringConvertible", "segmentedControlClicked"]
 - ["Ps23CustomStringConvertible", "segmentedControlPaddding"]
@@ -697,6 +709,7 @@ depends-member:
 - !private ["Ps9Equatable", "TimeInterval"]
 - ["Ps9Equatable", "UIApplication"]
 - !private ["Ps9Equatable", "UIEvent"]
+- !private ["Ps9Equatable", "UIOffset"]
 - !private ["Ps9Equatable", "UIView"]
 - !private ["Ps9Equatable", "UserDefaults"]
 - !private ["Ps9Equatable", "_DisabledRangeIndex"]
@@ -752,6 +765,7 @@ depends-member:
 - !private ["Ps9Equatable", "registerObserver"]
 - !private ["Ps9Equatable", "reloadData"]
 - !private ["Ps9Equatable", "repeat"]
+- !private ["Ps9Equatable", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps9Equatable", "segmentedControl"]
 - ["Ps9Equatable", "segmentedControlClicked"]
 - ["Ps9Equatable", "segmentedControlPaddding"]
@@ -824,6 +838,7 @@ depends-member:
 - !private ["Ps8Hashable", "TimeInterval"]
 - ["Ps8Hashable", "UIApplication"]
 - !private ["Ps8Hashable", "UIEvent"]
+- !private ["Ps8Hashable", "UIOffset"]
 - !private ["Ps8Hashable", "UIView"]
 - !private ["Ps8Hashable", "UserDefaults"]
 - !private ["Ps8Hashable", "_DisabledRangeIndex"]
@@ -873,6 +888,7 @@ depends-member:
 - !private ["Ps8Hashable", "registerAsBusyObserverWithMediator"]
 - !private ["Ps8Hashable", "registerObserver"]
 - !private ["Ps8Hashable", "reloadData"]
+- !private ["Ps8Hashable", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps8Hashable", "segmentedControl"]
 - ["Ps8Hashable", "segmentedControlClicked"]
 - ["Ps8Hashable", "segmentedControlPaddding"]
@@ -970,6 +986,7 @@ depends-member:
 - !private ["PSo8NSCoding", "TimeInterval"]
 - ["PSo8NSCoding", "UIApplication"]
 - !private ["PSo8NSCoding", "UIEvent"]
+- !private ["PSo8NSCoding", "UIOffset"]
 - !private ["PSo8NSCoding", "UIView"]
 - !private ["PSo8NSCoding", "UserDefaults"]
 - ["PSo8NSCoding", "activeTableList"]
@@ -1009,6 +1026,7 @@ depends-member:
 - ["PSo8NSCoding", "pointerDuration"]
 - !private ["PSo8NSCoding", "registerAsBusyObserverWithMediator"]
 - !private ["PSo8NSCoding", "reloadData"]
+- !private ["PSo8NSCoding", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo8NSCoding", "segmentedControl"]
 - ["PSo8NSCoding", "segmentedControlClicked"]
 - ["PSo8NSCoding", "segmentedControlPaddding"]
@@ -1041,6 +1059,7 @@ depends-member:
 - !private ["PSo26NSExtensionRequestHandling", "TimeInterval"]
 - ["PSo26NSExtensionRequestHandling", "UIApplication"]
 - !private ["PSo26NSExtensionRequestHandling", "UIEvent"]
+- !private ["PSo26NSExtensionRequestHandling", "UIOffset"]
 - !private ["PSo26NSExtensionRequestHandling", "UIView"]
 - !private ["PSo26NSExtensionRequestHandling", "UserDefaults"]
 - ["PSo26NSExtensionRequestHandling", "activeTableList"]
@@ -1097,6 +1116,7 @@ depends-member:
 - !private ["PSo34NSFetchedResultsControllerDelegate", "TimeInterval"]
 - ["PSo34NSFetchedResultsControllerDelegate", "UIApplication"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "UIEvent"]
+- !private ["PSo34NSFetchedResultsControllerDelegate", "UIOffset"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "UIView"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "UserDefaults"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "activeTableList"]
@@ -1156,6 +1176,7 @@ depends-member:
 - ["CSo8NSObject", "UIButton"]
 - ["CSo8NSObject", "UIEvent"]
 - !private ["CSo8NSObject", "UILabel"]
+- !private ["CSo8NSObject", "UIOffset"]
 - ["CSo8NSObject", "UISearchBar"]
 - ["CSo8NSObject", "UISegmentedControl"]
 - ["CSo8NSObject", "UITableView"]
@@ -1206,6 +1227,7 @@ depends-member:
 - !private ["CSo8NSObject", "registerAsBusyObserverWithMediator"]
 - !private ["CSo8NSObject", "registerObserver"]
 - !private ["CSo8NSObject", "reloadData"]
+- !private ["CSo8NSObject", "searchFieldBackgroundPositionAdjustment"]
 - ["CSo8NSObject", "segmentedControl"]
 - ["CSo8NSObject", "segmentedControlClicked"]
 - ["CSo8NSObject", "segmentedControlPaddding"]
@@ -1240,6 +1262,7 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "TimeInterval"]
 - ["PSo16NSObjectProtocol", "UIApplication"]
 - !private ["PSo16NSObjectProtocol", "UIEvent"]
+- !private ["PSo16NSObjectProtocol", "UIOffset"]
 - !private ["PSo16NSObjectProtocol", "UIView"]
 - !private ["PSo16NSObjectProtocol", "UserDefaults"]
 - ["PSo16NSObjectProtocol", "activeTableList"]
@@ -1284,6 +1307,7 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "registerAsBusyObserverWithMediator"]
 - !private ["PSo16NSObjectProtocol", "registerObserver"]
 - !private ["PSo16NSObjectProtocol", "reloadData"]
+- !private ["PSo16NSObjectProtocol", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo16NSObjectProtocol", "segmentedControl"]
 - ["PSo16NSObjectProtocol", "segmentedControlClicked"]
 - ["PSo16NSObjectProtocol", "segmentedControlPaddding"]
@@ -1321,6 +1345,7 @@ depends-member:
 - !private ["P11BreweryTour8Observer", "TimeInterval"]
 - ["P11BreweryTour8Observer", "UIApplication"]
 - !private ["P11BreweryTour8Observer", "UIEvent"]
+- !private ["P11BreweryTour8Observer", "UIOffset"]
 - !private ["P11BreweryTour8Observer", "UIView"]
 - !private ["P11BreweryTour8Observer", "UserDefaults"]
 - !private ["P11BreweryTour8Observer", "activeTableList"]
@@ -1474,6 +1499,7 @@ depends-member:
 - !private ["PSo29UIAccessibilityIdentification", "isHidden"]
 - !private ["PSo29UIAccessibilityIdentification", "placeholder"]
 - !private ["PSo29UIAccessibilityIdentification", "reloadData"]
+- !private ["PSo29UIAccessibilityIdentification", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo29UIAccessibilityIdentification", "selectedSegmentIndex"]
 - !private ["PSo29UIAccessibilityIdentification", "setNeedsDisplay"]
 - !private ["PSo29UIAccessibilityIdentification", "startAnimating"]
@@ -1488,6 +1514,7 @@ depends-member:
 - !private ["PSo12UIAppearance", "isHidden"]
 - !private ["PSo12UIAppearance", "placeholder"]
 - !private ["PSo12UIAppearance", "reloadData"]
+- !private ["PSo12UIAppearance", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo12UIAppearance", "selectedSegmentIndex"]
 - !private ["PSo12UIAppearance", "setNeedsDisplay"]
 - !private ["PSo12UIAppearance", "startAnimating"]
@@ -1504,6 +1531,7 @@ depends-member:
 - !private ["PSo21UIAppearanceContainer", "TimeInterval"]
 - ["PSo21UIAppearanceContainer", "UIApplication"]
 - !private ["PSo21UIAppearanceContainer", "UIEvent"]
+- !private ["PSo21UIAppearanceContainer", "UIOffset"]
 - !private ["PSo21UIAppearanceContainer", "UIView"]
 - !private ["PSo21UIAppearanceContainer", "UserDefaults"]
 - ["PSo21UIAppearanceContainer", "activeTableList"]
@@ -1543,6 +1571,7 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "pointerDuration"]
 - !private ["PSo21UIAppearanceContainer", "registerAsBusyObserverWithMediator"]
 - !private ["PSo21UIAppearanceContainer", "reloadData"]
+- !private ["PSo21UIAppearanceContainer", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo21UIAppearanceContainer", "segmentedControl"]
 - ["PSo21UIAppearanceContainer", "segmentedControlClicked"]
 - ["PSo21UIAppearanceContainer", "segmentedControlPaddding"]
@@ -1569,6 +1598,7 @@ depends-member:
 - ["PSo21UIApplicationDelegate", "coreDataStack"]
 - !private ["PSo16UIBarPositioning", "frame"]
 - !private ["PSo16UIBarPositioning", "placeholder"]
+- !private ["PSo16UIBarPositioning", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo16UIBarPositioning", "text"]
 - !private ["PSo16UIBarPositioning", "topItem"]
 - ["PSo24UIBarPositioningDelegate", "AllBreweriesTableList"]
@@ -1581,6 +1611,7 @@ depends-member:
 - !private ["PSo24UIBarPositioningDelegate", "TimeInterval"]
 - ["PSo24UIBarPositioningDelegate", "UIApplication"]
 - !private ["PSo24UIBarPositioningDelegate", "UIEvent"]
+- !private ["PSo24UIBarPositioningDelegate", "UIOffset"]
 - !private ["PSo24UIBarPositioningDelegate", "UIView"]
 - !private ["PSo24UIBarPositioningDelegate", "UserDefaults"]
 - !private ["PSo24UIBarPositioningDelegate", "activeTableList"]
@@ -1622,6 +1653,7 @@ depends-member:
 - !private ["PSo18UIContentContainer", "TimeInterval"]
 - ["PSo18UIContentContainer", "UIApplication"]
 - !private ["PSo18UIContentContainer", "UIEvent"]
+- !private ["PSo18UIContentContainer", "UIOffset"]
 - !private ["PSo18UIContentContainer", "UIView"]
 - !private ["PSo18UIContentContainer", "UserDefaults"]
 - ["PSo18UIContentContainer", "activeTableList"]
@@ -1680,6 +1712,7 @@ depends-member:
 - !private ["PSo17UICoordinateSpace", "isHidden"]
 - !private ["PSo17UICoordinateSpace", "placeholder"]
 - !private ["PSo17UICoordinateSpace", "reloadData"]
+- !private ["PSo17UICoordinateSpace", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo17UICoordinateSpace", "selectedSegmentIndex"]
 - !private ["PSo17UICoordinateSpace", "setNeedsDisplay"]
 - !private ["PSo17UICoordinateSpace", "startAnimating"]
@@ -1693,6 +1726,7 @@ depends-member:
 - !private ["PSo13UIDynamicItem", "isHidden"]
 - !private ["PSo13UIDynamicItem", "placeholder"]
 - !private ["PSo13UIDynamicItem", "reloadData"]
+- !private ["PSo13UIDynamicItem", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo13UIDynamicItem", "selectedSegmentIndex"]
 - !private ["PSo13UIDynamicItem", "setNeedsDisplay"]
 - !private ["PSo13UIDynamicItem", "startAnimating"]
@@ -1711,6 +1745,7 @@ depends-member:
 - !private ["PSo18UIFocusEnvironment", "TimeInterval"]
 - ["PSo18UIFocusEnvironment", "UIApplication"]
 - !private ["PSo18UIFocusEnvironment", "UIEvent"]
+- !private ["PSo18UIFocusEnvironment", "UIOffset"]
 - !private ["PSo18UIFocusEnvironment", "UIView"]
 - !private ["PSo18UIFocusEnvironment", "UserDefaults"]
 - ["PSo18UIFocusEnvironment", "activeTableList"]
@@ -1750,6 +1785,7 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "pointerDuration"]
 - !private ["PSo18UIFocusEnvironment", "registerAsBusyObserverWithMediator"]
 - !private ["PSo18UIFocusEnvironment", "reloadData"]
+- !private ["PSo18UIFocusEnvironment", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo18UIFocusEnvironment", "segmentedControl"]
 - ["PSo18UIFocusEnvironment", "segmentedControlClicked"]
 - ["PSo18UIFocusEnvironment", "segmentedControlPaddding"]
@@ -1777,6 +1813,7 @@ depends-member:
 - !private ["PSo11UIFocusItem", "isHidden"]
 - !private ["PSo11UIFocusItem", "placeholder"]
 - !private ["PSo11UIFocusItem", "reloadData"]
+- !private ["PSo11UIFocusItem", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo11UIFocusItem", "selectedSegmentIndex"]
 - !private ["PSo11UIFocusItem", "setNeedsDisplay"]
 - !private ["PSo11UIFocusItem", "startAnimating"]
@@ -1792,6 +1829,8 @@ depends-member:
 - !private ["CSo22UINavigationController", "navigationBar"]
 - ["CSo16UINavigationItem", "deinit"]
 - !private ["CSo16UINavigationItem", "title"]
+- ["VSC8UIOffset", "deinit"]
+- !private ["VSC8UIOffset", "init"]
 - ["CSo11UIResponder", "AllBreweriesTableList"]
 - ["CSo11UIResponder", "AnyObject"]
 - ["CSo11UIResponder", "AppDelegate"]
@@ -1814,6 +1853,7 @@ depends-member:
 - ["CSo11UIResponder", "UIButton"]
 - ["CSo11UIResponder", "UIEvent"]
 - !private ["CSo11UIResponder", "UILabel"]
+- !private ["CSo11UIResponder", "UIOffset"]
 - ["CSo11UIResponder", "UISearchBar"]
 - ["CSo11UIResponder", "UISegmentedControl"]
 - ["CSo11UIResponder", "UITableView"]
@@ -1860,6 +1900,7 @@ depends-member:
 - ["CSo11UIResponder", "pointerDuration"]
 - !private ["CSo11UIResponder", "registerAsBusyObserverWithMediator"]
 - !private ["CSo11UIResponder", "reloadData"]
+- !private ["CSo11UIResponder", "searchFieldBackgroundPositionAdjustment"]
 - ["CSo11UIResponder", "segmentedControl"]
 - ["CSo11UIResponder", "segmentedControlClicked"]
 - ["CSo11UIResponder", "segmentedControlPaddding"]
@@ -1890,6 +1931,7 @@ depends-member:
 - !private ["PSo30UIResponderStandardEditActions", "TimeInterval"]
 - ["PSo30UIResponderStandardEditActions", "UIApplication"]
 - !private ["PSo30UIResponderStandardEditActions", "UIEvent"]
+- !private ["PSo30UIResponderStandardEditActions", "UIOffset"]
 - !private ["PSo30UIResponderStandardEditActions", "UIView"]
 - !private ["PSo30UIResponderStandardEditActions", "UserDefaults"]
 - ["PSo30UIResponderStandardEditActions", "activeTableList"]
@@ -1930,6 +1972,7 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "pointerDuration"]
 - !private ["PSo30UIResponderStandardEditActions", "registerAsBusyObserverWithMediator"]
 - !private ["PSo30UIResponderStandardEditActions", "reloadData"]
+- !private ["PSo30UIResponderStandardEditActions", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo30UIResponderStandardEditActions", "segmentedControl"]
 - ["PSo30UIResponderStandardEditActions", "segmentedControlClicked"]
 - ["PSo30UIResponderStandardEditActions", "segmentedControlPaddding"]
@@ -1964,6 +2007,7 @@ depends-member:
 - !private ["PSo20UIScrollViewDelegate", "TimeInterval"]
 - ["PSo20UIScrollViewDelegate", "UIApplication"]
 - !private ["PSo20UIScrollViewDelegate", "UIEvent"]
+- !private ["PSo20UIScrollViewDelegate", "UIOffset"]
 - !private ["PSo20UIScrollViewDelegate", "UIView"]
 - !private ["PSo20UIScrollViewDelegate", "UserDefaults"]
 - !private ["PSo20UIScrollViewDelegate", "activeTableList"]
@@ -1997,6 +2041,7 @@ depends-member:
 - !private ["PSo20UIScrollViewDelegate", "tutorialView"]
 - !private ["CSo11UISearchBar", "frame"]
 - !private ["CSo11UISearchBar", "placeholder"]
+- !private ["CSo11UISearchBar", "searchFieldBackgroundPositionAdjustment"]
 - !private ["CSo11UISearchBar", "text"]
 - ["PSo19UISearchBarDelegate", "AllBreweriesTableList"]
 - ["PSo19UISearchBarDelegate", "BreweryTableList"]
@@ -2008,6 +2053,7 @@ depends-member:
 - !private ["PSo19UISearchBarDelegate", "TimeInterval"]
 - ["PSo19UISearchBarDelegate", "UIApplication"]
 - !private ["PSo19UISearchBarDelegate", "UIEvent"]
+- !private ["PSo19UISearchBarDelegate", "UIOffset"]
 - !private ["PSo19UISearchBarDelegate", "UIView"]
 - !private ["PSo19UISearchBarDelegate", "UserDefaults"]
 - !private ["PSo19UISearchBarDelegate", "activeTableList"]
@@ -2053,6 +2099,7 @@ depends-member:
 - !private ["PSo16UIStateRestoring", "TimeInterval"]
 - ["PSo16UIStateRestoring", "UIApplication"]
 - !private ["PSo16UIStateRestoring", "UIEvent"]
+- !private ["PSo16UIStateRestoring", "UIOffset"]
 - !private ["PSo16UIStateRestoring", "UIView"]
 - !private ["PSo16UIStateRestoring", "UserDefaults"]
 - ["PSo16UIStateRestoring", "activeTableList"]
@@ -2111,6 +2158,7 @@ depends-member:
 - !private ["PSo21UITableViewDataSource", "TimeInterval"]
 - ["PSo21UITableViewDataSource", "UIApplication"]
 - !private ["PSo21UITableViewDataSource", "UIEvent"]
+- !private ["PSo21UITableViewDataSource", "UIOffset"]
 - !private ["PSo21UITableViewDataSource", "UIView"]
 - !private ["PSo21UITableViewDataSource", "UserDefaults"]
 - !private ["PSo21UITableViewDataSource", "activeTableList"]
@@ -2152,6 +2200,7 @@ depends-member:
 - !private ["PSo19UITableViewDelegate", "TimeInterval"]
 - ["PSo19UITableViewDelegate", "UIApplication"]
 - !private ["PSo19UITableViewDelegate", "UIEvent"]
+- !private ["PSo19UITableViewDelegate", "UIOffset"]
 - !private ["PSo19UITableViewDelegate", "UIView"]
 - !private ["PSo19UITableViewDelegate", "UserDefaults"]
 - !private ["PSo19UITableViewDelegate", "activeTableList"]
@@ -2186,6 +2235,7 @@ depends-member:
 - !private ["PSo11UITextInput", "text"]
 - !private ["PSo17UITextInputTraits", "frame"]
 - !private ["PSo17UITextInputTraits", "placeholder"]
+- !private ["PSo17UITextInputTraits", "searchFieldBackgroundPositionAdjustment"]
 - !private ["PSo17UITextInputTraits", "text"]
 - !private ["CSo10UITextView", "text"]
 - ["PSo18UITraitEnvironment", "AllBreweriesTableList"]
@@ -2198,6 +2248,7 @@ depends-member:
 - !private ["PSo18UITraitEnvironment", "TimeInterval"]
 - ["PSo18UITraitEnvironment", "UIApplication"]
 - !private ["PSo18UITraitEnvironment", "UIEvent"]
+- !private ["PSo18UITraitEnvironment", "UIOffset"]
 - !private ["PSo18UITraitEnvironment", "UIView"]
 - !private ["PSo18UITraitEnvironment", "UserDefaults"]
 - ["PSo18UITraitEnvironment", "activeTableList"]
@@ -2237,6 +2288,7 @@ depends-member:
 - ["PSo18UITraitEnvironment", "pointerDuration"]
 - !private ["PSo18UITraitEnvironment", "registerAsBusyObserverWithMediator"]
 - !private ["PSo18UITraitEnvironment", "reloadData"]
+- !private ["PSo18UITraitEnvironment", "searchFieldBackgroundPositionAdjustment"]
 - ["PSo18UITraitEnvironment", "segmentedControl"]
 - ["PSo18UITraitEnvironment", "segmentedControlClicked"]
 - ["PSo18UITraitEnvironment", "segmentedControlPaddding"]
@@ -2265,6 +2317,7 @@ depends-member:
 - !private ["CSo6UIView", "isHidden"]
 - !private ["CSo6UIView", "placeholder"]
 - !private ["CSo6UIView", "reloadData"]
+- !private ["CSo6UIView", "searchFieldBackgroundPositionAdjustment"]
 - !private ["CSo6UIView", "selectedSegmentIndex"]
 - !private ["CSo6UIView", "setNeedsDisplay"]
 - !private ["CSo6UIView", "startAnimating"]
@@ -2293,6 +2346,7 @@ depends-member:
 - ["CSo16UIViewController", "UIButton"]
 - ["CSo16UIViewController", "UIEvent"]
 - !private ["CSo16UIViewController", "UILabel"]
+- !private ["CSo16UIViewController", "UIOffset"]
 - ["CSo16UIViewController", "UISearchBar"]
 - ["CSo16UIViewController", "UISegmentedControl"]
 - ["CSo16UIViewController", "UITableView"]
@@ -2372,6 +2426,7 @@ depends-member:
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "isHidden"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "placeholder"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "reloadData"]
+- !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "searchFieldBackgroundPositionAdjustment"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "selectedSegmentIndex"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "setNeedsDisplay"]
 - !private ["Ps37_DefaultCustomPlaygroundQuickLookable", "startAnimating"]
@@ -2418,6 +2473,7 @@ depends-member:
 - !private ["Ps9_Hashable", "TimeInterval"]
 - ["Ps9_Hashable", "UIApplication"]
 - !private ["Ps9_Hashable", "UIEvent"]
+- !private ["Ps9_Hashable", "UIOffset"]
 - !private ["Ps9_Hashable", "UIView"]
 - !private ["Ps9_Hashable", "UserDefaults"]
 - !private ["Ps9_Hashable", "_DisabledRangeIndex"]
@@ -2467,6 +2523,7 @@ depends-member:
 - !private ["Ps9_Hashable", "registerAsBusyObserverWithMediator"]
 - !private ["Ps9_Hashable", "registerObserver"]
 - !private ["Ps9_Hashable", "reloadData"]
+- !private ["Ps9_Hashable", "searchFieldBackgroundPositionAdjustment"]
 - ["Ps9_Hashable", "segmentedControl"]
 - ["Ps9_Hashable", "segmentedControlClicked"]
 - ["Ps9_Hashable", "segmentedControlPaddding"]
@@ -2651,6 +2708,7 @@ depends-nominal:
 - "CSo15UINavigationBar"
 - "CSo22UINavigationController"
 - "CSo16UINavigationItem"
+- "VSC8UIOffset"
 - "CSo11UIResponder"
 - "PSo30UIResponderStandardEditActions"
 - !private "CSo12UIScrollView"
