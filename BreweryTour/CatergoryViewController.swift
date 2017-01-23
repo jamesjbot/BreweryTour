@@ -310,7 +310,7 @@ NSFetchedResultsControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        newSearchBar.searchFieldBackgroundPositionAdjustment = UIOffset(horizontal: 0.0, vertical: -6.0)
         // Set the initial viewModel
         activeTableList = styleList
 
