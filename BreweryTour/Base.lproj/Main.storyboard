@@ -25,19 +25,19 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" spacing="1" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi" userLabel="CompleteHorizontal">
-                                <rect key="frame" x="0.0" y="66" width="375" height="601"/>
+                            <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi" userLabel="CompleteHorizontal">
+                                <rect key="frame" x="0.0" y="65" width="375" height="602"/>
                                 <subviews>
-                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Current Selection:" textAlignment="center" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0f8-gZ-M3j">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="21"/>
+                                    <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Current Selection:" textAlignment="center" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0f8-gZ-M3j" userLabel="SelectionBox">
+                                        <rect key="frame" x="8" y="3" width="359" height="5"/>
                                         <nil key="textColor"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mmN-dq-rb5">
-                                        <rect key="frame" x="0.0" y="22" width="375" height="29"/>
+                                        <rect key="frame" x="8" y="11" width="359" height="29"/>
                                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                        <edgeInsets key="layoutMargins" top="8" left="15" bottom="8" right="15"/>
                                         <segments>
                                             <segment title="Style"/>
                                             <segment title="Breweries with Style"/>
@@ -49,7 +49,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Select Style Below / Search here" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
-                                        <rect key="frame" x="0.0" y="51" width="375" height="44"/>
+                                        <rect key="frame" x="8" y="42" width="359" height="44"/>
                                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
                                         <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -59,26 +59,26 @@
                                         </connections>
                                     </searchBar>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx" userLabel="Generic Table">
-                                        <rect key="frame" x="0.0" y="96" width="375" height="505"/>
+                                        <rect key="frame" x="8" y="89" width="359" height="505"/>
                                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="sectionIndexBackgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <prototypes>
                                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="genericTypeCell" textLabel="WUq-hH-lhL" detailTextLabel="n7M-rj-VPI" style="IBUITableViewCellStyleSubtitle" id="kaU-Em-b0H">
-                                                <rect key="frame" x="0.0" y="28" width="375" height="44"/>
+                                                <rect key="frame" x="0.0" y="28" width="359" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Style Name Will Go Here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WUq-hH-lhL">
-                                                            <rect key="frame" x="15" y="6" width="203" height="17"/>
+                                                            <rect key="frame" x="15" y="6" width="202.5" height="17"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="n7M-rj-VPI">
-                                                            <rect key="frame" x="15" y="23" width="44" height="15"/>
+                                                            <rect key="frame" x="15" y="23" width="44" height="14.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <nil key="textColor"/>
@@ -95,16 +95,10 @@
                                         </connections>
                                     </tableView>
                                 </subviews>
-                                <color key="backgroundColor" red="0.81583412249999998" green="0.29526499470000001" blue="0.065191185060000004" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="OSH-8A-abx" firstAttribute="width" secondItem="FTn-Tc-4mi" secondAttribute="width" id="DxO-jS-vSs"/>
-                                    <constraint firstItem="OSH-8A-abx" firstAttribute="height" secondItem="FTn-Tc-4mi" secondAttribute="height" multiplier="0.85" id="N5X-9z-QaA"/>
                                 </constraints>
-                                <variation key="default">
-                                    <mask key="constraints">
-                                        <exclude reference="N5X-9z-QaA"/>
-                                    </mask>
-                                </variation>
+                                <edgeInsets key="layoutMargins" top="3" left="8" bottom="8" right="8"/>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="447-tn-FIf" userLabel="Tutorial View">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
@@ -195,11 +189,10 @@
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                         <constraints>
-                            <constraint firstItem="FTn-Tc-4mi" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" constant="2" id="1Ju-Oo-ZhH"/>
+                            <constraint firstItem="FTn-Tc-4mi" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" constant="1" id="1Ju-Oo-ZhH"/>
                             <constraint firstItem="447-tn-FIf" firstAttribute="top" secondItem="Yu6-64-6UL" secondAttribute="bottom" id="6lT-LP-g9L"/>
                             <constraint firstAttribute="trailing" secondItem="FTn-Tc-4mi" secondAttribute="trailing" id="A3i-ph-YMo"/>
                             <constraint firstItem="wrT-1x-h0f" firstAttribute="top" secondItem="447-tn-FIf" secondAttribute="bottom" id="GMi-Me-47B"/>
-                            <constraint firstAttribute="trailingMargin" secondItem="FTn-Tc-4mi" secondAttribute="trailing" constant="-11" id="HPc-wu-gNk"/>
                             <constraint firstItem="chy-Gf-XC8" firstAttribute="width" secondItem="ans-at-Olx" secondAttribute="width" multiplier="0.8" id="OA3-o7-1GF"/>
                             <constraint firstItem="bpZ-cN-Rf5" firstAttribute="centerX" secondItem="ans-at-Olx" secondAttribute="centerX" id="OKb-ey-Ejd"/>
                             <constraint firstAttribute="trailing" secondItem="447-tn-FIf" secondAttribute="trailing" id="bjq-ZM-qOs"/>
@@ -209,8 +202,8 @@
                             <constraint firstItem="447-tn-FIf" firstAttribute="leading" secondItem="ans-at-Olx" secondAttribute="leading" id="zhT-oy-7YS"/>
                         </constraints>
                         <variation key="default">
-                            <mask key="constraints">
-                                <exclude reference="HPc-wu-gNk"/>
+                            <mask key="subviews">
+                                <exclude reference="447-tn-FIf"/>
                             </mask>
                         </variation>
                     </view>
@@ -528,25 +521,25 @@
                                                 <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tcx-Kc-hK0" id="AcN-pE-EtA">
-                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="F2c-bs-Vb5">
-                                                            <rect key="frame" x="73" y="6" width="37" height="17"/>
+                                                            <rect key="frame" x="74" y="7" width="36.5" height="17"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="A3i-fU-GAB">
-                                                            <rect key="frame" x="73" y="23" width="50" height="14"/>
+                                                            <rect key="frame" x="74" y="24" width="50" height="14"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="14"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Nophoto.png" id="Co2-DY-qqn">
-                                                            <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                            <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </imageView>
                                                     </subviews>
@@ -700,25 +693,25 @@
                                         <subviews>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" text="Beer" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WlE-Ju-job">
                                                 <rect key="frame" x="3" y="0.0" width="369" height="26.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" verticalCompressionResistancePriority="751" text="Brewery" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="J1x-Yv-uwY" userLabel="Brewery">
                                                 <rect key="frame" x="3" y="26.5" width="369" height="27"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="14"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Availability:" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C23-Bf-8WA">
                                                 <rect key="frame" x="3" y="53.5" width="369" height="26.5"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="13"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Style:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="L8O-9W-M7W">
                                                 <rect key="frame" x="3" y="80" width="369" height="27"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="13"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
@@ -736,20 +729,20 @@
                                                         </connections>
                                                     </button>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Organic:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="v3I-gw-3vZ">
-                                                        <rect key="frame" x="98" y="0.0" width="65" height="26.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <rect key="frame" x="93.5" y="0.0" width="69" height="26.5"/>
+                                                        <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ABV:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Lvo-f0-UCc">
-                                                        <rect key="frame" x="231.5" y="0.0" width="37" height="26.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <rect key="frame" x="226.5" y="0.0" width="42" height="26.5"/>
+                                                        <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="IBU:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wYK-0U-iDb" userLabel="IBU:">
-                                                        <rect key="frame" x="337" y="0.0" width="32" height="26.5"/>
-                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <rect key="frame" x="333" y="0.0" width="36" height="26.5"/>
+                                                        <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
@@ -764,13 +757,13 @@
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Description" translatesAutoresizingMaskIntoConstraints="NO" id="0z3-QK-mWY">
                                         <rect key="frame" x="0.0" y="267" width="375" height="258.5"/>
                                         <color key="backgroundColor" red="0.81583412247474751" green="0.28607570052260439" blue="0.14721137283119282" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" text="Your tasting notes" translatesAutoresizingMaskIntoConstraints="NO" id="UOG-ID-3ve" userLabel="Tasting Notes">
                                         <rect key="frame" x="0.0" y="525.5" width="375" height="121.5"/>
                                         <color key="backgroundColor" red="1" green="0.71797675945977169" blue="0.17599077893900983" alpha="1" colorSpace="calibratedRGB"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="alphabet" returnKeyType="done"/>
                                     </textView>
                                 </subviews>
@@ -965,25 +958,25 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="65G-I2-bt1">
-                                                    <rect key="frame" x="73" y="6" width="37" height="17"/>
+                                                    <rect key="frame" x="74" y="6" width="36.5" height="17"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4eR-fy-GSw">
-                                                    <rect key="frame" x="73" y="23" width="54" height="15"/>
+                                                    <rect key="frame" x="74" y="23" width="53.5" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="Nophoto.png" id="gVx-aZ-Y5e">
-                                                    <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </imageView>
                                             </subviews>
@@ -1129,25 +1122,25 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EPN-e6-10X" id="Q1S-to-2h3">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="L0G-7N-7Tr">
-                                                    <rect key="frame" x="73" y="6" width="37" height="17"/>
+                                                    <rect key="frame" x="74" y="6" width="36.5" height="17"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tyv-eG-Ufw">
-                                                    <rect key="frame" x="73" y="23" width="54" height="15"/>
+                                                    <rect key="frame" x="74" y="23" width="53.5" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Nophoto.png" id="Isa-JK-NWA">
-                                                    <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </imageView>
                                             </subviews>
