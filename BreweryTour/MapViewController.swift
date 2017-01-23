@@ -492,7 +492,6 @@ class MapViewController : UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
 
-
         // Activate indicator if system is busy
         if Mediator.sharedInstance().isSystemBusy() {
             DispatchQueue.main.async {
