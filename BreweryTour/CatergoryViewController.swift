@@ -331,8 +331,11 @@ NSFetchedResultsControllerDelegate {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        activeTableList.filterContentForSearchText(searchText: newSearchBar.text!, completion: nil)
-
+        activeTableList.filterContentForSearchText(searchText: newSearchBar.text!){
+            (success) -> Void in
+            self.genericTable.reloadData()
+        }
+        
         // Change the Navigator name
         navigationController?.navigationBar.topItem?.title = "Select"
 
