@@ -283,6 +283,7 @@ class MapViewController : UIViewController {
 
 
     @objc private func clearPointFromTargetLocation() {
+        currentLocation.isHidden = true
         guard floatingAnnotation != nil else {
             return
         }
@@ -375,6 +376,9 @@ class MapViewController : UIViewController {
 
 
     private func makePointTargetLocation() {
+        // Expose the button only when we have pin
+        currentLocation.isHidden = false
+
         let location = CLLocation(latitude: floatingAnnotation.coordinate.latitude, longitude: floatingAnnotation.coordinate.longitude)
         targetLocation = location
         displayNewStrategyWithNewPoint()
@@ -467,6 +471,8 @@ class MapViewController : UIViewController {
     // Ask user for access to their location
     override func viewDidLoad(){
         super.viewDidLoad()
+
+        currentLocation.isHidden = true
 
         DispatchQueue.main.async{
             self.mapView.showsUserLocation = true
