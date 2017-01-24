@@ -3,13 +3,13 @@
 What is it?
   -----------
 
-BreweryTour is a Swift based App to help you find breweries that make the style of beer you currently gushing over.
+BreweryTour is a Swift based App to help you find breweries that make the style of beer you're currently gushing over.
 When my friends introduce me to a new style of beer, I've had trouble finding other places that brew that type of beer.
 This app solves that problem for others. It allows you to search for all breweries that produce your desired style.
 
 Current capabilities include:
 
-Select a style and all the brewery associated with it will download.
+Select a style and all the breweries associated with it will download.
 
 Select a brewery and all the beers associated with it will download.
 
@@ -17,9 +17,9 @@ Search for a brewery by name in the search bar on the Selected Beers / All Beers
 
 Search for a beer by name in the search bar on the Selected Beers Screen
 
-Search for breweries in a specific area (use the map and place a pin in the new area)
-
 On the map you can limiting the amount of search results (use slider on the map to limit the results)
+
+Limit breweries to a specific area instead of your current location (use the map and place a pin in the new area)
 
 On the map you can target you search results to a specific area by long pressing.
 
@@ -34,7 +34,7 @@ To get directions to the brewery (first favorite a brewery on the map, then go t
 
 How to Install?
   -------------
-After downloading, please navigate to the folder and type `pod install`
+After downloading, please navigate to the BreweryTour folder and type `pod install`
 
 Then go into the folder BreweryTour, open BreweryTour.xcworkspace.
 
