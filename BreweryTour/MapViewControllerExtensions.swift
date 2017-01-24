@@ -258,7 +258,7 @@ extension MapViewController : MKMapViewDelegate {
     // This formats the pins and calloutAccessory views on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 
-        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MyAnnotationView
+        let pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MyAnnotationView
 
         var foundBrewery: Brewery?
 
