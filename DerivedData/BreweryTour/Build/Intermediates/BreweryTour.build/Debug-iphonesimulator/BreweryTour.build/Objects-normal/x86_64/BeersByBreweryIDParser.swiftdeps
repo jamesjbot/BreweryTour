@@ -8,17 +8,17 @@ provides-member:
 provides-dynamic-lookup:
 depends-top-level:
 - "Void"
+- "NSDictionary"
+- !private "StringLiteralType"
+- !private "BooleanLiteralType"
 - !private "AnyObject"
 - "BeersByBreweryIDParser"
-- "CastingPrecedence"
-- "ParserProtocol"
-- "NSDictionary"
-- !private "BeerDesigner"
 - !private "!="
-- !private "BooleanLiteralType"
+- !private "BeerDesigner"
+- "ParserProtocol"
 - "Bool"
 - "String"
-- !private "StringLiteralType"
+- "CastingPrecedence"
 depends-member:
 - !private ["Ps9AnyObject", "BeerDesigner"]
 - !private ["Ps9AnyObject", "deinit"]

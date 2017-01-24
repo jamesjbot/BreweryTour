@@ -7,15 +7,15 @@ provides-member:
 - ["P11BreweryTour9TableList", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "Void"
-- "TableList"
-- "Int"
 - "Bool"
-- "AnyObject"
 - "UITableViewCell"
 - "String"
-- "Observer"
+- "Void"
 - "IndexPath"
+- "Int"
+- "Observer"
+- "TableList"
+- "AnyObject"
 depends-member:
 - ["P11BreweryTour9TableList", "AnyObject"]
 - ["P11BreweryTour9TableList", "Bool"]

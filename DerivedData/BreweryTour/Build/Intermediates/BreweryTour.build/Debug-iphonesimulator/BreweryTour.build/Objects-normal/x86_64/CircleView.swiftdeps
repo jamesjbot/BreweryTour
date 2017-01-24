@@ -6,27 +6,27 @@ provides-nominal:
 provides-member:
 - ["C11BreweryTour10CircleView", ""]
 provides-dynamic-lookup:
-- "halfOfViewSize"
+- "draw"
 - "full"
-- "lineWidth"
-- "drawCirleCenteredAt"
 - "centerOfCirclesView"
 - "multiplier"
-- "draw"
+- "lineWidth"
+- "drawCirleCenteredAt"
+- "halfOfViewSize"
 depends-top-level:
-- "CGRect"
-- !private "UIColor"
+- "CGPoint"
+- "CircleView"
+- !private "/"
+- "UIBezierPath"
+- "UIView"
+- "M_PI"
 - "AssignmentPrecedence"
 - "CGFloat"
-- !private "min"
-- !private "/"
-- "CGPoint"
-- "M_PI"
-- "*"
+- !private "UIColor"
+- "CGRect"
 - !private "BooleanLiteralType"
-- "UIBezierPath"
-- "CircleView"
-- "UIView"
+- "*"
+- !private "min"
 depends-member:
 - ["Ps16AbsoluteValuable", "init"]
 - ["Ps9AnyObject", "CGFloat"]

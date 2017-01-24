@@ -10,11 +10,11 @@ provides-member:
 - ["P11BreweryTour27ReceiveBroadcastSetSelected", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "NSManagedObject"
-- "MediatorBroadcastSetSelected"
 - "Void"
 - "ReceiveBroadcastSetSelected"
+- "NSManagedObject"
 - "Bool"
+- "MediatorBroadcastSetSelected"
 - "String"
 depends-member:
 - ["P11BreweryTour28MediatorBroadcastSetSelected", "Bool"]

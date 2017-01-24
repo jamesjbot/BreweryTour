@@ -1,6 +1,6 @@
 version: "Apple Swift version 3.0.2 (swiftlang-800.0.63 clang-800.0.42.1)"
 options: "4da1f8855c0925abee53a0893b9cdd60"
-build_time: [538530455, 106802000]
+build_time: [538553428, 182610000]
 inputs:
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/StylesTableList.swift": [538416039, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/Style+CoreDataClass.swift": [538146635, 0]
@@ -22,7 +22,7 @@ inputs:
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/Brewery+CoreDataClass.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/Style+CoreDataProperties.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/FavoriteBreweriesViewController.swift": [538416039, 0]
-  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MapViewController.swift": [538529955, 0]
+  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MapViewController.swift": [538553279, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/SelectedBeersViewController.swift": [538528651, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/GlobalConstants.swift": [538416039, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/CircleView.swift": [538146635, 0]

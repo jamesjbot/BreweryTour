@@ -10,9 +10,9 @@ provides-member:
 - ["P11BreweryTour20MediatorBusyObserver", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "Bool"
-- "MediatorBusyObserver"
 - "BusyObserver"
+- "MediatorBusyObserver"
+- "Bool"
 depends-member:
 - ["P11BreweryTour12BusyObserver", "registerAsBusyObserverWithMediator"]
 - ["P11BreweryTour12BusyObserver", "startAnimating"]

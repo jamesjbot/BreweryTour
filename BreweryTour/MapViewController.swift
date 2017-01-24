@@ -14,25 +14,25 @@
  times and current beer selection.
  Clicking on the pin will also zoom in to the pin and give a routing to the
  brewery.
- 
+
  Internals
  The MapViewController takes what the Mediator currently has selected
- 
+
  Then viewWillAppear chooses the strategy based on the selected item
  MapStrategy the super class maps multiple breweries on the map.
  It does this by sorting and finally send the annotation back to the update
  map function.
- For brewery we just immediately display the brewery's location by sending it as 
+ For brewery we just immediately display the brewery's location by sending it as
  a single brewery to it's superclass MapStrategy
- For style we 
+ For style we
 
  When choosing brewery from CategoryViewController:
- The mediator will provide the brewery object, we will map breweries according 
+ The mediator will provide the brewery object, we will map breweries according
  their location.
- 
- The appropriate strategy to convert to annotations will be chosen by style or 
+
+ The appropriate strategy to convert to annotations will be chosen by style or
  brewery type that enter
- 
+
  Then when it finishes it will send the annotation back
  */
 
@@ -43,8 +43,9 @@ import MapKit
 import CoreLocation
 import CoreData
 
-// Helper class to sort filter annotations
-fileprivate class MyAnnotation: NSObject, MKAnnotation {
+// Helper Adapter class to sort/filter annotations
+fileprivate class NewMyAnnotation: NSObject {
+    var annotation: MKAnnotation?
     var title: String?
     var subtitle: String?
     var coordinate: CLLocationCoordinate2D = CLLocationCoordinate2D(latitude: 0, longitude: 0)
@@ -54,23 +55,35 @@ fileprivate class MyAnnotation: NSObject, MKAnnotation {
 
     init(_ mka: MKAnnotation) {
         super.init()
+        annotation = mka
         coordinate = mka.coordinate
         title = mka.title!
         subtitle = mka.subtitle!
     }
 
-    static func ==(left: MyAnnotation, right: MyAnnotation) -> Bool {
-        return left.coordinate.latitude == right.coordinate.latitude && left.coordinate.longitude == right.coordinate.longitude
+    override func isEqual(_ object: Any?) -> Bool {
+        if object is NewMyAnnotation {
+            return title == (object as! NewMyAnnotation).title
+        }
+        return false
     }
 
     override var hashValue: Int {
-        return Int((coordinate.latitude * 10000000) + coordinate.longitude)
+        if let hash = title?.hashValue {
+            return hash
+        }
+        return 0
+    }
+
+    static func ==(left: NewMyAnnotation, right: NewMyAnnotation) -> Bool {
+        return left.title == right.title
     }
 }
 
 
+
 class MapViewController : UIViewController {
-    
+
     // MARK: Constants
     let centerLocation = CLLocation(latitude: 39.5, longitude: -98.35)
     let circularAnimationDuration = 5
@@ -208,6 +221,7 @@ class MapViewController : UIViewController {
             // Set floating annotation
             let coordinateOnMap = mapView.convert(sender.location(in: mapView), toCoordinateFrom: mapView)
             let annotation = MKPointAnnotation()
+            annotation.title = "floatingAnnotation"
             annotation.coordinate = coordinateOnMap
             mapView.addAnnotation(annotation)
             floatingAnnotation = annotation
@@ -353,7 +367,7 @@ class MapViewController : UIViewController {
             activeMappingStrategy = BreweryMapStrategy(b: mapViewData as! Brewery,
                                                        view: self,
                                                        location: targetLocation!)
-            
+
         }
     }
 
@@ -409,14 +423,14 @@ class MapViewController : UIViewController {
         targetLocation = location
         displayNewStrategyWithNewPoint()
     }
-    
+
 
     private func setTargetLocationWhenTargetLocationIsNil() {
         // Zoom to users location first if we have it.
         // When we first join the mapview and the userlocation has not been set.
         // It will default to 0,0, so we center the location in the US
 
-        // Only do these when target location is nil or this 
+        // Only do these when target location is nil or this
         // is the temporary centerLocation
         guard targetLocation == nil || targetLocation == centerLocation else {
             return
@@ -468,39 +482,65 @@ class MapViewController : UIViewController {
     }
 
 
+    private func updateExtraction(a:Set<NewMyAnnotation>) -> [MKAnnotation] {
+        var returnArray = [MKAnnotation]()
+        for i in a {
+            returnArray.append(i.annotation!)
+        }
+        return returnArray
+    }
+
+
     // Draw the annotations on the map
     internal func updateMap(withAnnotations: [MKAnnotation]) {
-
-        if !isAnnotation(inArray: withAnnotations) {
-            mapView.removeOverlays(mapView.overlays)
-        }
-
-        // If the annotation displayed are the same do nothing
-        guard arraysAreDifferent(a: mapView.annotations, b: withAnnotations) else {
-            // Do nothing annotations are the same
-            return
-        }
-
-        // Add only new annotations, remove old annotations
-        // This prevents flashing
         DispatchQueue.main.async {
-            var mya: [MyAnnotation] = [MyAnnotation]()
-            for a in self.mapView.annotations {
-                mya.append(MyAnnotation(a))
-            }
-            var myb: [MyAnnotation] = [MyAnnotation]()
-            for a in withAnnotations {
-                myb.append(MyAnnotation(a))
+
+            // Remove overlays if the Brewery has been remove from 
+            // the observable set
+            if !self.isAnnotation(inArray: withAnnotations) {
+                self.mapView.removeOverlays(self.mapView.overlays)
             }
 
-            let originalSet:Set<MyAnnotation> = Set<MyAnnotation>(mya)
-            let newSet = Set<MyAnnotation>(myb)
-            let intersectSet = originalSet.intersection(newSet)
-            let removeSet = originalSet.symmetricDifference(intersectSet)
+            // If the annotations displayed are the same do nothing
+            guard self.arraysAreDifferent(a: self.mapView.annotations, b: withAnnotations) else {
+                // Do nothing annotations are the same
+                return
+            }
+
+            // Decorate old annotations
+            var old: [NewMyAnnotation] = [NewMyAnnotation]()
+            var oldAnnotations = self.mapView.annotations
+            if let index = oldAnnotations.index(where: {$0 === self.floatingAnnotation} ) {
+                oldAnnotations.remove(at: index)
+            }
+            for a in self.mapView.annotations {
+                old.append(NewMyAnnotation(a))
+            }
+
+            //Decorate new annotations
+            var new: [NewMyAnnotation] = [NewMyAnnotation]()
+            for a in withAnnotations {
+                new.append(NewMyAnnotation(a))
+            }
+
+            // Convert arrays to sets to perform set logic
+            let oldSet:Set<NewMyAnnotation> = Set<NewMyAnnotation>(old)
+            let newSet = Set<NewMyAnnotation>(new)
+
+            // Find intersection
+            let intersectSet = oldSet.intersection(newSet)
+
+            let removeSet = oldSet.symmetricDifference(intersectSet)
             let addSet = newSet.symmetricDifference(intersectSet)
 
-            self.mapView.removeAnnotations(Array(removeSet))
-            self.mapView.addAnnotations(Array(addSet))
+            // Convert back to MKAnnotations
+            let removeArray = self.updateExtraction(a: removeSet)
+            let addArray = self.updateExtraction(a: addSet)
+
+            // Add only new annotations, remove old annotations
+            // This prevents flashing
+            self.mapView.removeAnnotations(removeArray)
+            self.mapView.addAnnotations(addArray)
 
             // Add back out floating annotation we deleted.
             if let floatingAnnotation = self.floatingAnnotation {
@@ -535,35 +575,35 @@ class MapViewController : UIViewController {
         // Set slider value and text
         slider.value = Float(Mediator.sharedInstance().lastSliderValue())
         numberOfPoints.text = String(Int(slider.value))
-
+        
         if let annotation = Mediator.sharedInstance().getFloatingAnnotation() {
             floatingAnnotation = annotation
             mapView.addAnnotation(floatingAnnotation)
             makePointTargetLocation()
         }
     }
-
-
+    
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-
+        
         // Activate indicator if system is busy
         if Mediator.sharedInstance().isSystemBusy() {
             DispatchQueue.main.async {
                 self.activityIndicator.startAnimating()
             }
         }
-
+        
         // Set the function of this screen
         tabBarController?.title = "Go To Website"
-
+        
         displayNewStrategyWithNewPoint()
     }
-
-
+    
+    
     override func viewDidAppear(_ animated : Bool) {
         super.viewDidAppear(animated)
-
+        
         tutorialInitialization()
     }
 }

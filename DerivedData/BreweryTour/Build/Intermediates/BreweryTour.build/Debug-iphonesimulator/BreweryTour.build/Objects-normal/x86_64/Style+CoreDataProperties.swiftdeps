@@ -12,20 +12,20 @@ provides-member:
 - ["C11BreweryTour5Style", "addToBrewerywithstyle"]
 - ["C11BreweryTour5Style", "removeFromBrewerywithstyle"]
 provides-dynamic-lookup:
-- "brewerywithstyle"
-- "id"
-- "addToBrewerywithstyle"
-- "addToBrewerywithstyle"
-- "removeFromBrewerywithstyle"
-- "removeFromBrewerywithstyle"
 - "displayName"
+- "brewerywithstyle"
+- "addToBrewerywithstyle"
+- "addToBrewerywithstyle"
+- "removeFromBrewerywithstyle"
+- "removeFromBrewerywithstyle"
+- "id"
 depends-top-level:
+- "String"
+- !private "StringLiteralType"
 - "Style"
+- "NSFetchRequest"
 - "Brewery"
 - "NSSet"
-- "String"
-- "NSFetchRequest"
-- !private "StringLiteralType"
 depends-member:
 - !private ["Ps9AnyObject", "NSFetchRequest"]
 - ["Ps9AnyObject", "addToBrewerywithstyle"]

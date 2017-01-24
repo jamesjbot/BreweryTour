@@ -7,23 +7,23 @@ provides-member:
 - ["C11BreweryTour15BreweriesParser", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "Void"
-- !private "BreweryDesigner"
 - !private "NSArray"
-- "Bool"
-- !private "=="
-- !private "!="
-- "CastingPrecedence"
 - "ParserProtocol"
-- !private "Dictionary"
-- "NSDictionary"
-- "BreweriesParser"
+- !private "BreweryDesigner"
+- !private "UnicodeScalarType"
 - !private "Int"
+- "Bool"
 - !private "StringLiteralType"
 - "String"
 - !private "BooleanLiteralType"
-- !private "UnicodeScalarType"
 - !private "AnyObject"
+- "Void"
+- !private "Dictionary"
+- "BreweriesParser"
+- !private "=="
+- "NSDictionary"
+- !private "!="
+- "CastingPrecedence"
 depends-member:
 - !private ["Ps9AnyObject", "BreweryDesigner"]
 - ["Ps9AnyObject", "deinit"]

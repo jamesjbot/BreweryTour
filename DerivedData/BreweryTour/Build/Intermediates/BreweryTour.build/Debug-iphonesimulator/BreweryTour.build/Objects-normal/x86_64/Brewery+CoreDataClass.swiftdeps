@@ -7,19 +7,19 @@ provides-member:
 - ["C11BreweryTour7Brewery", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- !private "!="
-- "TernaryPrecedence"
-- "Bool"
-- "Brewery"
-- "NSManagedObject"
-- !private "??"
 - "String"
-- "AssignmentPrecedence"
-- "NSManagedObjectContext"
-- !private "NSEntityDescription"
-- "BreweryData"
 - !private "StringLiteralType"
+- "Brewery"
 - !private "BooleanLiteralType"
+- !private "??"
+- "TernaryPrecedence"
+- "NSManagedObject"
+- !private "NSEntityDescription"
+- !private "!="
+- "NSManagedObjectContext"
+- "AssignmentPrecedence"
+- "BreweryData"
+- "Bool"
 depends-member:
 - !private ["Ps9AnyObject", "Brewery"]
 - !private ["Ps9AnyObject", "NSEntityDescription"]

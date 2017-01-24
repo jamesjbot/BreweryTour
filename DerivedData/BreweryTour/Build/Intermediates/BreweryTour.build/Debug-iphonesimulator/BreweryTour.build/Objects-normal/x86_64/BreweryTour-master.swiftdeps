@@ -1,6 +1,6 @@
 version: "Apple Swift version 3.0.2 (swiftlang-800.0.63 clang-800.0.42.1)"
 options: "8816fefee87c3ca83e0f96e19111d020"
-build_time: [538529160, 998717000]
+build_time: [538553462, 54653000]
 inputs:
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/StylesTableList.swift": [538416039, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/Style+CoreDataClass.swift": [538146635, 0]
@@ -14,7 +14,7 @@ inputs:
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/AllBeersViewModel.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/BreweryDBClientConstants.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/BeersViewModel.swift": [538528651, 0]
-  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MakePinView.swift": [9223372036854775807, 0]
+  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MakePinView.swift": [538528651, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MapStrategy.swift": [538416039, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/Brewery+CoreDataProperties.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MapViewControllerExtensions.swift": [538528651, 0]
@@ -22,7 +22,7 @@ inputs:
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/Brewery+CoreDataClass.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/Style+CoreDataProperties.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/FavoriteBreweriesViewController.swift": [538416039, 0]
-  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MapViewController.swift": [538528651, 0]
+  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MapViewController.swift": [538553279, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/SelectedBeersViewController.swift": [538528651, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/GlobalConstants.swift": [538416039, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/CircleView.swift": [538146635, 0]
@@ -39,7 +39,7 @@ inputs:
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/DismissableTutorialViewController.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/BreweriesParser.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/ParserFactory.swift": [538146635, 0]
-  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MyAnnotationView.swift": [9223372036854775807, 0]
+  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/MyAnnotationView.swift": [538528651, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/ExtensionUIViewController.swift": [538146635, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/ObserverAndSubjectProtocol.swift": [538416039, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/NSManagedObjectDisplayable.swift": [538146635, 0]
@@ -56,5 +56,5 @@ inputs:
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/BusyObserversProtocol.swift": [538416039, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/BreweryAndBeerCreationQueue.swift": [538416039, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/BeersByBreweryIDParser.swift": [538146635, 0]
-  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/StorableFloatingAnnotation.swift": [9223372036854775807, 0]
+  "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/StorableFloatingAnnotation.swift": [538528651, 0]
   "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/BreweryTour/AppDelegate.swift": [538146635, 0]

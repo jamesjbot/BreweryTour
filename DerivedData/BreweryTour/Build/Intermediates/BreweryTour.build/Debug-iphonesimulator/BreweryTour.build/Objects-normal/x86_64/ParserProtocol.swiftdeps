@@ -7,11 +7,11 @@ provides-member:
 - ["P11BreweryTour14ParserProtocol", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "String"
 - "Void"
-- "ParserProtocol"
 - "Bool"
+- "ParserProtocol"
 - "NSDictionary"
+- "String"
 depends-member:
 - ["P11BreweryTour14ParserProtocol", "Bool"]
 - ["P11BreweryTour14ParserProtocol", "NSDictionary"]

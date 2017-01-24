@@ -8,19 +8,19 @@ provides-member:
 provides-dynamic-lookup:
 - "setBrewery"
 depends-top-level:
-- "NSCoder"
-- !private "BooleanLiteralType"
-- "MKAnnotation"
-- "String"
 - !private "*"
 - !private "StringLiteralType"
-- !private "UIButton"
-- !private "UIImage"
 - "MKPinAnnotationView"
+- !private "BooleanLiteralType"
+- "MKAnnotation"
+- "Brewery"
+- !private "UIButton"
+- "MyPinAnnotationView"
+- "NSCoder"
+- !private "UIImage"
+- "String"
 - "AssignmentPrecedence"
 - !private "=="
-- "MyPinAnnotationView"
-- "Brewery"
 depends-member:
 - !private ["Ps9AnyObject", "UIButton"]
 - !private ["Ps9AnyObject", "UIImage"]

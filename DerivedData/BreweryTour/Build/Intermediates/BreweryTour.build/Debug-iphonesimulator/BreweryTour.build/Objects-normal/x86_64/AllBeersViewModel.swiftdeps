@@ -9,15 +9,15 @@ provides-dynamic-lookup:
 - "searchForUserEntered"
 depends-top-level:
 - "Void"
+- "OnlineSearchCapable"
 - "BooleanLiteralType"
 - "AllBeersViewModel"
 - !private "Message"
-- "Subject"
 - "BeersViewModel"
-- "OnlineSearchCapable"
+- "Subject"
+- !private "=="
 - "Bool"
 - "String"
-- !private "=="
 - !private "BreweryDBClient"
 depends-member:
 - ["C11BreweryTour17AllBeersViewModel", "Bool"]

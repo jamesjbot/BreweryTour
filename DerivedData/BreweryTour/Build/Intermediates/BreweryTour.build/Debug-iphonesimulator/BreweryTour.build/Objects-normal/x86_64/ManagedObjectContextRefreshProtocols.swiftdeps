@@ -10,8 +10,8 @@ provides-member:
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "BroadcastManagedObjectContextRefresh"
 - "ReceiveBroadcastManagedObjectContextRefresh"
+- "BroadcastManagedObjectContextRefresh"
 depends-member:
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "ReceiveBroadcastManagedObjectContextRefresh"]
 - ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "allBeersAndBreweriesDeleted"]

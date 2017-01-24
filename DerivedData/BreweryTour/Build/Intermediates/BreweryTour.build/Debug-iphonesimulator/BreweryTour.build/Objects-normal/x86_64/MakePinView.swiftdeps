@@ -7,21 +7,21 @@ provides-member:
 - ["C11BreweryTour11MakePinView", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- !private "UIColor"
-- !private "||"
-- "MKAnnotation"
-- !private "MyAnnotationView"
-- !private "MyPinAnnotationView"
 - "String"
-- !private "MKPinAnnotationView"
-- !private "==="
-- !private "Bool"
-- "CastingPrecedence"
-- "MKAnnotationView"
 - "AssignmentPrecedence"
-- "MakePinView"
-- "Brewery"
+- "CastingPrecedence"
 - "MKUserLocation"
+- !private "MKPinAnnotationView"
+- "Brewery"
+- !private "==="
+- !private "UIColor"
+- "MKAnnotationView"
+- "MKAnnotation"
+- !private "Bool"
+- !private "MyPinAnnotationView"
+- !private "||"
+- "MakePinView"
+- !private "MyAnnotationView"
 depends-member:
 - !private ["Ps9AnyObject", "MakePinView"]
 - !private ["Ps9AnyObject", "MyAnnotationView"]

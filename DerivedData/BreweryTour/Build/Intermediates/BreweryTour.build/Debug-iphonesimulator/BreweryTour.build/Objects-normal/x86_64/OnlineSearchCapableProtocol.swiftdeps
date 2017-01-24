@@ -7,10 +7,10 @@ provides-member:
 - ["P11BreweryTour19OnlineSearchCapable", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "OnlineSearchCapable"
-- "Bool"
 - "String"
+- "OnlineSearchCapable"
 - "Void"
+- "Bool"
 depends-member:
 - ["P11BreweryTour19OnlineSearchCapable", "Bool"]
 - ["P11BreweryTour19OnlineSearchCapable", "String"]

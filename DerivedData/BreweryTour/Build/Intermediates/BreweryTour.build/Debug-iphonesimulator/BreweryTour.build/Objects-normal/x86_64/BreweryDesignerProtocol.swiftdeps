@@ -11,20 +11,20 @@ provides-member:
 - ["P11BreweryTour23BreweryDesignerProtocol", "createBreweryObject"]
 provides-dynamic-lookup:
 depends-top-level:
-- "TernaryPrecedence"
 - "AnyObject"
-- !private "UnicodeScalarType"
-- "BreweryDesigner"
-- "Brewery"
-- "BreweryDesignerProtocol"
 - !private "=="
+- "BreweryDesigner"
 - "CastingPrecedence"
-- !private "StringLiteralType"
-- !private "BreweryData"
-- "String"
-- !private "??"
-- !private "BooleanLiteralType"
+- !private "UnicodeScalarType"
+- "TernaryPrecedence"
 - !private "BreweryAndBeerCreationQueue"
+- !private "BooleanLiteralType"
+- !private "BreweryData"
+- !private "StringLiteralType"
+- "String"
+- "BreweryDesignerProtocol"
+- !private "??"
+- "Brewery"
 depends-member:
 - !private ["Ps9AnyObject", "BreweryDesigner"]
 - ["Ps9AnyObject", "createBreweryObject"]

@@ -10,14 +10,14 @@ provides-member:
 - ["C11BreweryTour13ParserFactory", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "ParserFactory"
-- !private "BreweriesParser"
-- !private "StylesParser"
-- !private "BeersFollowedByBreweriesParser"
-- "ParserFactoryProtocol"
-- "ParserProtocol"
-- "BreweryDBClient"
 - !private "BeersByBreweryIDParser"
+- "BreweryDBClient"
+- "ParserFactoryProtocol"
+- !private "BreweriesParser"
+- !private "BeersFollowedByBreweriesParser"
+- !private "StylesParser"
+- "ParserProtocol"
+- "ParserFactory"
 depends-member:
 - ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "BeersByBreweryID"]
 - ["OC11BreweryTour15BreweryDBClient31APIQueryResponseProcessingTypes", "BeersFollowedByBreweries"]

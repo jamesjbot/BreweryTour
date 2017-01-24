@@ -6,21 +6,21 @@ provides-nominal:
 provides-member:
 - ["C11BreweryTour18MyTabBarController", ""]
 provides-dynamic-lookup:
+- "tabBarController"
 - "viewDidLoad"
 - "viewWillAppear"
-- "tabBarController"
 depends-top-level:
-- "AssignmentPrecedence"
 - !private "DismissableTutorial"
-- "CastingPrecedence"
-- "MyTabBarController"
-- "UITabBarControllerDelegate"
-- !private "UIBarButtonItem"
-- !private "BooleanLiteralType"
-- "UIViewController"
-- !private "StringLiteralType"
 - "UITabBarController"
+- !private "UIBarButtonItem"
+- "UITabBarControllerDelegate"
+- "CastingPrecedence"
+- "AssignmentPrecedence"
 - "Bool"
+- !private "BooleanLiteralType"
+- "MyTabBarController"
+- !private "StringLiteralType"
+- "UIViewController"
 depends-member:
 - !private ["Ps9AnyObject", "DismissableTutorial"]
 - !private ["Ps9AnyObject", "UIBarButtonItem"]

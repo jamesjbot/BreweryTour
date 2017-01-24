@@ -8,11 +8,11 @@ provides-member:
 provides-dynamic-lookup:
 depends-top-level:
 - "AssignmentPrecedence"
-- "Style"
-- "String"
-- "NSManagedObjectContext"
-- !private "NSEntityDescription"
 - "NSManagedObject"
+- "String"
+- !private "NSEntityDescription"
+- "NSManagedObjectContext"
+- "Style"
 - !private "StringLiteralType"
 depends-member:
 - !private ["Ps9AnyObject", "NSEntityDescription"]

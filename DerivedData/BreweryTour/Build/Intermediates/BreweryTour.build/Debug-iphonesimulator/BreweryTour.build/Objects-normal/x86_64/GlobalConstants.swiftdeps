@@ -7,8 +7,8 @@ provides-member:
 - ["V11BreweryTour11g_constants", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "g_constants"
 - "StringLiteralType"
+- "g_constants"
 depends-member:
 - ["Ps9AnyObject", "init"]
 - ["Ps7CVarArg", "init"]

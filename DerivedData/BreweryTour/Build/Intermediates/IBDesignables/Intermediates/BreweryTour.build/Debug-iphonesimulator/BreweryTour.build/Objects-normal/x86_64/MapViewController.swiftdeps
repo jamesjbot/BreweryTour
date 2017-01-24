@@ -6,110 +6,112 @@ provides-nominal:
 provides-member:
 - ["C11BreweryTour17MapViewController", ""]
 provides-dynamic-lookup:
-- "slider"
-- "centerLocation"
-- "iphoneFactor"
-- "radiusDivisor"
-- "currentLocationTapped"
-- "floatingAnnotation"
-- "readOnlyContext"
-- "dismissTutorial"
-- "coordinate"
-- "numberOfPoints"
-- "touchUpOutside"
-- "circularAnimationDuration"
-- "subtitle"
 - "breweriesForDisplay"
-- "mapView"
-- "clearPointFromTargetLocation"
-- "handleLongPress"
-- "nextTutorialAction"
-- "container"
-- "tutorialText"
-- "longPressRecognizer"
-- "reuseId"
-- "activityIndicator"
-- "currentLocation"
+- "updateMap"
 - "pointer"
+- "tutorialText"
+- "displayNewStrategyWithNewPoint"
 - "title"
-- "viewDidAppear"
+- "longPressRecognizer"
+- "isEqual"
+- "reuseId"
+- "touchUpOutside"
 - "nextTutorial"
-- "sliderAction"
-- "viewDidLoad"
+- "clearPointFromTargetLocation"
+- "numberOfPoints"
 - "hashValue"
+- "iphoneFactor"
+- "nextTutorialAction"
+- "annotation"
+- "container"
+- "floatingAnnotation"
+- "radiusDivisor"
+- "dismissTutorial"
+- "viewDidAppear"
+- "routedAnnotation"
+- "centerLocation"
+- "activityIndicator"
+- "circularAnimationDuration"
+- "slider"
+- "handleLongPress"
+- "sliderAction"
+- "mapView"
+- "subtitle"
 - "tutorialView"
 - "sliderTouchUpInside"
-- "updateMap"
+- "readOnlyContext"
 - "viewWillAppear"
-- "routedAnnotation"
-- "displayNewStrategyWithNewPoint"
+- "viewDidLoad"
+- "currentLocationTapped"
+- "coordinate"
+- "currentLocation"
 depends-top-level:
-- !private "TimeInterval"
-- "MyAnnotation"
+- !private "CLLocationCoordinate2D"
+- !private "MKCoordinateRegion"
+- "AppDelegate"
+- !private "g_constants"
+- !private "UIGestureRecognizerState"
+- "MKAnnotation"
+- !private "*"
+- "UIApplication"
+- "UILongPressGestureRecognizer"
+- !private "kCLLocationAccuracyHundredMeters"
+- !private "DispatchQueue"
+- "UIButton"
+- "UIActivityIndicatorView"
+- "CircleView"
+- "CLLocationManager"
+- "CGFloat"
+- "UIEvent"
+- "MKAnnotationView"
+- !private "StyleMapStrategy"
+- "CLLocationDistance"
+- !private "||"
+- !private "MKCoordinateSpanMake"
+- "Bool"
+- "Int"
+- "MapStrategy"
+- !private "Array"
+- !private "Float"
+- !private "MKCoordinateRegionMakeWithDistance"
+- !private "==="
+- "MKMapView"
+- !private "&&"
 - !private "BreweryMapStrategy"
+- "UIView"
+- !private "String"
+- "StringLiteralType"
 - "NSManagedObject"
-- !private "!"
+- !private "TimeInterval"
+- "Brewery"
+- "NewMyAnnotation"
+- "UISlider"
+- !private "Set"
+- "Style"
+- !private "BooleanLiteralType"
+- "UITextView"
 - !private "UIBarButtonItem"
 - !private "NSObject"
 - "NSFetchedResultsController"
-- "CastingPrecedence"
-- "CLLocationDistance"
-- !private "||"
-- "MKAnnotationView"
-- "Int"
-- "Brewery"
+- !private "!"
+- !private "MKPointAnnotation"
+- "UILabel"
+- !private "+="
+- !private "+"
+- !private "Mediator"
+- "UIViewController"
+- !private "CGPoint"
+- "MapViewController"
+- !private "-"
+- "CLLocation"
 - "=="
 - "AssignmentPrecedence"
-- !private "StyleMapStrategy"
-- !private "Array"
-- "UIApplication"
-- !private "MKCoordinateSpanMake"
-- !private "&&"
-- "UILabel"
-- "MKAnnotation"
-- "MKMapView"
-- !private "MKCoordinateRegionMakeWithDistance"
-- "AppDelegate"
-- "MapStrategy"
-- "CircleView"
-- !private "String"
-- !private "Mediator"
-- !private "MKCoordinateRegion"
-- !private "BooleanLiteralType"
-- "UILongPressGestureRecognizer"
-- !private "Float"
-- "StringLiteralType"
-- "CLLocation"
-- !private "+"
-- !private "kCLLocationAccuracyHundredMeters"
-- "MapViewController"
-- "UIButton"
 - !private "UserDefaults"
-- "UIActivityIndicatorView"
-- "UIView"
-- !private "CGPoint"
-- "UISlider"
 - !private "!="
-- "CLLocationManager"
-- !private "g_constants"
-- "Style"
-- "UIViewController"
-- "Bool"
-- "UITextView"
-- !private "CLLocationCoordinate2D"
-- "UIEvent"
-- !private "MKPointAnnotation"
-- !private "+="
-- !private "*"
-- !private "Set"
-- !private "DispatchQueue"
-- !private "UIGestureRecognizerState"
-- !private "-"
-- "CGFloat"
+- "CastingPrecedence"
 depends-member:
 - !private ["Ps16AbsoluteValuable", "init"]
 - !private ["Ps9AnyObject", "=="]
-- !private ["Ps9AnyObject", "Array"]
 - !private ["Ps9AnyObject", "BreweryMapStrategy"]
 - !private ["Ps9AnyObject", "CGPoint"]
 - ["Ps9AnyObject", "CLLocation"]
@@ -118,13 +120,14 @@ depends-member:
 - !private ["Ps9AnyObject", "DispatchQueue"]
 - !private ["Ps9AnyObject", "Float"]
 - !private ["Ps9AnyObject", "Int"]
+- !private ["Ps9AnyObject", "MKAnnotation"]
 - !private ["Ps9AnyObject", "MKCoordinateRegion"]
 - !private ["Ps9AnyObject", "MKCoordinateRegionMakeWithDistance"]
 - !private ["Ps9AnyObject", "MKCoordinateSpanMake"]
 - !private ["Ps9AnyObject", "MKPointAnnotation"]
 - !private ["Ps9AnyObject", "Mediator"]
-- !private ["Ps9AnyObject", "MyAnnotation"]
 - ["Ps9AnyObject", "NSFetchedResultsController"]
+- !private ["Ps9AnyObject", "NewMyAnnotation"]
 - !private ["Ps9AnyObject", "RawValue"]
 - !private ["Ps9AnyObject", "Set"]
 - !private ["Ps9AnyObject", "String"]
@@ -179,6 +182,7 @@ depends-member:
 - ["Ps9AnyObject", "initCoreLoction"]
 - ["Ps9AnyObject", "iphoneFactor"]
 - ["Ps9AnyObject", "isAnnotation"]
+- !private ["Ps9AnyObject", "isEqual"]
 - !private ["Ps9AnyObject", "isHidden"]
 - !private ["Ps9AnyObject", "isSystemBusy"]
 - !private ["Ps9AnyObject", "kCLLocationAccuracyHundredMeters"]
@@ -246,6 +250,7 @@ depends-member:
 - ["Ps9AnyObject", "tutorialState"]
 - ["Ps9AnyObject", "tutorialText"]
 - ["Ps9AnyObject", "tutorialView"]
+- ["Ps9AnyObject", "updateExtraction"]
 - ["Ps9AnyObject", "updateMap"]
 - !private ["Ps9AnyObject", "userLocation"]
 - !private ["Ps9AnyObject", "value"]
@@ -266,8 +271,10 @@ depends-member:
 - !private ["Sa", "count"]
 - ["Sa", "deinit"]
 - !private ["Sa", "enumerated"]
+- !private ["Sa", "index"]
 - !private ["Sa", "init"]
 - !private ["Sa", "isEmpty"]
+- !private ["Sa", "remove"]
 - !private ["Sa", "removeLast"]
 - !private ["Sa", "subscript"]
 - !private ["Ps23BidirectionalCollection", "Element"]
@@ -280,8 +287,10 @@ depends-member:
 - !private ["Ps23BidirectionalCollection", "append"]
 - !private ["Ps23BidirectionalCollection", "count"]
 - !private ["Ps23BidirectionalCollection", "enumerated"]
+- !private ["Ps23BidirectionalCollection", "index"]
 - !private ["Ps23BidirectionalCollection", "init"]
 - !private ["Ps23BidirectionalCollection", "isEmpty"]
+- !private ["Ps23BidirectionalCollection", "remove"]
 - !private ["Ps23BidirectionalCollection", "removeLast"]
 - !private ["Ps23BidirectionalCollection", "subscript"]
 - !private ["Ps22BidirectionalIndexable", "Element"]
@@ -294,8 +303,10 @@ depends-member:
 - !private ["Ps22BidirectionalIndexable", "append"]
 - !private ["Ps22BidirectionalIndexable", "count"]
 - !private ["Ps22BidirectionalIndexable", "enumerated"]
+- !private ["Ps22BidirectionalIndexable", "index"]
 - !private ["Ps22BidirectionalIndexable", "init"]
 - !private ["Ps22BidirectionalIndexable", "isEmpty"]
+- !private ["Ps22BidirectionalIndexable", "remove"]
 - !private ["Ps22BidirectionalIndexable", "removeLast"]
 - !private ["Ps22BidirectionalIndexable", "subscript"]
 - !private ["Vs18BidirectionalSlice", "Index"]
@@ -323,7 +334,6 @@ depends-member:
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "setFloating"]
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "setLastSliderValue"]
 - !private ["P11BreweryTour36BroadcastManagedObjectContextRefresh", "sharedInstance"]
-- !private ["P11BreweryTour12BusyObserver", "Array"]
 - !private ["P11BreweryTour12BusyObserver", "BreweryMapStrategy"]
 - !private ["P11BreweryTour12BusyObserver", "CGPoint"]
 - ["P11BreweryTour12BusyObserver", "CLLocation"]
@@ -332,13 +342,14 @@ depends-member:
 - !private ["P11BreweryTour12BusyObserver", "DispatchQueue"]
 - !private ["P11BreweryTour12BusyObserver", "Float"]
 - !private ["P11BreweryTour12BusyObserver", "Int"]
+- !private ["P11BreweryTour12BusyObserver", "MKAnnotation"]
 - !private ["P11BreweryTour12BusyObserver", "MKCoordinateRegion"]
 - !private ["P11BreweryTour12BusyObserver", "MKCoordinateRegionMakeWithDistance"]
 - !private ["P11BreweryTour12BusyObserver", "MKCoordinateSpanMake"]
 - !private ["P11BreweryTour12BusyObserver", "MKPointAnnotation"]
 - !private ["P11BreweryTour12BusyObserver", "Mediator"]
-- !private ["P11BreweryTour12BusyObserver", "MyAnnotation"]
 - ["P11BreweryTour12BusyObserver", "NSFetchedResultsController"]
+- !private ["P11BreweryTour12BusyObserver", "NewMyAnnotation"]
 - !private ["P11BreweryTour12BusyObserver", "Set"]
 - !private ["P11BreweryTour12BusyObserver", "String"]
 - !private ["P11BreweryTour12BusyObserver", "StyleMapStrategy"]
@@ -388,6 +399,7 @@ depends-member:
 - !private ["P11BreweryTour12BusyObserver", "tutorialState"]
 - !private ["P11BreweryTour12BusyObserver", "tutorialText"]
 - !private ["P11BreweryTour12BusyObserver", "tutorialView"]
+- !private ["P11BreweryTour12BusyObserver", "updateExtraction"]
 - ["CSo7CALayer", "deinit"]
 - !private ["CSo7CALayer", "removeAllAnimations"]
 - !private ["PSo15CALayerDelegate", "addAnnotation"]
@@ -439,7 +451,6 @@ depends-member:
 - !private ["CSo17CLLocationManager", "locationServicesEnabled"]
 - !private ["CSo17CLLocationManager", "requestLocation"]
 - !private ["CSo17CLLocationManager", "requestWhenInUseAuthorization"]
-- !private ["PSo25CLLocationManagerDelegate", "Array"]
 - !private ["PSo25CLLocationManagerDelegate", "BreweryMapStrategy"]
 - !private ["PSo25CLLocationManagerDelegate", "CGPoint"]
 - ["PSo25CLLocationManagerDelegate", "CLLocation"]
@@ -448,13 +459,14 @@ depends-member:
 - !private ["PSo25CLLocationManagerDelegate", "DispatchQueue"]
 - !private ["PSo25CLLocationManagerDelegate", "Float"]
 - !private ["PSo25CLLocationManagerDelegate", "Int"]
+- !private ["PSo25CLLocationManagerDelegate", "MKAnnotation"]
 - !private ["PSo25CLLocationManagerDelegate", "MKCoordinateRegion"]
 - !private ["PSo25CLLocationManagerDelegate", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo25CLLocationManagerDelegate", "MKCoordinateSpanMake"]
 - !private ["PSo25CLLocationManagerDelegate", "MKPointAnnotation"]
 - !private ["PSo25CLLocationManagerDelegate", "Mediator"]
-- !private ["PSo25CLLocationManagerDelegate", "MyAnnotation"]
 - ["PSo25CLLocationManagerDelegate", "NSFetchedResultsController"]
+- !private ["PSo25CLLocationManagerDelegate", "NewMyAnnotation"]
 - !private ["PSo25CLLocationManagerDelegate", "Set"]
 - !private ["PSo25CLLocationManagerDelegate", "String"]
 - !private ["PSo25CLLocationManagerDelegate", "StyleMapStrategy"]
@@ -504,8 +516,8 @@ depends-member:
 - !private ["PSo25CLLocationManagerDelegate", "tutorialState"]
 - !private ["PSo25CLLocationManagerDelegate", "tutorialText"]
 - !private ["PSo25CLLocationManagerDelegate", "tutorialView"]
+- !private ["PSo25CLLocationManagerDelegate", "updateExtraction"]
 - !private ["Ps7CVarArg", "=="]
-- !private ["Ps7CVarArg", "Array"]
 - !private ["Ps7CVarArg", "BreweryMapStrategy"]
 - !private ["Ps7CVarArg", "CGPoint"]
 - ["Ps7CVarArg", "CLLocation"]
@@ -519,13 +531,14 @@ depends-member:
 - !private ["Ps7CVarArg", "Int"]
 - !private ["Ps7CVarArg", "IntegerLiteralType"]
 - !private ["Ps7CVarArg", "Iterator"]
+- !private ["Ps7CVarArg", "MKAnnotation"]
 - !private ["Ps7CVarArg", "MKCoordinateRegion"]
 - !private ["Ps7CVarArg", "MKCoordinateRegionMakeWithDistance"]
 - !private ["Ps7CVarArg", "MKCoordinateSpanMake"]
 - !private ["Ps7CVarArg", "MKPointAnnotation"]
 - !private ["Ps7CVarArg", "Mediator"]
-- !private ["Ps7CVarArg", "MyAnnotation"]
 - ["Ps7CVarArg", "NSFetchedResultsController"]
+- !private ["Ps7CVarArg", "NewMyAnnotation"]
 - !private ["Ps7CVarArg", "RawValue"]
 - !private ["Ps7CVarArg", "Set"]
 - !private ["Ps7CVarArg", "Stride"]
@@ -581,12 +594,14 @@ depends-member:
 - !private ["Ps7CVarArg", "g_constants"]
 - ["Ps7CVarArg", "handleLongPress"]
 - !private ["Ps7CVarArg", "hashValue"]
+- !private ["Ps7CVarArg", "index"]
 - ["Ps7CVarArg", "init"]
 - ["Ps7CVarArg", "initCoreLoction"]
 - !private ["Ps7CVarArg", "intersection"]
 - ["Ps7CVarArg", "iphoneFactor"]
 - ["Ps7CVarArg", "isAnnotation"]
 - !private ["Ps7CVarArg", "isEmpty"]
+- !private ["Ps7CVarArg", "isEqual"]
 - !private ["Ps7CVarArg", "isHidden"]
 - !private ["Ps7CVarArg", "kCLLocationAccuracyHundredMeters"]
 - ["Ps7CVarArg", "lastSelectedManagedObject"]
@@ -609,6 +624,7 @@ depends-member:
 - ["Ps7CVarArg", "radiusDivisor"]
 - ["Ps7CVarArg", "readOnlyContext"]
 - !private ["Ps7CVarArg", "registerAsBusyObserverWithMediator"]
+- !private ["Ps7CVarArg", "remove"]
 - !private ["Ps7CVarArg", "removeAllAnimations"]
 - !private ["Ps7CVarArg", "removeAnnotation"]
 - !private ["Ps7CVarArg", "removeAnnotations"]
@@ -651,6 +667,7 @@ depends-member:
 - ["Ps7CVarArg", "tutorialState"]
 - ["Ps7CVarArg", "tutorialText"]
 - ["Ps7CVarArg", "tutorialView"]
+- ["Ps7CVarArg", "updateExtraction"]
 - ["Ps7CVarArg", "updateMap"]
 - !private ["Ps7CVarArg", "userLocation"]
 - !private ["Ps7CVarArg", "value"]
@@ -674,9 +691,11 @@ depends-member:
 - !private ["Ps10Collection", "append"]
 - !private ["Ps10Collection", "count"]
 - !private ["Ps10Collection", "enumerated"]
+- !private ["Ps10Collection", "index"]
 - !private ["Ps10Collection", "init"]
 - !private ["Ps10Collection", "intersection"]
 - !private ["Ps10Collection", "isEmpty"]
+- !private ["Ps10Collection", "remove"]
 - !private ["Ps10Collection", "removeLast"]
 - !private ["Ps10Collection", "subscript"]
 - !private ["Ps10Collection", "symmetricDifference"]
@@ -688,7 +707,6 @@ depends-member:
 - ["C11BreweryTour13CoreDataStack", "container"]
 - ["C11BreweryTour13CoreDataStack", "deinit"]
 - !private ["Ps28CustomDebugStringConvertible", "=="]
-- !private ["Ps28CustomDebugStringConvertible", "Array"]
 - !private ["Ps28CustomDebugStringConvertible", "BreweryMapStrategy"]
 - !private ["Ps28CustomDebugStringConvertible", "CGPoint"]
 - ["Ps28CustomDebugStringConvertible", "CLLocation"]
@@ -701,13 +719,14 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "IndexDistance"]
 - !private ["Ps28CustomDebugStringConvertible", "Int"]
 - !private ["Ps28CustomDebugStringConvertible", "Iterator"]
+- !private ["Ps28CustomDebugStringConvertible", "MKAnnotation"]
 - !private ["Ps28CustomDebugStringConvertible", "MKCoordinateRegion"]
 - !private ["Ps28CustomDebugStringConvertible", "MKCoordinateRegionMakeWithDistance"]
 - !private ["Ps28CustomDebugStringConvertible", "MKCoordinateSpanMake"]
 - !private ["Ps28CustomDebugStringConvertible", "MKPointAnnotation"]
 - !private ["Ps28CustomDebugStringConvertible", "Mediator"]
-- !private ["Ps28CustomDebugStringConvertible", "MyAnnotation"]
 - ["Ps28CustomDebugStringConvertible", "NSFetchedResultsController"]
+- !private ["Ps28CustomDebugStringConvertible", "NewMyAnnotation"]
 - !private ["Ps28CustomDebugStringConvertible", "RawValue"]
 - !private ["Ps28CustomDebugStringConvertible", "Set"]
 - !private ["Ps28CustomDebugStringConvertible", "String"]
@@ -761,12 +780,14 @@ depends-member:
 - !private ["Ps28CustomDebugStringConvertible", "g_constants"]
 - ["Ps28CustomDebugStringConvertible", "handleLongPress"]
 - !private ["Ps28CustomDebugStringConvertible", "hashValue"]
+- !private ["Ps28CustomDebugStringConvertible", "index"]
 - ["Ps28CustomDebugStringConvertible", "init"]
 - ["Ps28CustomDebugStringConvertible", "initCoreLoction"]
 - !private ["Ps28CustomDebugStringConvertible", "intersection"]
 - ["Ps28CustomDebugStringConvertible", "iphoneFactor"]
 - ["Ps28CustomDebugStringConvertible", "isAnnotation"]
 - !private ["Ps28CustomDebugStringConvertible", "isEmpty"]
+- !private ["Ps28CustomDebugStringConvertible", "isEqual"]
 - !private ["Ps28CustomDebugStringConvertible", "isHidden"]
 - !private ["Ps28CustomDebugStringConvertible", "kCLLocationAccuracyHundredMeters"]
 - ["Ps28CustomDebugStringConvertible", "lastSelectedManagedObject"]
@@ -791,6 +812,7 @@ depends-member:
 - ["Ps28CustomDebugStringConvertible", "radiusDivisor"]
 - ["Ps28CustomDebugStringConvertible", "readOnlyContext"]
 - !private ["Ps28CustomDebugStringConvertible", "registerAsBusyObserverWithMediator"]
+- !private ["Ps28CustomDebugStringConvertible", "remove"]
 - !private ["Ps28CustomDebugStringConvertible", "removeAllAnimations"]
 - !private ["Ps28CustomDebugStringConvertible", "removeAnnotation"]
 - !private ["Ps28CustomDebugStringConvertible", "removeAnnotations"]
@@ -833,6 +855,7 @@ depends-member:
 - ["Ps28CustomDebugStringConvertible", "tutorialState"]
 - ["Ps28CustomDebugStringConvertible", "tutorialText"]
 - ["Ps28CustomDebugStringConvertible", "tutorialView"]
+- ["Ps28CustomDebugStringConvertible", "updateExtraction"]
 - ["Ps28CustomDebugStringConvertible", "updateMap"]
 - !private ["Ps28CustomDebugStringConvertible", "userLocation"]
 - !private ["Ps28CustomDebugStringConvertible", "value"]
@@ -867,18 +890,19 @@ depends-member:
 - !private ["Ps17CustomReflectable", "count"]
 - !private ["Ps17CustomReflectable", "enumerated"]
 - !private ["Ps17CustomReflectable", "hashValue"]
+- !private ["Ps17CustomReflectable", "index"]
 - ["Ps17CustomReflectable", "init"]
 - !private ["Ps17CustomReflectable", "intersection"]
 - !private ["Ps17CustomReflectable", "isEmpty"]
 - !private ["Ps17CustomReflectable", "midY"]
 - !private ["Ps17CustomReflectable", "origin"]
+- !private ["Ps17CustomReflectable", "remove"]
 - !private ["Ps17CustomReflectable", "removeLast"]
 - !private ["Ps17CustomReflectable", "subscript"]
 - !private ["Ps17CustomReflectable", "symmetricDifference"]
 - !private ["Ps17CustomReflectable", "width"]
 - !private ["Ps17CustomReflectable", "x"]
 - !private ["Ps23CustomStringConvertible", "=="]
-- !private ["Ps23CustomStringConvertible", "Array"]
 - !private ["Ps23CustomStringConvertible", "BreweryMapStrategy"]
 - !private ["Ps23CustomStringConvertible", "CGPoint"]
 - ["Ps23CustomStringConvertible", "CLLocation"]
@@ -892,13 +916,14 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "Int"]
 - !private ["Ps23CustomStringConvertible", "IntegerLiteralType"]
 - !private ["Ps23CustomStringConvertible", "Iterator"]
+- !private ["Ps23CustomStringConvertible", "MKAnnotation"]
 - !private ["Ps23CustomStringConvertible", "MKCoordinateRegion"]
 - !private ["Ps23CustomStringConvertible", "MKCoordinateRegionMakeWithDistance"]
 - !private ["Ps23CustomStringConvertible", "MKCoordinateSpanMake"]
 - !private ["Ps23CustomStringConvertible", "MKPointAnnotation"]
 - !private ["Ps23CustomStringConvertible", "Mediator"]
-- !private ["Ps23CustomStringConvertible", "MyAnnotation"]
 - ["Ps23CustomStringConvertible", "NSFetchedResultsController"]
+- !private ["Ps23CustomStringConvertible", "NewMyAnnotation"]
 - !private ["Ps23CustomStringConvertible", "RawValue"]
 - !private ["Ps23CustomStringConvertible", "Set"]
 - !private ["Ps23CustomStringConvertible", "Stride"]
@@ -955,12 +980,14 @@ depends-member:
 - !private ["Ps23CustomStringConvertible", "g_constants"]
 - ["Ps23CustomStringConvertible", "handleLongPress"]
 - !private ["Ps23CustomStringConvertible", "hashValue"]
+- !private ["Ps23CustomStringConvertible", "index"]
 - ["Ps23CustomStringConvertible", "init"]
 - ["Ps23CustomStringConvertible", "initCoreLoction"]
 - !private ["Ps23CustomStringConvertible", "intersection"]
 - ["Ps23CustomStringConvertible", "iphoneFactor"]
 - ["Ps23CustomStringConvertible", "isAnnotation"]
 - !private ["Ps23CustomStringConvertible", "isEmpty"]
+- !private ["Ps23CustomStringConvertible", "isEqual"]
 - !private ["Ps23CustomStringConvertible", "isHidden"]
 - !private ["Ps23CustomStringConvertible", "kCLLocationAccuracyHundredMeters"]
 - ["Ps23CustomStringConvertible", "lastSelectedManagedObject"]
@@ -983,6 +1010,7 @@ depends-member:
 - ["Ps23CustomStringConvertible", "radiusDivisor"]
 - ["Ps23CustomStringConvertible", "readOnlyContext"]
 - !private ["Ps23CustomStringConvertible", "registerAsBusyObserverWithMediator"]
+- !private ["Ps23CustomStringConvertible", "remove"]
 - !private ["Ps23CustomStringConvertible", "removeAllAnimations"]
 - !private ["Ps23CustomStringConvertible", "removeAnnotation"]
 - !private ["Ps23CustomStringConvertible", "removeAnnotations"]
@@ -1025,6 +1053,7 @@ depends-member:
 - ["Ps23CustomStringConvertible", "tutorialState"]
 - ["Ps23CustomStringConvertible", "tutorialText"]
 - ["Ps23CustomStringConvertible", "tutorialView"]
+- ["Ps23CustomStringConvertible", "updateExtraction"]
 - ["Ps23CustomStringConvertible", "updateMap"]
 - !private ["Ps23CustomStringConvertible", "userLocation"]
 - !private ["Ps23CustomStringConvertible", "value"]
@@ -1043,7 +1072,6 @@ depends-member:
 - !private ["Vs26DefaultRandomAccessIndices", "Iterator"]
 - !private ["Vs26DefaultRandomAccessIndices", "SubSequence"]
 - !private ["Vs26DefaultRandomAccessIndices", "_Element"]
-- !private ["P11BreweryTour19DismissableTutorial", "Array"]
 - !private ["P11BreweryTour19DismissableTutorial", "BreweryMapStrategy"]
 - !private ["P11BreweryTour19DismissableTutorial", "CGPoint"]
 - ["P11BreweryTour19DismissableTutorial", "CLLocation"]
@@ -1052,13 +1080,14 @@ depends-member:
 - !private ["P11BreweryTour19DismissableTutorial", "DispatchQueue"]
 - !private ["P11BreweryTour19DismissableTutorial", "Float"]
 - !private ["P11BreweryTour19DismissableTutorial", "Int"]
+- !private ["P11BreweryTour19DismissableTutorial", "MKAnnotation"]
 - !private ["P11BreweryTour19DismissableTutorial", "MKCoordinateRegion"]
 - !private ["P11BreweryTour19DismissableTutorial", "MKCoordinateRegionMakeWithDistance"]
 - !private ["P11BreweryTour19DismissableTutorial", "MKCoordinateSpanMake"]
 - !private ["P11BreweryTour19DismissableTutorial", "MKPointAnnotation"]
 - !private ["P11BreweryTour19DismissableTutorial", "Mediator"]
-- !private ["P11BreweryTour19DismissableTutorial", "MyAnnotation"]
 - ["P11BreweryTour19DismissableTutorial", "NSFetchedResultsController"]
+- !private ["P11BreweryTour19DismissableTutorial", "NewMyAnnotation"]
 - !private ["P11BreweryTour19DismissableTutorial", "Set"]
 - !private ["P11BreweryTour19DismissableTutorial", "String"]
 - !private ["P11BreweryTour19DismissableTutorial", "StyleMapStrategy"]
@@ -1108,6 +1137,7 @@ depends-member:
 - !private ["P11BreweryTour19DismissableTutorial", "tutorialState"]
 - !private ["P11BreweryTour19DismissableTutorial", "tutorialText"]
 - !private ["P11BreweryTour19DismissableTutorial", "tutorialView"]
+- !private ["P11BreweryTour19DismissableTutorial", "updateExtraction"]
 - !private ["CSo14DispatchObject", "async"]
 - !private ["CSo14DispatchObject", "main"]
 - !private ["CSo13DispatchQueue", "async"]
@@ -1119,7 +1149,6 @@ depends-member:
 - !private ["Vs18EnumeratedSequence", "Iterator"]
 - !private ["Vs18EnumeratedSequence", "deinit"]
 - !private ["Ps9Equatable", "=="]
-- !private ["Ps9Equatable", "Array"]
 - !private ["Ps9Equatable", "BreweryMapStrategy"]
 - !private ["Ps9Equatable", "CGPoint"]
 - ["Ps9Equatable", "CLLocation"]
@@ -1132,14 +1161,15 @@ depends-member:
 - !private ["Ps9Equatable", "IntegerLiteralType"]
 - !private ["Ps9Equatable", "Iterator"]
 - ["Ps9Equatable", "Longpress"]
+- !private ["Ps9Equatable", "MKAnnotation"]
 - !private ["Ps9Equatable", "MKCoordinateRegion"]
 - !private ["Ps9Equatable", "MKCoordinateRegionMakeWithDistance"]
 - !private ["Ps9Equatable", "MKCoordinateSpanMake"]
 - !private ["Ps9Equatable", "MKPointAnnotation"]
 - ["Ps9Equatable", "Map"]
 - !private ["Ps9Equatable", "Mediator"]
-- !private ["Ps9Equatable", "MyAnnotation"]
 - ["Ps9Equatable", "NSFetchedResultsController"]
+- !private ["Ps9Equatable", "NewMyAnnotation"]
 - !private ["Ps9Equatable", "RawValue"]
 - !private ["Ps9Equatable", "Set"]
 - ["Ps9Equatable", "Slider"]
@@ -1204,6 +1234,7 @@ depends-member:
 - !private ["Ps9Equatable", "intersection"]
 - ["Ps9Equatable", "iphoneFactor"]
 - ["Ps9Equatable", "isAnnotation"]
+- !private ["Ps9Equatable", "isEqual"]
 - !private ["Ps9Equatable", "isHidden"]
 - !private ["Ps9Equatable", "kCLLocationAccuracyHundredMeters"]
 - ["Ps9Equatable", "lastSelectedManagedObject"]
@@ -1271,6 +1302,7 @@ depends-member:
 - ["Ps9Equatable", "tutorialState"]
 - ["Ps9Equatable", "tutorialText"]
 - ["Ps9Equatable", "tutorialView"]
+- ["Ps9Equatable", "updateExtraction"]
 - ["Ps9Equatable", "updateMap"]
 - !private ["Ps9Equatable", "userLocation"]
 - !private ["Ps9Equatable", "value"]
@@ -1291,14 +1323,17 @@ depends-member:
 - !private ["Ps25ExpressibleByArrayLiteral", "autoreverse"]
 - !private ["Ps25ExpressibleByArrayLiteral", "count"]
 - !private ["Ps25ExpressibleByArrayLiteral", "enumerated"]
+- !private ["Ps25ExpressibleByArrayLiteral", "index"]
 - !private ["Ps25ExpressibleByArrayLiteral", "init"]
 - !private ["Ps25ExpressibleByArrayLiteral", "intersection"]
 - !private ["Ps25ExpressibleByArrayLiteral", "isEmpty"]
+- !private ["Ps25ExpressibleByArrayLiteral", "remove"]
 - !private ["Ps25ExpressibleByArrayLiteral", "removeLast"]
 - !private ["Ps25ExpressibleByArrayLiteral", "repeat"]
 - !private ["Ps25ExpressibleByArrayLiteral", "subscript"]
 - !private ["Ps25ExpressibleByArrayLiteral", "symmetricDifference"]
 - !private ["Ps27ExpressibleByBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps43ExpressibleByExtendedGraphemeClusterLiteral", "hashValue"]
 - ["Ps43ExpressibleByExtendedGraphemeClusterLiteral", "init"]
 - !private ["Ps25ExpressibleByFloatLiteral", "init"]
 - !private ["Ps27ExpressibleByIntegerLiteral", "IntegerLiteralType"]
@@ -1306,14 +1341,16 @@ depends-member:
 - !private ["Ps27ExpressibleByIntegerLiteral", "_DisabledRangeIndex"]
 - !private ["Ps27ExpressibleByIntegerLiteral", "hashValue"]
 - !private ["Ps27ExpressibleByIntegerLiteral", "init"]
+- !private ["Ps32ExpressibleByStringInterpolation", "hashValue"]
 - ["Ps32ExpressibleByStringInterpolation", "init"]
+- !private ["Ps26ExpressibleByStringLiteral", "hashValue"]
 - ["Ps26ExpressibleByStringLiteral", "init"]
+- !private ["Ps33ExpressibleByUnicodeScalarLiteral", "hashValue"]
 - ["Ps33ExpressibleByUnicodeScalarLiteral", "init"]
 - ["Sf", "deinit"]
 - !private ["Sf", "init"]
 - !private ["Ps13FloatingPoint", "init"]
 - !private ["Ps8Hashable", "=="]
-- !private ["Ps8Hashable", "Array"]
 - !private ["Ps8Hashable", "BreweryMapStrategy"]
 - !private ["Ps8Hashable", "CGPoint"]
 - ["Ps8Hashable", "CLLocation"]
@@ -1326,14 +1363,15 @@ depends-member:
 - !private ["Ps8Hashable", "IntegerLiteralType"]
 - !private ["Ps8Hashable", "Iterator"]
 - ["Ps8Hashable", "Longpress"]
+- !private ["Ps8Hashable", "MKAnnotation"]
 - !private ["Ps8Hashable", "MKCoordinateRegion"]
 - !private ["Ps8Hashable", "MKCoordinateRegionMakeWithDistance"]
 - !private ["Ps8Hashable", "MKCoordinateSpanMake"]
 - !private ["Ps8Hashable", "MKPointAnnotation"]
 - ["Ps8Hashable", "Map"]
 - !private ["Ps8Hashable", "Mediator"]
-- !private ["Ps8Hashable", "MyAnnotation"]
 - ["Ps8Hashable", "NSFetchedResultsController"]
+- !private ["Ps8Hashable", "NewMyAnnotation"]
 - !private ["Ps8Hashable", "RawValue"]
 - !private ["Ps8Hashable", "Set"]
 - ["Ps8Hashable", "Slider"]
@@ -1397,6 +1435,7 @@ depends-member:
 - !private ["Ps8Hashable", "intersection"]
 - ["Ps8Hashable", "iphoneFactor"]
 - ["Ps8Hashable", "isAnnotation"]
+- !private ["Ps8Hashable", "isEqual"]
 - !private ["Ps8Hashable", "isHidden"]
 - !private ["Ps8Hashable", "kCLLocationAccuracyHundredMeters"]
 - ["Ps8Hashable", "lastSelectedManagedObject"]
@@ -1461,6 +1500,7 @@ depends-member:
 - ["Ps8Hashable", "tutorialState"]
 - ["Ps8Hashable", "tutorialText"]
 - ["Ps8Hashable", "tutorialView"]
+- ["Ps8Hashable", "updateExtraction"]
 - ["Ps8Hashable", "updateMap"]
 - !private ["Ps8Hashable", "userLocation"]
 - !private ["Ps8Hashable", "value"]
@@ -1480,9 +1520,11 @@ depends-member:
 - !private ["Ps9Indexable", "append"]
 - !private ["Ps9Indexable", "count"]
 - !private ["Ps9Indexable", "enumerated"]
+- !private ["Ps9Indexable", "index"]
 - !private ["Ps9Indexable", "init"]
 - !private ["Ps9Indexable", "intersection"]
 - !private ["Ps9Indexable", "isEmpty"]
+- !private ["Ps9Indexable", "remove"]
 - !private ["Ps9Indexable", "removeLast"]
 - !private ["Ps9Indexable", "subscript"]
 - !private ["Ps9Indexable", "symmetricDifference"]
@@ -1496,9 +1538,11 @@ depends-member:
 - !private ["Ps13IndexableBase", "append"]
 - !private ["Ps13IndexableBase", "count"]
 - !private ["Ps13IndexableBase", "enumerated"]
+- !private ["Ps13IndexableBase", "index"]
 - !private ["Ps13IndexableBase", "init"]
 - !private ["Ps13IndexableBase", "intersection"]
 - !private ["Ps13IndexableBase", "isEmpty"]
+- !private ["Ps13IndexableBase", "remove"]
 - !private ["Ps13IndexableBase", "removeLast"]
 - !private ["Ps13IndexableBase", "subscript"]
 - !private ["Ps13IndexableBase", "symmetricDifference"]
@@ -1521,16 +1565,14 @@ depends-member:
 - !private ["Ps17IntegerArithmetic", "init"]
 - !private ["Ps16IteratorProtocol", "Element"]
 - !private ["Ps25LosslessStringConvertible", "_getBuiltinLogicValue"]
+- !private ["Ps25LosslessStringConvertible", "hashValue"]
 - ["Ps25LosslessStringConvertible", "init"]
-- !private ["PSo12MKAnnotation", "CLLocationCoordinate2D"]
-- !private ["PSo12MKAnnotation", "Int"]
 - !private ["PSo12MKAnnotation", "coordinate"]
 - ["PSo12MKAnnotation", "deinit"]
 - !private ["PSo12MKAnnotation", "init"]
 - !private ["PSo12MKAnnotation", "location"]
 - !private ["PSo12MKAnnotation", "subtitle"]
 - !private ["PSo12MKAnnotation", "title"]
-- !private ["PSo12MKAnnotation", ""]
 - !private ["CSo16MKAnnotationView", "annotation"]
 - !private ["VSC18MKCoordinateRegion", "deinit"]
 - !private ["VSC18MKCoordinateRegion", "init"]
@@ -1551,7 +1593,6 @@ depends-member:
 - !private ["CSo9MKMapView", "showsScale"]
 - !private ["CSo9MKMapView", "showsUserLocation"]
 - !private ["CSo9MKMapView", "userLocation"]
-- !private ["PSo17MKMapViewDelegate", "Array"]
 - !private ["PSo17MKMapViewDelegate", "BreweryMapStrategy"]
 - !private ["PSo17MKMapViewDelegate", "CGPoint"]
 - ["PSo17MKMapViewDelegate", "CLLocation"]
@@ -1560,13 +1601,14 @@ depends-member:
 - !private ["PSo17MKMapViewDelegate", "DispatchQueue"]
 - !private ["PSo17MKMapViewDelegate", "Float"]
 - !private ["PSo17MKMapViewDelegate", "Int"]
+- !private ["PSo17MKMapViewDelegate", "MKAnnotation"]
 - !private ["PSo17MKMapViewDelegate", "MKCoordinateRegion"]
 - !private ["PSo17MKMapViewDelegate", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo17MKMapViewDelegate", "MKCoordinateSpanMake"]
 - !private ["PSo17MKMapViewDelegate", "MKPointAnnotation"]
 - !private ["PSo17MKMapViewDelegate", "Mediator"]
-- !private ["PSo17MKMapViewDelegate", "MyAnnotation"]
 - ["PSo17MKMapViewDelegate", "NSFetchedResultsController"]
+- !private ["PSo17MKMapViewDelegate", "NewMyAnnotation"]
 - !private ["PSo17MKMapViewDelegate", "Set"]
 - !private ["PSo17MKMapViewDelegate", "String"]
 - !private ["PSo17MKMapViewDelegate", "StyleMapStrategy"]
@@ -1616,18 +1658,20 @@ depends-member:
 - !private ["PSo17MKMapViewDelegate", "tutorialState"]
 - !private ["PSo17MKMapViewDelegate", "tutorialText"]
 - !private ["PSo17MKMapViewDelegate", "tutorialView"]
+- !private ["PSo17MKMapViewDelegate", "updateExtraction"]
 - !private ["CSo17MKPointAnnotation", "coordinate"]
 - ["CSo17MKPointAnnotation", "deinit"]
 - !private ["CSo17MKPointAnnotation", "init"]
+- !private ["CSo17MKPointAnnotation", "title"]
 - !private ["CSo7MKShape", "coordinate"]
 - !private ["CSo7MKShape", "init"]
+- !private ["CSo7MKShape", "title"]
 - !private ["CSo14MKUserLocation", "coordinate"]
 - !private ["CSo14MKUserLocation", "deinit"]
 - !private ["CSo14MKUserLocation", "location"]
 - !private ["C11BreweryTour11MapStrategy", "endSearch"]
 - !private ["C11BreweryTour11MapStrategy", "runningID"]
 - ["C11BreweryTour17MapViewController", "AppDelegate"]
-- !private ["C11BreweryTour17MapViewController", "Array"]
 - ["C11BreweryTour17MapViewController", "Bool"]
 - ["C11BreweryTour17MapViewController", "Brewery"]
 - !private ["C11BreweryTour17MapViewController", "BreweryMapStrategy"]
@@ -1651,9 +1695,9 @@ depends-member:
 - !private ["C11BreweryTour17MapViewController", "MKPointAnnotation"]
 - ["C11BreweryTour17MapViewController", "MapStrategy"]
 - !private ["C11BreweryTour17MapViewController", "Mediator"]
-- !private ["C11BreweryTour17MapViewController", "MyAnnotation"]
 - ["C11BreweryTour17MapViewController", "NSFetchedResultsController"]
 - ["C11BreweryTour17MapViewController", "NSManagedObject"]
+- !private ["C11BreweryTour17MapViewController", "NewMyAnnotation"]
 - !private ["C11BreweryTour17MapViewController", "Set"]
 - !private ["C11BreweryTour17MapViewController", "String"]
 - ["C11BreweryTour17MapViewController", "Style"]
@@ -1729,6 +1773,7 @@ depends-member:
 - !private ["C11BreweryTour17MapViewController", "tutorialState"]
 - ["C11BreweryTour17MapViewController", "tutorialText"]
 - ["C11BreweryTour17MapViewController", "tutorialView"]
+- !private ["C11BreweryTour17MapViewController", "updateExtraction"]
 - ["C11BreweryTour17MapViewController", "updateMap"]
 - ["C11BreweryTour17MapViewController", "viewDidAppear"]
 - ["C11BreweryTour17MapViewController", "viewDidLoad"]
@@ -1772,8 +1817,10 @@ depends-member:
 - !private ["Ps17MutableCollection", "append"]
 - !private ["Ps17MutableCollection", "count"]
 - !private ["Ps17MutableCollection", "enumerated"]
+- !private ["Ps17MutableCollection", "index"]
 - !private ["Ps17MutableCollection", "init"]
 - !private ["Ps17MutableCollection", "isEmpty"]
+- !private ["Ps17MutableCollection", "remove"]
 - !private ["Ps17MutableCollection", "removeLast"]
 - !private ["Ps17MutableCollection", "subscript"]
 - !private ["Ps16MutableIndexable", "Element"]
@@ -1785,12 +1832,13 @@ depends-member:
 - !private ["Ps16MutableIndexable", "append"]
 - !private ["Ps16MutableIndexable", "count"]
 - !private ["Ps16MutableIndexable", "enumerated"]
+- !private ["Ps16MutableIndexable", "index"]
 - !private ["Ps16MutableIndexable", "init"]
 - !private ["Ps16MutableIndexable", "isEmpty"]
+- !private ["Ps16MutableIndexable", "remove"]
 - !private ["Ps16MutableIndexable", "removeLast"]
 - !private ["Ps16MutableIndexable", "subscript"]
 - ["CSo7NSCoder", "deinit"]
-- !private ["PSo8NSCoding", "Array"]
 - !private ["PSo8NSCoding", "BreweryMapStrategy"]
 - !private ["PSo8NSCoding", "CGPoint"]
 - ["PSo8NSCoding", "CLLocation"]
@@ -1799,13 +1847,14 @@ depends-member:
 - !private ["PSo8NSCoding", "DispatchQueue"]
 - !private ["PSo8NSCoding", "Float"]
 - !private ["PSo8NSCoding", "Int"]
+- !private ["PSo8NSCoding", "MKAnnotation"]
 - !private ["PSo8NSCoding", "MKCoordinateRegion"]
 - !private ["PSo8NSCoding", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo8NSCoding", "MKCoordinateSpanMake"]
 - !private ["PSo8NSCoding", "MKPointAnnotation"]
 - !private ["PSo8NSCoding", "Mediator"]
-- !private ["PSo8NSCoding", "MyAnnotation"]
 - ["PSo8NSCoding", "NSFetchedResultsController"]
+- !private ["PSo8NSCoding", "NewMyAnnotation"]
 - !private ["PSo8NSCoding", "RawValue"]
 - !private ["PSo8NSCoding", "Set"]
 - !private ["PSo8NSCoding", "String"]
@@ -1847,6 +1896,7 @@ depends-member:
 - !private ["PSo8NSCoding", "frame"]
 - !private ["PSo8NSCoding", "g_constants"]
 - ["PSo8NSCoding", "handleLongPress"]
+- !private ["PSo8NSCoding", "hashValue"]
 - ["PSo8NSCoding", "init"]
 - ["PSo8NSCoding", "initCoreLoction"]
 - ["PSo8NSCoding", "iphoneFactor"]
@@ -1900,6 +1950,7 @@ depends-member:
 - ["PSo8NSCoding", "tutorialState"]
 - ["PSo8NSCoding", "tutorialText"]
 - ["PSo8NSCoding", "tutorialView"]
+- ["PSo8NSCoding", "updateExtraction"]
 - ["PSo8NSCoding", "updateMap"]
 - !private ["PSo8NSCoding", "userLocation"]
 - !private ["PSo8NSCoding", "value"]
@@ -1909,8 +1960,8 @@ depends-member:
 - ["PSo8NSCoding", ""]
 - !private ["PSo9NSCopying", "RawValue"]
 - !private ["PSo9NSCopying", "coordinate"]
+- !private ["PSo9NSCopying", "hashValue"]
 - ["PSo9NSCopying", "init"]
-- !private ["PSo26NSExtensionRequestHandling", "Array"]
 - !private ["PSo26NSExtensionRequestHandling", "BreweryMapStrategy"]
 - !private ["PSo26NSExtensionRequestHandling", "CGPoint"]
 - ["PSo26NSExtensionRequestHandling", "CLLocation"]
@@ -1919,13 +1970,14 @@ depends-member:
 - !private ["PSo26NSExtensionRequestHandling", "DispatchQueue"]
 - !private ["PSo26NSExtensionRequestHandling", "Float"]
 - !private ["PSo26NSExtensionRequestHandling", "Int"]
+- !private ["PSo26NSExtensionRequestHandling", "MKAnnotation"]
 - !private ["PSo26NSExtensionRequestHandling", "MKCoordinateRegion"]
 - !private ["PSo26NSExtensionRequestHandling", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo26NSExtensionRequestHandling", "MKCoordinateSpanMake"]
 - !private ["PSo26NSExtensionRequestHandling", "MKPointAnnotation"]
 - !private ["PSo26NSExtensionRequestHandling", "Mediator"]
-- !private ["PSo26NSExtensionRequestHandling", "MyAnnotation"]
 - ["PSo26NSExtensionRequestHandling", "NSFetchedResultsController"]
+- !private ["PSo26NSExtensionRequestHandling", "NewMyAnnotation"]
 - !private ["PSo26NSExtensionRequestHandling", "Set"]
 - !private ["PSo26NSExtensionRequestHandling", "String"]
 - !private ["PSo26NSExtensionRequestHandling", "StyleMapStrategy"]
@@ -1993,6 +2045,7 @@ depends-member:
 - ["PSo26NSExtensionRequestHandling", "tutorialState"]
 - ["PSo26NSExtensionRequestHandling", "tutorialText"]
 - ["PSo26NSExtensionRequestHandling", "tutorialView"]
+- ["PSo26NSExtensionRequestHandling", "updateExtraction"]
 - ["PSo26NSExtensionRequestHandling", "updateMap"]
 - ["PSo26NSExtensionRequestHandling", "viewDidAppear"]
 - ["PSo26NSExtensionRequestHandling", "viewDidLoad"]
@@ -2000,7 +2053,6 @@ depends-member:
 - ["PSo26NSExtensionRequestHandling", ""]
 - ["CSo26NSFetchedResultsController", "deinit"]
 - ["CSo26NSFetchedResultsController", "init"]
-- !private ["PSo34NSFetchedResultsControllerDelegate", "Array"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "BreweryMapStrategy"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "CGPoint"]
 - ["PSo34NSFetchedResultsControllerDelegate", "CLLocation"]
@@ -2009,13 +2061,14 @@ depends-member:
 - !private ["PSo34NSFetchedResultsControllerDelegate", "DispatchQueue"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "Float"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "Int"]
+- !private ["PSo34NSFetchedResultsControllerDelegate", "MKAnnotation"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "MKCoordinateRegion"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "MKCoordinateSpanMake"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "MKPointAnnotation"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "Mediator"]
-- !private ["PSo34NSFetchedResultsControllerDelegate", "MyAnnotation"]
 - ["PSo34NSFetchedResultsControllerDelegate", "NSFetchedResultsController"]
+- !private ["PSo34NSFetchedResultsControllerDelegate", "NewMyAnnotation"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "Set"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "String"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "StyleMapStrategy"]
@@ -2067,12 +2120,13 @@ depends-member:
 - !private ["PSo34NSFetchedResultsControllerDelegate", "tutorialState"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "tutorialText"]
 - !private ["PSo34NSFetchedResultsControllerDelegate", "tutorialView"]
+- !private ["PSo34NSFetchedResultsControllerDelegate", "updateExtraction"]
 - ["CSo15NSManagedObject", "deinit"]
 - ["CSo22NSManagedObjectContext", "deinit"]
+- !private ["PSo16NSMutableCopying", "hashValue"]
 - ["PSo16NSMutableCopying", "init"]
 - !private ["CSo8NSObject", "=="]
 - ["CSo8NSObject", "AppDelegate"]
-- !private ["CSo8NSObject", "Array"]
 - ["CSo8NSObject", "Bool"]
 - ["CSo8NSObject", "Brewery"]
 - !private ["CSo8NSObject", "BreweryMapStrategy"]
@@ -2096,9 +2150,9 @@ depends-member:
 - !private ["CSo8NSObject", "MKPointAnnotation"]
 - ["CSo8NSObject", "MapStrategy"]
 - !private ["CSo8NSObject", "Mediator"]
-- ["CSo8NSObject", "MyAnnotation"]
 - ["CSo8NSObject", "NSFetchedResultsController"]
 - ["CSo8NSObject", "NSManagedObject"]
+- ["CSo8NSObject", "NewMyAnnotation"]
 - !private ["CSo8NSObject", "RawValue"]
 - !private ["CSo8NSObject", "Set"]
 - !private ["CSo8NSObject", "String"]
@@ -2160,6 +2214,7 @@ depends-member:
 - ["CSo8NSObject", "initCoreLoction"]
 - ["CSo8NSObject", "iphoneFactor"]
 - ["CSo8NSObject", "isAnnotation"]
+- !private ["CSo8NSObject", "isEqual"]
 - !private ["CSo8NSObject", "isHidden"]
 - !private ["CSo8NSObject", "kCLLocationAccuracyHundredMeters"]
 - ["CSo8NSObject", "lastSelectedManagedObject"]
@@ -2221,6 +2276,7 @@ depends-member:
 - ["CSo8NSObject", "tutorialState"]
 - ["CSo8NSObject", "tutorialText"]
 - ["CSo8NSObject", "tutorialView"]
+- ["CSo8NSObject", "updateExtraction"]
 - ["CSo8NSObject", "updateMap"]
 - !private ["CSo8NSObject", "userLocation"]
 - !private ["CSo8NSObject", "value"]
@@ -2230,7 +2286,6 @@ depends-member:
 - ["CSo8NSObject", "viewWillAppear"]
 - !private ["CSo8NSObject", ""]
 - !private ["PSo16NSObjectProtocol", "=="]
-- !private ["PSo16NSObjectProtocol", "Array"]
 - !private ["PSo16NSObjectProtocol", "BreweryMapStrategy"]
 - !private ["PSo16NSObjectProtocol", "CGPoint"]
 - ["PSo16NSObjectProtocol", "CLLocation"]
@@ -2239,13 +2294,14 @@ depends-member:
 - !private ["PSo16NSObjectProtocol", "DispatchQueue"]
 - !private ["PSo16NSObjectProtocol", "Float"]
 - !private ["PSo16NSObjectProtocol", "Int"]
+- !private ["PSo16NSObjectProtocol", "MKAnnotation"]
 - !private ["PSo16NSObjectProtocol", "MKCoordinateRegion"]
 - !private ["PSo16NSObjectProtocol", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo16NSObjectProtocol", "MKCoordinateSpanMake"]
 - !private ["PSo16NSObjectProtocol", "MKPointAnnotation"]
 - !private ["PSo16NSObjectProtocol", "Mediator"]
-- !private ["PSo16NSObjectProtocol", "MyAnnotation"]
 - ["PSo16NSObjectProtocol", "NSFetchedResultsController"]
+- !private ["PSo16NSObjectProtocol", "NewMyAnnotation"]
 - !private ["PSo16NSObjectProtocol", "RawValue"]
 - !private ["PSo16NSObjectProtocol", "Set"]
 - !private ["PSo16NSObjectProtocol", "String"]
@@ -2298,6 +2354,7 @@ depends-member:
 - ["PSo16NSObjectProtocol", "initCoreLoction"]
 - ["PSo16NSObjectProtocol", "iphoneFactor"]
 - ["PSo16NSObjectProtocol", "isAnnotation"]
+- !private ["PSo16NSObjectProtocol", "isEqual"]
 - !private ["PSo16NSObjectProtocol", "isHidden"]
 - !private ["PSo16NSObjectProtocol", "kCLLocationAccuracyHundredMeters"]
 - ["PSo16NSObjectProtocol", "lastSelectedManagedObject"]
@@ -2359,6 +2416,7 @@ depends-member:
 - ["PSo16NSObjectProtocol", "tutorialState"]
 - ["PSo16NSObjectProtocol", "tutorialText"]
 - ["PSo16NSObjectProtocol", "tutorialView"]
+- ["PSo16NSObjectProtocol", "updateExtraction"]
 - ["PSo16NSObjectProtocol", "updateMap"]
 - !private ["PSo16NSObjectProtocol", "userLocation"]
 - !private ["PSo16NSObjectProtocol", "value"]
@@ -2370,7 +2428,9 @@ depends-member:
 - ["CSo21NSPersistentContainer", "viewContext"]
 - !private ["PSo14NSSecureCoding", "RawValue"]
 - !private ["PSo14NSSecureCoding", "coordinate"]
+- !private ["PSo14NSSecureCoding", "hashValue"]
 - ["PSo14NSSecureCoding", "init"]
+- !private ["CSo8NSString", "hashValue"]
 - ["CSo8NSString", "init"]
 - !private ["CSo9OS_object", "async"]
 - !private ["CSo9OS_object", "main"]
@@ -2388,8 +2448,10 @@ depends-member:
 - !private ["Ps22RandomAccessCollection", "append"]
 - !private ["Ps22RandomAccessCollection", "count"]
 - !private ["Ps22RandomAccessCollection", "enumerated"]
+- !private ["Ps22RandomAccessCollection", "index"]
 - !private ["Ps22RandomAccessCollection", "init"]
 - !private ["Ps22RandomAccessCollection", "isEmpty"]
+- !private ["Ps22RandomAccessCollection", "remove"]
 - !private ["Ps22RandomAccessCollection", "removeLast"]
 - !private ["Ps22RandomAccessCollection", "subscript"]
 - !private ["Ps21RandomAccessIndexable", "Element"]
@@ -2402,8 +2464,10 @@ depends-member:
 - !private ["Ps21RandomAccessIndexable", "append"]
 - !private ["Ps21RandomAccessIndexable", "count"]
 - !private ["Ps21RandomAccessIndexable", "enumerated"]
+- !private ["Ps21RandomAccessIndexable", "index"]
 - !private ["Ps21RandomAccessIndexable", "init"]
 - !private ["Ps21RandomAccessIndexable", "isEmpty"]
+- !private ["Ps21RandomAccessIndexable", "remove"]
 - !private ["Ps21RandomAccessIndexable", "removeLast"]
 - !private ["Ps21RandomAccessIndexable", "subscript"]
 - !private ["Vs17RandomAccessSlice", "Index"]
@@ -2421,8 +2485,10 @@ depends-member:
 - !private ["Ps26RangeReplaceableCollection", "append"]
 - !private ["Ps26RangeReplaceableCollection", "count"]
 - !private ["Ps26RangeReplaceableCollection", "enumerated"]
+- !private ["Ps26RangeReplaceableCollection", "index"]
 - !private ["Ps26RangeReplaceableCollection", "init"]
 - !private ["Ps26RangeReplaceableCollection", "isEmpty"]
+- !private ["Ps26RangeReplaceableCollection", "remove"]
 - !private ["Ps26RangeReplaceableCollection", "removeLast"]
 - !private ["Ps26RangeReplaceableCollection", "subscript"]
 - !private ["Ps25RangeReplaceableIndexable", "Element"]
@@ -2434,8 +2500,10 @@ depends-member:
 - !private ["Ps25RangeReplaceableIndexable", "append"]
 - !private ["Ps25RangeReplaceableIndexable", "count"]
 - !private ["Ps25RangeReplaceableIndexable", "enumerated"]
+- !private ["Ps25RangeReplaceableIndexable", "index"]
 - !private ["Ps25RangeReplaceableIndexable", "init"]
 - !private ["Ps25RangeReplaceableIndexable", "isEmpty"]
+- !private ["Ps25RangeReplaceableIndexable", "remove"]
 - !private ["Ps25RangeReplaceableIndexable", "removeLast"]
 - !private ["Ps25RangeReplaceableIndexable", "subscript"]
 - !private ["Ps16RawRepresentable", "Element"]
@@ -2459,9 +2527,11 @@ depends-member:
 - !private ["Ps8Sequence", "append"]
 - !private ["Ps8Sequence", "count"]
 - !private ["Ps8Sequence", "enumerated"]
+- !private ["Ps8Sequence", "index"]
 - !private ["Ps8Sequence", "init"]
 - !private ["Ps8Sequence", "intersection"]
 - !private ["Ps8Sequence", "isEmpty"]
+- !private ["Ps8Sequence", "remove"]
 - !private ["Ps8Sequence", "removeLast"]
 - !private ["Ps8Sequence", "subscript"]
 - !private ["Ps8Sequence", "symmetricDifference"]
@@ -2507,12 +2577,15 @@ depends-member:
 - !private ["Ps10Strideable", "hashValue"]
 - !private ["Ps10Strideable", "init"]
 - ["SS", "deinit"]
+- !private ["SS", "hashValue"]
 - ["SS", "init"]
 - ["C11BreweryTour5Style", "deinit"]
 - !private ["C11BreweryTour16StyleMapStrategy", "deinit"]
 - !private ["C11BreweryTour16StyleMapStrategy", "init"]
 - !private ["C11BreweryTour16StyleMapStrategy", "runningID"]
+- !private ["Ps16TextOutputStream", "hashValue"]
 - ["Ps16TextOutputStream", "init"]
+- !private ["Ps20TextOutputStreamable", "hashValue"]
 - ["Ps20TextOutputStreamable", "init"]
 - !private ["PSo29UIAccessibilityIdentification", "addAnnotation"]
 - !private ["PSo29UIAccessibilityIdentification", "addAnnotations"]
@@ -2567,7 +2640,6 @@ depends-member:
 - !private ["PSo12UIAppearance", "text"]
 - !private ["PSo12UIAppearance", "userLocation"]
 - !private ["PSo12UIAppearance", "value"]
-- !private ["PSo21UIAppearanceContainer", "Array"]
 - !private ["PSo21UIAppearanceContainer", "BreweryMapStrategy"]
 - !private ["PSo21UIAppearanceContainer", "CGPoint"]
 - ["PSo21UIAppearanceContainer", "CLLocation"]
@@ -2576,13 +2648,14 @@ depends-member:
 - !private ["PSo21UIAppearanceContainer", "DispatchQueue"]
 - !private ["PSo21UIAppearanceContainer", "Float"]
 - !private ["PSo21UIAppearanceContainer", "Int"]
+- !private ["PSo21UIAppearanceContainer", "MKAnnotation"]
 - !private ["PSo21UIAppearanceContainer", "MKCoordinateRegion"]
 - !private ["PSo21UIAppearanceContainer", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo21UIAppearanceContainer", "MKCoordinateSpanMake"]
 - !private ["PSo21UIAppearanceContainer", "MKPointAnnotation"]
 - !private ["PSo21UIAppearanceContainer", "Mediator"]
-- !private ["PSo21UIAppearanceContainer", "MyAnnotation"]
 - ["PSo21UIAppearanceContainer", "NSFetchedResultsController"]
+- !private ["PSo21UIAppearanceContainer", "NewMyAnnotation"]
 - !private ["PSo21UIAppearanceContainer", "Set"]
 - !private ["PSo21UIAppearanceContainer", "String"]
 - !private ["PSo21UIAppearanceContainer", "StyleMapStrategy"]
@@ -2673,6 +2746,7 @@ depends-member:
 - ["PSo21UIAppearanceContainer", "tutorialState"]
 - ["PSo21UIAppearanceContainer", "tutorialText"]
 - ["PSo21UIAppearanceContainer", "tutorialView"]
+- ["PSo21UIAppearanceContainer", "updateExtraction"]
 - ["PSo21UIAppearanceContainer", "updateMap"]
 - !private ["PSo21UIAppearanceContainer", "userLocation"]
 - !private ["PSo21UIAppearanceContainer", "value"]
@@ -2692,7 +2766,6 @@ depends-member:
 - !private ["CSo8UIButton", "deinit"]
 - !private ["CSo8UIButton", "init"]
 - !private ["CSo8UIButton", "isHidden"]
-- !private ["PSo18UIContentContainer", "Array"]
 - !private ["PSo18UIContentContainer", "BreweryMapStrategy"]
 - !private ["PSo18UIContentContainer", "CGPoint"]
 - ["PSo18UIContentContainer", "CLLocation"]
@@ -2701,13 +2774,14 @@ depends-member:
 - !private ["PSo18UIContentContainer", "DispatchQueue"]
 - !private ["PSo18UIContentContainer", "Float"]
 - !private ["PSo18UIContentContainer", "Int"]
+- !private ["PSo18UIContentContainer", "MKAnnotation"]
 - !private ["PSo18UIContentContainer", "MKCoordinateRegion"]
 - !private ["PSo18UIContentContainer", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo18UIContentContainer", "MKCoordinateSpanMake"]
 - !private ["PSo18UIContentContainer", "MKPointAnnotation"]
 - !private ["PSo18UIContentContainer", "Mediator"]
-- !private ["PSo18UIContentContainer", "MyAnnotation"]
 - ["PSo18UIContentContainer", "NSFetchedResultsController"]
+- !private ["PSo18UIContentContainer", "NewMyAnnotation"]
 - !private ["PSo18UIContentContainer", "Set"]
 - !private ["PSo18UIContentContainer", "String"]
 - !private ["PSo18UIContentContainer", "StyleMapStrategy"]
@@ -2775,6 +2849,7 @@ depends-member:
 - ["PSo18UIContentContainer", "tutorialState"]
 - ["PSo18UIContentContainer", "tutorialText"]
 - ["PSo18UIContentContainer", "tutorialView"]
+- ["PSo18UIContentContainer", "updateExtraction"]
 - ["PSo18UIContentContainer", "updateMap"]
 - ["PSo18UIContentContainer", "viewDidAppear"]
 - ["PSo18UIContentContainer", "viewDidLoad"]
@@ -2837,7 +2912,6 @@ depends-member:
 - !private ["PSo13UIDynamicItem", "text"]
 - !private ["PSo13UIDynamicItem", "userLocation"]
 - !private ["PSo13UIDynamicItem", "value"]
-- !private ["PSo18UIFocusEnvironment", "Array"]
 - !private ["PSo18UIFocusEnvironment", "BreweryMapStrategy"]
 - !private ["PSo18UIFocusEnvironment", "CGPoint"]
 - ["PSo18UIFocusEnvironment", "CLLocation"]
@@ -2846,13 +2920,14 @@ depends-member:
 - !private ["PSo18UIFocusEnvironment", "DispatchQueue"]
 - !private ["PSo18UIFocusEnvironment", "Float"]
 - !private ["PSo18UIFocusEnvironment", "Int"]
+- !private ["PSo18UIFocusEnvironment", "MKAnnotation"]
 - !private ["PSo18UIFocusEnvironment", "MKCoordinateRegion"]
 - !private ["PSo18UIFocusEnvironment", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo18UIFocusEnvironment", "MKCoordinateSpanMake"]
 - !private ["PSo18UIFocusEnvironment", "MKPointAnnotation"]
 - !private ["PSo18UIFocusEnvironment", "Mediator"]
-- !private ["PSo18UIFocusEnvironment", "MyAnnotation"]
 - ["PSo18UIFocusEnvironment", "NSFetchedResultsController"]
+- !private ["PSo18UIFocusEnvironment", "NewMyAnnotation"]
 - !private ["PSo18UIFocusEnvironment", "Set"]
 - !private ["PSo18UIFocusEnvironment", "String"]
 - !private ["PSo18UIFocusEnvironment", "StyleMapStrategy"]
@@ -2943,6 +3018,7 @@ depends-member:
 - ["PSo18UIFocusEnvironment", "tutorialState"]
 - ["PSo18UIFocusEnvironment", "tutorialText"]
 - ["PSo18UIFocusEnvironment", "tutorialView"]
+- ["PSo18UIFocusEnvironment", "updateExtraction"]
 - ["PSo18UIFocusEnvironment", "updateMap"]
 - !private ["PSo18UIFocusEnvironment", "userLocation"]
 - !private ["PSo18UIFocusEnvironment", "value"]
@@ -2993,7 +3069,6 @@ depends-member:
 - !private ["CSo16UINavigationItem", "deinit"]
 - !private ["CSo16UINavigationItem", "setRightBarButtonItems"]
 - ["CSo11UIResponder", "AppDelegate"]
-- !private ["CSo11UIResponder", "Array"]
 - ["CSo11UIResponder", "Bool"]
 - ["CSo11UIResponder", "Brewery"]
 - !private ["CSo11UIResponder", "BreweryMapStrategy"]
@@ -3017,9 +3092,9 @@ depends-member:
 - !private ["CSo11UIResponder", "MKPointAnnotation"]
 - ["CSo11UIResponder", "MapStrategy"]
 - !private ["CSo11UIResponder", "Mediator"]
-- !private ["CSo11UIResponder", "MyAnnotation"]
 - ["CSo11UIResponder", "NSFetchedResultsController"]
 - ["CSo11UIResponder", "NSManagedObject"]
+- !private ["CSo11UIResponder", "NewMyAnnotation"]
 - !private ["CSo11UIResponder", "Set"]
 - !private ["CSo11UIResponder", "String"]
 - ["CSo11UIResponder", "Style"]
@@ -3121,13 +3196,13 @@ depends-member:
 - ["CSo11UIResponder", "tutorialState"]
 - ["CSo11UIResponder", "tutorialText"]
 - ["CSo11UIResponder", "tutorialView"]
+- ["CSo11UIResponder", "updateExtraction"]
 - ["CSo11UIResponder", "updateMap"]
 - !private ["CSo11UIResponder", "userLocation"]
 - !private ["CSo11UIResponder", "value"]
 - ["CSo11UIResponder", "viewDidAppear"]
 - ["CSo11UIResponder", "viewDidLoad"]
 - ["CSo11UIResponder", "viewWillAppear"]
-- !private ["PSo30UIResponderStandardEditActions", "Array"]
 - !private ["PSo30UIResponderStandardEditActions", "BreweryMapStrategy"]
 - !private ["PSo30UIResponderStandardEditActions", "CGPoint"]
 - ["PSo30UIResponderStandardEditActions", "CLLocation"]
@@ -3136,13 +3211,14 @@ depends-member:
 - !private ["PSo30UIResponderStandardEditActions", "DispatchQueue"]
 - !private ["PSo30UIResponderStandardEditActions", "Float"]
 - !private ["PSo30UIResponderStandardEditActions", "Int"]
+- !private ["PSo30UIResponderStandardEditActions", "MKAnnotation"]
 - !private ["PSo30UIResponderStandardEditActions", "MKCoordinateRegion"]
 - !private ["PSo30UIResponderStandardEditActions", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo30UIResponderStandardEditActions", "MKCoordinateSpanMake"]
 - !private ["PSo30UIResponderStandardEditActions", "MKPointAnnotation"]
 - !private ["PSo30UIResponderStandardEditActions", "Mediator"]
-- !private ["PSo30UIResponderStandardEditActions", "MyAnnotation"]
 - ["PSo30UIResponderStandardEditActions", "NSFetchedResultsController"]
+- !private ["PSo30UIResponderStandardEditActions", "NewMyAnnotation"]
 - !private ["PSo30UIResponderStandardEditActions", "Set"]
 - !private ["PSo30UIResponderStandardEditActions", "String"]
 - !private ["PSo30UIResponderStandardEditActions", "StyleMapStrategy"]
@@ -3236,6 +3312,7 @@ depends-member:
 - ["PSo30UIResponderStandardEditActions", "tutorialState"]
 - ["PSo30UIResponderStandardEditActions", "tutorialText"]
 - ["PSo30UIResponderStandardEditActions", "tutorialView"]
+- ["PSo30UIResponderStandardEditActions", "updateExtraction"]
 - ["PSo30UIResponderStandardEditActions", "updateMap"]
 - !private ["PSo30UIResponderStandardEditActions", "userLocation"]
 - !private ["PSo30UIResponderStandardEditActions", "value"]
@@ -3247,7 +3324,6 @@ depends-member:
 - ["CSo8UISlider", "deinit"]
 - !private ["CSo8UISlider", "frame"]
 - !private ["CSo8UISlider", "value"]
-- !private ["PSo16UIStateRestoring", "Array"]
 - !private ["PSo16UIStateRestoring", "BreweryMapStrategy"]
 - !private ["PSo16UIStateRestoring", "CGPoint"]
 - ["PSo16UIStateRestoring", "CLLocation"]
@@ -3256,13 +3332,14 @@ depends-member:
 - !private ["PSo16UIStateRestoring", "DispatchQueue"]
 - !private ["PSo16UIStateRestoring", "Float"]
 - !private ["PSo16UIStateRestoring", "Int"]
+- !private ["PSo16UIStateRestoring", "MKAnnotation"]
 - !private ["PSo16UIStateRestoring", "MKCoordinateRegion"]
 - !private ["PSo16UIStateRestoring", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo16UIStateRestoring", "MKCoordinateSpanMake"]
 - !private ["PSo16UIStateRestoring", "MKPointAnnotation"]
 - !private ["PSo16UIStateRestoring", "Mediator"]
-- !private ["PSo16UIStateRestoring", "MyAnnotation"]
 - ["PSo16UIStateRestoring", "NSFetchedResultsController"]
+- !private ["PSo16UIStateRestoring", "NewMyAnnotation"]
 - !private ["PSo16UIStateRestoring", "Set"]
 - !private ["PSo16UIStateRestoring", "String"]
 - !private ["PSo16UIStateRestoring", "StyleMapStrategy"]
@@ -3330,6 +3407,7 @@ depends-member:
 - ["PSo16UIStateRestoring", "tutorialState"]
 - ["PSo16UIStateRestoring", "tutorialText"]
 - ["PSo16UIStateRestoring", "tutorialView"]
+- ["PSo16UIStateRestoring", "updateExtraction"]
 - ["PSo16UIStateRestoring", "updateMap"]
 - ["PSo16UIStateRestoring", "viewDidAppear"]
 - ["PSo16UIStateRestoring", "viewDidLoad"]
@@ -3341,7 +3419,6 @@ depends-member:
 - !private ["PSo11UITextInput", "text"]
 - !private ["PSo17UITextInputTraits", "text"]
 - !private ["CSo10UITextView", "text"]
-- !private ["PSo18UITraitEnvironment", "Array"]
 - !private ["PSo18UITraitEnvironment", "BreweryMapStrategy"]
 - !private ["PSo18UITraitEnvironment", "CGPoint"]
 - ["PSo18UITraitEnvironment", "CLLocation"]
@@ -3350,13 +3427,14 @@ depends-member:
 - !private ["PSo18UITraitEnvironment", "DispatchQueue"]
 - !private ["PSo18UITraitEnvironment", "Float"]
 - !private ["PSo18UITraitEnvironment", "Int"]
+- !private ["PSo18UITraitEnvironment", "MKAnnotation"]
 - !private ["PSo18UITraitEnvironment", "MKCoordinateRegion"]
 - !private ["PSo18UITraitEnvironment", "MKCoordinateRegionMakeWithDistance"]
 - !private ["PSo18UITraitEnvironment", "MKCoordinateSpanMake"]
 - !private ["PSo18UITraitEnvironment", "MKPointAnnotation"]
 - !private ["PSo18UITraitEnvironment", "Mediator"]
-- !private ["PSo18UITraitEnvironment", "MyAnnotation"]
 - ["PSo18UITraitEnvironment", "NSFetchedResultsController"]
+- !private ["PSo18UITraitEnvironment", "NewMyAnnotation"]
 - !private ["PSo18UITraitEnvironment", "Set"]
 - !private ["PSo18UITraitEnvironment", "String"]
 - !private ["PSo18UITraitEnvironment", "StyleMapStrategy"]
@@ -3447,6 +3525,7 @@ depends-member:
 - ["PSo18UITraitEnvironment", "tutorialState"]
 - ["PSo18UITraitEnvironment", "tutorialText"]
 - ["PSo18UITraitEnvironment", "tutorialView"]
+- ["PSo18UITraitEnvironment", "updateExtraction"]
 - ["PSo18UITraitEnvironment", "updateMap"]
 - !private ["PSo18UITraitEnvironment", "userLocation"]
 - !private ["PSo18UITraitEnvironment", "value"]
@@ -3481,7 +3560,6 @@ depends-member:
 - !private ["CSo6UIView", "userLocation"]
 - !private ["CSo6UIView", "value"]
 - ["CSo16UIViewController", "AppDelegate"]
-- !private ["CSo16UIViewController", "Array"]
 - ["CSo16UIViewController", "Bool"]
 - ["CSo16UIViewController", "Brewery"]
 - !private ["CSo16UIViewController", "BreweryMapStrategy"]
@@ -3505,9 +3583,9 @@ depends-member:
 - !private ["CSo16UIViewController", "MKPointAnnotation"]
 - ["CSo16UIViewController", "MapStrategy"]
 - !private ["CSo16UIViewController", "Mediator"]
-- !private ["CSo16UIViewController", "MyAnnotation"]
 - ["CSo16UIViewController", "NSFetchedResultsController"]
 - ["CSo16UIViewController", "NSManagedObject"]
+- !private ["CSo16UIViewController", "NewMyAnnotation"]
 - !private ["CSo16UIViewController", "Set"]
 - !private ["CSo16UIViewController", "String"]
 - ["CSo16UIViewController", "Style"]
@@ -3584,6 +3662,7 @@ depends-member:
 - ["CSo16UIViewController", "tutorialState"]
 - ["CSo16UIViewController", "tutorialText"]
 - ["CSo16UIViewController", "tutorialView"]
+- ["CSo16UIViewController", "updateExtraction"]
 - ["CSo16UIViewController", "updateMap"]
 - ["CSo16UIViewController", "viewDidAppear"]
 - ["CSo16UIViewController", "viewDidLoad"]
@@ -3594,6 +3673,7 @@ depends-member:
 - ["VSC30UIViewKeyframeAnimationOptions", "deinit"]
 - !private ["VSC30UIViewKeyframeAnimationOptions", "repeat"]
 - !private ["V10Foundation3URL", "deinit"]
+- !private ["P9Alamofire14URLConvertible", "hashValue"]
 - ["P9Alamofire14URLConvertible", "init"]
 - !private ["CSo12UserDefaults", "bool"]
 - ["CSo12UserDefaults", "deinit"]
@@ -3609,8 +3689,10 @@ depends-member:
 - !private ["Ps14_ArrayProtocol", "append"]
 - !private ["Ps14_ArrayProtocol", "count"]
 - !private ["Ps14_ArrayProtocol", "enumerated"]
+- !private ["Ps14_ArrayProtocol", "index"]
 - !private ["Ps14_ArrayProtocol", "init"]
 - !private ["Ps14_ArrayProtocol", "isEmpty"]
+- !private ["Ps14_ArrayProtocol", "remove"]
 - !private ["Ps14_ArrayProtocol", "removeLast"]
 - !private ["Ps14_ArrayProtocol", "subscript"]
 - !private ["Ps15_CVarArgAligned", "init"]
@@ -3650,11 +3732,14 @@ depends-member:
 - !private ["Ps24_DestructorSafeContainer", "append"]
 - !private ["Ps24_DestructorSafeContainer", "count"]
 - !private ["Ps24_DestructorSafeContainer", "enumerated"]
+- !private ["Ps24_DestructorSafeContainer", "index"]
 - !private ["Ps24_DestructorSafeContainer", "init"]
 - !private ["Ps24_DestructorSafeContainer", "isEmpty"]
+- !private ["Ps24_DestructorSafeContainer", "remove"]
 - !private ["Ps24_DestructorSafeContainer", "removeLast"]
 - !private ["Ps24_DestructorSafeContainer", "subscript"]
 - !private ["Ps35_ExpressibleByBuiltinBooleanLiteral", "_getBuiltinLogicValue"]
+- !private ["Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral", "hashValue"]
 - ["Ps51_ExpressibleByBuiltinExtendedGraphemeClusterLiteral", "init"]
 - !private ["Ps33_ExpressibleByBuiltinFloatLiteral", "init"]
 - !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "IntegerLiteralType"]
@@ -3662,12 +3747,15 @@ depends-member:
 - !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "_DisabledRangeIndex"]
 - !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "hashValue"]
 - !private ["Ps35_ExpressibleByBuiltinIntegerLiteral", "init"]
+- !private ["Ps34_ExpressibleByBuiltinStringLiteral", "hashValue"]
 - ["Ps34_ExpressibleByBuiltinStringLiteral", "init"]
+- !private ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "hashValue"]
 - ["Ps39_ExpressibleByBuiltinUTF16StringLiteral", "init"]
+- !private ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "hashValue"]
 - ["Ps41_ExpressibleByBuiltinUnicodeScalarLiteral", "init"]
+- !private ["Ps35_HasCustomAnyHashableRepresentation", "hashValue"]
 - ["Ps35_HasCustomAnyHashableRepresentation", "init"]
 - !private ["Ps9_Hashable", "=="]
-- !private ["Ps9_Hashable", "Array"]
 - !private ["Ps9_Hashable", "BreweryMapStrategy"]
 - !private ["Ps9_Hashable", "CGPoint"]
 - ["Ps9_Hashable", "CLLocation"]
@@ -3680,14 +3768,15 @@ depends-member:
 - !private ["Ps9_Hashable", "IntegerLiteralType"]
 - !private ["Ps9_Hashable", "Iterator"]
 - ["Ps9_Hashable", "Longpress"]
+- !private ["Ps9_Hashable", "MKAnnotation"]
 - !private ["Ps9_Hashable", "MKCoordinateRegion"]
 - !private ["Ps9_Hashable", "MKCoordinateRegionMakeWithDistance"]
 - !private ["Ps9_Hashable", "MKCoordinateSpanMake"]
 - !private ["Ps9_Hashable", "MKPointAnnotation"]
 - ["Ps9_Hashable", "Map"]
 - !private ["Ps9_Hashable", "Mediator"]
-- !private ["Ps9_Hashable", "MyAnnotation"]
 - ["Ps9_Hashable", "NSFetchedResultsController"]
+- !private ["Ps9_Hashable", "NewMyAnnotation"]
 - !private ["Ps9_Hashable", "RawValue"]
 - !private ["Ps9_Hashable", "Set"]
 - ["Ps9_Hashable", "Slider"]
@@ -3751,6 +3840,7 @@ depends-member:
 - !private ["Ps9_Hashable", "intersection"]
 - ["Ps9_Hashable", "iphoneFactor"]
 - ["Ps9_Hashable", "isAnnotation"]
+- !private ["Ps9_Hashable", "isEqual"]
 - !private ["Ps9_Hashable", "isHidden"]
 - !private ["Ps9_Hashable", "kCLLocationAccuracyHundredMeters"]
 - ["Ps9_Hashable", "lastSelectedManagedObject"]
@@ -3815,6 +3905,7 @@ depends-member:
 - ["Ps9_Hashable", "tutorialState"]
 - ["Ps9_Hashable", "tutorialText"]
 - ["Ps9_Hashable", "tutorialView"]
+- ["Ps9_Hashable", "updateExtraction"]
 - ["Ps9_Hashable", "updateMap"]
 - !private ["Ps9_Hashable", "userLocation"]
 - !private ["Ps9_Hashable", "value"]
@@ -3852,6 +3943,7 @@ depends-member:
 - !private ["Ps21_ObjectiveCBridgeable", "count"]
 - !private ["Ps21_ObjectiveCBridgeable", "enumerated"]
 - !private ["Ps21_ObjectiveCBridgeable", "hashValue"]
+- !private ["Ps21_ObjectiveCBridgeable", "index"]
 - ["Ps21_ObjectiveCBridgeable", "init"]
 - !private ["Ps21_ObjectiveCBridgeable", "intersection"]
 - !private ["Ps21_ObjectiveCBridgeable", "isEmpty"]
@@ -3859,6 +3951,7 @@ depends-member:
 - !private ["Ps21_ObjectiveCBridgeable", "longitude"]
 - !private ["Ps21_ObjectiveCBridgeable", "midY"]
 - !private ["Ps21_ObjectiveCBridgeable", "origin"]
+- !private ["Ps21_ObjectiveCBridgeable", "remove"]
 - !private ["Ps21_ObjectiveCBridgeable", "removeLast"]
 - !private ["Ps21_ObjectiveCBridgeable", "subscript"]
 - !private ["Ps21_ObjectiveCBridgeable", "symmetricDifference"]
@@ -4075,4 +4168,4 @@ depends-external:
 - "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Intermediates/IBDesignables/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-Swift.h"
 - "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Intermediates/IBDesignables/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Headers/Alamofire-umbrella.h"
 - "/Users/jamesjongs/Desktop/ProjectBackup/BreweryTour/DerivedData/BreweryTour/Build/Intermediates/IBDesignables/Products/Debug-iphonesimulator/Alamofire/Alamofire.framework/Modules/module.modulemap"
-interface-hash: "e0ab25b9b504d869d427ec9c5f0e458f"
+interface-hash: "d5f7467ead268222c15e8f6364e2ced7"

@@ -7,17 +7,17 @@ provides-member:
 - ["C11BreweryTour4Beer", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "Brewery"
-- "Beer"
-- "NSData"
-- "Bool"
-- "AssignmentPrecedence"
 - "NSManagedObjectContext"
+- "NSData"
 - "BeerData"
-- "NSManagedObject"
 - !private "StringLiteralType"
 - "String"
+- "NSManagedObject"
 - !private "NSEntityDescription"
+- "Brewery"
+- "Beer"
+- "Bool"
+- "AssignmentPrecedence"
 depends-member:
 - !private ["Ps9AnyObject", "Beer"]
 - !private ["Ps9AnyObject", "NSEntityDescription"]

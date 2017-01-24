@@ -10,15 +10,15 @@ provides-member:
 - ["V11BreweryTour8BeerData", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "Bool"
 - "AssignmentPrecedence"
-- "Void"
-- "String"
-- "NSSet"
-- !private "BooleanLiteralType"
 - "BeerData"
+- "String"
 - "BreweryData"
+- "NSSet"
 - "Brewery"
+- "Void"
+- !private "BooleanLiteralType"
+- "Bool"
 depends-member:
 - ["V11BreweryTour8BeerData", "Bool"]
 - ["V11BreweryTour8BeerData", "String"]

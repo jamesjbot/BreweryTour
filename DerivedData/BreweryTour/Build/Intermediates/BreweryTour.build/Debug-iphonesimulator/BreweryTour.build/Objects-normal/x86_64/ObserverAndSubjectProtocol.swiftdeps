@@ -13,10 +13,10 @@ provides-member:
 - ["P11BreweryTour7Subject", ""]
 provides-dynamic-lookup:
 depends-top-level:
-- "AnyObject"
 - "Subject"
 - "StringLiteralType"
 - "Message"
+- "AnyObject"
 - "String"
 - "Observer"
 depends-member:

@@ -7,16 +7,16 @@ provides-member:
 provides-dynamic-lookup:
 - "displayAlertWindow"
 depends-top-level:
+- !private "Void"
 - !private "UIAlertController"
-- !private "UIAlertActionStyle"
+- "UIAlertAction"
+- !private "StringLiteralType"
+- "BooleanLiteralType"
+- !private "UIAlertControllerStyle"
+- "UIViewController"
 - "String"
 - !private "DispatchQueue"
-- "BooleanLiteralType"
-- !private "Void"
-- "UIAlertAction"
-- "UIViewController"
-- !private "UIAlertControllerStyle"
-- !private "StringLiteralType"
+- !private "UIAlertActionStyle"
 depends-member:
 - !private ["Ps9AnyObject", "DispatchQueue"]
 - !private ["Ps9AnyObject", "UIAlertAction"]
