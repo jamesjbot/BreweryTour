@@ -35,7 +35,7 @@ class MyAnnotationView: MKAnnotationView {
         UIGraphicsEndImageContext()
         image = resizedImage
         if let brewery = brewery {
-            setBrewery(brewery)
+            let _ = setBrewery(brewery)
         }
     }
 
