@@ -39,3 +39,11 @@ After downloading, please navigate to the folder and type `pod install`
 Then go into the folder BreweryTour, open BreweryTour.xcworkspace.
 
 Then build the project.
+
+
+Technologies Used
+  -------------
+This data source for the beers and breweries is BreweryDB, http://www.brewerydb.com
+The data persistence is achieved mostly thru CoreData, the tutorial states are saved in UserDefaults.
+The choice of embedding a TabBarcontroller in a NavigationController was just to challenge myself.
+I was trying to learn MVVM Design Pattern so that is all the tablelist and view model stuff you see in the code.
