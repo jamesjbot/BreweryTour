@@ -16,3 +16,12 @@ Limiting the amount of search results (use slider on the map to limit the result
 Gettig directions to the brewery (favorite the brewery on the map, then go to the favorite brewery tab and click the brewery)
 
 Saving tasting notes on a beer. You can save these notes in the beer detail view and they will automatically save.
+
+
+How to Install?
+  -------------
+After downloading, please navigate to the folder and type `pod install`
+
+Then go into the folder open BreweryTour.xcworkspace.
+
+Then build the project.
