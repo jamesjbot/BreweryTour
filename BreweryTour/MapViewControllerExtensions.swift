@@ -172,9 +172,28 @@ extension MapViewController : MKMapViewDelegate {
     // Respond to user taps on the annotation callout
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         // Did the user favorite or ask for more information on the brewery
+
+        // Block annotations lacking websites,
+        guard let annotationName = view.annotation?.title,
+            annotationName != userLocationName,
+            annotationName != "" else {
+                return
+        }
+
         switch control as UIView {
             // UIControl is subclass of UIView
             // Testing if UIControl is one of the MKAnnotationView's subviews
+
+        // Goto Webpage Information
+        case view.rightCalloutAccessoryView!:
+
+            if let str : String = (view.annotation?.subtitle)!,
+                let url: URL = URL(string: str) {
+                    tryToOpenWebpage(url: url)
+            }
+
+            break
+
 
         case view.leftCalloutAccessoryView!:// Favorite or unfavorite a brewery
 
@@ -218,19 +237,16 @@ extension MapViewController : MKMapViewDelegate {
             }
             break
 
-        // Goto Webpage Information
-        case view.rightCalloutAccessoryView!:
-
-            if let str : String = (view.annotation?.subtitle)!,
-                let url: URL = URL(string: str) {
-                if UIApplication.shared.canOpenURL(url) {
-                    UIApplication.shared.open(url, options: [:], completionHandler: nil)
-                }
-            }
-            break
-            
         default:
             break
+        }
+    }
+
+
+    // Wraps conditional logic around webpage opening, to prevent malformed url
+    func tryToOpenWebpage(url: URL) {
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
 

@@ -16,24 +16,23 @@
  brewery.
 
  Internals
- The MapViewController takes what the Mediator currently has selected
-
- Then viewWillAppear chooses the strategy based on the selected item
- MapStrategy the super class maps multiple breweries on the map.
- It does this by sorting and finally send the annotation back to the update
+ The MapViewController takes what the Mediator currently has selected,
+ then viewWillAppear chooses the strategy based on the selected item.
+ 
+ MapStrategy is the super class, maps multiple breweries on the map.
+ It does this by sorting and finally sending the annotation back to the update
  map function.
+
  For brewery we just immediately display the brewery's location by sending it as
- a single brewery to it's superclass MapStrategy
- For style we
+ a single brewery to it's superclass MapStrategy, which sends it back to our
+ updateMapFunction
+ 
+ For style we create a StyleMapStrategy, that enters its own loop to process
+ breweries currently in the database and new ones that are being downloaded.
+ It stays alive till it process all its beers or a new style strategy has
+ replaced it in the Mediator's currently running StyleStrategy
 
- When choosing brewery from CategoryViewController:
- The mediator will provide the brewery object, we will map breweries according
- their location.
 
- The appropriate strategy to convert to annotations will be chosen by style or
- brewery type that enter
-
- Then when it finishes it will send the annotation back
  */
 
 
@@ -90,6 +89,7 @@ class MapViewController : UIViewController {
     let iphoneFactor = 2
     let radiusDivisor = 4
     let reuseId = "pin"
+    let userLocationName = "My Location"
 
     // Pointer animation duration
     private let pointerDelay: CGFloat = 0.0
@@ -221,7 +221,7 @@ class MapViewController : UIViewController {
             // Set floating annotation
             let coordinateOnMap = mapView.convert(sender.location(in: mapView), toCoordinateFrom: mapView)
             let annotation = MKPointAnnotation()
-            annotation.title = "floatingAnnotation"
+            annotation.title = ""
             annotation.coordinate = coordinateOnMap
             mapView.addAnnotation(annotation)
             floatingAnnotation = annotation
@@ -343,12 +343,8 @@ class MapViewController : UIViewController {
     }
 
 
-    private func createCurrentLocationButton() {
-        let userLocationButton = UIBarButtonItem(title: "Current location", style: .plain, target: self, action: #selector(clearPointFromTargetLocation))
-        self.navigationItem.setRightBarButtonItems([userLocationButton], animated: true)
-    }
-
-
+    // This stops whatever search is currently running and
+    // invokes a new search.
     private func decideOnMappingStrategyAndInvoke(mapViewData: NSManagedObject) {
         // Decision making to display Breweries Style or Brewery
 
@@ -360,6 +356,12 @@ class MapViewController : UIViewController {
                                                      view: self,
                                                      location: targetLocation!,
                                                      maxPoints: Int(slider.value))
+
+            // Changing stylemapping strategies can occur often, this will,
+            // help the processing StyleMapStrategy differentiate which strategy
+            // is running.
+            // When the StyleMapStrategy sees that it is not the current strategy
+            // it will end itself.
             Mediator.sharedInstance().onlyValidStyleStrategy = (activeMappingStrategy as! StyleMapStrategy).runningID!
 
         } else if mapViewData is Brewery {
@@ -430,7 +432,7 @@ class MapViewController : UIViewController {
         // When we first join the mapview and the userlocation has not been set.
         // It will default to 0,0, so we center the location in the US
 
-        // Only do these when target location is nil or this
+        // Only do this when target location is nil or this
         // is the temporary centerLocation
         guard targetLocation == nil || targetLocation == centerLocation else {
             return
@@ -556,6 +558,7 @@ class MapViewController : UIViewController {
     override func viewDidLoad(){
         super.viewDidLoad()
 
+        // Hide current location butoton
         currentLocation.isHidden = true
 
         DispatchQueue.main.async{
@@ -570,12 +573,11 @@ class MapViewController : UIViewController {
 
         mapView.addGestureRecognizer(longPressRecognizer)
 
-        createCurrentLocationButton()
-
         // Set slider value and text
         slider.value = Float(Mediator.sharedInstance().lastSliderValue())
         numberOfPoints.text = String(Int(slider.value))
-        
+
+        // If we save a floating annotation from before show it.
         if let annotation = Mediator.sharedInstance().getFloatingAnnotation() {
             floatingAnnotation = annotation
             mapView.addAnnotation(floatingAnnotation)
@@ -596,7 +598,9 @@ class MapViewController : UIViewController {
         
         // Set the function of this screen
         tabBarController?.title = "Go To Website"
-        
+
+        // Wondering how we center the map 
+        // This functions both sets the targetLocation and display strategy
         displayNewStrategyWithNewPoint()
     }
     
@@ -605,6 +609,8 @@ class MapViewController : UIViewController {
         super.viewDidAppear(animated)
         
         tutorialInitialization()
+        // Center on use location
+        centerMapOnLocation(location: mapView.userLocation.location, radius: CLLocationDistance(5), centerUS: false)
     }
 }
 
