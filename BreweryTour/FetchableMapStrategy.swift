@@ -96,7 +96,6 @@ class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate  {
     // Used for when style is updated with new breweries
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
-        print("Fetchable Map Strategy controller did change content called")
         debouncedFunction!()
     }
 

@@ -203,7 +203,7 @@ extension StylesTableList : TableList {
             aStyle = filteredObjects[elementAt.row]
         }
         // Set Selected Mediator thru its protocol
-        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: aStyle, completion: completion)
+        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: aStyle,state: nil, completion: completion)
         return nil
     }
     

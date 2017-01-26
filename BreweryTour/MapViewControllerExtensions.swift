@@ -135,6 +135,11 @@ extension MapViewController : MKMapViewDelegate {
     // Selecting a Pin, draw the route to this pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 
+        // Disable green line routing
+        guard enableRouting.isOn else {
+            return
+        }
+
         // Save the routed annotation
         routedAnnotation = view
 
@@ -175,7 +180,7 @@ extension MapViewController : MKMapViewDelegate {
 
         // Block annotations lacking websites,
         guard let annotationName = view.annotation?.title,
-            annotationName != userLocationName,
+            annotationName != UserLocationName,
             annotationName != "" else {
                 return
         }

@@ -309,22 +309,46 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ad2-Zo-dOE" userLabel="Menu">
-                                <rect key="frame" x="375" y="94" width="0.0" height="73.5"/>
+                                <rect key="frame" x="375" y="94" width="0.0" height="81"/>
                                 <subviews>
-                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" alignment="center" spacing="6" translatesAutoresizingMaskIntoConstraints="NO" id="tRa-e6-wgp">
-                                        <rect key="frame" x="0.0" y="0.0" width="0.0" height="73.5"/>
+                                    <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="tRa-e6-wgp">
+                                        <rect key="frame" x="0.0" y="0.0" width="210.5" height="81"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show All Breweries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="llo-Ab-hAP">
-                                                <rect key="frame" x="0.0" y="8" width="0.0" height="20.5"/>
-                                                <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
-                                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                <nil key="textColor"/>
-                                                <nil key="highlightedColor"/>
-                                            </label>
-                                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="KWs-jN-C0e">
-                                                <rect key="frame" x="0.0" y="34.5" width="2" height="31"/>
-                                            </switch>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4e3-Fs-f4E" userLabel="Upper">
+                                                <rect key="frame" x="8" y="8" width="194.5" height="31"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show All Breweries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="llo-Ab-hAP" userLabel="Show all breweries in this state">
+                                                        <rect key="frame" x="0.0" y="0.0" width="145.5" height="31"/>
+                                                        <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="KWs-jN-C0e">
+                                                        <rect key="frame" x="145.5" y="0.0" width="51" height="31"/>
+                                                    </switch>
+                                                </subviews>
+                                            </stackView>
+                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XZs-La-SAf" userLabel="Lower">
+                                                <rect key="frame" x="8" y="42" width="194.5" height="31"/>
+                                                <subviews>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable Routing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iGp-v1-JB6">
+                                                        <rect key="frame" x="0.0" y="0.0" width="145.5" height="31"/>
+                                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                        <nil key="textColor"/>
+                                                        <nil key="highlightedColor"/>
+                                                    </label>
+                                                    <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MSt-q1-5LW">
+                                                        <rect key="frame" x="145.5" y="0.0" width="51" height="31"/>
+                                                    </switch>
+                                                </subviews>
+                                            </stackView>
                                         </subviews>
+                                        <constraints>
+                                            <constraint firstItem="XZs-La-SAf" firstAttribute="leading" secondItem="4e3-Fs-f4E" secondAttribute="leading" id="BW8-po-yKc"/>
+                                            <constraint firstItem="XZs-La-SAf" firstAttribute="width" secondItem="4e3-Fs-f4E" secondAttribute="width" id="S6T-ES-GnB"/>
+                                            <constraint firstItem="XZs-La-SAf" firstAttribute="trailing" secondItem="4e3-Fs-f4E" secondAttribute="trailing" id="h6q-E3-h9W"/>
+                                        </constraints>
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
                                 </subviews>
@@ -339,7 +363,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yrc-0a-qnb">
-                                <rect key="frame" x="116.5" y="577" width="142" height="33"/>
+                                <rect key="frame" x="117" y="577" width="142" height="33"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
@@ -472,6 +496,7 @@
                     <connections>
                         <outlet property="activityIndicator" destination="ZU7-BT-73c" id="Ua6-o1-w7d"/>
                         <outlet property="currentLocation" destination="yrc-0a-qnb" id="SDS-MY-lPj"/>
+                        <outlet property="enableRouting" destination="MSt-q1-5LW" id="eUo-Wj-erN"/>
                         <outlet property="localBreweries" destination="KWs-jN-C0e" id="d4g-h5-YDG"/>
                         <outlet property="longPressRecognizer" destination="if2-iF-Eb5" id="EXz-gc-J2J"/>
                         <outlet property="mapView" destination="idd-zP-hy0" id="hTM-gR-Klp"/>

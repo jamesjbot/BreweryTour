@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import MapKit
+import CoreLocation
 /*
  This class managed states changes across the app
  If a selection is made on the selection screen then we can 
@@ -98,8 +99,21 @@ extension Mediator: MediatorBroadcastSetSelected {
 
 
     // When an element on categoryScreen is selected, process it on BreweryDBClient
-    internal func select(thisItem: NSManagedObject, completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
-        passedItem = thisItem
+    internal func select(thisItem: NSManagedObject?, state: String? ,completion: @escaping (_ success: Bool, _ msg : String? ) -> Void) {
+
+        // These items can sometimes be nil.
+        if let thisItem = thisItem {
+            passedItem = thisItem
+        } else {
+            passedItem = nil
+        }
+
+        if let state = state {
+            BreweryDBClient.sharedInstance().downloadBreweries(byState: state)
+            { (success, msg) -> Void in
+            }
+            return
+        }
 
         notifyPassedItemObservers(thisItem: passedItem!)
 

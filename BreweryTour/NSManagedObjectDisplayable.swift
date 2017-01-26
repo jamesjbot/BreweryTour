@@ -11,7 +11,7 @@ import CoreData
 
 // Input to Mediator Protocol managed by the CategorySelectionScreen. Selected Object
 protocol MediatorBroadcastSetSelected {
-    func select(thisItem: NSManagedObject, completion: @escaping (Bool, String?) -> Void)
+    func select(thisItem: NSManagedObject?,state: String?, completion: @escaping (Bool, String?) -> Void)
     func registerForObjectUpdate(observer: ReceiveBroadcastSetSelected)
 
 }

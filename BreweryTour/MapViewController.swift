@@ -88,7 +88,7 @@ class MapViewController : UIViewController {
     let iphoneFactor = 2
     let radiusDivisor = 4
     let reuseId = "pin"
-    let userLocationName = "My Location"
+    let UserLocationName = "My Location"
 
     // Pointer animation duration
     private let pointerDelay: CGFloat = 0.0
@@ -129,6 +129,7 @@ class MapViewController : UIViewController {
 
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var currentLocation: UIButton!
+    @IBOutlet weak var enableRouting: UISwitch!
     @IBOutlet weak var localBreweries: UISwitch!
     @IBOutlet weak var longPressRecognizer: UILongPressGestureRecognizer!
     @IBOutlet weak var mapView: MKMapView!
@@ -393,6 +394,24 @@ class MapViewController : UIViewController {
         guard mapViewData != nil || localBreweries.isOn else {
             return
         }
+        // Tells mediator we have selected a targetLocation
+        // and to initiate search.
+        if localBreweries.isOn && targetLocation != nil {
+            CLGeocoder().reverseGeocodeLocation(targetLocation!)
+            { (placemarksarray, error) -> Void in
+                guard error == nil else {
+                    self.displayAlertWindow(title: "Geocoding Error",
+                                            msg: "Failed Please try again ",
+                                            actions: [])
+                    return
+                }
+                let placemark: CLPlacemark = (placemarksarray?.first)! as CLPlacemark
+                let state = ConvertToFullStateName().fullname(placemark.administrativeArea!)
+                Mediator.sharedInstance().select(thisItem: nil, state: state) {
+                (success,msg) -> Void in
+                }
+            }// end of geocoder completion handler
+        }
 
         setTargetLocationWhenTargetLocationIsNil()
 
@@ -422,7 +441,10 @@ class MapViewController : UIViewController {
         print("You want to expose the menu")
         if menuConstraint.constant == 0 {
             let maxUIView = flatUIView(menu).max(by: {return $0.intrinsicContentSize.width < $1.intrinsicContentSize.width })
-            menuConstraint.constant = (maxUIView?.intrinsicContentSize.width)! + 2*(maxUIView?.layoutMargins.left)!
+            menuConstraint.constant = (maxUIView?.intrinsicContentSize.width)!
+                + 2*(maxUIView?.layoutMargins.left)!
+                + 2*enableRouting.layoutMargins.left
+                + enableRouting.intrinsicContentSize.width
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutIfNeeded()
             }
@@ -465,27 +487,6 @@ class MapViewController : UIViewController {
         let location = CLLocation(latitude: floatingAnnotation.coordinate.latitude, longitude: floatingAnnotation.coordinate.longitude)
         targetLocation = location
         displayNewStrategyWithNewPoint()
-        if localBreweries.isOn {
-            CLGeocoder().reverseGeocodeLocation(targetLocation!)
-            { (placemarksarray, error) -> Void in
-                //self.myActivityIndicator.stopAnimating()
-                guard error == nil else {
-                    print(error)
-                    self.displayAlertWindow(title: "Geocoding Error",
-                                            msg: "Failed Please try again ",
-                                            actions: [])
-                    return
-                }
-                let placemark: CLPlacemark = (placemarksarray?.first)! as CLPlacemark
-                let state = ConvertToFullStateName().fullname(placemark.administrativeArea!)
-                BreweryDBClient.sharedInstance().downloadBreweries(byState: state)
-                { (success, msg) -> Void in
-                    if !success {
-                        self.displayAlertWindow(title: "Breweries at Location", msg: msg!)
-                    }
-                }
-            }// end of geocoder completion handler
-        }
     }
 
 
@@ -509,7 +510,7 @@ class MapViewController : UIViewController {
         }
     }
 
-
+    // Dynamically changes the number of breweries shown on map
     private func touchUpSlider(_ sender: UISlider) {
         guard mapView.userLocation.coordinate.latitude != 0,
             mapView.userLocation.coordinate.longitude != 0 else {
@@ -523,7 +524,7 @@ class MapViewController : UIViewController {
 
         // Replotting
         let mapViewData = Mediator.sharedInstance().getPassedItem()
-        guard mapViewData is Style else {
+        guard mapViewData is Style || localBreweries.isOn  else {
             return
         }
 
@@ -590,7 +591,10 @@ class MapViewController : UIViewController {
             if let index = oldAnnotations.index(where: {$0 === self.floatingAnnotation} ) {
                 oldAnnotations.remove(at: index)
             }
-            for a in self.mapView.annotations {
+            if let index = oldAnnotations.index(where: {$0.title!! == self.UserLocationName} ) {
+                oldAnnotations.remove(at: index)
+            }
+            for a in oldAnnotations {
                 old.append(NewMyAnnotation(a))
             }
 
@@ -609,6 +613,11 @@ class MapViewController : UIViewController {
 
             let removeSet = oldSet.symmetricDifference(intersectSet)
             let addSet = newSet.symmetricDifference(intersectSet)
+
+            if removeSet.count == 1 && addSet.count == 0 &&
+                removeSet.first?.title! == self.UserLocationName {
+                return
+            }
 
             // Convert back to MKAnnotations
             let removeArray = self.updateExtraction(a: removeSet)

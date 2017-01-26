@@ -92,7 +92,6 @@ class BreweryAndBeerCreationQueue: NSObject {
     }
 
 
-
     private func add(brewery newBrewery: Brewery, toStyleID: String, context: NSManagedObjectContext) {
         autoreleasepool {
             do {

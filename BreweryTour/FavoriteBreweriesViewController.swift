@@ -223,10 +223,9 @@ extension FavoriteBreweriesViewController : UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         // Send the brewery to the mediator so that selected beers will update with the selection
-        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: frcForBrewery.object(at: indexPath)) {
-            (success, msg) -> Void in
-        }
-
+        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: frcForBrewery.object(at: indexPath),
+                                                                           state: nil,
+                                                                           completion: { (success, msg) -> Void in })
         // Switch to get directions to brewery
         if let lat = Double(frcForBrewery.object(at: indexPath).latitude!) ,
             let long = Double(frcForBrewery.object(at: indexPath).longitude!) {
