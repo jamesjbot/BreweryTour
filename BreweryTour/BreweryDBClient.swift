@@ -56,8 +56,13 @@ protocol BreweryDBClientProtocol {
 
     // Downloads Beer Styles
     func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void )
-    // Query for breweries with a specific name
 
+
+    // Download brewerie by location
+    func downloadBreweries(byState: String,
+                             completion: @escaping (_ success: Bool, _ msg: String?) -> Void )
+
+    // Query for breweries with a specific name
     func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void )
 
     // Download images in the background for a brewery
@@ -82,6 +87,8 @@ class BreweryDBClient {
         case Breweries
         // This will produce beers when and is called when any brewery is selected.
         case BeersByBreweryID
+        // The format of data when search for Breweries by postal code
+        case LocationFollowedByBrewery
     }
 
     // This object links beers and breweries to their images.
@@ -108,7 +115,7 @@ class BreweryDBClient {
 
     // MARK: Functions
 
-    private func createURLFromParameters(queryType: APIQueryResponseProcessingTypes,
+    private func createURLFromParameters(queryType queryProcessingType: APIQueryResponseProcessingTypes,
                                          querySpecificID: String?,
                                          parameters: [String:AnyObject]) -> NSURL {
         /* 
@@ -119,7 +126,7 @@ class BreweryDBClient {
         components.scheme = Constants.BreweryDB.APIScheme
         components.host = Constants.BreweryDB.APIHost
 
-        switch queryType {
+        switch queryProcessingType {
         case .BeersFollowedByBreweries:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Beers
             break
@@ -133,6 +140,9 @@ class BreweryDBClient {
             // GET: /brewery/:breweryId/beers
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery + "/" +
                 querySpecificID! + "/" + Constants.BreweryDB.Methods.Beers
+        case .LocationFollowedByBrewery:
+            components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Locations
+            break
         }
 
         components.queryItems = [NSURLQueryItem]() as [URLQueryItem]?
@@ -146,7 +156,8 @@ class BreweryDBClient {
         // Finally Add the API Key - QueryItem
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
-
+        //TODO REMOVE IN IN FINAL VERSIONS
+        print(components.url)
         return components.url! as NSURL
     }
 
@@ -244,7 +255,7 @@ class BreweryDBClient {
         return
     }
     
-    
+
     // Query for breweries that offer a certain style.
     internal func downloadBeersAndBreweriesBy(styleID : String,
                                               completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
@@ -444,7 +455,78 @@ class BreweryDBClient {
         }
     }
     
-    
+
+    // Query for all breweries at location
+    internal func downloadBreweries(byState: String,
+                                    completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+        let theOutputType = APIQueryResponseProcessingTypes.LocationFollowedByBrewery
+        var methodParameters  = [
+            Constants.BreweryParameterKeys.Region : byState as AnyObject,
+            Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
+            Constants.BreweryParameterKeys.Page : "1" as AnyObject
+        ]
+        let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
+                                                        querySpecificID: nil,
+                                                        parameters: methodParameters)
+        Alamofire.request(outputURL.absoluteString!)
+            .responseJSON {
+                response in
+
+                guard self.genericJSONResponseProcessSuccess(response: response) else {
+                    completion(false,"Network failure, please try again later")
+                    return
+                }
+                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
+                guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
+                    completion(false, "No results")
+                    return
+                }
+
+                print(responseJSON["totalResults"])
+
+                // Asynchronous page processing
+                let queue : DispatchQueue = DispatchQueue.global()
+                let group : DispatchGroup = DispatchGroup()
+
+                for i in 1...numberOfPages {
+                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
+                    let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
+                                                                         querySpecificID: nil,
+                                                                         parameters: methodParameters)
+                    // When all dispatch groups leave their processing
+                    // We will get notified with the group.notify.
+                    // Currently this means after we get results for every page
+                    // from BreweryDb
+                    group.enter()
+                    queue.async(group: group) {
+                        Alamofire.request(outputURL.absoluteString!)
+                            .responseJSON {
+                                response in
+
+                                guard self.genericJSONResponseProcessSuccess(response: response) else {
+                                    completion(false,"Network failure, please try again later")
+                                    return
+                                }
+                                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+
+                                self.parse(response: responseJSON as NSDictionary,
+                                           querySpecificID:  nil,
+                                           outputType: theOutputType,
+                                           completion: completion,
+                                           group: group)
+                                group.leave()
+                        }
+                    }
+                }
+                group.notify(queue: queue) {
+                    completion(true, "download Breweries by location")
+                }
+        }
+        return
+    }
+
+
     // Query for breweries with a specific name
     internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
 

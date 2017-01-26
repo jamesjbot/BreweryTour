@@ -36,6 +36,7 @@ class Mediator {
     internal var nextPublicStyleStrategyID: Int {
         get {
             StyleStrategyID = StyleStrategyID + 1
+            onlyValidStyleStrategy = StyleStrategyID
             return StyleStrategyID
         }
     }

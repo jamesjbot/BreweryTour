@@ -12,7 +12,16 @@
 import Foundation
 import MapKit
 
-class MapStrategy: NSObject {
+
+protocol MapAnnotationProvider {
+    // converts breweries to annotations
+    func convertLocationToAnnotation() -> [MKAnnotation]
+    func endSearch()
+    func sendAnnotationsToMap()
+}
+
+
+class MapStrategy: NSObject, MapAnnotationProvider {
 
     // MARK: - Variables
 
@@ -43,13 +52,12 @@ class MapStrategy: NSObject {
 
 
     func endSearch() {
+        fatalError("You must override endSearch()!!!")
+        print("This will cause a compiler warning")
         // Dummy stub for BreweryMapStrategy
         // StyleMapStrategy will override it's implementation
     }
 
-
-    override init() {
-    }
 
     func sendAnnotationsToMap() {
         // Format the first maximumClosestBreweries for display.

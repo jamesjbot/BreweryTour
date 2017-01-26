@@ -21,6 +21,7 @@ extension BreweryDBClient {
                 static let Brewery = "brewery"
                 static let Styles = "styles"
                 static let Beer = "beer"
+                static let Locations = "locations"
             }
         }
         
@@ -33,6 +34,8 @@ extension BreweryDBClient {
             static let HasImages = "hasImages"
             static let WithLocations = "withLocations"
             static let Page = "p"
+            static let PostalCode = "postalCode"
+            static let Region = "region"
         }
         
         struct BreweryParameterValues {

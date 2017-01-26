@@ -80,10 +80,9 @@ fileprivate class NewMyAnnotation: NSObject {
 }
 
 
-
 class MapViewController : UIViewController {
 
-    // MARK: Constants
+    // MARK: - Constants
     let centerLocation = CLLocation(latitude: 39.5, longitude: -98.35)
     let circularAnimationDuration = 5
     let iphoneFactor = 2
@@ -111,7 +110,7 @@ class MapViewController : UIViewController {
 
     private let sliderPaddding : CGFloat = 8
 
-    // MARK: Variables
+    // MARK: - Variables
 
     fileprivate weak var activeMappingStrategy: MapStrategy? = nil
     internal var floatingAnnotation: MKAnnotation!
@@ -126,12 +125,15 @@ class MapViewController : UIViewController {
     // New breweries with styles variable
     internal var breweriesForDisplay: [Brewery] = []
 
-    // MARK: IBOutlet
+    // MARK: - IBOutlet
 
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var currentLocation: UIButton!
+    @IBOutlet weak var localBreweries: UISwitch!
     @IBOutlet weak var longPressRecognizer: UILongPressGestureRecognizer!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var menu: UIView!
+    @IBOutlet weak var menuConstraint: NSLayoutConstraint!
     @IBOutlet weak var numberOfPoints: UILabel!
     @IBOutlet weak var slider: UISlider!
 
@@ -142,7 +144,7 @@ class MapViewController : UIViewController {
     @IBOutlet weak var nextTutorial: UIButton!
 
 
-    // MARK: IBAction
+    // MARK: - IBAction
 
     @IBAction func currentLocationTapped(_ sender: UIButton) {
         clearPointFromTargetLocation()
@@ -345,10 +347,18 @@ class MapViewController : UIViewController {
 
     // This stops whatever search is currently running and
     // invokes a new search.
-    private func decideOnMappingStrategyAndInvoke(mapViewData: NSManagedObject) {
+    private func decideOnMappingStrategyAndInvoke(mapViewData: NSManagedObject?) {
         // Decision making to display Breweries Style or Brewery
 
         activeMappingStrategy?.endSearch()
+
+        guard !localBreweries.isOn else {
+            activeMappingStrategy = AllBreweriesMapStrategy(                                                  view: self,
+                                                                                                              location: targetLocation!,
+                                                                            maxPoints: Int(slider.value))
+            return
+        }
+
 
         if mapViewData is Style {
 
@@ -379,18 +389,49 @@ class MapViewController : UIViewController {
         // Get new selection
         let mapViewData = Mediator.sharedInstance().getPassedItem()
         // If there is nothing no changes need to be made to the map
-        guard mapViewData != nil else {
+
+        guard mapViewData != nil || localBreweries.isOn else {
             return
         }
 
         setTargetLocationWhenTargetLocationIsNil()
 
-        decideOnMappingStrategyAndInvoke(mapViewData: mapViewData!)
+        decideOnMappingStrategyAndInvoke(mapViewData: mapViewData)
 
         // Capture last selection, so we can compare when an update is requested
         lastSelectedManagedObject = mapViewData
 
         activateIndicatorIfSystemBusy()
+    }
+
+
+    private func flatUIView(_ view: UIView) -> [UIView] {
+        var allView: [UIView] = []
+        if view.subviews.count == 0 {
+            return [view]
+        }
+        for i in view.subviews {
+            allView.append(contentsOf: flatUIView(i))
+        }
+        allView.append(view)
+        return allView
+    }
+
+
+    @objc internal func exposeMenu() {
+        print("You want to expose the menu")
+        if menuConstraint.constant == 0 {
+            let maxUIView = flatUIView(menu).max(by: {return $0.intrinsicContentSize.width < $1.intrinsicContentSize.width })
+            menuConstraint.constant = (maxUIView?.intrinsicContentSize.width)! + 2*(maxUIView?.layoutMargins.left)!
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutIfNeeded()
+            }
+        } else {
+            menuConstraint.constant = 0
+            UIView.animate(withDuration: 0.5) {
+                self.view.layoutIfNeeded()
+            }
+        }
     }
 
 
@@ -424,6 +465,27 @@ class MapViewController : UIViewController {
         let location = CLLocation(latitude: floatingAnnotation.coordinate.latitude, longitude: floatingAnnotation.coordinate.longitude)
         targetLocation = location
         displayNewStrategyWithNewPoint()
+        if localBreweries.isOn {
+            CLGeocoder().reverseGeocodeLocation(targetLocation!)
+            { (placemarksarray, error) -> Void in
+                //self.myActivityIndicator.stopAnimating()
+                guard error == nil else {
+                    print(error)
+                    self.displayAlertWindow(title: "Geocoding Error",
+                                            msg: "Failed Please try again ",
+                                            actions: [])
+                    return
+                }
+                let placemark: CLPlacemark = (placemarksarray?.first)! as CLPlacemark
+                let state = ConvertToFullStateName().fullname(placemark.administrativeArea!)
+                BreweryDBClient.sharedInstance().downloadBreweries(byState: state)
+                { (success, msg) -> Void in
+                    if !success {
+                        self.displayAlertWindow(title: "Breweries at Location", msg: msg!)
+                    }
+                }
+            }// end of geocoder completion handler
+        }
     }
 
 
@@ -494,19 +556,32 @@ class MapViewController : UIViewController {
 
 
     // Draw the annotations on the map
-    internal func updateMap(withAnnotations: [MKAnnotation]) {
+    internal func updateMap(withAnnotations annotations: [MKAnnotation]) {
         DispatchQueue.main.async {
 
-            // Remove overlays if the Brewery has been remove from 
-            // the observable set
-            if !self.isAnnotation(inArray: withAnnotations) {
-                self.mapView.removeOverlays(self.mapView.overlays)
+            var finalAnnotations:[MKAnnotation]?
+
+            // Remove excess annotations
+            if annotations.count > Int(self.slider.value) {
+                finalAnnotations = Array(annotations[0..<Int(self.slider.value)])
+            } else {
+                finalAnnotations = annotations
+            }
+            // if there are no annotation exit.
+            guard finalAnnotations != nil else {
+                return
             }
 
             // If the annotations displayed are the same do nothing
-            guard self.arraysAreDifferent(a: self.mapView.annotations, b: withAnnotations) else {
+            guard self.arraysAreDifferent(a: self.mapView.annotations, b: finalAnnotations!) else {
                 // Do nothing annotations are the same
                 return
+            }
+
+            // Remove overlays if the Brewery has been remove from
+            // the observable set
+            if !self.isAnnotation(inArray: finalAnnotations!) {
+                self.mapView.removeOverlays(self.mapView.overlays)
             }
 
             // Decorate old annotations
@@ -521,7 +596,7 @@ class MapViewController : UIViewController {
 
             //Decorate new annotations
             var new: [NewMyAnnotation] = [NewMyAnnotation]()
-            for a in withAnnotations {
+            for a in finalAnnotations! {
                 new.append(NewMyAnnotation(a))
             }
 

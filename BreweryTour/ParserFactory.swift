@@ -36,6 +36,9 @@ class ParserFactory: ParserFactoryProtocol {
 
         case BreweryDBClient.APIQueryResponseProcessingTypes.Styles:
             return StylesParser()
+            
+        case BreweryDBClient.APIQueryResponseProcessingTypes.LocationFollowedByBrewery:
+            return BreweriesByStateParser()
         }
     }
 }
