@@ -7,13 +7,15 @@ This app solves that problem for others. It allows you to search for all breweri
 
 ### How to Install?
 ---
+First have cocoapods installed, if you don't have it there are instructions at https://cocoapods.org
+
 Go to https://github.com/jamesjbot/BreweryTour and download the zip file
 
 Or
 
-From terminal (with git installed), type git clone https://github.com/jamesjbot/BreweryTour.git
-
-Have cocoapods installed, if you don't have it there are instructions at https://cocoapods.org
+From terminal (with git installed), type 
+`git clone https://github.com/jamesjbot/BreweryTour.git
+pod install`
 
 After downloading, please navigate to the BreweryTour folder and type `pod install`
 
