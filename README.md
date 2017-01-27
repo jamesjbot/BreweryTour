@@ -1,14 +1,12 @@
 # BreweryTour
 ---
 ## What is it?
----
 BreweryTour is a Swift based App to help you find breweries that make the style of beer you're currently excited about.
 When my friends introduce me to a new style of beer, I've had trouble finding other places that brew that type of beer.
 This app solves that problem for others. It allows you to search for all breweries that produce your desired style.
 
 ---
 ### How to Install?
- 
 Go to https://github.com/jamesjbot/BreweryTour and download the zip file
 
 Or
