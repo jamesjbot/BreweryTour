@@ -12,18 +12,19 @@ First have cocoapods installed, if you don't have it there are instructions at h
 
 Go to https://github.com/jamesjbot/BreweryTour and download the zip file
 
+After downloading, please navigate to the BreweryTour folder and type `pod install`
+
+Then go into the folder BreweryTour, open BreweryTour.xcworkspace.
+
 Or
 
 From terminal (with git installed), type 
 ```
 git clone https://github.com/jamesjbot/BreweryTour.git
+cd BreweryTour
 pod install
-
+open BreweryTour.xcworkspace
 ```
-
-After downloading, please navigate to the BreweryTour folder and type `pod install`
-
-Then go into the folder BreweryTour, open BreweryTour.xcworkspace.
 
 Then build the project.
 
