@@ -21,6 +21,12 @@ On the map you can limiting the amount of search results (use slider on the map 
 
 Limit breweries to a specific area instead of your current location (use the map and place a pin in the new area)
 
+There is a new menu bar on the map press + to access it
+
+You can now see local breweries relative to your location or the new pin (use the map and tap + menu in the upper right, flip switch for Show all local)
+
+You can turn off any further routing by fliping the enable routing switch to off.
+
 On the map you can target you search results to a specific area by long pressing.
 
 On the map you can favorite a brewery, this will allow you to get driving directions to it in the Favortes Brewery Tab
@@ -32,6 +38,7 @@ On the beer detail screen you can favorite the beer or save tasting notes.
 To get directions to the brewery (first favorite a brewery on the map, then go to the favorite brewery tab and click the brewery)
 
 
+
 How to Install?
   -------------
 After downloading, please navigate to the BreweryTour folder and type `pod install`
@@ -41,9 +48,12 @@ Then go into the folder BreweryTour, open BreweryTour.xcworkspace.
 Then build the project.
 
 
+
 Technologies Used
   -------------
 This data source for the beers and breweries is BreweryDB, http://www.brewerydb.com
 The data persistence is achieved mostly thru CoreData, the tutorial states are saved in UserDefaults.
 The choice of embedding a TabBarcontroller in a NavigationController was just to challenge myself.
 I was trying to learn MVVM Design Pattern so that is all the tablelist and view model stuff you see in the code.
+Grand central dispatch is used generously throughout the download process.
+
