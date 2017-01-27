@@ -157,7 +157,6 @@ class MapViewController : UIViewController {
         clearPointFromTargetLocation()
     }
 
-
     @IBAction func nextTutorialAction(_ sender: UIButton) {
         // Advance the tutorial state
         switch tutorialState {
@@ -267,6 +266,14 @@ class MapViewController : UIViewController {
             break
         }
     }
+
+
+    @IBAction func routingSwitchAction(_ sender: UISwitch) {
+        if !sender.isOn {
+            mapView.removeOverlays(mapView.overlays)
+        }
+    }
+
 
     @IBAction func showLocalBreweriesAction(_ sender: UISwitch) {
             displayNewStrategyWithNewPoint()
