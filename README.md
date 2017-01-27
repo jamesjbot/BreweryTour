@@ -58,6 +58,8 @@ Current capabilities include:
 
 * To get directions to the brewery (first favorite a brewery on the map, then go to the favorite brewery tab and click the brewery)  
 
+* On the beer detail screen you can favorite a certain beer and add your own tasting notes.
+
 ### Technologies Used
 ---
 This data source for the beers and breweries is BreweryDB, http://www.brewerydb.com
