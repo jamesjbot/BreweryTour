@@ -52,8 +52,14 @@ Then build the project.
 Technologies Used
   -------------
 This data source for the beers and breweries is BreweryDB, http://www.brewerydb.com
+
 The data persistence is achieved mostly thru CoreData, the tutorial states are saved in UserDefaults.
+
 The choice of embedding a TabBarcontroller in a NavigationController was just to challenge myself.
+
 I was trying to learn MVVM Design Pattern so that is all the tablelist and view model stuff you see in the code.
+
 Grand central dispatch is used generously throughout the download process.
+
+Used Cocoapods to integrate AlamoFire Networking
 
