@@ -20,7 +20,7 @@ import CoreData
 
 class SettingsViewController: UIViewController {
     
-    // MARK: Constants
+    // MARK: - Constants
 
     private let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
     private let breweryFetch: NSFetchRequest<Brewery> = Brewery.fetchRequest()
@@ -30,14 +30,14 @@ class SettingsViewController: UIViewController {
     private let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
 
 
-    // MARK: IBOutlet
+    // MARK: - IBOutlet
 
     @IBOutlet weak var activityIndic: UIActivityIndicatorView!
     @IBOutlet weak var automaticMapSwitch: UISwitch!
     @IBOutlet weak var deleteButton: UIButton!
 
 
-    // MARK: IBAction
+    // MARK: - IBAction
 
 
     @IBAction func deleteBeersBrewery(_ sender: AnyObject) {

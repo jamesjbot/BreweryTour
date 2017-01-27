@@ -16,20 +16,20 @@ import CoreData
 
 class BeerDetailViewController: UIViewController {
 
-    // MARK: Constants
+    // MARK: - Constants
 
     private let container = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container
     private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
 
 
-    // MARK: Variables
+    // MARK: - Variables
 
     internal var beer : Beer!
     private var isBeerFavorited : Bool!
 
 
-    // MARK: IBOutlets
+    // MARK: - IBOutlets
 
     @IBOutlet weak var abv: UILabel!
     @IBOutlet weak var availableText: UILabel!
@@ -44,7 +44,7 @@ class BeerDetailViewController: UIViewController {
     @IBOutlet weak fileprivate var tasting: UITextView!
 
 
-    // MARK: IBActions
+    // MARK: - IBActions
     
     @IBAction func favoriteClicked(_ sender: UIButton) {
         // Must change the state first
@@ -63,7 +63,7 @@ class BeerDetailViewController: UIViewController {
     }
 
     
-    // MARK: Functions
+    // MARK: - Functions
 
     private func getStyleName(id : String,
                               completion: @escaping (_ name: String ) -> Void ) {

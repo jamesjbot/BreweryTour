@@ -101,7 +101,7 @@ NSFetchedResultsControllerDelegate {
     }
 
 
-    // MARK: Variables
+    // MARK: - Variables
     // This is the active view model
     internal var activeTableList : TableList!
 
@@ -124,7 +124,7 @@ NSFetchedResultsControllerDelegate {
     private var tutorialState: CategoryTutorialStage = .InitialScreen
 
 
-    // MARK: IBOutlets
+    // MARK: - IBOutlets
 
     // Tutorial outlets
     @IBOutlet weak var mapButton: UIBarButtonItem!
@@ -141,7 +141,7 @@ NSFetchedResultsControllerDelegate {
     @IBOutlet weak var segmentedControl: UISegmentedControl!
 
 
-    // MARK: IBActions
+    // MARK: - IBActions
 
     @IBAction func dissMissTutorial(_ sender: UIButton) {
         tutorialModeOn = false
@@ -288,7 +288,7 @@ NSFetchedResultsControllerDelegate {
     }
 
 
-    // MARK: Functions
+    // MARK: - Functions
 
     private func filterContent() {
         if let text = newSearchBar.text {

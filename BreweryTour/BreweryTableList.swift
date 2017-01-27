@@ -19,13 +19,13 @@ import CoreData
 
 class BreweryTableList: NSObject, Subject {
 
-    // MARK: Constants
+    // MARK: - Constants
 
     private let initialDelay = 1000 // 1 second
     private let longDelay = 10000 // 10 seconds
     private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
 
-    // MARK: Variables
+    // MARK: - Variables
 
     private var bounceDelay: Int = 0 // 10
 

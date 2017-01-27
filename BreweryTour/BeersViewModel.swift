@@ -19,12 +19,12 @@ import CoreData
 
 class BeersViewModel: NSObject {
 
-    // MARK: Constants
+    // MARK: - Constants
 
     internal let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
     
-    // MARK: Variables
+    // MARK: - Variables
 
     fileprivate var filteredObjects: [Beer] = [Beer]()
 

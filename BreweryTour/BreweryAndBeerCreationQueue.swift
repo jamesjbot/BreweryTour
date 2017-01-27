@@ -38,7 +38,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     fileprivate var abandonProcessingQueue: Bool = false
 
-    // MARK: Constants
+    // MARK: - Constants
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
@@ -59,7 +59,7 @@ class BreweryAndBeerCreationQueue: NSObject {
     private let maximumSmallRuns = 28
     private let maximumLargeRuns = 100
 
-    // MARK: Variables
+    // MARK: - Variables
 
     fileprivate var classContext: NSManagedObjectContext? {
         didSet {
@@ -82,7 +82,7 @@ class BreweryAndBeerCreationQueue: NSObject {
     fileprivate var runningBeerQueue = [(BeerData,Int)]()
 
 
-    // MARK: Functions
+    // MARK: - Functions
 
     internal class func sharedInstance() -> BreweryAndBeerCreationProtocol {
         struct Singleton {

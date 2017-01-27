@@ -24,12 +24,12 @@ protocol ImageLinkingProcotol {
 
 class ManagedObjectImageLinker: ImageLinkingProcotol {
 
-    // MARK: Constants
+    // MARK: - Constants
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
     private let maxSaves = 200
     private let timerDelay: Double = 3
 
-    // MARK: Variables
+    // MARK: - Variables
 
     // Image processing variables
     private var imageProcessTimer: Timer!
@@ -47,7 +47,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
     }
 
 
-    // MARK: Functions
+    // MARK: - Functions
 
     private func decideToDisableTimer() {
         if imagesToBeAssignedQueue.count == 0 {

@@ -74,7 +74,7 @@ protocol BreweryDBClientProtocol {
 
 class BreweryDBClient {
 
-    // MARK: Enumerations
+    // MARK: - Enumerations
 
     // This is the switch that describes the output of the parsing section
     internal enum APIQueryResponseProcessingTypes {
@@ -99,10 +99,10 @@ class BreweryDBClient {
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
 
 
-    // MARK: Variables
+    // MARK: - Variables
 
 
-    // MARK: Singleton Implementation
+    // MARK: - Singleton Implementation
 
     private init(){}
     internal class func sharedInstance() -> BreweryDBClient {
@@ -113,7 +113,7 @@ class BreweryDBClient {
     }
 
 
-    // MARK: Functions
+    // MARK: - Functions
 
     private func createURLFromParameters(queryType queryProcessingType: APIQueryResponseProcessingTypes,
                                          querySpecificID: String?,

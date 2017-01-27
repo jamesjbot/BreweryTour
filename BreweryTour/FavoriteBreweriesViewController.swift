@@ -21,18 +21,18 @@ import MapKit
 
 class FavoriteBreweriesViewController: UIViewController {
     
-    // MARK: Constants
+    // MARK: - Constants
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let paddingForPoint : CGFloat = 20
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
 
-    // MARK: Variables
+    // MARK: - Variables
 
     fileprivate var frcForBrewery : NSFetchedResultsController<Brewery>!
 
 
-    // MARK: IBOutlets
+    // MARK: - IBOutlets
 
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
@@ -41,7 +41,7 @@ class FavoriteBreweriesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
 
-    // MARK: IBActions
+    // MARK: - IBActions
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
@@ -50,7 +50,7 @@ class FavoriteBreweriesViewController: UIViewController {
     }
 
     
-    // MARK: Functions
+    // MARK: - Functions
 
     func configureCell(cell: UITableViewCell, indexPath: NSIndexPath) {
         guard let selectedObject = frcForBrewery.object(at: indexPath as IndexPath) as Brewery? else {

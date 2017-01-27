@@ -20,19 +20,19 @@ import Foundation
 class StylesTableList: NSObject {
 
     
-    // MARK: Constants
+    // MARK: - Constants
 
     let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
 
-    // MARK: Variables
+    // MARK: - Variables
     
     fileprivate var filteredObjects: [Style] = [Style]()
     fileprivate var frc : NSFetchedResultsController<Style>!
     fileprivate var observer : Observer!
 
 
-    // MARK: Functions
+    // MARK: - Functions
 
     // This is the inital styles populate on a brand new startup
     // This is performed in the background on initialization

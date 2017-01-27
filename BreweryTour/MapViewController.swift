@@ -631,7 +631,6 @@ class MapViewController : UIViewController {
 
     fileprivate func updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: [MKAnnotation]) -> (Set<NewMyAnnotation>, Set<NewMyAnnotation>) {
 
-
         // Remove overlays if the Brewery has been remove from
         // the observable set
         if self.routedAnnotationIsNot(inArray: finalAnnotations) {

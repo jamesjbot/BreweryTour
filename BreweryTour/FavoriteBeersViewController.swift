@@ -17,7 +17,7 @@ import CoreData
 
 class FavoriteBeersViewController: UIViewController {
     
-    // MARK: Constants
+    // MARK: - Constants
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     private let paddingForPoint : CGFloat = 20
@@ -25,12 +25,12 @@ class FavoriteBeersViewController: UIViewController {
     fileprivate let reuseID = "FavoriteCell"
 
 
-    // MARK: Variables
+    // MARK: - Variables
 
     fileprivate var frc : NSFetchedResultsController<Beer>
 
 
-    // MARK: IBOutlets
+    // MARK: - IBOutlets
     
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
@@ -39,7 +39,7 @@ class FavoriteBeersViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
 
 
-    // MARK: IBAction
+    // MARK: - IBAction
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
