@@ -51,9 +51,9 @@ Current capabilities include:
 * On the beer detail screen you can favorite the beer or save tasting notes.
 
 * To get directions to the brewery (first favorite a brewery on the map, then go to the favorite brewery tab and click the brewery)  
----
+
 ### Technologies Used
-  
+---
 This data source for the beers and breweries is BreweryDB, http://www.brewerydb.com
 
 The data persistence is achieved mostly thru CoreData, the tutorial states are saved in UserDefaults.
@@ -65,6 +65,6 @@ I was trying to learn MVVM Design Pattern so that is all the tablelist and view 
 Grand central dispatch is used generously throughout the download process.
 
 Used Cocoapods to integrate AlamoFire Networking
----
 #### Know bugs
+---
 The ability to search for local beers only works in the United States.
