@@ -1,12 +1,12 @@
 # BreweryTour
----
 ## What is it?
+---
 BreweryTour is a Swift based App to help you find breweries that make the style of beer you're currently excited about.
 When my friends introduce me to a new style of beer, I've had trouble finding other places that brew that type of beer.
 This app solves that problem for others. It allows you to search for all breweries that produce your desired style.
 
----
 ### How to Install?
+---
 Go to https://github.com/jamesjbot/BreweryTour and download the zip file
 
 Or
@@ -51,9 +51,6 @@ Current capabilities include:
 * On the beer detail screen you can favorite the beer or save tasting notes.
 
 * To get directions to the brewery (first favorite a brewery on the map, then go to the favorite brewery tab and click the brewery)  
-
-
-
 ---
 ### Technologies Used
   
@@ -68,8 +65,6 @@ I was trying to learn MVVM Design Pattern so that is all the tablelist and view 
 Grand central dispatch is used generously throughout the download process.
 
 Used Cocoapods to integrate AlamoFire Networking
-
-
 ---
 #### Know bugs
 The ability to search for local beers only works in the United States.
