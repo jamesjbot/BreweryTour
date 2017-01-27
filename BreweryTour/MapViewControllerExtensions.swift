@@ -50,7 +50,12 @@ extension MapViewController: CLLocationManagerDelegate {
 
 
     func mapView(_ mapView: MKMapView, didUpdate userLocation: MKUserLocation) {
-        displayNewStrategyWithNewPoint()
+        // When the cllmanager finally catches the user postion and there is 
+        // only the center selected point lets remove the center point.
+        if targetLocation == centerLocation {
+            centerMapOnLocation(location: mapView.userLocation.location,
+                                radiusInMeters: CLLocationDistance(DistanceAroundUserLocation), centerUS: false)
+        }
         return
     }
 

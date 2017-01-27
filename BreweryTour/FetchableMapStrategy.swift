@@ -24,45 +24,6 @@ import Foundation
 import MapKit
 import CoreData
 
-//TODO REMOVE IN FINAL protocol FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate {
-//
-//    // MARK: - Constants
-//
-//    // These are delays to update the mapViewController
-////    let initialDelay: Int
-////    let longDelay: Int
-////
-////    let maxShortDelayLoops: Int
-////    internal var runningID: Int?
-////
-////    // Coredata
-////    fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
-////    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
-////
-////
-////    // MARK: - Variables
-////
-////    internal var bounceDelay: Int = 0
-////    internal var debouncedFunction: (()->())? = nil
-////
-////    private var delayLoops = 0
-////    fileprivate var maxPoints: Int?
-////
-////    fileprivate var styleFRC: NSFetchedResultsController<NSFetchRequestResult>?
-//
-//
-//    // MARK: - Functions
-//
-//    // Used for when style is updated with new breweries
-//    func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
-//    // This function will drop the excessive calls to redisplay the map
-//    // Borrowed from
-//    // http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call/33794262#33794262
-//    func debounce(delay:Int, queue:DispatchQueue, action: @escaping (()->())) -> ()->()
-//    func fetch()
-//    func fetchSortandSend()
-//}
-
 class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate  {
 
     // MARK: - Constants
@@ -138,21 +99,9 @@ class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate  {
             endSearch()
             return
         }
-
-//        delayLoops += 1
-//        if delayLoops > maxShortDelayLoops { // After 10 run make the delay even longer
-//            bounceDelay = longDelay
-//            // Replace the debounced function with a longer version
-//            debouncedFunction = nil
-//            debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
-//                self.fetchSortandSend()
-//            })
-//        }
         fetch()
         sortLocations()
-//        if breweryLocations.count > maxPoints! {
-//            breweryLocations = Array(breweryLocations[0..<maxPoints!])
-//        }
+
         sendAnnotationsToMap()
     }
 
@@ -218,12 +167,6 @@ class StyleMapStrategy: FetchableMapStrategy {
 
 
 class AllBreweriesMapStrategy: FetchableMapStrategy {
-
-//    override func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-//        // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
-//        print("all breweries map strategy controllerDid change content")
-//        super.controllerDidChangeContent(controller)
-//    }
 
     override internal func fetch() {
         do {

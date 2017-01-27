@@ -67,7 +67,7 @@
                                             <outlet property="delegate" destination="RKC-MN-s1K" id="1dR-s0-Mir"/>
                                         </connections>
                                     </searchBar>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="singleLineEtched" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx" userLabel="Generic Table">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx" userLabel="Generic Table">
                                         <rect key="frame" x="8" y="119" width="359" height="475"/>
                                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="sectionIndexBackgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -76,18 +76,18 @@
                                                 <rect key="frame" x="0.0" y="28" width="359" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="kaU-Em-b0H" id="Qba-ev-yKd">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Style Name Will Go Here" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="WUq-hH-lhL">
-                                                            <rect key="frame" x="15" y="6" width="203" height="17"/>
+                                                            <rect key="frame" x="15" y="6" width="202.5" height="17"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="n7M-rj-VPI">
-                                                            <rect key="frame" x="15" y="23" width="44" height="15"/>
+                                                            <rect key="frame" x="15" y="23" width="44" height="14.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" type="system" pointSize="12"/>
                                                             <nil key="textColor"/>
@@ -312,34 +312,37 @@
                                 <rect key="frame" x="375" y="94" width="0.0" height="81"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="tRa-e6-wgp">
-                                        <rect key="frame" x="0.0" y="0.0" width="210.5" height="81"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="180" height="81"/>
                                         <subviews>
-                                            <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="4e3-Fs-f4E" userLabel="Upper">
-                                                <rect key="frame" x="8" y="8" width="194.5" height="31"/>
+                                            <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="4e3-Fs-f4E" userLabel="Upper">
+                                                <rect key="frame" x="8" y="8" width="164" height="31"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show All Breweries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="llo-Ab-hAP" userLabel="Show all breweries in this state">
-                                                        <rect key="frame" x="0.0" y="0.0" width="145.5" height="31"/>
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Show all local " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="llo-Ab-hAP" userLabel="Show all local breweries">
+                                                        <rect key="frame" x="0.0" y="0.0" width="112" height="31"/>
                                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" translatesAutoresizingMaskIntoConstraints="NO" id="KWs-jN-C0e">
-                                                        <rect key="frame" x="145.5" y="0.0" width="51" height="31"/>
+                                                        <rect key="frame" x="115" y="0.0" width="51" height="31"/>
+                                                        <connections>
+                                                            <action selector="showLocalBreweriesAction:" destination="kc4-oF-YzA" eventType="valueChanged" id="cRt-rK-VSH"/>
+                                                        </connections>
                                                     </switch>
                                                 </subviews>
                                             </stackView>
                                             <stackView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="XZs-La-SAf" userLabel="Lower">
-                                                <rect key="frame" x="8" y="42" width="194.5" height="31"/>
+                                                <rect key="frame" x="8" y="42" width="164" height="31"/>
                                                 <subviews>
                                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Enable Routing" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="iGp-v1-JB6">
-                                                        <rect key="frame" x="0.0" y="0.0" width="145.5" height="31"/>
+                                                        <rect key="frame" x="0.0" y="0.0" width="115" height="31"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                         <nil key="textColor"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
                                                     <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="MSt-q1-5LW">
-                                                        <rect key="frame" x="145.5" y="0.0" width="51" height="31"/>
+                                                        <rect key="frame" x="115" y="0.0" width="51" height="31"/>
                                                     </switch>
                                                 </subviews>
                                             </stackView>
@@ -386,7 +389,7 @@
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                         <subviews>
                                             <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DB0-f6-MiY" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
-                                                <rect key="frame" x="214.5" y="257" width="40" height="40"/>
+                                                <rect key="frame" x="215" y="257" width="40" height="40"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="BZV-eu-1zg"/>
                                                     <constraint firstAttribute="width" secondItem="DB0-f6-MiY" secondAttribute="height" multiplier="1:1" id="l5e-k1-Qvr"/>
@@ -497,7 +500,6 @@
                         <outlet property="activityIndicator" destination="ZU7-BT-73c" id="Ua6-o1-w7d"/>
                         <outlet property="currentLocation" destination="yrc-0a-qnb" id="SDS-MY-lPj"/>
                         <outlet property="enableRouting" destination="MSt-q1-5LW" id="eUo-Wj-erN"/>
-                        <outlet property="localBreweries" destination="KWs-jN-C0e" id="d4g-h5-YDG"/>
                         <outlet property="longPressRecognizer" destination="if2-iF-Eb5" id="EXz-gc-J2J"/>
                         <outlet property="mapView" destination="idd-zP-hy0" id="hTM-gR-Klp"/>
                         <outlet property="menu" destination="ad2-Zo-dOE" id="UTA-CO-xbM"/>
@@ -505,6 +507,7 @@
                         <outlet property="nextTutorial" destination="8Pc-m6-hEY" id="LLf-8h-UYK"/>
                         <outlet property="numberOfPoints" destination="CXH-BH-Cuf" id="joi-sq-JAz"/>
                         <outlet property="pointer" destination="DB0-f6-MiY" id="DJk-9Q-Vxb"/>
+                        <outlet property="showLocalBreweries" destination="KWs-jN-C0e" id="u0i-WD-aWr"/>
                         <outlet property="slider" destination="pbH-Lz-OoH" id="mKh-Bz-xzn"/>
                         <outlet property="tutorialText" destination="Pci-Qx-EEF" id="YLM-XF-4kJ"/>
                         <outlet property="tutorialView" destination="2Wr-de-AeO" id="b58-JM-AsU"/>
@@ -586,25 +589,25 @@
                                                 <rect key="frame" x="0.0" y="28" width="359" height="44"/>
                                                 <autoresizingMask key="autoresizingMask"/>
                                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="Tcx-Kc-hK0" id="AcN-pE-EtA">
-                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="43"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="359" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="F2c-bs-Vb5">
-                                                            <rect key="frame" x="73" y="6" width="37" height="17"/>
+                                                            <rect key="frame" x="74" y="7" width="36.5" height="17"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="A3i-fU-GAB">
-                                                            <rect key="frame" x="73" y="23" width="50" height="14"/>
+                                                            <rect key="frame" x="74" y="24" width="50" height="14"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                             <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="14"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
                                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Nophoto.png" id="Co2-DY-qqn">
-                                                            <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                            <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                             <autoresizingMask key="autoresizingMask"/>
                                                         </imageView>
                                                     </subviews>
@@ -957,7 +960,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lT6-7r-ceh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1674" y="-766"/>
+            <point key="canvasLocation" x="1657" y="-761"/>
         </scene>
         <!--Brewery Tour-->
         <scene sceneID="068-UA-gCJ">
@@ -1028,25 +1031,25 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="E3a-pT-flO" id="ELz-Jy-n8n">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="65G-I2-bt1">
-                                                    <rect key="frame" x="73" y="6" width="37" height="17"/>
+                                                    <rect key="frame" x="74" y="6" width="36.5" height="17"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="4eR-fy-GSw">
-                                                    <rect key="frame" x="73" y="23" width="54" height="15"/>
+                                                    <rect key="frame" x="74" y="23" width="53.5" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleAspectFit" image="Nophoto.png" id="gVx-aZ-Y5e">
-                                                    <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </imageView>
                                             </subviews>
@@ -1192,25 +1195,25 @@
                                         <rect key="frame" x="0.0" y="28" width="375" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="EPN-e6-10X" id="Q1S-to-2h3">
-                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="375" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="L0G-7N-7Tr">
-                                                    <rect key="frame" x="73" y="6" width="37" height="17"/>
+                                                    <rect key="frame" x="74" y="6" width="36.5" height="17"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="tyv-eG-Ufw">
-                                                    <rect key="frame" x="73" y="23" width="54" height="15"/>
+                                                    <rect key="frame" x="74" y="23" width="53.5" height="15"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="15"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                                 <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" image="Nophoto.png" id="Isa-JK-NWA">
-                                                    <rect key="frame" x="15" y="0.0" width="43" height="43"/>
+                                                    <rect key="frame" x="15" y="0.0" width="44" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </imageView>
                                             </subviews>
@@ -1337,23 +1340,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UDx-ZZ-Vmk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="2663" y="301"/>
-        </scene>
-        <!--View Controller-->
-        <scene sceneID="IMO-Dm-WHW">
-            <objects>
-                <viewController id="u2a-zF-m3r" sceneMemberID="viewController">
-                    <layoutGuides>
-                        <viewControllerLayoutGuide type="top" id="5BQ-kB-a0t"/>
-                        <viewControllerLayoutGuide type="bottom" id="hd1-ZN-ZHt"/>
-                    </layoutGuides>
-                    <view key="view" contentMode="scaleToFill" id="M5i-fq-awK">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="hf4-op-nr6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
         </scene>
     </scenes>
     <resources>

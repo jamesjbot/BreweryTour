@@ -18,7 +18,7 @@
  Internals
  The MapViewController takes what the Mediator currently has selected,
  then viewWillAppear chooses the strategy based on the selected item.
- 
+
  MapStrategy is the super class, maps multiple breweries on the map.
  It does this by sorting and finally sending the annotation back to the update
  map function.
@@ -26,13 +26,16 @@
  For brewery we just immediately display the brewery's location by sending it as
  a single brewery to it's superclass MapStrategy, which sends it back to our
  updateMapFunction
- 
+
  For style we create a StyleMapStrategy, that enters its own loop to process
  breweries currently in the database and new ones that are being downloaded.
  It stays alive till it process all its beers or a new style strategy has
  replaced it in the Mediator's currently running StyleStrategy
 
-
+ The use can now select to show local beers by going into the + menu
+ and selecting show local beers.
+ Moving the pointer still works and it will query beers for the state that point
+ is in.
  */
 
 
@@ -85,6 +88,7 @@ class MapViewController : UIViewController {
     // MARK: - Constants
     let centerLocation = CLLocation(latitude: 39.5, longitude: -98.35)
     let circularAnimationDuration = 5
+    let DistanceAroundUserLocation = CLLocationDistance(200000)
     let iphoneFactor = 2
     let radiusDivisor = 4
     let reuseId = "pin"
@@ -99,6 +103,7 @@ class MapViewController : UIViewController {
         case Map
         case Longpress
         case Slider
+        case Menu
     }
 
     // Location manager allows us access to the user's location
@@ -117,7 +122,7 @@ class MapViewController : UIViewController {
     fileprivate var lastSelectedManagedObject : NSManagedObject?
     internal var routedAnnotation: MKAnnotationView?
     fileprivate var styleFRC: NSFetchedResultsController<Style> = NSFetchedResultsController<Style>()
-    fileprivate var targetLocation: CLLocation?
+    internal var targetLocation: CLLocation?
 
     // Initialize the tutorial views initial screen
     private var tutorialState: CategoryTutorialStage = .Map
@@ -130,13 +135,14 @@ class MapViewController : UIViewController {
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var currentLocation: UIButton!
     @IBOutlet weak var enableRouting: UISwitch!
-    @IBOutlet weak var localBreweries: UISwitch!
+    @IBOutlet weak var showLocalBreweries: UISwitch!
     @IBOutlet weak var longPressRecognizer: UILongPressGestureRecognizer!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var menu: UIView!
     @IBOutlet weak var menuConstraint: NSLayoutConstraint!
     @IBOutlet weak var numberOfPoints: UILabel!
     @IBOutlet weak var slider: UISlider!
+
 
     // Tutorial
     @IBOutlet weak var pointer: CircleView!
@@ -160,6 +166,8 @@ class MapViewController : UIViewController {
         case .Longpress:
             tutorialState = .Slider
         case .Slider:
+            tutorialState = .Menu
+        case .Menu:
             tutorialState = .Map
         }
 
@@ -192,6 +200,13 @@ class MapViewController : UIViewController {
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.x += self.slider.frame.width - self.sliderPaddding},
                                     completion: nil)
+            break
+
+        case .Menu:
+            pointer.isHidden = true
+            pointer.layer.removeAllAnimations()
+            pointer.setNeedsDisplay()
+            tutorialText.text = "Tap the + on the navigation bar for menu. Here you can allow the pointer to show all breweries local to you instead of just one style. Here you can also disable the green routing line."
             break
         }
 
@@ -253,6 +268,9 @@ class MapViewController : UIViewController {
         }
     }
 
+    @IBAction func showLocalBreweriesAction(_ sender: UISwitch) {
+            displayNewStrategyWithNewPoint()
+    }
 
     @IBAction func sliderAction(_ sender: UISlider, forEvent event: UIEvent) {
         let intValue: Int = Int(sender.value)
@@ -306,7 +324,12 @@ class MapViewController : UIViewController {
     }
 
 
-    func centerMapOnLocation(location: CLLocation?, radius regionRadius: CLLocationDistance?, centerUS: Bool) {
+    func centerMapOnLocation(location: CLLocation?, radiusInMeters regionRadius: CLLocationDistance?, centerUS: Bool) {
+
+        // User is watching and annotation don't move the screen.
+        guard mapView.selectedAnnotations.count == 0 else {
+            return
+        }
         DispatchQueue.main.async {
             guard ( location != nil && !centerUS )  else {
                 // Center of the U.S.
@@ -317,8 +340,9 @@ class MapViewController : UIViewController {
                 return
             }
             // Set the view region
+            // The distances are in meters
             let coordinateRegion = MKCoordinateRegionMakeWithDistance((location?.coordinate)!,
-                                                                      regionRadius! * 2.0, regionRadius! * 2.0)
+                                                                      regionRadius!, regionRadius!)
             self.mapView.setRegion(coordinateRegion, animated: true)
             self.mapView.setNeedsDisplay()
         }
@@ -334,6 +358,7 @@ class MapViewController : UIViewController {
         floatingAnnotation = nil
         // Reset back to user true location
         targetLocation = nil
+        centerMapOnLocation(location: mapView.userLocation.location, radiusInMeters: DistanceAroundUserLocation, centerUS: false)
         displayNewStrategyWithNewPoint()
     }
 
@@ -353,17 +378,17 @@ class MapViewController : UIViewController {
 
         activeMappingStrategy?.endSearch()
 
-        guard !localBreweries.isOn else {
+        guard !showLocalBreweries.isOn else {
             activeMappingStrategy = AllBreweriesMapStrategy(                                                  view: self,
                                                                                                               location: targetLocation!,
-                                                                            maxPoints: Int(slider.value))
+                                                                                                              maxPoints: Int(slider.value))
             return
         }
 
 
         if mapViewData is Style {
 
-            activeMappingStrategy = StyleMapStrategy(s: mapViewData as! Style,
+            activeMappingStrategy = StyleMapStrategy(s: mapViewData as? Style,
                                                      view: self,
                                                      location: targetLocation!,
                                                      maxPoints: Int(slider.value))
@@ -380,23 +405,53 @@ class MapViewController : UIViewController {
             activeMappingStrategy = BreweryMapStrategy(b: mapViewData as! Brewery,
                                                        view: self,
                                                        location: targetLocation!)
-
         }
     }
 
 
+    // This picks which location to center breweries around.
+    internal func decideOnTargetLocation() {
+        // Zoom to users location first if we have it.
+        // When we first join the mapview and the userlocation has not been set.
+        // It will default to 0,0, so we center the location in the US
+
+        // Only do this when target location is nil or this
+        // is the temporary centerLocation
+        // If target location is non nil we already have a target.
+        guard targetLocation == nil || targetLocation == centerLocation else {
+            return
+        }
+
+        let uninitialzedLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
+        if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
+            mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
+            targetLocation = centerLocation
+        } else {
+            targetLocation = mapView.userLocation.location
+        }
+    }
+
+
+    // This performs setup prior to deciding on a map strategy
     internal func displayNewStrategyWithNewPoint() {
 
         // Get new selection
         let mapViewData = Mediator.sharedInstance().getPassedItem()
         // If there is nothing no changes need to be made to the map
 
-        guard mapViewData != nil || localBreweries.isOn else {
-            return
+        // Stop if there is nothing to display
+
+        // This is stopping the beginning inital user locatin update form happening
+
+        guard mapViewData != nil || showLocalBreweries.isOn ||
+            targetLocation == mapView.userLocation.location else {
+                return
         }
+
+
         // Tells mediator we have selected a targetLocation
-        // and to initiate search.
-        if localBreweries.isOn && targetLocation != nil {
+        // and to showLocalBreweries.
+        if showLocalBreweries.isOn && targetLocation != nil {
             CLGeocoder().reverseGeocodeLocation(targetLocation!)
             { (placemarksarray, error) -> Void in
                 guard error == nil else {
@@ -408,12 +463,12 @@ class MapViewController : UIViewController {
                 let placemark: CLPlacemark = (placemarksarray?.first)! as CLPlacemark
                 let state = ConvertToFullStateName().fullname(placemark.administrativeArea!)
                 Mediator.sharedInstance().select(thisItem: nil, state: state) {
-                (success,msg) -> Void in
+                    (success,msg) -> Void in
                 }
             }// end of geocoder completion handler
         }
 
-        setTargetLocationWhenTargetLocationIsNil()
+        decideOnTargetLocation()
 
         decideOnMappingStrategyAndInvoke(mapViewData: mapViewData)
 
@@ -438,12 +493,11 @@ class MapViewController : UIViewController {
 
 
     @objc internal func exposeMenu() {
-        print("You want to expose the menu")
         if menuConstraint.constant == 0 {
             let maxUIView = flatUIView(menu).max(by: {return $0.intrinsicContentSize.width < $1.intrinsicContentSize.width })
             menuConstraint.constant = (maxUIView?.intrinsicContentSize.width)!
-                + 2*(maxUIView?.layoutMargins.left)!
-                + 2*enableRouting.layoutMargins.left
+                + 2 * (maxUIView?.layoutMargins.left)!
+                + 2 * enableRouting.layoutMargins.left
                 + enableRouting.intrinsicContentSize.width
             UIView.animate(withDuration: 0.5) {
                 self.view.layoutIfNeeded()
@@ -468,18 +522,6 @@ class MapViewController : UIViewController {
     }
 
 
-    private func isAnnotation(inArray: [MKAnnotation]) -> Bool {
-        if let coordinate = routedAnnotation?.annotation?.coordinate {
-            for i in inArray {
-                if compareCoordinates(a: i.coordinate, b: coordinate ) {
-                    return true
-                }
-            }
-        }
-        return false
-    }
-
-
     private func makePointTargetLocation() {
         // Expose the button only when we have pin
         currentLocation.isHidden = false
@@ -490,25 +532,17 @@ class MapViewController : UIViewController {
     }
 
 
-    private func setTargetLocationWhenTargetLocationIsNil() {
-        // Zoom to users location first if we have it.
-        // When we first join the mapview and the userlocation has not been set.
-        // It will default to 0,0, so we center the location in the US
-
-        // Only do this when target location is nil or this
-        // is the temporary centerLocation
-        guard targetLocation == nil || targetLocation == centerLocation else {
-            return
+    private func routedAnnotationIsNot(inArray: [MKAnnotation]) -> Bool {
+        if let coordinate = routedAnnotation?.annotation?.coordinate {
+            for i in inArray {
+                if compareCoordinates(a: i.coordinate, b: coordinate ) {
+                    return false
+                }
+            }
         }
-
-        let uninitialzedLocation = CLLocationCoordinate2D(latitude: 0, longitude: 0)
-        if mapView.userLocation.coordinate.latitude == uninitialzedLocation.latitude &&
-            mapView.userLocation.coordinate.longitude == uninitialzedLocation.longitude {
-            targetLocation = centerLocation
-        } else {
-            targetLocation = mapView.userLocation.location
-        }
+        return true
     }
+
 
     // Dynamically changes the number of breweries shown on map
     private func touchUpSlider(_ sender: UISlider) {
@@ -524,10 +558,9 @@ class MapViewController : UIViewController {
 
         // Replotting
         let mapViewData = Mediator.sharedInstance().getPassedItem()
-        guard mapViewData is Style || localBreweries.isOn  else {
+        guard mapViewData is Style || showLocalBreweries.isOn  else {
             return
         }
-
         displayNewStrategyWithNewPoint()
     }
 
@@ -558,71 +591,31 @@ class MapViewController : UIViewController {
 
     // Draw the annotations on the map
     internal func updateMap(withAnnotations annotations: [MKAnnotation]) {
-        DispatchQueue.main.async {
+        var finalAnnotations:[MKAnnotation]?
 
-            var finalAnnotations:[MKAnnotation]?
+        // Remove excess annotations
+        if annotations.count > Int(self.slider.value) {
+            finalAnnotations = Array(annotations[0..<Int(self.slider.value)])
+        } else {
+            finalAnnotations = annotations
+        }
 
-            // Remove excess annotations
-            if annotations.count > Int(self.slider.value) {
-                finalAnnotations = Array(annotations[0..<Int(self.slider.value)])
-            } else {
-                finalAnnotations = annotations
-            }
-            // if there are no annotation exit.
-            guard finalAnnotations != nil else {
-                return
-            }
-
+        guard finalAnnotations != nil,   // if there are no annotations exit.
             // If the annotations displayed are the same do nothing
-            guard self.arraysAreDifferent(a: self.mapView.annotations, b: finalAnnotations!) else {
+            self.arraysAreDifferent(a: self.mapView.annotations, b: finalAnnotations!) else {
                 // Do nothing annotations are the same
                 return
-            }
+        }
+        let (removeSet, addSet) = updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: finalAnnotations!)
+        // Convert back to MKAnnotations
+        let removeArray = self.updateExtraction(a: removeSet)
+        let addArray = self.updateExtraction(a: addSet)
 
-            // Remove overlays if the Brewery has been remove from
-            // the observable set
-            if !self.isAnnotation(inArray: finalAnnotations!) {
-                self.mapView.removeOverlays(self.mapView.overlays)
-            }
-
-            // Decorate old annotations
-            var old: [NewMyAnnotation] = [NewMyAnnotation]()
-            var oldAnnotations = self.mapView.annotations
-            if let index = oldAnnotations.index(where: {$0 === self.floatingAnnotation} ) {
-                oldAnnotations.remove(at: index)
-            }
-            if let index = oldAnnotations.index(where: {$0.title!! == self.UserLocationName} ) {
-                oldAnnotations.remove(at: index)
-            }
-            for a in oldAnnotations {
-                old.append(NewMyAnnotation(a))
-            }
-
-            //Decorate new annotations
-            var new: [NewMyAnnotation] = [NewMyAnnotation]()
-            for a in finalAnnotations! {
-                new.append(NewMyAnnotation(a))
-            }
-
-            // Convert arrays to sets to perform set logic
-            let oldSet:Set<NewMyAnnotation> = Set<NewMyAnnotation>(old)
-            let newSet = Set<NewMyAnnotation>(new)
-
-            // Find intersection
-            let intersectSet = oldSet.intersection(newSet)
-
-            let removeSet = oldSet.symmetricDifference(intersectSet)
-            let addSet = newSet.symmetricDifference(intersectSet)
-
-            if removeSet.count == 1 && addSet.count == 0 &&
-                removeSet.first?.title! == self.UserLocationName {
-                return
-            }
-
-            // Convert back to MKAnnotations
-            let removeArray = self.updateExtraction(a: removeSet)
-            let addArray = self.updateExtraction(a: addSet)
-
+        if removeSet.count == 0 && addSet.count == 0 &&
+            removeSet.first?.title! == self.UserLocationName {
+            return
+        }
+        DispatchQueue.main.async {
             // Add only new annotations, remove old annotations
             // This prevents flashing
             self.mapView.removeAnnotations(removeArray)
@@ -633,6 +626,48 @@ class MapViewController : UIViewController {
                 self.mapView.addAnnotation(floatingAnnotation)
             }
         }
+    }
+
+
+    fileprivate func updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: [MKAnnotation]) -> (Set<NewMyAnnotation>, Set<NewMyAnnotation>) {
+
+
+        // Remove overlays if the Brewery has been remove from
+        // the observable set
+        if self.routedAnnotationIsNot(inArray: finalAnnotations) {
+            self.mapView.removeOverlays(self.mapView.overlays)
+        }
+
+        // Decorate old annotations
+        var old: [NewMyAnnotation] = [NewMyAnnotation]()
+        var oldAnnotations = self.mapView.annotations
+        if let index = oldAnnotations.index(where: {$0 === self.floatingAnnotation} ) {
+            oldAnnotations.remove(at: index)
+        }
+        if let index = oldAnnotations.index(where: {$0.title!! == self.UserLocationName} ) {
+            oldAnnotations.remove(at: index)
+        }
+        for a in oldAnnotations {
+            old.append(NewMyAnnotation(a))
+        }
+
+        //Decorate new annotations
+        var new: [NewMyAnnotation] = [NewMyAnnotation]()
+        for a in finalAnnotations {
+            new.append(NewMyAnnotation(a))
+        }
+
+        // Convert arrays to sets to perform set logic
+        let oldSet:Set<NewMyAnnotation> = Set<NewMyAnnotation>(old)
+        let newSet = Set<NewMyAnnotation>(new)
+
+        // Find intersection
+        let intersectSet = oldSet.intersection(newSet)
+
+        let removeSet = oldSet.symmetricDifference(intersectSet)
+        let addSet = newSet.symmetricDifference(intersectSet)
+
+        return (removeSet,addSet)
     }
 
 
@@ -668,8 +703,8 @@ class MapViewController : UIViewController {
             makePointTargetLocation()
         }
     }
-    
-    
+
+
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -682,7 +717,7 @@ class MapViewController : UIViewController {
         
         // Set the function of this screen
         tabBarController?.title = "Go To Website"
-
+        
         // Wondering how we center the map 
         // This functions both sets the targetLocation and display strategy
         displayNewStrategyWithNewPoint()
@@ -694,7 +729,8 @@ class MapViewController : UIViewController {
         
         tutorialInitialization()
         // Center on use location
-        centerMapOnLocation(location: mapView.userLocation.location, radius: CLLocationDistance(5), centerUS: false)
+        centerMapOnLocation(location: mapView.userLocation.location,
+                            radiusInMeters: DistanceAroundUserLocation, centerUS: false)
     }
 }
 

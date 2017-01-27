@@ -156,8 +156,6 @@ class BreweryDBClient {
         // Finally Add the API Key - QueryItem
         let queryItem : URLQueryItem = NSURLQueryItem(name: Constants.BreweryParameterKeys.Key, value: Constants.BreweryParameterValues.APIKey) as URLQueryItem
         components.queryItems?.append(queryItem)
-        //TODO REMOVE IN IN FINAL VERSIONS
-        print(components.url)
         return components.url! as NSURL
     }
 
@@ -482,8 +480,6 @@ class BreweryDBClient {
                     completion(false, "No results")
                     return
                 }
-
-                print(responseJSON["totalResults"])
 
                 // Asynchronous page processing
                 let queue : DispatchQueue = DispatchQueue.global()
