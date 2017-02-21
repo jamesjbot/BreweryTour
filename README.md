@@ -49,7 +49,7 @@ Current capabilities include:
 
 * You can turn off any further routing by fliping the enable routing switch to off.
 
-* On the map you can target you search results to a specific area by long pressing.
+* On the map you can target your search results to a specific area by long pressing.
 
 * On the map you can favorite a brewery, this will allow you to get driving directions to it in the Favortes Brewery Tab
 
