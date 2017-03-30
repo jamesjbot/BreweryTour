@@ -29,16 +29,16 @@ extension AllBeersViewModel: OnlineSearchCapable {
         BreweryDBClient.sharedInstance().downloadBeersBy(name: searchTerm) {
             (success, msg) -> Void in
             guard success == true else {
-                completion!(success,msg)
+                completion?(success,msg)
                 return
             }
             // If the query succeeded repopulate this view model and notify view to update itself.
             do {
                 try self.frc.performFetch()
                 super.observer?.sendNotify(from: self, withMsg: Message.Reload)
-                completion!(true, "Success")
+                completion?(true, "Success")
             } catch {
-                completion!(false, "Failed Request")
+                completion?(false, "Failed Request")
             }
         }
     }
