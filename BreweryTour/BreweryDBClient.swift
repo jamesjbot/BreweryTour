@@ -58,7 +58,7 @@ protocol BreweryDBClientProtocol {
     func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void )
 
 
-    // Download brewerie by location
+    // Download breweries by location
     func downloadBreweries(byState: String,
                              completion: @escaping (_ success: Bool, _ msg: String?) -> Void )
 
