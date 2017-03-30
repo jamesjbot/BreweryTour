@@ -107,7 +107,8 @@ extension AllBreweriesTableList : TableList {
             } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
                 brewery = self.filteredObjects[indexPath.row]
             }
-            cell.textLabel?.text = brewery.name!
+            cell.textLabel?.text = brewery.name ?? ""
+
             if let data = brewery.image {
                 DispatchQueue.main.async {
                     cell.imageView?.image = UIImage(data: data as Data)
