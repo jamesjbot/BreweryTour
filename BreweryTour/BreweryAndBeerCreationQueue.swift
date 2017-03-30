@@ -160,7 +160,7 @@ class BreweryAndBeerCreationQueue: NSObject {
         tempContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
         tempContext?.automaticallyMergesChangesFromParent = true
 
-        tempContext?.performAndWait {
+        tempContext?.perform {
             autoreleasepool {
                 beerLoop: for _ in 1...maxSave {
 
