@@ -23,7 +23,7 @@ class AllBreweriesTableList: NSObject, Subject {
 
     internal var filteredObjects: [Brewery] = [Brewery]()
 
-    internal var frc : NSFetchedResultsController<Brewery>!
+    internal var breweryFetchedResultsController : NSFetchedResultsController<Brewery>!
 
     fileprivate var observer : Observer!
 
@@ -40,21 +40,21 @@ class AllBreweriesTableList: NSObject, Subject {
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = [NSSortDescriptor(key: "name", ascending: true)]
         request.fetchLimit = 10000
-        frc = NSFetchedResultsController(fetchRequest: request,
+        breweryFetchedResultsController = NSFetchedResultsController(fetchRequest: request,
                                          managedObjectContext: readOnlyContext!,
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
-        frc.delegate = self
+        breweryFetchedResultsController.delegate = self
 
         Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
 
         do {
-            try frc.performFetch()
+            try breweryFetchedResultsController.performFetch()
         } catch {
             observer.sendNotify(from: self, withMsg: Message.Retry)
         }
 
-        guard frc.fetchedObjects?.count == 0 else {
+        guard breweryFetchedResultsController.fetchedObjects?.count == 0 else {
             // We have brewery entries go ahead and display them viewcontroller
             return
         }
@@ -72,12 +72,12 @@ class AllBreweriesTableList: NSObject, Subject {
 extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
 
     internal func contextsRefreshAllObjects() {
-        frc.managedObjectContext.refreshAllObjects()
-        frc.managedObjectContext.reset()
+        breweryFetchedResultsController.managedObjectContext.refreshAllObjects()
+        breweryFetchedResultsController.managedObjectContext.reset()
         // We must performFetch after refreshing context, otherwise we will retain
         // Old information is retained.
         do {
-            try frc.performFetch()
+            try breweryFetchedResultsController.performFetch()
             observer.sendNotify(from: self, withMsg: Message.Reload)
         } catch {
 
@@ -102,9 +102,13 @@ extension AllBreweriesTableList : TableList {
             let image = #imageLiteral(resourceName: "Nophoto.png")
             cell.imageView?.image = image
             var brewery: Brewery!
-            if (searchText?.isEmpty)!  {
-                brewery = self.frc.object(at: indexPath)
-            } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
+            let searchEmpty = searchText?.isEmpty ?? true
+            let searchNotEmpty = !searchEmpty
+            if searchEmpty {
+                // process the object at requested index path
+                brewery = self.breweryFetchedResultsController.object(at: indexPath)
+            } else if searchNotEmpty && self.filteredObjects.count > 0 {
+                // process the filtered objects at requested index path
                 brewery = self.filteredObjects[indexPath.row]
             }
             cell.textLabel?.text = brewery.name ?? ""
@@ -123,15 +127,15 @@ extension AllBreweriesTableList : TableList {
     func filterContentForSearchText(searchText: String, completion: ((_ success: Bool)-> Void)? = nil ) {
 
         // Only filter object if there are objects to filter.
-        guard frc.fetchedObjects != nil else {
+        guard breweryFetchedResultsController.fetchedObjects != nil else {
             filteredObjects.removeAll()
             return
         }
-        guard (frc.fetchedObjects?.count)! > 0 else {
+        guard (breweryFetchedResultsController.fetchedObjects?.count) ?? 0 > 0 else {
             filteredObjects.removeAll()
             return
         }
-        filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
+        filteredObjects = (breweryFetchedResultsController.fetchedObjects?.filter({ ( ($0 ).name?.lowercased().contains(searchText.lowercased()) )! } ))!
         if let completion = completion {
             completion(true)
         }
@@ -144,7 +148,7 @@ extension AllBreweriesTableList : TableList {
         guard searchText == "" else {
             return filteredObjects.count
         }
-        return frc.fetchedObjects!.count
+        return breweryFetchedResultsController.fetchedObjects?.count ?? 0
     }
 
 
@@ -155,7 +159,7 @@ extension AllBreweriesTableList : TableList {
         // all the breweries that are currently displayed. And then turn on the selected brewery
         var savedBreweryForDisplay : Brewery!
         if searchText == "" {
-            savedBreweryForDisplay = (frc.object(at:elementAt)) as Brewery
+            savedBreweryForDisplay = (breweryFetchedResultsController.object(at:elementAt)) as Brewery
         } else {
             savedBreweryForDisplay = (filteredObjects[elementAt.row]) as Brewery
         }
@@ -179,7 +183,7 @@ extension AllBreweriesTableList: OnlineSearchCapable {
             (success, msg) -> Void in
             // Send a completion regardless.
             // if there are updates later NSFetchedResultsControllerDelegate will inform the viewcontroller.
-            completion!(success,msg)
+            completion?(success,msg)
         }
     }
 }
