@@ -1,33 +1,24 @@
 # BreweryTour
 
-### What is it?
----
+## Overview
 BreweryTour is a Swift based App to help you find breweries that make the style of beer you're currently excited about.
 When my friends introduce me to a new style of beer, I've had trouble finding other places that brew that type of beer.
 This app solves that problem for others. It allows you to search for all breweries that produce your desired style.
 
-### How to Install?
----
-First have cocoapods installed, if you don't have it there are instructions at https://cocoapods.org
+## Technologies Used
+This data source for the beers and breweries is BreweryDB, http://www.brewerydb.com
 
-Go to https://github.com/jamesjbot/BreweryTour and download the zip file
+The data persistence is achieved mostly thru CoreData, the tutorial states are saved in UserDefaults.
 
-After downloading, please navigate to the BreweryTour folder and type `pod install`
+The choice of embedding a TabBarcontroller in a NavigationController was just to challenge myself.
 
-Then go into the folder BreweryTour, open BreweryTour.xcworkspace.
+I was trying to learn MVVM Design Pattern so that is all the tablelist and view model stuff you see in the code.
 
-Or
+Grand central dispatch is used generously throughout the download process.
 
-From terminal (with git installed), type 
-```
-git clone https://github.com/jamesjbot/BreweryTour.git
-cd BreweryTour
-pod install
-open BreweryTour.xcworkspace
-```
+Used Cocoapods to integrate AlamoFire Networking
 
-Then build the project.
-
+## Example usage
 
 Current capabilities include:
 
@@ -61,23 +52,36 @@ Current capabilities include:
 
 * On the beer detail screen you can favorite a certain beer and add your own tasting notes.
 
-### Technologies Used
----
-This data source for the beers and breweries is BreweryDB, http://www.brewerydb.com
+## How to set up the dev environment
+First have cocoapods installed, if you don't have it there are instructions at https://cocoapods.org
 
-The data persistence is achieved mostly thru CoreData, the tutorial states are saved in UserDefaults.
+Go to https://github.com/jamesjbot/BreweryTour and download the zip file
 
-The choice of embedding a TabBarcontroller in a NavigationController was just to challenge myself.
+After downloading, please navigate to the BreweryTour folder and type `pod install`
 
-I was trying to learn MVVM Design Pattern so that is all the tablelist and view model stuff you see in the code.
+Then go into the folder BreweryTour, open BreweryTour.xcworkspace.
 
-Grand central dispatch is used generously throughout the download process.
+Or
 
-Used Cocoapods to integrate AlamoFire Networking
-#### Know bugs
----
+From terminal (with git installed), type 
+```
+git clone https://github.com/jamesjbot/BreweryTour.git
+cd BreweryTour
+pod install
+open BreweryTour.xcworkspace
+```
+
+Then build the project.
+
+## How to ship a change
+Changes are not accepted at this time
+
+## Know bugs
 The ability to search for local beers only works in the United States.
+ 
+## Change log 
+* 10-02-2016 Initial Commit
 
-#### License
----
+## License and author info
 All rights reserved
+Author: jongs.j@gmail.com
