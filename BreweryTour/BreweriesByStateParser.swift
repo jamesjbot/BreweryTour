@@ -34,7 +34,7 @@ class BreweriesByStateParser: ParserProtocol {
                 openToPublic as! String == "Y",
                 breweryDict["longitude"] != nil,
                 breweryDict["latitude"] != nil,
-                breweryDict["brewery"]?["name"] != nil // Without name can't store.
+                breweryDict["brewery"]?["name"] != nil // Can't store without name
                 else {
                     continue breweryLoop
             }
@@ -42,11 +42,12 @@ class BreweriesByStateParser: ParserProtocol {
             // Make one brewers id
             let brewersID = (breweryDict["breweryId"]?.description)!
 
-            BreweryDesigner.sharedInstance().createBreweryObject(breweryDict: breweryDict["brewery"] as! Dictionary,
-                                                locationDict: breweryDict,
-                                                brewersID: brewersID,
-                                                style: nil) { // There is no style to pull in when looking for breweries only.
-                                                    (thisbrewery) -> Void in
+            BreweryDesigner.sharedInstance().createBreweryObject(
+                breweryDict: breweryDict["brewery"] as! Dictionary,
+                locationDict: breweryDict,
+                brewersID: brewersID,
+                style: nil) { // There is no style to pull in when looking for breweries only.
+                (thisbrewery) -> Void in
             }
         } // end of breweryLoop
         completion!(true, "Success")
