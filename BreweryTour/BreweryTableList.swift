@@ -157,9 +157,11 @@ extension BreweryTableList: TableList {
             let image = #imageLiteral(resourceName: "Nophoto.png")
             cell.imageView?.image = image
             var brewery: Brewery?
-            if (searchText?.isEmpty)! {
+            var searchTextIsEmpty = searchText?.isEmpty ?? true
+            var searchTextIsNotEmpty = !searchTextIsEmpty
+            if (searchTextIsEmpty) {
                 brewery = self.copyOfSet[indexPath.row]
-            } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
+            } else if searchTextIsNotEmpty && self.filteredObjects.count > 0 {
                 brewery = (self.filteredObjects[indexPath.row])
             }
             cell.textLabel?.text = brewery?.name

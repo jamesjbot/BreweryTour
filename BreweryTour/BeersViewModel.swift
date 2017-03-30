@@ -28,13 +28,13 @@ class BeersViewModel: NSObject {
 
     fileprivate var filteredObjects: [Beer] = [Beer]()
 
-    internal var frc : NSFetchedResultsController<Beer>! = NSFetchedResultsController()
+    internal var frc : NSFetchedResultsController<Beer>? = NSFetchedResultsController()
 
     fileprivate var mediator:  Mediator = Mediator.sharedInstance()
 
     internal var observer : Observer?
 
-    internal var selectedObject : NSManagedObject! = nil
+    internal var selectedObject : NSManagedObject? = nil
 
 
     // MARK: - Functions 
@@ -88,10 +88,10 @@ class BeersViewModel: NSObject {
                                          cacheName: nil)
 
         //reassign the delegate
-        frc.delegate = self
+        frc?.delegate = self
 
         do {
-            try frc.performFetch()
+            try frc?.performFetch()
             if observerNeedsNotification {
                 observer?.sendNotify(from: self, withMsg: Message.Reload)
             }
@@ -140,12 +140,12 @@ extension BeersViewModel: ReceiveBroadcastSetSelected {
 extension BeersViewModel: ReceiveBroadcastManagedObjectContextRefresh {
     // When all coredata ManagedObjects are deleted this is called by the mediator to refresh the context
     internal func contextsRefreshAllObjects() {
-        frc.managedObjectContext.refreshAllObjects()
+        frc?.managedObjectContext.refreshAllObjects()
 
         // We must performFetch after refreshing context, otherwise we will retain
         // Old information is retained.
         do {
-            try frc.performFetch()
+            try frc?.performFetch()
         } catch {
 
         }
@@ -177,9 +177,11 @@ extension BeersViewModel: TableList {
         let image = #imageLiteral(resourceName: "Nophoto.png")
         cell.imageView?.image = image
         var beer: Beer!
-        if (searchText?.isEmpty)!  {
-            beer = self.frc.object(at: indexPath)
-        } else if !((searchText?.isEmpty)!) && self.filteredObjects.count > 0 {
+        let searchTextIsEmpty: Bool = searchText?.isEmpty ?? true
+        let searchTextIsNotEmpty = !searchTextIsEmpty
+        if searchTextIsEmpty  {
+            beer = self.frc?.object(at: indexPath)
+        } else if searchTextIsNotEmpty && self.filteredObjects.count > 0 {
             beer = self.filteredObjects[indexPath.row]
         }
         if let beerName = beer.beerName,
@@ -202,14 +204,16 @@ extension BeersViewModel: TableList {
     internal func filterContentForSearchText(searchText: String, completion: ((_: Bool)-> ())? = nil ) {
         filteredObjects.removeAll()
 
-        guard frc.fetchedObjects != nil else {
+        guard frc?.fetchedObjects != nil else {
             return
         }
-        guard frc.fetchedObjects!.count > 0 else {
+        guard frc?.fetchedObjects?.count ?? 0 > 0 else {
             return
         }
 
-        filteredObjects = (frc.fetchedObjects?.filter({ ( ($0 ).beerName!.lowercased().contains(searchText.lowercased()) ) } ))!
+        filteredObjects = (frc?.fetchedObjects?.filter(
+            { ( ($0 ).beerName?.lowercased().contains(searchText.lowercased()) ) ?? false }
+            ))!
         if let completion = completion {
             completion(true)
         }
@@ -227,7 +231,7 @@ extension BeersViewModel: TableList {
         if searchText != "" {
             return filteredObjects.count
         } else {
-            return (frc.fetchedObjects?.count ?? 0)
+            return (frc?.fetchedObjects?.count ?? 0)
         }
     }
 
@@ -245,7 +249,7 @@ extension BeersViewModel: TableList {
         if searchText != "" {
             return filteredObjects[elementAt.row]
         } else {
-            return frc.fetchedObjects?[elementAt.row]
+            return frc?.fetchedObjects?[elementAt.row]
         }
     }
     

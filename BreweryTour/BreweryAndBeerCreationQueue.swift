@@ -74,7 +74,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     fileprivate var mediatorObserver: MediatorBusyObserver?
 
-    private var workTimer: Timer!
+    private var workTimer: Timer?
 
     private var breweryQueue: DispatchQueue = DispatchQueue.global(qos: .background)
 
@@ -123,9 +123,12 @@ class BreweryAndBeerCreationQueue: NSObject {
     private func decideOnDownloadingImage(fromURL: String?, forType: ImageDownloadType, forID: String) {
         if let url = fromURL {
             DispatchQueue.global(qos: .utility).async {
-                BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: forType,
-                                                                         aturl: NSURL(string: url)!,
-                                                                         forID: forID)
+                if let nsurl = NSURL(string: url) {
+                    BreweryDBClient.sharedInstance().downloadImageToCoreData(forType: forType,
+                                                                             aturl: nsurl ,
+                                                                             forID: forID)
+                }
+
             }
         }
     }
@@ -172,9 +175,13 @@ class BreweryAndBeerCreationQueue: NSObject {
                     // Therefore we must attach the styles to the breweries at a beer by beer level.
                     let (beer,attempt) = self.runningBeerQueue.removeFirst()
 
+                    guard let breweryID = beer.breweryID else {
+                        continue
+                    }
+
                     let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
                     request.sortDescriptors = []
-                    request.predicate = NSPredicate(format: "id == %@", beer.breweryID!)
+                    request.predicate = NSPredicate(format: "id == %@", breweryID)
 
                     do {
                         let brewers = try tempContext?.fetch(request)
@@ -330,7 +337,7 @@ class BreweryAndBeerCreationQueue: NSObject {
 
 
     private func stopWork() {
-        workTimer.invalidate()
+        workTimer?.invalidate()
         workTimer = nil
         mediatorObserver?.notifyStoppingWork()
         loopCounter = 0
@@ -370,12 +377,12 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
     }
 
     // Queues up breweries to be saved
-    internal func queueBrewery(_ b: BreweryData?) {
+    internal func queueBrewery(_ breweryData: BreweryData?) {
         // Check to see if brewery exists
         let context = container?.newBackgroundContext()
         let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
         request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id== %@", (b?.id)!)
+        request.predicate = NSPredicate(format: "id== %@", (breweryData?.id)!)
         var brewer: [Brewery]?
         do {
             brewer = try context?.fetch(request)
@@ -386,7 +393,7 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
             // Skip brewery creation when we already have the brewery
             return
         }
-        if let localBrewer = b {
+        if let localBrewer = breweryData {
             runningBreweryQueue.append(localBrewer)
             startWorkTimer()
         }

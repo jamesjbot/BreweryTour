@@ -50,7 +50,7 @@ public class Beer: NSManagedObject {
         self.beerDescription = description
         self.availability = availability
         self.brewer = brewer
-        self.favorite = favorite!
+        self.favorite = favorite ?? false
         self.id = id
         self.image = image
         self.imageUrl = imageURL

@@ -2,4 +2,6 @@
 *.xcbkptlist
 DerivedData/
 .DS_Store
-
+BreweryTour.zargo
+BreweryTour.zargo~
+Nophoto.png

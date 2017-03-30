@@ -29,14 +29,19 @@ extension BeerDesignerProtocol {
                                   brewerID: String,
                                   completion: @escaping (_ out : Beer) -> ()) {
 
+        guard let beerId = beer["id"] as? String,
+            let styleId = (beer["styleId"] as? NSNumber)?.description else {
+            return
+        }
+
         let beer = BeerData(inputAvailability: beer["available"]?["description"] as? String ?? "No Information Provided",
                             inDescription: beer["description"] as? String ?? "No Information Provided",
                             inName: beer["name"] as? String ?? "",
                             inBrewerId: brewerID,
-                            inId: beer["id"] as! String,
+                            inId: beerId,
                             inImageURL: beer["labels"]?["medium"] as? String ?? "",
                             inIsOrganic: beer["isOrganic"] as? String == "Y" ? true : false,
-                            inStyle: (beer["styleId"] as! NSNumber).description,
+                            inStyle: styleId,
                             inAbv: beer["abv"] as? String ?? "N/A",
                             inIbu: beer["ibu"] as? String ?? "N/A")
 

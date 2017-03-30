@@ -138,8 +138,12 @@ class BreweryDBClient {
             break
         case .BeersByBreweryID:
             // GET: /brewery/:breweryId/beers
+            guard let specificID = querySpecificID else {
+                NSLog("Error examining queryspecificid")
+                return NSURL()
+            }
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery + "/" +
-                querySpecificID! + "/" + Constants.BreweryDB.Methods.Beers
+                specificID + "/" + Constants.BreweryDB.Methods.Beers
         case .LocationFollowedByBrewery:
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Locations
             break
@@ -197,7 +201,12 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
                                                         querySpecificID: nil,
                                                         parameters: methodParameters)
-        Alamofire.request(outputURL.absoluteString!)
+
+        guard let outputURLString = outputURL.absoluteString else {
+            return
+        }
+
+        Alamofire.request(outputURLString)
             .responseJSON {
                 response in
 
@@ -205,9 +214,12 @@ class BreweryDBClient {
                     completion(false,"Network failure, please try again later")
                     return
                 }
-                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
 
-                guard let numberOfPages = responseJSON["numberOfPages"] as! Int? else {
+                guard let responseJSON: [String:AnyObject] = response.result.value as? [String : AnyObject] else {
+                    return
+                }
+
+                guard let numberOfPages = responseJSON["numberOfPages"] as? Int else {
                     completion(false, "No results")
                     return
                 }
@@ -227,7 +239,7 @@ class BreweryDBClient {
                     // from BreweryDb
                     group.enter()
                     queue.async(group: group) {
-                        Alamofire.request(outputURL.absoluteString!)
+                        Alamofire.request(outputURLString)
                             .responseJSON {
                                 response in
 
@@ -235,7 +247,10 @@ class BreweryDBClient {
                                     completion(false,"Network failure, please try again later")
                                     return
                                 }
-                                let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
+                                guard let responseJSON: [String:AnyObject] = response.result.value as? [String : AnyObject] else {
+                                    group.leave()
+                                    return
+                                }
 
                                 self.parse(response: responseJSON as NSDictionary,
                                            querySpecificID:  nil,
@@ -275,11 +290,11 @@ class BreweryDBClient {
             }
             let responseJSON: [String:AnyObject] = response.result.value as! [String : AnyObject]
 
-            guard let numberOfPagesInt = responseJSON["numberOfPages"] as! Int? else {
+            guard let numberOfPagesInt = responseJSON["numberOfPages"] as? Int else {
                 completion(false, "No results")
                 return
             }
-            guard (responseJSON["totalResults"] as! Int?) != nil else {
+            guard (responseJSON["totalResults"] as? Int) != nil else {
                 completion(false, "No results")
                 return
             }

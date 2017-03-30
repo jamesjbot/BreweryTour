@@ -53,10 +53,10 @@ class SelectedBeersViewModel: BeersViewModel, Subject {
                                          sectionNameKeyPath: nil,
                                          cacheName: nil)
         //reassign the delegate
-        frc.delegate = self
+        frc?.delegate = self
 
         do {
-            try frc.performFetch()
+            try frc?.performFetch()
             if observerNeedsNotification {
                 observer?.sendNotify(from: self, withMsg: Message.Reload)
             }

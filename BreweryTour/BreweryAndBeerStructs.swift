@@ -75,7 +75,7 @@ internal struct BeerData {
         imageUrl = inImageURL
         isOrganic = inIsOrganic
         styleID = inStyle
-        abv = inAbv!
-        ibu = inIbu!
+        abv = inAbv ?? ""
+        ibu = inIbu ?? ""
     }
 }

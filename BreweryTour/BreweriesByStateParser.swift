@@ -17,13 +17,13 @@ class BreweriesByStateParser: ParserProtocol {
 
         // If there are no pages means there is nothing to process.
         guard (response["numberOfPages"] as? Int) != nil else {
-            completion!(false, "No results returned")
+            completion?(false, "No results returned")
             return
         }
 
         // Unable to parse Brewery Failed to extract data
         guard let breweryArray = response["data"] as? [[String:AnyObject]] else {
-            completion!(false, "Network error please try again")
+            completion?(false, "Network error please try again")
             return
         }
 
@@ -40,7 +40,9 @@ class BreweriesByStateParser: ParserProtocol {
             }
 
             // Make one brewers id
-            let brewersID = (breweryDict["breweryId"]?.description)!
+            guard let brewersID = (breweryDict["breweryId"]?.description) else {
+                continue breweryLoop
+            }
 
             BreweryDesigner.sharedInstance().createBreweryObject(
                 breweryDict: breweryDict["brewery"] as! Dictionary,
@@ -50,6 +52,6 @@ class BreweriesByStateParser: ParserProtocol {
                 (thisbrewery) -> Void in
             }
         } // end of breweryLoop
-        completion!(true, "Success")
+        completion?(true, "Success")
     }
 }

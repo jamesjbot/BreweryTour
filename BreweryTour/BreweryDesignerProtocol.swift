@@ -29,12 +29,17 @@ extension BreweryDesignerProtocol {
                              brewersID: String,
                              style: String?,
                              completion: @escaping (_ out : Brewery) -> () ) {
+        guard let breweryName = breweryDict["name"] as? String,
+            let latitude = locDict["latitude"]?.description,
+            let longitude = locDict["longitude"]?.description else {
+            return
+        }
         let breweryData = BreweryData(
-            inName: breweryDict["name"] as! String,
-            inLatitude: (locDict["latitude"]?.description)!,
-            inLongitude: (locDict["longitude"]?.description)!,
-            inUrl: (locDict["website"] as! String? ?? ""),
-            open: (locDict["openToPublic"] as! String == "Y") ? true : false,
+            inName: breweryName,
+            inLatitude: latitude,
+            inLongitude: longitude,
+            inUrl: (locDict["website"] as? String ?? ""),
+            open: (locDict["openToPublic"] as? String == "Y") ? true : false,
             inId: brewersID,
             inImageUrl: breweryDict["images"]?["icon"] as? String ?? "",
             inStyleID: style)

@@ -43,7 +43,7 @@ public class Brewery: NSManagedObject {
                      context: NSManagedObjectContext){
         // Insert new Brewery in database
         let entity = NSEntityDescription.entity(forEntityName: "Brewery",
-                                                in: context)
+                                                      in: context)
         self.init(entity: entity!, insertInto: context)
         self.latitude = inBrewery.latitude
         self.longitude = inBrewery.longitude

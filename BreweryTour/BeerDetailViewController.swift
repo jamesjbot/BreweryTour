@@ -50,11 +50,10 @@ class BeerDetailViewController: UIViewController {
         // Must change the state first
         isBeerFavorited = !isBeerFavorited
         var image : UIImage? = nil
-        if isBeerFavorited! {
+        if isBeerFavorited ?? false {
             image = UIImage(named: "heart_icon.png")
             sender.setImage(image, for: .normal)
             saveBeerInCoreDataToBackgroundContext(makeFavorite: true)
-
         } else {
             image = UIImage(named: "heart_icon_black_white_line_art.png")
             saveBeerInCoreDataToBackgroundContext(makeFavorite: false)
@@ -87,9 +86,9 @@ class BeerDetailViewController: UIViewController {
     fileprivate func saveBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
         container?.performBackgroundTask() {
             (context) -> Void in
-            let updatableBeer = context.object(with: self.beer.objectID) as! Beer
-            updatableBeer.favorite = makeFavorite
-            updatableBeer.tastingNotes = self.tasting.text
+            let updatableBeer = context.object(with: self.beer.objectID) as? Beer
+            updatableBeer?.favorite = makeFavorite
+            updatableBeer?.tastingNotes = self.tasting.text
             do {
                 try context.save()
             } catch {
@@ -103,7 +102,10 @@ class BeerDetailViewController: UIViewController {
         // Check to make sure the Beer isn't already in the database
         let request : NSFetchRequest<Beer> = NSFetchRequest(entityName: "Beer")
         request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id = %@", argumentArray: [beer.id!])
+        guard let beerId = beer.id else {
+            return nil
+        }
+        request.predicate = NSPredicate(format: "id = %@", argumentArray: [beerId])
         do {
             let results = try context.fetch(request)
             if (results.count) > 0 {
@@ -172,7 +174,7 @@ class BeerDetailViewController: UIViewController {
         organicLabel.text = "Organic: " + (beer.isOrganic == true ? "Yes" : "No")
         abv.text = "ABV: " + (beer.abv ?? "")
         ibu.text = "IBU: " + (beer.ibu ?? "")
-        getStyleName(id: beer.styleID!){
+        getStyleName(id: beer.styleID ?? ""){
             (name) -> Void in
             self.style.text = "Style: " + name
         }
