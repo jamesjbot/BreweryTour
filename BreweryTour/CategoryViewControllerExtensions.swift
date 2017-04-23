@@ -41,11 +41,19 @@ extension CategoryViewController: UISearchBarDelegate {
     // Filter out selections not conforming to the searchbar text
     func searchBar(_ searchBar: UISearchBar, textDidChange: String){
         // This will filter empty text too.
+        // This is called when the user change text in the searchbar
+
         if textDidChange.characters.count == 0 {
+            // Only dismiss keyboard when removing all characters in the 
+            // UISearchbar on an iphone.
+            guard UIDevice.current.model == "iPhone" else {
+                return
+            }
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
         }
+        // Refresh the online screen
         activeTableList.filterContentForSearchText(searchText: textDidChange) {
             (ok) -> Void in
             self.genericTable.reloadData()
@@ -219,12 +227,7 @@ extension CategoryViewController : UITableViewDelegate {
                                      searchText: newSearchBar.text!,
                                      completion: completionHandler)
     }
-
-
-
 }
-
-
 
 
 // MARK: - Observer

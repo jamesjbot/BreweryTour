@@ -230,7 +230,7 @@ class BreweryDBClient {
                 
                 for i in 1...numberOfPages {
                     methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
-                    let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
+                    let _ : NSURL = self.createURLFromParameters(queryType: theOutputType,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
                     // When all dispatch groups leave their processing
