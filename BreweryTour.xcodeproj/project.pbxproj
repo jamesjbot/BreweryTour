@@ -584,7 +584,6 @@
 				TargetAttributes = {
 					A7B2AADA1DA791A400EE844C = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = T37NKE3UT9;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.Maps.iOS = {
