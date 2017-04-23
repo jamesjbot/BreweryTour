@@ -222,7 +222,13 @@ class MapViewController : UIViewController {
 
     @IBAction func handleLongPress(_ sender: UILongPressGestureRecognizer) {
         // Remove redundant calls to long press
-        mapView.resignFirstResponder()
+        //mapView.resignFirstResponder()
+
+        // When the user places a pin down allow them to see if they are in
+        // local brewery or global brewery mode.
+        if  menuConstraint.constant == 0 {
+            exposeMenu()
+        }
 
         // Always set a pin down when user presses down
         // When the pin state is changed delete old pin and replace with new pin
