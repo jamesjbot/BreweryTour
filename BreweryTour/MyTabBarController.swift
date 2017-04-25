@@ -16,7 +16,7 @@ import UIKit
 
 class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
 
-    var menuButton: UIBarButtonItem?
+    //var menuButton: UIBarButtonItem?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +34,7 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
 
 
+    // Sets just the help button on the tabbarcontroller navigationbar
     private func setHelpButton(tutorial dismissable: DismissableTutorial) {
         DispatchQueue.main.async {
             self.navigationItem.setRightBarButtonItems([], animated: true)
@@ -43,6 +44,7 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
     }
 
 
+    // Sets the menu and help button on the tabbarcontroller navigationbar
     private func setMenuAndHelpButton(tutorial dismissable: DismissableTutorial ) {
         DispatchQueue.main.async {
             self.navigationItem.setRightBarButtonItems([], animated: true)
@@ -52,7 +54,7 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
         }
     }
 
-
+    // Is called when a tabbarController is selected
     internal func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         let dismissable = viewController as! DismissableTutorial
         if dismissable is MapViewController {
@@ -60,7 +62,7 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
             //menuButton?.isEnabled = true
         } else {
             setHelpButton(tutorial: dismissable)
-            menuButton?.isEnabled = false
+            //menuButton?.isEnabled = false
         }
     }
 

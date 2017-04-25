@@ -157,6 +157,14 @@ class MapViewController : UIViewController {
         clearPointFromTargetLocation()
     }
 
+    @IBAction func helpTapped(_ sender: Any) {
+        tutorialView.isHidden = false
+    }
+
+    @IBAction func menuTapped(_ sender: Any) {
+        exposeMenu()
+    }
+
     @IBAction func nextTutorialAction(_ sender: UIButton) {
         // Advance the tutorial state
         switch tutorialState {
@@ -182,7 +190,7 @@ class MapViewController : UIViewController {
         case .Longpress:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Hold down on any location to set a new\ncenter for breweries to gather around\nPress Reset to home to return to your location"
+            tutorialText.text = "Hold down on any location to set a new\ncenter for breweries to gather around\nPress Just around me button to home to return to your location"
             // Adds a circular path to tutorial pointer
             addCircularPathToPointer()
             break
@@ -205,7 +213,7 @@ class MapViewController : UIViewController {
             pointer.isHidden = true
             pointer.layer.removeAllAnimations()
             pointer.setNeedsDisplay()
-            tutorialText.text = "Tap the + on the navigation bar for menu. Here you can allow the pointer to show all breweries local to you instead of just one style. Here you can also disable the green routing line."
+            tutorialText.text = "Tap Menu on the navigation bar for menu. Here you can allow the pointer to show all breweries local to you instead of just one style. Here you can also disable the green routing line."
             break
         }
 
@@ -227,7 +235,9 @@ class MapViewController : UIViewController {
         // When the user places a pin down allow them to see if they are in
         // local brewery or global brewery mode.
         if  menuConstraint.constant == 0 {
+            showLocalBreweries.isOn = true
             exposeMenu()
+
         }
 
         // Always set a pin down when user presses down

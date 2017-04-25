@@ -68,6 +68,10 @@ class SelectedBeersViewController: UIViewController {
         UserDefaults.standard.synchronize()
     }
 
+    @IBAction func helpTapped(_ sender: Any) {
+        tutorialView.isHidden = false
+    }
+
     @IBAction func nextLesson(_ sender: UIButton) {
         // Advance the tutorial state
         switch tutorialState {

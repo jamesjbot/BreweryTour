@@ -34,6 +34,14 @@ extension CategoryViewController: BusyObserver {
 
 }
 
+// MARK: - DismissableTutorial
+
+extension CategoryViewController : DismissableTutorial {
+    internal func enableTutorial() {
+        tutorialView.isHidden = false
+    }
+}
+
 // MARK: - UISearchBarDelegate
 
 extension CategoryViewController: UISearchBarDelegate {
@@ -186,9 +194,11 @@ extension CategoryViewController : UITableViewDelegate {
                 return
             }
 
+            // Move to new tab
             DispatchQueue.main.async {
-                self.performSegue(withIdentifier: "GoToMap", sender: nil)
+                self.tabBarController?.selectedIndex = TabbarConstants.mapTab.rawValue
             }
+
         }
         return activeTableListSelectedCompletionHandler
     }

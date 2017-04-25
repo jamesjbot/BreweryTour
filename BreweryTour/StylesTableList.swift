@@ -29,7 +29,7 @@ class StylesTableList: NSObject {
     
     fileprivate var filteredObjects: [Style] = [Style]()
     fileprivate var frc : NSFetchedResultsController<Style>!
-    fileprivate var observer : Observer!
+    fileprivate var observer : Observer?
 
 
     // MARK: - Functions
@@ -40,12 +40,12 @@ class StylesTableList: NSObject {
         BreweryDBClient.sharedInstance().downloadBeerStyles(){
             (success, msg) -> Void in
             if !success {
-                self.observer.sendNotify(from: self, withMsg: "Failed to download initial styles\ncheck network connection and try again.")
+                self.observer?.sendNotify(from: self, withMsg: "Failed to download initial styles\ncheck network connection and try again.")
             } else {
                 // Added performFetch otherwise dat would not reload when there is a
                 // refreshAllObjects in the context.
                 self.refetchData()
-                self.observer.sendNotify(from: self, withMsg: Message.Reload)
+                self.observer?.sendNotify(from: self, withMsg: Message.Reload)
             }
         }
     }
@@ -96,7 +96,7 @@ class StylesTableList: NSObject {
 extension StylesTableList: NSFetchedResultsControllerDelegate {
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        observer.sendNotify(from: self, withMsg: Message.Reload)
+        observer?.sendNotify(from: self, withMsg: Message.Reload)
     }
 }
 

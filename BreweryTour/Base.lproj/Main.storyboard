@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="H0g-oq-XOD">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16E195" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="aS9-dG-afv">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -22,11 +22,11 @@
                         <viewControllerLayoutGuide type="bottom" id="wrT-1x-h0f"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="ans-at-Olx" userLabel="Major View">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" tag="5" contentMode="scaleToFill" axis="vertical" spacing="5" translatesAutoresizingMaskIntoConstraints="NO" id="FTn-Tc-4mi" userLabel="CompleteHorizontalStackView">
-                                <rect key="frame" x="0.0" y="65" width="375" height="602"/>
+                                <rect key="frame" x="0.0" y="65" width="375" height="553"/>
                                 <subviews>
                                     <textField opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" enabled="NO" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Current Selection:" textAlignment="center" minimumFontSize="10" translatesAutoresizingMaskIntoConstraints="NO" id="0f8-gZ-M3j" userLabel="SelectionBox">
                                         <rect key="frame" x="8" y="5" width="359" height="30"/>
@@ -35,7 +35,7 @@
                                         <textInputTraits key="textInputTraits"/>
                                     </textField>
                                     <segmentedControl opaque="NO" contentMode="scaleToFill" verticalCompressionResistancePriority="747" contentHorizontalAlignment="center" contentVerticalAlignment="center" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="mmN-dq-rb5">
-                                        <rect key="frame" x="8" y="40" width="359" height="28.5"/>
+                                        <rect key="frame" x="8" y="40" width="359" height="9"/>
                                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <edgeInsets key="layoutMargins" top="8" left="15" bottom="8" right="15"/>
                                         <segments>
@@ -53,22 +53,22 @@
                                             <action selector="segmentedControlClicked:forEvent:" destination="RKC-MN-s1K" eventType="valueChanged" id="1HX-2h-8LA"/>
                                         </connections>
                                     </segmentedControl>
-                                    <searchBar contentMode="redraw" verticalCompressionResistancePriority="300" searchBarStyle="minimal" placeholder="Select Style Below / Search here" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
-                                        <rect key="frame" x="8" y="72.5" width="359" height="41.5"/>
+                                    <searchBar alpha="0.5" contentMode="redraw" verticalCompressionResistancePriority="300" searchBarStyle="prominent" placeholder="Select Style Below / Search here" translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IOR-m7-kFb">
+                                        <rect key="frame" x="8" y="53" width="359" height="12"/>
                                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" id="ecJ-R7-iYO"/>
                                         </constraints>
                                         <edgeInsets key="layoutMargins" top="0.0" left="8" bottom="8" right="8"/>
-                                        <color key="tintColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="tintColor" red="0.2392156869" green="0.67450982329999998" blue="0.96862745289999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <textInputTraits key="textInputTraits" spellCheckingType="no" returnKeyType="done" enablesReturnKeyAutomatically="YES"/>
                                         <connections>
                                             <outlet property="delegate" destination="RKC-MN-s1K" id="1dR-s0-Mir"/>
                                         </connections>
                                     </searchBar>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" keyboardDismissMode="interactive" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="OSH-8A-abx" userLabel="Generic Table">
-                                        <rect key="frame" x="8" y="119" width="359" height="475"/>
+                                        <rect key="frame" x="8" y="70" width="359" height="475"/>
                                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <color key="sectionIndexBackgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                         <prototypes>
@@ -116,10 +116,10 @@
                                 </userDefinedRuntimeAttributes>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="447-tn-FIf" userLabel="Tutorial View">
-                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <subviews>
                                     <view alpha="0.59999999999999998" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="AIv-0r-wQn" userLabel="Shadow View">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="603"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                         <subviews>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="jRB-Sa-1bJ" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <rect key="frame" x="15" y="295" width="40" height="40"/>
@@ -136,7 +136,7 @@
                                         </constraints>
                                     </view>
                                     <textView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" verticalHuggingPriority="1000" scrollEnabled="NO" editable="NO" textAlignment="natural" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="chy-Gf-XC8" userLabel="TableTutorialText">
-                                        <rect key="frame" x="67" y="514" width="300" height="40"/>
+                                        <rect key="frame" x="67" y="465" width="300" height="40"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" id="kKo-Jl-mpT"/>
@@ -151,7 +151,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textView>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tYB-qS-wLt">
-                                        <rect key="frame" x="167" y="562" width="50" height="33"/>
+                                        <rect key="frame" x="167" y="513" width="50" height="33"/>
                                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
@@ -166,7 +166,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wl7-tQ-drX">
-                                        <rect key="frame" x="225" y="562" width="142" height="33"/>
+                                        <rect key="frame" x="225" y="513" width="142" height="33"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="142" id="ec4-c1-qfq"/>
@@ -199,7 +199,7 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bpZ-cN-Rf5">
-                                <rect key="frame" x="178" y="324" width="20" height="20"/>
+                                <rect key="frame" x="178" y="299" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -224,24 +224,15 @@
                                 <segue destination="RxT-d5-hZA" kind="show" id="GMp-du-1Rh"/>
                             </connections>
                         </barButtonItem>
-                        <rightBarButtonItems>
-                            <barButtonItem title="Map" id="fyC-Ho-f67">
-                                <connections>
-                                    <action selector="mapButtonClicked:" destination="RKC-MN-s1K" id="G4D-Y8-gNz"/>
-                                    <segue destination="aS9-dG-afv" kind="show" identifier="GoToMap" id="Kjw-4I-TCa"/>
-                                </connections>
-                            </barButtonItem>
-                            <barButtonItem title="Help" id="TjJ-dl-rXy">
-                                <connections>
-                                    <action selector="helpButton:" destination="RKC-MN-s1K" id="5rB-ac-qbq"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" title="Help" id="TjJ-dl-rXy">
+                            <connections>
+                                <action selector="helpButton:" destination="RKC-MN-s1K" id="5rB-ac-qbq"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="bpZ-cN-Rf5" id="1I4-bF-cS4"/>
                         <outlet property="genericTable" destination="OSH-8A-abx" id="AUc-v3-xzb"/>
-                        <outlet property="mapButton" destination="fyC-Ho-f67" id="4jp-ky-liF"/>
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="pointer" destination="jRB-Sa-1bJ" id="cRy-a1-03F"/>
                         <outlet property="segmentedControl" destination="mmN-dq-rb5" id="1vF-MM-mRn"/>
@@ -252,9 +243,9 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="vff-Wg-WtP" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="856.79999999999995" y="-59.820089955022496"/>
+            <point key="canvasLocation" x="620" y="1519"/>
         </scene>
-        <!--Map-->
+        <!--Map View Controller-->
         <scene sceneID="xjh-Lw-ZkF">
             <objects>
                 <viewController storyboardIdentifier="Map" id="kc4-oF-YzA" customClass="MapViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
@@ -270,10 +261,10 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="554"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="kc0-yR-sUB">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="30"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="16"/>
                                         <subviews>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="250" minValue="1" maxValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="pbH-Lz-OoH">
-                                                <rect key="frame" x="6" y="8" width="361" height="15"/>
+                                                <rect key="frame" x="6" y="8" width="361" height="1"/>
                                                 <color key="backgroundColor" red="0.86614188759999999" green="0.50073217569999995" blue="0.17953677970000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <edgeInsets key="layoutMargins" top="0.0" left="16" bottom="0.0" right="16"/>
                                                 <color key="minimumTrackTintColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -289,7 +280,7 @@
                                                 </connections>
                                             </slider>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="250" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXH-BH-Cuf">
-                                                <rect key="frame" x="367" y="8" width="0.0" height="14"/>
+                                                <rect key="frame" x="367" y="8" width="0.0" height="0.0"/>
                                                 <color key="backgroundColor" red="0.86614188759999999" green="0.50073217569999995" blue="0.17953677970000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
@@ -300,7 +291,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
                                     <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" pitchEnabled="NO" showsPointsOfInterest="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="idd-zP-hy0">
-                                        <rect key="frame" x="0.0" y="30" width="375" height="524"/>
+                                        <rect key="frame" x="0.0" y="16" width="375" height="538"/>
                                         <connections>
                                             <outlet property="delegate" destination="kc4-oF-YzA" id="UHU-69-8jl"/>
                                         </connections>
@@ -314,7 +305,7 @@
                                 </constraints>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ad2-Zo-dOE" userLabel="Menu">
-                                <rect key="frame" x="375" y="94" width="0.0" height="81"/>
+                                <rect key="frame" x="375" y="80" width="0.0" height="81"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="tRa-e6-wgp">
                                         <rect key="frame" x="0.0" y="0.0" width="180" height="81"/>
@@ -322,7 +313,7 @@
                                             <stackView opaque="NO" contentMode="scaleToFill" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="4e3-Fs-f4E" userLabel="Upper">
                                                 <rect key="frame" x="8" y="8" width="164" height="31"/>
                                                 <subviews>
-                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Show all local " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="llo-Ab-hAP" userLabel="Show all local breweries">
+                                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" horizontalCompressionResistancePriority="749" text="Show Nearby" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="llo-Ab-hAP" userLabel="Show all local breweries">
                                                         <rect key="frame" x="0.0" y="0.0" width="112" height="31"/>
                                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
@@ -366,7 +357,6 @@
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <constraints>
                                     <constraint firstAttribute="width" id="CpX-Yi-a40"/>
-                                    <constraint firstItem="tRa-e6-wgp" firstAttribute="width" secondItem="ad2-Zo-dOE" secondAttribute="width" id="J13-9g-0E1"/>
                                     <constraint firstAttribute="trailing" secondItem="tRa-e6-wgp" secondAttribute="trailing" id="YuV-xv-kYB"/>
                                     <constraint firstAttribute="bottom" secondItem="tRa-e6-wgp" secondAttribute="bottom" id="bgg-DX-UUp"/>
                                     <constraint firstItem="tRa-e6-wgp" firstAttribute="top" secondItem="ad2-Zo-dOE" secondAttribute="top" id="f8y-Nb-sK6"/>
@@ -501,9 +491,21 @@
                             <constraint firstItem="ZU7-BT-73c" firstAttribute="centerY" secondItem="bSb-va-KkV" secondAttribute="centerY" id="uIH-6G-ol6"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Map" image="map" id="wBm-jW-G7A">
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
-                    </tabBarItem>
+                    <navigationItem key="navigationItem" id="pZ6-Ek-a0W">
+                        <barButtonItem key="leftBarButtonItem" title="Longpress to see local breweries" id="gDs-oy-wnY"/>
+                        <rightBarButtonItems>
+                            <barButtonItem title="Menu" id="3fs-AB-uVl">
+                                <connections>
+                                    <action selector="menuTapped:" destination="kc4-oF-YzA" id="XEf-Zq-IAS"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Help" id="VMz-ic-528">
+                                <connections>
+                                    <action selector="helpTapped:" destination="kc4-oF-YzA" id="3t4-7A-Zzm"/>
+                                </connections>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="ZU7-BT-73c" id="Ua6-o1-w7d"/>
                         <outlet property="currentLocation" destination="yrc-0a-qnb" id="SDS-MY-lPj"/>
@@ -528,9 +530,9 @@
                     </connections>
                 </pongPressGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="2661.5999999999999" y="-360.2698650674663"/>
+            <point key="canvasLocation" x="5050" y="-360"/>
         </scene>
-        <!--Selected Beers-->
+        <!--Selected Beers View Controller-->
         <scene sceneID="KEQ-HI-GM0">
             <objects>
                 <viewController storyboardIdentifier="SelectedBeers" id="CGT-bu-6NU" customClass="SelectedBeersViewController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
@@ -731,10 +733,14 @@
                             <constraint firstItem="3h4-CW-XGp" firstAttribute="leading" secondItem="79S-bs-Ki0" secondAttribute="leading" id="zt4-qy-fiy"/>
                         </constraints>
                     </view>
-                    <tabBarItem key="tabBarItem" title="Selected Beers" image="list" id="Ptn-dv-QwG">
-                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
-                    </tabBarItem>
                     <toolbarItems/>
+                    <navigationItem key="navigationItem" id="Fqc-0h-H5b">
+                        <barButtonItem key="rightBarButtonItem" title="Help" id="adA-xf-Yjn">
+                            <connections>
+                                <action selector="helpTapped:" destination="CGT-bu-6NU" id="d2X-cM-1yl"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
                         <outlet property="activityIndicator" destination="WhL-1F-Lh4" id="fDr-il-RgC"/>
                         <outlet property="nextLessonButton" destination="Ssx-no-b7L" id="Jx2-E2-4hk"/>
@@ -748,7 +754,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iR2-N2-eti" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1320.8" y="793.8530734632684"/>
+            <point key="canvasLocation" x="2260" y="793.8530734632684"/>
         </scene>
         <!--Beer Detail View-->
         <scene sceneID="q91-Un-DBN">
@@ -878,7 +884,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="2xF-JH-lUT" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3383" y="681"/>
+            <point key="canvasLocation" x="3626" y="794"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="jS1-XL-H9X">
@@ -889,11 +895,11 @@
                         <viewControllerLayoutGuide type="bottom" id="bf2-bC-tom"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pKa-uA-FlV">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="618"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="lVx-tM-jGt">
-                                <rect key="frame" x="57" y="253" width="261" height="161"/>
+                                <rect key="frame" x="57" y="228.5" width="261" height="161"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yUC-Ve-7Hk">
                                         <rect key="frame" x="0.0" y="0.0" width="261" height="30"/>
@@ -949,7 +955,7 @@
                                 </constraints>
                             </stackView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="sGk-hC-lDe">
-                                <rect key="frame" x="178" y="324" width="20" height="20"/>
+                                <rect key="frame" x="178" y="299" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -968,7 +974,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="lT6-7r-ceh" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1657" y="-761"/>
+            <point key="canvasLocation" x="1420" y="1519"/>
         </scene>
         <!--Brewery Tour-->
         <scene sceneID="068-UA-gCJ">
@@ -986,9 +992,6 @@
                         <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </toolbar>
-                    <connections>
-                        <segue destination="RKC-MN-s1K" kind="relationship" relationship="rootViewController" id="o8k-1Q-4lm"/>
-                    </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="huN-WH-Fky" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -1008,15 +1011,16 @@
                         <color key="selectedImageTintColor" red="0.81583412249999998" green="0.29526499470000001" blue="0.065191185060000004" alpha="1" colorSpace="calibratedRGB"/>
                     </tabBar>
                     <connections>
-                        <segue destination="kc4-oF-YzA" kind="relationship" relationship="viewControllers" id="rAk-9J-vAp"/>
-                        <segue destination="CGT-bu-6NU" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
+                        <segue destination="QK5-oc-elP" kind="relationship" relationship="viewControllers" id="rAk-9J-vAp"/>
+                        <segue destination="r4E-t1-lEa" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
+                        <segue destination="McZ-kG-KcA" kind="relationship" relationship="viewControllers" id="cPX-Zr-dVf"/>
                         <segue destination="aCO-9Y-u6t" kind="relationship" relationship="viewControllers" id="ycc-gm-HrD"/>
                         <segue destination="vMd-lA-jRB" kind="relationship" relationship="viewControllers" id="YgJ-ol-rXl"/>
                     </connections>
                 </tabBarController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iAI-zV-wtC" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1657" y="-59"/>
+            <point key="canvasLocation" x="2623" y="-360"/>
         </scene>
         <!--Favorite Beers-->
         <scene sceneID="uKn-Pq-Nxn">
@@ -1031,7 +1035,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="HiO-eH-bPB">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
                                 <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="sectionIndexBackgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
@@ -1071,10 +1075,10 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ws9-nT-7up" userLabel="Tutorial View">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="3PX-Bp-dPH" userLabel="Shadow View">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="598"/>
                                         <subviews>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fkm-L6-PwO" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <rect key="frame" x="15" y="295" width="40" height="40"/>
@@ -1084,7 +1088,7 @@
                                                 </constraints>
                                             </view>
                                             <button hidden="YES" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Dng-sO-x7w">
-                                                <rect key="frame" x="164" y="513.5" width="50" height="33"/>
+                                                <rect key="frame" x="164" y="557.5" width="50" height="33"/>
                                                 <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                 <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1108,7 +1112,7 @@
                                         </constraints>
                                     </view>
                                     <textView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a beer to see its details." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WBt-SP-ZqP" userLabel="TableTutorialText">
-                                        <rect key="frame" x="86" y="441" width="281" height="64"/>
+                                        <rect key="frame" x="86" y="485" width="281" height="64"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -1124,7 +1128,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textView>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="i0o-YN-JMV">
-                                        <rect key="frame" x="222" y="513" width="145" height="33"/>
+                                        <rect key="frame" x="222" y="557" width="145" height="33"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1181,7 +1185,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SXT-6T-y1W" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2007" y="796"/>
+            <point key="canvasLocation" x="2944.8000000000002" y="795.6521739130435"/>
         </scene>
         <!--Favorite Breweries-->
         <scene sceneID="uNa-bO-QQy">
@@ -1196,7 +1200,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="MTM-AV-wIe">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
                                 <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="FavoriteCell" textLabel="L0G-7N-7Tr" detailTextLabel="tyv-eG-Ufw" imageView="Isa-JK-NWA" style="IBUITableViewCellStyleSubtitle" id="EPN-e6-10X">
@@ -1236,10 +1240,10 @@
                                 </connections>
                             </tableView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="uPp-fq-N67" userLabel="Tutorial View">
-                                <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                                <rect key="frame" x="0.0" y="20" width="375" height="598"/>
                                 <subviews>
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fCF-E4-Faw" userLabel="Shadow View">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="598"/>
                                         <subviews>
                                             <view clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="A06-Fi-xnD" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <rect key="frame" x="15" y="295" width="40" height="40"/>
@@ -1275,7 +1279,7 @@
                                         </constraints>
                                     </view>
                                     <textView userInteractionEnabled="NO" contentMode="scaleToFill" bounces="NO" scrollEnabled="NO" editable="NO" text="Select a brewery to see it on the map." selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="66j-wi-SEc" userLabel="TableTutorialText">
-                                        <rect key="frame" x="86" y="441" width="281" height="64"/>
+                                        <rect key="frame" x="86" y="485" width="281" height="64"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <constraints>
@@ -1291,7 +1295,7 @@
                                         </userDefinedRuntimeAttributes>
                                     </textView>
                                     <button contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zd5-8B-CTh">
-                                        <rect key="frame" x="222" y="513" width="145" height="33"/>
+                                        <rect key="frame" x="222" y="557" width="145" height="33"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -1347,13 +1351,77 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UDx-ZZ-Vmk" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2663" y="301"/>
+            <point key="canvasLocation" x="4559" y="411"/>
+        </scene>
+        <!--Search Style/Brewery-->
+        <scene sceneID="Pge-Z5-iEv">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="McZ-kG-KcA" customClass="DismissableHelpNavigationController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Search Style/Brewery" image="Search" id="ZBb-0A-nfr">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                    </tabBarItem>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1vP-KU-Yxd">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="RKC-MN-s1K" kind="relationship" relationship="rootViewController" id="msf-J9-yYV"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="YPc-i6-Vi5" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="620" y="794"/>
+        </scene>
+        <!--Search Beers-->
+        <scene sceneID="O51-J4-fYy">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="r4E-t1-lEa" customClass="DismissableHelpNavigationController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Search Beers" image="list" id="Ptn-dv-QwG">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                    </tabBarItem>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7hh-cz-bWK">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="CGT-bu-6NU" kind="relationship" relationship="rootViewController" id="Ph9-Dx-pEO"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="vc2-kB-P1r" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1420" y="794"/>
+        </scene>
+        <!--Map-->
+        <scene sceneID="VQw-Js-7bO">
+            <objects>
+                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="QK5-oc-elP" customClass="DismissableHelpNavigationController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
+                    <tabBarItem key="tabBarItem" title="Map" image="map" id="wBm-jW-G7A">
+                        <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
+                    </tabBarItem>
+                    <toolbarItems/>
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="waI-IB-CFH">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
+                        <autoresizingMask key="autoresizingMask"/>
+                    </navigationBar>
+                    <nil name="viewControllers"/>
+                    <connections>
+                        <segue destination="kc4-oF-YzA" kind="relationship" relationship="rootViewController" id="AQi-yD-w2p"/>
+                    </connections>
+                </navigationController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="nV4-Ta-23c" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="3600.8000000000002" y="-360.2698650674663"/>
         </scene>
     </scenes>
     <resources>
         <image name="BeersTabbaricon2.png" width="75" height="75"/>
         <image name="BreweryTabbarIcon.png" width="50" height="50"/>
         <image name="Nophoto.png" width="200" height="200"/>
+        <image name="Search" width="25" height="25"/>
         <image name="Settings" width="40" height="40"/>
         <image name="heart_icon_black_white_line_art.png" width="305" height="287"/>
         <image name="list" width="32" height="32"/>

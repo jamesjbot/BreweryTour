@@ -22,6 +22,13 @@
 		A71DC9BE1DB2984C00AF81CD /* FavoriteBeersViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A71DC9BD1DB2984C00AF81CD /* FavoriteBeersViewController.swift */; };
 		A72B18441E3466D400D3DFF1 /* MapViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B18431E3466D400D3DFF1 /* MapViewControllerExtensions.swift */; };
 		A72B18461E346F2B00D3DFF1 /* CategoryViewControllerExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = A72B18451E346F2B00D3DFF1 /* CategoryViewControllerExtensions.swift */; };
+		A7300C5A1EAF7FCD0029EBB6 /* 1493143022_magnifying-glass.png in Resources */ = {isa = PBXBuildFile; fileRef = A7300C591EAF7FCD0029EBB6 /* 1493143022_magnifying-glass.png */; };
+		A7300C5C1EAF833E0029EBB6 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = A7300C5B1EAF833E0029EBB6 /* search.png */; };
+		A7300C5F1EAF844F0029EBB6 /* search25.png in Resources */ = {isa = PBXBuildFile; fileRef = A7300C5D1EAF844F0029EBB6 /* search25.png */; };
+		A7300C601EAF844F0029EBB6 /* search50.png in Resources */ = {isa = PBXBuildFile; fileRef = A7300C5E1EAF844F0029EBB6 /* search50.png */; };
+		A7300C621EAF86650029EBB6 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A7300C611EAF86650029EBB6 /* README.md */; };
+		A7300C641EAF88290029EBB6 /* TabbarConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7300C631EAF88290029EBB6 /* TabbarConstants.swift */; };
+		A7300C661EAF9D050029EBB6 /* DismissableHelpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7300C651EAF9D050029EBB6 /* DismissableHelpNavigationController.swift */; };
 		A7419ED91E2DBD3E006E421D /* BeersTabbaricon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7419ED71E2DBD3E006E421D /* BeersTabbaricon2x.png */; };
 		A7419EDA1E2DBD3E006E421D /* BeersTabbaricon3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7419ED81E2DBD3E006E421D /* BeersTabbaricon3x.png */; };
 		A741BF4D1E17EAE5003958A4 /* Style+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BF4C1E17EAE5003958A4 /* Style+CoreDataProperties.swift */; };
@@ -136,6 +143,13 @@
 		A71DC9BD1DB2984C00AF81CD /* FavoriteBeersViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FavoriteBeersViewController.swift; sourceTree = "<group>"; };
 		A72B18431E3466D400D3DFF1 /* MapViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewControllerExtensions.swift; sourceTree = "<group>"; };
 		A72B18451E346F2B00D3DFF1 /* CategoryViewControllerExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CategoryViewControllerExtensions.swift; sourceTree = "<group>"; };
+		A7300C591EAF7FCD0029EBB6 /* 1493143022_magnifying-glass.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "1493143022_magnifying-glass.png"; path = "../../../../Downloads/1493143022_magnifying-glass.png"; sourceTree = "<group>"; };
+		A7300C5B1EAF833E0029EBB6 /* search.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search.png; sourceTree = "<group>"; };
+		A7300C5D1EAF844F0029EBB6 /* search25.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search25.png; sourceTree = "<group>"; };
+		A7300C5E1EAF844F0029EBB6 /* search50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = search50.png; sourceTree = "<group>"; };
+		A7300C611EAF86650029EBB6 /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		A7300C631EAF88290029EBB6 /* TabbarConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TabbarConstants.swift; sourceTree = "<group>"; };
+		A7300C651EAF9D050029EBB6 /* DismissableHelpNavigationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DismissableHelpNavigationController.swift; sourceTree = "<group>"; };
 		A7419ED71E2DBD3E006E421D /* BeersTabbaricon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeersTabbaricon2x.png; sourceTree = "<group>"; };
 		A7419ED81E2DBD3E006E421D /* BeersTabbaricon3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BeersTabbaricon3x.png; sourceTree = "<group>"; };
 		A741BF4C1E17EAE5003958A4 /* Style+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Style+CoreDataProperties.swift"; sourceTree = "<group>"; };
@@ -266,6 +280,8 @@
 		A727D1451DA918D20063F2B3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A7300C651EAF9D050029EBB6 /* DismissableHelpNavigationController.swift */,
+				A7300C631EAF88290029EBB6 /* TabbarConstants.swift */,
 				A752344E1DAEDB59008EF071 /* BeerDetailViewController.swift */,
 				A748FAD31DF6E95F005637BD /* MyTabBarController.swift */,
 				A7189CFA1DFDD487001409FA /* SettingsViewController.swift */,
@@ -301,6 +317,24 @@
 				A7195F7E1E2A1FEE0089C1ED /* FetchableMapStrategy.swift */,
 			);
 			name = MapStrategies;
+			sourceTree = "<group>";
+		};
+		A7300C671EAFBBA90029EBB6 /* MapViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
+				A72B18431E3466D400D3DFF1 /* MapViewControllerExtensions.swift */,
+			);
+			name = MapViewController;
+			sourceTree = "<group>";
+		};
+		A7300C681EAFBBB70029EBB6 /* CategoryViewController */ = {
+			isa = PBXGroup;
+			children = (
+				A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */,
+				A72B18451E346F2B00D3DFF1 /* CategoryViewControllerExtensions.swift */,
+			);
+			name = CategoryViewController;
 			sourceTree = "<group>";
 		};
 		A741BF491E16FD93003958A4 /* XcodegeneratedFiles */ = {
@@ -343,6 +377,7 @@
 		A7B2AAD21DA791A300EE844C = {
 			isa = PBXGroup;
 			children = (
+				A7300C611EAF86650029EBB6 /* README.md */,
 				A7B2AADD1DA791A400EE844C /* BreweryTour */,
 				A7B2AAF51DA791A400EE844C /* BreweryTourTests */,
 				A7B2AB001DA791A400EE844C /* BreweryTourUITests */,
@@ -450,12 +485,10 @@
 		A7D3B8951E18FFF50017E5AE /* ViewModelBackedDataViews */ = {
 			isa = PBXGroup;
 			children = (
-				A7B2AAE01DA791A400EE844C /* CatergoryViewController.swift */,
-				A72B18451E346F2B00D3DFF1 /* CategoryViewControllerExtensions.swift */,
+				A7300C681EAFBBB70029EBB6 /* CategoryViewController */,
 				A752344C1DAEA666008EF071 /* SelectedBeersViewController.swift */,
 				A78FBC4C1E38D0F9003D49B6 /* ConvertToFullStateName.swift */,
-				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
-				A72B18431E3466D400D3DFF1 /* MapViewControllerExtensions.swift */,
+				A7300C671EAFBBA90029EBB6 /* MapViewController */,
 				A751602B1E35C29D0078F6F9 /* MakePinView.swift */,
 				A72C979B1E2C5AE600C711B6 /* MapStrategies */,
 			);
@@ -473,6 +506,9 @@
 		A7FF1A031DB0E14600AD0BB3 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A7300C5D1EAF844F0029EBB6 /* search25.png */,
+				A7300C5E1EAF844F0029EBB6 /* search50.png */,
+				A7300C591EAF7FCD0029EBB6 /* 1493143022_magnifying-glass.png */,
 				A75160291E35AA250078F6F9 /* beermap.png */,
 				A794A68A1E2E2B6800797180 /* Nophoto.png */,
 				A7419ED71E2DBD3E006E421D /* BeersTabbaricon2x.png */,
@@ -482,6 +518,7 @@
 				A79EB7021E30D2AA00C54D43 /* AppIcon20.png */,
 				A79EB7031E30D2AA00C54D43 /* AppIcon29.png */,
 				A79EB7041E30D2AA00C54D43 /* AppIcon40.png */,
+				A7300C5B1EAF833E0029EBB6 /* search.png */,
 				A79EB7051E30D2AA00C54D43 /* AppIcon58.png */,
 				A79EB7071E30D2AA00C54D43 /* AppIcon76.png */,
 				A79EB7061E30D2AA00C54D43 /* AppIcon60.png */,
@@ -641,16 +678,20 @@
 				A76B3B911DB0E00D00B0A899 /* heart_icon_black_white_line_art.pdf in Resources */,
 				A79EB70F1E30D2AA00C54D43 /* AppIcon.png in Resources */,
 				A79EB7181E30D2AA00C54D43 /* AppIcon87.png in Resources */,
+				A7300C5A1EAF7FCD0029EBB6 /* 1493143022_magnifying-glass.png in Resources */,
 				A76B3B8B1DB0C03700B0A899 /* Launch Screen.storyboard in Resources */,
 				A7419EDA1E2DBD3E006E421D /* BeersTabbaricon3x.png in Resources */,
 				A79EB71A1E30D2AA00C54D43 /* AppIcon152.png in Resources */,
 				A79EB7191E30D2AA00C54D43 /* AppIcon120.png in Resources */,
+				A7300C601EAF844F0029EBB6 /* search50.png in Resources */,
 				A79EB7121E30D2AA00C54D43 /* AppIcon40.png in Resources */,
+				A7300C5C1EAF833E0029EBB6 /* search.png in Resources */,
 				A79EB71B1E30D2AA00C54D43 /* AppIcon167.png in Resources */,
 				A79EB7171E30D2AA00C54D43 /* AppIcon84.png in Resources */,
 				A794A68B1E2E2B6800797180 /* Nophoto.png in Resources */,
 				A79EB7161E30D2AA00C54D43 /* AppIcon80.png in Resources */,
 				A79EB7151E30D2AA00C54D43 /* AppIcon76.png in Resources */,
+				A7300C5F1EAF844F0029EBB6 /* search25.png in Resources */,
 				A7D2272B1DB55F3800360A3B /* small_hear_icon.png in Resources */,
 				A7FF1A071DB0E67E00AD0BB3 /* heart_icon.png in Resources */,
 				A76B3B901DB0E00D00B0A899 /* heart_icon.pdf in Resources */,
@@ -752,6 +793,7 @@
 				A7D2272D1DB5620300360A3B /* FavoriteBreweriesViewController.swift in Sources */,
 				A7B7524E1DA8CE7B00117ED0 /* MapViewController.swift in Sources */,
 				A752344D1DAEA666008EF071 /* SelectedBeersViewController.swift in Sources */,
+				A7300C641EAF88290029EBB6 /* TabbarConstants.swift in Sources */,
 				A77E0C031DF9ECBF0007E55F /* GlobalConstants.swift in Sources */,
 				A701E0481DEEACFC00CDBD2F /* CircleView.swift in Sources */,
 				A7E932521E0A42F600E07F53 /* AllBreweriesTableList.swift in Sources */,
@@ -772,6 +814,7 @@
 				A7634E681E26ED440066ACEF /* ParserFactory.swift in Sources */,
 				A75160281E356AB50078F6F9 /* MyAnnotationView.swift in Sources */,
 				A711EC091DC8EBDF008E114A /* ExtensionUIViewController.swift in Sources */,
+				A7300C621EAF86650029EBB6 /* README.md in Sources */,
 				A74350741DBAA17F007AE08C /* ObserverAndSubjectProtocol.swift in Sources */,
 				A74350681DB91454007AE08C /* NSManagedObjectDisplayable.swift in Sources */,
 				A7189CFB1DFDD487001409FA /* SettingsViewController.swift in Sources */,
@@ -781,6 +824,7 @@
 				A71DC9BE1DB2984C00AF81CD /* FavoriteBeersViewController.swift in Sources */,
 				A7634E6F1E2723F20066ACEF /* BreweryDesignerProtocol.swift in Sources */,
 				A743501B1DB78615007AE08C /* TableListProtocol.swift in Sources */,
+				A7300C661EAF9D050029EBB6 /* DismissableHelpNavigationController.swift in Sources */,
 				A7634E711E2730F70066ACEF /* BeerDesignerProtocol.swift in Sources */,
 				A741BF531E1877C3003958A4 /* ManagedObjectImageLinker.swift in Sources */,
 				A7634E751E27354B0066ACEF /* BeersFollowedByBreweriesParser.swift in Sources */,
