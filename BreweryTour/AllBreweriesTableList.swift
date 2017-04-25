@@ -25,7 +25,7 @@ class AllBreweriesTableList: NSObject, Subject {
 
     internal var breweryFetchedResultsController : NSFetchedResultsController<Brewery>!
 
-    fileprivate var observer : Observer!
+    fileprivate var observer : Observer?
 
     private let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
@@ -51,7 +51,7 @@ class AllBreweriesTableList: NSObject, Subject {
         do {
             try breweryFetchedResultsController.performFetch()
         } catch {
-            observer.sendNotify(from: self, withMsg: Message.Retry)
+            observer?.sendNotify(from: self, withMsg: Message.Retry)
         }
 
         guard breweryFetchedResultsController.fetchedObjects?.count == 0 else {
@@ -78,7 +78,7 @@ extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
         // Old information is retained.
         do {
             try breweryFetchedResultsController.performFetch()
-            observer.sendNotify(from: self, withMsg: Message.Reload)
+            observer?.sendNotify(from: self, withMsg: Message.Reload)
         } catch {
 
         }
@@ -195,7 +195,7 @@ extension AllBreweriesTableList : NSFetchedResultsControllerDelegate {
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Send message to observer regardless of situation. The observer decides if it should act.
-        observer.sendNotify(from: self, withMsg: Message.Reload)
+        observer?.sendNotify(from: self, withMsg: Message.Reload)
 
     }
 }
