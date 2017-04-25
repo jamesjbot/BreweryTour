@@ -22,7 +22,7 @@ class Mediator {
     // MARK: Constants
 
     // MARK: Variables
-    private var automaticallySegueValue: Bool = false
+    private var automaticallySegueValue: Bool = true
     fileprivate var busyObservers: [BusyObserver] = []
     fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
 
@@ -56,10 +56,10 @@ class Mediator {
         return automaticallySegueValue
     }
 
-
     internal func setAutomaticallySegue(to: Bool) {
         automaticallySegueValue = to
     }
+
 
     // MARK: - Mapslider values
     internal func lastSliderValue() -> Int {
@@ -69,6 +69,7 @@ class Mediator {
     internal func setLastSliderValue(_ i: Int) {
         lastMapSliderValue = Int(i)
     }
+
 
     // MARK: - Singleton Implementation
     private init(){
@@ -182,6 +183,7 @@ extension Mediator: StorableFloatingAnnotation {
     internal func getFloatingAnnotation() -> MKAnnotation? {
         return floatingAnnotation
     }
+
 
     internal func setFloating(annotation: MKAnnotation) {
         floatingAnnotation = annotation
