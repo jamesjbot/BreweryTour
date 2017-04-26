@@ -100,6 +100,7 @@ class MapViewController : UIViewController {
 
     // For cycling thru the states of the tutorial for the viewcontroller
     private enum CategoryTutorialStage {
+        case InitialScreen
         case Map
         case Longpress
         case Slider
@@ -125,7 +126,7 @@ class MapViewController : UIViewController {
     internal var targetLocation: CLLocation?
 
     // Initialize the tutorial views initial screen
-    private var tutorialState: CategoryTutorialStage = .Longpress
+    private var tutorialState: CategoryTutorialStage = .Menu
 
     // New breweries with styles variable
     internal var breweriesForDisplay: [Brewery] = []
@@ -168,6 +169,8 @@ class MapViewController : UIViewController {
     @IBAction func nextTutorialAction(_ sender: UIButton) {
         // Advance the tutorial state
         switch tutorialState {
+        case .InitialScreen:
+            tutorialState = .Map
         case .Map:
             tutorialState = .Longpress
         case .Longpress:
@@ -175,11 +178,16 @@ class MapViewController : UIViewController {
         case .Slider:
             tutorialState = .Menu
         case .Menu:
-            tutorialState = .Map
+            tutorialState = .InitialScreen
         }
 
         // Show tutorial content
         switch tutorialState {
+        case .InitialScreen:
+            pointer.isHidden = true
+            pointer.setNeedsDisplay()
+            tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles. Please step thru this tutorial with the next button.\nDismiss it when you are done.\nTo bring the tutorial back press Help?"
+
         case .Map:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
@@ -590,7 +598,7 @@ class MapViewController : UIViewController {
 
     private func tutorialInitialization() {
         // Tutorial layers
-        tutorialState = .Slider
+        tutorialState = .Menu
         nextTutorialAction(UIButton())
         // Display tutorial view.
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
@@ -752,7 +760,8 @@ class MapViewController : UIViewController {
         tutorialInitialization()
         // Center on use location
         centerMapOnLocation(location: mapView.userLocation.location,
-                            radiusInMeters: DistanceAroundUserLocation, centerUS: false)
+                            radiusInMeters: DistanceAroundUserLocation,
+                            centerUS: false)
     }
 }
 
