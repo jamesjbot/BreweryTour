@@ -1011,8 +1011,8 @@
                     </tabBar>
                     <connections>
                         <segue destination="QK5-oc-elP" kind="relationship" relationship="viewControllers" id="rAk-9J-vAp"/>
-                        <segue destination="r4E-t1-lEa" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
                         <segue destination="McZ-kG-KcA" kind="relationship" relationship="viewControllers" id="cPX-Zr-dVf"/>
+                        <segue destination="r4E-t1-lEa" kind="relationship" relationship="viewControllers" id="mpM-jm-uog"/>
                         <segue destination="aCO-9Y-u6t" kind="relationship" relationship="viewControllers" id="ycc-gm-HrD"/>
                         <segue destination="vMd-lA-jRB" kind="relationship" relationship="viewControllers" id="YgJ-ol-rXl"/>
                     </connections>
@@ -1377,7 +1377,7 @@
         <scene sceneID="O51-J4-fYy">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="r4E-t1-lEa" customClass="DismissableHelpNavigationController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Search Beers" image="list" id="Ptn-dv-QwG">
+                    <tabBarItem key="tabBarItem" title="Search Beers" image="search25.png" id="Ptn-dv-QwG">
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <toolbarItems/>
@@ -1423,7 +1423,7 @@
         <image name="Search" width="25" height="25"/>
         <image name="Settings" width="40" height="40"/>
         <image name="heart_icon_black_white_line_art.png" width="305" height="287"/>
-        <image name="list" width="32" height="32"/>
         <image name="map" width="32" height="32"/>
+        <image name="search25.png" width="25" height="25"/>
     </resources>
 </document>

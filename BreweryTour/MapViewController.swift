@@ -105,6 +105,11 @@ class MapViewController : UIViewController {
         case Longpress
         case Slider
         case Menu
+        case JustAroundMe
+        case SearchBeers
+        case SearchStyles
+        case FavoriteBeers
+        case FavoriteBreweries
     }
 
     // Location manager allows us access to the user's location
@@ -170,38 +175,51 @@ class MapViewController : UIViewController {
         // Advance the tutorial state
         switch tutorialState {
         case .InitialScreen:
-            tutorialState = .Map
-        case .Map:
             tutorialState = .Longpress
         case .Longpress:
+            tutorialState = .Map
+        case .Map:
+            tutorialState = .JustAroundMe
+        case .JustAroundMe:
             tutorialState = .Slider
         case .Slider:
             tutorialState = .Menu
         case .Menu:
+            tutorialState = .SearchStyles
+        case .SearchStyles:
+            tutorialState = .SearchBeers
+        case .SearchBeers:
+            tutorialState = .FavoriteBeers
+        case .FavoriteBeers:
+            tutorialState = .FavoriteBreweries
+        case .FavoriteBreweries:
             tutorialState = .InitialScreen
         }
 
         // Show tutorial content
         switch tutorialState {
         case .InitialScreen:
-            pointer.isHidden = true
-            pointer.setNeedsDisplay()
-            tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles. Please step thru this tutorial with the next button.\nDismiss it when you are done.\nTo bring the tutorial back press Help?"
-
-        case .Map:
-            pointer.isHidden = false
-            pointer.setNeedsDisplay()
-            tutorialText.text = "Select any brewery marker to see it's route.\nClick the heart to favorite a brewery.\nClick on information to bring up the brewery website."
-            // Adds a circular path to tutorial pointer
-            addCircularPathToPointer()
+            hidePointerAndRemoveAnimation()
+            tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles.\nPlease step thru this tutorial with the next button.\nDismiss it when you are done.\nAny time you want to bring the tutorial back press Help?"
 
         case .Longpress:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Long press on any location to set a new center for breweries to gather around\nPress 'Just around me' button to return to your home location"
+            tutorialText.text = "Lets start by long pressing on any location to set a new center for breweries to gather around\n"
             // Adds a circular path to tutorial pointer
             addCircularPathToPointer()
             break
+
+        case .Map:
+            pointer.isHidden = false
+            pointer.setNeedsDisplay()
+            tutorialText.text = "Select any brewery marker to see it's route.\nClick the heart to favorite a brewery.\nClick on information to bring up the brewery's website."
+            // Adds a circular path to tutorial pointer
+            addCircularPathToPointer()
+
+        case .JustAroundMe:
+            hidePointerAndRemoveAnimation()
+            tutorialText.text = "Press 'Just around me' button to return to your home location"
 
         case .Slider:
             pointer.isHidden = false
@@ -218,13 +236,30 @@ class MapViewController : UIViewController {
             break
 
         case .Menu:
-            pointer.isHidden = true
-            pointer.layer.removeAllAnimations()
-            pointer.setNeedsDisplay()
-            tutorialText.text = "Tap Menu on the navigation bar for menu.\nHere you can allow the pointer to show all breweries local to you instead of just one style.\nHere you can also disable the green routing line."
+            hidePointerAndRemoveAnimation()
+            tutorialText.text = "Tap Menu on the navigation bar for map options.\nHere you can allow the pointer to show all breweries nearby your target instead of just one style.\nHere you can also disable the green routing line."
+            break
+
+        case .SearchStyles:
+            hidePointerAndRemoveAnimation()
+            tutorialText.text = "At the bottom the 'Search Style' tab allows you to search for all beers and breweries that produce a specific style."
+            break
+
+        case .SearchBeers:
+            hidePointerAndRemoveAnimation()
+            tutorialText.text = "At the bottom the 'Search Beers' tab allows you to search for individual beer names, and see the selected group of beers from the search styles tab."
+            break
+
+        case .FavoriteBeers:
+            hidePointerAndRemoveAnimation()
+            tutorialText.text = "The 'Favorite Beers' tab allows you to see beers you've favorited when you clicked on a beer in the 'Search Beers' tab."
+            break
+
+        case .FavoriteBreweries:
+            hidePointerAndRemoveAnimation()
+            tutorialText.text = "The 'Favorite Breweries' tab allow you to see all the breweries you've favorited on the map. It will also allow you to navigate to them when you tap the brewery name."
             break
         }
-
     }
 
 
@@ -539,6 +574,13 @@ class MapViewController : UIViewController {
                 self.view.layoutIfNeeded()
             }
         }
+    }
+
+
+    private func hidePointerAndRemoveAnimation() {
+        pointer.isHidden = true
+        pointer.layer.removeAllAnimations()
+        pointer.setNeedsDisplay()
     }
 
 
