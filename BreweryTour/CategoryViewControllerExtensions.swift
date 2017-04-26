@@ -194,6 +194,14 @@ extension CategoryViewController : UITableViewDelegate {
                 return
             }
 
+            // User selected a style turn off local breweries
+            for viewcontroller in (self.tabBarController?.viewControllers)! {
+                if viewcontroller.childViewControllers.first is MapViewController {
+                    (viewcontroller.childViewControllers.first as! MapViewController).showLocalBreweries.isOn = false
+                    break
+                }
+            }
+
             // Move to new tab
             DispatchQueue.main.async {
                 self.tabBarController?.selectedIndex = TabbarConstants.mapTab.rawValue
