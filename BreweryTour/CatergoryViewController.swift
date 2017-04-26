@@ -88,7 +88,6 @@ NSFetchedResultsControllerDelegate {
         case Table
         case BreweriesWithStyleTable
         case AllBreweries
-        case InitialScreen
         case Map
         case RefreshDB
     }
@@ -121,8 +120,7 @@ NSFetchedResultsControllerDelegate {
     }
 
     // Initialize the tutorial views initial screen
-    private var tutorialState: CategoryTutorialStage = .InitialScreen
-
+    private var tutorialState: CategoryTutorialStage = .RefreshDB
 
     // MARK: - IBOutlets
 
@@ -165,8 +163,6 @@ NSFetchedResultsControllerDelegate {
     @IBAction func nextTutorialScreen(_ sender: AnyObject) {
         // Advance the tutorial state
         switch tutorialState {
-        case .InitialScreen:
-            tutorialState = .SegementedControl
         case .SegementedControl:
             tutorialState = .Table
         case .Table:
@@ -178,16 +174,11 @@ NSFetchedResultsControllerDelegate {
         case .Map:
             tutorialState = .RefreshDB
         case .RefreshDB:
-            tutorialState = .InitialScreen
-
+            tutorialState = .SegementedControl
         }
 
         // Show tutorial content
         switch tutorialState {
-        case .InitialScreen:
-            pointer.isHidden = true
-            pointer.setNeedsDisplay()
-            tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles. Please step thru this tutorial with the next button.\nDismiss it when you are done.\nTo bring the tutorial back press Help?"
 
         case .SegementedControl:
             pointer.isHidden = false
@@ -234,7 +225,7 @@ NSFetchedResultsControllerDelegate {
                                     completion: nil)
 
         case .Map:
-            tutorialText.text = "Click on 'Map' to proceed to the map, to view your last selection."
+            tutorialText.text = "Click on 'Map' tab to proceed to the map, to view your last selection."
             pointer.isHidden = true
             pointer.setNeedsDisplay()
 
