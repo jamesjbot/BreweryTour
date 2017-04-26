@@ -392,7 +392,7 @@ extension SelectedBeersViewController : UISearchBarDelegate {
                                    style: .default,
                                    handler: searchOnline)
         displayAlertWindow(title: "Search Online",
-                           msg: "Cannot find match on device,\ncan we search online?",
+                           msg: "Cannot find all matches on device,\ncan we search online?",
                            actions: [action])
     }
 }
