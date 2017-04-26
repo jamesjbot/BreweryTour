@@ -176,7 +176,7 @@ extension BeersViewModel: TableList {
         cell.textLabel?.adjustsFontSizeToFitWidth = true
         let image = #imageLiteral(resourceName: "Nophoto.png")
         cell.imageView?.image = image
-        var beer: Beer!
+        var beer: Beer?
         let searchTextIsEmpty: Bool = searchText?.isEmpty ?? true
         let searchTextIsNotEmpty = !searchTextIsEmpty
         if searchTextIsEmpty  {
@@ -184,12 +184,12 @@ extension BeersViewModel: TableList {
         } else if searchTextIsNotEmpty && self.filteredObjects.count > 0 {
             beer = self.filteredObjects[indexPath.row]
         }
-        if let beerName = beer.beerName,
-            let brewerName = beer.brewer?.name {
+        if let beerName = beer?.beerName,
+            let brewerName = beer?.brewer?.name {
             cell.textLabel?.text = beerName
             cell.detailTextLabel?.text = brewerName
         }
-        if let data = beer.image {
+        if let data = beer?.image {
             DispatchQueue.main.async {
                 cell.imageView?.image = UIImage(data: data as Data)
                 cell.imageView?.setNeedsDisplay()
