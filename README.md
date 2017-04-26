@@ -20,8 +20,8 @@ Cocoapods was used to integrate AlamoFire Networking.
 Upon opening the app, you will be greeted with a tutorial screen click next to see the usage for this screen, click dismiss to dismiss the tutorial.      
 You will be on the Map screen.   
 
-Within the Map screen (tab):
-Longpress to see nearby breweries to that location.
+Within the Map screen (tab):   
+Longpress to see nearby breweries to that location.   
 You can control the number of breweries being shown by dragging the slider at the top.    
 The number of breweries will be listed on the right side of the slider.   
 If you click the Menu button you have some map options, to show all nearby local breweries, and turn off the green line routing information you see when a brewery is clicked.   
