@@ -37,6 +37,10 @@ class SelectedBeersViewController: UIViewController {
     private let paddingForPoint : CGFloat = 20
     private let segmentedControlPaddding : CGFloat = 8
 
+    // Pointer animation duration
+    private let pointerDelay: CGFloat = 0.0
+    private let pointerDuration: CGFloat = 1.0
+
     fileprivate let allBeersViewModel: AllBeersViewModel = AllBeersViewModel()
     fileprivate let selectedBeersViewModel : SelectedBeersViewModel = SelectedBeersViewModel()
 
@@ -90,8 +94,8 @@ class SelectedBeersViewController: UIViewController {
             let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding,
                                         y: segmentedControl.center.y)
             pointer.center = segmentPoint
-            UIView.animateKeyframes(withDuration: 0.5,
-                                    delay: 0.0,
+            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
+                                    delay: TimeInterval(pointerDelay),
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.x += self.segmentedControl.frame.width - (2*self.segmentedControlPaddding)},
                                     completion: nil)
@@ -102,8 +106,8 @@ class SelectedBeersViewController: UIViewController {
             let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint ,
                                      y: tableView.frame.origin.y)
             pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: 0.5,
-                                    delay: 0.0,
+            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
+                                    delay: TimeInterval(pointerDelay),
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.y += self.tableView.frame.height - self.paddingForPoint },
                                     completion: nil)
@@ -114,8 +118,8 @@ class SelectedBeersViewController: UIViewController {
             tutorialText.text = "Enter the name of a beer, and we will search online for it."
             let tablePoint = CGPoint(x: searchBar.frame.origin.x + paddingForPoint , y: searchBar.frame.midY)
             pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: 0.5,
-                                    delay: 0.0,
+            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
+                                    delay: TimeInterval(pointerDelay),
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.x += self.searchBar.frame.maxX - (2*self.paddingForPoint) },
                                     completion: nil)
