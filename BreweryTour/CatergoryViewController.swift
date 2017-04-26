@@ -154,12 +154,6 @@ NSFetchedResultsControllerDelegate {
     }
 
 
-    @IBAction func mapButtonClicked(_ sender: AnyObject) {
-        _ = sender.resignFirstResponder() // Sometimes the button clicks twice
-        performSegue(withIdentifier:"GoToMap", sender: sender)
-    }
-
-
     @IBAction func nextTutorialScreen(_ sender: AnyObject) {
         // Advance the tutorial state
         switch tutorialState {
