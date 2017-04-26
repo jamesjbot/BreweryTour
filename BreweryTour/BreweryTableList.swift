@@ -159,11 +159,16 @@ extension BreweryTableList: TableList {
             var brewery: Brewery?
             let searchTextIsEmpty = searchText?.isEmpty ?? true
             let searchTextIsNotEmpty = !searchTextIsEmpty
-            if (searchTextIsEmpty) {
+            if (searchTextIsEmpty) && self.copyOfSet.count > 0 {
                 brewery = self.copyOfSet[indexPath.row]
             } else if searchTextIsNotEmpty && self.filteredObjects.count > 0 {
                 brewery = (self.filteredObjects[indexPath.row])
             }
+            
+            guard brewery != nil else {
+                return
+            }
+
             cell.textLabel?.text = brewery?.name
             if let data = brewery?.image {
                 DispatchQueue.main.async {
