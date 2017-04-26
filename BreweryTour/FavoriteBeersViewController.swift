@@ -23,7 +23,7 @@ class FavoriteBeersViewController: UIViewController {
     private let paddingForPoint : CGFloat = 20
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
     fileprivate let reuseID = "FavoriteCell"
-
+    fileprivate let noPhotoImage = #imageLiteral(resourceName: "Nophoto.png")
 
     // MARK: - Variables
 
@@ -60,6 +60,9 @@ class FavoriteBeersViewController: UIViewController {
         }
         // Populate cell from the NSManagedObject instance
         DispatchQueue.main.async {
+            cell.imageView?.image = self.noPhotoImage
+            cell.textLabel?.text = nil
+            cell.detailTextLabel?.text = nil
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             cell.textLabel?.text = selectedObject.beerName
             cell.detailTextLabel?.text = selectedObject.brewer?.name
@@ -110,7 +113,7 @@ class FavoriteBeersViewController: UIViewController {
         performFetchOnResultsController()
         tableView.reloadData()
         // Navigation bar title
-        tabBarController?.title = "Click For Details"
+        navigationItem.title = "Click For Details"
     }
 
     

@@ -25,7 +25,7 @@ class FavoriteBreweriesViewController: UIViewController {
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
     fileprivate let paddingForPoint : CGFloat = 20
     fileprivate let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
-
+    fileprivate let noPhotoImage = #imageLiteral(resourceName: "Nophoto.png")
 
     // MARK: - Variables
 
@@ -62,6 +62,9 @@ class FavoriteBreweriesViewController: UIViewController {
         }
         // Populate cell from the NSManagedObject instance
         DispatchQueue.main.async {
+            cell.textLabel?.text = nil
+            cell.detailTextLabel?.text = nil
+            cell.imageView?.image = self.noPhotoImage
             cell.textLabel?.text = selectedObject.name!
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             cell.detailTextLabel?.text = ""
@@ -117,7 +120,7 @@ class FavoriteBreweriesViewController: UIViewController {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
         tableView.reloadData()
-        tabBarController?.title = "Click For Directions"
+        navigationItem.title = "Click For Directions"
     }
 
     
