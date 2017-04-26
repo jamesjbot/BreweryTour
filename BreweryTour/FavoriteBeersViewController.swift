@@ -123,8 +123,8 @@ class FavoriteBeersViewController: UIViewController {
         tutorialText.text = "Select a beer to show its details"
         let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
         pointer.center = tablePoint
-        UIView.animateKeyframes(withDuration: 0.5,
-                                delay: 0.0,
+        UIView.animateKeyframes(withDuration: AnimationConstant.pointerDuration,
+                                delay: AnimationConstant.pointerDelay,
                                 options: [ .autoreverse, .repeat ],
                                 animations: { self.pointer.center.y += self.tableView.frame.height - (3*self.paddingForPoint) - (self.tabBarController?.tabBar.frame.height)! },
                                 completion: nil)

@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		5CEC755E8F1CEA8794EB7D7E /* Pods_BreweryTour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E9EC7BBC7977680F92446772 /* Pods_BreweryTour.framework */; };
 		A701E0481DEEACFC00CDBD2F /* CircleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A701E0471DEEACFC00CDBD2F /* CircleView.swift */; };
+		A705F2901EB162570051F972 /* CoreAnimationConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A705F28F1EB162570051F972 /* CoreAnimationConstants.swift */; };
 		A709D3F61DAE459C00F11452 /* Beer+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A709D3F01DAE459C00F11452 /* Beer+CoreDataClass.swift */; };
 		A709D3F81DAE459C00F11452 /* Brewery+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A709D3F21DAE459C00F11452 /* Brewery+CoreDataClass.swift */; };
 		A709D3FA1DAE459C00F11452 /* Style+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = A709D3F41DAE459C00F11452 /* Style+CoreDataClass.swift */; };
@@ -130,6 +131,7 @@
 /* Begin PBXFileReference section */
 		5FE96E7632C169C41B622CB6 /* Pods-BreweryTour.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BreweryTour.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BreweryTour/Pods-BreweryTour.debug.xcconfig"; sourceTree = "<group>"; };
 		A701E0471DEEACFC00CDBD2F /* CircleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircleView.swift; sourceTree = "<group>"; };
+		A705F28F1EB162570051F972 /* CoreAnimationConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoreAnimationConstants.swift; sourceTree = "<group>"; };
 		A709D3F01DAE459C00F11452 /* Beer+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Beer+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A709D3F21DAE459C00F11452 /* Brewery+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Brewery+CoreDataClass.swift"; sourceTree = "<group>"; };
 		A709D3F41DAE459C00F11452 /* Style+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Style+CoreDataClass.swift"; sourceTree = "<group>"; };
@@ -287,6 +289,7 @@
 				A7189CFA1DFDD487001409FA /* SettingsViewController.swift */,
 				A7D3B8941E18FFD70017E5AE /* NoViewModelDataViews */,
 				A7D3B8951E18FFF50017E5AE /* ViewModelBackedDataViews */,
+				A705F28F1EB162570051F972 /* CoreAnimationConstants.swift */,
 			);
 			name = Controller;
 			sourceTree = "<group>";
@@ -817,6 +820,7 @@
 				A7300C621EAF86650029EBB6 /* README.md in Sources */,
 				A74350741DBAA17F007AE08C /* ObserverAndSubjectProtocol.swift in Sources */,
 				A74350681DB91454007AE08C /* NSManagedObjectDisplayable.swift in Sources */,
+				A705F2901EB162570051F972 /* CoreAnimationConstants.swift in Sources */,
 				A7189CFB1DFDD487001409FA /* SettingsViewController.swift in Sources */,
 				A7634E6A1E2704A50066ACEF /* StylesParser.swift in Sources */,
 				A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */,
