@@ -96,7 +96,7 @@ class MapViewController : UIViewController {
 
     // Pointer animation duration
     private let pointerDelay: CGFloat = 0.0
-    private let pointerDuration: CGFloat = 0.5
+    private let pointerDuration: CGFloat = 1.0
 
     // For cycling thru the states of the tutorial for the viewcontroller
     private enum CategoryTutorialStage {
