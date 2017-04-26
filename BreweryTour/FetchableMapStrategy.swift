@@ -9,12 +9,11 @@
 /*
  Subclass to map strategy provides annotation for Style chosen breweries
 
- This class will initial search for any breweries attached to the style
+ This class will initially search for any breweries attached to the style
  initialFetchBreweries
  This will also register for update to the breweries set in the Style object
  When Style is update it will fire the NSFetchedResultsDelegate that we will
- We to call a new fetch to get the whole set of update
- fetch
+ We to call a new fetch to get the whole set of update fetch
  sortTheLocations from the superclass.
  sendTheAnnotations back to the view controller from the superclass
 
@@ -153,7 +152,9 @@ class StyleMapStrategy: FetchableMapStrategy {
 
         do {
             try styleFRC?.performFetch()
-            breweryLocations = (styleFRC?.fetchedObjects?.first as! Style).brewerywithstyle?.allObjects as! [Brewery]
+            if let locations = ((styleFRC?.fetchedObjects?.first as? Style)?.brewerywithstyle?.allObjects as? [Brewery]) {
+                breweryLocations = locations
+            }
         } catch {
             NSLog("Error reading coredata")
         }
