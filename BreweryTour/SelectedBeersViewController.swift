@@ -128,7 +128,12 @@ class SelectedBeersViewController: UIViewController {
     @IBAction func segmentedClicked(_ sender: UISegmentedControl) {
 
         let segmentedMode: SegmentedControllerMode = SelectedBeersViewController.SegmentedControllerMode(rawValue: sender.selectedSegmentIndex)!
+        segmentedPressedChooseViewModel(withMode: segmentedMode)
+    }
 
+    // MARK: - Functions
+
+    private func segmentedPressedChooseViewModel(withMode segmentedMode: SegmentedControllerMode) {
         switch segmentedMode {
             // Everytime we switch we have to refilter,
             // Here is the order of operations
@@ -159,7 +164,6 @@ class SelectedBeersViewController: UIViewController {
         }
     }
 
-    // MARK: - Functions
 
     // MARK: - Life Cycle
 
@@ -190,8 +194,15 @@ class SelectedBeersViewController: UIViewController {
         // Set navigationbar title
         tabBarController?.title = "Click For Details"
 
-        // Set Selected Beers as the first screen
-        segmentedControl.selectedSegmentIndex = 0 // Selected Beers mode
+        // Display only selected beers
+        if activeViewModel is SelectedBeersViewModel {
+            // Set selected subset as the first screen
+            segmentedControl.selectedSegmentIndex = SegmentedControllerMode.SelectedBeers.rawValue
+        } else {
+            // Set All Beers as the first screen
+            segmentedControl.selectedSegmentIndex = SegmentedControllerMode.AllBeers.rawValue
+        }
+
 
         // Tell view model to load SelectedBeers
         segmentedClicked(segmentedControl)
@@ -349,13 +360,14 @@ extension SelectedBeersViewController : UISearchBarDelegate {
     internal func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
 
-        // PREVENT ONLINE SEARCHES FROM SELECTEDBEERSTABLELIST, Only Allow
+        // Only Allow
         // AllBeerTableList to search online
         // This is because the preselection will not encompass the search results
-        guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBeers.rawValue,
+        segmentedControl.selectedSegmentIndex = SegmentedControllerMode.AllBeers.rawValue
+        segmentedClicked(segmentedControl)
+        guard !(searchBar.text?.isEmpty)! else{
             // Escape beacuse nothing was entered in search bar
-            !(searchBar.text?.isEmpty)! else{
-                return
+            return
         }
 
         // Function to attach to alert button
@@ -366,8 +378,8 @@ extension SelectedBeersViewController : UISearchBarDelegate {
             if activeViewModel is OnlineSearchCapable {
                 (activeViewModel as! OnlineSearchCapable).searchForUserEntered(searchTerm: searchBar.text!) {
                     (success, msg) -> Void in
-                    self.activityIndicator.stopAnimating()
                     self.activityIndicator.isHidden = true
+                    self.activityIndicator.stopAnimating()
                     if success {
                         self.tableView.reloadData()
                     } else {
