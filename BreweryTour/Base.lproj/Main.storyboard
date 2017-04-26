@@ -492,7 +492,6 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="pZ6-Ek-a0W">
-                        <barButtonItem key="leftBarButtonItem" title="Longpress to see local breweries" id="gDs-oy-wnY"/>
                         <rightBarButtonItems>
                             <barButtonItem title="Menu" id="3fs-AB-uVl">
                                 <connections>

@@ -125,7 +125,7 @@ class MapViewController : UIViewController {
     internal var targetLocation: CLLocation?
 
     // Initialize the tutorial views initial screen
-    private var tutorialState: CategoryTutorialStage = .Map
+    private var tutorialState: CategoryTutorialStage = .Longpress
 
     // New breweries with styles variable
     internal var breweriesForDisplay: [Brewery] = []
@@ -183,14 +183,14 @@ class MapViewController : UIViewController {
         case .Map:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Select any brewery marker to see it's route.\nClick the heart to favorite a brewery.\nClick on information to bring up brewery website."
+            tutorialText.text = "Select any brewery marker to see it's route.\nClick the heart to favorite a brewery.\nClick on information to bring up the brewery website."
             // Adds a circular path to tutorial pointer
             addCircularPathToPointer()
 
         case .Longpress:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Hold down on any location to set a new\ncenter for breweries to gather around\nPress Just around me button to home to return to your location"
+            tutorialText.text = "Long press on any location to set a new center for breweries to gather around\nPress 'Just around me' button to return to your home location"
             // Adds a circular path to tutorial pointer
             addCircularPathToPointer()
             break
@@ -213,7 +213,7 @@ class MapViewController : UIViewController {
             pointer.isHidden = true
             pointer.layer.removeAllAnimations()
             pointer.setNeedsDisplay()
-            tutorialText.text = "Tap Menu on the navigation bar for menu. Here you can allow the pointer to show all breweries local to you instead of just one style. Here you can also disable the green routing line."
+            tutorialText.text = "Tap Menu on the navigation bar for menu.\nHere you can allow the pointer to show all breweries local to you instead of just one style.\nHere you can also disable the green routing line."
             break
         }
 
