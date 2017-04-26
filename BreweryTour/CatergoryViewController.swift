@@ -80,7 +80,7 @@ NSFetchedResultsControllerDelegate {
 
     // Pointer animation duration
     private let pointerDelay: CGFloat = 0.0
-    private let pointerDuration: CGFloat = 0.5
+    private let pointerDuration: CGFloat = 1.0
 
     // For cycling thru the states of the tutorial for the viewcontroller
     private enum CategoryTutorialStage {
@@ -177,7 +177,7 @@ NSFetchedResultsControllerDelegate {
         case .SegementedControl:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downoaded."
+            tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downloaded."
             let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.frame.midY)
             pointer.center = segmentPoint
             UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
