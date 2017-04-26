@@ -442,12 +442,17 @@ class MapViewController : UIViewController {
     private func decideOnMappingStrategyAndInvoke(mapViewData: NSManagedObject?) {
         // Decision making to display Breweries Style or Brewery
 
+        // Can't map either strategy is there is no target
+        guard targetLocation != nil else {
+            return
+        }
+
         activeMappingStrategy?.endSearch()
 
         guard !showLocalBreweries.isOn else {
-            activeMappingStrategy = AllBreweriesMapStrategy(                                                  view: self,
-                                                                                                              location: targetLocation!,
-                                                                                                              maxPoints: Int(slider.value))
+            activeMappingStrategy = AllBreweriesMapStrategy(view: self,
+                                                            location: targetLocation!,
+                                                            maxPoints: Int(slider.value))
             return
         }
 
