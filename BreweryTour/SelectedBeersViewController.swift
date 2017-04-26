@@ -86,7 +86,7 @@ class SelectedBeersViewController: UIViewController {
         switch tutorialState {
         case .SegementedControl:
             // Set the initial point
-            tutorialText.text = "Choose 'Selected Beers' to show beers from style/brewery selection, Choose 'All Beers' to show all beers ever viewed on this device."
+            tutorialText.text = "Choose 'Selected Beers' to show beers from style/brewery selection,\nChoose 'All Beers' to show all beers ever viewed on this device."
             let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding,
                                         y: segmentedControl.center.y)
             pointer.center = segmentPoint
