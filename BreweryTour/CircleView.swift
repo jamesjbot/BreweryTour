@@ -30,7 +30,7 @@ class CircleView: UIView {
 
         var lineWidth : CGFloat = 0.5
         
-        var full = CGFloat(M_PI*2)
+        var full = CGFloat(Double.pi*2)
 
     
 // MARK: - Functions
