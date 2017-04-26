@@ -131,7 +131,7 @@ class MapViewController : UIViewController {
     internal var targetLocation: CLLocation?
 
     // Initialize the tutorial views initial screen
-    private var tutorialState: CategoryTutorialStage = .Menu
+    private var tutorialState: CategoryTutorialStage = .FavoriteBreweries
 
     // New breweries with styles variable
     internal var breweriesForDisplay: [Brewery] = []
@@ -200,7 +200,7 @@ class MapViewController : UIViewController {
         switch tutorialState {
         case .InitialScreen:
             hidePointerAndRemoveAnimation()
-            tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles.\nPlease step thru this tutorial with the next button.\nDismiss it when you are done.\nAny time you want to bring the tutorial back press Help?"
+            tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles.\nPlease step thru this tutorial with the next button.\nDismiss it when you are done.\nAny time you want to bring the tutorial back press Help"
 
         case .Longpress:
             pointer.isHidden = false
@@ -645,7 +645,7 @@ class MapViewController : UIViewController {
 
     private func tutorialInitialization() {
         // Tutorial layers
-        tutorialState = .Menu
+        tutorialState = .FavoriteBreweries
         nextTutorialAction(UIButton())
         // Display tutorial view.
         if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
