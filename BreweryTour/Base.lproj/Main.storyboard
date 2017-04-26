@@ -581,11 +581,11 @@
                                             </mask>
                                         </variation>
                                     </stackView>
-                                    <searchBar contentMode="redraw" searchBarStyle="minimal" placeholder="Select/search for a new beer." translatesAutoresizingMaskIntoConstraints="NO" id="vz7-RO-sWr">
+                                    <searchBar alpha="0.5" contentMode="redraw" searchBarStyle="prominent" placeholder="Select/search for a new beer." translucent="NO" translatesAutoresizingMaskIntoConstraints="NO" id="vz7-RO-sWr">
                                         <rect key="frame" x="8" y="44" width="359" height="44"/>
                                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
-                                        <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
-                                        <color key="barTintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <color key="tintColor" red="0.2392156869" green="0.67450982329999998" blue="0.96862745289999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <color key="barTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
                                         <textInputTraits key="textInputTraits" returnKeyType="search" enablesReturnKeyAutomatically="YES"/>
                                     </searchBar>
                                     <tableView clipsSubviews="YES" contentMode="scaleToFill" verticalCompressionResistancePriority="747" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="7fx-me-ez9">
