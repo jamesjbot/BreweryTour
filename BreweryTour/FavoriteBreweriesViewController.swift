@@ -49,6 +49,9 @@ class FavoriteBreweriesViewController: UIViewController {
         UserDefaults.standard.synchronize()
     }
 
+    @IBAction func helpTapped(_ sender: Any) {
+        tutorialView.isHidden = false
+    }
     
     // MARK: - Functions
 
@@ -121,7 +124,7 @@ class FavoriteBreweriesViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Animate tutorial
-        tutorialText.text = "Select a brewery to show direction to this location."
+        tutorialText.text = "Select a brewery to show directions to this location."
         let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint , y: tableView.frame.origin.y)
         pointer.center = tablePoint
         UIView.animateKeyframes(withDuration: 0.5,

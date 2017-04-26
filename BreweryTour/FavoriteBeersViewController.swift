@@ -47,6 +47,9 @@ class FavoriteBeersViewController: UIViewController {
         UserDefaults.standard.synchronize()
     }
 
+    @IBAction func helpTapped(_ sender: Any) {
+        tutorialView.isHidden = false
+    }
 
     // MARK: - Functions
 
