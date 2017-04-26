@@ -300,7 +300,7 @@ class BreweryDBClient {
             }
 
             // Asynchronous page processing
-            let queue : DispatchQueue = DispatchQueue.global(qos: .utility)
+            let queue : DispatchQueue = DispatchQueue.global(qos: .background)
             let group : DispatchGroup = DispatchGroup()
             for p in 1...numberOfPagesInt {
                 methodParameters[Constants.BreweryParameterKeys.Page] = p as AnyObject
