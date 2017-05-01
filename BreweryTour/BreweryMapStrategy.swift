@@ -15,11 +15,11 @@ import MapKit
 
 class BreweryMapStrategy: MapStrategy {
 
-    init(b: Brewery, view: MapViewController, location: CLLocation) {
+    init(b singleBrewery: Brewery, view: MapViewController, location: CLLocation) {
         super.init()
         targetLocation = location
         breweryLocations.removeAll()
-        breweryLocations.append(b)
+        breweryLocations.append(singleBrewery)
         parentMapViewController = view
         sortLocations()
         sendAnnotationsToMap()
