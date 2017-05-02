@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreData
+import CoreLocation
 
 
 public class Brewery: NSManagedObject {
@@ -53,5 +54,10 @@ public class Brewery: NSManagedObject {
         self.name = inBrewery.name != "" ? inBrewery.name : "No Brewery Name Listed"
         self.image = inBrewery.image
     }
-    
+
+    func getLocation() -> CLLocationCoordinate2D? {
+        let lat = CLLocationDegrees(floatLiteral: Double(latitude ?? "0.0")!)
+        let long = CLLocationDegrees(floatLiteral: Double(longitude ?? "0.0")!)
+        return CLLocationCoordinate2D(latitude: lat, longitude: long)
+    }
 }

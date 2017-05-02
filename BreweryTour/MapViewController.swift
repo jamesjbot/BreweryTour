@@ -550,19 +550,6 @@ class MapViewController : UIViewController {
     }
 
 
-    private func flatUIView(_ view: UIView) -> [UIView] {
-        var allView: [UIView] = []
-        if view.subviews.count == 0 {
-            return [view]
-        }
-        for i in view.subviews {
-            allView.append(contentsOf: flatUIView(i))
-        }
-        allView.append(view)
-        return allView
-    }
-
-
     @objc internal func exposeMenu() {
         if menuConstraint.constant == 0 {
             let maxUIView = flatUIView(menu).max(by: {return $0.intrinsicContentSize.width < $1.intrinsicContentSize.width })
@@ -579,6 +566,19 @@ class MapViewController : UIViewController {
                 self.view.layoutIfNeeded()
             }
         }
+    }
+
+
+    private func flatUIView(_ view: UIView) -> [UIView] {
+        var allView: [UIView] = []
+        if view.subviews.count == 0 {
+            return [view]
+        }
+        for i in view.subviews {
+            allView.append(contentsOf: flatUIView(i))
+        }
+        allView.append(view)
+        return allView
     }
 
 

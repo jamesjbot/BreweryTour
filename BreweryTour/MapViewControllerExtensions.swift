@@ -136,10 +136,84 @@ extension MapViewController {
 // MARK: - MKMapViewDelegate
 
 extension MapViewController : MKMapViewDelegate {
-    
+
+    // Remove selected callout
+    func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {
+        if view is BeermugAnnotationView {
+            for subview in view.subviews
+            {
+                subview.removeFromSuperview()
+            }
+        }
+    }
+
     // Selecting a Pin, draw the route to this pin
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
 
+        // Draw green line routing
+        if enableRouting.isOn {
+            drawRouteLine(onMap: mapView, withAnnotation: view)
+        }
+
+        if view.annotation is MKUserLocation || view.annotation === floatingAnnotation {
+            // Do not allow the selection floating pin or user's home pin
+            return
+        }
+
+        let breweryID = convertAnnotationToObjectID(by: view.annotation!)
+        // Fetch object from context
+        let selectedBrewery = readOnlyContext?.object(with: breweryID!) as! Brewery
+        let breweryAnnotation = BreweryAnnotation(brewery: selectedBrewery)
+
+        // Create a callout
+        let views = Bundle.main.loadNibNamed("BreweryCustomCallout", owner: nil, options: nil)
+        let calloutView = views?[0] as! BreweryCustomCalloutView
+        calloutView.breweryName.text = breweryAnnotation.breweryName!
+        calloutView.breweryWebSite.text = "\(breweryAnnotation.breweryWebsite ?? "")"
+        if breweryAnnotation.favorite ?? false {
+            calloutView.favoriteImage.image = #imageLiteral(resourceName: "favorite")
+        } else {
+            calloutView.favoriteImage.image = #imageLiteral(resourceName: "unfavorite")
+        }
+
+        // Set a a button on the weblink so the user can view the webpage.
+        let webButton = WebpageUIButton(frame: calloutView.breweryWebSite.frame)
+        if let str : String = (view.annotation?.subtitle)!,
+            let destinationUrl: URL = URL(string: str) {
+            webButton.url = destinationUrl
+            webButton.addTarget(self, action: #selector(tryToOpenWebpage(sender:)), for: .touchUpInside)
+            calloutView.addSubview(webButton)
+        }
+
+        // Attach favoriting action on FavoriteImage.
+        let favoriteButton = FavoriteUIButton(frame: calloutView.favoriteImage.frame)
+        favoriteButton.brewery = selectedBrewery
+        favoriteButton.favoriteImageView = calloutView.favoriteImage
+        favoriteButton.addTarget(self, action: #selector(changeFavoriteStatusOnBrewery(sender:)), for: .touchUpInside)
+        calloutView.addSubview(favoriteButton)
+        favoriteButton.objectID = breweryID
+
+        // Set the callout offset from theview
+        calloutView.center = CGPoint(x: view.bounds.size.width / 2, y: -calloutView.bounds.size.height*0.52)
+        view.addSubview(calloutView)
+        mapView.setCenter((view.annotation?.coordinate)!, animated: true)
+    }
+
+    // When a favorite image is clicked toggle status.
+    @objc private func changeFavoriteStatusOnBrewery(sender: FavoriteUIButton) {
+        if !(sender.brewery?.favorite ?? true) {
+            sender.brewery?.favorite = true
+            sender.favoriteImageView?.image = #imageLiteral(resourceName: "favorite")
+        } else {
+            sender.brewery?.favorite = false
+            sender.favoriteImageView?.image = #imageLiteral(resourceName: "unfavorite")
+        }
+        sender.favoriteImageView?.setNeedsDisplay()
+        saveFavoriteStatus(withObjectID: sender.objectID!, favoriteStatus: (sender.brewery?.favorite)!)
+    }
+
+
+    private func drawRouteLine(onMap map: MKMapView, withAnnotation view: MKAnnotationView) {
         // Disable green line routing
         guard enableRouting.isOn else {
             return
@@ -179,83 +253,26 @@ extension MapViewController : MKMapViewDelegate {
     }
 
 
-    // Respond to user taps on the annotation callout
-    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        // Did the user favorite or ask for more information on the brewery
-
-        // Block annotations lacking websites,
-        guard let annotationName = view.annotation?.title,
-            annotationName != UserLocationName,
-            annotationName != "" else {
-                return
-        }
-
-        switch control as UIView {
-            // UIControl is subclass of UIView
-            // Testing if UIControl is one of the MKAnnotationView's subviews
-
-        // Goto Webpage Information
-        case view.rightCalloutAccessoryView!:
-
-            if let str : String = (view.annotation?.subtitle)!,
-                let url: URL = URL(string: str) {
-                    tryToOpenWebpage(url: url)
-            }
-
-            break
-
-
-        case view.leftCalloutAccessoryView!:// Favorite or unfavorite a brewery
-
-            guard (view.annotation?.title)! != "My Locations" else {
-                // Do not respond to taps on the user's location callout
-                return
-            }
-
-            // Find the brewery object that belongs to this location
-            let tempObjectID = convertAnnotationToObjectID(by: view.annotation!)
-
-            // Fetch object from context
-            let favBrewery = readOnlyContext?.object(with: tempObjectID!) as! Brewery
-
-            // Flip favorite state in the database and in the ui
-            favBrewery.favorite = !(favBrewery.favorite)
-            let image : UIImage!
-            if favBrewery.favorite == false {
-                image = UIImage(named: "small_heart_icon_black_white_line_art.png")?.withRenderingMode(.alwaysOriginal)
-            } else {
-                image = UIImage(named: "heart_icon.png")?.withRenderingMode(.alwaysOriginal)
-            }
-
-            // Update favorite icon in accessory callout
-            DispatchQueue.main.async {
-                (view.leftCalloutAccessoryView as! UIButton).setImage(image!, for: .normal)
-                view.setNeedsDisplay()
-            }
-
-            // Save favorite status and update map
-            container?.performBackgroundTask(){
-                (context) -> Void in
-                (context.object(with: tempObjectID!) as! Brewery).favorite = favBrewery.favorite
-                context.performAndWait {
-                    do {
-                        try context.save()
-                    } catch _ {
-                        self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite brewery, \nplease try again")
-                    }
+    func saveFavoriteStatus(withObjectID objectID: NSManagedObjectID, favoriteStatus: Bool) {
+        // Save favorite status and update map
+        container?.performBackgroundTask(){
+            (context) -> Void in
+            (context.object(with: objectID) as! Brewery).favorite = favoriteStatus
+            context.performAndWait {
+                do {
+                    try context.save()
+                } catch _ {
+                    self.displayAlertWindow(title: "Error", msg: "Sorry there was an error toggling your favorite brewery, \nplease try again")
                 }
             }
-            break
-
-        default:
-            break
         }
     }
 
 
     // Wraps conditional logic around webpage opening, to prevent malformed url
-    func tryToOpenWebpage(url: URL) {
-        if UIApplication.shared.canOpenURL(url) {
+    @objc func tryToOpenWebpage(sender : Any) {
+        if let url = (sender as? WebpageUIButton)?.url,
+            UIApplication.shared.canOpenURL(url) {
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
@@ -280,11 +297,10 @@ extension MapViewController : MKMapViewDelegate {
         return nil
     }
 
-
-    // This formats the pins and calloutAccessory views on the map
+    // This formats the pins and beers mugs on the map 
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
 
-        let pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? MyAnnotationView
+        let pinView = mapView.dequeueReusableAnnotationView(withIdentifier: reuseId) as? BeermugAnnotationView
 
         var foundBrewery: Brewery?
 
@@ -293,7 +309,8 @@ extension MapViewController : MKMapViewDelegate {
         }
 
         // Based on the incoming annotationView let change this pinView
-        let annotationView =  MakePinView.sharedInstance().makePinView(fromAnnotationView: pinView,
+        let annotationView =
+            MakePinView.sharedInstance().makePinOrBeerMugViewOnMap(fromAnnotationView: pinView,
                                                                   fromAnnotation: annotation,
                                                                   withUserLocation: mapView.userLocation,
                                                                   floatingAnnotation: floatingAnnotation,
@@ -301,9 +318,7 @@ extension MapViewController : MKMapViewDelegate {
                                                                   brewery: foundBrewery)
         return annotationView
     }
-
 }
-
 
 // MARK: - NSFetchedResultsControllerDelegate
 

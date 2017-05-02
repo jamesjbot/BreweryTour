@@ -1,3 +1,4 @@
+
 //
 //  MakePinView.swift
 //  BreweryTour
@@ -24,7 +25,7 @@ class MakePinView {
     }
 
     
-    internal func makePinView(fromAnnotationView: MKAnnotationView?,
+    internal func makePinOrBeerMugViewOnMap(fromAnnotationView oldPinView: MKAnnotationView?,
                               fromAnnotation annotation: MKAnnotation,
                               withUserLocation: MKUserLocation,
                               floatingAnnotation: MKAnnotation?,
@@ -42,35 +43,46 @@ class MakePinView {
         // 2) FloatingLocation
         // 3) Regular beer location
 
-        // Process 1 & 2 MkAnnotations
+        // Process 1 & 2 MkAnnotations (MKUserLocation && FloatingLocation)
         if annotation is MKUserLocation || annotation === floatingAnnotation {
-            // Just pins
-            guard let fromAnnotationView = fromAnnotationView,
-                    fromAnnotationView is MKPinAnnotationView else {
-                return createPinAnnotationView(annotation: annotation,
-                                           reuseID: reuseID,
-                                           isfloatingAnnotation: annotation === floatingAnnotation)
+            // Just user and floating pins pins
+            // FIXME: remove this dead code.
+            // What is this actually doing now
+            guard let localOldPinView = oldPinView,
+                // We have a an MKAnnotationView
+                    oldPinView is MKPinAnnotationView else {
+                        // We do not have an old pin
+                        // Why are we trying to make an oldPinView again
+                        //return localOldPinView
+                        //fatalError()
+                        //return
+                        // Create a new BeerMug Annotation
+                        //If the annotation is a user it should never be a beer
+                return createUserPinAnnotationView(annotation: annotation,
+                                               reuseID: reuseID,
+                                               isfloatingAnnotation: annotation === floatingAnnotation)
             }
-            // Modify the dequeued MKAnnotationView
+            
+            // Modify the dequeued MKAnnotationView (oldPinView)
             if annotation === floatingAnnotation {
-                (fromAnnotationView as! MKPinAnnotationView).pinTintColor = UIColor.magenta
+                (oldPinView as! MKPinAnnotationView).pinTintColor = UIColor.magenta
             } else {
-                (fromAnnotationView as! MKPinAnnotationView).pinTintColor = UIColor.black
+                (oldPinView as! MKPinAnnotationView).pinTintColor = UIColor.black
             }
-            return fromAnnotationView
+            return oldPinView!
 
         } else { // Regular beer location, process 3 MKAnnotations
 
-            guard let fromAnnotationView = fromAnnotationView else {
-                return createMKAnnnotationView(annotation: annotation, reuseID: reuseID, brewery: brewery)
+            guard let oldPinView = oldPinView else {
+                return createBeermugAnnnotationView(annotation: annotation, reuseID: reuseID, brewery: brewery)
             }
-            return fromAnnotationView // no need to change the image it's already a beer
+            return oldPinView // no need to change the image it's already a beer
         }
     }
 
-
-    private func createPinAnnotationView(annotation: MKAnnotation, reuseID: String, isfloatingAnnotation: Bool) -> MKPinAnnotationView {
-        let pinView = MyPinAnnotationView(annot: annotation, reuse: reuseID)
+    // Creates AnnotationView with pins
+    private func createUserPinAnnotationView(annotation: MKAnnotation, reuseID: String, isfloatingAnnotation: Bool) -> MKPinAnnotationView {
+        let pinView = JustUserAndFloatingPinAnnotationView(annot: annotation, reuse: reuseID)
         if isfloatingAnnotation {
             pinView.pinTintColor = UIColor.magenta
             return pinView
@@ -80,9 +92,12 @@ class MakePinView {
         }
     }
 
-
-    private func createMKAnnnotationView(annotation: MKAnnotation, reuseID: String, brewery: Brewery?) -> MKAnnotationView {
-        let mkView = MyAnnotationView(annot: annotation, reuse: reuseID, brewery: brewery)
+    // Creates AnnotationView with little beer mugs
+    private func createBeermugAnnnotationView(annotation: MKAnnotation, reuseID: String, brewery: Brewery?) -> MKAnnotationView {
+        let mkView = BeermugAnnotationView(annot: annotation,
+                                      reuse: reuseID,
+                                      brewery: brewery,
+                                      favorite: (brewery?.favorite)!)
         return mkView
     }
 
