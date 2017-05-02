@@ -53,7 +53,6 @@ class MapStrategy: NSObject, MapAnnotationProvider {
 
     func endSearch() {
         fatalError("You must override endSearch()!!!")
-        print("This will cause a compiler warning")
         // Dummy stub for BreweryMapStrategy
         // StyleMapStrategy will override it's implementation
     }
