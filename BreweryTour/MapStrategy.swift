@@ -34,17 +34,18 @@ class MapStrategy: NSObject, MapAnnotationProvider {
     // converts breweries to annotations
     func convertLocationToAnnotation() -> [MKAnnotation] {
         var annotations = [MKAnnotation]()
-        for i in breweryLocations {
+        for breweryLocation in breweryLocations {
 
             // Sometimes the breweries don't have a location
-            guard i.latitude != nil && i.longitude != nil else {
+            guard breweryLocation.latitude != nil && breweryLocation.longitude != nil else {
                 continue
             }
 
             let aPin = MKPointAnnotation()
-            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(i.latitude!)!, longitude: Double(i.longitude!)!)
-            aPin.title = i.name
-            aPin.subtitle = i.url
+            aPin.coordinate = CLLocationCoordinate2D(latitude: Double(breweryLocation.latitude!)!,
+                                                     longitude: Double(breweryLocation.longitude!)!)
+            aPin.title = breweryLocation.name
+            aPin.subtitle = breweryLocation.url
             annotations.append(aPin)
         }
         return annotations

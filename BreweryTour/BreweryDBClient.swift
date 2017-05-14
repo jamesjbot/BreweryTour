@@ -228,8 +228,8 @@ class BreweryDBClient {
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
                 
-                for i in 1...numberOfPages {
-                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
+                for breweryResultsPageNumber in 1...numberOfPages {
+                    methodParameters[Constants.BreweryParameterKeys.Page] = breweryResultsPageNumber as AnyObject
                     let _ : NSURL = self.createURLFromParameters(queryType: theOutputType,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
@@ -302,8 +302,8 @@ class BreweryDBClient {
             // Asynchronous page processing
             let queue : DispatchQueue = DispatchQueue.global(qos: .background)
             let group : DispatchGroup = DispatchGroup()
-            for p in 1...numberOfPagesInt {
-                methodParameters[Constants.BreweryParameterKeys.Page] = p as AnyObject
+            for pageOfBeersAndBreweries in 1...numberOfPagesInt {
+                methodParameters[Constants.BreweryParameterKeys.Page] = pageOfBeersAndBreweries as AnyObject
                 let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                                      querySpecificID: nil,
                                                                      parameters: methodParameters)
@@ -410,8 +410,8 @@ class BreweryDBClient {
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group = DispatchGroup()
                 
-                for i in 1...numberOfPages {
-                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
+                for beersPageNumber in 1...numberOfPages {
+                    methodParameters[Constants.BreweryParameterKeys.Page] = beersPageNumber as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: APIQueryResponseProcessingTypes.BeersFollowedByBreweries,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
@@ -500,8 +500,8 @@ class BreweryDBClient {
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
 
-                for i in 1...numberOfPages {
-                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
+                for breweriesResultPageNumber in 1...numberOfPages {
+                    methodParameters[Constants.BreweryParameterKeys.Page] = breweriesResultPageNumber as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
@@ -574,8 +574,8 @@ class BreweryDBClient {
                 let queue : DispatchQueue = DispatchQueue.global()
                 let group : DispatchGroup = DispatchGroup()
 
-                for i in 1...numberOfPages {
-                    methodParameters[Constants.BreweryParameterKeys.Page] = i as AnyObject
+                for breweryResultsPageNumber in 1...numberOfPages {
+                    methodParameters[Constants.BreweryParameterKeys.Page] = breweryResultsPageNumber as AnyObject
                     let outputURL : NSURL = self.createURLFromParameters(queryType: theOutputType,
                                                                          querySpecificID: nil,
                                                                          parameters: methodParameters)
