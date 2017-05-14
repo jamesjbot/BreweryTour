@@ -89,8 +89,8 @@ class Mediator {
 extension Mediator: MediatorBroadcastSetSelected {
 
     private func notifyPassedItemObservers(thisItem: NSManagedObject) {
-        for i in passedItemObservers {
-            i.updateObserversSelected(item: thisItem)
+        for observer in passedItemObservers {
+            observer.updateObserversSelected(item: thisItem)
         }
     }
 
@@ -139,15 +139,15 @@ extension Mediator: MediatorBusyObserver {
 
 
     func notifyStartingWork() {
-        for i in busyObservers {
-            i.startAnimating()
+        for observer in busyObservers {
+            observer.startAnimating()
         }
     }
 
 
     func notifyStoppingWork() {
-        for i in busyObservers {
-            i.stopAnimating()
+        for observer in busyObservers {
+            observer.stopAnimating()
         }
     }
 
@@ -164,8 +164,8 @@ extension Mediator: BroadcastManagedObjectContextRefresh {
 
     internal func allBeersAndBreweriesDeleted() {
         passedItem = nil
-        for i in contextObservers {
-            i.contextsRefreshAllObjects()
+        for observer in contextObservers {
+            observer.contextsRefreshAllObjects()
         }
     }
 

@@ -550,6 +550,7 @@ class MapViewController : UIViewController {
     }
 
 
+    // Show the options menu for 'Show local only' and 'Enable routing' to display.
     @objc internal func exposeMenu() {
         if menuConstraint.constant == 0 {
             let maxUIView = flatUIView(menu).max(by: {return $0.intrinsicContentSize.width < $1.intrinsicContentSize.width })
@@ -568,14 +569,14 @@ class MapViewController : UIViewController {
         }
     }
 
-
+    // FIXME think about changing this.
     private func flatUIView(_ view: UIView) -> [UIView] {
         var allView: [UIView] = []
         if view.subviews.count == 0 {
             return [view]
         }
-        for i in view.subviews {
-            allView.append(contentsOf: flatUIView(i))
+        for subviews in view.subviews {
+            allView.append(contentsOf: flatUIView(subviews))
         }
         allView.append(view)
         return allView
@@ -610,10 +611,10 @@ class MapViewController : UIViewController {
     }
 
 
-    private func routedAnnotationIsNot(inArray: [MKAnnotation]) -> Bool {
+    private func routedAnnotationIsNot(inArray annotations: [MKAnnotation]) -> Bool {
         if let coordinate = routedAnnotation?.annotation?.coordinate {
-            for i in inArray {
-                if compareCoordinates(a: i.coordinate, b: coordinate ) {
+            for annotation in annotations {
+                if compareCoordinates(a: annotation.coordinate, b: coordinate ) {
                     return false
                 }
             }
@@ -658,9 +659,9 @@ class MapViewController : UIViewController {
     }
 
 
-    private func updateExtraction(a:Set<NewMyAnnotation>) -> [MKAnnotation] {
+    private func updateExtraction(a set :Set<NewMyAnnotation>) -> [MKAnnotation] {
         var returnArray = [MKAnnotation]()
-        for i in a {
+        for annotation in set {
             returnArray.append(i.annotation!)
         }
         return returnArray
