@@ -308,7 +308,7 @@ extension MapViewController : MKMapViewDelegate {
              foundBrewery = readOnlyContext?.object(with: objectID) as? Brewery
         }
 
-        // Based on the incoming annotationView let change this pinView
+        // Based on the incoming annotationView let's change this pinView
         let annotationView =
             MakePinView.sharedInstance().makePinOrBeerMugViewOnMap(fromAnnotationView: pinView,
                                                                   fromAnnotation: annotation,
