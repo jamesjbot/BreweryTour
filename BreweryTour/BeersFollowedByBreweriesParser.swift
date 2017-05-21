@@ -62,7 +62,7 @@ class BeersFollowedByBreweriesParser: ParserProtocol {
                 }
                 
                 // Send to beer creation process
-                BeerDesigner.sharedInstanct().createBeerObject(beer: beer, brewerID: brewersID) {
+                BeerDesigner.sharedInstance().createBeerObject(beer: beer, brewerID: brewersID) {
                     (Beer) -> Void in
                 }
                 
