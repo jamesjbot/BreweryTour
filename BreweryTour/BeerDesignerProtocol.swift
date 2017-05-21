@@ -53,7 +53,7 @@ extension BeerDesignerProtocol {
 class BeerDesigner: BeerDesignerProtocol {
 
     private init() {}
-    internal class func sharedInstanct() -> BeerDesignerProtocol {
+    internal class func sharedInstance() -> BeerDesignerProtocol {
         struct Singleton {
             static var sharedInstance = BeerDesigner()
         }

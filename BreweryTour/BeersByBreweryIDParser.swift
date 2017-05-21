@@ -14,7 +14,7 @@ class BeersByBreweryIDParser: ParserProtocol {
                querySpecificID : String?,
                completion: (( (_ success :  Bool, _ msg: String?) -> Void )?) ) {
         // Since were are querying by brewery ID we can be guaranteed that
-        // the brewery exists and we can use the querySpecificID!.
+        // the brewery exists, therefore we can use the querySpecificID!.
         guard let beerArray = response["data"] as? [[String:AnyObject]] else {
             // Failed to extract data
             completion?(false, "There are no beers listed for this brewer.")
@@ -22,13 +22,13 @@ class BeersByBreweryIDParser: ParserProtocol {
         }
         createBeerLoop: for beer in beerArray {
 
-            // This beer has no style id skip it
+            // Assure that we have a beer with style id
             guard beer["styleId"] != nil else {
                 continue createBeerLoop
             }
-            // FIXME: - This is a type fix
+
             if let queryID = querySpecificID {
-                BeerDesigner.sharedInstanct().createBeerObject(beer: beer, brewerID: queryID) {
+                BeerDesigner.sharedInstance().createBeerObject(beer: beer, brewerID: queryID) {
                     (Beer) -> Void in
                 }
             }
