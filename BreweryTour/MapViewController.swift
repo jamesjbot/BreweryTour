@@ -553,33 +553,56 @@ class MapViewController : UIViewController {
     // Show the options menu for 'Show local only' and 'Enable routing' to display.
     @objc internal func exposeMenu() {
         if menuConstraint.constant == 0 {
-            let maxUIView = flatUIView(menu).max(by: {return $0.intrinsicContentSize.width < $1.intrinsicContentSize.width })
-            menuConstraint.constant = (maxUIView?.intrinsicContentSize.width)!
-                + 2 * (maxUIView?.layoutMargins.left)!
-                + 2 * enableRouting.layoutMargins.left
-                + enableRouting.intrinsicContentSize.width
-            UIView.animate(withDuration: 0.5) {
-                self.view.layoutIfNeeded()
-            }
+            showMenu()
         } else {
-            menuConstraint.constant = 0
-            UIView.animate(withDuration: 0.5) {
-                self.view.layoutIfNeeded()
-            }
+            shrinkMenu()
         }
     }
 
-    // FIXME think about changing this.
-    private func flatUIView(_ view: UIView) -> [UIView] {
-        var allView: [UIView] = []
-        if view.subviews.count == 0 {
+
+    private func showMenu() {
+        let maxUIView = maxOf(viewsIn: flattenUIView(menu))
+        menuConstraint.constant = (maxUIView.intrinsicContentSize.width)
+            + 2 * maxUIView.layoutMargins.left
+            + 2 * enableRouting.layoutMargins.left
+            + enableRouting.intrinsicContentSize.width
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+
+    private func shrinkMenu() {
+        menuConstraint.constant = 0
+        UIView.animate(withDuration: 0.5) {
+            self.view.layoutIfNeeded()
+        }
+    }
+
+
+
+    private func maxOf(viewsIn views: [UIView]) -> UIView {
+        let largest = views.max(by:
+        { a, b -> Bool in
+            return a.intrinsicContentSize.width < b.intrinsicContentSize.width })
+        return largest ?? view // Return the largest view in the tree of view or the main view
+    }
+
+    
+    private func flattenUIView(_ view: UIView) -> [UIView] {
+        var allViews: [UIView] = []
+        if view.subviews.count == 0 { // If there are no subview return itself
             return [view]
         }
-        for subviews in view.subviews {
-            allView.append(contentsOf: flatUIView(subviews))
+
+        // Put the original containing view in
+        allViews.append(view)
+
+        // Put all child views in
+        for subview in view.subviews {
+            allViews.append(contentsOf: flattenUIView(subview))
         }
-        allView.append(view)
-        return allView
+        return allViews
     }
 
 
