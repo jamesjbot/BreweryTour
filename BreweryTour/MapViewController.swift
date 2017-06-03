@@ -682,15 +682,11 @@ class MapViewController : UIViewController {
     }
 
 
-    private func updateExtraction(a set :Set<NewMyAnnotation>) -> [MKAnnotation] {
-        var returnArray = [MKAnnotation]()
-        for annotation in set {
-            returnArray.append(i.annotation!)
-        }
-        return returnArray
+    private func convertSetToArrayOfAnnotations(set :Set<NewMyAnnotation>) -> [MKAnnotation] {
+        return set.flatMap({$0.annotation})
     }
 
-
+    
     // Draw the annotations on the map
     internal func updateMap(withAnnotations annotations: [MKAnnotation]) {
         var finalAnnotations:[MKAnnotation]?
@@ -710,8 +706,8 @@ class MapViewController : UIViewController {
         }
         let (removeSet, addSet) = updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: finalAnnotations!)
         // Convert back to MKAnnotations
-        let removeArray = self.updateExtraction(a: removeSet)
-        let addArray = self.updateExtraction(a: addSet)
+        let removeArray = convertSetToArrayOfAnnotations(set: removeSet)
+        let addArray = convertSetToArrayOfAnnotations(set: addSet)
 
         if removeSet.count == 0 && addSet.count == 0 &&
             removeSet.first?.title! == self.UserLocationName {
