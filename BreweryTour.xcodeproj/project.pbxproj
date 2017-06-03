@@ -27,7 +27,7 @@
 		A7300C5C1EAF833E0029EBB6 /* search.png in Resources */ = {isa = PBXBuildFile; fileRef = A7300C5B1EAF833E0029EBB6 /* search.png */; };
 		A7300C5F1EAF844F0029EBB6 /* search25.png in Resources */ = {isa = PBXBuildFile; fileRef = A7300C5D1EAF844F0029EBB6 /* search25.png */; };
 		A7300C601EAF844F0029EBB6 /* search50.png in Resources */ = {isa = PBXBuildFile; fileRef = A7300C5E1EAF844F0029EBB6 /* search50.png */; };
-		A7300C621EAF86650029EBB6 /* README.md in Sources */ = {isa = PBXBuildFile; fileRef = A7300C611EAF86650029EBB6 /* README.md */; };
+		A7300C621EAF86650029EBB6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A7300C611EAF86650029EBB6 /* README.md */; };
 		A7300C641EAF88290029EBB6 /* TabbarConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7300C631EAF88290029EBB6 /* TabbarConstants.swift */; };
 		A7300C661EAF9D050029EBB6 /* DismissableHelpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7300C651EAF9D050029EBB6 /* DismissableHelpNavigationController.swift */; };
 		A7419ED91E2DBD3E006E421D /* BeersTabbaricon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7419ED71E2DBD3E006E421D /* BeersTabbaricon2x.png */; };
@@ -585,8 +585,8 @@
 			buildPhases = (
 				D8BA43B84FAD3DEA64FAFE0B /* [CP] Check Pods Manifest.lock */,
 				A7B2AAD71DA791A400EE844C /* Sources */,
-				A7B2AAD81DA791A400EE844C /* Frameworks */,
 				A7B2AAD91DA791A400EE844C /* Resources */,
+				A7B2AAD81DA791A400EE844C /* Frameworks */,
 				A3A6732664DE4D3F17EF4978 /* [CP] Embed Pods Frameworks */,
 				10E6BFF6FA9E20AA8FFA810C /* [CP] Copy Pods Resources */,
 			);
@@ -691,6 +691,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A7300C621EAF86650029EBB6 /* README.md in Resources */,
 				A7D227241DB4D90D00360A3B /* BreweryTabbarIcon.png in Resources */,
 				A7419ED91E2DBD3E006E421D /* BeersTabbaricon2x.png in Resources */,
 				A7B2AAE91DA791A400EE844C /* Assets.xcassets in Resources */,
@@ -846,7 +847,6 @@
 				A7634E681E26ED440066ACEF /* ParserFactory.swift in Sources */,
 				A75160281E356AB50078F6F9 /* BeermugAnnotationView.swift in Sources */,
 				A711EC091DC8EBDF008E114A /* ExtensionUIViewController.swift in Sources */,
-				A7300C621EAF86650029EBB6 /* README.md in Sources */,
 				A74350741DBAA17F007AE08C /* ObserverAndSubjectProtocol.swift in Sources */,
 				A74350681DB91454007AE08C /* NSManagedObjectDisplayable.swift in Sources */,
 				A705F2901EB162570051F972 /* CoreAnimationConstants.swift in Sources */,
