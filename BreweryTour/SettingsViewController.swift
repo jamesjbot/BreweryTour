@@ -44,45 +44,71 @@ class SettingsViewController: UIViewController {
         // Prompt user should we delete all the beers and breweries
         // Create action for prompt
 
+         func deleteBeerData(inContext context: NSManagedObjectContext, _ success: inout Bool) {
+            let request = NSBatchDeleteRequest(fetchRequest: self.beerFetch as! NSFetchRequest<NSFetchRequestResult>)
+            do {
+                try context.execute(request)
+            } catch let error {
+                self.displayAlertWindow(title: "Error", msg: "Error deleting Beer data \(error)")
+                success = false
+            }
+        }
+
+
+        func deleteStyleData(inContext context: NSManagedObjectContext, _ success: inout Bool) {
+            let request = NSBatchDeleteRequest(fetchRequest: self.styleFetch as! NSFetchRequest<NSFetchRequestResult>)
+            do {
+                try context.execute(request)
+            } catch let error {
+                self.displayAlertWindow(title: "Error", msg: "Error deleting Style data \(error)")
+                success = false
+            }
+        }
+
+
+        func deleteBreweryData(inContext context: NSManagedObjectContext, _ success: inout Bool) {
+            let request = NSBatchDeleteRequest(fetchRequest: self.breweryFetch as! NSFetchRequest<NSFetchRequestResult>)
+            do {
+                try context.execute(request)
+            } catch let error {
+                self.displayAlertWindow(title: "Error", msg: "Error deleting Brewery data \(error)")
+            }
+        }
+
+        func saveDeletions(inContext context: NSManagedObjectContext, _ success: inout Bool) {
+            do {
+                try context.save()
+            } catch let error {
+                self.displayAlertWindow(title: "Error", msg: "Succesfully deleted but unable to save deletions to database \(error)")
+            }
+        }
+
         func deleteAll(_ action: UIAlertAction) {
             self.startIndicator()
             container?.performBackgroundTask({
                 (context) in
-                var success: Bool = true
-                var request = NSBatchDeleteRequest(fetchRequest: self.beerFetch as! NSFetchRequest<NSFetchRequestResult>)
-                do {
-                    try context.execute(request)
-                } catch let error {
-                    self.displayAlertWindow(title: "Error", msg: "Error deleting Beer data \(error)")
-                    success = false
-                }
-                request = NSBatchDeleteRequest(fetchRequest: self.styleFetch as! NSFetchRequest<NSFetchRequestResult>)
-                do {
-                    try context.execute(request)
-                } catch let error {
-                    self.displayAlertWindow(title: "Error", msg: "Error deleting Style data \(error)")
-                    success = false
-                }
-                request = NSBatchDeleteRequest(fetchRequest: self.breweryFetch as! NSFetchRequest<NSFetchRequestResult>)
-                do {
-                    try context.execute(request)
-                } catch let error {
-                    self.displayAlertWindow(title: "Error", msg: "Error deleting Brewery data \(error)")
-                    success = false
-                }
-                do {
-                    try context.save()
-                } catch _ {
-                    success = false
-                    self.displayAlertWindow(title: "Error", msg: "Successfully deleted but unable to save?")
-                }
+                var allProgressSucceeded: Bool = true
+
+                deleteBeerData(inContext: context, &allProgressSucceeded)
+
+                deleteStyleData(inContext: context, &allProgressSucceeded)
+
+                deleteBreweryData(inContext: context, &allProgressSucceeded)
+
+                saveDeletions(inContext: context, &allProgressSucceeded)
+
                 self.stopIndicator()
-                if success == true {
-                    self.displayAlertWindow(title: "Delete Data", msg: "Successful"+self.statistics())
+
+                if allProgressSucceeded == true {
+                    self.displayAlertWindow(title: "Delete All Data", msg: "Successful"+self.statistics())
+                } else {
+                    self.displayAlertWindow(title: "Delete All Data", msg: "There was an error deleting all data, try again later")
                 }
+
                 self.mediator.allBeersAndBreweriesDeleted()
             })
         }
+
         let action = UIAlertAction(title: "Delete",
                                    style: .default,
                                    handler: deleteAll)
