@@ -65,7 +65,7 @@ class MapStrategy: NSObject, MapAnnotationProvider {
     }
 
     
-    // sorts the breweries by distnace to targetLocation
+    // Sort the breweries by distance to targetLocation
     func sortLocations() {
         breweryLocations = breweryLocations.sorted(by:
             { (brewery1, brewery2) -> Bool in
