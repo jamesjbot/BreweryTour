@@ -62,7 +62,8 @@ struct ConvertToFullStateName {
         	"WI":"WISCONSIN",
         	"WY":"WYOMING"
     ]
-    func fullname(_ state: String) -> String {
+
+    func fullname(fromAbbreviation state: String) -> String {
         return dict[state]!
     }
 }
