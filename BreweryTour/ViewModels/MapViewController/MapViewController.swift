@@ -532,7 +532,7 @@ class MapViewController : UIViewController {
                     return
                 }
                 let placemark: CLPlacemark = (placemarksarray?.first)! as CLPlacemark
-                let state = ConvertToFullStateName().fullname(placemark.administrativeArea!)
+                let state = ConvertToFullStateName().fullname(fromAbbreviation: placemark.administrativeArea!)
                 Mediator.sharedInstance().select(thisItem: nil, state: state) {
                     (success,msg) -> Void in
                 }
