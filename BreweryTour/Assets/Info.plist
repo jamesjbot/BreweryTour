@@ -5,8 +5,6 @@
 	<key>UIAppFonts</key>
 	<array>
 		<string>AlfaSlabOne-Regular.ttf</string>
-		<string>Aclonia.tff</string>
-		<string>Shirkhand-Regular.tff</string>
 	</array>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
