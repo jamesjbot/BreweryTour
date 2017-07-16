@@ -18,7 +18,7 @@ import UIKit
 import Foundation
 import CoreData
 
-class SettingsViewController: UIViewController {
+class SettingsViewController: UIViewController, AlertWindowDisplaying {
     
     // MARK: - Constants
 

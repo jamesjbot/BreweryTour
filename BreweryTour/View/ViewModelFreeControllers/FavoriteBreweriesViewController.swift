@@ -19,7 +19,7 @@ import CoreData
 import CoreGraphics
 import MapKit
 
-class FavoriteBreweriesViewController: UIViewController {
+class FavoriteBreweriesViewController: UIViewController, AlertWindowDisplaying {
     
     // MARK: - Constants
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container

@@ -135,7 +135,7 @@ extension MapViewController {
 
 // MARK: - MKMapViewDelegate
 
-extension MapViewController : MKMapViewDelegate {
+extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
 
     // Remove selected callout
     func mapView(_ mapView: MKMapView, didDeselect view: MKAnnotationView) {

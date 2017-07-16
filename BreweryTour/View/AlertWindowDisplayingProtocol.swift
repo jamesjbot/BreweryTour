@@ -1,5 +1,5 @@
 //
-//  ExtensionUIViewController.swift
+//  AlertWindowDisplaying Protocol
 //  BreweryTour
 //
 //  Created by James Jongsurasithiwat on 11/1/16.
@@ -8,7 +8,12 @@
 
 import UIKit
 
-extension UIViewController {
+protocol AlertWindowDisplaying {
+    func displayAlertWindow(title: String, msg: String, actions: [UIAlertAction]?)
+}
+
+
+extension AlertWindowDisplaying where Self: UIViewController {
 
     // MARK: - Function
     

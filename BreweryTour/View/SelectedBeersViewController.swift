@@ -333,7 +333,7 @@ extension SelectedBeersViewController : UITableViewDelegate {
 
 // MARK: - UISearchBarDelegate
 
-extension SelectedBeersViewController : UISearchBarDelegate {
+extension SelectedBeersViewController : UISearchBarDelegate, AlertWindowDisplaying {
 
     // Any text entered in the searchbar triggers this
     internal func searchBar(_ searchBar: UISearchBar, textDidChange: String){
