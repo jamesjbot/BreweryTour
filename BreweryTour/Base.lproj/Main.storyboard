@@ -386,7 +386,7 @@
                                     <view alpha="0.60000002384185791" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6HM-s5-dg9" userLabel="Shadow View">
                                         <rect key="frame" x="0.0" y="0.0" width="375" height="554"/>
                                         <subviews>
-                                            <view hidden="YES" clipsSubviews="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DB0-f6-MiY" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
+                                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="DB0-f6-MiY" userLabel="pointer" customClass="CircleView" customModule="BreweryTour" customModuleProvider="target">
                                                 <rect key="frame" x="215" y="257" width="40" height="40"/>
                                                 <constraints>
                                                     <constraint firstAttribute="width" constant="40" id="BZV-eu-1zg"/>
@@ -980,7 +980,7 @@
             <objects>
                 <navigationController storyboardIdentifier="BreweryTourNavigationController" title="Brewery Tour" automaticallyAdjustsScrollViewInsets="NO" id="H0g-oq-XOD" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="qaX-sf-HGS">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="qaX-sf-HGS">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="tintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -1374,7 +1374,7 @@
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="1vP-KU-Yxd">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="1vP-KU-Yxd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1395,7 +1395,7 @@
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="7hh-cz-bWK">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="7hh-cz-bWK">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1416,7 +1416,7 @@
                         <offsetWrapper key="titlePositionAdjustment" horizontal="0.0" vertical="0.0"/>
                     </tabBarItem>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="waI-IB-CFH">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="waI-IB-CFH">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1435,7 +1435,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ecf-ZM-m6R" customClass="DismissableHelpNavigationController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Favorite Beers" image="BeersTabbaricon2.png" id="pSD-1f-fdp"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="rgO-bg-hES">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="rgO-bg-hES">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
@@ -1454,7 +1454,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Dak-x0-W7q" customClass="DismissableHelpNavigationController" customModule="BreweryTour" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBarItem key="tabBarItem" title="Favorite Breweries" image="BreweryTabbarIcon.png" id="GMI-eD-XYO"/>
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="y7u-ak-80E">
+                    <navigationBar key="navigationBar" contentMode="scaleToFill" misplaced="YES" id="y7u-ak-80E">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
