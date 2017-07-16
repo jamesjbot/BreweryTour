@@ -14,7 +14,7 @@
 import UIKit
 import CoreData
 
-class BeerDetailViewController: UIViewController {
+class BeerDetailViewController: UIViewController, AlertWindowDisplaying {
 
     // MARK: - Constants
 

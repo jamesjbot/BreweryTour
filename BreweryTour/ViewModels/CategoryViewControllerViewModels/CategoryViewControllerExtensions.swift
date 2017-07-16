@@ -44,7 +44,7 @@ extension CategoryViewController : DismissableTutorial {
 
 // MARK: - UISearchBarDelegate
 
-extension CategoryViewController: UISearchBarDelegate {
+extension CategoryViewController: UISearchBarDelegate, AlertWindowDisplaying {
 
     // Filter out selections not conforming to the searchbar text
     func searchBar(_ searchBar: UISearchBar, textDidChange: String){
