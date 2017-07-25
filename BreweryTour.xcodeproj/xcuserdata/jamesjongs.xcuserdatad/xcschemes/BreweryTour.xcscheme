@@ -38,6 +38,11 @@
                BlueprintName = "BreweryTourTests"
                ReferencedContainer = "container:BreweryTour.xcodeproj">
             </BuildableReference>
+            <SkippedTests>
+               <Test
+                  Identifier = "CoreDataStackTests/testDeleteAll()">
+               </Test>
+            </SkippedTests>
          </TestableReference>
          <TestableReference
             skipped = "NO">
