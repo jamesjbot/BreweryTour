@@ -1,6 +1,6 @@
 //
 //  Beer+CoreDataClass.swift
-//  
+//
 //
 //  Created by James Jongsurasithiwat on 10/12/16.
 //
@@ -8,9 +8,15 @@
 
 import Foundation
 import CoreData
+import SwiftyBeaver
+
 
 public class Beer: NSManagedObject {
-    convenience init(id: String, name: String , beerDescription: String, availability: String, context : NSManagedObjectContext){
+    convenience init(id: String,
+                     name: String,
+                     beerDescription: String,
+                     availability: String,
+                     context : NSManagedObjectContext){
         let entityDescription = NSEntityDescription.entity(forEntityName: "Beer", in: context)
         self.init(entity: entityDescription!, insertInto: context)
         self.beerName = name
@@ -18,19 +24,25 @@ public class Beer: NSManagedObject {
         self.availability = availability
         self.id = id
     }
-    
-    convenience init(data: BeerData, context: NSManagedObjectContext) {
-        self.init(entity: Beer.entity(), insertInto: context)
-        availability = data.availability
-        beerDescription = data.beerDescription
-        beerName = data.beerName
-        breweryID = data.breweryID
-        id = data.id
-        imageUrl = data.imageUrl
-        isOrganic = data.isOrganic
-        styleID = data.styleID
-        abv = data.abv
-        ibu = data.ibu
+
+    convenience init(data: BeerData, context: NSManagedObjectContext) throws {
+        if let entityDescription = NSEntityDescription.entity(forEntityName: "Beer", in: context) {
+            self.init(entity: entityDescription,
+                      insertInto: context)
+            availability = data.availability
+            beerDescription = data.beerDescription
+            beerName = data.beerName
+            breweryID = data.breweryID
+            id = data.id
+            imageUrl = data.imageUrl
+            isOrganic = data.isOrganic
+            styleID = data.styleID
+            abv = data.abv
+            ibu = data.ibu
+        } else {
+            SwiftyBeaver.error("Unable to create an entity description")
+            throw BreweryTour.UnableToCreateBeerException
+        }
     }
 
     convenience init(name : String?,
@@ -59,5 +71,5 @@ public class Beer: NSManagedObject {
         self.breweryID = brewer?.id
     }
     
-
+    
 }

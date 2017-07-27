@@ -2,7 +2,7 @@
 //  Brewery+CoreDataProperties.swift
 //  
 //
-//  Created by James Jongsurasithiwat on 1/14/17.
+//  Created by James Jongsurasithiwat on 7/25/17.
 //
 //
 

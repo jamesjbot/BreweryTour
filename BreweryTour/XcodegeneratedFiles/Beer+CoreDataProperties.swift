@@ -2,7 +2,7 @@
 //  Beer+CoreDataProperties.swift
 //  
 //
-//  Created by James Jongsurasithiwat on 1/16/17.
+//  Created by James Jongsurasithiwat on 7/25/17.
 //
 //
 
@@ -13,7 +13,7 @@ import CoreData
 extension Beer {
 
     @nonobjc public class func fetchRequest() -> NSFetchRequest<Beer> {
-        return NSFetchRequest<Beer>(entityName: "Beer");
+        return NSFetchRequest<Beer>(entityName: "Beer")
     }
 
     @NSManaged public var abv: String?
