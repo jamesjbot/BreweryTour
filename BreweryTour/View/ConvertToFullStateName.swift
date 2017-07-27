@@ -8,9 +8,11 @@
 
 import Foundation
 
+/// This structs allows us to convert abbreviated 2 character states names in to fully
+/// qualified names.
 struct ConvertToFullStateName {
 
-    var dict: Dictionary = [
+    var dictionary: Dictionary = [
         	"AL":"ALABAMA",
         	"AK":"ALASKA",
         	"AZ":"ARIZONA",
@@ -63,7 +65,14 @@ struct ConvertToFullStateName {
         	"WY":"WYOMING"
     ]
 
+    /// Converts two character U.S. state name abbreviations to full names
+    ///
+    /// - parameters:
+    ///     - fromAbbreviation: Two character state abbreviation
+    ///
+    /// - returns:
+    ///     - A String containing the full state name with + instead of spaces.
     func fullname(fromAbbreviation state: String) -> String {
-        return dict[state]!
+        return dictionary[state] ?? ""
     }
 }
