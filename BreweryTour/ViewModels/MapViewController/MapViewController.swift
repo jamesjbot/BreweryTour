@@ -663,7 +663,7 @@ class MapViewController : UIViewController {
 
         guard finalAnnotations != nil,   // if there are no annotations exit.
             // If the annotations displayed are the same do nothing
-            self.arraysAreDifferent(a: self.mapView.annotations, b: finalAnnotations!) else {
+            self.arraysAreDifferent(arrayWithFloatingAnnotation: self.mapView.annotations, finalAnnotations!) else {
                 // Do nothing annotations are the same
                 return
         }
@@ -1126,8 +1126,10 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
 // MARK: - NSFetchedResultsControllerDelegate
 
 extension MapViewController : NSFetchedResultsControllerDelegate {
+
     // Used for when style is updated with new breweries
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
+        
         // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
         SwiftyBeaver.info("MapViewController.controllerDidChangeContent Called")
         breweriesForDisplay = (controller.fetchedObjects?.first as! Style).brewerywithstyle?.allObjects as! [Brewery]
@@ -1139,8 +1141,9 @@ extension MapViewController : NSFetchedResultsControllerDelegate {
 
 extension MapViewController {
 
-    // Activate indicator if system is busy
+    /// Activate indicator if system is busy
     fileprivate func activateIndicatorIfSystemBusy() {
+
         if Mediator.sharedInstance().isSystemBusy() {
             DispatchQueue.main.async {
                 self.activityIndicator.startAnimating()
@@ -1148,22 +1151,30 @@ extension MapViewController {
         }
     }
 
-    // Compares arrays of MKAnnotations
-    fileprivate func arraysAreDifferent(a copy: [MKAnnotation], b: [MKAnnotation]) -> Bool {
-        var a = copy
-        if !copy.isEmpty {
-            a.removeLast() // remove floatingannotation
-        }
-        guard a.count == b.count else {
-            return true
+
+    /// Compares arrays of MKAnnotations and returns true when they are different
+    ///
+    /// - parameters:
+    ///     - arrayWithFloatingAnnotayion: an array with the users location (floating annotation)
+    ///     - b: other array to compare to
+    /// - returns:
+    ///     - `true` if the array are different
+    fileprivate func arraysAreDifferent(arrayWithFloatingAnnotation: [MKAnnotation], _ b: [MKAnnotation]) -> Bool {
+
+        var a = arrayWithFloatingAnnotation
+        if !a.isEmpty {
+            a.removeLast() // remove floating annotation
         }
 
-        // They are either both zero or both not zero
-        guard a.count != 0 && b.count != 0 else {
+        if a.count == 0 && b.count == 0 {
             return false
         }
 
-        for (i,_) in a.enumerated() {
+        guard a.count == b.count, a.count > 0 && b.count > 0 else { // array must be of similar length non zero
+            return true
+        }
+
+        for i in 0..<a.count {
             if a[i].coordinate.latitude != b[i].coordinate.latitude ||
                 a[i].coordinate.longitude != b[i].coordinate.longitude {
                 return true
@@ -1172,8 +1183,10 @@ extension MapViewController {
         return false
     }
 
-    // Returns a array of Annotations from a set.
+
+    /// Returns an array of Annotations from a set.
     fileprivate func convertSetToArrayOfAnnotations(set :Set<AnnotationAdapter>) -> [MKAnnotation] {
+
         return set.flatMap({$0.annotation})
     }
 }
