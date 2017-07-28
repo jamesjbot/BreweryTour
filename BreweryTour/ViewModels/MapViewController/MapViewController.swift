@@ -46,9 +46,9 @@ import CoreLocation
 import CoreData
 import SwiftyBeaver
 
-// Helper Adapter class to sort/filter annotations
-// FIXME: Change the name of NewMyAnnotation to something else.
-fileprivate class NewMyAnnotation: NSObject {
+/// Adapter class to sort/filter annotations
+fileprivate class AnnotationAdapter: NSObject {
+
     var annotation: MKAnnotation?
     var title: String?
     var subtitle: String?
@@ -66,8 +66,8 @@ fileprivate class NewMyAnnotation: NSObject {
     }
 
     override func isEqual(_ object: Any?) -> Bool {
-        if object is NewMyAnnotation {
-            return title == (object as! NewMyAnnotation).title
+        if object is AnnotationAdapter {
+            return title == (object as! AnnotationAdapter).title
         }
         return false
     }
@@ -79,10 +79,11 @@ fileprivate class NewMyAnnotation: NSObject {
         return 0
     }
 
-    static func ==(left: NewMyAnnotation, right: NewMyAnnotation) -> Bool {
+    static func ==(_ left: AnnotationAdapter, _ right: AnnotationAdapter) -> Bool {
         return left.title == right.title
     }
 }
+
 
 // MARK: - UIViewController
 class MapViewController : UIViewController {
@@ -153,7 +154,7 @@ class MapViewController : UIViewController {
     @IBOutlet weak var slider: UISlider!
 
 
-    // Tutorial
+    // Tutorial outlets
     @IBOutlet weak var pointer: CircleView!
     @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var tutorialView: UIView!
@@ -689,7 +690,7 @@ class MapViewController : UIViewController {
     }
 
 
-    fileprivate func updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: [MKAnnotation]) -> (Set<NewMyAnnotation>, Set<NewMyAnnotation>) {
+    fileprivate func updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: [MKAnnotation]) -> (Set<AnnotationAdapter>, Set<AnnotationAdapter>) {
 
         // Remove overlays if the Brewery has been remove from
         // the observable set
@@ -698,7 +699,7 @@ class MapViewController : UIViewController {
         }
 
         // Decorate old annotations
-        var old: [NewMyAnnotation] = [NewMyAnnotation]()
+        var old: [AnnotationAdapter] = [AnnotationAdapter]()
         var oldAnnotations = self.mapView.annotations
         if let index = oldAnnotations.index(where: {$0 === self.floatingAnnotation} ) {
             oldAnnotations.remove(at: index)
@@ -707,18 +708,18 @@ class MapViewController : UIViewController {
             oldAnnotations.remove(at: index)
         }
         for a in oldAnnotations {
-            old.append(NewMyAnnotation(a))
+            old.append(AnnotationAdapter(a))
         }
 
         //Decorate new annotations
-        var new: [NewMyAnnotation] = [NewMyAnnotation]()
+        var new: [AnnotationAdapter] = [AnnotationAdapter]()
         for a in finalAnnotations {
-            new.append(NewMyAnnotation(a))
+            new.append(AnnotationAdapter(a))
         }
 
         // Convert arrays to sets to perform set logic
-        let oldSet:Set<NewMyAnnotation> = Set<NewMyAnnotation>(old)
-        let newSet = Set<NewMyAnnotation>(new)
+        let oldSet:Set<AnnotationAdapter> = Set<AnnotationAdapter>(old)
+        let newSet = Set<AnnotationAdapter>(new)
 
         // Find intersection
         let intersectSet = oldSet.intersection(newSet)
@@ -803,7 +804,7 @@ extension MapViewController: ReceiveBroadcastManagedObjectContextRefresh {
 
     func contextsRefreshAllObjects() {
         SwiftyBeaver.info("MapViewController.contextsRefreshAllObjects() called")
-        SwiftyBeaver.info("MaoViewController now calling endSearch on the attached mapstrategy \(activeMappingStrategy)")
+        SwiftyBeaver.info("MapViewController now calling endSearch on the attached mapstrategy \(String(describing: activeMappingStrategy))")
         activeMappingStrategy?.endSearch()
         // FIXME: Should I remove all the annotations.
         // Clear the current annotation on screen.
@@ -1172,7 +1173,7 @@ extension MapViewController {
     }
 
     // Returns a array of Annotations from a set.
-    fileprivate func convertSetToArrayOfAnnotations(set :Set<NewMyAnnotation>) -> [MKAnnotation] {
+    fileprivate func convertSetToArrayOfAnnotations(set :Set<AnnotationAdapter>) -> [MKAnnotation] {
         return set.flatMap({$0.annotation})
     }
 }
