@@ -45,7 +45,7 @@ class FavoriteBreweriesViewController: UIViewController, AlertWindowDisplaying {
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
-        UserDefaults.standard.set(false, forKey: g_constants.FavoriteBeersTutorial)
+        UserDefaults.standard.set(false, forKey: g_constants.FavoriteBeersShowTutorial)
         UserDefaults.standard.synchronize()
     }
 
@@ -136,7 +136,7 @@ class FavoriteBreweriesViewController: UIViewController, AlertWindowDisplaying {
                                 animations: { self.pointer.center.y += self.tableView.frame.height - (3*self.paddingForPoint) - (self.tabBarController?.tabBar.frame.height)! },
                                 completion: nil)
         // Show tutorial
-        if UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) {
+        if UserDefaults.standard.bool(forKey: g_constants.CategoryViewShowTutorial) {
             // Do nothing because the tutorial will show automatically.
         } else {
             tutorialView.isHidden = true

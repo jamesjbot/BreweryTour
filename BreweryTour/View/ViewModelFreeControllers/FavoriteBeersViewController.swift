@@ -43,7 +43,7 @@ class FavoriteBeersViewController: UIViewController,AlertWindowDisplaying {
     
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
-        UserDefaults.standard.set(false, forKey: g_constants.FavoriteBeersTutorial)
+        UserDefaults.standard.set(false, forKey: g_constants.FavoriteBeersShowTutorial)
         UserDefaults.standard.synchronize()
     }
 
@@ -130,10 +130,9 @@ class FavoriteBeersViewController: UIViewController,AlertWindowDisplaying {
                                 completion: nil)
 
         // Show tutorial
-        if UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) {
-            // Do nothing because the tutorial will show automatically.
-        } else {
+        guard UserDefaults.standard.bool(forKey: g_constants.CategoryViewShowTutorial) == true else {
             tutorialView.isHidden = true
+            return
         }
     }
 }

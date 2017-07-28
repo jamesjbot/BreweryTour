@@ -68,7 +68,7 @@ class SelectedBeersViewController: UIViewController {
 
     @IBAction func dismissTutorial(_ sender: UIButton) {
         tutorialView.isHidden = true
-        UserDefaults.standard.set(false, forKey: g_constants.SelectedBeersTutorial)
+        UserDefaults.standard.set(false, forKey: g_constants.SelectedBeersShowTutorial)
         UserDefaults.standard.synchronize()
     }
 
@@ -226,7 +226,7 @@ class SelectedBeersViewController: UIViewController {
         nextLesson(nextLessonButton)
 
         // Display the tutorial
-        if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
+        if UserDefaults.standard.bool(forKey: g_constants.MapViewShowTutorial) {
             // Do nothing
         } else {
             tutorialView.isHidden = true

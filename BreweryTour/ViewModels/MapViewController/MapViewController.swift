@@ -266,7 +266,7 @@ class MapViewController : UIViewController {
     @IBAction func dismissTutorial(_ sender: UIButton) {
 
         tutorialView.isHidden = true
-        UserDefaults.standard.set(false, forKey: g_constants.MapViewTutorial)
+        UserDefaults.standard.set(false, forKey: g_constants.MapViewShowTutorial)
         UserDefaults.standard.synchronize()
     }
 
@@ -672,12 +672,10 @@ class MapViewController : UIViewController {
         tutorialState = .FavoriteBreweries
         nextTutorialAction(UIButton())
         // Display tutorial view.
-        if UserDefaults.standard.bool(forKey: g_constants.MapViewTutorial) {
-            // Do nothing because the tutorial will show automatically.
-            tutorialView.isHidden = false
-
-        } else {
+        tutorialView.isHidden = false
+        guard UserDefaults.standard.bool(forKey: g_constants.MapViewShowTutorial) == true else {
             tutorialView.isHidden = true
+            return
         }
     }
 
@@ -799,6 +797,9 @@ class MapViewController : UIViewController {
             mapView.addAnnotation(floatingAnnotation)
             makePointTargetLocation()
         }
+
+        // Register with Mediator as Receive contextRefreshes
+        Mediator.sharedInstance().registerManagedObjectContextRefresh(self)
     }
 
 
