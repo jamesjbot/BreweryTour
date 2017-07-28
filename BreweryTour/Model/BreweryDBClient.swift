@@ -634,7 +634,7 @@ class BreweryDBClient {
                 let png = UIImagePNGRepresentation(image) {
 
                 // Send linking job out for processing.
-                self.imageLinker.queueLinkJob(moID: forID, moType: forType, data: png as NSData)
+                self.imageLinker.queueLinkJob(managedObjectID: forID, managedObjectType: forType, data: png as NSData)
             }
         }
         task.resume()
