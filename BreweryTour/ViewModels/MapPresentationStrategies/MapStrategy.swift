@@ -11,7 +11,7 @@
 
 import Foundation
 import MapKit
-
+import SwiftyBeaver
 
 protocol MapAnnotationProvider {
     // converts breweries to annotations
@@ -53,7 +53,7 @@ class MapStrategy: NSObject, MapAnnotationProvider {
     }
 
 
-    func endSearch() {
+    internal func endSearch() {
         fatalError("You must override endSearch()!!!")
         // Dummy stub for BreweryMapStrategy
         // StyleMapStrategy will override it's implementation
@@ -72,12 +72,33 @@ class MapStrategy: NSObject, MapAnnotationProvider {
         guard breweryLocations.count > 1 else {
             return
         }
+        guard isAllLocationDataNonNil(in: breweryLocations) else {
+            SwiftyBeaver.error("MapStrategy detected breweries without location data.")
+            return
+        }
+        SwiftyBeaver.info("MapStrategy.sortLocations() Sorting breweries by positons")
         breweryLocations = breweryLocations.sorted(by:
             { (brewery1, brewery2) -> Bool in
-                // FIXME: Locatins are coming in with nil
+                SwiftyBeaver.verbose("MapStrategy within the brewery sorting closures working on \(breweryLocations.count) breweries")
                 let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
                 let location2: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery2.latitude!)!), longitude: CLLocationDegrees(Double(brewery2.longitude!)!))
                 return ((targetLocation?.distance(from: location1))! as Double) < ((targetLocation?.distance(from: location2))! as Double)
         })
+    }
+
+
+    /// Checks whether all latitudes and longitudes in data is present
+    ///
+    /// - parameters:
+    ///     - locations: An array of breweries
+    /// - returns:
+    ///     - `true` if all location data present
+    private func isAllLocationDataNonNil(in locations: [Brewery]) -> Bool {
+        for location in locations {
+            if location.longitude == nil || location.latitude == nil {
+                return false
+            }
+        }
+        return true
     }
 }
