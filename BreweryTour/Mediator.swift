@@ -10,12 +10,14 @@ import Foundation
 import CoreData
 import MapKit
 import CoreLocation
-/*
- This class managed states changes across the app
- If a selection is made on the selection screen then we can 
- notify the other Views That will need to update because of that change.
- */
+import SwiftyBeaver
 
+/*
+ This class manages message passing across the app
+ If a selection is made on the selection screen then we can 
+ notify the other view to update because of that change.
+ If the database data is deleted we can notify the views to update their content.
+ */
 
 class Mediator {
 
@@ -163,9 +165,14 @@ extension Mediator: MediatorBusyObserver {
 extension Mediator: BroadcastManagedObjectContextRefresh {
 
     internal func allBeersAndBreweriesDeleted() {
-        passedItem = nil
+        SwiftyBeaver.info("Mediator allBeersAndBreweriesDelete called")
+
+        resetSelectedItemToNil()
+
+        // Notify observers of changes.
         for observer in contextObservers {
             observer.contextsRefreshAllObjects()
+            SwiftyBeaver.info("Mediator contextsRefreshed; notified \(observer) ")
         }
     }
 
@@ -175,6 +182,7 @@ extension Mediator: BroadcastManagedObjectContextRefresh {
         contextObservers.append(a)
     }
 }
+
 
 // MARK: - StorableFloatingAnnotation
 
@@ -191,6 +199,12 @@ extension Mediator: StorableFloatingAnnotation {
 }
 
 
+// MARK: - Fileprivate helper functions
 
+extension Mediator {
+    fileprivate func resetSelectedItemToNil() {
+        passedItem = nil
+    }
+}
 
 
