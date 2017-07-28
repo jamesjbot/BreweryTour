@@ -9,6 +9,7 @@
 import Foundation
 import CoreData
 import UIKit
+import SwiftyBeaver
 
 // Image processing enumeration
 internal enum ImageDownloadType {
@@ -18,7 +19,7 @@ internal enum ImageDownloadType {
 
 
 protocol ImageLinkingProcotol {
-    func queueLinkJob(moID: String, moType: ImageDownloadType, data: NSData)
+    func queueLinkJob(managedObjectID: String, managedObjectType: ImageDownloadType, data: NSData)
 }
 
 
@@ -80,7 +81,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
     }
 
 
-    private func generateRequest(_ type: ImageDownloadType) -> NSFetchRequest<NSFetchRequestResult> {
+    private func generateRequest(_ type: ImageDownloadType) -> NSFetchRequest<NSFetchRequestResult>? {
         let request: NSFetchRequest<NSFetchRequestResult>?
         switch type {
         case .Beer:
@@ -90,7 +91,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
             request = Brewery.fetchRequest()
             break
         }
-        return request!
+        return request
     }
 
 
@@ -99,20 +100,23 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
         context?.mergePolicy = NSMergePolicy.mergeByPropertyObjectTrump
     }
 
-    internal func queueLinkJob(moID: String, moType: ImageDownloadType, data: NSData) {
-        imagesToBeAssignedQueue[moID] = (moType, data)
+    internal func queueLinkJob(managedObjectID: String, managedObjectType: ImageDownloadType, data: NSData) {
+        imagesToBeAssignedQueue[managedObjectID] = (managedObjectType, data)
     }
 
 
     // Process the last unfull set on the breweriesToBeProcessed queue.
     @objc private func timerProcessImageQueue() {
-        let dq = DispatchQueue.global(qos: .userInitiated)
+        let dispatchQueue = DispatchQueue.global(qos: .userInitiated)
         let context = backContext
         initContext(context)
-        dq.sync {
+        dispatchQueue.sync {
             var saves = 0 // Stopping counter
             for (key, (type, data ) ) in self.imagesToBeAssignedQueue {
-                let request = generateRequest(type)
+                guard let request = generateRequest(type) else {
+                    SwiftyBeaver.error("ManagedObjectImageLinker had a problem generating a request for \(type):\(#line)")
+                    continue
+                }
                 let result = fetchExecute(request: request, withKey: key, inContext: context)
                 guard result?.count == 1 else  {
                     if result?.count == 0 { // Remove, no parent found
