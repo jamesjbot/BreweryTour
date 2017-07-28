@@ -29,6 +29,7 @@
 import Foundation
 import MapKit
 import CoreData
+import SwiftyBeaver
 
 class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate  {
 
@@ -64,34 +65,56 @@ class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate  {
     // Used for when style is updated with new breweries
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
         // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
-        debouncedFunction!()
+        SwiftyBeaver.info("FetchableMapStrategy controllerDidChangeContent called, next calling debounced function")
+        debouncedFunction?()
     }
 
 
     // This function will drop the excessive calls to redisplay the map
     // Borrowed from
     // http://stackoverflow.com/questions/27116684/how-can-i-debounce-a-method-call/33794262#33794262
-    internal func debounce(delay:Int, queue:DispatchQueue, action: @escaping (()->())) -> ()->() {
-        var lastFireTime = DispatchTime.now()
-        let dispatchDelay = DispatchTimeInterval.milliseconds(delay)
+    /// This function creates a timer and runs a function after a delayed amount of time
+    ///
+    /// - parameters:
+    ///     - action: the function to fire when the time is up
+    ///     - delay: amount of time to delay in milliseconds
+    ///     - queue: the dispatchqueue to run the timer on
+    /// - returns:
+    ///     - a function block.
+    internal func delayFiring(function action: @escaping (()->()),
+                              afterDelay delay: Int,
+                              fromQueue queue: DispatchQueue) -> ()->() {
 
-        return {
-            let dispatchTime: DispatchTime = lastFireTime + dispatchDelay
-            queue.asyncAfter(deadline: dispatchTime, execute: {
-                let when: DispatchTime = lastFireTime + dispatchDelay
-                let now = DispatchTime.now()
-                if now.rawValue >= when.rawValue {
-                    lastFireTime = DispatchTime.now()
-                    action()
-                }
-            })
+        let dispatchTime: DispatchTime = DispatchTime.now() + DispatchTimeInterval.milliseconds(delay)
+
+        let dispatchWorkItem = createDispatchWorkItem(with: action, at: dispatchTime)
+
+        return {queue.asyncAfter(deadline: dispatchTime,
+                                 execute: dispatchWorkItem)
         }
     }
 
 
-    override func endSearch() {
-        debouncedFunction = nil
-        styleFRC?.delegate = nil
+    /// Creates a DispatchWorkItem containing the command to sort brewerlocation and send it to the viewcontroller
+    ///
+    /// - parameters: 
+    ///     - action: the method to run, here it will be fetchSortAndSend
+    /// - returns:
+    ///     - a DispatchWorkItem
+    private func createDispatchWorkItem(with action: @escaping (()->()) ,at targetTime: DispatchTime) -> DispatchWorkItem {
+        return DispatchWorkItem(block: { [ weak self ] in
+            // If the debounced function has been cancelled don't do anything
+            SwiftyBeaver.info("Debounced DispatchWorkItem has been called")
+            guard self?.debouncedFunction != nil else {
+                SwiftyBeaver.info("Debounced function has been cancelled")
+                return
+            }
+            SwiftyBeaver.info("Within the work block DispatchWorkItem")
+            let timeNow = DispatchTime.now()
+            if timeNow.rawValue >= targetTime.rawValue {
+                action()
+            }
+        })
     }
 
 
@@ -101,6 +124,7 @@ class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate  {
 
 
     internal func fetchSortandSend() {
+        SwiftyBeaver.info("Fetchable Map Strategy, fetchSortAndSend called()")
         // Only the last created strategy is allow to run
         guard Mediator.sharedInstance().onlyValidStyleStrategy == runningID else {
             endSearch()
@@ -113,6 +137,23 @@ class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate  {
         sendAnnotationsToMap() // Send the newly created annotations to the map.
     }
 
+
+    override internal func endSearch() {
+        SwiftyBeaver.info("FetchableMapStrategy endSearch called")
+        // Do we stil want this?  
+        //debouncedFunction = nil
+    }
+
+}
+
+extension FetchableMapStrategy {
+    fileprivate func wrapUpFetchSortAndSendForDelayedExecutionInClassScopeVariable(afterDelay bounceDelay: Int ) {
+        let action = {
+            SwiftyBeaver.info("Embedded fetchSortAndSend() action from wrapUp Functions\(#line)")
+            self.fetchSortandSend()
+        }
+        debouncedFunction = delayFiring(function: action, afterDelay: bounceDelay, fromQueue: DispatchQueue.main)
+    }
 }
 
 
@@ -126,6 +167,7 @@ class StyleMapStrategy: FetchableMapStrategy {
         super.breweryLocations.removeAll()
         initialFetchBreweries(byStyle: s)
         parentMapViewController = view
+        SwiftyBeaver.info("StyleMapStrategy calling sortLocations in initialization")
         sortLocations()
         if breweryLocations.count > maxPoints! {
             breweryLocations = Array(breweryLocations[0..<maxPoints!])
@@ -134,13 +176,23 @@ class StyleMapStrategy: FetchableMapStrategy {
     }
 
     override internal func fetch() {
+        SwiftyBeaver.info("StyleMapStrategy.fetch() called")
+        // Important this fixed the error 
+        // Because we reinitialie it to nothing 
+        // before we go to grab new entries.
+        // If we don't reinitilize this will contain references to the CoreData objects and will still keep processing but when tryng access the data we will have null pointer exceptions.
+        // DRY
+        breweryLocations = []
         do {
             try styleFRC?.performFetch()
             if let locations = (styleFRC?.fetchedObjects?.first as? Style)?.brewerywithstyle?.allObjects as? [Brewery] {
                 breweryLocations = locations
+                SwiftyBeaver.info("StyleMapStrategy successfully found breweries")
+            } else {
+                SwiftyBeaver.info("StyleMapStrategy did not find breweries")
             }
         } catch {
-            NSLog("Critical error unable to read database.")
+            SwiftyBeaver.error("StyleMapStrategy \(#line) Critical error unable to read database.")
         }
     }
 
@@ -165,13 +217,15 @@ class StyleMapStrategy: FetchableMapStrategy {
                 breweryLocations = locations
             }
         } catch {
-            NSLog("Error reading coredata")
+            SwiftyBeaver.error("Error reading coredata")
         }
         // Initialize debounce function and associate it with sortanddisplay
-        bounceDelay = initialDelay
-        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
-            self.fetchSortandSend()
-        })
+        wrapUpFetchSortAndSendForDelayedExecutionInClassScopeVariable(afterDelay: initialDelay)
+//        bounceDelay = initialDelay
+//        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
+//            SwiftyBeaver.info("Embedded fetchSortAndSend() from debounced Functions\(#line)")
+//            self.fetchSortandSend()
+//        })
     }
 }
 
@@ -179,17 +233,22 @@ class StyleMapStrategy: FetchableMapStrategy {
 class AllBreweriesMapStrategy: FetchableMapStrategy {
 
     override internal func fetch() {
+        breweryLocations = []
         do {
             try styleFRC?.performFetch()
             if let locations = styleFRC?.fetchedObjects as? [Brewery] {
                 breweryLocations = locations
+                SwiftyBeaver.info("AllBreweriesMapStrategy successfully found breweries")
+            } else {
+                SwiftyBeaver.info("AllBreweriesMapStrategy did not find any breweries")
             }
         } catch {
-            NSLog("Critical error unable to read database.")
+            SwiftyBeaver.error("AllBreweriesMapStrategy Critical error unable to read database.")
         }
     }
 
-    // This functio is called once only during initializaiton
+
+    // This function is called once only during initializaiton
     internal func initialFetchBreweries() {
         // Fetch all the Breweries with style
         readOnlyContext?.automaticallyMergesChangesFromParent = true
@@ -208,13 +267,15 @@ class AllBreweriesMapStrategy: FetchableMapStrategy {
                 breweryLocations = locations
             }
         } catch {
-            NSLog("Error reading coredata")
+            SwiftyBeaver.error("Error reading coredata")
         }
         // Initialize debounce function and associate it with sortanddisplay
-        bounceDelay = initialDelay
-        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
-            self.fetchSortandSend()
-        })
+        wrapUpFetchSortAndSendForDelayedExecutionInClassScopeVariable(afterDelay: initialDelay)
+//        bounceDelay = initialDelay
+//        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
+//            SwiftyBeaver.info("FetchableMapStrategy initialFetchBreweries \(#line)")
+//            self.fetchSortandSend()
+//        })
     }
 
     init(view: MapViewController, location: CLLocation, maxPoints points: Int) {
@@ -225,6 +286,7 @@ class AllBreweriesMapStrategy: FetchableMapStrategy {
         breweryLocations.removeAll()
         initialFetchBreweries()
         parentMapViewController = view
+        SwiftyBeaver.info("AllBreweriesMapStrategy calling sortLocations in initialization.")
         sortLocations()
         if breweryLocations.count > maxPoints! {
             breweryLocations = Array(breweryLocations[0..<maxPoints!])
