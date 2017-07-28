@@ -15,7 +15,7 @@ import Foundation
 import UIKit
 import CoreData
 import Dispatch
-
+import SwiftyBeaver
 
 protocol BreweryAndBeerCreationProtocol {
 
@@ -27,6 +27,7 @@ protocol BreweryAndBeerCreationProtocol {
 
 extension BreweryAndBeerCreationQueue: ReceiveBroadcastManagedObjectContextRefresh {
 
+    /// All content was delete from the database, so stop loading content into the database
     func contextsRefreshAllObjects() {
         abandonProcessingQueue = true
         classContext?.refreshAllObjects()
@@ -102,7 +103,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 let resultStyle = try context.fetch(styleRequest)
                 resultStyle.first?.addToBrewerywithstyle(newBrewery)
             } catch let error {
-                NSLog("There was and error saving brewery to style\(error.localizedDescription)")
+                SwiftyBeaver.error("There was an error saving brewery to style\(error.localizedDescription)")
             }
         }
     }
@@ -197,14 +198,15 @@ class BreweryAndBeerCreationQueue: NSObject {
                                      context: tempContext!)
                         }
 
-                        let createdBeer = Beer(data: beer, context: tempContext!)
+                        let createdBeer = try Beer(data: beer, context: tempContext!)
                         createdBeer.brewer = brewers?.first
 
                         self.decideOnDownloadingImage(fromURL: beer.imageUrl, forType: .Beer, forID: beer.id!)
 
                     } catch let error {
-                        NSLog("There was and error saving brewery to style\(error.localizedDescription)")
-                        fatalError()
+                        SwiftyBeaver.error("There was an error saving brewery to style\(error.localizedDescription)")
+                        // FIXME: Waht should you do if we can't get a
+                        //fatalError()
                     }
                 }
             }
@@ -234,6 +236,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                     let b = self.runningBreweryQueue.removeFirst()
                     let newBrewery = Brewery(data: b, context: self.classContext!)
 
+                    // If brewery has a style id; add the brewery to that style.
                     if let styleID = b.styleID {
                         self.add(brewery: newBrewery,
                                  toStyleID: styleID,
@@ -413,6 +416,7 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
         } catch let error{
             NSLog("Error finding a Beer because \(error.localizedDescription)")
         }
+
         guard beers?.first == nil else {
             // Skip beer creation when we already have the beer
             return
