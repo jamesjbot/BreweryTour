@@ -17,17 +17,18 @@
 import UIKit
 import Foundation
 import CoreData
+import SwiftyBeaver
 
 class SettingsViewController: UIViewController, AlertWindowDisplaying {
     
     // MARK: - Constants
 
-    private let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
-    private let breweryFetch: NSFetchRequest<Brewery> = Brewery.fetchRequest()
-    private let coreDataStack = (UIApplication.shared.delegate as! AppDelegate).coreDataStack
+    private let coreDataStack: CoreDataEntriesDeletable? = ((UIApplication.shared.delegate as? AppDelegate)?.coreDataStack)
     private let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
-    private let mediator = Mediator.sharedInstance()
-    private let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
+//    private let mediator = Mediator.sharedInstance()
+//    private let beerFetch: NSFetchRequest<Beer> = Beer.fetchRequest()
+//    private let breweryFetch: NSFetchRequest<Brewery> = Brewery.fetchRequest()
+//    private let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
 
 
     // MARK: - IBOutlet
@@ -42,82 +43,34 @@ class SettingsViewController: UIViewController, AlertWindowDisplaying {
 
     @IBAction func deleteBeersBrewery(_ sender: AnyObject) {
         // Prompt user should we delete all the beers and breweries
-        // Create action for prompt
 
-         func deleteBeerData(inContext context: NSManagedObjectContext, _ success: inout Bool) {
-            let request = NSBatchDeleteRequest(fetchRequest: self.beerFetch as! NSFetchRequest<NSFetchRequestResult>)
-            do {
-                try context.execute(request)
-            } catch let error {
-                self.displayAlertWindow(title: "Error", msg: "Error deleting Beer data \(error)")
-                success = false
-            }
-        }
-
-
-        func deleteStyleData(inContext context: NSManagedObjectContext, _ success: inout Bool) {
-            let request = NSBatchDeleteRequest(fetchRequest: self.styleFetch as! NSFetchRequest<NSFetchRequestResult>)
-            do {
-                try context.execute(request)
-            } catch let error {
-                self.displayAlertWindow(title: "Error", msg: "Error deleting Style data \(error)")
-                success = false
-            }
-        }
-
-
-        func deleteBreweryData(inContext context: NSManagedObjectContext, _ success: inout Bool) {
-            let request = NSBatchDeleteRequest(fetchRequest: self.breweryFetch as! NSFetchRequest<NSFetchRequestResult>)
-            do {
-                try context.execute(request)
-            } catch let error {
-                self.displayAlertWindow(title: "Error", msg: "Error deleting Brewery data \(error)")
-            }
-        }
-
-
-        func saveDeletions(inContext context: NSManagedObjectContext, _ success: inout Bool) {
-            do {
-                try context.save()
-            } catch let error {
-                self.displayAlertWindow(title: "Error", msg: "Succesfully deleted but unable to save deletions to database \(error)")
-            }
-        }
-
-
-        func deleteAll(_ action: UIAlertAction) {
+        // The function that we should run if user wants to deleteAllEntries
+        func deleteAllEntries(_ action: UIAlertAction) {
 
             self.startIndicator()
 
-            container?.performBackgroundTask({
-                (context) in
-                var allProgressSucceeded: Bool = true
-
-                deleteBeerData(inContext: context, &allProgressSucceeded)
-
-                deleteStyleData(inContext: context, &allProgressSucceeded)
-
-                deleteBreweryData(inContext: context, &allProgressSucceeded)
-
-                saveDeletions(inContext: context, &allProgressSucceeded)
-
+            coreDataStack?.deleteAllDataAndSaveAndNotifyViews() {
+                (successfullyDeletedAllEntries: Bool,
+                results: ResultsOfCoreDataDeletion) in
                 self.stopIndicator()
-
-                if allProgressSucceeded == true {
-                    self.displayAlertWindow(title: "Delete All Data", msg: "Successful"+self.statistics())
+                if successfullyDeletedAllEntries {
+                    let counts: CountOfObjectsInCoreData = (self.coreDataStack?.getCountsOfObjectsInCoreData())!
+                    self.displayAlertWindow(title: "Delete All Data", msg: "Successful"+self.formatStatistics(styleCount: counts.styleObjectsCount,
+                                                                                                              beerCount: counts.beerObjectsCount,
+                                                                                                    breweryCount: counts.breweryObjectsCount))
                 } else {
-                    self.displayAlertWindow(title: "Delete All Data", msg: "There was an error deleting all data, try again later")
+                    self.displayAlertWindow(title: "Delete All Data", msg: "There was an error deleting \(results.description), try again later")
+                    SwiftyBeaver.error("Notified user of error deleting entires")
                 }
-
-                self.mediator.allBeersAndBreweriesDeleted()
-            })
+            }
         }
 
+        // Create action for prompt
         let action = UIAlertAction(title: "Delete",
                                    style: .default,
-                                   handler: deleteAll)
+                                   handler: deleteAllEntries)
         displayAlertWindow(title: "Delete All Data",
-                           msg: "Are you sure you want to delete all data, this includes\ntasting notes and favorites?"+statistics(),
+                           msg: "Are you sure you want to delete all data, this includes\ntasting notes and favorites?",//+statistics(),
                            actions: [action])
     }
 
@@ -155,16 +108,8 @@ class SettingsViewController: UIViewController, AlertWindowDisplaying {
     }
 
 
-    private func statistics() -> String {
-        do {
-            let beerCount =  try container?.viewContext.fetch(beerFetch).count
-            let styleCount = try container?.viewContext.fetch(styleFetch).count
-            let breweryCount = try container?.viewContext.fetch(breweryFetch).count
-            return "\nStyles:\(styleCount!)\nBeers\(beerCount!)\nBreweries:\(breweryCount!)"
-        } catch _ {
-            self.displayAlertWindow(title: "Error", msg: "Please try again.")
-            return ""
-        }
+    private func formatStatistics(styleCount: Int, beerCount: Int, breweryCount: Int) -> String {
+        return "\nStyles:\(styleCount)\nBeers\(beerCount)\nBreweries:\(breweryCount)"
     }
 
     private func stopIndicator() {
