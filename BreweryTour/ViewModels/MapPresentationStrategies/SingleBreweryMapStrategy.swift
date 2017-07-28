@@ -12,6 +12,7 @@
 
 import Foundation
 import MapKit
+import SwiftyBeaver
 
 class SingleBreweryMapStrategy: MapStrategy {
 
@@ -21,6 +22,7 @@ class SingleBreweryMapStrategy: MapStrategy {
         breweryLocations.removeAll()
         breweryLocations.append(singleBrewery)
         parentMapViewController = view
+        SwiftyBeaver.info("SingleBreweryMapStrategy callign sortLocation in initialization logic.")
         sortLocations()
         sendAnnotationsToMap()
     }
