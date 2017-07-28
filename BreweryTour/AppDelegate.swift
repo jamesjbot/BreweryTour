@@ -8,28 +8,22 @@
 
 import UIKit
 import CoreData
+import SwiftyBeaver
+import Foundation
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    // MARK: - Constants
+    internal let coreDataStack = CoreDataStack.init(modelName: "BreweryTour")
+
+    // MARK: - Varaibles
+
     var window: UIWindow?
 
-    internal let coreDataStack = CoreDataStack.init(modelName: "BreweryTour")
-    
-    func checkIfFirstLaunched() {
-        if UserDefaults.standard.bool(forKey: g_constants.FirstLaunched) {
-            // Do nothing
-        } else {
-            UserDefaults.standard.set(true, forKey: g_constants.FirstLaunched)
-            UserDefaults.standard.set(true, forKey: g_constants.CategoryViewTutorial)
-            UserDefaults.standard.set(true, forKey: g_constants.MapViewTutorial)
-            UserDefaults.standard.set(true, forKey: g_constants.SelectedBeersTutorial)
-            UserDefaults.standard.set(true, forKey: g_constants.FavoriteBeersTutorial)
-            UserDefaults.standard.set(true, forKey: g_constants.FavoriteBreweriesTutorial)
-        }
-    }
-    
-    
+
+    // MARK: - Functions
+
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
         checkIfFirstLaunched()
@@ -39,6 +33,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and invalidate graphics rendering callbacks. Games should use this method to pause the game.
+
         // Save settings
         UserDefaults.standard.synchronize()
         // Save coredata
@@ -48,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+
         // Save user preferences
         UserDefaults.standard.synchronize()
         // Save coredata
@@ -65,11 +61,73 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
+
         // Save User preferences
         UserDefaults.standard.synchronize()
         // Save coredata
         coreDataStack?.saveToFile()
     }
 
+}
+
+extension AppDelegate {
+
+    fileprivate func checkIfFirstLaunched() {
+
+        setupSwiftyBeaverLogging()
+        createLogEntryForPathToDocumentsDirectory()
+        setTutorialsForFirstTimeRun()
+    }
+
+
+    private func setupSwiftyBeaverLogging() {
+
+        deletePreviousSwiftyBeaverLogfile()
+        createNewSwiftyBeaverLogfile()
+    }
+
+
+    private func deletePreviousSwiftyBeaverLogfile() {
+
+        let fileManager = FileManager.default
+        let cachedirectory = fileManager.urls(for: .cachesDirectory, in: .userDomainMask)
+        var swiftybeaverPath = cachedirectory[0].appendingPathComponent("swiftybeaver")
+        swiftybeaverPath = swiftybeaverPath.appendingPathExtension("log")
+        try? fileManager.removeItem(at: swiftybeaverPath)
+    }
+
+
+    private func createNewSwiftyBeaverLogfile() {
+
+        let file = FileDestination()
+        file.format = "$DEEEE MMMM dd yyyy HH:mm:sss$d $L: $M: "
+        SwiftyBeaver.addDestination(file)
+        SwiftyBeaver.info("Starting New Run.....")
+        //platform.minLevel = .warning
+    }
+
+
+    private func createLogEntryForPathToDocumentsDirectory() {
+        #if arch(i386) || arch(x86_64)
+            if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path {
+                SwiftyBeaver.info("Documents Directory: \(documentsPath)")
+            }
+        #endif
+    }
+
+
+    private func setTutorialsForFirstTimeRun() {
+        guard UserDefaults.standard.object(forKey: g_constants.FirstTimeLaunched) == nil else {
+            return
+        }
+        // Mark all the tutorial as being viewed..
+        UserDefaults.standard.set(false, forKey: g_constants.FirstTimeLaunched)
+        UserDefaults.standard.set(true, forKey: g_constants.CategoryViewShowTutorial)
+        UserDefaults.standard.set(true, forKey: g_constants.MapViewShowTutorial)
+        UserDefaults.standard.set(true, forKey: g_constants.SelectedBeersShowTutorial)
+        UserDefaults.standard.set(true, forKey: g_constants.FavoriteBeersShowTutorial)
+        UserDefaults.standard.set(true, forKey: g_constants.FavoriteBreweriesShowTutorial)
+    }
+    
 }
 

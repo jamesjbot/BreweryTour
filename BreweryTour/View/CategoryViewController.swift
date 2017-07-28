@@ -144,7 +144,7 @@ NSFetchedResultsControllerDelegate {
     @IBAction func dissMissTutorial(_ sender: UIButton) {
         tutorialModeOn = false
         // Set the tutorial off in permanent settings
-        UserDefaults.standard.set(false, forKey: g_constants.CategoryViewTutorial)
+        UserDefaults.standard.set(false, forKey: g_constants.CategoryViewShowTutorial)
         UserDefaults.standard.synchronize()
     }
 
@@ -336,7 +336,7 @@ NSFetchedResultsControllerDelegate {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         // Show tutorial
-        guard UserDefaults.standard.bool(forKey: g_constants.CategoryViewTutorial) else {
+        guard UserDefaults.standard.bool(forKey: g_constants.CategoryViewShowTutorial) else {
             tutorialView.isHidden = true
             return
         }

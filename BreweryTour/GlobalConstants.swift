@@ -14,10 +14,10 @@ import Foundation
 
 // Constants for tutorial screen
 public struct g_constants {
-    static let FirstLaunched = "firstLaunched"
-    static let CategoryViewTutorial = "categoryTutorial"
-    static let MapViewTutorial = "mapTutorial"
-    static let SelectedBeersTutorial = "beersTutorial"
-    static let FavoriteBeersTutorial = "favoriteBeersTutorial"
-    static let FavoriteBreweriesTutorial = "favoriteBreweriesTutorial"
+    static let FirstTimeLaunched = "firstTimeLaunched"
+    static let CategoryViewShowTutorial = "categoryTutorial"
+    static let MapViewShowTutorial = "mapTutorial"
+    static let SelectedBeersShowTutorial = "beersTutorial"
+    static let FavoriteBeersShowTutorial = "favoriteBeersTutorial"
+    static let FavoriteBreweriesShowTutorial = "favoriteBreweriesTutorial"
 }
