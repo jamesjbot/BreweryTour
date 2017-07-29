@@ -221,11 +221,6 @@ class StyleMapStrategy: FetchableMapStrategy {
         }
         // Initialize debounce function and associate it with sortanddisplay
         wrapUpFetchSortAndSendForDelayedExecutionInClassScopeVariable(afterDelay: initialDelay)
-//        bounceDelay = initialDelay
-//        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
-//            SwiftyBeaver.info("Embedded fetchSortAndSend() from debounced Functions\(#line)")
-//            self.fetchSortandSend()
-//        })
     }
 }
 
