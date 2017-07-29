@@ -20,8 +20,22 @@ protocol MapAnnotationProvider {
     func sendAnnotationsToMap()
 }
 
+protocol MappableStrategy {
+    func endSearch()
+    func sendAnnotationsToMap()
+    func sortLocations()
+}
 
-class MapStrategy: NSObject, MapAnnotationProvider {
+extension MappableStrategy {
+    internal func endSearch() {
+        fatalError("You must override endSearch()!!!")
+        // Dummy stub for BreweryMapStrategy
+        // StyleMapStrategy will override it's implementation
+    }
+}
+
+
+class MapStrategy: NSObject, MapAnnotationProvider, MappableStrategy {
 
     // MARK: - Variables
 
