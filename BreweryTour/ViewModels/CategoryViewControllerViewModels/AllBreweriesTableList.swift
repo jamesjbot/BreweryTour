@@ -11,9 +11,9 @@
  */
 
 import Foundation
-
 import UIKit
 import CoreData
+import SwiftyBeaver
 
 class AllBreweriesTableList: NSObject, Subject {
 
@@ -51,6 +51,7 @@ class AllBreweriesTableList: NSObject, Subject {
         do {
             try breweryFetchedResultsController.performFetch()
         } catch {
+            SwiftyBeaver.info("AllBreweriesTableList unable to fetch brewery results.")
             observer?.sendNotify(from: self, withMsg: Message.Retry)
         }
 
@@ -80,7 +81,7 @@ extension AllBreweriesTableList: ReceiveBroadcastManagedObjectContextRefresh {
             try breweryFetchedResultsController.performFetch()
             observer?.sendNotify(from: self, withMsg: Message.Reload)
         } catch {
-
+            SwiftyBeaver.info("AllBreweriesTableList could not fetch breweries")
         }
     }
 }
