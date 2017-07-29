@@ -31,7 +31,13 @@ import MapKit
 import CoreData
 import SwiftyBeaver
 
-class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate  {
+
+protocol FetchableStrategy {
+    func fetch()
+}
+
+
+class FetchableMapStrategy: MapStrategy, NSFetchedResultsControllerDelegate, FetchableStrategy  {
 
     // MARK: - Constants
 
