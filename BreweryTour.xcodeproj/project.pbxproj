@@ -115,7 +115,6 @@
 		A7B2AAE41DA791A400EE844C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7B2AAE21DA791A400EE844C /* Main.storyboard */; };
 		A7B2AAE71DA791A400EE844C /* BreweryTour.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE51DA791A400EE844C /* BreweryTour.xcdatamodeld */; };
 		A7B2AAE91DA791A400EE844C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7B2AAE81DA791A400EE844C /* Assets.xcassets */; };
-		A7B2AAF71DA791A400EE844C /* BreweryTourTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAF61DA791A400EE844C /* BreweryTourTests.swift */; };
 		A7B2AB021DA791A400EE844C /* BreweryTourUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */; };
 		A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */; };
 		A7B7524E1DA8CE7B00117ED0 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */; };
@@ -128,6 +127,7 @@
 		A7DDC3F91DCC3A770077F34A /* BreweryDBClientConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7DDC3F81DCC3A770077F34A /* BreweryDBClientConstants.swift */; };
 		A7E3E00F1E0B9B1E0068ED48 /* KeyboardExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E3E00E1E0B9B1E0068ED48 /* KeyboardExtension.swift */; };
 		A7E932521E0A42F600E07F53 /* AllBreweriesTableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7E932511E0A42F500E07F53 /* AllBreweriesTableList.swift */; };
+		A7FBF25E1F2CF1870072CF84 /* MappingStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FBF25D1F2CF1870072CF84 /* MappingStrategyTests.swift */; };
 		A7FF1A071DB0E67E00AD0BB3 /* heart_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */; };
 		A7FF1A091DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */; };
 		D19C17A91BFEB6CB4E193CE6 /* Pods_BreweryTour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 680FBE3F7A28081E14FF95C0 /* Pods_BreweryTour.framework */; };
@@ -278,7 +278,6 @@
 		A7B2AAE81DA791A400EE844C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A7B2AAED1DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B2AAF21DA791A400EE844C /* BreweryTourTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BreweryTourTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		A7B2AAF61DA791A400EE844C /* BreweryTourTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryTourTests.swift; sourceTree = "<group>"; };
 		A7B2AAF81DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B2AAFD1DA791A400EE844C /* BreweryTourUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BreweryTourUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryTourUITests.swift; sourceTree = "<group>"; };
@@ -294,6 +293,7 @@
 		A7DDC3F81DCC3A770077F34A /* BreweryDBClientConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClientConstants.swift; sourceTree = "<group>"; };
 		A7E3E00E1E0B9B1E0068ED48 /* KeyboardExtension.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KeyboardExtension.swift; sourceTree = "<group>"; };
 		A7E932511E0A42F500E07F53 /* AllBreweriesTableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AllBreweriesTableList.swift; sourceTree = "<group>"; };
+		A7FBF25D1F2CF1870072CF84 /* MappingStrategyTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MappingStrategyTests.swift; path = UnitTests/MappingStrategyTests.swift; sourceTree = "<group>"; };
 		A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon.png; sourceTree = "<group>"; };
 		A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = heart_icon_black_white_line_art.png; sourceTree = "<group>"; };
 		C23C61975D032ABC404F3BC0 /* Pods-BreweryTour.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BreweryTour.release.xcconfig"; path = "Pods/Target Support Files/Pods-BreweryTour/Pods-BreweryTour.release.xcconfig"; sourceTree = "<group>"; };
@@ -624,9 +624,9 @@
 		A7B2AAF51DA791A400EE844C /* BreweryTourTests */ = {
 			isa = PBXGroup;
 			children = (
+				A7FBF25D1F2CF1870072CF84 /* MappingStrategyTests.swift */,
 				A72F749F1F2620D600306664 /* CoreDataStackTest.swift */,
 				0759C63C724A3DC1C169FFB2 /* Frameworks */,
-				A7B2AAF61DA791A400EE844C /* BreweryTourTests.swift */,
 				A7B2AAF81DA791A400EE844C /* Info.plist */,
 			);
 			path = BreweryTourTests;
@@ -1077,8 +1077,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7B2AAF71DA791A400EE844C /* BreweryTourTests.swift in Sources */,
 				A72F74A01F2620D600306664 /* CoreDataStackTest.swift in Sources */,
+				A7FBF25E1F2CF1870072CF84 /* MappingStrategyTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
