@@ -917,8 +917,9 @@ extension MapViewController {
     }
 
 
-    // Render the route line
+    /// Render the route line
     internal func mapView(_ mapView: MKMapView, rendererFor overlay: MKOverlay) -> MKOverlayRenderer {
+
         let polylineRenderer = MKPolylineRenderer(overlay: overlay)
         if overlay is MKPolyline {
             polylineRenderer.strokeColor = UIColor.green.withAlphaComponent(0.5)
@@ -928,8 +929,9 @@ extension MapViewController {
     }
 
 
-    // Removes all routes from map
-    func removeRouteOnMap(){
+    /// Removes all routes from map
+    internal func removeRouteOnMap(){
+
         mapView.removeOverlays(mapView.overlays)
     }
 }
@@ -958,7 +960,7 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
         }
 
         if view.annotation is MKUserLocation || view.annotation === floatingAnnotation {
-            // Do not allow the selection floating pin or user's home pin
+            // Do not allow selecting the floating pin or user's home pin
             return
         }
 
@@ -1017,7 +1019,8 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
 
 
     private func drawRouteLine(onMap map: MKMapView, withAnnotation view: MKAnnotationView) {
-        // Disable green line routing
+
+        // if user elected to disable green line routing
         guard enableRouting.isOn else {
             return
         }
@@ -1028,7 +1031,7 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
         // Our location
         let origin = MKMapItem(placemark: MKPlacemark(coordinate: mapView.userLocation.coordinate))
 
-        // The brewery selected
+        // The selected brewery destination
         let destination = convertToMKMapItemThis(view)
 
         // Getting plottable directions
@@ -1039,6 +1042,7 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
         request.transportType = .automobile // Plottable directions for car only
         let directions = MKDirections(request: request)
         directions.calculate(){
+
             (response , error ) -> Void in
 
             if let routeResponse = response?.routes {
@@ -1050,6 +1054,7 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
 
             } else { // No car routes found, Prompt with a warning window
 
+                // No car routes found, Prompt with a warning window
                 self.displayAlertWindow(title: "No Routes", msg: "There are no routes available.")
             }
         }
@@ -1057,11 +1062,13 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
 
 
     func saveFavoriteStatus(withObjectID objectID: NSManagedObjectID, favoriteStatus: Bool) {
+
         // Save favorite status and update map
         container?.performBackgroundTask(){
             (context) -> Void in
             (context.object(with: objectID) as! Brewery).favorite = favoriteStatus
             context.performAndWait {
+
                 do {
                     try context.save()
                 } catch _ {
@@ -1074,8 +1081,10 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
 
     // Wraps conditional logic around webpage opening, to prevent malformed url
     @objc func tryToOpenWebpage(sender : Any) {
+
         if let url = (sender as? WebpageUIButton)?.url,
             UIApplication.shared.canOpenURL(url) {
+
             UIApplication.shared.open(url, options: [:], completionHandler: nil)
         }
     }
@@ -1086,9 +1095,11 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
         guard let myTitle = by.title! else {
             return nil
         }
+
         let request : NSFetchRequest<Brewery> = NSFetchRequest(entityName: "Brewery")
         request.sortDescriptors = []
         request.predicate = NSPredicate(format: "name = %@", myTitle )
+
         do {
             let breweries = try readOnlyContext?.fetch(request)
             if let brewery = breweries?.first {
@@ -1099,6 +1110,7 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
         }
         return nil
     }
+
 
     // This formats the pins and beers mugs on the map
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -1123,13 +1135,14 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
     }
 }
 
+
 // MARK: - NSFetchedResultsControllerDelegate
 
 extension MapViewController : NSFetchedResultsControllerDelegate {
 
     // Used for when style is updated with new breweries
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
-        
+
         // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
         SwiftyBeaver.info("MapViewController.controllerDidChangeContent Called")
         breweriesForDisplay = (controller.fetchedObjects?.first as! Style).brewerywithstyle?.allObjects as! [Brewery]
@@ -1137,7 +1150,7 @@ extension MapViewController : NSFetchedResultsControllerDelegate {
 }
 
 
-// MARK: - Private helper methods
+// MARK: - Fileprivate helper methods
 
 extension MapViewController {
 
