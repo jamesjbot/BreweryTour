@@ -266,11 +266,6 @@ class AllBreweriesMapStrategy: FetchableMapStrategy {
         }
         // Initialize debounce function and associate it with sortanddisplay
         wrapUpFetchSortAndSendForDelayedExecutionInClassScopeVariable(afterDelay: initialDelay)
-//        bounceDelay = initialDelay
-//        debouncedFunction = debounce(delay: bounceDelay, queue: DispatchQueue.main, action: {
-//            SwiftyBeaver.info("FetchableMapStrategy initialFetchBreweries \(#line)")
-//            self.fetchSortandSend()
-//        })
     }
 
     init(view: MapViewController, location: CLLocation, maxPoints points: Int) {
