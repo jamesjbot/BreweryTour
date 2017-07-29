@@ -284,7 +284,7 @@
 		A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryTourUITests.swift; sourceTree = "<group>"; };
 		A7B2AB031DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClient.swift; sourceTree = "<group>"; };
-		A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
+		A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapViewController.swift; path = ../../ViewModels/MapViewController/MapViewController.swift; sourceTree = "<group>"; };
 		A7D227231DB4D90D00360A3B /* BreweryTabbarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BreweryTabbarIcon.png; sourceTree = "<group>"; };
 		A7D227281DB55F3700360A3B /* small_heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = small_heart_icon_black_white_line_art.png; path = BreweryTour/Assets/small_heart_icon_black_white_line_art.png; sourceTree = SOURCE_ROOT; };
 		A7D227291DB55F3700360A3B /* small_heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = small_heart_icon.png; path = BreweryTour/Assets/small_heart_icon.png; sourceTree = SOURCE_ROOT; };
@@ -352,6 +352,8 @@
 		A727D1451DA918D20063F2B3 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				A7300C671EAFBBA90029EBB6 /* MapViewController */,
+				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
 				A752344C1DAEA666008EF071 /* SelectedBeersViewController.swift */,
 				A7300C651EAF9D050029EBB6 /* DismissableHelpNavigationController.swift */,
 				A748FAD51DF75316005637BD /* DismissableTutorialViewController.swift */,
@@ -393,10 +395,10 @@
 		A7300C671EAFBBA90029EBB6 /* MapViewController */ = {
 			isa = PBXGroup;
 			children = (
-				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
 				A72B18431E3466D400D3DFF1 /* MapViewControllerExtensions.swift */,
 			);
-			path = MapViewController;
+			name = MapViewController;
+			path = ../../ViewModels/MapViewController;
 			sourceTree = "<group>";
 		};
 		A741BF491E16FD93003958A4 /* XcodegeneratedFiles */ = {
@@ -700,7 +702,6 @@
 				A7D3B8931E18FFAA0017E5AE /* SelectedBeersViewModels */,
 				A77DEEBA1E1C66960054F95C /* CategoryViewControllerViewModels */,
 				A72C979B1E2C5AE600C711B6 /* MapPresentationStrategies */,
-				A7300C671EAFBBA90029EBB6 /* MapViewController */,
 				A705F28F1EB162570051F972 /* CoreAnimationConstants.swift */,
 				A751602B1E35C29D0078F6F9 /* MakePinView.swift */,
 			);
