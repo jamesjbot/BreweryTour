@@ -16,8 +16,8 @@ import SwiftyBeaver
 
 class SingleBreweryMapStrategy: MapStrategy {
 
-    init(b singleBrewery: Brewery, view: MapViewController, location: CLLocation) {
-        super.init()
+    init(b singleBrewery: Brewery, view: MapAnnotationReceiver, location: CLLocation) {
+        super.init(view: view)
         targetLocation = location
         breweryLocations.removeAll()
         breweryLocations.append(singleBrewery)

@@ -15,15 +15,16 @@ import SwiftyBeaver
 
 protocol MapAnnotationProvider {
     // converts breweries to annotations
-    func convertLocationToAnnotation() -> [MKAnnotation]
-    func endSearch()
+    func convertLocationToAnnotation() -> [MKAnnotation] // this is an internal helper function that is called 
+    func endSearch() // Called from mapviewcontroller
     func sendAnnotationsToMap()
 }
 
+// FIXME: This is my new protocl
 protocol MappableStrategy {
     func endSearch()
     func sendAnnotationsToMap()
-    func sortLocations()
+    func sortLocations() -> [Brewery]?
 }
 
 extension MappableStrategy {
@@ -40,11 +41,15 @@ class MapStrategy: NSObject, MapAnnotationProvider, MappableStrategy {
     // MARK: - Variables
 
     var breweryLocations: [Brewery] = []
-    var parentMapViewController: MapViewController? = nil
+    var parentMapViewController: MapAnnotationReceiver? = nil
     var targetLocation: CLLocation? = nil
 
 
     // MARK: - Functions
+
+    init(view: MapAnnotationReceiver){
+        parentMapViewController = view
+    }
 
     // Converts brewery locations to map annotations
     func convertLocationToAnnotation() -> [MKAnnotation] {
@@ -81,14 +86,14 @@ class MapStrategy: NSObject, MapAnnotationProvider, MappableStrategy {
 
     
     // Sort the breweries by distance to targetLocation
-    func sortLocations() {
+    func sortLocations() -> [Brewery]? {
         // If there are less than 2 breweries no need to sort.
         guard breweryLocations.count > 1 else {
-            return
+            return breweryLocations
         }
         guard isAllLocationDataNonNil(in: breweryLocations) else {
             SwiftyBeaver.error("MapStrategy detected breweries without location data.")
-            return
+            return nil
         }
         SwiftyBeaver.info("MapStrategy.sortLocations() Sorting breweries by positons")
         breweryLocations = breweryLocations.sorted(by:
@@ -98,6 +103,8 @@ class MapStrategy: NSObject, MapAnnotationProvider, MappableStrategy {
                 let location2: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery2.latitude!)!), longitude: CLLocationDegrees(Double(brewery2.longitude!)!))
                 return ((targetLocation?.distance(from: location1))! as Double) < ((targetLocation?.distance(from: location2))! as Double)
         })
+
+        return breweryLocations
     }
 
 
