@@ -85,6 +85,11 @@ fileprivate class AnnotationAdapter: NSObject {
 }
 
 
+protocol MapAnnotationReceiver {
+    func updateMap(withAnnotations annotations: [MKAnnotation])
+}
+
+
 // MARK: - UIViewController
 class MapViewController : UIViewController {
 
@@ -649,46 +654,6 @@ class MapViewController : UIViewController {
         }
     }
 
-    
-    // Draw the annotations on the map
-    internal func updateMap(withAnnotations annotations: [MKAnnotation]) {
-        var finalAnnotations:[MKAnnotation]?
-
-        // Remove excess annotations
-        if annotations.count > Int(self.slider.value) {
-            finalAnnotations = Array(annotations[0..<Int(self.slider.value)])
-        } else {
-            finalAnnotations = annotations
-        }
-
-        guard finalAnnotations != nil,   // if there are no annotations exit.
-            // If the annotations displayed are the same do nothing
-            self.arraysAreDifferent(arrayWithFloatingAnnotation: self.mapView.annotations, finalAnnotations!) else {
-                // Do nothing annotations are the same
-                return
-        }
-        let (removeSet, addSet) = updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: finalAnnotations!)
-        // Convert back to MKAnnotations
-        let removeArray = convertSetToArrayOfAnnotations(set: removeSet)
-        let addArray = convertSetToArrayOfAnnotations(set: addSet)
-
-        if removeSet.count == 0 && addSet.count == 0 &&
-            removeSet.first?.title! == self.UserLocationName {
-            return
-        }
-        DispatchQueue.main.async {
-            // Add only new annotations, remove old annotations
-            // This prevents flashing
-            self.mapView.removeAnnotations(removeArray)
-            self.mapView.addAnnotations(addArray)
-
-            // Add back out floating annotation we deleted.
-            if let floatingAnnotation = self.floatingAnnotation {
-                self.mapView.addAnnotation(floatingAnnotation)
-            }
-        }
-    }
-
 
     fileprivate func updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: [MKAnnotation]) -> (Set<AnnotationAdapter>, Set<AnnotationAdapter>) {
 
@@ -797,6 +762,49 @@ class MapViewController : UIViewController {
                             centerUS: false)
     }
 }
+
+
+extension MapViewController: MapAnnotationReceiver {
+    // Draw the annotations on the map
+    internal func updateMap(withAnnotations annotations: [MKAnnotation]) {
+        var finalAnnotations:[MKAnnotation]?
+
+        // Remove excess annotations
+        if annotations.count > Int(self.slider.value) {
+            finalAnnotations = Array(annotations[0..<Int(self.slider.value)])
+        } else {
+            finalAnnotations = annotations
+        }
+
+        guard finalAnnotations != nil,   // if there are no annotations exit.
+            // If the annotations displayed are the same do nothing
+            self.arraysAreDifferent(arrayWithFloatingAnnotation: self.mapView.annotations, finalAnnotations!) else {
+                // Do nothing annotations are the same
+                return
+        }
+        let (removeSet, addSet) = updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: finalAnnotations!)
+        // Convert back to MKAnnotations
+        let removeArray = convertSetToArrayOfAnnotations(set: removeSet)
+        let addArray = convertSetToArrayOfAnnotations(set: addSet)
+
+        if removeSet.count == 0 && addSet.count == 0 &&
+            removeSet.first?.title! == self.UserLocationName {
+            return
+        }
+        DispatchQueue.main.async {
+            // Add only new annotations, remove old annotations
+            // This prevents flashing
+            self.mapView.removeAnnotations(removeArray)
+            self.mapView.addAnnotations(addArray)
+
+            // Add back out floating annotation we deleted.
+            if let floatingAnnotation = self.floatingAnnotation {
+                self.mapView.addAnnotation(floatingAnnotation)
+            }
+        }
+    }
+}
+
 
 // MARK: - ReceiveBroadcastManagedObjectContextRefresh
 
