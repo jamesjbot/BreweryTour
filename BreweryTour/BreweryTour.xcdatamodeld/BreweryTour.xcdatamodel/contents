@@ -50,6 +50,6 @@
     <elements>
         <element name="Beer" positionX="-153" positionY="-135" width="128" height="270"/>
         <element name="Brewery" positionX="-513" positionY="-72" width="128" height="210"/>
-        <element name="Style" positionX="-342" positionY="239" width="128" height="103"/>
+        <element name="Style" positionX="-342" positionY="239" width="128" height="105"/>
     </elements>
 </model>
