@@ -15,15 +15,14 @@ import SwiftyBeaver
 
 protocol MapAnnotationProvider {
     // converts breweries to annotations
-    func convertLocationToAnnotation() -> [MKAnnotation] // this is an internal helper function that is called 
+    func convertLocationToAnnotation(breweries: [Brewery]) -> [MKAnnotation] // this is an internal helper function that is called
     func endSearch() // Called from mapviewcontroller
-    func sendAnnotationsToMap()
+    func send(annotations: [MKAnnotation], to map: MapAnnotationReceiver)
 }
 
 // FIXME: This is my new protocl
 protocol MappableStrategy {
     func endSearch()
-    func sendAnnotationsToMap()
     func sortLocations() -> [Brewery]?
 }
 
@@ -52,7 +51,7 @@ class MapStrategy: NSObject, MapAnnotationProvider, MappableStrategy {
     }
 
     // Converts brewery locations to map annotations
-    func convertLocationToAnnotation() -> [MKAnnotation] {
+    func convertLocationToAnnotation(breweries breweryLocations: [Brewery]) -> [MKAnnotation] {
         var annotations = [MKAnnotation]()
         for breweryLocation in breweryLocations {
 
@@ -79,9 +78,10 @@ class MapStrategy: NSObject, MapAnnotationProvider, MappableStrategy {
     }
 
 
-    func sendAnnotationsToMap() {
+    func send(annotations: [MKAnnotation], to map: MapAnnotationReceiver) {
         // Format the first maximumClosestBreweries for display.
-        parentMapViewController?.updateMap(withAnnotations: convertLocationToAnnotation())
+        map.updateMap(withAnnotations: annotations)
+        //parentMapViewController?.updateMap(withAnnotations: convertLocationToAnnotation(breweries: <#T##[Brewery]#>))
     }
 
     
