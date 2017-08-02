@@ -233,17 +233,18 @@ class BreweryAndBeerCreationQueue: NSObject {
                         break breweryLoop
                     }
 
-                    let b = self.runningBreweryQueue.removeFirst()
-                    let newBrewery = Brewery(data: b, context: self.classContext!)
-
+                    let breweryData = self.runningBreweryQueue.removeFirst()
+                    let newBrewery = Brewery(with: breweryData as BreweryData, context: self.classContext!)
                     // If brewery has a style id; add the brewery to that style.
-                    if let styleID = b.styleID {
+                    if let styleID = breweryData.styleID {
                         self.add(brewery: newBrewery,
                                  toStyleID: styleID,
                                  context: self.classContext!)
                     }
 
-                    self.decideOnDownloadingImage(fromURL: b.imageUrl, forType: .Brewery, forID: b.id!)
+                    self.decideOnDownloadingImage(fromURL: breweryData.imageUrl,
+                                                  forType: .Brewery,
+                                                  forID: breweryData.id!)
                 }
             }
             // Save brewery and style data.
