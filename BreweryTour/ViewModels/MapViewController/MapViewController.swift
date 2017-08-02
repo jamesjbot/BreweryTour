@@ -427,7 +427,8 @@ class MapViewController : UIViewController {
         guard !showLocalBreweries.isOn else {
             activeMappingStrategy = AllBreweriesMapStrategy(view: self,
                                                             location: targetLocation!,
-                                                            maxPoints: Int(slider.value))
+                                                            maxPoints: Int(slider.value),
+                                                            inputContext: readOnlyContext! )
             return
         }
 
@@ -437,7 +438,8 @@ class MapViewController : UIViewController {
             activeMappingStrategy = StyleMapStrategy(s: mapViewData as? Style,
                                                      view: self,
                                                      location: targetLocation!,
-                                                     maxPoints: Int(slider.value))
+                                                     maxPoints: Int(slider.value),
+                                                     inputContext: readOnlyContext!)
 
             // Changing stylemapping strategies can occur often, this will,
             // help the processing StyleMapStrategy differentiate which strategy

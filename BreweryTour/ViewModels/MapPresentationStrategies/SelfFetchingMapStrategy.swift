@@ -63,8 +63,9 @@ class FetchableMapStrategy: MapStrategy, FetchableStrategy  {
     internal var runningID: Int?
 
     // Coredata
-    fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
-    let readOnlyContext = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
+    //fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
+    var readOnlyContext: NSManagedObjectContext?
+    // = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container.viewContext
 
 
     // MARK: - Variables
@@ -186,8 +187,9 @@ extension FetchableMapStrategy {
 
 class StyleMapStrategy: FetchableMapStrategy {
 
-    init(s: Style?, view: MapAnnotationReceiver, location: CLLocation, maxPoints points: Int) {
+    init(s: Style?, view: MapAnnotationReceiver, location: CLLocation, maxPoints points: Int, inputContext: NSManagedObjectContext) {
         super.init(view: view)
+        readOnlyContext = inputContext
         runningID = Mediator.sharedInstance().nextPublicStyleStrategyID
         maxPoints = points
         targetLocation = location
@@ -299,8 +301,10 @@ class AllBreweriesMapStrategy: FetchableMapStrategy {
         wrapUpFetchSortAndSendForDelayedExecutionInClassScopeVariable(afterDelay: initialDelay)
     }
 
-    init(view: MapAnnotationReceiver, location: CLLocation, maxPoints points: Int) {
+    init(view: MapAnnotationReceiver, location: CLLocation, maxPoints points: Int,
+         inputContext: NSManagedObjectContext) {
         super.init(view: view)
+        readOnlyContext = inputContext
         runningID = Mediator.sharedInstance().nextPublicStyleStrategyID
         maxPoints = points
         targetLocation = location
