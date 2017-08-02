@@ -33,7 +33,7 @@ import SwiftyBeaver
 
 
 protocol FetchableStrategy {
-    func fetch()
+    func fetch() -> [Brewery]
 }
 
 protocol CoreDataStackAccess {
@@ -104,12 +104,9 @@ class FetchableMapStrategy: MapStrategy, FetchableStrategy  {
                                  execute: dispatchWorkItem)
         }
     }
+    
 
-
-
-
-
-    internal func fetch() {
+    internal func fetch() -> [Brewery] {
         fatalError("You must override fetch()")
     }
 
@@ -204,7 +201,7 @@ class StyleMapStrategy: FetchableMapStrategy {
         sendAnnotationsToMap()
     }
 
-    override internal func fetch() {
+    override internal func fetch() -> [Brewery] {
         SwiftyBeaver.info("StyleMapStrategy.fetch() called")
         // Important this fixed the error 
         // Because we reinitialie it to nothing 
@@ -223,6 +220,7 @@ class StyleMapStrategy: FetchableMapStrategy {
         } catch {
             SwiftyBeaver.error("StyleMapStrategy \(#line) Critical error unable to read database.")
         }
+        return breweryLocations
     }
 
 
@@ -260,7 +258,7 @@ class StyleMapStrategy: FetchableMapStrategy {
 
 class AllBreweriesMapStrategy: FetchableMapStrategy {
 
-    override internal func fetch() {
+    override internal func fetch() -> [Brewery] {
         breweryLocations = []
         do {
             try styleFRC?.performFetch()
@@ -273,6 +271,7 @@ class AllBreweriesMapStrategy: FetchableMapStrategy {
         } catch {
             SwiftyBeaver.error("AllBreweriesMapStrategy Critical error unable to read database.")
         }
+        return breweryLocations
     }
 
 
