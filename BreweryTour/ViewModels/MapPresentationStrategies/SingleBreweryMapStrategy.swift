@@ -23,8 +23,7 @@ class SingleBreweryMapStrategy: MapStrategy {
         breweryLocations.append(singleBrewery)
         parentMapViewController = view
         SwiftyBeaver.info("SingleBreweryMapStrategy callign sortLocation in initialization logic.")
-        sortLocations()
-        sendAnnotationsToMap()
+        send(annotations: convertLocationToAnnotation(breweries: breweryLocations), to: parentMapViewController!)
     }
 
 }

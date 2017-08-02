@@ -118,11 +118,14 @@ class FetchableMapStrategy: MapStrategy, FetchableStrategy  {
             endSearch()
             return
         }
-        fetch() // Breweries.
+        var breweries = fetch() // Breweries.
 
-        sortLocations() // Sort Brewery By Distance to our location.
+        breweries = sortLocations()! // Sort Brewery By Distance to our location.
 
-        sendAnnotationsToMap() // Send the newly created annotations to the map.
+        let annotations = convertLocationToAnnotation(breweries: breweries)
+
+        // FIXME: mapannotation provider needs updating
+        send(annotations: annotations, to: parentMapViewController!) // Send the newly created annotations to the map.
     }
 
 
@@ -198,7 +201,7 @@ class StyleMapStrategy: FetchableMapStrategy {
         if breweryLocations.count > maxPoints! {
             breweryLocations = Array(breweryLocations[0..<maxPoints!])
         }
-        sendAnnotationsToMap()
+        send(annotations: convertLocationToAnnotation(breweries: breweryLocations), to: parentMapViewController!)
     }
 
     override internal func fetch() -> [Brewery] {
@@ -315,6 +318,21 @@ class AllBreweriesMapStrategy: FetchableMapStrategy {
         if breweryLocations.count > maxPoints! {
             breweryLocations = Array(breweryLocations[0..<maxPoints!])
         }
-        sendAnnotationsToMap()
+        send(annotations: convertLocationToAnnotation(breweries: breweryLocations),
+             to: parentMapViewController!)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
