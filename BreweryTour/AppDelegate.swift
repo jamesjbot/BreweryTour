@@ -14,15 +14,15 @@ import Foundation
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    // MARK: - Constants
+    // MARK: Constants
     internal let coreDataStack = CoreDataStack.init(modelName: "BreweryTour")
 
-    // MARK: - Varaibles
+    // MARK: Varaibles
 
     var window: UIWindow?
 
 
-    // MARK: - Functions
+    // MARK: Functions
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
@@ -70,6 +70,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
 }
 
+
+// MARK: - SwiftyBeaver Logging Implementation
+
 extension AppDelegate {
 
     fileprivate func checkIfFirstLaunched() {
@@ -114,9 +117,14 @@ extension AppDelegate {
             }
         #endif
     }
+}
 
+// MARK: - 
+// MARK: Tutorial Persistance
 
-    private func setTutorialsForFirstTimeRun() {
+extension AppDelegate {
+
+    fileprivate func setTutorialsForFirstTimeRun() {
         guard UserDefaults.standard.object(forKey: g_constants.FirstTimeLaunched) == nil else {
             return
         }
