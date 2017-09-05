@@ -1,46 +1,92 @@
-# Camera Camera
+# BreweryTour
 
 ## Overview
-
-Camera Camera is a Swift based QR code reading app.
+BreweryTour is a Swift based App to help you find breweries that make the style of beer you're currently excited about.
+When my friends introduce me to a new style of beer, I've had trouble finding other places that brew that type of beer.
+This app solves that problem for others. It allows you to search for all breweries that produce your desired style.
 
 ## Technologies Used
 
-UIKit, ReactiveKit, Bond, SwiftyBeaver Logging , GCD, AVFoundation, Cocoapods, Generics, MVVM, Protocol Oriented Programming.   
+UIKit, MapKit, CoreData, GCD, CoreAnimation, CoreLocation, Cocoapods, Generics, Design Patterns.
 
-MVVM design pattern was used to seperate out the layers.      
+The crowd sourced data for the beers and breweries is BreweryDB, http://www.brewerydb.com.     
+The data persistence is achieved mostly thru CoreData, the tutorial states are saved in UserDefaults.  
+Grand central dispatch is used generously throughout the download process.   
+MVVM design pattern is used to back many of the viewcontrollers.   
+Cocoapods was used to integrate AlamoFire Networking.   
 
 ## Example usage
-  
-After the app starts up, point the camera at some qr codes.    
-The qr codes will be outlined and stay solidly on the screen till you move away, no flickering of the outline will occur.     
-At the bottom you can take a photo of the qr codes and it will automatically save to the Photo Album.      
-Above the 'Take Photo' button you can deselect qr code overlays in the saved imade.   
+
+Upon opening the app, you will be greeted with a tutorial screen click next to see the usage for this screen, click dismiss to dismiss the tutorial.      
+You will be on the Map screen.   
+
+Within the Map screen (tab):   
+Longpress to see nearby breweries to that location.       
+You will see a beer mug for every brewery that was returned.   
+Clicking on the beer mug will bring up the brewery's name, website address, and whether you've marked this as a liked brewery.
+If the brewery has a website listed below, clicking on it will bring up the brewery's website.  
+Click the heart to favorite the brewery, then in the 'Favorite Brewery' (tab) you can get turn by turn directions to the brewery.   
+You can control the number of breweries being shown by dragging the slider at the top.    
+The number of breweries will be listed on the right side of the slider.   
+If you click the Menu button you have some map options, to show all nearby local breweries, and turn off the green line routing information you see when a brewery is clicked.   
+At the bottom of the screen is the tabbar that controls views of the map, a styles and brewery selection screen, the beers that you selected via styles/brewery screen, your favorite beers screen, and your favorite breweries screen.   
+To look for a specific style of beer click the 'Search Style' (tab).   
+
+Within the Search Styles Tab:   
+Select a beer style and then it will begin to download all the entries for that style.   
+There are alot of breweries and beers per style, the spinner will keep going as long as there are breweries and their beers to be processed.    
+Click Breweries with style (in the segemented control) to see the breweries that have the style you selected.     
+Click All Breweries (in the segemented control) to see all breweries currently in the device in on a list.   
+At anytime you can press on a brewery and the app will switch to the map, you may need to zoom out to see the location of the brewery.    
+
+Within the Search beers (tab):   
+You may see detailed information about beers, favorite those beers and write tasting notes about the beers.     
+
+Within the Search Beers screen (tab):   
+You can select your favorited beers and see details about each beer.   
+You can also place tasting notes about the beer.   
+
+Within the Favorite Beers screen (tab):  
+You can select a beer to show it's details
+
+Within the Favorite Breweries screen (tab):
+You can select a brewery and get travel directions to that brewery.   
+This screen is a great way to keep a list of breweries you want to visit in the near future.
 
 Current capabilities include:
 
-* You can see multiple qr codes with the same message payload.   
-* You can take a picture with or without qr codes displayed.    
-* The app works in all orientations.    
+* Select a style and all the breweries associated with it will download.
+* Select a brewery and all the beers associated with it will download.
+* Search for a brewery by name in the search bar on the Search Styles (Tab) / All Beers (Segemnted Control)
+* Search for a beer by name in the search bar on the Search Beers Screen
+* On the map you can limiting the amount of search results (use slider on the map to limit the results)
+* Limit breweries to a specific area instead of your current location (use the map and place a pin in the new area)
+* There is a new menu bar on the map press 'Menu' to access it
+* You can now see local breweries relative to your location or the new pin (use the map and tap Menu in the upper right, flip switch for Show all local)  
+* You can turn off any further routing by fliping the enable routing switch to off.
+* On the map you can target your search results to a specific area by long pressing.
+* On the map you can favorite a brewery, this will allow you to get driving directions to it in the Favortes Brewery Tab
+* On the Search Beers (tab) / All beers (Segmented Control) you can get detailed infromation on the beer by clicking it.
+* On the beer detail screen you can favorite the beer or save tasting notes.
+* To get directions to a brewery (first favorite a brewery on the map, then go to the favorite brewery tab and click the brewery)      
 
 ## How to set up the dev environment
-
 First have cocoapods installed, if you don't have it there are instructions at https://cocoapods.org
 
-Go to https://github.com/jamesjbot/Cameracamera.git and download the zip file
+Go to https://github.com/jamesjbot/BreweryTour and download the zip file
 
-After downloading, please navigate to the Cameracamera folder and type `pod install`
+After downloading, please navigate to the BreweryTour folder and type `pod install`
 
-Then go into the folder Cameracamera, open Cameracamera.xcworkspace.
+Then go into the folder BreweryTour, open BreweryTour.xcworkspace.
 
 Or
 
 From terminal (with git installed), type 
 ```
-git clone https://github.com/jamesjbot/Cameracamera.git
-cd Cameracamera
+git clone https://github.com/jamesjbot/BreweryTour.git
+cd BreweryTour
 pod install
-open Cameracamera.xcworkspace
+open BreweryTour.xcworkspace
 ```
 
 Then build the project.
@@ -49,10 +95,14 @@ Then build the project.
 Changes are not accepted at this time
 
 ## Know bugs
-None
+The ability to search for local beers only works in the United States.   
+Prior to establishing your current location via gps, the app will default to the center of the United States.
+Routing is now slower than the custom callout display. The route may not map before a new callout is pressed.
  
 ## Change log
-* 05-09-2017 Initial Commit
+* 01-05-2017 Added Custom Callout
+* 26-04-2017 Change the layout app
+* 10-02-2016 Initial Commit
 
 ## License and author info
 All rights reserved
