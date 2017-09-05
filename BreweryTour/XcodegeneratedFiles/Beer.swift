@@ -47,10 +47,6 @@ public class Beer: NSManagedObject {
         styleID = data.styleID
         abv = data.abv
         ibu = data.ibu
-        // } else {
-        // SwiftyBeaver.error("Unable to create Beer object")
-        //throw BreweryTourErrors.UnableToCreateBeerException
-        //}
     }
 
     convenience init(name : String?,
