@@ -1251,7 +1251,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 57N49ZFXV9;
+				DEVELOPMENT_TEAM = T37NKE3UT9;
 				INFOPLIST_FILE = BreweryTourTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = JamesJongs.BreweryTourTests;
@@ -1266,7 +1266,7 @@
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				BUNDLE_LOADER = "$(TEST_HOST)";
-				DEVELOPMENT_TEAM = 57N49ZFXV9;
+				DEVELOPMENT_TEAM = T37NKE3UT9;
 				INFOPLIST_FILE = BreweryTourTests/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = JamesJongs.BreweryTourTests;
