@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12120" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="12121" systemVersion="16G29" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" launchScreen="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="01J-lp-oVM">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12088"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12089"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -30,13 +30,9 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="VDM-Lf-T14">
-                                <rect key="frame" x="169" y="315" width="37" height="37"/>
-                            </activityIndicatorView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Brewery Tour" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hvu-Yr-OMj">
-                                <rect key="frame" x="33" y="142" width="308" height="58"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="CourierNewPS-BoldMT" family="Courier New" pointSize="40"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Brewery Tour" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Hvu-Yr-OMj">
+                                <rect key="frame" x="63.5" y="142" width="247.5" height="64"/>
+                                <fontDescription key="fontDescription" name="GujaratiSangamMN-Bold" family="Gujarati Sangam MN" pointSize="44"/>
                                 <color key="textColor" red="1" green="0.012914525551056544" blue="0.22873752982197015" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                                 <color key="shadowColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
@@ -47,13 +43,13 @@
                         <constraints>
                             <constraint firstItem="nMn-tj-uHN" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="-36.5" id="0kK-hL-OZY"/>
                             <constraint firstAttribute="centerX" secondItem="obG-Y5-kRd" secondAttribute="centerX" id="5cz-MP-9tL"/>
-                            <constraint firstItem="VDM-Lf-T14" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="BLk-vU-y4t"/>
+                            <constraint firstItem="Hvu-Yr-OMj" firstAttribute="top" secondItem="Llm-lL-Icb" secondAttribute="bottom" constant="122" id="7af-85-6XE"/>
                             <constraint firstItem="xb3-aO-Qok" firstAttribute="top" secondItem="nMn-tj-uHN" secondAttribute="bottom" id="IWi-Iu-yau"/>
                             <constraint firstAttribute="trailing" secondItem="nMn-tj-uHN" secondAttribute="trailing" id="Ini-Qy-sJ1"/>
                             <constraint firstItem="obG-Y5-kRd" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" constant="20" symbolic="YES" id="SfN-ll-jLj"/>
                             <constraint firstAttribute="bottom" secondItem="obG-Y5-kRd" secondAttribute="bottom" constant="20" id="Y44-ml-fuU"/>
                             <constraint firstItem="nMn-tj-uHN" firstAttribute="leading" secondItem="Ze5-6b-2t3" secondAttribute="leading" id="YBM-lS-CV9"/>
-                            <constraint firstItem="VDM-Lf-T14" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="icT-DK-ktc"/>
+                            <constraint firstItem="Hvu-Yr-OMj" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="xJJ-nR-bN7"/>
                         </constraints>
                     </view>
                 </viewController>
