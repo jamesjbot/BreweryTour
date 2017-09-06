@@ -30,7 +30,8 @@ public class Brewery: NSManagedObject {
     }
 
     convenience init(with data: BreweryData, context: NSManagedObjectContext) {
-        self.init(entity: Brewery.entity(), insertInto: context)
+        let entityDescription = NSEntityDescription.entity(forEntityName: "Brewery", in: context)
+        self.init(entity: entityDescription!, insertInto: context)
         self.latitude = data.latitude
         self.longitude = data.longitude
         self.url = data.url
