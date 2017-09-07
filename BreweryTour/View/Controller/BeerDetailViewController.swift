@@ -117,7 +117,9 @@ class BeerDetailViewController: UIViewController, AlertWindowDisplaying {
         }
         return nil
     }
-    
+
+
+    // MARK: - Life Cycle Management
 
     // Makes the description and tasting notes UITextView scroll to the top.
     override func viewDidLayoutSubviews() {
@@ -125,8 +127,6 @@ class BeerDetailViewController: UIViewController, AlertWindowDisplaying {
         tasting.setContentOffset(CGPoint.zero, animated: false)
     }
 
-
-    // MARK: - Life Cycle Management 
 
     override func viewDidLoad() {
         super.viewDidLoad()
