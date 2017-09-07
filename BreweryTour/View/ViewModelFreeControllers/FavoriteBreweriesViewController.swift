@@ -120,7 +120,6 @@ class FavoriteBreweriesViewController: UIViewController, AlertWindowDisplaying {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
         tableView.reloadData()
-        navigationItem.title = "Click For Directions"
     }
 
     
