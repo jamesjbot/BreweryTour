@@ -195,9 +195,6 @@ class SelectedBeersViewController: UIViewController {
         // have changed
         tableView.reloadData()
 
-        // Set navigationbar title
-        tabBarController?.title = "Click For Details"
-
         // Display only selected beers
         if activeViewModel is SelectedBeersViewModel {
             // Set selected subset as the first screen
