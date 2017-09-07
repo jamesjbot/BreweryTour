@@ -322,7 +322,8 @@ NSFetchedResultsControllerDelegate {
         }
         
         // Change the Navigator name
-        navigationController?.navigationBar.topItem?.title = "Select"
+        // FIXME set in storyboard
+        //navigationController?.navigationBar.topItem?.title = "Select"
 
         // SegmentedControlClicked will reload the table.
         segmentedControlClicked(segmentedControl, forEvent: UIEvent())//Dummy event
