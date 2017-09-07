@@ -67,8 +67,8 @@ class FavoriteBeersViewController: UIViewController,AlertWindowDisplaying {
             cell.textLabel?.text = selectedObject.beerName
             cell.detailTextLabel?.text = selectedObject.brewer?.name
             if let data : NSData = (selectedObject.image) {
-                let im = UIImage(data: data as Data)
-                cell.imageView?.image = im
+                let image = UIImage(data: data as Data)
+                cell.imageView?.image = image
             }
         }
     }
@@ -112,8 +112,6 @@ class FavoriteBeersViewController: UIViewController,AlertWindowDisplaying {
         super.viewWillAppear(animated)
         performFetchOnResultsController()
         tableView.reloadData()
-        // Navigation bar title
-        navigationItem.title = "Click For Details"
     }
 
     
