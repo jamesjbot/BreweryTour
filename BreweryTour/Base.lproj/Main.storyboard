@@ -683,11 +683,11 @@
                         <viewControllerLayoutGuide type="bottom" id="bf2-bC-tom"/>
                     </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="pKa-uA-FlV">
-                        <rect key="frame" x="0.0" y="64" width="375" height="554"/>
+                        <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="36" translatesAutoresizingMaskIntoConstraints="NO" id="lVx-tM-jGt">
-                                <rect key="frame" x="57" y="196.5" width="261" height="161"/>
+                                <rect key="frame" x="57" y="221" width="261" height="161"/>
                                 <subviews>
                                     <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yUC-Ve-7Hk">
                                         <rect key="frame" x="0.0" y="0.0" width="261" height="30"/>
@@ -743,7 +743,7 @@
                                 </constraints>
                             </stackView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="sGk-hC-lDe">
-                                <rect key="frame" x="178" y="267" width="20" height="20"/>
+                                <rect key="frame" x="178" y="291.5" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -1120,7 +1120,7 @@
                     </view>
                     <extendedEdge key="edgesForExtendedLayout" bottom="YES"/>
                     <toolbarItems/>
-                    <navigationItem key="navigationItem" title="Navigate to" id="FWr-SV-3EY">
+                    <navigationItem key="navigationItem" title="Navigate To" id="FWr-SV-3EY">
                         <barButtonItem key="leftBarButtonItem" image="Settings" id="iff-xQ-BS0">
                             <inset key="imageInsets" minX="6" minY="6" maxX="6" maxY="6"/>
                             <connections>
@@ -1501,6 +1501,6 @@
         <image name="map" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="GMp-du-1Rh"/>
+        <segue reference="A1K-Yt-gf4"/>
     </inferredMetricsTieBreakers>
 </document>
