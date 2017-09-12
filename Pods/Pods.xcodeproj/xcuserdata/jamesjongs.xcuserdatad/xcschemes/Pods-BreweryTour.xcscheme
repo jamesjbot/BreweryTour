@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "47F756D2C81CB77E625C175965EF9600"
+               BlueprintIdentifier = "2F9E2447DC68FBE358C1BDB8C317F699"
                BuildableName = "Pods_BreweryTour.framework"
                BlueprintName = "Pods-BreweryTour"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -26,7 +26,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
@@ -37,7 +36,6 @@
       buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
-      language = ""
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
       ignoresPersistentStateOnLaunch = "NO"
@@ -47,7 +45,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "47F756D2C81CB77E625C175965EF9600"
+            BlueprintIdentifier = "2F9E2447DC68FBE358C1BDB8C317F699"
             BuildableName = "Pods_BreweryTour.framework"
             BlueprintName = "Pods-BreweryTour"
             ReferencedContainer = "container:Pods.xcodeproj">

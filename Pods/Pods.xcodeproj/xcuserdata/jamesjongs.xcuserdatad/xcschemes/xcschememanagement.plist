@@ -9,7 +9,22 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>Bond.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>Diff.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>Pods-BreweryTour.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>ReactiveKit.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -22,17 +37,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>47F756D2C81CB77E625C175965EF9600</key>
+		<key>2F9E2447DC68FBE358C1BDB8C317F699</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>4D901AD8E2D96B98C1C16B02872318E6</key>
+		<key>4E4E4CE89DCA8573AC3CEF80C199D4BE</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>7D481C266A59FF6757B288F791A83A4D</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>88E9EC28B8B46C3631E6B242B50F4442</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E1E21D3451445F65A5E1F3E63822111E</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>E302360E40D5D52920F569B2BC66BC2E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
