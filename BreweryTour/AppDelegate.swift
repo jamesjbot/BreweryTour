@@ -113,6 +113,7 @@ extension AppDelegate {
     private func createLogEntryForPathToDocumentsDirectory() {
         #if arch(i386) || arch(x86_64)
             if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path {
+                print("Documents Directory: \(documentsPath)")
                 SwiftyBeaver.info("Documents Directory: \(documentsPath)")
             }
         #endif
