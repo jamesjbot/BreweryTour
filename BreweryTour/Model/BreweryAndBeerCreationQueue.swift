@@ -16,12 +16,17 @@ import UIKit
 import CoreData
 import Dispatch
 import SwiftyBeaver
+import Bond
 
 protocol BreweryAndBeerCreationProtocol {
+
+    var isQueueRunning: Observable<Bool> { get }
+    var elementsRemainingToProcess: Observable<Int> {get}
 
     func isBreweryAndBeerCreationRunning() -> Bool
     func queueBrewery(_ b: BreweryData?)
     func queueBeer(_ b: BeerData?)
+    func abandonProcessing() -> Bool
 }
 
 
@@ -37,7 +42,6 @@ extension BreweryAndBeerCreationQueue: ReceiveBroadcastManagedObjectContextRefre
 
 class BreweryAndBeerCreationQueue: NSObject {
 
-    fileprivate var abandonProcessingQueue: Bool = false
 
     // MARK: - Constants
 
@@ -60,7 +64,16 @@ class BreweryAndBeerCreationQueue: NSObject {
     private let maximumSmallRuns = 28
     private let maximumLargeRuns = 100
 
+    // SwiftyBeaver Logging
+    //let log = SwiftyBeaver.self
+
     // MARK: - Variables
+    fileprivate var abandonProcessingQueue: Bool = false
+
+    // A temporary test variable allow us to see the processing queue's state.
+    internal var elementsRemainingToProcess: Observable<Int> = Observable<Int>(0)
+
+    internal var isQueueRunning: Observable<Bool> = Observable<Bool>(false)
 
     fileprivate var classContext: NSManagedObjectContext? {
         didSet {
@@ -70,6 +83,8 @@ class BreweryAndBeerCreationQueue: NSObject {
 
     private var currentMaxSavesPerLoop: Int = 0
     private var currentRepeatInterval: Double = 0
+
+
 
     private var loopCounter: Int = 0
 
@@ -103,7 +118,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 let resultStyle = try context.fetch(styleRequest)
                 resultStyle.first?.addToBrewerywithstyle(newBrewery)
             } catch let error {
-                SwiftyBeaver.error("There was an error saving brewery to style\(error.localizedDescription)")
+                //SwiftyBeaver    ("There was an error saving brewery to style\(error.localizedDescription)")
             }
         }
     }
@@ -204,10 +219,14 @@ class BreweryAndBeerCreationQueue: NSObject {
                         self.decideOnDownloadingImage(fromURL: beer.imageUrl, forType: .Beer, forID: beer.id!)
 
                     } catch let error {
-                        SwiftyBeaver.error("There was an error saving brewery to style\(error.localizedDescription)")
-                        // FIXME: Waht should you do if we can't get a
+                        
+                        //SwiftyBeaver.self.error("There was an error saving brewery to style\(error.localizedDescription)")
+                        // FIXME: What should you do if we can't get a
                         //fatalError()
                     }
+                    
+                    // FIXME: Temporary test code
+                    //elementsRemainingToProcess = elementsRemainingToProcess.value - 1
                 }
             }
             // Help slow saving and memory leak.
@@ -245,9 +264,13 @@ class BreweryAndBeerCreationQueue: NSObject {
                     self.decideOnDownloadingImage(fromURL: breweryData.imageUrl,
                                                   forType: .Brewery,
                                                   forID: breweryData.id!)
+
+                    // FIXME: Temporary test code
+                    //elementsRemainingToProcess = elementsRemainingToProcess.value - 1
+
                 }
             }
-            // Save brewery and style data.
+            // Save group of breweries and style data.
             do {
                 self.classContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
                 try self.classContext?.save()
@@ -263,7 +286,8 @@ class BreweryAndBeerCreationQueue: NSObject {
     // Periodic method to save breweries and beers
     @objc private func processQueue() {
         // This function will save all breweries before saving beers.
-        classContext?.automaticallyMergesChangesFromParent = true
+        // FIXME: May not need this.
+        // classContext?.automaticallyMergesChangesFromParent = true
         self.loopCounter += 1
         if self.loopCounter > self.maximumSmallRuns {
             self.switchToLongRunningDataLoad()
@@ -272,7 +296,7 @@ class BreweryAndBeerCreationQueue: NSObject {
         }
 
         // Save breweries one at time. Batch saving generates conflict errors.
-        let dq = DispatchQueue(label: "SerialQueue")
+        let dq = DispatchQueue(label: "BreweryAndBeerProcessingSerialQueue")
         dq.sync {
             guard !self.runningBreweryQueue.isEmpty || !self.runningBeerQueue.isEmpty else {
                 // Both queues are empty stop timer
@@ -373,6 +397,10 @@ class BreweryAndBeerCreationQueue: NSObject {
 
 extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
 
+    func abandonProcessing() -> Bool {
+        return true
+    }
+
     internal func isBreweryAndBeerCreationRunning() -> Bool {
         if runningBreweryQueue.isEmpty && runningBeerQueue.isEmpty {
             return false
@@ -400,6 +428,8 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
         if let localBrewer = breweryData {
             runningBreweryQueue.append(localBrewer)
             startWorkTimer()
+            // FIXME Temporary test code
+            elementsRemainingToProcess.value += 1
         }
     }
 
@@ -426,6 +456,8 @@ extension BreweryAndBeerCreationQueue: BreweryAndBeerCreationProtocol {
             let attempt = 0
             runningBeerQueue.append( (beer,attempt) )
             startWorkTimer()
+            // FIXME Temporary test code
+            elementsRemainingToProcess.value += 1
         }
     }
 }
