@@ -14,16 +14,41 @@ import Foundation
 import MapKit
 import SwiftyBeaver
 
-class SingleBreweryMapStrategy: MapStrategy {
+final class SingleBreweryMapStrategy: MappableStrategy {
 
-    init(b singleBrewery: Brewery, view: MapAnnotationReceiver, location: CLLocation) {
-        super.init(view: view)
+    var parentMapViewController: MapAnnotationReceiver? = nil
+    var targetLocation: CLLocation? = nil
+    private var onlyBrewery: Brewery?
+
+    convenience init(b singleBrewery: Brewery,
+                     view: MapAnnotationReceiver,
+                     location: CLLocation) {
+
+        self.init(view: view)
+        //SwiftyBeaver.info("SingelBreweryMapStrategy created")
+        
+        onlyBrewery = singleBrewery
         targetLocation = location
-        breweryLocations.removeAll()
-        breweryLocations.append(singleBrewery)
         parentMapViewController = view
-        SwiftyBeaver.info("SingleBreweryMapStrategy callign sortLocation in initialization logic.")
-        send(annotations: convertLocationToAnnotation(breweries: breweryLocations), to: parentMapViewController!)
+        send(annotations: convertBreweryToAnnotation(breweries: [singleBrewery]), to: parentMapViewController!)
     }
+
+
+    func endSearch() -> (()->())?{
+
+        // Doesn't need to do anything except conform to protocol
+        return nil
+    }
+
+
+    func getBreweries() -> [Brewery] {
+
+        guard let onlyBrewery = onlyBrewery else {
+            //SwiftyBeaver.error("How was a SingleBreweryMapStrategy populated without a brewery? \(String(describing: self.onlyBrewery))")
+            return []
+        }
+        return [onlyBrewery]
+    }
+
 
 }
