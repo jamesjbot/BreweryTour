@@ -92,6 +92,7 @@
 		A77DEEB91E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77DEEB81E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift */; };
 		A77E0C031DF9ECBF0007E55F /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */; };
 		A77FEBF71E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */; };
+		A78CD4691FA68DAA00BE99DF /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78CD46A1FA68DAA00BE99DF /* SwiftyBeaver.framework */; };
 		A78FBB5E1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBB5D1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift */; };
 		A78FBC4B1E38BE75003D49B6 /* BreweriesByStateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBC4A1E38BE75003D49B6 /* BreweriesByStateParser.swift */; };
 		A78FBC4D1E38D0F9003D49B6 /* ConvertToFullStateName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBC4C1E38D0F9003D49B6 /* ConvertToFullStateName.swift */; };
@@ -253,6 +254,8 @@
 		A77DEEB81E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JustUserAndFloatingPinAnnotationView.swift; sourceTree = "<group>"; };
 		A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryAndBeerCreationQueue.swift; sourceTree = "<group>"; };
+		A78CD4651FA68D0D00BE99DF /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		A78CD46A1FA68DAA00BE99DF /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A78FBB5D1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusyObserversProtocol.swift; sourceTree = "<group>"; };
 		A78FBC4A1E38BE75003D49B6 /* BreweriesByStateParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweriesByStateParser.swift; sourceTree = "<group>"; };
 		A78FBC4C1E38D0F9003D49B6 /* ConvertToFullStateName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConvertToFullStateName.swift; path = ../View/ConvertToFullStateName.swift; sourceTree = "<group>"; };
@@ -308,6 +311,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A78CD4691FA68DAA00BE99DF /* SwiftyBeaver.framework in Frameworks */,
 				A79EB6F21E308AA000C54D43 /* Alamofire.framework in Frameworks */,
 				A79EB6F41E308AB600C54D43 /* MapKit.framework in Frameworks */,
 				5CEC755E8F1CEA8794EB7D7E /* Pods_BreweryTour.framework in Frameworks */,
@@ -583,6 +587,7 @@
 		A7B2AAD21DA791A300EE844C = {
 			isa = PBXGroup;
 			children = (
+				A78CD4651FA68D0D00BE99DF /* SwiftyBeaver.framework */,
 				A7300C611EAF86650029EBB6 /* README.md */,
 				A7B2AADD1DA791A400EE844C /* BreweryTour */,
 				A7B2AAF51DA791A400EE844C /* BreweryTourTests */,
@@ -767,6 +772,7 @@
 		F31E85EDAD6C7B0ACBB4C070 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				A78CD46A1FA68DAA00BE99DF /* SwiftyBeaver.framework */,
 				680FBE3F7A28081E14FF95C0 /* Pods_BreweryTour.framework */,
 			);
 			name = Frameworks;
@@ -1241,7 +1247,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 5D930397D4795650DD413457 /* Pods-BreweryTour.debug.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = T37NKE3UT9;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1260,7 +1265,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = C23C61975D032ABC404F3BC0 /* Pods-BreweryTour.release.xcconfig */;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				DEVELOPMENT_TEAM = T37NKE3UT9;
 				FRAMEWORK_SEARCH_PATHS = (
