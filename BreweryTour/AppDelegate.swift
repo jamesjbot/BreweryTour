@@ -8,14 +8,20 @@
 
 import UIKit
 import CoreData
-import SwiftyBeaver
 import Foundation
+import SwiftyBeaver
+
+var log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
+    //log = SwiftyBeaver.self
+
     // MARK: Constants
     internal let coreDataStack = CoreDataStack.init(modelName: "BreweryTour")
+
+
 
     // MARK: Varaibles
 
@@ -101,10 +107,10 @@ extension AppDelegate {
 
 
     private func createNewSwiftyBeaverLogfile() {
-
+        print("createNewSwiftyBeaverLogfile() called")
         let file = FileDestination()
         file.format = "$DEEEE MMMM dd yyyy HH:mm:sss$d $L: $M: "
-        SwiftyBeaver.addDestination(file)
+        log.addDestination(file)
         SwiftyBeaver.info("Starting New Run.....")
         //platform.minLevel = .warning
     }
