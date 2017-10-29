@@ -275,7 +275,7 @@ class BreweryAndBeerCreationQueue: NSObject {
                 self.classContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
                 try self.classContext?.save()
             } catch let error {
-                NSLog("There was and error saving brewery \(error.localizedDescription)")
+                log.error("There was and error saving brewery \(error.localizedDescription)")
             }
             self.classContext?.reset()
             

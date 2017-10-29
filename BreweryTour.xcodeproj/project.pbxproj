@@ -88,6 +88,7 @@
 		A77365371F196F9D00E4FD11 /* PirataOne-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A77365191F196F9D00E4FD11 /* PirataOne-Regular.ttf */; };
 		A77365391F196F9D00E4FD11 /* Righteous-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A773651C1F196F9D00E4FD11 /* Righteous-Regular.ttf */; };
 		A773653B1F196F9D00E4FD11 /* Shrikhand-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A773651F1F196F9D00E4FD11 /* Shrikhand-Regular.ttf */; };
+		A77785E51FA6786800846B15 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A77785E41FA6786800846B15 /* Assets.xcassets */; };
 		A77DEEB91E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77DEEB81E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift */; };
 		A77E0C031DF9ECBF0007E55F /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */; };
 		A77FEBF71E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */; };
@@ -116,7 +117,6 @@
 		A7B2AAE11DA791A400EE844C /* CategoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE01DA791A400EE844C /* CategoryViewController.swift */; };
 		A7B2AAE41DA791A400EE844C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A7B2AAE21DA791A400EE844C /* Main.storyboard */; };
 		A7B2AAE71DA791A400EE844C /* BreweryTour.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE51DA791A400EE844C /* BreweryTour.xcdatamodeld */; };
-		A7B2AAE91DA791A400EE844C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = A7B2AAE81DA791A400EE844C /* Assets.xcassets */; };
 		A7B2AB021DA791A400EE844C /* BreweryTourUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */; };
 		A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */; };
 		A7B7524E1DA8CE7B00117ED0 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */; };
@@ -249,6 +249,7 @@
 		A773651C1F196F9D00E4FD11 /* Righteous-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Righteous-Regular.ttf"; sourceTree = "<group>"; };
 		A773651E1F196F9D00E4FD11 /* OFL.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
 		A773651F1F196F9D00E4FD11 /* Shrikhand-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Shrikhand-Regular.ttf"; sourceTree = "<group>"; };
+		A77785E41FA6786800846B15 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A77DEEB81E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JustUserAndFloatingPinAnnotationView.swift; sourceTree = "<group>"; };
 		A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryAndBeerCreationQueue.swift; sourceTree = "<group>"; };
@@ -278,7 +279,6 @@
 		A7B2AAE01DA791A400EE844C /* CategoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = CategoryViewController.swift; path = ../CategoryViewController.swift; sourceTree = "<group>"; };
 		A7B2AAE31DA791A400EE844C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		A7B2AAE61DA791A400EE844C /* BreweryTour.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = BreweryTour.xcdatamodel; sourceTree = "<group>"; };
-		A7B2AAE81DA791A400EE844C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		A7B2AAED1DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B2AAF21DA791A400EE844C /* BreweryTourTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = BreweryTourTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B2AAF81DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -614,7 +614,6 @@
 				A7D999511F1887AE00F5DE72 /* ViewModels */,
 				A7D999501F185C9300F5DE72 /* View */,
 				A727D1461DA918E90063F2B3 /* Model */,
-				A7B2AAE81DA791A400EE844C /* Assets.xcassets */,
 				A7FF1A031DB0E14600AD0BB3 /* Assets */,
 				A7B2AAE51DA791A400EE844C /* BreweryTour.xcdatamodeld */,
 				D5D33C56AFBB3BA146A78187 /* Pods */,
@@ -714,13 +713,14 @@
 		A7FF1A031DB0E14600AD0BB3 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A77785E41FA6786800846B15 /* Assets.xcassets */,
+				A7B2AAE21DA791A400EE844C /* Main.storyboard */,
+				A76B3B8A1DB0C03700B0A899 /* Launch Screen.storyboard */,
 				A76006AF1F67741900511AAE /* TempBreweryTab.png */,
 				A76006B11F67756A00511AAE /* NewBreweryTabbarIcon.png */,
 				A76006B31F67C07500511AAE /* Double beers.png */,
 				A76006B51F67C1E600511AAE /* Double beers2.png */,
-				A7B2AAE21DA791A400EE844C /* Main.storyboard */,
 				A7B2AAED1DA791A400EE844C /* Info.plist */,
-				A76B3B8A1DB0C03700B0A899 /* Launch Screen.storyboard */,
 				A7300C5D1EAF844F0029EBB6 /* search25.png */,
 				A7300C5E1EAF844F0029EBB6 /* search50.png */,
 				A75160291E35AA250078F6F9 /* beermap.png */,
@@ -892,7 +892,6 @@
 				A76006B21F67756A00511AAE /* NewBreweryTabbarIcon.png in Resources */,
 				A7D227241DB4D90D00360A3B /* BreweryTabbarIcon.png in Resources */,
 				A7419ED91E2DBD3E006E421D /* BeersTabbaricon2x.png in Resources */,
-				A7B2AAE91DA791A400EE844C /* Assets.xcassets in Resources */,
 				A76B3B8D1DB0C5A200B0A899 /* BeerLaunchImage.png in Resources */,
 				A77365201F196F9D00E4FD11 /* Aclonica.ttf in Resources */,
 				A7FF1A091DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png in Resources */,
@@ -931,6 +930,7 @@
 				A79EB7151E30D2AA00C54D43 /* AppIcon76.png in Resources */,
 				A7300C5F1EAF844F0029EBB6 /* search25.png in Resources */,
 				A76006B41F67C07500511AAE /* Double beers.png in Resources */,
+				A77785E51FA6786800846B15 /* Assets.xcassets in Resources */,
 				A7D2272B1DB55F3800360A3B /* small_heart_icon.png in Resources */,
 				A77365241F196F9D00E4FD11 /* BalooTamma-Regular.ttf in Resources */,
 				A7FF1A071DB0E67E00AD0BB3 /* heart_icon.png in Resources */,
