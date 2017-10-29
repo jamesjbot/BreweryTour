@@ -132,7 +132,7 @@ class MapViewController : UIViewController {
 
     // MARK: - Variables
 
-    fileprivate weak var activeMappingStrategy: MapStrategy? = nil
+    fileprivate var activeMappingStrategy: MapAnnotationProvider? = nil
     internal var floatingAnnotation: MKAnnotation!
     fileprivate var lastSelectedManagedObject : NSManagedObject?
     internal var routedAnnotation: MKAnnotationView?
@@ -422,7 +422,7 @@ class MapViewController : UIViewController {
             return
         }
 
-        activeMappingStrategy?.endSearch()
+        let _ = activeMappingStrategy?.endSearch()
 
         guard !showLocalBreweries.isOn else {
             activeMappingStrategy = AllBreweriesMapStrategy(view: self,
@@ -435,7 +435,7 @@ class MapViewController : UIViewController {
 
         if mapViewData is Style {
 
-            activeMappingStrategy = StyleMapStrategy(s: mapViewData as? Style,
+            activeMappingStrategy = StyleMapStrategy(style: mapViewData as? Style,
                                                      view: self,
                                                      location: targetLocation!,
                                                      maxPoints: Int(slider.value),
@@ -446,7 +446,7 @@ class MapViewController : UIViewController {
             // is running.
             // When the StyleMapStrategy sees that it is not the current strategy
             // it will end itself.
-            Mediator.sharedInstance().onlyValidStyleStrategy = (activeMappingStrategy as! StyleMapStrategy).runningID!
+            Mediator.sharedInstance().onlyValidStyleStrategy = (activeMappingStrategy as! StyleMapStrategy).runningID
 
         } else if mapViewData is Brewery {
 
@@ -737,7 +737,10 @@ class MapViewController : UIViewController {
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        
+
+        // FIXME: Test to remove navigation bar filter
+        //navigationController?.navigationBar.isTranslucent = true
+
         // Activate indicator if system is busy
         if Mediator.sharedInstance().isSystemBusy() {
             DispatchQueue.main.async {
@@ -813,9 +816,9 @@ extension MapViewController: MapAnnotationReceiver {
 extension MapViewController: ReceiveBroadcastManagedObjectContextRefresh {
 
     func contextsRefreshAllObjects() {
-        SwiftyBeaver.info("MapViewController.contextsRefreshAllObjects() called")
-        SwiftyBeaver.info("MapViewController now calling endSearch on the attached mapstrategy \(String(describing: activeMappingStrategy))")
-        activeMappingStrategy?.endSearch()
+        //SwiftyBeaver.info("MapViewController.contextsRefreshAllObjects() called")
+        //SwiftyBeaver.info("MapViewController now calling endSearch on the attached mapstrategy \(String(describing: activeMappingStrategy))")
+        let _ = activeMappingStrategy?.endSearch()
         // FIXME: Should I remove all the annotations.
         // Clear the current annotation on screen.
         mapView.removeAnnotations(mapView.annotations)
