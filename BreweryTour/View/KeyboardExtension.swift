@@ -27,7 +27,7 @@ extension BeerDetailViewController {
 
 
     // Moves the view up prior to presenting keyboard
-    func keyboardWillShow(_ notification: Notification){
+    @objc func keyboardWillShow(_ notification: Notification){
         
         view.autoresizesSubviews = false
         // Get height of keyboard and save it globally
@@ -46,7 +46,7 @@ extension BeerDetailViewController {
 
 
     // Moves the view down when the keyboard is dismissed
-    func keyboardWillHide(_ notification: Notification){
+    @objc func keyboardWillHide(_ notification: Notification){
         // Move the bottomTextFiled UIView down by the keyboard amount
         if getKeyboardHeight(notification) != 0 {
             // This allows autolayout in portrait mode, to adjust the Location Textview dynamically. Otherwise the view will autosize and be the incorrect size on screen.
