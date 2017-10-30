@@ -15,13 +15,9 @@ var log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
-    log.in
-    //log = SwiftyBeaver.self
-    ////log.info("Hell0")
+
     // MARK: Constants
     internal let coreDataStack = CoreDataStack.init(modelName: "BreweryTour")
-
-
 
     // MARK: Varaibles
 
