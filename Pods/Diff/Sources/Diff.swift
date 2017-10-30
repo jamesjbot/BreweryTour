@@ -208,15 +208,15 @@ public extension Collection {
     ) -> [Trace] {
         return findPath(
             diffTraces(to: to, isEqual: isEqual),
-            n: Int(self.count.toIntMax()),
-            m: Int(to.count.toIntMax())
+            n: Int(UInt64(self.count)),
+            m: Int(UInt64(to.count))
         )
     }
 
     fileprivate func tracesForDeletions() -> [Trace] {
         var traces = [Trace]()
-        for index in 0 ..< self.count.toIntMax() {
-            let intIndex = index.toIntMax()
+        for index in 0 ..< UInt64(self.count) {
+            let intIndex = UInt64(index)
             traces.append(Trace(from: Point(x: Int(intIndex), y: 0), to: Point(x: Int(intIndex) + 1, y: 0), D: 0))
         }
         return traces
@@ -224,8 +224,8 @@ public extension Collection {
 
     fileprivate func tracesForInsertions(to: Self) -> [Trace] {
         var traces = [Trace]()
-        for index in 0 ..< to.count.toIntMax() {
-            let intIndex = index.toIntMax()
+        for index in 0 ..< UInt64(to.count) {
+            let intIndex = UInt64(index)
             traces.append(Trace(from: Point(x: 0, y: Int(intIndex)), to: Point(x: 0, y: Int(intIndex) + 1), D: 0))
         }
         return traces
@@ -236,8 +236,8 @@ public extension Collection {
         isEqual: (Iterator.Element, Iterator.Element) -> Bool
     ) -> [Trace] {
 
-        let fromCount = Int(self.count.toIntMax())
-        let toCount = Int(to.count.toIntMax())
+        let fromCount = Int(UInt64(self.count))
+        let toCount = Int(UInt64(to.count))
         var traces = Array<Trace>()
 
         let max = fromCount + toCount // this is arbitrary, maximum difference between from and to. N+M assures that this algorithm always finds from diff
