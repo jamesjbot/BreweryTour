@@ -98,7 +98,8 @@ extension MappableStrategy {
             //SwiftyBeaver.error("MapStrategy detected breweries without location data.")
             return nil
         }
-        //SwiftyBeaver.info("MapStrategy.sortLocations() Sorting breweries by positons")
+        print(log)
+        //log.info("MapStrategy.sortLocations() Sorting breweries by positons")
         breweryLocations = breweryLocations.sorted(by:
             { (brewery1, brewery2) -> Bool in
                 let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))

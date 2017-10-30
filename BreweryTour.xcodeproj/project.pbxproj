@@ -92,7 +92,6 @@
 		A77DEEB91E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77DEEB81E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift */; };
 		A77E0C031DF9ECBF0007E55F /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */; };
 		A77FEBF71E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */; };
-		A78CD4691FA68DAA00BE99DF /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78CD46A1FA68DAA00BE99DF /* SwiftyBeaver.framework */; };
 		A78FBB5E1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBB5D1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift */; };
 		A78FBC4B1E38BE75003D49B6 /* BreweriesByStateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBC4A1E38BE75003D49B6 /* BreweriesByStateParser.swift */; };
 		A78FBC4D1E38D0F9003D49B6 /* ConvertToFullStateName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBC4C1E38D0F9003D49B6 /* ConvertToFullStateName.swift */; };
@@ -133,6 +132,7 @@
 		A7FBF25E1F2CF1870072CF84 /* MappingStrategyTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7FBF25D1F2CF1870072CF84 /* MappingStrategyTests.swift */; };
 		A7FF1A071DB0E67E00AD0BB3 /* heart_icon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A061DB0E67E00AD0BB3 /* heart_icon.png */; };
 		A7FF1A091DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png in Resources */ = {isa = PBXBuildFile; fileRef = A7FF1A081DB0E68500AD0BB3 /* heart_icon_black_white_line_art.png */; };
+		B5099DAAA705F74156A14443 /* Pods_BreweryTour.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 680FBE3F7A28081E14FF95C0 /* Pods_BreweryTour.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -310,10 +310,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A78CD4691FA68DAA00BE99DF /* SwiftyBeaver.framework in Frameworks */,
 				A79EB6F21E308AA000C54D43 /* Alamofire.framework in Frameworks */,
 				A79EB6F41E308AB600C54D43 /* MapKit.framework in Frameworks */,
 				5CEC755E8F1CEA8794EB7D7E /* Pods_BreweryTour.framework in Frameworks */,
+				B5099DAAA705F74156A14443 /* Pods_BreweryTour.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
