@@ -68,7 +68,7 @@ class FavoriteBreweriesViewController: UIViewController, AlertWindowDisplaying {
             cell.textLabel?.text = selectedObject.name!
             cell.textLabel?.adjustsFontSizeToFitWidth = true
             cell.detailTextLabel?.text = ""
-            if let data : NSData = (selectedObject.image) {
+            if let data : NSData = (selectedObject.image as! NSData) {
                 let im = UIImage(data: data as Data)
                 cell.imageView?.image = im
             }

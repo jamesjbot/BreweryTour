@@ -70,7 +70,7 @@ public class Beer: NSManagedObject {
         self.brewer = brewer
         self.favorite = favorite ?? false
         self.id = id
-        self.image = image
+        self.image = image as Data?
         self.imageUrl = imageURL
         self.tastingNotes = tasting
         self.styleID = style
