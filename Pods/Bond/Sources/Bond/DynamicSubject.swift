@@ -118,7 +118,7 @@ public struct DynamicSubject2<Element, Error: Swift.Error>: SubjectProtocol, Bin
             guard let target = target else { return }
             setter(target, element)
             if triggerEventOnSetting {
-              subject.next()
+                subject.next()
             }
           default:
             break
