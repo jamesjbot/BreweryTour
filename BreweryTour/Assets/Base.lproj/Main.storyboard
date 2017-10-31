@@ -4,7 +4,6 @@
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
-        <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13174"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
@@ -207,7 +206,7 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="bpZ-cN-Rf5">
-                                <rect key="frame" x="178" y="267" width="20" height="20"/>
+                                <rect key="frame" x="177.5" y="267" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -270,29 +269,29 @@
                                 <rect key="frame" x="0.0" y="0.0" width="375" height="510"/>
                                 <subviews>
                                     <stackView contentMode="scaleToFill" alignment="center" spacing="2" translatesAutoresizingMaskIntoConstraints="NO" id="kc0-yR-sUB">
-                                        <rect key="frame" x="0.0" y="0.0" width="375" height="25.5"/>
+                                        <rect key="frame" x="0.0" y="0.0" width="375" height="83"/>
                                         <subviews>
                                             <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Breweries Shown:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="oK1-ad-KYV" userLabel="Breweries:">
-                                                <rect key="frame" x="8" y="2.5" width="0.0" height="20.5"/>
+                                                <rect key="frame" x="8" y="31.5" width="0.0" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="250" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="CXH-BH-Cuf">
-                                                <rect key="frame" x="8" y="8" width="0.0" height="9.5"/>
+                                                <rect key="frame" x="8" y="31.5" width="0.0" height="20.5"/>
                                                 <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Closest Breweries" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="mcC-VJ-20c" userLabel="Closest">
-                                                <rect key="frame" x="10" y="8" width="0.0" height="9.5"/>
+                                                <rect key="frame" x="10" y="31.5" width="0.0" height="20.5"/>
                                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                 <nil key="textColor"/>
                                                 <nil key="highlightedColor"/>
                                             </label>
                                             <slider opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" value="250" minValue="2" maxValue="1000" translatesAutoresizingMaskIntoConstraints="NO" id="pbH-Lz-OoH">
-                                                <rect key="frame" x="10" y="8" width="359" height="10.5"/>
+                                                <rect key="frame" x="10" y="26.5" width="359" height="31"/>
                                                 <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
                                                 <edgeInsets key="layoutMargins" top="0.0" left="16" bottom="0.0" right="16"/>
                                                 <color key="minimumTrackTintColor" white="0.0" alpha="1" colorSpace="calibratedWhite"/>
@@ -309,7 +308,7 @@
                                         <edgeInsets key="layoutMargins" top="8" left="8" bottom="8" right="8"/>
                                     </stackView>
                                     <mapView multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" pitchEnabled="NO" showsPointsOfInterest="NO" showsScale="YES" translatesAutoresizingMaskIntoConstraints="NO" id="idd-zP-hy0">
-                                        <rect key="frame" x="0.0" y="25.5" width="375" height="484.5"/>
+                                        <rect key="frame" x="0.0" y="83" width="375" height="427"/>
                                         <connections>
                                             <outlet property="delegate" destination="kc4-oF-YzA" id="UHU-69-8jl"/>
                                         </connections>
@@ -317,7 +316,7 @@
                                 </subviews>
                             </stackView>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="ad2-Zo-dOE" userLabel="Menu">
-                                <rect key="frame" x="375" y="25.5" width="0.0" height="81"/>
+                                <rect key="frame" x="375" y="64.5" width="0.0" height="81"/>
                                 <subviews>
                                     <stackView opaque="NO" contentMode="scaleToFill" axis="vertical" spacing="3" translatesAutoresizingMaskIntoConstraints="NO" id="tRa-e6-wgp">
                                         <rect key="frame" x="0.0" y="0.0" width="180" height="81"/>
@@ -376,7 +375,7 @@
                                 </constraints>
                             </view>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="yrc-0a-qnb">
-                                <rect key="frame" x="117" y="469" width="142" height="33"/>
+                                <rect key="frame" x="116.5" y="469" width="142" height="33"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                 <inset key="contentEdgeInsets" minX="5" minY="5" maxX="5" maxY="5"/>
@@ -478,7 +477,7 @@
                                 </constraints>
                             </view>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="ZU7-BT-73c">
-                                <rect key="frame" x="177" y="267" width="20" height="20"/>
+                                <rect key="frame" x="177.5" y="267" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
@@ -637,13 +636,13 @@
                                         <rect key="frame" x="0.0" y="133.5" width="375" height="133.5"/>
                                     </imageView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" text="Description" translatesAutoresizingMaskIntoConstraints="NO" id="0z3-QK-mWY">
-                                        <rect key="frame" x="0.0" y="267" width="375" height="258.5"/>
+                                        <rect key="frame" x="0.0" y="267" width="375" height="258"/>
                                         <color key="backgroundColor" red="0.81583412247474751" green="0.28607570052260439" blue="0.14721137283119282" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
                                     </textView>
                                     <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" keyboardDismissMode="interactive" text="Your tasting notes" translatesAutoresizingMaskIntoConstraints="NO" id="UOG-ID-3ve" userLabel="Tasting Notes">
-                                        <rect key="frame" x="0.0" y="525.5" width="375" height="121.5"/>
+                                        <rect key="frame" x="0.0" y="525" width="375" height="122"/>
                                         <color key="backgroundColor" red="1" green="0.71797675945977169" blue="0.17599077893900983" alpha="1" colorSpace="calibratedRGB"/>
                                         <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
                                         <textInputTraits key="textInputTraits" autocapitalizationType="sentences" keyboardType="alphabet" returnKeyType="done"/>
@@ -754,7 +753,7 @@
                                 </constraints>
                             </stackView>
                             <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="white" translatesAutoresizingMaskIntoConstraints="NO" id="sGk-hC-lDe">
-                                <rect key="frame" x="178" y="267" width="20" height="20"/>
+                                <rect key="frame" x="177.5" y="267" width="20" height="20"/>
                             </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="0.71797675949999995" blue="0.17599077890000001" alpha="1" colorSpace="calibratedRGB"/>
