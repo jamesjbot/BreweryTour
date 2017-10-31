@@ -504,11 +504,14 @@
                     </view>
                     <toolbarItems/>
                     <navigationItem key="navigationItem" id="pZ6-Ek-a0W">
-                        <barButtonItem key="leftBarButtonItem" image="Settings" id="bHN-jM-XV8">
-                            <connections>
-                                <segue destination="RxT-d5-hZA" kind="show" id="VTO-3L-aQy"/>
-                            </connections>
-                        </barButtonItem>
+                        <leftBarButtonItems>
+                            <barButtonItem image="Settings" id="bHN-jM-XV8">
+                                <connections>
+                                    <segue destination="RxT-d5-hZA" kind="show" id="VTO-3L-aQy"/>
+                                </connections>
+                            </barButtonItem>
+                            <barButtonItem title="Item" id="lgY-cC-vhk"/>
+                        </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem title="Menu" id="3fs-AB-uVl">
                                 <connections>
@@ -520,11 +523,14 @@
                                     <action selector="helpTapped:" destination="kc4-oF-YzA" id="3t4-7A-Zzm"/>
                                 </connections>
                             </barButtonItem>
+                            <barButtonItem title="Item" id="knZ-GH-gyq"/>
                         </rightBarButtonItems>
                     </navigationItem>
                     <simulatedToolbarMetrics key="simulatedBottomBarMetrics"/>
                     <connections>
                         <outlet property="activityIndicator" destination="ZU7-BT-73c" id="Ua6-o1-w7d"/>
+                        <outlet property="beersLeftToProcess" destination="knZ-GH-gyq" id="xRO-Qv-xET"/>
+                        <outlet property="breweriesLeftToProcess" destination="lgY-cC-vhk" id="MbF-YM-e8w"/>
                         <outlet property="currentLocation" destination="yrc-0a-qnb" id="SDS-MY-lPj"/>
                         <outlet property="enableRouting" destination="MSt-q1-5LW" id="eUo-Wj-erN"/>
                         <outlet property="longPressRecognizer" destination="if2-iF-Eb5" id="EXz-gc-J2J"/>
@@ -1501,7 +1507,7 @@
         <image name="BreweryTabbarIcon.png" width="50" height="50"/>
         <image name="Nophoto.png" width="200" height="200"/>
         <image name="Search" width="25" height="25"/>
-        <image name="Settings" width="40" height="40"/>
+        <image name="Settings" width="22" height="22"/>
         <image name="heart_icon_black_white_line_art.png" width="305" height="287"/>
         <image name="map" width="32" height="32"/>
     </resources>
