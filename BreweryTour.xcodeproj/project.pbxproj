@@ -92,7 +92,6 @@
 		A77DEEB91E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77DEEB81E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift */; };
 		A77E0C031DF9ECBF0007E55F /* GlobalConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */; };
 		A77FEBF71E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */; };
-		A78CD48E1FA6BC9F00BE99DF /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A78CD46A1FA68DAA00BE99DF /* SwiftyBeaver.framework */; };
 		A78FBB5E1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBB5D1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift */; };
 		A78FBC4B1E38BE75003D49B6 /* BreweriesByStateParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBC4A1E38BE75003D49B6 /* BreweriesByStateParser.swift */; };
 		A78FBC4D1E38D0F9003D49B6 /* ConvertToFullStateName.swift in Sources */ = {isa = PBXBuildFile; fileRef = A78FBC4C1E38D0F9003D49B6 /* ConvertToFullStateName.swift */; };
@@ -254,7 +253,6 @@
 		A77DEEB81E1B4EA80054F95C /* JustUserAndFloatingPinAnnotationView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JustUserAndFloatingPinAnnotationView.swift; sourceTree = "<group>"; };
 		A77E0C021DF9ECBF0007E55F /* GlobalConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalConstants.swift; sourceTree = "<group>"; };
 		A77FEBF61E15FE0E00A4F1B0 /* BreweryAndBeerCreationQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryAndBeerCreationQueue.swift; sourceTree = "<group>"; };
-		A78CD46A1FA68DAA00BE99DF /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A78FBB5D1E2FF0DC00AE93A8 /* BusyObserversProtocol.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BusyObserversProtocol.swift; sourceTree = "<group>"; };
 		A78FBC4A1E38BE75003D49B6 /* BreweriesByStateParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweriesByStateParser.swift; sourceTree = "<group>"; };
 		A78FBC4C1E38D0F9003D49B6 /* ConvertToFullStateName.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ConvertToFullStateName.swift; path = ../View/ConvertToFullStateName.swift; sourceTree = "<group>"; };
@@ -288,7 +286,7 @@
 		A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryTourUITests.swift; sourceTree = "<group>"; };
 		A7B2AB031DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClient.swift; sourceTree = "<group>"; };
-		A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MapViewController.swift; path = ../../ViewModels/MapViewController/MapViewController.swift; sourceTree = "<group>"; };
+		A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A7D227231DB4D90D00360A3B /* BreweryTabbarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BreweryTabbarIcon.png; sourceTree = "<group>"; };
 		A7D227281DB55F3700360A3B /* small_heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = small_heart_icon_black_white_line_art.png; path = BreweryTour/Assets/small_heart_icon_black_white_line_art.png; sourceTree = SOURCE_ROOT; };
 		A7D227291DB55F3700360A3B /* small_heart_icon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = small_heart_icon.png; path = BreweryTour/Assets/small_heart_icon.png; sourceTree = SOURCE_ROOT; };
@@ -310,7 +308,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A78CD48E1FA6BC9F00BE99DF /* SwiftyBeaver.framework in Frameworks */,
 				A79EB6F21E308AA000C54D43 /* Alamofire.framework in Frameworks */,
 				A79EB6F41E308AB600C54D43 /* MapKit.framework in Frameworks */,
 				5CEC755E8F1CEA8794EB7D7E /* Pods_BreweryTour.framework in Frameworks */,
@@ -359,7 +356,6 @@
 			isa = PBXGroup;
 			children = (
 				A7300C671EAFBBA90029EBB6 /* MapViewController */,
-				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
 				A752344C1DAEA666008EF071 /* SelectedBeersViewController.swift */,
 				A7300C651EAF9D050029EBB6 /* DismissableHelpNavigationController.swift */,
 				A748FAD51DF75316005637BD /* DismissableTutorialViewController.swift */,
@@ -402,6 +398,7 @@
 		A7300C671EAFBBA90029EBB6 /* MapViewController */ = {
 			isa = PBXGroup;
 			children = (
+				A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */,
 				A72B18431E3466D400D3DFF1 /* MapViewControllerExtensions.swift */,
 			);
 			name = MapViewController;
@@ -770,7 +767,6 @@
 		F31E85EDAD6C7B0ACBB4C070 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A78CD46A1FA68DAA00BE99DF /* SwiftyBeaver.framework */,
 				680FBE3F7A28081E14FF95C0 /* Pods_BreweryTour.framework */,
 			);
 			name = Frameworks;
@@ -991,7 +987,6 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-BreweryTour/Pods-BreweryTour-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Bond/Bond.framework",
-				"${BUILT_PRODUCTS_DIR}/Diff/Diff.framework",
 				"${BUILT_PRODUCTS_DIR}/Differ/Differ.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveKit/ReactiveKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
@@ -1000,7 +995,6 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Bond.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Diff.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Differ.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
