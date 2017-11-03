@@ -11,7 +11,7 @@ import CoreData
 import Foundation
 import SwiftyBeaver
 
-var log = SwiftyBeaver.self
+//var log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
@@ -22,13 +22,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Varaibles
 
     var window: UIWindow?
+    var log = SwiftyBeaver.self
 
+    let bbCreationQueue: BreweryAndBeerCreationProtocol = NewCreationQueue.sharedInstance()
 
     // MARK: Functions
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+
         checkIfFirstLaunched()
+
+        // Dependency inject our creation queue
+//        Mediator.sharedInstance().creationQueue = bbCreationQueue
+//        if let tabbar = window?.rootViewController as? UITabBarController {
+//            for child in tabbar.viewControllers ?? [] {
+//                guard var tab = child as? AcceptsCreationQueue else {
+//                    continue
+//                }
+//                tab.set(creationQueue: bbCreationQueue)
+//            }
+//        }
         return true
     }
 
@@ -103,11 +117,14 @@ extension AppDelegate {
 
 
     private func createNewSwiftyBeaverLogfile() {
+        // FIXME:
         print("createNewSwiftyBeaverLogfile() called")
         let file = FileDestination()
         file.format = "$DEEEE MMMM dd yyyy HH:mm:sss$d $L: $M: "
         log.addDestination(file)
         SwiftyBeaver.info("Starting New Run.....")
+        log.info("HI")
+
         //platform.minLevel = .warning
     }
 
