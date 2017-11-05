@@ -22,17 +22,36 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     // MARK: Varaibles
 
     var window: UIWindow?
-    var log = SwiftyBeaver.self
 
-    let bbCreationQueue: BreweryAndBeerCreationProtocol = NewCreationQueue.sharedInstance()
+    var bbCreationQueue: BreweryAndBeerCreationProtocol?
 
+    var breweryDesigner: BreweryDesigner?
+    var beerDesigner: BeerDesigner?
+    var parserFactory: ParserFactory?
+
+    var breweryDBClient: BreweryDBClient?
     // MARK: Functions
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
 
-        checkIfFirstLaunched()
+        bbCreationQueue = NewCreationQueue.sharedInstance()
 
+        if let bbCreationQueue = bbCreationQueue {
+            beerDesigner = BeerDesigner(with: bbCreationQueue)
+            breweryDesigner = BreweryDesigner(with: bbCreationQueue)
+            parserFactory = ParserFactory(withQueue: bbCreationQueue)
+            guard breweryDesigner != nil else {
+                fatalError("Brewery Designer not created")
+            }
+
+            parserFactory?.set(breweryDesigner: breweryDesigner!)
+            parserFactory?.set(beerDesigner: beerDesigner!)
+
+            BreweryDBClient.sharedInstance().set(parser: parserFactory!)
+            //BreweryDBClient = BreweryDBClient(withParser: parserFactory)
+        }
+        checkIfFirstLaunched()
         // Dependency inject our creation queue
 //        Mediator.sharedInstance().creationQueue = bbCreationQueue
 //        if let tabbar = window?.rootViewController as? UITabBarController {

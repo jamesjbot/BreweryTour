@@ -95,20 +95,26 @@ class BreweryDBClient {
     fileprivate let imageLinker = ManagedObjectImageLinker()
 
     // This managed object context is fetching information.
-    private let readOnlyContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext
+    private var readOnlyContext: NSManagedObjectContext = (((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.viewContext)!
     private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
 
 
     // MARK: - Variables
 
+    private var parserFactory: ParserFactoryProtocol?
 
     // MARK: - Singleton Implementation
+
+    func set(parser: ParserFactoryProtocol) {
+        parserFactory = parser
+    }
 
     private init(){}
     internal class func sharedInstance() -> BreweryDBClient {
         struct Singleton {
             static var sharedInstance = BreweryDBClient()
         }
+
         return Singleton.sharedInstance
     }
 
@@ -172,8 +178,13 @@ class BreweryDBClient {
                        group: DispatchGroup? = nil){
 
         // Process every query type accordingly
-        let parser: ParserProtocol = ParserFactory.sharedInstance().createParser(type: outputType)
-        parser.parse(response: response, querySpecificID: querySpecificID, completion: completion)
+        // FIXME:
+        print("Parsing Output type \(outputType)")
+        // FIXME?
+        if let parserFactory = parserFactory {
+            let parser: ParserProtocol = parserFactory.createParser(type: outputType)!
+            parser.parse(response: response, querySpecificID: querySpecificID, completion: completion)
+        }
     }
 
 
