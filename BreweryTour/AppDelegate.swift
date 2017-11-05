@@ -11,7 +11,7 @@ import CoreData
 import Foundation
 import SwiftyBeaver
 
-//var log = SwiftyBeaver.self
+var log = SwiftyBeaver.self
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
