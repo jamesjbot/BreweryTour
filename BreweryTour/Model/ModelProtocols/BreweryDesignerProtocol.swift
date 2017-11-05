@@ -14,6 +14,7 @@ import Foundation
 
 protocol BreweryDesignerProtocol {
     // Parse brewery data and send to creation queue.
+    var creationQueue: BreweryAndBeerCreationProtocol? { get set }
     func createBreweryObject(breweryDict: [String:AnyObject],
                              locationDict locDict: [String:AnyObject],
                              brewersID: String,
@@ -44,18 +45,27 @@ extension BreweryDesignerProtocol {
             inImageUrl: breweryDict["images"]?["icon"] as? String ?? "",
             inStyleID: style)
 
-        BreweryAndBeerCreationQueue.sharedInstance().queueBrewery(breweryData)
+        creationQueue?.queueBrewery(breweryData)
     }
 }
 
 
 class BreweryDesigner: BreweryDesignerProtocol {
 
-    private init() {}
-    internal class func sharedInstance() -> BreweryDesignerProtocol {
-        struct Singleton {
-            static var sharedInstance = BreweryDesigner()
-        }
-        return Singleton.sharedInstance
+    var creationQueue: BreweryAndBeerCreationProtocol? //{
+    init(with creationQueue: BreweryAndBeerCreationProtocol ) {
+        self.creationQueue = creationQueue
     }
+//    private init() {}
+
+//    internal class func sharedInstance() -> BreweryDesignerProtocol {
+//        struct Singleton {
+//            static var sharedInstance = BreweryDesigner()
+//        }
+//        return Singleton.sharedInstance
+//    }
+}
+
+extension BreweryDesigner: AcceptsCreationQueue { // FIXME Possible call PropertyInject CreationQueue
+
 }
