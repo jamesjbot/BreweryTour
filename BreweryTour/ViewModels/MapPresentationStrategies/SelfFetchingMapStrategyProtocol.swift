@@ -78,7 +78,7 @@ protocol FetchableStrategy: MappableStrategy, NSFetchedResultsControllerDelegate
 
     func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>)
     func createFetchRequest(with style: Style?) -> NSFetchRequest<NSFetchRequestResult>
-    func concreteClassGetBreweries(from breweryOrStyleUpdateController: NSFetchedResultsController<NSFetchRequestResult>) -> [Brewery]
+    func concreteFetchableStrategyGetBreweries(from breweryOrStyleUpdateController: NSFetchedResultsController<NSFetchRequestResult>) -> [Brewery]
 }
 
 
@@ -115,7 +115,7 @@ extension FetchableStrategy {
         var breweryLocations: [Brewery] = []
         do {
             try breweryOrStyleUpdateController.performFetch()
-            breweryLocations = concreteClassGetBreweries(from: breweryOrStyleUpdateController)
+            breweryLocations = concreteFetchableStrategyGetBreweries(from: breweryOrStyleUpdateController)
         } catch {
             SwiftyBeaver.error("\(#file) \(#function) Critical error unable to read database.")
         }
@@ -187,6 +187,7 @@ extension FetchableStrategy {
 
         let dispatchWorkItem = createDispatchWorkItem(with: action, at: dispatchTime)
 
+        // This is a call from the main dispatch queue
         return {queue.asyncAfter(deadline: dispatchTime,
                                  execute: dispatchWorkItem)
         }
@@ -226,7 +227,9 @@ extension FetchableStrategy {
                                                          to: self.parentMapViewController!)
             }
 
-            delayedBlockFetchSortSend = delayFiring(function: action, afterDelay: bounceDelay, fromQueue: DispatchQueue.main)
+            delayedBlockFetchSortSend = delayFiring(function: action,
+                                                    afterDelay: bounceDelay,
+                                                    fromQueue: DispatchQueue.main)
 
             return delayedBlockFetchSortSend
     }
@@ -288,11 +291,12 @@ final class StyleMapStrategy: NSObject, FetchableStrategy {
 
     // This is the implemented template method from Fetchable Strategy
     // it returns breweries based on a Style (StyleMapStrategy)
-    func concreteClassGetBreweries(from breweryOrStyleUpdateController: NSFetchedResultsController<NSFetchRequestResult>) -> [Brewery] {
+    func concreteFetchableStrategyGetBreweries(from breweryOrStyleUpdateController: NSFetchedResultsController<NSFetchRequestResult>) -> [Brewery] {
 
         // Reaching into the Style entry and extracting the breweries that are attached to the specified style
         try? breweryOrStyleUpdateController.performFetch()
-        return ((breweryOrStyleUpdateController.fetchedObjects?.first as? Style)?.brewerywithstyle?.allObjects as? [Brewery])!
+        log.info("breweryOrStyle fetchedObjects is")
+        return ((breweryOrStyleUpdateController.fetchedObjects?.first as? Style)?.brewerywithstyle?.allObjects as? [Brewery]) ?? []
     }
 
 
@@ -371,7 +375,7 @@ final class AllBreweriesMapStrategy: NSObject, FetchableStrategy {
 
 
     // Retrieve brewery from the populated NSFetchedResultsController
-    func concreteClassGetBreweries(from breweryOrStyleUpdateController: NSFetchedResultsController<NSFetchRequestResult>) -> [Brewery] {
+    func concreteFetchableStrategyGetBreweries(from breweryOrStyleUpdateController: NSFetchedResultsController<NSFetchRequestResult>) -> [Brewery] {
 
         try? breweryOrStyleUpdateController.performFetch()
         return (breweryOrStyleUpdateController.fetchedObjects as? [Brewery])!
