@@ -109,7 +109,15 @@ class BreweryDBClient {
         parserFactory = parser
     }
 
-    private init(){}
+    
+    private init(){
+        // TODO: Find a better way to dependency inject the context
+//        if let backContext = backContext {
+//            //imageLinker.backContext = backContext
+//        }
+    }
+
+
     internal class func sharedInstance() -> BreweryDBClient {
         struct Singleton {
             static var sharedInstance = BreweryDBClient()
