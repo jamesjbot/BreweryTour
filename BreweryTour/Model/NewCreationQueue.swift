@@ -34,7 +34,7 @@ extension NewCreationQueue: ReceiveBroadcastManagedObjectContextRefresh {
     /// All content was delete from the database, so stop loading content into the database
     func contextsRefreshAllObjects() {
         abandonProcessingQueue = true
-        classContext?.refreshAllObjects()
+        newPrivateBackgroundContextForPeriodicallySavingCoreData?.refreshAllObjects()
     }
 }
 
@@ -42,25 +42,24 @@ extension NewCreationQueue: ReceiveBroadcastManagedObjectContextRefresh {
 class NewCreationQueue: NSObject {
 
     // MARK: - Constants
+    enum DataType {
+        case Beer
+        case Brewery
+    }
+
+    struct Constants {
+        static let BackgroundSaveTimeIntervaliSeconds = 6
+        static let Maximum_Attempts_To_Reinsert_Beer_For_Processing = 3
+    }
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
-    // Initial responsive load
+    private let BackgroundSaveTimerInterval = Constants.BackgroundSaveTimeIntervaliSeconds
+
+     Initial responsive load
     private let initialMaxSavesPerLoop: Int = 3
     private let initialRepeatInterval: Double = 2
 
-    // Long running loads
-    // System fastest processes is 1.2 records / second
-    // Slowest I've seen is .5 records / second and could go lower
-    private let longrunningMaxSavesPerLoop: Int = 30
-    private let longRunningRepeatInterval: Double = 60
-
-    // Very long running (memory constraiend)
-    private let verylongrunningMaxSavesPerLoop: Int = 10
-    private let verylongrunningRepeatInterval: Double = 30
-
-    private let maximumSmallRuns = 28
-    private let maximumLargeRuns = 100
 
     // SwiftyBeaver Logging
     //let log = SwiftyBeaver.self
@@ -74,11 +73,12 @@ class NewCreationQueue: NSObject {
 
     internal var isQueueRunning: Observable<Bool> = Observable<Bool>(false)
 
-    fileprivate var classContext: NSManagedObjectContext? {
+    fileprivate var newPrivateBackgroundContextForPeriodicallySavingCoreData: NSManagedObjectContext? {
         didSet {
-            print("You just ste the classContext")
-            classContext?.automaticallyMergesChangesFromParent = true
-            classContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
+            print("You just set the classContext")
+            newPrivateBackgroundContextForPeriodicallySavingCoreData?.automaticallyMergesChangesFromParent = true
+            newPrivateBackgroundContextForPeriodicallySavingCoreData?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
+            print("Class Context Concurrency type \(String(describing: newPrivateBackgroundContextForPeriodicallySavingCoreData?.concurrencyType))")
             print("Class Context didSet exited")
         }
     }
@@ -92,8 +92,26 @@ class NewCreationQueue: NSObject {
 
     private var workTimer: Timer?
 
-    private var breweryDispatchQueue: DispatchQueue = DispatchQueue.global(qos: .userInitiated)
-    private var brewerySerialQueue = DispatchQueue(label: "Brewer's Serial", qos: DispatchQoS.utility, attributes: [], autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.workItem, target: nil)
+    private var newCreationDispatchQueue: DispatchQueue = DispatchQueue.global(qos: .utility)
+    private var asyncOnlyBrewerySerialQueue = DispatchQueue(label: "Brewer's Serial",
+                                                            qos: DispatchQoS.utility,
+                                                            attributes: [],
+                                                            autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.workItem,
+                                                            target: nil)
+
+    private var asyncOnlyProcessingQueue = DispatchQueue(label:"Processing queue")
+    private var syncOnlyQueueForAddingItemDataToQueues = DispatchQueue.global(qos: .utility)
+
+    private var asyncQueueForAddedItemsToContext = DispatchQueue(label:"Inserting and updateing queue")
+
+    private var syncOnlyBrewerySerialQueue = DispatchQueue(label: "CoreData sync update",
+                                                           qos: .utility,
+                                                           attributes: [],
+                                                           autoreleaseFrequency: DispatchQueue.AutoreleaseFrequency.inherit,
+                                                           target: nil)
+
+    private var contextForEnqueueData: NSManagedObjectContext?
+    private var contextForCoreDataQueryOnly: NSManagedObjectContext?
 
     fileprivate var runningBreweryQueue = [BreweryData]()
     fileprivate var runningBeerQueue = [(BeerData,Int)]()
@@ -119,7 +137,7 @@ class NewCreationQueue: NSObject {
                 let resultStyle = try context.fetch(styleRequest)
                 resultStyle.first?.addToBrewerywithstyle(newBrewery)
             } catch let error {
-                //log.error("There was an error saving brewery to style\(error.localizedDescription)")
+                log.error("There was an error saving brewery to style\(error.localizedDescription)")
             }
         }
     }
@@ -160,401 +178,201 @@ class NewCreationQueue: NSObject {
         return maxSave
     }
 
+    private func initialization() {
+        contextForEnqueueData = container?.newBackgroundContext()
+        contextForCoreDataQueryOnly = container?.viewContext
 
-    private override init() {
-        super.init()
-        classContext = container?.newBackgroundContext()
-        classContext!.automaticallyMergesChangesFromParent = true
-        classContext!.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
+
+        newPrivateBackgroundContextForPeriodicallySavingCoreData = container?.newBackgroundContext()
+        print("Concurrency type: \(String(describing: newPrivateBackgroundContextForPeriodicallySavingCoreData))")
+        newPrivateBackgroundContextForPeriodicallySavingCoreData!.automaticallyMergesChangesFromParent = true
+        newPrivateBackgroundContextForPeriodicallySavingCoreData!.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
 
         (Mediator.sharedInstance() as BroadcastManagedObjectContextRefresh).registerManagedObjectContextRefresh(self)
         mediatorObserver = Mediator.sharedInstance() as MediatorBusyObserver
-        // FIXME: Delete line below
-        //switchToInitialRunningDataLoad()
+    }
 
+    func threadinfo() {
+//        print("\nMain:\(Thread.isMainThread)")
+//        print("multithreaded:\(Thread.isMultiThreaded())")
+//        print("Thread:\(Thread.current)")
+//        print("Priority:\(Thread.threadPriority())")
+    }
+
+    private override init() {
+        super.init()
+        initialization()
         // Independent saving code
-        Timer.scheduledTimer(withTimeInterval: 5, repeats: true){
+        Timer.scheduledTimer(withTimeInterval: TimeInterval(BackgroundSaveTimerInterval), repeats: true){
             timer in
+            self.possiblesubprocessBreweryLoop()
+            print("Entered timer")
+            self.threadinfo()
+            self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.perform {
+                print("Successfully entered a perform in timer <------")
+            }
+            DispatchQueue(label: "Duh inline").async {
+                print("In Duh inline")
+                self.threadinfo()
+                self.possiblesubprocessBreweryLoop()
+                self.possibleNewDequeBeerLoop()
+            }
             print("timer fired")
-            let workItem = DispatchWorkItem {
-                guard (self.classContext?.hasChanges)! else {
+            self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.performAndWait {
+                guard (self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.hasChanges)! else {
                     return
                 }
-                self.classContext!.perform {
+                self.newPrivateBackgroundContextForPeriodicallySavingCoreData!.perform {
                     do {
-                        self.breweryElementsRemainingToProcess.value -= (self.classContext?.insertedObjects.count) ?? 0
-                        try self.classContext?.save()
+                        self.breweryElementsRemainingToProcess.value -= (self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.insertedObjects.count) ?? 0
+                        try self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.save()
                         print("Successfully saved")
                     } catch let error {
                         print("---> Error saving Brewery\(error.localizedDescription)")
                         //log.error("There was and error saving brewery \(error.localizedDescription)")
                     }
-                }
-            }
-            self.brewerySerialQueue.sync(execute: workItem)
-        }
+                }}}
     }
 
 
     private func possibleNewDequeBeerLoop() {
-        let tempContext = container?.newBackgroundContext()
-        while runningBeerQueue.count > 0 {
+        asyncQueueForAddedItemsToContext.async {
+            self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.perform {
 
-            let workItem = DispatchWorkItem {
                 guard let (lbeer,lattempt) = self.runningBeerQueue.first else {
                     return
                 }
-                let _ = self.runningBeerQueue.removeFirst()
-                self.beerElementsRemainingToProcess.value -= 1
+
+                self.syncOnlyQueueForAddingItemDataToQueues.sync {
+                    let _ = self.runningBeerQueue.removeFirst()
+                    self.beerElementsRemainingToProcess.value -= 1
+                }
+
                 let beer:BeerData? = lbeer
                 let attempt: Int? = lattempt
+
                 guard let breweryID = beer?.breweryID else {
                     // FIXME: This break doesn't seem right
+                    print("Inappropriate exit")
                     return
                 }
+
                 let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
                 request.sortDescriptors = []
                 request.predicate = NSPredicate(format: "id == %@", breweryID)
 
                 do {
-                    let brewers = try tempContext?.fetch(request)
+                    let brewers = try self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.fetch(request)
 
                     // Request did not find breweries
                     guard brewers?.count == 1 else {
+                        print("Found multiple breweries \(brewers?.count)")
                         self.reinsertBeer(beer!,attempt!)
+                        print("Reinserting beer because brewery not found")
                         return
                     }
 
                     if let styleID = beer!.styleID {
                         self.add(brewery: (brewers?.first)!, toStyleID: styleID,
-                                 context: tempContext!)
+                                 context: self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
+                        print("Beer has been saved to moc scatchpad")
                     }
 
-                    let createdBeer = try Beer(data: beer!, context: tempContext!)
+                    let createdBeer = try Beer(data: beer!, context: 
+                        self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
                     createdBeer.brewer = brewers?.first
+                    print("Successfully created a beer")
+                    print("Running beer queue at end of loop is \(self.runningBeerQueue.count)")
+
+                    if !self.runningBeerQueue.isEmpty {
+                        print("Loop not empty so queing another time around the loop")
+                        self.scheduleARunOfBeerLoopOnAsyncOnly()
+                    }
 
                     self.decideOnDownloadingImage(fromURL: beer!.imageUrl, forType: .Beer, forID: (beer?.id!)!)
 
                 } catch let error {
-
-                    //SwiftyBeaver.self.error("There was an error saving brewery to style\(error.localizedDescription)")
-                    // FIXME: What should you do if we can't get a
-                    //fatalError()
-                }
-
-                // FIXME: Temporary test code
-                //self.beerElementsRemainingToProcess.value -= 1
-                // Help slow saving and memory leak.
-                do {
-                    if (tempContext?.hasChanges)! {
-                        try tempContext?.save()
-                    }
-                    // Reset to help running out of memory
-                    //tempContext?.reset()
-                } catch let error {
-
+                    log.error("There was an error saving beer \(error.localizedDescription)")
                 }
             }
-            self.brewerySerialQueue.sync(execute: workItem)
+
         }
     }
-
-//    private func subprocessBeerLoop(_ maxSave: Int) {
-//        // Processing Beers
-//        let tempContext = container?.newBackgroundContext()
-//        tempContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
-//        tempContext?.automaticallyMergesChangesFromParent = true
-//
-//        tempContext?.perform {
-//            autoreleasepool {
-//                beerLoop: for _ in 1...maxSave {
-//
-//                    guard self.continueProcessingAfterContextRefresh() else {
-//                        break beerLoop
-//                    }
-//
-//                    // If we select a brewery, then only beers will be generated.
-//                    // Therefore we must attach the styles to the breweries at a beer by beer level.
-//
-//                    var beer: BeerData?
-//                    var attempt: Int?
-//                    guard self.runningBeerQueue.count > 0 else {
-//                        continue
-//                    }
-//                    let workItem = DispatchWorkItem {
-//                        let (lbeer,lattempt) = self.runningBeerQueue.removeFirst()
-//                        beer = lbeer
-//                        attempt = lattempt
-//                    }
-//
-//                    self.brewerySerialQueue.sync(execute: workItem)
-//
-//                    guard let breweryID = beer!.breweryID else {
-//                        continue
-//                    }
-//
-//                    let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
-//                    request.sortDescriptors = []
-//                    request.predicate = NSPredicate(format: "id == %@", breweryID)
-//
-//                    do {
-//                        let brewers = try tempContext?.fetch(request)
-//
-//                        // Request did not find breweries
-//                        guard brewers?.count == 1 else {
-//                            self.reinsertBeer(beer!,attempt!)
-//                            continue
-//                        }
-//
-//                        if let styleID = beer!.styleID {
-//                            self.add(brewery: (brewers?.first)!, toStyleID: styleID,
-//                                     context: tempContext!)
-//                        }
-//
-//                        let createdBeer = try Beer(data: beer!, context: tempContext!)
-//                        createdBeer.brewer = brewers?.first
-//
-//                        self.decideOnDownloadingImage(fromURL: beer!.imageUrl, forType: .Beer, forID: (beer?.id!)!)
-//
-//                    } catch let error {
-//
-//                        //SwiftyBeaver.self.error("There was an error saving brewery to style\(error.localizedDescription)")
-//                        // FIXME: What should you do if we can't get a
-//                        //fatalError()
-//                    }
-//
-//                    // FIXME: Temporary test code
-//                    self.beerElementsRemainingToProcess.value -= 1
-//                }
-//            }
-//            // Help slow saving and memory leak.
-//            do {
-//                if (tempContext?.hasChanges)! {
-//                    try tempContext?.save()
-//                }
-//                // Reset to help running out of memory
-//                tempContext?.reset()
-//            } catch let error {
-//                NSLog("There was and error saving brewery to style\(error.localizedDescription)")
-//            }
-//        }
-//    }
 
     private func possiblesubprocessBreweryLoop() {
-        autoreleasepool {
 
-            print("possiblesubprocessBreweryLoopCalled")
-            let workItem = DispatchWorkItem {
-                print("----> Work item running BreweryConsumerLoop")
-                guard let breweryData = self.runningBreweryQueue.first else {
-                    return // are these running against the same
-                }
-                self.classContext?.perform {
-                    let newBrewery = Brewery(with: breweryData, context: self.classContext!)
-                    // If brewery has a style id; add the brewery to that style.
-                    if let styleID = breweryData.styleID {
-                        self.add(brewery: newBrewery,
-                                 toStyleID: styleID,
-                                 context: self.classContext!)
-                    }
-                    self.decideOnDownloadingImage(fromURL: breweryData.imageUrl,
-                                                  forType: .Brewery,
-                                                  forID: breweryData.id!)
-                    // FIXME: Temporary test code
-                    //self.breweryElementsRemainingToProcess.value -= 1
-                    print("Should have decremented brewery Left to process to \(self.breweryElementsRemainingToProcess.value) while queue:\(self.runningBreweryQueue.count)")
-                    if self.runningBreweryQueue.count > 0 {
-                        print("The queue size:\(self.runningBreweryQueue.count)")
-                        print("The queue size:\(self.runningBreweryQueue.count)")
-                        self.brewerySerialQueue.sync {
-                            self.runningBreweryQueue.removeFirst() // Delete record from queueR
-                        }
-                    }
-                    if !self.runningBreweryQueue.isEmpty {
-                        print("Loop not empty so saving another try")
-                        self.possiblesubprocessBreweryLoop()
-                    }
-                }
+        //autoreleasepool {
+        print("possiblesubprocessBreweryLoopCalled")
+        threadinfo()
+        print("----> Work item running BreweryConsumerLoop")
+        guard let breweryData = self.runningBreweryQueue.first else {
+            return // are these running against the same
+        }
+        self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.perform {
+            let newBrewery = Brewery(with: breweryData, context: self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
+            print("Successfully created a brewery")
+            // If brewery has a style id; add the brewery to that style.
+            if let styleID = breweryData.styleID {
+                self.add(brewery: newBrewery,
+                         toStyleID: styleID,
+                         context: self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
             }
-            brewerySerialQueue.sync(execute: workItem)
-            print("possiblesubprocessBreweryLoop() Completed Queing a work item to process all breweries in queue.")
-            //}
+            self.decideOnDownloadingImage(fromURL: breweryData.imageUrl,
+                                          forType: .Brewery,
+                                          forID: breweryData.id!)
+            // FIXME: Temporary test code
+            //self.breweryElementsRemainingToProcess.value -= 1
+            print("Should have decremented brewery Left to process to \(self.breweryElementsRemainingToProcess.value) while queue:\(self.runningBreweryQueue.count)")
+
+            let _ = self.syncOnlyQueueForAddingItemDataToQueues.sync {
+                if self.runningBreweryQueue.count > 0 {
+                    print("The queue size:\(self.runningBreweryQueue.count)")
+                    print("The queue size:\(self.runningBreweryQueue.count)")
+                    self.runningBreweryQueue.removeFirst() // Delete record from queueR
+                }
+            } // Now brewery will not process
         }
     }
 
+    private func scheduleARunOfBreweryLoop() {
+        asyncOnlyBrewerySerialQueue.after(when: 2) {
+            [unowned self] in
+            self.possiblesubprocessBreweryLoop()
+        }
+    }
 
-//    private func subprocessBreweryLoop(_ maxSave: Int) {
-//        classContext?.performAndWait {
-//
-//            autoreleasepool {
-//                breweryLoop: for _ in 1...maxSave {
-//                    guard self.continueProcessingAfterContextRefresh() else {
-//                        break breweryLoop
-//                    }
-//                    guard self.runningBreweryQueue.count > 0 else {
-//                        continue
-//                    }
-//                    var breweryData: BreweryData?
-//                    let workItem = DispatchWorkItem {
-//                        breweryData = self.runningBreweryQueue.removeFirst()
-//                    }
-//                    brewerySerialQueue.sync(execute: workItem)
-//                    let newBrewery = Brewery(with: breweryData as! BreweryData, context: self.classContext!)
-//                    // If brewery has a style id; add the brewery to that style.
-//                    if let styleID = breweryData?.styleID {
-//                        self.add(brewery: newBrewery,
-//                                 toStyleID: styleID,
-//                                 context: self.classContext!)
-//                    }
-//
-//                    self.decideOnDownloadingImage(fromURL: breweryData!.imageUrl,
-//                                                  forType: .Brewery,
-//                                                  forID: breweryData!.id!)
-//
-//                    // FIXME: Temporary test code
-//                    breweryElementsRemainingToProcess.value -= 1
-//
-//                }
-//            }
-//            // Save group of breweries and style data.
-//            do {
-//                //self.classContext?.mergePolicy = NSMergePolicy(merge: NSMergePolicyType.mergeByPropertyObjectTrumpMergePolicyType)
-//                try self.classContext?.save()
-//            } catch let error {
-//                //log.error("There was and error saving brewery \(error.localizedDescription)")
-//            }
-//            self.classContext?.reset()
-//        }
-//    }
-
-
-    // Periodic method to save breweries and beers
-//    @objc private func startOfProcessQueue() {
-//        // FIXME
-//        print("Attempting to startOfProcessQueue")
-//        // This function will save all breweries before saving beers.
-//        // FIXME: May not need this.
-//        // classContext?.automaticallyMergesChangesFromParent = true
-//        self.loopCounter += 1
-//        if self.loopCounter > self.maximumSmallRuns {
-//            self.switchToLongRunningDataLoad()
-//        } else if self.loopCounter > self.maximumLargeRuns {
-//            self.switchToVeryLongRunningDataLoad()
-//        }
-//
-//        // Save breweries one at time. Batch saving generates conflict errors.
-//        //let dq = DispatchQueue(label: "BreweryAndBeerProcessingSerialQueue")
-//        //dq
-//        DispatchQueue.global(qos: .userInitiated).async {
-//            // FIXME PROPOSED SOLUTION
-//            while self.runningBreweryQueue.count > 0 {
-//
-//                //FIXME
-//                print("Async running process queue as .userInitiated")
-//                guard !self.runningBreweryQueue.isEmpty || !self.runningBeerQueue.isEmpty else {
-//                    // Both queues are empty stop timer
-//                    //self.reinitializeLoadParameter()
-//                    return
-//                }
-//
-//                // This adjusts the maximum amount of processing per data load
-//                // Low in the beginning then increasing
-//                var maxSave: Int!
-//                maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBreweryQueue.count)
-//
-//                // Processing Breweries
-//                if !self.runningBreweryQueue.isEmpty { // Should we skip brewery processing
-//                    //self.subprocessBreweryLoop(maxSave)
-//                    self.possiblesubprocessBreweryLoop()
-//                }
-//
-//            } // End of while loop
-//            // Begin to process beers only if breweries are done.
-//            guard self.runningBreweryQueue.isEmpty else {
-//                // Else Wait for timer to fire again and process some more
-//                // Breweries
-//                return
-//            }
-//
-//            // Reset the maximum records to process
-//            // FIXME temporarily comment out
-//            //maxSave = self.decideOnMaximumRecordsPerLoop(queueCount: self.runningBeerQueue.count)
-//
-//            // Process Beers
-//            if !self.runningBeerQueue.isEmpty { // We skip beer processing when
-//                // FIXME temporarily change
-//                //self.subprocessBeerLoop(maxSave)
-//                //self.subprocessBeerLoop(1000)
-//                self.possibleNewDequeBeerLoop()
-//            }
-//            // FIXME
-//            print("Finished running startOfProcessQueue asynchronously")
-//        }
-//    }
-
-
-//    private func reinitializeLoadParameter() {
-//        switchToInitialRunningDataLoad()
-//        stopWork()
-//    }
+    private func scheduleARunOfBeerLoopOnAsyncOnly() {
+        asyncOnlyBrewerySerialQueue.after(when: 2) {
+            [unowned self] in
+            self.possibleNewDequeBeerLoop()
+        }
+    }
 
 
     private func reinsertBeer(_ beer: BeerData, _ inAttempt: Int) {
-
+        guard inAttempt < Constants.Maximum_Attempts_To_Reinsert_Beer_For_Processing else {
+            log.info("A Beer was skipped due to too many attempts at processing.")
+            return
+        }
         // If we have breweries still running then put beer back
-        let attempt = inAttempt
+        let attempt = inAttempt + 1
         // This only runs from a DispatchWorkItem
-        self.runningBeerQueue.append( (beer,0) )
+        self.runningBeerQueue.append( (beer, attempt) )
     }
 
 
-    fileprivate func startWorkTimer() {
-        //        if workTimer == nil {
-        //            print("Work timer was nil creating a new scheduled timer")
-        //            workTimer = Timer.scheduledTimer(timeInterval: currentRepeatInterval,
-        //                                             target: self,
-        //                                             selector: #selector(self.startOfProcessQueue),
-        //                                             userInfo: nil,
-        //                                             repeats: true)
-        //        } else {
-        //            // FIXME
-        //            print("Work timer is not nil")
-        //        }
-        //        isQueueRunning.value = true
-        //        mediatorObserver?.notifyStartingWork()
-        //        // FIXME
-        //        print("Starting work timer exiting?")
+    private func synchronizedAccessToList(type: DataType, data: AnyObject) {
+        switch type {
+        case DataType.Beer:
+            syncOnlyQueueForAddingItemDataToQueues.sync {
+                runningBeerQueue.append((data as! BeerData, 0 ))
+            }
+        case DataType.Brewery:
+            syncOnlyQueueForAddingItemDataToQueues.sync {
+                runningBreweryQueue.append(data as! BreweryData)
+            }
+        }
     }
-
-
-    private func stopWork() {
-        //        workTimer?.invalidate()
-        //        workTimer = nil
-        //        mediatorObserver?.notifyStoppingWork()
-        //        loopCounter = 0
-        //        isQueueRunning.value = false
-        //        print("Stopping work timer")
-    }
-
-
-//    private func switchToInitialRunningDataLoad() {
-//        currentMaxSavesPerLoop = initialMaxSavesPerLoop
-//        currentRepeatInterval = initialRepeatInterval
-//    }
-//
-//
-//    private func switchToLongRunningDataLoad() {
-//        currentMaxSavesPerLoop = longrunningMaxSavesPerLoop
-//        currentRepeatInterval = longRunningRepeatInterval
-//    }
-//
-//
-//    private func switchToVeryLongRunningDataLoad() {
-//        //log.info("func \(#function)")
-//        currentMaxSavesPerLoop = verylongrunningMaxSavesPerLoop
-//        currentRepeatInterval = verylongrunningRepeatInterval
-//    }
-
 }
 
 
@@ -566,88 +384,69 @@ extension NewCreationQueue: BreweryAndBeerCreationProtocol {
         return true
     }
 
-    internal func isBreweryAndBeerCreationRunning() -> Bool {
-        if runningBreweryQueue.isEmpty && runningBeerQueue.isEmpty {
-            return false
-        }
-        return true
-    }
-
     // Queues up breweries to be saved
     internal func queueBrewery(_ breweryData: BreweryData?) {
-        print("------> queuing brewery")
+
         // Check to see if brewery exists
-        let context = container?.newBackgroundContext()
-        context?.perform {
+        contextForCoreDataQueryOnly?.perform {
             let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
             request.sortDescriptors = []
             request.predicate = NSPredicate(format: "id== %@", (breweryData?.id)!)
             var breweries: [Brewery]?
             do {
-                breweries = try context?.fetch(request)
+                breweries = try self.contextForCoreDataQueryOnly?.fetch(request)
             } catch let error{
                 log.error("Error finding a brewery because \(error.localizedDescription)")
             }
+
             guard breweries?.first == nil else {
                 // Skip brewery creation when we already have the brewery
                 return
             }
+
             if let localBrewer = breweryData {
                 // serialQueue to enqueue onto the queue serial queue processes
-                self.brewerySerialQueue.sync {
-                    self.runningBreweryQueue.append(localBrewer)
-                }
-//                let workItem = DispatchWorkItem {
-//                    self.runningBreweryQueue.append(localBrewer)
-//                }
-//                self.brewerySerialQueue.sync(execute: workItem)
-                print("incremented brewery remaining to be processed first")
-                // FIXME Temporary test code
-                self.self.breweryElementsRemainingToProcess.value += 1
+                self.synchronizedAccessToList(type: DataType.Brewery, data: localBrewer as AnyObject)
 
                 // Schedule the breweryLoop for processing in the future
+                // FIXME: is this needed
                 self.possiblesubprocessBreweryLoop()
-
-                // FIXME but the following 2 lines back in.
-                //startWorkTimer()
-                //startOfProcessQueue()
             }
         }
     }
 
 
     // Queues up beers to be saved
-    internal func queueBeer(_ b: BeerData?) {
+    internal func queueBeer(_ beerData: BeerData?) {
+
+        log.info("queueBeer called")
         // Check to see if beer exists
-        let context = container?.newBackgroundContext()
-        let request: NSFetchRequest<Beer> = Beer.fetchRequest()
-        request.sortDescriptors = []
-        request.predicate = NSPredicate(format: "id == %@", (b?.id)!)
-        var beers: [Beer]?
-        do {
-            beers = try context?.fetch(request)
-        } catch let error{
-            NSLog("Error finding a Beer because \(error.localizedDescription)")
-        }
+        contextForCoreDataQueryOnly?.perform {
 
-        guard beers?.first == nil else {
-            // Skip beer creation when we already have the beer
-            return
-        }
+            let request: NSFetchRequest<Beer> = Beer.fetchRequest()
+            request.sortDescriptors = []
+            request.predicate = NSPredicate(format: "id == %@", (beerData?.id)!)
+            var beers: [Beer]?
 
-        if let beer = b {
-            let attempt: Int = 0
-            let workItem = DispatchWorkItem {
-                self.runningBeerQueue.append( (beer,0) )
+            do {
+                beers = try self.contextForCoreDataQueryOnly?.fetch(request)
+            } catch let error{
+                log.error("Error finding a Beer because \(error.localizedDescription)")
             }
-            //brewerySerialQueue.sync(execute: workItem)
 
-            // Deque beers
-            //possibleNewDequeBeerLoop()
+            guard beers?.first == nil else {
+                log.info("We found the beer, no need to requeue it")
+                // Skip beer creation when we already have the beer
+                return
+            }
 
-            //startWorkTimer()
-            // FIXME Temporary test code
-            beerElementsRemainingToProcess.value += 1
+            if let beer = beerData {
+                let _: Int = 0
+                self.synchronizedAccessToList(type: DataType.Beer, data: beer as AnyObject)
+
+                // FIXME Temporary test code
+                self.beerElementsRemainingToProcess.value += 1
+            }
         }
     }
 }
