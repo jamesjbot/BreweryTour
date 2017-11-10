@@ -127,7 +127,6 @@ class CoreDataStack: NSObject {
     fileprivate let breweryFetch: NSFetchRequest<Brewery> = Brewery.fetchRequest()
     fileprivate let styleFetch: NSFetchRequest<Style> = Style.fetchRequest()
 
-
     // MARK: - Initializers
     init?(modelName: String) {
 
@@ -138,7 +137,7 @@ class CoreDataStack: NSObject {
         container.loadPersistentStores(completionHandler: {
             (description, error) -> Void in
             if let error = error {
-                SwiftyBeaver.error("Error creating NSpersistentContainer and loading a persistentStore\n\(error.localizedDescription)")
+                SwiftyBeaver.error("Error creating NSPersistentContainer and loading a persistentStore\n\(error.localizedDescription)")
                 // FIXME: Maybe add something that warns the user that the program can no longer function because the main data store could not be initialized.
             }
         })
