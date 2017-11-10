@@ -10,6 +10,11 @@ import CoreData
 import UIKit
 
 class BreweriesByStateParser: ParserProtocol {
+    var breweryDesigner: BreweryDesignerProtocol
+    
+    init(with breweryDesigner: BreweryDesignerProtocol) {
+        self.breweryDesigner = breweryDesigner
+    }
 
     func parse(response : NSDictionary,
                querySpecificID : String?,
@@ -44,7 +49,7 @@ class BreweriesByStateParser: ParserProtocol {
                 continue breweryLoop
             }
 
-            BreweryDesigner.sharedInstance().createBreweryObject(
+            breweryDesigner.createBreweryObject(
                 breweryDict: breweryDict["brewery"] as! Dictionary,
                 locationDict: breweryDict,
                 brewersID: brewersID,
@@ -54,4 +59,5 @@ class BreweriesByStateParser: ParserProtocol {
         } // end of breweryLoop
         completion?(true, "Success")
     }
+
 }
