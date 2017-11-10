@@ -9,36 +9,54 @@
 import Foundation
 
 protocol ParserFactoryProtocol {
-    func createParser(type: BreweryDBClient.APIQueryResponseProcessingTypes) -> ParserProtocol
+    func createParser(type: BreweryDBClient.APIQueryResponseProcessingTypes) -> ParserProtocol?
 }
 
 class ParserFactory: ParserFactoryProtocol {
 
-    private init(){}
-    internal class func sharedInstance() -> ParserFactoryProtocol {
-        struct Singleton {
-            static var sharedInstance = ParserFactory()
-        }
-        return Singleton.sharedInstance
+    var creationQueue: BreweryAndBeerCreationProtocol?
+
+    var breweryDesigner: BreweryDesignerProtocol?
+    var beerDesigner: BeerDesigner?
+
+    internal func set(breweryDesigner: BreweryDesignerProtocol) {
+        self.breweryDesigner = breweryDesigner
     }
 
+    internal func set(beerDesigner: BeerDesigner) {
+        self.beerDesigner = beerDesigner
+    }
 
-    func createParser(type: BreweryDBClient.APIQueryResponseProcessingTypes) -> ParserProtocol {
+    init(withQueue: BreweryAndBeerCreationProtocol) {
+        self.creationQueue = withQueue
+    }
+
+    func createParser(type: BreweryDBClient.APIQueryResponseProcessingTypes) -> ParserProtocol? {
         switch type {
         case BreweryDBClient.APIQueryResponseProcessingTypes.BeersByBreweryID:
-            return BeersByBreweryIDParser()
+            return BeersByBreweryIDParser(withBeerDesigner: beerDesigner!)
 
         case BreweryDBClient.APIQueryResponseProcessingTypes.BeersFollowedByBreweries:
-            return BeersFollowedByBreweriesParser()
+            if let breweryD = breweryDesigner, let beerD = beerDesigner {
+                return BeersFollowedByBreweriesParser(withBeerDesigner: beerD,
+                                                      with: breweryD)
+            }
+            return nil
 
         case BreweryDBClient.APIQueryResponseProcessingTypes.Breweries:
-            return BreweriesParser()
+            if let bd = breweryDesigner {
+                return BreweriesParser(with: bd)
+            }
+            return nil
 
         case BreweryDBClient.APIQueryResponseProcessingTypes.Styles:
             return StylesParser()
             
         case BreweryDBClient.APIQueryResponseProcessingTypes.LocationFollowedByBrewery:
-            return BreweriesByStateParser()
+            if let bd = breweryDesigner {
+                return BreweriesByStateParser(with: bd)
+            }
+            return nil
         }
     }
 }
