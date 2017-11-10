@@ -10,6 +10,7 @@ import Foundation
 import CoreData
 import UIKit
 import SwiftyBeaver
+import Dispatch
 
 // Image processing enumeration
 internal enum ImageDownloadType {
@@ -26,7 +27,7 @@ protocol ImageLinkingProcotol {
 class ManagedObjectImageLinker: ImageLinkingProcotol {
 
     // MARK: - Constants
-    private let backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
+    private let backContext: NSManagedObjectContext = (((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext())!
     private let maxSaves = 200
     private let timerDelay: Double = 3
 
@@ -49,6 +50,12 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
 
 
     // MARK: - Functions
+
+    init() {
+//        DispatchQueue.main.sync {
+//            backContext = ((UIApplication.shared.delegate) as! AppDelegate).coreDataStack?.container.newBackgroundContext()
+//        }
+    }
 
     private func decideToDisableTimer() {
         if imagesToBeAssignedQueue.count == 0 {
@@ -107,17 +114,18 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
 
     // Process the last unfull set on the breweriesToBeProcessed queue.
     @objc private func timerProcessImageQueue() {
-        let dispatchQueue = DispatchQueue.global(qos: .userInitiated)
+        let imageProcessingDispatchQueue = DispatchQueue.global(qos: .background)
         let context = backContext
         initContext(context)
-        dispatchQueue.sync {
+        //imageProcessingDispatchQueue.async {
+        context.perform {
             var saves = 0 // Stopping counter
             for (key, (type, data ) ) in self.imagesToBeAssignedQueue {
-                guard let request = generateRequest(type) else {
+                guard let request = self.generateRequest(type) else {
                     //SwiftyBeaver.error("ManagedObjectImageLinker had a problem generating a request for \(type):\(#line)")
                     continue
                 }
-                let result = fetchExecute(request: request, withKey: key, inContext: context)
+                let result = self.fetchExecute(request: request, withKey: key, inContext: context)
                 guard result?.count == 1 else  {
                     if result?.count == 0 { // Remove, no parent found
                         self.imagesToBeAssignedQueue.removeValue(forKey: key)
@@ -143,12 +151,10 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                     break
                 }
 
-                context?.performAndWait { 
-                    do {
-                        try context!.save()
-                    } catch {
-                        NSLog("Failed to save context")
-                    }
+                do {
+                    try context.save()
+                } catch {
+                    NSLog("Failed to save context")
                 }
 
                 saves += 1
@@ -159,6 +165,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                 }
             }
             self.decideToDisableTimer()
+            //}
         }
     }
 
