@@ -15,6 +15,18 @@
 		A70926901F323C0300EB3BA2 /* Beer.swift in Sources */ = {isa = PBXBuildFile; fileRef = A709268F1F323C0300EB3BA2 /* Beer.swift */; };
 		A70926921F323C9700EB3BA2 /* Style.swift in Sources */ = {isa = PBXBuildFile; fileRef = A70926911F323C9700EB3BA2 /* Style.swift */; };
 		A711EC091DC8EBDF008E114A /* AlertWindowDisplayingProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A711EC081DC8EBDF008E114A /* AlertWindowDisplayingProtocol.swift */; };
+		A7140E351FAD8FC10076D5F4 /* Bond.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E361FAD8FC10076D5F4 /* Bond.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A7140E371FAD90120076D5F4 /* Bond.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7140E361FAD8FC10076D5F4 /* Bond.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7140E381FAD904A0076D5F4 /* Differ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E391FAD904A0076D5F4 /* Differ.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A7140E3A1FAD90500076D5F4 /* ReactiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E3C1FAD90500076D5F4 /* ReactiveKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A7140E3B1FAD90500076D5F4 /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E3D1FAD90500076D5F4 /* SwiftyBeaver.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A7140E3E1FAD90A40076D5F4 /* ReactiveKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7140E3C1FAD90500076D5F4 /* ReactiveKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7140E3F1FAD90A40076D5F4 /* SwiftyBeaver.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7140E3D1FAD90500076D5F4 /* SwiftyBeaver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7140E401FAD90A40076D5F4 /* Differ.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7140E391FAD904A0076D5F4 /* Differ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7140E411FAD90E60076D5F4 /* ReactiveKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E3C1FAD90500076D5F4 /* ReactiveKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7140E421FAD90E60076D5F4 /* SwiftyBeaver.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E3D1FAD90500076D5F4 /* SwiftyBeaver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7140E431FAD90E60076D5F4 /* Differ.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E391FAD904A0076D5F4 /* Differ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A7140E441FAD90E60076D5F4 /* Bond.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E361FAD8FC10076D5F4 /* Bond.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A7189CFB1DFDD487001409FA /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7189CFA1DFDD487001409FA /* SettingsViewController.swift */; };
 		A7195F7B1E29EEDD0089C1ED /* MapProtocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7195F7A1E29EEDD0089C1ED /* MapProtocols.swift */; };
 		A7195F7D1E29F82E0089C1ED /* SingleBreweryMapStrategy.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7195F7C1E29F82E0089C1ED /* SingleBreweryMapStrategy.swift */; };
@@ -119,8 +131,6 @@
 		A7B2AAE71DA791A400EE844C /* BreweryTour.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AAE51DA791A400EE844C /* BreweryTour.xcdatamodeld */; };
 		A7B2AB021DA791A400EE844C /* BreweryTourUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */; };
 		A7B2AB101DA7965F00EE844C /* BreweryDBClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */; };
-		A7B46ECA1FB58F1E00952A4B /* SwiftyBeaver.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7B46ECB1FB58F1E00952A4B /* SwiftyBeaver.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
-		A7B46ECC1FB5947600952A4B /* SwiftyBeaver.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7B46ECB1FB58F1E00952A4B /* SwiftyBeaver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A7B7524E1DA8CE7B00117ED0 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */; };
 		A7D227241DB4D90D00360A3B /* BreweryTabbarIcon.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D227231DB4D90D00360A3B /* BreweryTabbarIcon.png */; };
 		A7D2272A1DB55F3800360A3B /* small_heart_icon_black_white_line_art.png in Resources */ = {isa = PBXBuildFile; fileRef = A7D227281DB55F3700360A3B /* small_heart_icon_black_white_line_art.png */; };
@@ -162,6 +172,10 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				A7140E411FAD90E60076D5F4 /* ReactiveKit.framework in Embed Frameworks */,
+				A7140E421FAD90E60076D5F4 /* SwiftyBeaver.framework in Embed Frameworks */,
+				A7140E431FAD90E60076D5F4 /* Differ.framework in Embed Frameworks */,
+				A7140E441FAD90E60076D5F4 /* Bond.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -172,8 +186,11 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				A7B46ECC1FB5947600952A4B /* SwiftyBeaver.framework in CopyFiles */,
 				A724B55B1FB5607E0035B41F /* Pods_BreweryTour.framework in CopyFiles */,
+				A7140E3E1FAD90A40076D5F4 /* ReactiveKit.framework in CopyFiles */,
+				A7140E3F1FAD90A40076D5F4 /* SwiftyBeaver.framework in CopyFiles */,
+				A7140E401FAD90A40076D5F4 /* Differ.framework in CopyFiles */,
+				A7140E371FAD90120076D5F4 /* Bond.framework in CopyFiles */,
 				A7FB8A4E1FAD7BEA002006B7 /* Alamofire.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
@@ -319,9 +336,6 @@
 		A7B2AB011DA791A400EE844C /* BreweryTourUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BreweryTourUITests.swift; sourceTree = "<group>"; };
 		A7B2AB031DA791A400EE844C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		A7B2AB0F1DA7965F00EE844C /* BreweryDBClient.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BreweryDBClient.swift; sourceTree = "<group>"; };
-		A7B46EB11FB5800200952A4B /* TestFrameWorkTarget.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = TestFrameWorkTarget.h; sourceTree = "<group>"; };
-		A7B46EB21FB5800200952A4B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		A7B46ECB1FB58F1E00952A4B /* SwiftyBeaver.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwiftyBeaver.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		A7B7524D1DA8CE7B00117ED0 /* MapViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		A7D227231DB4D90D00360A3B /* BreweryTabbarIcon.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = BreweryTabbarIcon.png; sourceTree = "<group>"; };
 		A7D227281DB55F3700360A3B /* small_heart_icon_black_white_line_art.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = small_heart_icon_black_white_line_art.png; path = BreweryTour/Assets/small_heart_icon_black_white_line_art.png; sourceTree = SOURCE_ROOT; };
@@ -343,7 +357,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				A7B46ECA1FB58F1E00952A4B /* SwiftyBeaver.framework in Frameworks */,
+				A7140E3A1FAD90500076D5F4 /* ReactiveKit.framework in Frameworks */,
+				A7140E3B1FAD90500076D5F4 /* SwiftyBeaver.framework in Frameworks */,
+				A7140E381FAD904A0076D5F4 /* Differ.framework in Frameworks */,
+				A7140E351FAD8FC10076D5F4 /* Bond.framework in Frameworks */,
 				8F5A82B088FB8F021054FF3A /* Pods_BreweryTour.framework in Frameworks */,
 				A7FB8A4A1FAD7A81002006B7 /* Alamofire.framework in Frameworks */,
 			);
@@ -631,7 +648,6 @@
 				A7B2AADD1DA791A400EE844C /* BreweryTour */,
 				A7B2AAF51DA791A400EE844C /* BreweryTourTests */,
 				A7B2AB001DA791A400EE844C /* BreweryTourUITests */,
-				A7B46EB01FB5800200952A4B /* TestFrameWorkTarget */,
 				A7B2AADC1DA791A400EE844C /* Products */,
 				F31E85EDAD6C7B0ACBB4C070 /* Frameworks */,
 				9A9DD2B38318A3E612AFFF85 /* Pods */,
@@ -685,15 +701,6 @@
 				A7B2AB031DA791A400EE844C /* Info.plist */,
 			);
 			path = BreweryTourUITests;
-			sourceTree = "<group>";
-		};
-		A7B46EB01FB5800200952A4B /* TestFrameWorkTarget */ = {
-			isa = PBXGroup;
-			children = (
-				A7B46EB11FB5800200952A4B /* TestFrameWorkTarget.h */,
-				A7B46EB21FB5800200952A4B /* Info.plist */,
-			);
-			path = TestFrameWorkTarget;
 			sourceTree = "<group>";
 		};
 		A7D3B8921E18A3810017E5AE /* ModelProtocols */ = {
@@ -810,7 +817,6 @@
 		F31E85EDAD6C7B0ACBB4C070 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				A7B46ECB1FB58F1E00952A4B /* SwiftyBeaver.framework */,
 				A7140E3C1FAD90500076D5F4 /* ReactiveKit.framework */,
 				A7140E3D1FAD90500076D5F4 /* SwiftyBeaver.framework */,
 				A7140E391FAD904A0076D5F4 /* Differ.framework */,
@@ -1048,14 +1054,14 @@
 		};
 		A9A6543D9D95F40970699BEE /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 12;
+			buildActionMask = 8;
 			files = (
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-BreweryTour/Pods-BreweryTour-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Bond.framework",
-				"${BUILT_PRODUCTS_DIR}/Differ.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Bond/Bond.framework",
+				"${BUILT_PRODUCTS_DIR}/Differ/Differ.framework",
 				"${BUILT_PRODUCTS_DIR}/ReactiveKit/ReactiveKit.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyBeaver/SwiftyBeaver.framework",
 			);
@@ -1067,7 +1073,7 @@
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ReactiveKit.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyBeaver.framework",
 			);
-			runOnlyForDeploymentPostprocessing = 0;
+			runOnlyForDeploymentPostprocessing = 1;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BreweryTour/Pods-BreweryTour-frameworks.sh\"\n";
 		};
@@ -1227,7 +1233,7 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)/**";
+				FRAMEWORK_SEARCH_PATHS = "";
 				"FRAMEWORK_SEARCH_PATHS[arch=*]" = "";
 				GCC_C_LANGUAGE_STANDARD = gnu11;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -1320,10 +1326,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES = YES;
 				DEVELOPMENT_TEAM = 57N49ZFXV9;
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)/**",
-					"$(SRCROOT)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)/**";
 				GCC_PRECOMPILE_PREFIX_HEADER = NO;
 				INFOPLIST_FILE = BreweryTour/Assets/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
