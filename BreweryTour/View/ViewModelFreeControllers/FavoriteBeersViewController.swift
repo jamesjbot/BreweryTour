@@ -15,7 +15,7 @@
 import UIKit
 import CoreData
 
-class FavoriteBeersViewController: UIViewController,AlertWindowDisplaying {
+class FavoriteBeersViewController: UIViewController, AlertWindowDisplaying {
     
     // MARK: - Constants
 
