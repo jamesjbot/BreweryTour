@@ -10,6 +10,12 @@ import UIKit
 
 class BreweriesParser: ParserProtocol {
 
+    var breweryDesigner: BreweryDesignerProtocol
+
+    init(with breweryDesigner: BreweryDesignerProtocol) {
+        self.breweryDesigner = breweryDesigner
+    }
+
     func parse(response : NSDictionary,
                querySpecificID : String?,
                completion: (( (_ success :  Bool, _ msg: String?) -> Void )?) ) {
@@ -45,7 +51,7 @@ class BreweriesParser: ParserProtocol {
                 continue breweryLoop
             }
 
-            BreweryDesigner.sharedInstance().createBreweryObject(breweryDict: breweryDict as Dictionary,
+            breweryDesigner.createBreweryObject(breweryDict: breweryDict as Dictionary,
                                                 locationDict: locDic,
                                                 brewersID: brewersID,
                                                 style: nil) { // There is no style to pull in when looking for breweries only.
