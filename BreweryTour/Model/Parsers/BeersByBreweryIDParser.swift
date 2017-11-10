@@ -10,6 +10,12 @@ import Foundation
 
 class BeersByBreweryIDParser: ParserProtocol {
 
+    var beerDesigner: BeerDesignerProtocol
+
+    init(withBeerDesigner beerD: BeerDesignerProtocol) {
+        beerDesigner = beerD
+    }
+
     func parse(response : NSDictionary,
                querySpecificID : String?,
                completion: (( (_ success :  Bool, _ msg: String?) -> Void )?) ) {
@@ -28,7 +34,7 @@ class BeersByBreweryIDParser: ParserProtocol {
             }
 
             if let queryID = querySpecificID {
-                BeerDesigner.sharedInstance().createBeerObject(beer: beer, brewerID: queryID) {
+                beerDesigner.createBeerObject(beer: beer, brewerID: queryID) {
                     (Beer) -> Void in
                 }
             }
