@@ -13,3 +13,14 @@ protocol ParserProtocol {
                querySpecificID : String?,
                completion: (( (_ success :  Bool, _ msg: String?) -> Void )?) )
 }
+// FIXME
+//protocol DependencyInjectBreweryDesigner {
+//    var breweryDesigner: BreweryDesignerProtocol { get set }
+//}
+//
+//extension DependencyInjectBreweryDesigner {
+//    init(with breweryDesigner: BreweryDesignerProtocol) {
+//        //self.breweryDesigner = breweryDesigner
+//    }
+//}
+
