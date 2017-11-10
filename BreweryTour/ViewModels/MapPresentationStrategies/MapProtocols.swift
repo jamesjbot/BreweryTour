@@ -87,27 +87,29 @@ extension MappableStrategy {
 
     
     // Sort the breweries by distance to targetLocation
-    func sortLocations(_ input: [Brewery]) -> [Brewery]? {
+    // FIXME: This should be called asynchrnously because on very large loads this takes way to long and sometimes blocks the UI
+    func sortLocations(_ input: [Brewery] ) -> [Brewery]? {
+        //DispatchQueue.global(qos: .userInteractive).async {
+            var breweryLocations = input
+            // If there are less than 2 breweries no need to sort.
+            guard breweryLocations.count > 1 else {
+                return breweryLocations
+            }
+            guard self.isAllLocationDataNonNil(in: breweryLocations) else {
+                log.error("MapStrategy detected breweries without location data.")
+                return nil
+            }
+            //log.info("MapStrategy.sortLocations() Sorting breweries by positons")
+            breweryLocations = breweryLocations.sorted(by:
+                { (brewery1, brewery2) -> Bool in
+                    let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
+                    let location2: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery2.latitude!)!), longitude: CLLocationDegrees(Double(brewery2.longitude!)!))
+                    return ((targetLocation!.distance(from: location1)) as Double) < ((targetLocation!.distance(from: location2)) as Double)
+            })// FIXME we get stuck here maybe copy the array?
 
-        var breweryLocations = input
-        // If there are less than 2 breweries no need to sort.
-        guard breweryLocations.count > 1 else {
             return breweryLocations
-        }
-        guard isAllLocationDataNonNil(in: breweryLocations) else {
-            //SwiftyBeaver.error("MapStrategy detected breweries without location data.")
-            return nil
-        }
-        print(log)
-        //log.info("MapStrategy.sortLocations() Sorting breweries by positons")
-        breweryLocations = breweryLocations.sorted(by:
-            { (brewery1, brewery2) -> Bool in
-                let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
-                let location2: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery2.latitude!)!), longitude: CLLocationDegrees(Double(brewery2.longitude!)!))
-                return ((targetLocation!.distance(from: location1)) as Double) < ((targetLocation!.distance(from: location2)) as Double)
-        })
+        //}
 
-        return breweryLocations
     }
 
 
