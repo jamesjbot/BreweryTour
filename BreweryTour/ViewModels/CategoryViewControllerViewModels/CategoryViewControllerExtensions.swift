@@ -51,7 +51,7 @@ extension CategoryViewController: UISearchBarDelegate, AlertWindowDisplaying {
         // This will filter empty text too.
         // This is called when the user change text in the searchbar
 
-        if textDidChange.characters.count == 0 {
+        if textDidChange[...].count == 0 {
             // Only dismiss keyboard when removing all characters in the 
             // UISearchbar on an iphone.
             guard UIDevice.current.model == "iPhone" else {
