@@ -45,6 +45,9 @@ class Mediator {
     }
     private var StyleStrategyID:Int = 1
 
+    // FIXME: Is this still needed as I've changed the who actually is the notifier
+    internal var creationQueue: BreweryAndBeerCreationProtocol?
+
     // MARK: Functions
 
     // MARK: - PassingItem
@@ -136,7 +139,14 @@ extension Mediator: MediatorBroadcastSetSelected {
 
 extension Mediator: MediatorBusyObserver {
     func isSystemBusy() -> Bool {
-        return BreweryAndBeerCreationQueue.sharedInstance().isBreweryAndBeerCreationRunning()
+        // FIXME: this should be dependent on network access from the brewery db client
+        // not on the creation queue.
+        if let creationQueue = creationQueue {
+            return false
+            //return creationQueue.isBreweryAndBeerCreationRunning()
+        } else {
+            return false
+        }
     }
 
 
