@@ -49,15 +49,16 @@ class NewCreationQueue: NSObject {
 
     struct Constants {
         static let BackgroundSaveTimeIntervaliSeconds = 6
-        static let Maximum_Attempts_To_Reinsert_Beer_For_Processing = 3
+        static let Maximum_Attempts_To_Reinsert_Beer_For_Processing = 10
+        static let InitialMaxSavesPerLoop: Int = 10
+
     }
 
     fileprivate let container = (UIApplication.shared.delegate as! AppDelegate).coreDataStack?.container
 
     private let BackgroundSaveTimerInterval = Constants.BackgroundSaveTimeIntervaliSeconds
 
-     Initial responsive load
-    private let initialMaxSavesPerLoop: Int = 3
+    // Initial responsive load
     private let initialRepeatInterval: Double = 2
 
 
@@ -83,7 +84,7 @@ class NewCreationQueue: NSObject {
         }
     }
 
-    private var currentMaxSavesPerLoop: Int = 0
+    private var currentMaxSavesPerLoop: Int = 30
     private var currentRepeatInterval: Double = 0
 
     private var loopCounter: Int = 0
@@ -113,8 +114,8 @@ class NewCreationQueue: NSObject {
     private var contextForEnqueueData: NSManagedObjectContext?
     private var contextForCoreDataQueryOnly: NSManagedObjectContext?
 
-    fileprivate var runningBreweryQueue = [BreweryData]()
-    fileprivate var runningBeerQueue = [(BeerData,Int)]()
+    fileprivate var runningBreweryQueue: SynchronizedArray<BreweryData> = SynchronizedArray<BreweryData>()
+    fileprivate var runningBeerQueue = SynchronizedArray<(BeerData,Int)>()
 
 
     // MARK: - Functions
@@ -146,16 +147,18 @@ class NewCreationQueue: NSObject {
     private func continueProcessingAfterContextRefresh() -> Bool {
         // We've been told to abandon Processing because of a core data refresh.
         if abandonProcessingQueue {
-            runningBeerQueue.removeAll()
-            runningBreweryQueue.removeAll()
-            abandonProcessingQueue = false
+            syncOnlyQueueForAddingItemDataToQueues.sync {
+                runningBeerQueue.removeAll()
+                runningBreweryQueue.removeAll()
+                abandonProcessingQueue = false
+            }
             return false
         }
         return true
     }
 
 
-    private func decideOnDownloadingImage(fromURL: String?,
+    private func downloadImageIfAvailable(fromURL: String?,
                                           forType: ImageDownloadType,
                                           forID: String) {
         if let url = fromURL {
@@ -205,18 +208,15 @@ class NewCreationQueue: NSObject {
         // Independent saving code
         Timer.scheduledTimer(withTimeInterval: TimeInterval(BackgroundSaveTimerInterval), repeats: true){
             timer in
-            self.possiblesubprocessBreweryLoop()
-            print("Entered timer")
-            self.threadinfo()
+            self.subprocessBreweryLoop()
+            self.subprocessBeerLoop()
             self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.perform {
                 print("Successfully entered a perform in timer <------")
             }
-            DispatchQueue(label: "Duh inline").async {
-                print("In Duh inline")
-                self.threadinfo()
-                self.possiblesubprocessBreweryLoop()
-                self.possibleNewDequeBeerLoop()
-            }
+//            DispatchQueue(label: "Duh inline").async {
+//                self.subprocessBreweryLoop()
+//                self.subprocessBeerLoop()
+//            }
             print("timer fired")
             self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.performAndWait {
                 guard (self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.hasChanges)! else {
@@ -235,118 +235,106 @@ class NewCreationQueue: NSObject {
     }
 
 
-    private func possibleNewDequeBeerLoop() {
+    private func subprocessBeerLoop() {
+
         asyncQueueForAddedItemsToContext.async {
             self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.perform {
-
-                guard let (lbeer,lattempt) = self.runningBeerQueue.first else {
-                    return
-                }
-
-                self.syncOnlyQueueForAddingItemDataToQueues.sync {
-                    let _ = self.runningBeerQueue.removeFirst()
-                    self.beerElementsRemainingToProcess.value -= 1
-                }
-
-                let beer:BeerData? = lbeer
-                let attempt: Int? = lattempt
-
-                guard let breweryID = beer?.breweryID else {
-                    // FIXME: This break doesn't seem right
-                    print("Inappropriate exit")
-                    return
-                }
-
-                let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
-                request.sortDescriptors = []
-                request.predicate = NSPredicate(format: "id == %@", breweryID)
-
-                do {
-                    let brewers = try self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.fetch(request)
-
-                    // Request did not find breweries
-                    guard brewers?.count == 1 else {
-                        print("Found multiple breweries \(brewers?.count)")
-                        self.reinsertBeer(beer!,attempt!)
-                        print("Reinserting beer because brewery not found")
+                var currentProcessed = 0
+                while currentProcessed < Constants.InitialMaxSavesPerLoop {
+                    currentProcessed += 1
+                    guard let (lbeer,lattempt) = self.runningBeerQueue.first() else {
                         return
                     }
 
-                    if let styleID = beer!.styleID {
-                        self.add(brewery: (brewers?.first)!, toStyleID: styleID,
-                                 context: self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
-                        print("Beer has been saved to moc scatchpad")
+                    let _ = self.runningBeerQueue.removeAtIndex(index: 0)
+
+                    let beer:BeerData? = lbeer
+                    let attempt: Int? = lattempt
+
+                    guard let breweryID = beer?.breweryID else {
+                        // FIXME: This break doesn't seem right
+                        print("Inappropriate exit")
+                        return
                     }
 
-                    let createdBeer = try Beer(data: beer!, context: 
-                        self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
-                    createdBeer.brewer = brewers?.first
-                    print("Successfully created a beer")
-                    print("Running beer queue at end of loop is \(self.runningBeerQueue.count)")
+                    let request: NSFetchRequest<Brewery> = Brewery.fetchRequest()
+                    request.sortDescriptors = []
+                    request.predicate = NSPredicate(format: "id == %@", breweryID)
 
-                    if !self.runningBeerQueue.isEmpty {
-                        print("Loop not empty so queing another time around the loop")
-                        self.scheduleARunOfBeerLoopOnAsyncOnly()
+                    do {
+                        let brewers = try self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.fetch(request)
+
+                        // Request did not find breweries
+                        guard brewers?.count == 1 else {
+                            print("Found multiple breweries \(brewers?.count)")
+                            self.reinsertBeer(beer!,attempt!)
+                            print("Reinserting beer because brewery not found")
+                            return
+                        }
+
+                        if let styleID = beer!.styleID {
+                            self.add(brewery: (brewers?.first)!, toStyleID: styleID,
+                                     context: self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
+                            print("Beer has been saved to moc scatchpad")
+                        }
+
+                        let createdBeer = try Beer(data: beer!, context:
+                            self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
+                        createdBeer.brewer = brewers?.first
+                        print("Running beer queue at end of loop is \(self.runningBeerQueue.count)")
+
+                        // FIXME: What does this do?
+                        //                    if !(self.runningBeerQueue.count == 0) {
+                        //                        print("Loop not empty so queing another time around the loop")
+                        //                        self.scheduleARunOfBeerLoopOnAsyncOnly()
+                        //                    }
+
+                        self.downloadImageIfAvailable(fromURL: beer!.imageUrl, forType: .Beer, forID: (beer?.id!)!)
+
+                    } catch let error {
+                        log.error("There was an error saving beer \(error.localizedDescription)")
                     }
-
-                    self.decideOnDownloadingImage(fromURL: beer!.imageUrl, forType: .Beer, forID: (beer?.id!)!)
-
-                } catch let error {
-                    log.error("There was an error saving beer \(error.localizedDescription)")
                 }
             }
-
         }
     }
 
-    private func possiblesubprocessBreweryLoop() {
+    private func subprocessBreweryLoop() {
 
-        //autoreleasepool {
-        print("possiblesubprocessBreweryLoopCalled")
-        threadinfo()
-        print("----> Work item running BreweryConsumerLoop")
-        guard let breweryData = self.runningBreweryQueue.first else {
-            return // are these running against the same
+        guard let breweryData = self.runningBreweryQueue.first() else {
+            return // because we have no brewery to process
         }
         self.newPrivateBackgroundContextForPeriodicallySavingCoreData?.perform {
+
+            // Create brewery
             let newBrewery = Brewery(with: breweryData, context: self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
-            print("Successfully created a brewery")
+
             // If brewery has a style id; add the brewery to that style.
             if let styleID = breweryData.styleID {
                 self.add(brewery: newBrewery,
                          toStyleID: styleID,
                          context: self.newPrivateBackgroundContextForPeriodicallySavingCoreData!)
             }
-            self.decideOnDownloadingImage(fromURL: breweryData.imageUrl,
+
+            self.downloadImageIfAvailable(fromURL: breweryData.imageUrl,
                                           forType: .Brewery,
                                           forID: breweryData.id!)
-            // FIXME: Temporary test code
-            //self.breweryElementsRemainingToProcess.value -= 1
-            print("Should have decremented brewery Left to process to \(self.breweryElementsRemainingToProcess.value) while queue:\(self.runningBreweryQueue.count)")
 
+            // Remove the brewery from processing queue
             let _ = self.syncOnlyQueueForAddingItemDataToQueues.sync {
                 if self.runningBreweryQueue.count > 0 {
-                    print("The queue size:\(self.runningBreweryQueue.count)")
-                    print("The queue size:\(self.runningBreweryQueue.count)")
-                    self.runningBreweryQueue.removeFirst() // Delete record from queueR
+                    self.runningBreweryQueue.removeAtIndex(index: 0) // Delete record from queueR
                 }
-            } // Now brewery will not process
+            }
         }
     }
 
-    private func scheduleARunOfBreweryLoop() {
-        asyncOnlyBrewerySerialQueue.after(when: 2) {
-            [unowned self] in
-            self.possiblesubprocessBreweryLoop()
-        }
-    }
-
-    private func scheduleARunOfBeerLoopOnAsyncOnly() {
-        asyncOnlyBrewerySerialQueue.after(when: 2) {
-            [unowned self] in
-            self.possibleNewDequeBeerLoop()
-        }
-    }
+//    private func scheduleARunOfBeerLoopOnAsyncOnly() {
+//        asyncOnlyBrewerySerialQueue.after(when: 2) {
+//            [unowned self] in
+//            self.possibleNewDequeBeerLoop()
+//        }
+//    }
 
 
     private func reinsertBeer(_ beer: BeerData, _ inAttempt: Int) {
@@ -357,7 +345,7 @@ class NewCreationQueue: NSObject {
         // If we have breweries still running then put beer back
         let attempt = inAttempt + 1
         // This only runs from a DispatchWorkItem
-        self.runningBeerQueue.append( (beer, attempt) )
+        self.runningBeerQueue.append(newElement:  (beer, attempt) )
     }
 
 
@@ -365,11 +353,11 @@ class NewCreationQueue: NSObject {
         switch type {
         case DataType.Beer:
             syncOnlyQueueForAddingItemDataToQueues.sync {
-                runningBeerQueue.append((data as! BeerData, 0 ))
+                runningBeerQueue.append(newElement: (data as! BeerData, 0 ))
             }
         case DataType.Brewery:
             syncOnlyQueueForAddingItemDataToQueues.sync {
-                runningBreweryQueue.append(data as! BreweryData)
+                runningBreweryQueue.append(newElement: data as! BreweryData)
             }
         }
     }
@@ -410,7 +398,7 @@ extension NewCreationQueue: BreweryAndBeerCreationProtocol {
 
                 // Schedule the breweryLoop for processing in the future
                 // FIXME: is this needed
-                self.possiblesubprocessBreweryLoop()
+                self.subprocessBreweryLoop()
             }
         }
     }
@@ -446,6 +434,8 @@ extension NewCreationQueue: BreweryAndBeerCreationProtocol {
 
                 // FIXME Temporary test code
                 self.beerElementsRemainingToProcess.value += 1
+
+                self.subprocessBeerLoop()
             }
         }
     }
