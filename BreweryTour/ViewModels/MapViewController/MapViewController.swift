@@ -148,8 +148,6 @@ class MapViewController : UIViewController {
     internal var breweriesForDisplay: [Brewery] = []
 
     // MARK: - IBOutlet
-    // FIXME: Remove Debugging outlets
-    @IBOutlet weak var beersLeftToProcess: UIBarButtonItem!
     @IBOutlet weak var activityIndicator: UIActivityIndicatorView!
     @IBOutlet weak var currentLocation: UIButton!
     @IBOutlet weak var enableRouting: UISwitch!
@@ -160,9 +158,6 @@ class MapViewController : UIViewController {
     @IBOutlet weak var menuConstraint: NSLayoutConstraint!
     @IBOutlet weak var numberOfPoints: UILabel!
     @IBOutlet weak var slider: UISlider!
-
-    // FIXME Remove debugging outlet
-    @IBOutlet weak var breweriesLeftToProcess: UIBarButtonItem!
 
 
     // Tutorial outlets
@@ -370,21 +365,6 @@ class MapViewController : UIViewController {
 
 
     // MARK: - Functions
-    // FIXME: Remove debugging function
-    private func bindToRunningQueue() {
-        creationQueue?.breweryElementsRemainingToProcess.observeNext {
-            [unowned self] breweriesLeft in
-            DispatchQueue.main.async {
-                self.breweriesLeftToProcess.title = "Breweries:\(breweriesLeft)"
-            }
-        }
-        creationQueue?.beerElementsRemainingToProcess.observeNext {
-            [unowned self] beersLeft in
-            DispatchQueue.main.async {
-                self.beersLeftToProcess.title = "Beers:\(beersLeft)"
-            }
-        }
-    }
 
     func centerMapOnLocation(location: CLLocation?, radiusInMeters regionRadius: CLLocationDistance?, centerUS: Bool) {
 
@@ -724,9 +704,6 @@ class MapViewController : UIViewController {
     // Ask user for access to their location
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // FIXME: Remove debugging code
-        bindToRunningQueue()
 
         // Hide current location butoton
         currentLocation.isHidden = true
@@ -1261,10 +1238,6 @@ extension MapViewController {
 
         return set.flatMap({$0.annotation})
     }
-}
-
-// FIXME: Remove debugging code that show info on screen.
-extension MapViewController: AcceptsCreationQueue {
 }
 
 
