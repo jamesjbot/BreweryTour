@@ -180,59 +180,87 @@ NSFetchedResultsControllerDelegate {
         switch tutorialState {
 
         case .SegementedControlHelpScreen:
-            pointer.isHidden = false
-            pointer.setNeedsDisplay()
-            tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downloaded."
-            let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding , y: segmentedControl.frame.midY)
-            pointer.center = segmentPoint
-            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
-                                    delay: TimeInterval(pointerDelay),
-                                    options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.x += self.segmentedControl.frame.width - self.segmentedControlPaddding},
-                                    completion: nil)
+
+            DispatchQueue.main.async {
+                self.tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downloaded."
+                let segmentPoint  = CGPoint(x: self.segmentedControl.frame.origin.x + self.segmentedControlPaddding , y: self.segmentedControl.frame.midY)
+                self.pointer.center = segmentPoint
+                log.info("Position of pointer prior to setNeedsDisplay \(self.pointer.center)")
+                self.pointer.setNeedsDisplay()
+                log.info("Position of pointer after to setNeedsDisplay \(self.pointer.center)")
+                self.pointer.isHidden = false
+                UIView.animateKeyframes(withDuration: TimeInterval(self.pointerDuration),
+                                        delay: TimeInterval(self.pointerDelay),
+                                        options: [ .autoreverse, .repeat ],
+                                        animations: { self.pointer.center.x += self.segmentedControl.frame.width - self.segmentedControlPaddding},
+                                        completion: nil)
+            }
             break
+
         case .TableHelpScreen:
-            tutorialText.text = "Select a style or a brewery from list, then go to the map to see its location"
-            let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
-            pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
-                                    delay: TimeInterval(pointerDelay),
+
+            DispatchQueue.main.async {
+                self.tutorialText.text = "Select a style or a brewery from list, then go to the map to see its location"
+            let tablePoint = CGPoint(x: self.genericTable.frame.origin.x + self.paddingForPoint ,
+                                     y: self.genericTable.frame.origin.y)
+                self.pointer.center = tablePoint
+            UIView.animateKeyframes(withDuration: TimeInterval(self.pointerDuration),
+                                    delay: TimeInterval(self.pointerDelay),
                                     options: [ .autoreverse, .repeat ],
                                     animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                     completion: nil)
+            }
             break
+
         case .BreweriesWithStyleTableHelpScreen:
-            tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore."
-            let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
-            pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
-                                    delay: TimeInterval(pointerDelay),
-                                    options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
-                                    completion: nil)
+
+            DispatchQueue.main.async {
+                self.tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore."
+                let tablePoint = CGPoint(x: self.genericTable.frame.origin.x + self.paddingForPoint ,
+                                         y: self.genericTable.frame.origin.y)
+                self.pointer.center = tablePoint
+                UIView.animateKeyframes(withDuration: TimeInterval(self.pointerDuration),
+                                        delay: TimeInterval(self.pointerDelay),
+                                        options: [ .autoreverse, .repeat ],
+                                        animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
+                                        completion: nil)
+            }
+            break
 
         case .AllBreweriesHelpScreen:
-            tutorialText.text = "When 'All Breweries' is selected, you can search for a specific brewery from the internet by entering their name in the search bar"
-            pointer.isHidden = false
-            pointer.setNeedsDisplay()
-            let tablePoint = CGPoint(x: newSearchBar.frame.origin.x + paddingForPoint , y: newSearchBar.frame.midY)
-            pointer.center = tablePoint
-            UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
-                                    delay: TimeInterval(pointerDelay),
-                                    options: [ .autoreverse, .repeat ],
-                                    animations: { self.pointer.center.x += self.newSearchBar.frame.maxX - ( self.paddingForPoint ) },
-                                    completion: nil)
+
+            DispatchQueue.main.async {
+                self.tutorialText.text = "When 'All Breweries' is selected, you can search for a specific brewery from the internet by entering their name in the search bar"
+                self.pointer.isHidden = false
+                self.pointer.setNeedsDisplay()
+                let tablePoint = CGPoint(x: self.newSearchBar.frame.origin.x + self.paddingForPoint ,
+                                         y: self.newSearchBar.frame.midY)
+                self.pointer.center = tablePoint
+                UIView.animateKeyframes(withDuration: TimeInterval(self.pointerDuration),
+                                        delay: TimeInterval(self.pointerDelay),
+                                        options: [ .autoreverse, .repeat ],
+                                        animations: { self.pointer.center.x += self.newSearchBar.frame.maxX - ( self.paddingForPoint ) },
+                                        completion: nil)
+            }
+            break
 
         case .MapHelpScreen:
-            tutorialText.text = "Click on 'Map' tab to proceed to the map, to view your last selection."
-            pointer.isHidden = true
-            pointer.setNeedsDisplay()
+
+            DispatchQueue.main.async {
+                self.tutorialText.text = "Click on 'Map' tab to proceed to the map, to view your last selection."
+                self.pointer.isHidden = true
+                self.pointer.setNeedsDisplay()
+            }
 
 
         case .RefreshDBHelpScreen:
-            tutorialText.text = "If you would like to delete all beers, breweries, and styles information click the settings (gear) button. To go to the settings screen"
-            pointer.isHidden = true
-            pointer.setNeedsDisplay()
+
+            DispatchQueue.main.async {
+                self.tutorialText.text = "If you would like to delete all beers, breweries, and styles information click the settings (gear) button. To go to the settings screen"
+                self.pointer.isHidden = true
+                self.pointer.setNeedsDisplay()
+            }
+            break
         }
     }
 
