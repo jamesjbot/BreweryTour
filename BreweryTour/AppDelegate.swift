@@ -23,7 +23,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
 
-    var bbCreationQueue: BreweryAndBeerCreationProtocol?
+    var beerAndBreweryCreationQueue: BreweryAndBeerCreationProtocol?
 
     var breweryDesigner: BreweryDesigner?
     var beerDesigner: BeerDesigner?
@@ -34,17 +34,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        beerAndBreweryCreationQueue = NewCreationQueue.sharedInstance()
 
-        bbCreationQueue = NewCreationQueue.sharedInstance()
-
-        if let bbCreationQueue = bbCreationQueue {
+        if let bbCreationQueue = beerAndBreweryCreationQueue {
             beerDesigner = BeerDesigner(with: bbCreationQueue)
             breweryDesigner = BreweryDesigner(with: bbCreationQueue)
             parserFactory = ParserFactory(withQueue: bbCreationQueue)
             guard breweryDesigner != nil else {
                 fatalError("Brewery Designer not created")
             }
-
             parserFactory?.set(breweryDesigner: breweryDesigner!)
             parserFactory?.set(beerDesigner: beerDesigner!)
 
@@ -52,6 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             //BreweryDBClient = BreweryDBClient(withParser: parserFactory)
         }
         checkIfFirstLaunched()
+
         // Dependency inject our creation queue
 //        Mediator.sharedInstance().creationQueue = bbCreationQueue
 //        if let tabbar = window?.rootViewController as? UITabBarController {
@@ -140,10 +139,10 @@ extension AppDelegate {
         print("createNewSwiftyBeaverLogfile() called")
         let file = FileDestination()
         file.format = "$DEEEE MMMM dd yyyy HH:mm:sss$d $L: $M: "
+        let console = ConsoleDestination()
+        log.addDestination(console)
         log.addDestination(file)
-        SwiftyBeaver.info("Starting New Run.....")
-        log.info("HI")
-
+        log.info("Starting New Run.....")
         //platform.minLevel = .warning
     }
 
@@ -152,7 +151,7 @@ extension AppDelegate {
         #if arch(i386) || arch(x86_64)
             if let documentsPath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.path {
                 print("Documents Directory: \(documentsPath)")
-                SwiftyBeaver.info("Documents Directory: \(documentsPath)")
+                log.info("Documents Directory: \(documentsPath)")
             }
         #endif
     }
