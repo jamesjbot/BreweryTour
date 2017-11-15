@@ -84,12 +84,12 @@ NSFetchedResultsControllerDelegate {
 
     // For cycling thru the states of the tutorial for the viewcontroller
     private enum CategoryTutorialStage {
-        case SegementedControl
-        case Table
-        case BreweriesWithStyleTable
-        case AllBreweries
-        case Map
-        case RefreshDB
+        case SegementedControlHelpScreen
+        case TableHelpScreen
+        case BreweriesWithStyleTableHelpScreen
+        case AllBreweriesHelpScreen
+        case MapHelpScreen
+        case RefreshDBHelpScreen
     }
 
 
@@ -104,6 +104,7 @@ NSFetchedResultsControllerDelegate {
     // This is the active view model
     internal var activeTableList : TableList!
 
+
     // Variable telling us if we should automatically go to map on completed request
     internal var automaticallySegueToMap: Bool {
         get {
@@ -111,7 +112,9 @@ NSFetchedResultsControllerDelegate {
         }
     }
 
+
     internal var styleSelectionIndex: IndexPath?
+
 
     private var tutorialModeOn : Bool = false {
         didSet {
@@ -119,9 +122,11 @@ NSFetchedResultsControllerDelegate {
         }
     }
 
-    // Initialize the tutorial views initial screen
-    private var tutorialState: CategoryTutorialStage = .RefreshDB
 
+    // Initialize the tutorial views initial screen
+    private var tutorialState: CategoryTutorialStage = .RefreshDBHelpScreen
+
+    
     // MARK: - IBOutlets
 
     // Tutorial outlets
@@ -157,24 +162,24 @@ NSFetchedResultsControllerDelegate {
     @IBAction func nextTutorialScreen(_ sender: AnyObject) {
         // Advance the tutorial state
         switch tutorialState {
-        case .SegementedControl:
-            tutorialState = .Table
-        case .Table:
-            tutorialState = .BreweriesWithStyleTable
-        case .BreweriesWithStyleTable:
-            tutorialState = .AllBreweries
-        case .AllBreweries:
-            tutorialState = .Map
-        case .Map:
-            tutorialState = .RefreshDB
-        case .RefreshDB:
-            tutorialState = .SegementedControl
+        case .SegementedControlHelpScreen:
+            tutorialState = .TableHelpScreen
+        case .TableHelpScreen:
+            tutorialState = .BreweriesWithStyleTableHelpScreen
+        case .BreweriesWithStyleTableHelpScreen:
+            tutorialState = .AllBreweriesHelpScreen
+        case .AllBreweriesHelpScreen:
+            tutorialState = .MapHelpScreen
+        case .MapHelpScreen:
+            tutorialState = .RefreshDBHelpScreen
+        case .RefreshDBHelpScreen:
+            tutorialState = .SegementedControlHelpScreen
         }
 
         // Show tutorial content
         switch tutorialState {
 
-        case .SegementedControl:
+        case .SegementedControlHelpScreen:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
             tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downloaded."
@@ -186,7 +191,7 @@ NSFetchedResultsControllerDelegate {
                                     animations: { self.pointer.center.x += self.segmentedControl.frame.width - self.segmentedControlPaddding},
                                     completion: nil)
             break
-        case .Table:
+        case .TableHelpScreen:
             tutorialText.text = "Select a style or a brewery from list, then go to the map to see its location"
             let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
             pointer.center = tablePoint
@@ -196,7 +201,7 @@ NSFetchedResultsControllerDelegate {
                                     animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                     completion: nil)
             break
-        case .BreweriesWithStyleTable:
+        case .BreweriesWithStyleTableHelpScreen:
             tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore."
             let tablePoint = CGPoint(x: genericTable.frame.origin.x + paddingForPoint , y: genericTable.frame.origin.y)
             pointer.center = tablePoint
@@ -206,7 +211,7 @@ NSFetchedResultsControllerDelegate {
                                     animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                     completion: nil)
 
-        case .AllBreweries:
+        case .AllBreweriesHelpScreen:
             tutorialText.text = "When 'All Breweries' is selected, you can search for a specific brewery from the internet by entering their name in the search bar"
             pointer.isHidden = false
             pointer.setNeedsDisplay()
@@ -218,13 +223,13 @@ NSFetchedResultsControllerDelegate {
                                     animations: { self.pointer.center.x += self.newSearchBar.frame.maxX - ( self.paddingForPoint ) },
                                     completion: nil)
 
-        case .Map:
+        case .MapHelpScreen:
             tutorialText.text = "Click on 'Map' tab to proceed to the map, to view your last selection."
             pointer.isHidden = true
             pointer.setNeedsDisplay()
 
 
-        case .RefreshDB:
+        case .RefreshDBHelpScreen:
             tutorialText.text = "If you would like to delete all beers, breweries, and styles information click the settings (gear) button. To go to the settings screen"
             pointer.isHidden = true
             pointer.setNeedsDisplay()
@@ -286,7 +291,7 @@ NSFetchedResultsControllerDelegate {
         // This is here because I want it to always shows the initial screen
         // on a clean start. If user goes to another view and comes back they can
         // resume their tutorial state
-        tutorialState = .RefreshDB
+        tutorialState = .RefreshDBHelpScreen
         nextTutorialScreen(self)//Dummy to load data into the tutorial
     }
 
