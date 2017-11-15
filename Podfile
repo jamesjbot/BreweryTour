@@ -1,9 +1,10 @@
 # Uncomment the next line to define a global platform for your project
 #source 'https://github.com/CocoaPods/Specs.git'
-use_frameworks!
+
 platform :ios, '11.1'
 target 'BreweryTour' do
   # Comment the next line if you're not using Swift and don't want to use dynamic frameworks
+    use_frameworks!
     pod 'Bond' #, '6.3'
     pod 'SwiftyBeaver'
     pod 'Alamofire'
