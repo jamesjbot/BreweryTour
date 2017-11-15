@@ -29,8 +29,6 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
 
         // Capture the selected ViewController that is currently showing in the 
         // tab so it can operate with the tutorial protocol.
-        let dismissable = selectedViewController as! DismissableTutorial
-        setMenuAndHelpButton(tutorial: dismissable)
     }
 
 
@@ -48,7 +46,9 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
     private func setMenuAndHelpButton(tutorial dismissable: DismissableTutorial ) {
         DispatchQueue.main.async {
             self.navigationItem.setRightBarButtonItems([], animated: true)
-            let helpButton = UIBarButtonItem(title: "Help", style: .plain, target: dismissable, action: #selector(DismissableTutorial.enableTutorial))
+            let helpButton = UIBarButtonItem(title: "Help",
+                                             style: .plain, target: dismissable,
+                                             action: #selector(DismissableTutorial.enableTutorial))
             let menuButton = UIBarButtonItem(barButtonSystemItem: .add, target: self.selectedViewController, action: #selector(MapViewController.exposeMenu))
             self.navigationItem.setRightBarButtonItems([helpButton,menuButton], animated: true)
         }
@@ -56,14 +56,6 @@ class MyTabBarController: UITabBarController, UITabBarControllerDelegate {
 
     // Is called when a tabbarController is selected
     internal func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        let dismissable = viewController as! DismissableTutorial
-        if dismissable is MapViewController {
-            setMenuAndHelpButton(tutorial: dismissable)
-            //menuButton?.isEnabled = true
-        } else {
-            setHelpButton(tutorial: dismissable)
-            //menuButton?.isEnabled = false
-        }
     }
 
 }

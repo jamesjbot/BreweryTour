@@ -9,8 +9,6 @@
 import Foundation
 import UIKit
 
-class DismissableHelpNavigationController: UINavigationController, DismissableTutorial {
-    func enableTutorial() {
-        // TODO: Enable tutorial
-    }
+class DismissableHelpNavigationController: UINavigationController
+{
 }
