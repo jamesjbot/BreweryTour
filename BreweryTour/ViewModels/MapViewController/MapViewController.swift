@@ -459,7 +459,7 @@ class MapViewController : UIViewController {
 
 
     // This picks which location to center breweries around.
-    internal func decideOnTargetLocation() {
+    private func decideOnTargetLocation() {
         // Zoom to users location first if we have it.
         // When we first join the mapview and the userlocation has not been set.
         // It will default to 0,0, so we center the location in the US
