@@ -159,7 +159,7 @@ extension CoreDataStack: SavableCoreDataStack {
             objectContext.performAndWait {
                 guard objectContext.hasChanges else {
                     completionHandler?(false)
-                    SwiftyBeaver.warning("This context says it have no changes to update:\(objectContext.description)")
+                    log.warning("This context says it have no changes to update:\(objectContext.description)")
                     return
                 }
                 self.saveAndHandleErrors(inContext: objectContext,
