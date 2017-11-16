@@ -120,6 +120,7 @@ class MapViewController : UIViewController {
     // Pointer animation duration
     private let pointerDelay: CGFloat = 0.0
     private let pointerDuration: CGFloat = 1.0
+    private let textDelay: CGFloat = 0.5
 
     // Location manager allows us access to the user's location
     private let locationManager = CLLocationManager()
@@ -210,12 +211,20 @@ class MapViewController : UIViewController {
         switch tutorialState {
         case .InitialScreen:
             hidePointerAndRemoveAnimation()
-            tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles.\nPlease step thru this tutorial with the next button.\nDismiss it when you are done.\nAny time you want to bring the tutorial back press Help"
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Welcome to Brewery Tour.\nThis app was designed to help you plan a trip to breweries that serve your favorite beer styles.\nPlease step thru this tutorial with the next button.\nDismiss it when you are done.\nAny time you want to bring the tutorial back press Help"},
+                              completion: nil)
 
         case .Longpress:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Lets start by long pressing on any location to set a new center for breweries to gather around\n"
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Lets start by long pressing on any location to set a new center for breweries to gather around\n"},
+                              completion: nil)
             // Adds a circular path to tutorial pointer
             addCircularPathToPointer()
             break
@@ -223,19 +232,31 @@ class MapViewController : UIViewController {
         case .Map:
             pointer.isHidden = false
             pointer.setNeedsDisplay()
-            tutorialText.text = "Select any brewery marker to see it's route.\nClick the heart to favorite a brewery.\nClick on information to bring up the brewery's website."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Select any brewery marker to see it's route.\nClick the heart to favorite a brewery.\nClick on information to bring up the brewery's website."},
+                              completion: nil)
             // Adds a circular path to tutorial pointer
             addCircularPathToPointer()
 
         case .JustAroundMe:
             hidePointerAndRemoveAnimation()
-            tutorialText.text = "Press 'Just around me' button to return to your home location"
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Press 'Just around me' button to return to your home location"},
+                              completion: nil)
 
         case .Slider:
             pointer.isHidden = false
             pointer.layer.removeAllAnimations()
             pointer.setNeedsDisplay()
-            tutorialText.text = "Move the slider to select how many breweries you want displayed"
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Move the slider to select how many breweries you want displayed"},
+                              completion: nil)
             let sliderPoint  = CGPoint(x: slider.frame.origin.x + sliderPaddding , y: slider.frame.midY)
             pointer.center = sliderPoint
             UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
@@ -247,27 +268,47 @@ class MapViewController : UIViewController {
 
         case .Menu:
             hidePointerAndRemoveAnimation()
-            tutorialText.text = "Tap Menu on the navigation bar for map options.\nHere you can allow the pointer to show all breweries nearby your target instead of just one style.\nHere you can also disable the green routing line."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Tap Menu on the navigation bar for map options.\nHere you can allow the pointer to show all breweries nearby your target instead of just one style.\nHere you can also disable the green routing line."},
+                              completion: nil)
             break
 
         case .SearchStyles:
             hidePointerAndRemoveAnimation()
-            tutorialText.text = "At the bottom the 'Search Style' tab allows you to search for all beers and breweries that produce a specific style."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "At the bottom the 'Search Style' tab allows you to search for all beers and breweries that produce a specific style."},
+                              completion: nil)
             break
 
         case .SearchBeers:
             hidePointerAndRemoveAnimation()
-            tutorialText.text = "At the bottom the 'Search Beers' tab allows you to search for individual beer names, and see the selected group of beers from the search styles tab."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "At the bottom the 'Search Beers' tab allows you to search for individual beer names, and see the selected group of beers from the search styles tab."},
+                              completion: nil)
             break
 
         case .FavoriteBeers:
             hidePointerAndRemoveAnimation()
-            tutorialText.text = "The 'Favorite Beers' tab allows you to see beers you've favorited when you clicked on a beer in the 'Search Beers' tab."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "The 'Favorite Beers' tab allows you to see beers you've favorited when you clicked on a beer in the 'Search Beers' tab."},
+                              completion: nil)
             break
 
         case .FavoriteBreweries:
             hidePointerAndRemoveAnimation()
-            tutorialText.text = "The 'Favorite Breweries' tab allow you to see all the breweries you've favorited on the map. It will also allow you to navigate to them when you tap the brewery name."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "The 'Favorite Breweries' tab allow you to see all the breweries you've favorited on the map. It will also allow you to navigate to them when you tap the brewery name."},
+                              completion: nil)
             break
         }
     }
