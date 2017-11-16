@@ -84,15 +84,22 @@ class BeerDetailViewController: UIViewController, AlertWindowDisplaying {
     // All beers are in the database already, we just mark their
     // favorite status and update tasting notes
     fileprivate func saveBeerInCoreDataToBackgroundContext(makeFavorite: Bool) {
-        container?.performBackgroundTask() {
-            (context) -> Void in
-            let updatableBeer = context.object(with: self.beer.objectID) as? Beer
-            updatableBeer?.favorite = makeFavorite
-            updatableBeer?.tastingNotes = self.tasting.text
-            do {
-                try context.save()
-            } catch {
-                self.displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
+        DispatchQueue.main.async {
+            [unowned self] in
+            let favoriteStatus = makeFavorite
+            let asyncNotes = self.tasting.text
+            DispatchQueue.global().async {
+                self.container?.performBackgroundTask() {
+                    (context) -> Void in
+                    let updatableBeer = context.object(with: self.beer.objectID) as? Beer
+                    updatableBeer?.favorite = favoriteStatus
+                    updatableBeer?.tastingNotes = asyncNotes
+                    do {
+                        try context.save()
+                    } catch {
+                        self.displayAlertWindow(title: "Saving Beer data", msg: "There was an error saving\nRetype notes or click favorite again")
+                    }
+                }
             }
         }
     }
