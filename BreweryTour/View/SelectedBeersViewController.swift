@@ -39,6 +39,7 @@ class SelectedBeersViewController: UIViewController {
 
     // Pointer animation duration
     private let pointerDelay: CGFloat = 0.0
+    private let textDelay: CGFloat = 0.5
     private let pointerDuration: CGFloat = 1.0
 
     fileprivate let allBeersViewModel: AllBeersViewModel = AllBeersViewModel()
@@ -90,7 +91,11 @@ class SelectedBeersViewController: UIViewController {
         switch tutorialState {
         case .SegementedControl:
             // Set the initial point
-            tutorialText.text = "Choose 'Selected Beers' to show beers from style/brewery selection,\nChoose 'All Beers' to show all beers ever viewed on this device."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Choose 'Selected Beers' to show beers from style/brewery selection,\nChoose 'All Beers' to show all beers ever viewed on this device."},
+                              completion: nil)
             let segmentPoint  = CGPoint(x: segmentedControl.frame.origin.x + segmentedControlPaddding,
                                         y: segmentedControl.center.y)
             pointer.center = segmentPoint
@@ -102,7 +107,11 @@ class SelectedBeersViewController: UIViewController {
             break
 
         case .Table:
-            tutorialText.text = "Select a beer to show its details."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Select a beer to show its details."},
+                              completion: nil)
             let tablePoint = CGPoint(x: tableView.frame.origin.x + paddingForPoint ,
                                      y: tableView.frame.origin.y)
             pointer.center = tablePoint
@@ -115,7 +124,11 @@ class SelectedBeersViewController: UIViewController {
 
 
         case .SearchBar:
-            tutorialText.text = "Enter the name of a beer, and we will search online for it."
+            UIView.transition(with: self.tutorialText,
+                              duration: TimeInterval(self.textDelay),
+                              options:  [.transitionFlipFromTop],
+                              animations: {[unowned self] in self.tutorialText.text = "Enter the name of a beer, and we will search online for it."},
+                              completion: nil)
             let tablePoint = CGPoint(x: searchBar.frame.origin.x + paddingForPoint , y: searchBar.frame.midY)
             pointer.center = tablePoint
             UIView.animateKeyframes(withDuration: TimeInterval(pointerDuration),
