@@ -80,6 +80,7 @@ NSFetchedResultsControllerDelegate {
 
     // Pointer animation duration
     private let pointerDelay: CGFloat = 0.0
+    private let textDelay: CGFloat = 0.5
     private let pointerDuration: CGFloat = 1.0
 
     // For cycling thru the states of the tutorial for the viewcontroller
@@ -182,15 +183,17 @@ NSFetchedResultsControllerDelegate {
         case .SegementedControlHelpScreen:
 
             DispatchQueue.main.async {
-                self.tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downloaded."
+                UIView.transition(with: self.tutorialText,
+                                  duration: TimeInterval(self.textDelay),
+                                  options:  [.transitionFlipFromTop],
+                                  animations: {[unowned self] in self.tutorialText.text = "Select 'Style' to show all breweries with that style on the map and in Breweries with Styles.\nSelect 'Breweries with Style' to show breweries that make the selected style.\nSelect 'All Breweries' to see all the breweries currently downloaded."},
+                                  completion: nil)
                 let segmentPoint  = CGPoint(x: self.segmentedControl.frame.origin.x + self.segmentedControlPaddding , y: self.segmentedControl.frame.midY)
                 self.pointer.center = segmentPoint
-                log.info("Position of pointer prior to setNeedsDisplay \(self.pointer.center)")
                 self.pointer.setNeedsDisplay()
-                log.info("Position of pointer after to setNeedsDisplay \(self.pointer.center)")
                 self.pointer.isHidden = false
                 UIView.animateKeyframes(withDuration: TimeInterval(self.pointerDuration),
-                                        delay: TimeInterval(self.pointerDelay),
+                                        delay: TimeInterval(self.textDelay),
                                         options: [ .autoreverse, .repeat ],
                                         animations: { self.pointer.center.x += self.segmentedControl.frame.width - self.segmentedControlPaddding},
                                         completion: nil)
@@ -200,7 +203,11 @@ NSFetchedResultsControllerDelegate {
         case .TableHelpScreen:
 
             DispatchQueue.main.async {
-                self.tutorialText.text = "Select a style or a brewery from list, then go to the map to see its location"
+                UIView.transition(with: self.tutorialText,
+                                  duration: TimeInterval(self.textDelay),
+                                  options:  [.transitionFlipFromTop],
+                                  animations: {[unowned self] in self.tutorialText.text = "Select a style or a brewery from list, then go to the map to see its location"},
+                                  completion: nil)
             let tablePoint = CGPoint(x: self.genericTable.frame.origin.x + self.paddingForPoint ,
                                      y: self.genericTable.frame.origin.y)
                 self.pointer.center = tablePoint
@@ -215,12 +222,16 @@ NSFetchedResultsControllerDelegate {
         case .BreweriesWithStyleTableHelpScreen:
 
             DispatchQueue.main.async {
-                self.tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore."
+                UIView.transition(with: self.tutorialText,
+                                  duration: TimeInterval(self.textDelay),
+                                  options:  [.transitionFlipFromTop],
+                                  animations: {[unowned self] in self.tutorialText.text = "When in the two breweries screen, you may notice not many breweries show up. There are many breweries available, we will load more breweries as you select more styles. Go back and choose a style of beer you would like to explore."},
+                                  completion: nil)
                 let tablePoint = CGPoint(x: self.genericTable.frame.origin.x + self.paddingForPoint ,
                                          y: self.genericTable.frame.origin.y)
                 self.pointer.center = tablePoint
                 UIView.animateKeyframes(withDuration: TimeInterval(self.pointerDuration),
-                                        delay: TimeInterval(self.pointerDelay),
+                                        delay: TimeInterval(self.textDelay),
                                         options: [ .autoreverse, .repeat ],
                                         animations: { self.pointer.center.y += self.genericTable.frame.height - self.paddingForPoint },
                                         completion: nil)
@@ -230,7 +241,11 @@ NSFetchedResultsControllerDelegate {
         case .AllBreweriesHelpScreen:
 
             DispatchQueue.main.async {
-                self.tutorialText.text = "When 'All Breweries' is selected, you can search for a specific brewery from the internet by entering their name in the search bar"
+                UIView.transition(with: self.tutorialText,
+                                  duration: TimeInterval(self.textDelay),
+                                  options:  [.transitionFlipFromTop],
+                                  animations: {[unowned self] in self.tutorialText.text = "When 'All Breweries' is selected, you can search for a specific brewery from the internet by entering their name in the search bar"},
+                                  completion: nil)
                 self.pointer.isHidden = false
                 self.pointer.setNeedsDisplay()
                 let tablePoint = CGPoint(x: self.newSearchBar.frame.origin.x + self.paddingForPoint ,
@@ -247,7 +262,11 @@ NSFetchedResultsControllerDelegate {
         case .MapHelpScreen:
 
             DispatchQueue.main.async {
-                self.tutorialText.text = "Click on 'Map' tab to proceed to the map, to view your last selection."
+                UIView.transition(with: self.tutorialText,
+                                  duration: TimeInterval(self.textDelay),
+                                  options:  [.transitionFlipFromTop],
+                                  animations: {[unowned self] in self.tutorialText.text = "Click on 'Map' tab to proceed to the map, to view your last selection."},
+                                  completion: nil)
                 self.pointer.isHidden = true
                 self.pointer.setNeedsDisplay()
             }
@@ -256,7 +275,11 @@ NSFetchedResultsControllerDelegate {
         case .RefreshDBHelpScreen:
 
             DispatchQueue.main.async {
-                self.tutorialText.text = "If you would like to delete all beers, breweries, and styles information click the settings (gear) button. To go to the settings screen"
+                UIView.transition(with: self.tutorialText,
+                                  duration: TimeInterval(self.textDelay),
+                                  options:  [.transitionFlipFromTop],
+                                  animations: {[unowned self] in self.tutorialText.text = "If you would like to delete all beers, breweries, and styles information click the settings (gear) button. To go to the settings screen"},
+                                  completion: nil)
                 self.pointer.isHidden = true
                 self.pointer.setNeedsDisplay()
             }
