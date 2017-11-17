@@ -135,7 +135,15 @@ class MapViewController : UIViewController {
 
     internal var creationQueue: BreweryAndBeerCreationProtocol?
 
-    fileprivate var activeMappingStrategy: MapAnnotationProvider? = nil
+    fileprivate var activeMappingStrategy: MapAnnotationProvider? = nil {
+        didSet {
+            let _ = activeMappingStrategy?.annotations.observeNext(){
+                [unowned self] observableArray in
+                    self.updateMap(withAnnotations: observableArray.dataSource.array)
+                }
+        }
+    }
+
     internal var floatingAnnotation: MKAnnotation!
     fileprivate var lastSelectedManagedObject : NSManagedObject?
     internal var routedAnnotation: MKAnnotationView?
@@ -389,6 +397,7 @@ class MapViewController : UIViewController {
             displayNewStrategyWithNewPoint()
     }
 
+
     @IBAction func sliderAction(_ sender: UISlider, forEvent event: UIEvent) {
         let intValue: Int = Int(sender.value)
         numberOfPoints.text = String(intValue)
@@ -464,6 +473,7 @@ class MapViewController : UIViewController {
             return
         }
 
+        // When changing mapping strategies we want to stop current search.
         let _ = activeMappingStrategy?.endSearch()
 
         guard !showLocalBreweries.isOn else {
@@ -473,7 +483,6 @@ class MapViewController : UIViewController {
                                                             inputContext: readOnlyContext! )
             return
         }
-
 
         if mapViewData is Style {
 
@@ -488,7 +497,6 @@ class MapViewController : UIViewController {
             // is running.
             // When the StyleMapStrategy sees that it is not the current strategy
             // it will end itself.
-            Mediator.sharedInstance().onlyValidStyleStrategy = (activeMappingStrategy as! StyleMapStrategy).runningID
 
         } else if mapViewData is Brewery {
 
@@ -550,10 +558,10 @@ class MapViewController : UIViewController {
                                             actions: [])
                     return
                 }
-                let placemark: CLPlacemark = (placemarksarray?.first)! as CLPlacemark
-                let state = ConvertToFullStateName().fullname(fromAbbreviation: placemark.administrativeArea!)
+                let abbreviation = (placemarksarray?.first?.administrativeArea ?? "")
+                let state = ConvertToFullStateName().fullname(fromAbbreviation: abbreviation)
                 Mediator.sharedInstance().select(thisItem: nil, state: state) {
-                    (success,msg) -> Void in
+                        (success,msg) -> Void in
                 }
             }// end of geocoder completion handler
         }
@@ -597,7 +605,6 @@ class MapViewController : UIViewController {
             self.view.layoutIfNeeded()
         }
     }
-
 
 
     private func maxOf(viewsIn views: [UIView]) -> UIView {
