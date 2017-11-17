@@ -30,9 +30,8 @@ extension CategoryViewController: BusyObserver {
             self.activityIndicator.stopAnimating()
         }
     }
-
-
 }
+
 
 // MARK: - DismissableTutorial
 
@@ -41,6 +40,7 @@ extension CategoryViewController : DismissableTutorial {
         tutorialView.isHidden = false
     }
 }
+
 
 // MARK: - UISearchBarDelegate
 
@@ -79,7 +79,6 @@ extension CategoryViewController: UISearchBarDelegate, AlertWindowDisplaying {
         newSearchBar.resignFirstResponder()
         genericTable.reloadData()
     }
-
 
 
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -258,30 +257,31 @@ extension CategoryViewController: Observer {
     // Receive notifcation when the TableList backing the current view has changed
     func sendNotify(from: AnyObject, withMsg msg: String) {
         // Only receive messages form the active tablelist
-
-        guard (isViewLoaded && (view.window != nil) ),
-            (from === (activeTableList as AnyObject) ) else {
-                // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
-                return
-        }
-
-        // This will update the contents of the table if needed
-        switch msg {
-
-        case Message.Reload:
-            // Only the active table should respond to a tablelist reload command
-            if (activeTableList as AnyObject) === from {
-                genericTable.reloadData()
-                searchBar(newSearchBar, textDidChange: newSearchBar.text!)
+        DispatchQueue.main.async {
+            guard (self.isViewLoaded && (self.view.window != nil) ),
+                (from === (self.activeTableList as AnyObject) ) else {
+                    // Do not process messages when CategoryViewController is not visisble unless you are the stylesTableList.
+                    return
             }
-            break
-            
-        case Message.Retry:
-            displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
-            break
-            
-        default:
-            fatalError("uncaught message \(msg)")
+
+            // This will update the contents of the table if needed
+            switch msg {
+
+            case Message.Reload:
+                // Only the active table should respond to a tablelist reload command
+                if (self.activeTableList as AnyObject) === from {
+                    self.genericTable.reloadData()
+                    self.searchBar(self.newSearchBar, textDidChange: self.newSearchBar.text!)
+                }
+                break
+
+            case Message.Retry:
+                self.displayAlertWindow(title: "Error", msg: "Sorry there was an error please try again")
+                break
+
+            default:
+                fatalError("uncaught message \(msg)")
+            }
         }
     }
 }
