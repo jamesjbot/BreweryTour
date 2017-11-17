@@ -153,7 +153,7 @@ class BreweryDBClient {
         case .BeersByBreweryID:
             // GET: /brewery/:breweryId/beers
             guard let specificID = querySpecificID else {
-                NSLog("Error examining queryspecificid")
+                log.error("Error examining queryspecificid")
                 return NSURL()
             }
             components.path = Constants.BreweryDB.APIPath + Constants.BreweryDB.Methods.Brewery + "/" +
@@ -186,9 +186,7 @@ class BreweryDBClient {
                        group: DispatchGroup? = nil){
 
         // Process every query type accordingly
-        // FIXME:
-        print("Parsing Output type \(outputType)")
-        // FIXME?
+        log.info("Parsing Output type \(outputType)")
         if let parserFactory = parserFactory {
             let parser: ParserProtocol = parserFactory.createParser(type: outputType)!
             parser.parse(response: response, querySpecificID: querySpecificID, completion: completion)
@@ -211,6 +209,8 @@ class BreweryDBClient {
 
     // Query for all breweries
     internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+
+        log.debug("\(#function) called")
         let theOutputType = APIQueryResponseProcessingTypes.Breweries
         var methodParameters  = [
             Constants.BreweryParameterKeys.WithLocations : "Y" as AnyObject,
@@ -291,6 +291,8 @@ class BreweryDBClient {
     // Query for breweries that offer a certain style.
     internal func downloadBeersAndBreweriesBy(styleID : String,
                                               completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+
+        log.debug("\(#function) called")
         var methodParameters  = [
             Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
             Constants.BreweryParameterKeys.StyleID : styleID as AnyObject,
@@ -361,6 +363,7 @@ class BreweryDBClient {
     // GET: /brewery/:breweryId/beers
     internal func downloadBeersBy(brewery: Brewery,
                                   completionHandler: @escaping ( _ success: Bool, _ msg: String? ) -> Void ) {
+        log.debug("\(#function) called")
         let consistentOutput = APIQueryResponseProcessingTypes.BeersByBreweryID
         let methodParameter : [String:AnyObject] =
             [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject,
@@ -399,6 +402,8 @@ class BreweryDBClient {
     // Query for beers with a specific name
     internal func downloadBeersBy(name: String,
                                   completion: @escaping (_ success : Bool , _ msg : String? ) -> Void ) {
+
+        log.debug("\(#function) called")
         let theOutputType = APIQueryResponseProcessingTypes.BeersFollowedByBreweries
         var methodParameters  = [
             "name" : "*\(name)*" as AnyObject,
@@ -464,6 +469,8 @@ class BreweryDBClient {
     
     // Downloads Beer Styles
     internal func downloadBeerStyles(completionHandler: @escaping (_ success: Bool,_ msg: String?) -> Void ) {
+
+        log.debug("\(#function) called")
         let methodParameter : [String:AnyObject] = [Constants.BreweryParameterKeys.Format : Constants.BreweryParameterValues.FormatJSON as AnyObject]
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryResponseProcessingTypes.Styles,
                                                         querySpecificID: nil,
@@ -491,6 +498,8 @@ class BreweryDBClient {
     // Query for all breweries at location
     internal func downloadBreweries(byState: String,
                                     completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
+
+        log.debug("\(#function) called")
         let theOutputType = APIQueryResponseProcessingTypes.LocationFollowedByBrewery
         var methodParameters  = [
             Constants.BreweryParameterKeys.Region : byState as AnyObject,
@@ -560,6 +569,7 @@ class BreweryDBClient {
     // Query for breweries with a specific name
     internal func downloadBreweryBy(name: String, completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
 
+        log.debug("\(#function) called")
         let theOutputType = APIQueryResponseProcessingTypes.Breweries
         var methodParameters  = [
             "name" : "*\(name)*" as AnyObject,
@@ -631,6 +641,8 @@ class BreweryDBClient {
     internal func downloadImageToCoreData( forType: ImageDownloadType,
                                            aturl: NSURL,
                                            forID: String) {
+
+        log.debug("\(#function) called")
         guard aturl.absoluteString != "" else { // Must be a url
             return
         }
