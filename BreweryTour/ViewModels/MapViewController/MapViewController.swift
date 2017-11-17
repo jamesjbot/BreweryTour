@@ -86,7 +86,7 @@ fileprivate class AnnotationAdapter: NSObject {
 
 
 protocol MapAnnotationReceiver {
-    func updateMap(withAnnotations annotations: [MKAnnotation])
+    func updateMap(withAnnotations annotations: [MKAnnotation], limitedBy: Int)
 }
 
 
@@ -139,8 +139,11 @@ class MapViewController : UIViewController {
         didSet {
             let _ = activeMappingStrategy?.annotations.observeNext(){
                 [unowned self] observableArray in
-                    self.updateMap(withAnnotations: observableArray.dataSource.array)
+                DispatchQueue.main.async {
+                    self.updateMap(withAnnotations: observableArray.dataSource.array,
+                                   limitedBy: Int(self.slider.value) )
                 }
+            }
         }
     }
 
@@ -828,7 +831,8 @@ class MapViewController : UIViewController {
 
 extension MapViewController: MapAnnotationReceiver {
     // Draw the annotations on the map
-    internal func updateMap(withAnnotations annotations: [MKAnnotation]) {
+    internal func updateMap(withAnnotations annotations: [MKAnnotation], limitedBy: Int) {
+
         var finalAnnotations:[MKAnnotation]?
 
         // Remove excess annotations
@@ -838,10 +842,11 @@ extension MapViewController: MapAnnotationReceiver {
             finalAnnotations = annotations
         }
 
-        guard finalAnnotations != nil,   // if there are no annotations exit.
-            // If the annotations displayed are the same do nothing
-            self.arraysAreDifferent(arrayWithFloatingAnnotation: self.mapView.annotations, finalAnnotations!) else {
-                // Do nothing annotations are the same
+        // check to see if annotations exist or are the same
+        guard finalAnnotations != nil,
+            self.arraysAreDifferent(arrayWithFloatingAnnotation: self.mapView.annotations,
+                                    finalAnnotations!) else {
+                // Do nothing annotations are the same or don't exist
                 return
         }
         let (removeSet, addSet) = updateMapRemoveDuplicatesAndPrepareFinalDrawingArray(finalAnnotations: finalAnnotations!)
