@@ -13,24 +13,32 @@
 import Foundation
 import MapKit
 import SwiftyBeaver
+import Bond
 
-final class SingleBreweryMapStrategy: MappableStrategy {
+final class SingleBreweryMapStrategy: NSObject, MappableStrategy {
+
+    var annotations: MutableObservableArray<MKAnnotation>
 
     var parentMapViewController: MapAnnotationReceiver? = nil
     var targetLocation: CLLocation? = nil
     private var onlyBrewery: Brewery?
+
+    override init() {
+        annotations = MutableObservableArray<MKAnnotation>()
+        super.init()
+    }
 
     convenience init(b singleBrewery: Brewery,
                      view: MapAnnotationReceiver,
                      location: CLLocation) {
 
         self.init(view: view)
-        //SwiftyBeaver.info("SingelBreweryMapStrategy created")
+        log.info("SingleBreweryMapStrategy created")
         
         onlyBrewery = singleBrewery
         targetLocation = location
         parentMapViewController = view
-        send(annotations: convertBreweryToAnnotation(breweries: [singleBrewery]), to: parentMapViewController!)
+        annotations.replace(with: convertBreweryToAnnotation(breweries: [singleBrewery]))
     }
 
 
@@ -44,7 +52,7 @@ final class SingleBreweryMapStrategy: MappableStrategy {
     func getBreweries() -> [Brewery] {
 
         guard let onlyBrewery = onlyBrewery else {
-            //SwiftyBeaver.error("How was a SingleBreweryMapStrategy populated without a brewery? \(String(describing: self.onlyBrewery))")
+
             return []
         }
         return [onlyBrewery]

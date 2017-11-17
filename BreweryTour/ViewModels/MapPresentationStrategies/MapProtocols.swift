@@ -13,21 +13,19 @@
 import Foundation
 import MapKit
 import SwiftyBeaver
-
+import Bond
 
 protocol MapAnnotationProvider {
+
+    var annotations: MutableObservableArray<MKAnnotation> { get set }
 
     /// Converts breweries to annotations
     func convertBreweryToAnnotation(breweries: [Brewery]) -> [MKAnnotation]
 
-    /// Gets current breweries from the strategy
-    func getBreweries() -> [Brewery]
-
     /// This function is called by the MapAnnotationReceiver to end the current search
     func endSearch() -> (()->())?
 
-    /// Sends annotation to MapAnnotation
-    func send(annotations: [MKAnnotation], to map: MapAnnotationReceiver)
+    func getBreweries() -> [Brewery]
 }
 
 
@@ -78,13 +76,6 @@ extension MappableStrategy {
         return annotations
     }
 
-
-    /// Sends annotation to MapAnnotation
-    func send(annotations: [MKAnnotation], to map: MapAnnotationReceiver) {
-
-        map.updateMap(withAnnotations: annotations)
-    }
-
     
     // Sort the breweries by distance to targetLocation
     // FIXME: This should be called asynchrnously because on very large loads this takes way to long and sometimes blocks the UI
@@ -99,7 +90,7 @@ extension MappableStrategy {
                 log.error("MapStrategy detected breweries without location data.")
                 return nil
             }
-            //log.info("MapStrategy.sortLocations() Sorting breweries by positons")
+        log.info("MapStrategy.sortLocations() Sorting breweries by positons")
             breweryLocations = breweryLocations.sorted(by:
                 { (brewery1, brewery2) -> Bool in
                     let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
