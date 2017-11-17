@@ -35,7 +35,9 @@ protocol MappableStrategy: MapAnnotationProvider {
     var parentMapViewController: MapAnnotationReceiver? { set get }
     var targetLocation: CLLocation { set get }
 
-    func sortAsynchronously(_ locations: [Brewery], inRelationTo: CLLocation, completion: @escaping ([Brewery])->() )
+    func sortAsynchronously(_ locations: [Brewery],
+                            inRelationTo: CLLocation,
+                            completion: @escaping ([Brewery])->() )
 
     init()
 
