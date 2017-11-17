@@ -126,7 +126,7 @@ extension FetchableStrategy {
     // MARK: MapAnnotationProvider Implementation
 
     internal func endSearch() -> (()->())? {
-        SwiftyBeaver.info("FetchableMapStrategy endSearch called")
+        log.info("FetchableMapStrategy endSearch called")
         return {}
     }
 
@@ -152,18 +152,17 @@ final class StyleMapStrategy: NSObject, FetchableStrategy {
     // MARK: Variables
 
     var parentMapViewController: MapAnnotationReceiver?
-    var targetLocation: CLLocation?
+    var targetLocation: CLLocation = CLLocation()
     var readOnlyContext: NSManagedObjectContext?
     var bounceDelay: Int = DelaysConstants.InitialDelay.rawValue
     var delayedBlockFetchSortSend: (()->())?
     var delayLoops: Int = DelaysConstants.MaximumShortDelayLoops.rawValue
     var maxPoints: Int?
     var breweryOrStyleUpdateController: NSFetchedResultsController<NSFetchRequestResult>?
-    var annotations: MutableObservableArray<MKAnnotation>
+    var annotations: MutableObservableArray<MKAnnotation> = MutableObservableArray<MKAnnotation>()
 
     // MARK: Functions
     override init() {
-        annotations = MutableObservableArray<MKAnnotation>()
         super.init()
     }
 
@@ -175,7 +174,6 @@ final class StyleMapStrategy: NSObject, FetchableStrategy {
 
         self.init(view: view)
         readOnlyContext = inputContext
-        //runningID = Mediator.sharedInstance().nextPublicStyleStrategyID
         maxPoints = points
         targetLocation = location
         parentMapViewController = view
@@ -184,13 +182,14 @@ final class StyleMapStrategy: NSObject, FetchableStrategy {
 
         let breweries = initialFetchBreweries(byStyle: style)
 
-        // FIXME can I get sortandsend together and seperate out fetch
-
-        var breweryLocations = sortLocations(breweries)
-
-        breweryLocations = limitReturned(breweries: breweryLocations!, to: maxPoints!)
-
-        annotations.replace(with: convertBreweryToAnnotation(breweries: breweryLocations!))
+        self.sortAsynchronously(breweries, inRelationTo: targetLocation) {
+            locations in
+            guard let maxPoints = self.maxPoints else {
+                return
+            }
+            let breweryLocations = self.limitReturned(breweries: locations, to: maxPoints)
+            self.annotations.replace(with: self.convertBreweryToAnnotation(breweries: breweryLocations))
+        }
     }
 
 
@@ -237,9 +236,13 @@ final class StyleMapStrategy: NSObject, FetchableStrategy {
         log.info("StyleMapStrategy of FetchableMapStrategy controllerDidChangeContent called, next calling debounced function")
 
         let breweries = performFetchAndReturnUnsortedBreweries(on: controller)
-        var breweryLocations = sortLocations(breweries)
-        breweryLocations = limitReturned(breweries: breweryLocations!, to: maxPoints!)
-        annotations.replace(with: convertBreweryToAnnotation(breweries: breweryLocations!))
+
+        sortAsynchronously(breweries, inRelationTo: targetLocation) {
+            (breweryLocations)->() in
+            let smallerSetOfLocations = self.limitReturned(breweries: breweryLocations,
+                                                              to: self.maxPoints!)
+            self.annotations.replace(with: self.convertBreweryToAnnotation(breweries: smallerSetOfLocations))
+        }
     }
 }
 
@@ -250,15 +253,14 @@ final class AllBreweriesMapStrategy: NSObject, FetchableStrategy {
 
     // MARK: Variables
     var parentMapViewController: MapAnnotationReceiver?
-    var targetLocation: CLLocation?
+    var targetLocation: CLLocation = CLLocation()
     var readOnlyContext: NSManagedObjectContext?
     var maxPoints: Int?
     var breweryOrStyleUpdateController: NSFetchedResultsController<NSFetchRequestResult>?
-    var annotations: MutableObservableArray<MKAnnotation>
+    var annotations: MutableObservableArray<MKAnnotation> = MutableObservableArray<MKAnnotation>()
 
     // MARK: Functions
     override init() {
-        annotations = MutableObservableArray<MKAnnotation>()
         super.init()
     }
 
@@ -274,11 +276,12 @@ final class AllBreweriesMapStrategy: NSObject, FetchableStrategy {
         parentMapViewController = view
         SwiftyBeaver.info("AllBreweriesMapStrategy calling sortLocations in initialization.")
 
-        var breweryLocations = sortLocations(initialFetchBreweries())!
-
-        breweryLocations = limitReturned(breweries: breweryLocations, to: maxPoints!)
-
-        annotations.replace(with: convertBreweryToAnnotation(breweries: breweryLocations))
+        sortAsynchronously(initialFetchBreweries(), inRelationTo: targetLocation) {
+            (breweries) -> () in
+            let breweryLocations = self.limitReturned(breweries: breweries,
+                                                      to: self.maxPoints!)
+            self.annotations.replace(with: self.convertBreweryToAnnotation(breweries: breweryLocations))
+        }
     }
 
 
@@ -318,11 +321,14 @@ final class AllBreweriesMapStrategy: NSObject, FetchableStrategy {
 
         // Save all breweries for display the debouncing function will ameliorate the excessive calls to this.
         let breweries = performFetchAndReturnUnsortedBreweries(on: controller)
-        var breweryLocations = sortLocations(breweries)
-        breweryLocations = limitReturned(breweries: breweryLocations!, to: maxPoints!)
-        annotations.replace(with: convertBreweryToAnnotation(breweries: breweryLocations!))
-        log.info("AllBreweriesMap Strategy controllerDidChangeContext Called with \(controller.fetchedObjects?.count)")
-        log.info("AllBreweriesMapStrategy FetchableMapStrategy controllerDidChangeContent called, next calling debounced function")
+        sortAsynchronously(breweries, inRelationTo: targetLocation) {
+            (breweries) -> () in
+            let breweryLocations = self.limitReturned(breweries: breweries,
+                                             to: self.maxPoints!)
+            self.annotations.replace(with: self.convertBreweryToAnnotation(breweries: breweryLocations))
+            log.info("AllBreweriesMap Strategy controllerDidChangeContext Called with \(String(describing: controller.fetchedObjects?.count))")
+        }
+
     }
 }
 

@@ -31,10 +31,11 @@ protocol MapAnnotationProvider {
 
 protocol MappableStrategy: MapAnnotationProvider {
 
+    var annotations: MutableObservableArray<MKAnnotation> { set get }
     var parentMapViewController: MapAnnotationReceiver? { set get }
-    var targetLocation: CLLocation? { set get }
+    var targetLocation: CLLocation { set get }
 
-    func sortLocations(_: [Brewery]) -> [Brewery]?
+    func sortAsynchronously(_ locations: [Brewery], inRelationTo: CLLocation, completion: @escaping ([Brewery])->() )
 
     init()
 
@@ -47,8 +48,11 @@ protocol MappableStrategy: MapAnnotationProvider {
 extension MappableStrategy {
 
     // MARK: Functions
+    init() {
+        self.init()
+    }
 
-    init(view: MapAnnotationReceiver){
+    init(view: MapAnnotationReceiver) {
         self.init()
         parentMapViewController = view
     }
@@ -78,28 +82,30 @@ extension MappableStrategy {
 
     
     // Sort the breweries by distance to targetLocation
-    // FIXME: This should be called asynchrnously because on very large loads this takes way to long and sometimes blocks the UI
-    func sortLocations(_ input: [Brewery] ) -> [Brewery]? {
-        //DispatchQueue.global(qos: .userInteractive).async {
-            var breweryLocations = input
+    func sortAsynchronously(_ locations: [Brewery],
+              inRelationTo mapCenterTarget: CLLocation,
+              completion: @escaping ([Brewery])->() ) {
+        DispatchQueue.global(qos: .userInteractive).async {
+            var breweryLocations = locations
             // If there are less than 2 breweries no need to sort.
             guard breweryLocations.count > 1 else {
-                return breweryLocations
+                completion(breweryLocations)
+                return
             }
             guard self.isAllLocationDataNonNil(in: breweryLocations) else {
                 log.error("MapStrategy detected breweries without location data.")
-                return nil
+                return
             }
-        log.info("MapStrategy.sortLocations() Sorting breweries by positons")
+            log.info("MapStrategy.sortLocations() Sorting breweries by positons")
             breweryLocations = breweryLocations.sorted(by:
                 { (brewery1, brewery2) -> Bool in
                     let location1: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery1.latitude!)!), longitude: CLLocationDegrees(Double(brewery1.longitude!)!))
                     let location2: CLLocation = CLLocation(latitude: CLLocationDegrees(Double(brewery2.latitude!)!), longitude: CLLocationDegrees(Double(brewery2.longitude!)!))
-                    return ((targetLocation!.distance(from: location1)) as Double) < ((targetLocation!.distance(from: location2)) as Double)
-            })// FIXME we get stuck here maybe copy the array?
+                    return ((mapCenterTarget.distance(from: location1)) as Double) < ((mapCenterTarget.distance(from: location2)) as Double)
+            })
 
-            return breweryLocations
-        //}
+            completion(breweryLocations)
+        }
 
     }
 

@@ -17,14 +17,12 @@ import Bond
 
 final class SingleBreweryMapStrategy: NSObject, MappableStrategy {
 
-    var annotations: MutableObservableArray<MKAnnotation>
-
+    var annotations: MutableObservableArray<MKAnnotation> = MutableObservableArray<MKAnnotation>()
     var parentMapViewController: MapAnnotationReceiver? = nil
-    var targetLocation: CLLocation? = nil
+    var targetLocation: CLLocation = CLLocation()
     private var onlyBrewery: Brewery?
 
     override init() {
-        annotations = MutableObservableArray<MKAnnotation>()
         super.init()
     }
 
@@ -32,9 +30,8 @@ final class SingleBreweryMapStrategy: NSObject, MappableStrategy {
                      view: MapAnnotationReceiver,
                      location: CLLocation) {
 
-        self.init(view: view)
         log.info("SingleBreweryMapStrategy created")
-        
+        self.init(view: view)// mappable strategy initializer
         onlyBrewery = singleBrewery
         targetLocation = location
         parentMapViewController = view
