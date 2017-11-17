@@ -32,6 +32,15 @@
 		A7300C621EAF86650029EBB6 /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = A7300C611EAF86650029EBB6 /* README.md */; };
 		A7300C641EAF88290029EBB6 /* TabbarConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7300C631EAF88290029EBB6 /* TabbarConstants.swift */; };
 		A7300C661EAF9D050029EBB6 /* DismissableHelpNavigationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A7300C651EAF9D050029EBB6 /* DismissableHelpNavigationController.swift */; };
+		A738E98F1FBCC71000607517 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A718182A1FBA7A9B00A89068 /* Alamofire.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A738E9901FBCC71000607517 /* Alamofire.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A718182A1FBA7A9B00A89068 /* Alamofire.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A738E9921FBCC71500607517 /* SwiftyBeaver.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7CF02371FB9E38E0025D181 /* SwiftyBeaver.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A738E9931FBCC71A00607517 /* ReactiveKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E3C1FAD90500076D5F4 /* ReactiveKit.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A738E9941FBCC71A00607517 /* ReactiveKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7140E3C1FAD90500076D5F4 /* ReactiveKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A738E9951FBCC71E00607517 /* Differ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E391FAD904A0076D5F4 /* Differ.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A738E9961FBCC71E00607517 /* Differ.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7140E391FAD904A0076D5F4 /* Differ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		A738E9971FBCC72300607517 /* Bond.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = A7140E361FAD8FC10076D5F4 /* Bond.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		A738E9981FBCC72300607517 /* Bond.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = A7140E361FAD8FC10076D5F4 /* Bond.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		A7419ED91E2DBD3E006E421D /* BeersTabbaricon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7419ED71E2DBD3E006E421D /* BeersTabbaricon2x.png */; };
 		A7419EDA1E2DBD3E006E421D /* BeersTabbaricon3x.png in Resources */ = {isa = PBXBuildFile; fileRef = A7419ED81E2DBD3E006E421D /* BeersTabbaricon3x.png */; };
 		A741BF511E186DA7003958A4 /* OnlineSearchCapableProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = A741BF501E186DA6003958A4 /* OnlineSearchCapableProtocol.swift */; };
@@ -162,7 +171,12 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				A738E9941FBCC71A00607517 /* ReactiveKit.framework in CopyFiles */,
+				A738E9961FBCC71E00607517 /* Differ.framework in CopyFiles */,
 				A724B55B1FB5607E0035B41F /* Pods_BreweryTour.framework in CopyFiles */,
+				A738E9981FBCC72300607517 /* Bond.framework in CopyFiles */,
+				A738E9921FBCC71500607517 /* SwiftyBeaver.framework in CopyFiles */,
+				A738E9901FBCC71000607517 /* Alamofire.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -335,6 +349,10 @@
 				A718182D1FBAB42400A89068 /* SwiftyBeaver.framework in Frameworks */,
 				8F5A82B088FB8F021054FF3A /* Pods_BreweryTour.framework in Frameworks */,
 				A7CF023A1FB9EED40025D181 /* MapKit.framework in Frameworks */,
+				A738E9951FBCC71E00607517 /* Differ.framework in Frameworks */,
+				A738E9971FBCC72300607517 /* Bond.framework in Frameworks */,
+				A738E9931FBCC71A00607517 /* ReactiveKit.framework in Frameworks */,
+				A738E98F1FBCC71000607517 /* Alamofire.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -757,12 +775,12 @@
 		A7FF1A031DB0E14600AD0BB3 /* Assets */ = {
 			isa = PBXGroup;
 			children = (
+				A7B2AAED1DA791A400EE844C /* Info.plist */,
 				A77785E41FA6786800846B15 /* Assets.xcassets */,
 				A76006AF1F67741900511AAE /* TempBreweryTab.png */,
 				A76006B11F67756A00511AAE /* NewBreweryTabbarIcon.png */,
 				A76006B31F67C07500511AAE /* Double beers.png */,
 				A76006B51F67C1E600511AAE /* Double beers2.png */,
-				A7B2AAED1DA791A400EE844C /* Info.plist */,
 				A7300C5D1EAF844F0029EBB6 /* search25.png */,
 				A7300C5E1EAF844F0029EBB6 /* search50.png */,
 				A75160291E35AA250078F6F9 /* beermap.png */,
