@@ -135,14 +135,14 @@ extension AppDelegate {
 
 
     private func createNewSwiftyBeaverLogfile() {
-        // FIXME:
-        print("createNewSwiftyBeaverLogfile() called")
+        log.info("createNewSwiftyBeaverLogfile() called")
         let file = FileDestination()
         file.format = "$DEEEE MMMM dd yyyy HH:mm:sss$d $L: $M: "
         let console = ConsoleDestination()
         log.addDestination(console)
         log.addDestination(file)
         log.info("Starting New Run.....")
+        // Minimum level 
         //platform.minLevel = .warning
     }
 

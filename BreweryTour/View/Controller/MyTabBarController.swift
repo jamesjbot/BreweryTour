@@ -7,7 +7,7 @@
 //
 
 /*
- This is the TabBarController that we will embed in the navigation controller.
+ This is the TabBarController that we will embed with the navigation controller.
  It allows us to setup a the help button in a single location.
  This is called by the interface
  */

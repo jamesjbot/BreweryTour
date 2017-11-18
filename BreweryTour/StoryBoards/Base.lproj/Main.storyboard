@@ -245,7 +245,7 @@
                         <outlet property="newSearchBar" destination="IOR-m7-kFb" id="g6B-N4-g0h"/>
                         <outlet property="pointer" destination="jRB-Sa-1bJ" id="cRy-a1-03F"/>
                         <outlet property="segmentedControl" destination="mmN-dq-rb5" id="1vF-MM-mRn"/>
-                        <outlet property="selection" destination="0f8-gZ-M3j" id="SSd-mu-AyL"/>
+                        <outlet property="topSelectionTextField" destination="0f8-gZ-M3j" id="vep-mc-a8L"/>
                         <outlet property="tutorialText" destination="chy-Gf-XC8" id="HRg-12-ZWA"/>
                         <outlet property="tutorialView" destination="447-tn-FIf" id="mv0-Km-cSq"/>
                     </connections>
@@ -1506,6 +1506,6 @@
         <image name="map" width="32" height="32"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="VTO-3L-aQy"/>
+        <segue reference="GMp-du-1Rh"/>
     </inferredMetricsTieBreakers>
 </document>
