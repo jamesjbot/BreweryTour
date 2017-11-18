@@ -133,7 +133,7 @@ NSFetchedResultsControllerDelegate {
     // Tutorial outlets
     @IBOutlet weak var mapButton: UIBarButtonItem!
     @IBOutlet weak var pointer: UIView!
-    @IBOutlet weak var selection: UITextField!
+    @IBOutlet weak var topSelectionTextField: UITextField!
 
     @IBOutlet weak var tutorialText: UITextView!
     @IBOutlet weak var tutorialView: UIView!

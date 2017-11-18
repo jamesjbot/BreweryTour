@@ -81,21 +81,20 @@ extension CategoryViewController: UISearchBarDelegate, AlertWindowDisplaying {
     }
 
 
+    /*
+     This method allows the user to submit a query to BreweryDB for
+     breweries with the searchtext in their name
+
+     Only allow the AllBreweries mode to searchonline for breweries
+     this is because when in the styles mode the downloaded brewery
+     may not have that style and as such will not show up in the list
+     making for a confusing experience.
+     Same confusing experience goes for searching for styles.
+     */
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
 
-        /*
-         This method allows the user to submit a query to BreweryDB for
-         breweries with the searchtext in their name
-
-         Only allow the AllBreweries mode to searchonline for breweries
-         this is because when in the styles mode the downloaded brewery
-         may not have that style and as such will not show up in the list
-         making for a confusing experience.
-         Same confusing experience goes for searching for styles.
-         */
-
-        // BLOCK ALL ONLINE SEARCHES, except from AllBreweriesTableList
+        // BLOCK ALL ONLINE SEARCHES, Except from AllBreweriesTableList
         guard segmentedControl.selectedSegmentIndex == SegmentedControllerMode.AllBreweries.rawValue else {
             return
         }
@@ -204,13 +203,17 @@ extension CategoryViewController : UITableViewDelegate {
                 }
             }
 
-            // Move to new tab
-            DispatchQueue.main.async {
-                self.tabBarController?.selectedIndex = TabbarConstants.mapTab.rawValue
-            }
+            // Move to map tab
+            self.switchTabbarController(toTab: TabbarConstants.mapTab.rawValue)
 
         }
         return activeTableListSelectedCompletionHandler
+    }
+
+    private func switchTabbarController(toTab: TabbarConstants.RawValue) {
+        DispatchQueue.main.async {
+            self.tabBarController?.selectedIndex = toTab
+        }
     }
 
 
@@ -232,9 +235,9 @@ extension CategoryViewController : UITableViewDelegate {
 
         }
 
-        // Set the Textfield to the name of the selected item so the user
+        // Set the Selection Textfield to the name of the selected item so the user
         // knows what they selected.
-        selection.text = tableView.cellForRow(at: indexPath)?.textLabel?.text
+        topSelectionTextField.text = tableView.cellForRow(at: indexPath)?.textLabel?.text
         DispatchQueue.main.async {
             self.activityIndicator.startAnimating() // A faster signal to start animating rather than wait for the actual brewery process.
         }

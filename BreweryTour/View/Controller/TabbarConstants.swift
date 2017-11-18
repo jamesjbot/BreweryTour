@@ -10,8 +10,9 @@ import Foundation
 
 enum TabbarConstants: Int {
     case mapTab = 0
-    case selectedBeersTab = 1
-    case favoriteBeersTab = 2
-    case favoriteBreweriesTab = 3
-    case searchTab = 4
+    case categoryBreweiesTab = 1
+    case selectedBeersTab = 2
+    case favoriteBeersTab = 3
+    case favoriteBreweriesTab = 4
+    case searchTab = 5
 }
