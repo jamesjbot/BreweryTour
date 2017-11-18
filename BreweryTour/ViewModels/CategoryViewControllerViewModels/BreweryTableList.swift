@@ -219,9 +219,10 @@ extension BreweryTableList: TableList {
         }
         // Tell mediator about the brewery I want to display
         // Then mediator will tell selectedBeerList what to display
-        (Mediator.sharedInstance() as MediatorBroadcastSetSelected).select(thisItem: savedBreweryForDisplay,
-                                                                           state: nil,
-                                                                           completion: completion)
+        (Mediator.sharedInstance() as
+            MediatorBroadcastSetSelected).select(thisItem: savedBreweryForDisplay,
+                                                 state: nil,
+                                                 completion: completion)
         return nil
     }
 

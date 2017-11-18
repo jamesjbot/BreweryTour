@@ -1051,7 +1051,7 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
         // Create a callout
         let views = Bundle.main.loadNibNamed("BreweryCustomCallout", owner: nil, options: nil)
         let calloutView = views?[0] as! BreweryCustomCalloutView
-        setup(calloutView, with: breweryAnnotation, with: view)
+        setupCalloutView(calloutView, with: breweryAnnotation, with: view)
 
         // Attach favoriting action on FavoriteImage.
         let favoriteButton = FavoriteUIButton(frame: calloutView.favoriteImage.frame)
@@ -1069,10 +1069,13 @@ extension MapViewController : MKMapViewDelegate, AlertWindowDisplaying {
 
 
     /// Setup the values for the custom callout view
-    private func setup(_ calloutView: BreweryCustomCalloutView,
+    private func setupCalloutView(_ calloutView: BreweryCustomCalloutView,
                        with brewery: BreweryAnnotation,
                        with view: MKAnnotationView) {
 
+        // Property injections
+        calloutView.tabBarController = tabBarController
+        calloutView.backgroundNSManagedObject = brewery.brewery
         calloutView.breweryName.text = brewery.breweryName!
         calloutView.breweryWebSite.text = "\(brewery.breweryWebsite ?? "")"
         if brewery.favorite ?? false {
