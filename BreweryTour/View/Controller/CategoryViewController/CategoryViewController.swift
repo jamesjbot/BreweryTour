@@ -1,5 +1,5 @@
 //
-//  ViewController.swift
+//  CategoryViewController.swift
 //  BreweryTour
 //
 //  Created by James Jongsurasithiwat on 10/7/16.
@@ -45,7 +45,7 @@
  selection and the completion handler.
  After the breweryDBClient submits the internet requests it will prompt the
  completion handler to stop animating. 
- The view model will patiently wait or new breweries to be stored in the style.
+ The view model will patiently wait on new breweries to be stored in the style.
  The view model will use the NSFetchedResults controller delegate to pick up 
  These new breweries and display them.
  
