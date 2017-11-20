@@ -114,10 +114,9 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
 
     // Process the last unfull set on the breweriesToBeProcessed queue.
     @objc private func timerProcessImageQueue() {
-        let imageProcessingDispatchQueue = DispatchQueue.global(qos: .background)
+
         let context = backContext
         initContext(context)
-        //imageProcessingDispatchQueue.async {
         context.perform {
             var saves = 0 // Stopping counter
             for (key, (type, data ) ) in self.imagesToBeAssignedQueue {
@@ -165,7 +164,6 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                 }
             }
             self.decideToDisableTimer()
-            //}
         }
     }
 
