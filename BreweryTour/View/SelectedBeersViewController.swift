@@ -225,6 +225,14 @@ class SelectedBeersViewController: UIViewController {
         if Mediator.sharedInstance().isSystemBusy() {
             activityIndicator.startAnimating()
         }
+        // Remove busy indicator.
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: true) {
+            [unowned self] timer in
+            if Mediator.sharedInstance().isSystemBusy() == false {
+                self.activityIndicator.stopAnimating()
+                timer.invalidate()
+            }
+        }
     }
 
 
