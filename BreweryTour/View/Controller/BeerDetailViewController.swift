@@ -157,8 +157,8 @@ class BeerDetailViewController: UIViewController, AlertWindowDisplaying {
         availableText.adjustsFontSizeToFitWidth = true
         
         // Populate beer image if it is in the database
-        if let data : NSData = (beer.image as? NSData) {
-            let im = UIImage(data: data as Data)
+        if let data : Data = (beer.image) {
+            let im = UIImage(data: data)
             beerImage.image = im
         }
 
