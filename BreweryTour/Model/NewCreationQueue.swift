@@ -1,5 +1,5 @@
 //
-//  BreweryAndBeerCreationQueue.swift
+//  NewBreweryAndBeerCreationQueue.swift
 //  BreweryTour
 //
 //  Created by James Jongsurasithiwat on 12/28/16.
@@ -17,6 +17,17 @@ import CoreData
 import Dispatch
 import SwiftyBeaver
 import Bond
+
+protocol BreweryAndBeerCreationProtocol {
+
+    var isQueueRunning: Observable<Bool> { get }
+    var breweryElementsRemainingToProcess: Observable<Int> {get}
+    var beerElementsRemainingToProcess: Observable<Int> {get}
+    func queueBrewery(_ b: BreweryData?)
+    func queueBeer(_ b: BeerData?)
+    func abandonProcessing() -> Bool
+}
+
 
 protocol AcceptsCreationQueue {
     var creationQueue: BreweryAndBeerCreationProtocol? {get set}
@@ -266,9 +277,8 @@ class NewCreationQueue: NSObject {
 
                         // Request did not find breweries
                         guard brewers?.count == 1 else {
-                            print("Found multiple breweries \(brewers?.count)")
                             self.reinsertBeer(beer!,attempt!)
-                            print("Reinserting beer because brewery not found")
+                            log.info("Found \(String(describing: brewers?.count)) breweries; Reinserting beer because single brewery not found")
                             return
                         }
 
