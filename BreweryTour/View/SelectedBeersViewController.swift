@@ -356,7 +356,7 @@ extension SelectedBeersViewController : UISearchBarDelegate, AlertWindowDisplayi
     // Any text entered in the searchbar triggers this
     internal func searchBar(_ searchBar: UISearchBar, textDidChange: String){
         // User entered searchtext, now filter data
-        if textDidChange.characters.count == 0 {
+        if textDidChange.count == 0 {
             DispatchQueue.main.async {
                 searchBar.resignFirstResponder()
             }
