@@ -122,7 +122,7 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
             var saves = 0 // Stopping counter
             for (key, (type, data ) ) in self.imagesToBeAssignedQueue {
                 guard let request = self.generateRequest(type) else {
-                    //SwiftyBeaver.error("ManagedObjectImageLinker had a problem generating a request for \(type):\(#line)")
+                    log.error("ManagedObjectImageLinker had a problem generating a request for \(type):\(#line)")
                     continue
                 }
                 let result = self.fetchExecute(request: request, withKey: key, inContext: context)
@@ -140,14 +140,14 @@ class ManagedObjectImageLinker: ImageLinkingProcotol {
                         self.imagesToBeAssignedQueue.removeValue(forKey: key)
                         continue
                     }
-                    (result?.first as! Beer).image = data as NSData? as! Data
+                    (result?.first as? Beer)?.image = data as Data
                     break
                 case .Brewery:
                     guard (result?.first as! Brewery).image == nil else {
                         self.imagesToBeAssignedQueue.removeValue(forKey: key)
                         continue
                     }
-                    (result?.first as! Brewery).image = data as NSData? as! Data
+                    (result?.first as? Brewery)?.image = data as Data
                     break
                 }
 
