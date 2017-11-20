@@ -46,11 +46,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             parserFactory?.set(breweryDesigner: breweryDesigner!)
             parserFactory?.set(beerDesigner: beerDesigner!)
 
+            // Property inject parser
             BreweryDBClient.sharedInstance().set(parser: parserFactory!)
             //BreweryDBClient = BreweryDBClient(withParser: parserFactory)
         }
         checkIfFirstLaunched()
 
+        // Property inject BreweryDBClient into Mediator
+        Mediator.sharedInstance().breweryDBClient = BreweryDBClient.sharedInstance()
         // Dependency inject our creation queue
 //        Mediator.sharedInstance().creationQueue = bbCreationQueue
 //        if let tabbar = window?.rootViewController as? UITabBarController {

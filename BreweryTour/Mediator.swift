@@ -24,6 +24,7 @@ class Mediator {
     // MARK: Constants
 
     // MARK: Variables
+    internal var breweryDBClient: BreweryDBClientProtocol?
     private var automaticallySegueValue: Bool = true
     fileprivate var busyObservers: [BusyObserver] = []
     fileprivate var contextObservers: [ReceiveBroadcastManagedObjectContextRefresh] = [ReceiveBroadcastManagedObjectContextRefresh]()
@@ -44,9 +45,6 @@ class Mediator {
         }
     }
     private var StyleStrategyID:Int = 1
-
-    // FIXME: Is this still needed as I've changed the who actually is the notifier
-    internal var creationQueue: BreweryAndBeerCreationProtocol?
 
     // MARK: Functions
 
@@ -138,15 +136,11 @@ extension Mediator: MediatorBroadcastSetSelected {
 // MARK: - MediatorBusyObserver
 
 extension Mediator: MediatorBusyObserver {
+
+    // Busy ness depends on if the client is using the network connection
     func isSystemBusy() -> Bool {
-        // FIXME: this should be dependent on network access from the brewery db client
-        // not on the creation queue.
-        if let creationQueue = creationQueue {
-            return false
-            //return creationQueue.isBreweryAndBeerCreationRunning()
-        } else {
-            return false
-        }
+
+        return breweryDBClient?.isDownloading ?? false
     }
 
 
