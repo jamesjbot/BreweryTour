@@ -41,6 +41,8 @@ import CoreData
 
 protocol BreweryDBClientProtocol {
 
+    var isDownloading: Bool { get set }
+
     func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) 
 
     // Query for breweries that offer a certain style.
@@ -91,6 +93,8 @@ class BreweryDBClient {
         case LocationFollowedByBrewery
     }
 
+    internal var isDownloading: Bool
+
     // This object links beers and breweries to their images.
     fileprivate let imageLinker = ManagedObjectImageLinker()
 
@@ -111,10 +115,7 @@ class BreweryDBClient {
 
     
     private init(){
-        // TODO: Find a better way to dependency inject the context
-//        if let backContext = backContext {
-//            //imageLinker.backContext = backContext
-//        }
+        isDownloading = false
     }
 
 
@@ -122,7 +123,6 @@ class BreweryDBClient {
         struct Singleton {
             static var sharedInstance = BreweryDBClient()
         }
-
         return Singleton.sharedInstance
     }
 
@@ -193,9 +193,6 @@ class BreweryDBClient {
         }
     }
 
-
-    // MARK: - BreweryDBClientProtocol
-
     private func genericJSONResponseProcessSuccess(response: DataResponse<Any>) -> Bool {
         guard response.result.isSuccess else {
             return false
@@ -205,7 +202,10 @@ class BreweryDBClient {
         }
         return true
     }
+}
 
+// MARK: - BreweryDBClientProtocol
+extension BreweryDBClient: BreweryDBClientProtocol {
 
     // Query for all breweries
     internal func downloadAllBreweries(completion: @escaping (_ success: Bool, _ msg: String?) -> Void ) {
@@ -225,6 +225,7 @@ class BreweryDBClient {
             return
         }
 
+        isDownloading = true
         Alamofire.request(outputURLString)
             .responseJSON {
                 response in
@@ -281,6 +282,7 @@ class BreweryDBClient {
                     }
                 }
                 group.notify(queue: queue) {
+                    self.isDownloading = false
                     completion(true, "downloadAllBreweries All Pages Submitted To BreweryDB for processing All Pages Processed")
                 }
         }
@@ -303,6 +305,7 @@ class BreweryDBClient {
                                                         querySpecificID: nil,
                                                         parameters: methodParameters)
 
+        isDownloading = true
         Alamofire.request(outputURL.absoluteString!).responseJSON {
             response in
             guard self.genericJSONResponseProcessSuccess(response: response) else {
@@ -352,6 +355,7 @@ class BreweryDBClient {
             }  // Outside for loop
             
             group.notify(queue: queue) {
+                self.isDownloading = false
                 completion(true, "All Pages Submitted Processed DownloadBeerAndBreweriesByStyleID")
             }
         }
@@ -371,7 +375,7 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: consistentOutput,
                                                         querySpecificID: brewery.id,
                                                         parameters: methodParameter)
-        
+        isDownloading = true
         // This is an async call
         Alamofire.request(outputURL.absoluteString!).responseJSON(){
             response in
@@ -393,6 +397,7 @@ class BreweryDBClient {
                        querySpecificID : brewery.id,
                        outputType: consistentOutput,
                        completion: completionHandler)
+            self.isDownloading = false
         }
         completionHandler(true, "All Pages Processed downloadBeersByBrewery")
         return
@@ -415,6 +420,7 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
                                                         querySpecificID: nil,
                                                         parameters: methodParameters)
+        isDownloading = true
         Alamofire.request(outputURL.absoluteString!)
             .responseJSON {
                 response in
@@ -461,6 +467,7 @@ class BreweryDBClient {
                     }
                 }
                 group.notify(queue: queue){
+                    self.isDownloading = false
                     completion(true, "All Pages Processed downloadBeersByName")
                 }
         }
@@ -475,8 +482,10 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: APIQueryResponseProcessingTypes.Styles,
                                                         querySpecificID: nil,
                                                         parameters: methodParameter)
+        isDownloading = true
         Alamofire.request(outputURL.absoluteString!).responseJSON(){
             response in
+            self.isDownloading = false
             // Note: Styles Request does not return number of results.
 
             guard self.genericJSONResponseProcessSuccess(response: response) else {
@@ -509,6 +518,7 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
                                                         querySpecificID: nil,
                                                         parameters: methodParameters)
+        isDownloading = true
         Alamofire.request(outputURL.absoluteString!)
             .responseJSON {
                 response in
@@ -559,6 +569,7 @@ class BreweryDBClient {
                     }
                 }
                 group.notify(queue: queue) {
+                    self.isDownloading = false
                     completion(true, "download Breweries by location")
                 }
         }
@@ -580,6 +591,7 @@ class BreweryDBClient {
         let outputURL : NSURL = createURLFromParameters(queryType: theOutputType,
                                                         querySpecificID: nil,
                                                         parameters: methodParameters)
+        isDownloading = true
         Alamofire.request(outputURL.absoluteString!)
             .responseJSON {
                 response in
@@ -630,6 +642,7 @@ class BreweryDBClient {
                     }
                 }
                 group.notify(queue: queue) {
+                    self.isDownloading = false
                     completion(true, "All Pages Processed downloadBreweryByName")
                 }
         }
